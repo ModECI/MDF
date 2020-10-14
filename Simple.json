@@ -1,8 +1,8 @@
 {
-    "MyModel": {
+    "Simple": {
         "graphs": [
             {
-                "rl_ddm_model": {
+                "simple_example": {
                     "nodes": [
                         {
                             "input_node": {
