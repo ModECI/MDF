@@ -1,0 +1,78 @@
+{
+    "MyModel": {
+        "graphs": [
+            {
+                "rl_ddm_model": {
+                    "nodes": [
+                        {
+                            "input_node": {
+                                "parameters": {
+                                    "input_level": 0.0
+                                },
+                                "output_ports": [
+                                    {
+                                        "out_port": {
+                                            "value": "input_level"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "processing_node": {
+                                "parameters": {
+                                    "logistic_gain": 3,
+                                    "slope": 0.5
+                                },
+                                "input_ports": [
+                                    {
+                                        "input_port1": {
+                                            "shape": "(1,)"
+                                        }
+                                    }
+                                ],
+                                "functions": [
+                                    {
+                                        "logistic_1": {
+                                            "function": "logistic",
+                                            "args": {
+                                                "variable1": "input_port1",
+                                                "gain": "logistic_gain"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "linear_1": {
+                                            "function": "linear",
+                                            "args": {
+                                                "variable1": "logistic_1",
+                                                "slope": "slope"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "output_ports": [
+                                    {
+                                        "output_1": {
+                                            "value": "linear_1"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "edges": [
+                        {
+                            "input_edge": {
+                                "sender": "input_node",
+                                "receiver": "processing_node",
+                                "sender_port": "out_port",
+                                "receiver_port": "input_port1"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
