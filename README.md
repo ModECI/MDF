@@ -69,14 +69,14 @@ each of which is a dictionary with entries describing the **nodes** and **edges*
 Each entry in the **node** and **edge** dictionaries must be another dictionary that contains object-specific
 entries.   The ``nodes`` dictionary, in addition to entries describing nodes, can also contain entries that are
 themselves graphs, which can be used to describe hierarchically-structured models.  In addition to the ``nodes``
-and ``edges`` entries, a ``graph`` object can have additional entries, some of which are generic (such as the ``names`` 
+and ``edges`` entries, a ``graph`` object can have additional entries, some of which are generic (such as the ``names``
 entry in the example below;  see ``Entries common to all objects`` for a full listing);  it can also include a
 ``parameters`` entry, that contains specifications required by specific environments.  The following provides an
 example of the overall scheme of a BIDS-MDF specification:
 
-*[Should we add schedulers as a standard/generic parameter type to deal with aspects of computational flow
+[//]: # "Should we add schedulers as a standard/generic parameter type to deal with aspects of computational flow
 that are not determined by the structure of the graph itself??;  controller is another example of this (that we have
- added below to show how it would be done... but should probably be discussed further]*
+ added below to show how it would be done... but should probably be discussed further"
 
     {
         "graphs": [
@@ -92,7 +92,7 @@ that are not determined by the structure of the graph itself??;  controller is a
                 }
                 "parameters": {                             # Optional (for parameters of the graph)
                     ... dictionaries for graph parameters
-                    
+
                 }
              }
             {
@@ -147,24 +147,24 @@ The following entries can be used in any BIDS-MDF object (using the strings show
   while the ``PNL`` entry is used to specify the PNL-specific designation of a graph ("Composition").
 
 
-*[JDC: ??IS THERE ANY REASON TO DISTINGUISH THESE, OR SHOULD THESE BE COMBINED TO MAKE IT SIMPLER]*
+[//]: # "JDC: ??IS THERE ANY REASON TO DISTINGUISH THESE, OR SHOULD THESE BE COMBINED TO MAKE IT SIMPLER"
 
-*[KDM: No, there's no reason on my part, that was just how the original spec listed it, so I implemented it that way. 
-I think it would be better to choose one name]*
+[//]: # "KDM: No, there's no reason on my part, that was just how the original spec listed it, so I implemented it that way.
+I think it would be better to choose one name"
 
 * ``parameters`` (for non-**function** entries) or ``args`` (for **functions** entries) : this is used to specificy
   attributes of the object.  For all objects other than **functions**, these are called ``parameters``, and for
   **functions** they are called ``args``.  For example, the following contains an entry for a **node** ("Processing
-  Unit"), that has specifications for one of its standard **parameters** (``initializer``), as well as a ``functions`` 
+  Unit"), that has specifications for one of its standard **parameters** (``initializer``), as well as a ``functions``
   entry that specifies the list of functions for the node well as the **type** and **args** for each function.  For
   example, the node for **Processing Unit** in the example below has a single parameter specified, and a single
   function that is specified as follows:
 
-    *[JDC: Are there any standard-defined parameters for graphs, nodes?  Here, we assume that ``initializer`` is such
+    [//]: # "JDC: Are there any standard-defined parameters for graphs, nodes?  Here, we assume that ``initializer`` is such
     parameter and included it in the example as such.  However, I'm not sure we ever discussed or agreed to any such
     standard node parameters.  If so, we should list them somehwher.  If are not any, then ``parameters`` should be
-    removed from this example, and ``initializer`` (if retained) should be moved to the ``PNL`` entry in the next 
-    example)]*
+    removed from this example, and ``initializer`` (if retained) should be moved to the ``PNL`` entry in the next
+    example)"
 
         "nodes": {
             "Processing Unit": {
@@ -184,19 +184,19 @@ I think it would be better to choose one name]*
             }
         }
 
-    *[JDC: Are there any standard-defined parameters for graphs, nodes?  Here, we assume that ``initializer`` is such
+    [//]: # "JDC: Are there any standard-defined parameters for graphs, nodes?  Here, we assume that ``initializer`` is such
     parameter and included it in the example as such.  However, I'm not sure we ever discussed or agreed to any such
     standard node parameters.  If so, we should list them somehwher.  If are not any, then ``parameters`` should be
-    removed from this example, and ``initializer`` (if retained) should be moved to the ``PNL`` entry in the next 
-    example)]*
+    removed from this example, and ``initializer`` (if retained) should be moved to the ``PNL`` entry in the next
+    example)"
 
-    *[JDC: The example below is predicated on the assumption that ``controller`` should be a standard parameter for a
+    [//]: # "JDC: The example below is predicated on the assumption that ``controller`` should be a standard parameter for a
     graph;  if not, can delete the following text and example, but might want to include another one that shows how
-    a node can be referenced by another entry]*
+    a node can be referenced by another entry"
 
     The following example specifies a standard **parameter** for a graph -- ``controller`` -- by referencing the
     **node** that serves as the controller for the model:
-    
+
        "graphs": [{
             {
                 "parameters": {
@@ -209,15 +209,15 @@ I think it would be better to choose one name]*
                 }
             }]
         }
-     
-      
+
+
 
 
 
 The ``parameters`` entry of a **node** (or ``args`` entry of a *function**) can also include a subdictionary of
-environment-specific parameter-value (or arg-value) pairs.  For example, the ``parameters`` entry below adds entries 
-for two parameters -- ``execution_count`` and ``has_initializers`` -- that are specific to the PsyNeuLink (PNL) 
-environment: 
+environment-specific parameter-value (or arg-value) pairs.  For example, the ``parameters`` entry below adds entries
+for two parameters -- ``execution_count`` and ``has_initializers`` -- that are specific to the PsyNeuLink (PNL)
+environment:
 
       "parameters": {
             "initializer": [[0]]
@@ -264,14 +264,14 @@ These objects can all include a ``functions`` entry, that specifies one or more 
     model is executed (see [ports](#ports)] below);  the reference must use dot-delimited notation, beginning with the
     name of the **node** to which the **port** belongs (``A`` in the example above), followed by ``input_ports
     `` entry, and then name of the input_port from which the argument should receive its value.
-    
-    *[??PNL ALLOWS THE NAME OF THE NODE (MECHANISM) TO BE USED IN PLACE OF THE INPUTPORT.  THIS IS SEEMS TO BE
-    SUPPORTED FOR EDGES (SEE BELOW).  SHOULD WE DO THE SAME FOR SOURCE SPECIFICATIONS?]*
 
-    *[KDM: maybe, but I'd wait and see what others say. Suppose there might be a use for a "combined" input port with a
-     name that isn't the same as the arg name]*
-    
-    *[JDC: Not sure I follow;  should discuss]*
+    [//]: # "??PNL ALLOWS THE NAME OF THE NODE (MECHANISM) TO BE USED IN PLACE OF THE INPUTPORT.  THIS IS SEEMS TO BE
+    SUPPORTED FOR EDGES (SEE BELOW).  SHOULD WE DO THE SAME FOR SOURCE SPECIFICATIONS?"
+
+    [//]: # "KDM: maybe, but I'd wait and see what others say. Suppose there might be a use for a 'combined' input port with a
+     name that isn't the same as the arg name"
+
+    [//]: # "JDC: Not sure I follow;  should discuss"
 
 #### Non-**graph** **nodes**
 
