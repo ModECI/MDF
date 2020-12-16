@@ -1,0 +1,228 @@
+{
+    "ABCD": {
+        "graphs": [
+            {
+                "abcd_example": {
+                    "nodes": [
+                        {
+                            "input0": {
+                                "parameters": {
+                                    "input_level": 0.0
+                                },
+                                "output_ports": [
+                                    {
+                                        "out_port": {
+                                            "value": "input_level"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "A": {
+                                "parameters": {
+                                    "logistic_gain": 3,
+                                    "slope": 0.5
+                                },
+                                "input_ports": [
+                                    {
+                                        "input_port1": {
+                                            "shape": "(1,)"
+                                        }
+                                    }
+                                ],
+                                "functions": [
+                                    {
+                                        "logistic_1": {
+                                            "function": "logistic",
+                                            "args": {
+                                                "variable1": "input_port1",
+                                                "gain": "logistic_gain"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "linear_1": {
+                                            "function": "linear",
+                                            "args": {
+                                                "variable1": "logistic_1",
+                                                "slope": "slope"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "output_ports": [
+                                    {
+                                        "output_1": {
+                                            "value": "linear_1"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "B": {
+                                "parameters": {
+                                    "logistic_gain": 3,
+                                    "slope": 0.5
+                                },
+                                "input_ports": [
+                                    {
+                                        "input_port1": {
+                                            "shape": "(1,)"
+                                        }
+                                    }
+                                ],
+                                "functions": [
+                                    {
+                                        "logistic_1": {
+                                            "function": "logistic",
+                                            "args": {
+                                                "variable1": "input_port1",
+                                                "gain": "logistic_gain"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "linear_1": {
+                                            "function": "linear",
+                                            "args": {
+                                                "variable1": "logistic_1",
+                                                "slope": "slope"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "output_ports": [
+                                    {
+                                        "output_1": {
+                                            "value": "linear_1"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "C": {
+                                "parameters": {
+                                    "logistic_gain": 3,
+                                    "slope": 0.5
+                                },
+                                "input_ports": [
+                                    {
+                                        "input_port1": {
+                                            "shape": "(1,)"
+                                        }
+                                    }
+                                ],
+                                "functions": [
+                                    {
+                                        "logistic_1": {
+                                            "function": "logistic",
+                                            "args": {
+                                                "variable1": "input_port1",
+                                                "gain": "logistic_gain"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "linear_1": {
+                                            "function": "linear",
+                                            "args": {
+                                                "variable1": "logistic_1",
+                                                "slope": "slope"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "output_ports": [
+                                    {
+                                        "output_1": {
+                                            "value": "linear_1"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "D": {
+                                "parameters": {
+                                    "logistic_gain": 3,
+                                    "slope": 0.5
+                                },
+                                "input_ports": [
+                                    {
+                                        "input_port1": {
+                                            "shape": "(1,)"
+                                        }
+                                    }
+                                ],
+                                "functions": [
+                                    {
+                                        "logistic_1": {
+                                            "function": "logistic",
+                                            "args": {
+                                                "variable1": "input_port1",
+                                                "gain": "logistic_gain"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "linear_1": {
+                                            "function": "linear",
+                                            "args": {
+                                                "variable1": "logistic_1",
+                                                "slope": "slope"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "output_ports": [
+                                    {
+                                        "output_1": {
+                                            "value": "linear_1"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ],
+                    "edges": [
+                        {
+                            "input_edge": {
+                                "sender": "input0",
+                                "receiver": "A",
+                                "sender_port": "out_port",
+                                "receiver_port": "input_port1"
+                            }
+                        },
+                        {
+                            "input_edge": {
+                                "sender": "A",
+                                "receiver": "B",
+                                "sender_port": "output_1",
+                                "receiver_port": "input_port1"
+                            }
+                        },
+                        {
+                            "input_edge": {
+                                "sender": "B",
+                                "receiver": "C",
+                                "sender_port": "output_1",
+                                "receiver_port": "input_port1"
+                            }
+                        },
+                        {
+                            "input_edge": {
+                                "sender": "C",
+                                "receiver": "D",
+                                "sender_port": "output_1",
+                                "receiver_port": "input_port1"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
