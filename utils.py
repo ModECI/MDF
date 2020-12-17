@@ -39,3 +39,22 @@ def print_summary(graph):
         print('%s'%node)
     for edge in graph.edges:
         print('%s'%edge)
+        
+        
+
+    
+def load_mdf_json(filename):
+    """
+    Load an MDF JSON file
+    """
+    
+    from neuromllite.utils import load_json, _parse_element
+    
+    data = load_json(filename)
+        
+    print("Loaded graph from %s"%filename)
+    
+    model = Model()
+    model = _parse_element(data, model)
+    
+    return model

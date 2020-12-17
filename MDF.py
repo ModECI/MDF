@@ -34,6 +34,12 @@ class ModelGraph(BaseWithId):
         self.allowed_fields = collections.OrderedDict([('parameters',('Dict of global parameters for the network',dict))])
 
         super(ModelGraph, self).__init__(**kwargs)
+        
+        
+    def get_node(self, id):
+        for node in self.nodes:
+            if id == node.id:
+                return node
 
 
 class Node(BaseWithId):
