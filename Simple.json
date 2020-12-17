@@ -7,7 +7,7 @@
                         {
                             "input_node": {
                                 "parameters": {
-                                    "input_level": 0.0
+                                    "input_level": 1
                                 },
                                 "output_ports": [
                                     {
@@ -33,20 +33,20 @@
                                 ],
                                 "functions": [
                                     {
-                                        "logistic_1": {
-                                            "function": "logistic",
+                                        "linear_1": {
+                                            "function": "linear",
                                             "args": {
                                                 "variable1": "input_port1",
-                                                "gain": "logistic_gain"
+                                                "slope": "slope"
                                             }
                                         }
                                     },
                                     {
-                                        "linear_1": {
-                                            "function": "linear",
+                                        "logistic_1": {
+                                            "function": "logistic",
                                             "args": {
-                                                "variable1": "logistic_1",
-                                                "slope": "slope"
+                                                "variable1": "linear_1",
+                                                "gain": "logistic_gain"
                                             }
                                         }
                                     }
@@ -54,7 +54,7 @@
                                 "output_ports": [
                                     {
                                         "output_1": {
-                                            "value": "linear_1"
+                                            "value": "logistic_1"
                                         }
                                     }
                                 ]
