@@ -37,7 +37,7 @@ Among the targets for extension are standards for specifying process control flo
 specified in the format, the environment must either assume that process conrol flow is determined by the structure
 of the graph (i.e., edges are directed, the graph is acyclic, and nodes execute in the order of dependencies), or
 that process control flow is specified in environment-specific entries.  A goal of further development is to provide
-standard ways of expressing both time-based and condition-based specifications for execution timing and order.
+standard ways of expressing both time-based and condition-based specifications for execution timing and order. Progress on this topic is under [Conditions](#Conditions) and [Graphs](#Graphs).
 
 Basic Constructs
 ----------------
@@ -56,7 +56,7 @@ objects:
                   out by that component.
 
 In addition, the standard allows the specification of **parameters** for **nodes**, **edges** and **ports**,
-and **arguments** for **functions**.  The format for specifying these components is described below.
+**arguments** for **functions**, and run **conditions**.  The format for specifying these components is described below.
 
 Overall structure
 -----------------
@@ -94,6 +94,9 @@ that are not determined by the structure of the graph itself??;  controller is a
                     ... dictionaries for graph parameters
 
                 }
+                "conditions": {                             # Optional
+                    ... dictionaries for run conditions
+                }
              }
             {
                 "name": {
@@ -107,6 +110,9 @@ that are not determined by the structure of the graph itself??;  controller is a
                 }
                 "parameters": {
                     ... dictionaries for graph parameters
+                }
+                "conditions": {
+                    ... dictionaries for run conditions
                 }
              }
          ]
@@ -311,3 +317,97 @@ or ``receiver`` **node**.
 * ``receiver`` : the name of its destination **node**.
 
 * ``receiver_port`` : the name of the **port** on the ``receiver`` **node** to which it connects.
+
+#### **Conditions**
+
+These must include a **type**, among options of an accepted library of
+conditions (TBD), as well as any **args** and **kwargs necessary to
+determine satisfaction of the relevant condition.
+
+* ``type`` : the name of the condition
+* ``args`` : unnamed, and possibly ordered or variable-length, arguments used to evaluate the condition
+* ``kwargs`` : named arguments used to evaluate the condition
+
+#### **Graphs**
+
+These objects may include **condition**s to specify a non-default
+pattern of execution.
+
+* ``conditions`` : a dictionary with entries
+  * ``node_specific`` : a dictionary mapping **node**s to any non-default run **condition**s
+  * ``termination`` : a dictionary mapping time scales of model execution to **condition**s indicating when they end
+
+  Each node or time scale may have exactly one condition, however binary
+  conditions like `and`, `or`, and `not`, may combine multiple
+  conditions into one in an unambiguous way. This is sufficient to
+  describe a wide variety of execution patterns that go beyond an
+  implied ordering based on the structure of the graph, as in the
+  example below:
+
+      {
+          "node_specific": {
+              "A": {
+                  "type": "and",
+                  "args": [
+                      {
+                          "type": "TimeInterval",
+                          "args": [],
+                          "kwargs": {
+                              "end": 1000,
+                              "interval": 2,
+                              "unit": "ms"
+                          }
+                      },
+                      {
+                          "type": "Threshold",
+                          "args": [],
+                          "kwargs": {
+                              "parameter": "value",
+                              "threshold": "10",
+                              "direction": "<="
+                          }
+                      }
+                  ]
+              },
+              "B": {
+                  "type": "WhenFinished",
+                  "args": [],
+                  "kwargs": {
+                      "dependency": "A"
+                  }
+              },
+              "C": {
+                  "type": "EveryNCalls",
+                  "args": [],
+                  "kwargs": {
+                      "dependency": "B",
+                      "calls": 2
+                  }
+              }
+          },
+          "termination": {
+              "run": {
+                  "type": "AfterNTrials",
+                  "args": [],
+                  "kwargs": {
+                      "trials": 5
+                  }
+              },
+              "trial": {
+                  "type": "AtNCalls",
+                  "args": [],
+                  "kwargs": {
+                      "dependency": "C",
+                      "calls": 1
+                  }
+              }
+          }
+      }
+
+    In this example, node `A` runs only while its condition `and` is
+    true. This `and` is comprised of a `TimeInterval` and a `Threshold`,
+    creating a condition that is only true at even milliseconds for the
+    first 1000 milliseconds of the trial at which the `value` parameter
+    of `A` has also not exceeded 10. The trial finishes when the trial
+    termination condition is satisfied - when `C` has been executed
+    once.
