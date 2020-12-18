@@ -7,7 +7,7 @@
 
 Previous work in this area, taken from [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF):
 
-BIDS Model Description Format (BIDS-MDF)
+Model Description Format (MDF)
 ========================================
 
 Overview
