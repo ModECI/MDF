@@ -3,3 +3,5 @@
 *$py.class
 /modeci_mdf/__pycache__
 __pycache__
+*.gv
+/modeci_mdf/export/*.png

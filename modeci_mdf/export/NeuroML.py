@@ -8,6 +8,7 @@ Work in progress...
 import sys
 import neuromllite
 
+import lems.api as lems
 
 def mdf_to_neuroml(graph, save_to=None):
     
@@ -16,11 +17,23 @@ def mdf_to_neuroml(graph, save_to=None):
     net = neuromllite.Network(id=graph.id)
     net.notes = 'NeuroMLlite export of MDF graph: %s'%graph.id
     
+    model = lems.Model()
+    lems_definitions = '%s_lems_definitions.xml'%graph.id
+    
     for node in graph.nodes:
         print('    Node: %s'%node.id)
 
+        node_comp_type = '%s__definition'%node.id
+        node_comp = '%s__instance'%node.id
+        ct = lems.ComponentType(node_comp_type)
+        
+        ct.add(lems.Exposure('OUTPUT', 'none'))
+        ct.dynamics.add(lems.StateVariable('OUTPUT','none', 'OUTPUT')) 
 
-        cell = neuromllite.Cell(id='%s_definition'%node.id, lems_source_file='%s_lems_definitions.xml'%graph.id)
+        model.add(ct)
+        model.add(lems.Component(node_comp, node_comp_type))
+        
+        cell = neuromllite.Cell(id=node_comp, lems_source_file=lems_definitions)
         
         net.cells.append(cell)
         
@@ -33,6 +46,7 @@ def mdf_to_neuroml(graph, save_to=None):
     # Much more todo...   
     
     
+    model.export_to_file(lems_definitions)
 
     print('Nml net: %s'%net)
     if save_to:
@@ -49,7 +63,8 @@ def mdf_to_neuroml(graph, save_to=None):
                          network=new_file,
                          duration=simtime,
                          dt=dt,
-                         seed= 123)
+                         seed= 123,
+                         recordVariables={'OUTPUT':{'all':'*'}})
 
         sim.to_json_file()
 
