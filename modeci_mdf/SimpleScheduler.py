@@ -150,7 +150,7 @@ def evaluate(graph):
     
 if __name__ == "__main__":
     
-    from utils import load_mdf_json, print_summary
+    from modeci_mdf.utils import load_mdf_json, print_summary
     
     example = '../examples/Simple.json'
     verbose = True
