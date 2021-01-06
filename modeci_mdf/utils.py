@@ -3,7 +3,7 @@
     Example of ModECI MDF - Work in progress!!!
 '''
 
-from MDF import *
+from modeci_mdf.MDF import *
 
 def create_node(node_id, graph):
     

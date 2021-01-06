@@ -1,7 +1,8 @@
 import sys
 
-from MDF import *
+from modeci_mdf.MDF import *
 from neuromllite.utils import evaluate as evaluate_params
+    
     
 def params_info(parameters):    
     pi='['
@@ -11,6 +12,7 @@ def params_info(parameters):
     pi=pi[:-1]
     pi+=']'    
     return pi
+
 
 class EvaluableFunction():
     
@@ -50,6 +52,7 @@ class EvaluableOutput():
         print('    Evaluated %s with %s =\t%s'%(self.output_port, params_info(parameters), self.curr_value))
         return self.curr_value
         
+        
 class EvaluableInput():
     
     def __init__(self, input_port, verbose=False):
@@ -66,9 +69,7 @@ class EvaluableInput():
         return self.curr_value
         
         
-
 class EvaluableNode():
-    
     
     def __init__(self, node, verbose=False):
         self.verbose = verbose
@@ -113,7 +114,6 @@ class EvaluableNode():
 
 class EvaluableGraph():
     
-    
     def __init__(self, graph, verbose=False):
         self.verbose = verbose
         print('\nInit graph: %s'%graph.id)
@@ -126,7 +126,6 @@ class EvaluableGraph():
             en = EvaluableNode(node, self.verbose)
             self.enodes[node.id] = en
             self.root_nodes.append(node.id)
-            
         
         for edge in graph.edges:
             self.root_nodes.remove(edge.receiver)
@@ -148,11 +147,12 @@ class EvaluableGraph():
 def evaluate(graph):
     pass
     
+    
 if __name__ == "__main__":
     
     from utils import load_mdf_json, print_summary
     
-    example = 'Simple.json'
+    example = '../examples/Simple.json'
     verbose = True
     if len(sys.argv)==2:
         example = sys.argv[1]
