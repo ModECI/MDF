@@ -4,9 +4,9 @@ import collections
     Example of ModECI MDF - Work in progress!!!
 '''
 
-from MDF import *
+from modeci_mdf.MDF import *
 
-from utils import create_node, simple_connect, print_summary
+from modeci_mdf.utils import create_node, simple_connect, print_summary
     
 if __name__ == "__main__":
 

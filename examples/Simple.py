@@ -4,8 +4,7 @@ import collections
     Example of ModECI MDF - Work in progress!!!
 '''
 
-from MDF import *
-
+from modeci_mdf.MDF import *
 
 if __name__ == "__main__":
 
