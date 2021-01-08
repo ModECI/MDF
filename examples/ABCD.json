@@ -1,5 +1,6 @@
 {
     "ABCD": {
+        "format": "ModECI MDF v0.1",
         "graphs": [
             {
                 "abcd_example": {
@@ -36,7 +37,7 @@
                                         "logistic_1": {
                                             "function": "logistic",
                                             "args": {
-                                                "variable1": "input_port1",
+                                                "variable0": "input_port1",
                                                 "gain": "logistic_gain"
                                             }
                                         }
@@ -45,7 +46,7 @@
                                         "linear_1": {
                                             "function": "linear",
                                             "args": {
-                                                "variable1": "logistic_1",
+                                                "variable0": "logistic_1",
                                                 "slope": "slope"
                                             }
                                         }
@@ -78,7 +79,7 @@
                                         "logistic_1": {
                                             "function": "logistic",
                                             "args": {
-                                                "variable1": "input_port1",
+                                                "variable0": "input_port1",
                                                 "gain": "logistic_gain"
                                             }
                                         }
@@ -87,7 +88,7 @@
                                         "linear_1": {
                                             "function": "linear",
                                             "args": {
-                                                "variable1": "logistic_1",
+                                                "variable0": "logistic_1",
                                                 "slope": "slope"
                                             }
                                         }
@@ -120,7 +121,7 @@
                                         "logistic_1": {
                                             "function": "logistic",
                                             "args": {
-                                                "variable1": "input_port1",
+                                                "variable0": "input_port1",
                                                 "gain": "logistic_gain"
                                             }
                                         }
@@ -129,7 +130,7 @@
                                         "linear_1": {
                                             "function": "linear",
                                             "args": {
-                                                "variable1": "logistic_1",
+                                                "variable0": "logistic_1",
                                                 "slope": "slope"
                                             }
                                         }
@@ -162,7 +163,7 @@
                                         "logistic_1": {
                                             "function": "logistic",
                                             "args": {
-                                                "variable1": "input_port1",
+                                                "variable0": "input_port1",
                                                 "gain": "logistic_gain"
                                             }
                                         }
@@ -171,7 +172,7 @@
                                         "linear_1": {
                                             "function": "linear",
                                             "args": {
-                                                "variable1": "logistic_1",
+                                                "variable0": "logistic_1",
                                                 "slope": "slope"
                                             }
                                         }
@@ -189,7 +190,7 @@
                     ],
                     "edges": [
                         {
-                            "input_edge": {
+                            "edge_input0_A": {
                                 "sender": "input0",
                                 "receiver": "A",
                                 "sender_port": "out_port",
@@ -197,7 +198,7 @@
                             }
                         },
                         {
-                            "input_edge": {
+                            "edge_A_B": {
                                 "sender": "A",
                                 "receiver": "B",
                                 "sender_port": "output_1",
@@ -205,7 +206,7 @@
                             }
                         },
                         {
-                            "input_edge": {
+                            "edge_B_C": {
                                 "sender": "B",
                                 "receiver": "C",
                                 "sender_port": "output_1",
@@ -213,7 +214,7 @@
                             }
                         },
                         {
-                            "input_edge": {
+                            "edge_C_D": {
                                 "sender": "C",
                                 "receiver": "D",
                                 "sender_port": "output_1",

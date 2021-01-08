@@ -10,12 +10,12 @@ import neuromllite
 
 import lems.api as lems
 
-def mdf_to_neuroml(graph, save_to=None):
+def mdf_to_neuroml(graph, save_to=None, format=None):
     
     print('Converting graph: %s to NeuroML'%(graph.id))
  
     net = neuromllite.Network(id=graph.id)
-    net.notes = 'NeuroMLlite export of MDF graph: %s'%graph.id
+    net.notes = 'NeuroMLlite export of %s graph: %s'%(format if format else 'MDF',graph.id)
     
     model = lems.Model()
     lems_definitions = '%s_lems_definitions.xml'%graph.id
@@ -42,6 +42,32 @@ def mdf_to_neuroml(graph, save_to=None):
                     component=cell.id, 
                     properties={'color':'0.2 0.2 0.2', 'radius':3})
         net.populations.append(pop)
+        
+    if len(graph.edges)>0:
+
+        rsDL = neuromllite.Synapse(id='rsDL', lems_source_file=lems_definitions)
+        
+        model.add(lems.Component(rsDL.id, 'silentSynapse'))
+        net.synapses.append(rsDL)
+        
+    for edge in graph.edges:
+        print('    Edge: %s connects %s to %s'%(edge.id,edge.sender,edge.receiver))
+
+        ssyn_id = 'silentSyn_proj_%s'%edge.id
+        silentDLin = neuromllite.Synapse(id=ssyn_id, 
+                             lems_source_file=lems_definitions)
+                             
+        model.add(lems.Component(ssyn_id, 'silentSynapse'))
+        
+        net.synapses.append(silentDLin)
+        net.projections.append(neuromllite.Projection(id='proj_%s'%edge.id,
+                                           presynaptic=edge.sender, 
+                                           postsynaptic=edge.receiver,
+                                           synapse=rsDL.id,
+                                           pre_synapse=silentDLin.id,
+                                           type='continuousProjection',
+                                           weight=1,
+                                           random_connectivity=neuromllite.RandomConnectivity(probability=1)))
         
     # Much more todo...   
     
@@ -81,12 +107,13 @@ if __name__ == "__main__":
         example = sys.argv[1]
         verbose = False
         
-    mod_graph = load_mdf_json(example).graphs[0]
+    model = load_mdf_json(example)
+    mod_graph = model.graphs[0]
     
     print('Loaded Graph:')
     print_summary(mod_graph)
     
     print('------------------')
     
-    mdf_to_neuroml(mod_graph, save_to=example.replace('.json','.nmllite.json'))
+    mdf_to_neuroml(mod_graph, save_to=example.replace('.json','.nmllite.json'), format=model.format)
         

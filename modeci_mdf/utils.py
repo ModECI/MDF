@@ -5,7 +5,7 @@
 
 from modeci_mdf.MDF import *
 
-def create_node(node_id, graph):
+def create_example_node(node_id, graph):
     
     a = Node(id=node_id)
     graph.nodes.append(a)
@@ -14,9 +14,9 @@ def create_node(node_id, graph):
     ip1 = InputPort(id='input_port1', shape='(1,)')
     a.input_ports.append(ip1)
 
-    f1 = Function(id='logistic_1', function='logistic', args={'variable1':ip1.id,'gain':'logistic_gain'})
+    f1 = Function(id='logistic_1', function='logistic', args={'variable0':ip1.id,'gain':'logistic_gain'})
     a.functions.append(f1)
-    f2 = Function(id='linear_1', function='linear', args={'variable1':f1.id,'slope':'slope'})
+    f2 = Function(id='linear_1', function='linear', args={'variable0':f1.id,'slope':'slope'})
     a.functions.append(f2)
     a.output_ports.append(OutputPort(id='output_1', value='linear_1'))
     
@@ -24,7 +24,7 @@ def create_node(node_id, graph):
 
 def simple_connect(pre_node, post_node, graph):
     
-    e1 = Edge(id="input_edge",
+    e1 = Edge(id="edge_%s_%s"%(pre_node.id,post_node.id),
               sender=pre_node.id,
               sender_port=pre_node.output_ports[0].id,
               receiver=post_node.id,

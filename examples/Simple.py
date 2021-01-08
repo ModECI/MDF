@@ -5,10 +5,11 @@ import collections
 '''
 
 from modeci_mdf.MDF import *
+from modeci_mdf import MODECI_MDF_VERSION
 
 if __name__ == "__main__":
 
-    mod = Model(id='Simple')
+    mod = Model(id='Simple',format='ModECI MDF v%s'%MODECI_MDF_VERSION)
     mod_graph = ModelGraph(id='simple_example')
     mod.graphs.append(mod_graph)
 
@@ -26,9 +27,9 @@ if __name__ == "__main__":
     ip1 = InputPort(id='input_port1', shape='(1,)')
     processing_node.input_ports.append(ip1)
 
-    f1 = Function(id='linear_1', function='linear', args={'variable1':ip1.id,'slope':'slope'})
+    f1 = Function(id='linear_1', function='linear', args={'variable0':ip1.id,'slope':'slope'})
     processing_node.functions.append(f1)
-    f2 = Function(id='logistic_1', function='logistic', args={'variable1':f1.id,'gain':'logistic_gain'})
+    f2 = Function(id='logistic_1', function='logistic', args={'variable0':f1.id,'gain':'logistic_gain'})
     processing_node.functions.append(f2)
     processing_node.output_ports.append(OutputPort(id='output_1', value='logistic_1'))
 

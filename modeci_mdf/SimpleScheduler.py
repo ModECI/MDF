@@ -1,7 +1,9 @@
 import sys
 
 from modeci_mdf.MDF import *
-from neuromllite.utils import evaluate as evaluate_params
+from modeci_mdf.functions import mdf_functions
+
+from neuromllite.utils import evaluate as evaluate_params_nmllite
     
     
 def params_info(parameters):    
@@ -13,6 +15,13 @@ def params_info(parameters):
     pi+=']'    
     return pi
 
+def evaluate_expr(expr, func_params, verbose=False):
+    
+    e = evaluate_params_nmllite(expr, func_params, verbose=verbose)
+    if type(e) == str:
+        raise Exception('Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s'%(expr, params_info(func_params), e, type(e)))
+    return e
+
 
 class EvaluableFunction():
     
@@ -22,20 +31,20 @@ class EvaluableFunction():
         
     def evaluate(self, parameters):
         
-        if self.function.function=='linear':
-            expr = 'variable1*slope'
-        elif self.function.function=='logistic':
-            expr = '1/(1 + math.exp(-1*gain * (variable1)))'
-        else:
-            raise 'Unknown function: %s'%self.function.function
+        expr = None
+        for f in mdf_functions:
+            if self.function.function==f:
+                expr = mdf_functions[f]['expression_string']
+        if not expr:
+            raise 'Unknown function: %s. Known functions: %s'%(self.function.function, mdf_functions.keys)
         
         func_params = {}
         func_params.update(parameters)
         if self.verbose: print('    ---  Evaluating %s with %s, i.e. %s'%(self.function,params_info(func_params),expr))
         for arg in self.function.args:
-            func_params[arg] = evaluate_params(self.function.args[arg], func_params, verbose=False)
+            func_params[arg] = evaluate_expr(self.function.args[arg], func_params, verbose=False)
             if self.verbose: print('      Arg %s became %s'%(arg, func_params[arg]))
-        self.curr_value = evaluate_params(expr, func_params, verbose=False)
+        self.curr_value = evaluate_expr(expr, func_params, verbose=False)
         if self.verbose: print('    Evaluated %s with %s =\t%s'%(self.function, params_info(func_params), self.curr_value))
         return self.curr_value
         
@@ -48,7 +57,7 @@ class EvaluableOutput():
         
     def evaluate(self, parameters):
         if self.verbose: print('    Evaluating %s with %s '%(self.output_port, params_info(parameters)))
-        self.curr_value = evaluate_params(self.output_port.value, parameters, verbose=False)
+        self.curr_value = evaluate_expr(self.output_port.value, parameters, verbose=False)
         print('    Evaluated %s with %s =\t%s'%(self.output_port, params_info(parameters), self.curr_value))
         return self.curr_value
         

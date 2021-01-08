@@ -18,7 +18,8 @@ class Model(BaseWithId):
 
         self.allowed_children = collections.OrderedDict([
                                    ('graphs',('The definition of top level entry ...', ModelGraph))])
-
+                                   
+        self.allowed_fields = collections.OrderedDict([('format',('Information on verson of MDF',str))])
 
         super(Model, self).__init__(**kwargs)
 
