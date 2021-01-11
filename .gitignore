@@ -5,3 +5,7 @@
 __pycache__
 *.gv
 /modeci_mdf/export/*.png
+/modeci_mdf/export/*.dat
+x86_64
+*.mod
+report.*txt

@@ -27,9 +27,9 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
         node_comp = '%s__instance'%node.id
         ct = lems.ComponentType(node_comp_type)
         
-        ct.add(lems.Exposure('OUTPUT', 'none'))
-        ct.dynamics.add(lems.StateVariable('OUTPUT','none', 'OUTPUT')) 
-
+        ct.add(lems.Attachments("synapses","basePointCurrentDL"))
+        
+        
         model.add(ct)
         model.add(lems.Component(node_comp, node_comp_type))
         
@@ -42,6 +42,10 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                     component=cell.id, 
                     properties={'color':'0.2 0.2 0.2', 'radius':3})
         net.populations.append(pop)
+        
+        for op in node.output_ports:
+            ct.add(lems.Exposure(op.id, 'none'))
+            ct.dynamics.add(lems.DerivedVariable(name=op.id,dimension='none', value='1', exposure=op.id)) 
         
     if len(graph.edges)>0:
 
@@ -91,7 +95,15 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                          dt=dt,
                          seed= 123,
                          recordVariables={'OUTPUT':{'all':'*'}})
-
+                         
+        recordVariables = {}
+        for node in graph.nodes:
+            for op in node.output_ports:
+                if not op.id in recordVariables:
+                    recordVariables[op.id] = {}
+                recordVariables[op.id][node.id] = 0
+                
+        sim.recordVariables = recordVariables
         sim.to_json_file()
 
     
