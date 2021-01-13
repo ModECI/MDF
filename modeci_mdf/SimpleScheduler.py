@@ -1,7 +1,7 @@
 import sys
 
 from modeci_mdf.MDF import *
-from modeci_mdf.functions import mdf_functions
+from modeci_mdf.standardfunctions import mdf_functions, create_python_expression
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
     
@@ -34,7 +34,7 @@ class EvaluableFunction():
         expr = None
         for f in mdf_functions:
             if self.function.function==f:
-                expr = mdf_functions[f]['expression_string']
+                expr = create_python_expression(mdf_functions[f]['expression_string'])
         if not expr:
             raise 'Unknown function: %s. Known functions: %s'%(self.function.function, mdf_functions.keys)
         
@@ -106,14 +106,13 @@ class EvaluableNode():
         curr_params = {}
         curr_params.update(self.node.parameters)
         
-        for rip in self.evaluable_inputs:
-        
-            i = self.evaluable_inputs[rip].evaluate(curr_params)
-            curr_params[rip] = i
-        for rf in self.evaluable_functions:
-            curr_params[rf] = self.evaluable_functions[rf].evaluate(curr_params)
-        for rop in self.evaluable_outputs:
-            self.evaluable_outputs[rop].evaluate(curr_params)
+        for eip in self.evaluable_inputs:
+            i = self.evaluable_inputs[eip].evaluate(curr_params)
+            curr_params[eip] = i
+        for ef in self.evaluable_functions:
+            curr_params[ef] = self.evaluable_functions[ef].evaluate(curr_params)
+        for eop in self.evaluable_outputs:
+            self.evaluable_outputs[eop].evaluate(curr_params)
         
     def get_output(self, id):
         for rop in self.evaluable_outputs:

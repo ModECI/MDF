@@ -10,6 +10,8 @@ import neuromllite
 
 import lems.api as lems
 
+from modeci_mdf.standardfunctions import mdf_functions, substitute_args
+
 def mdf_to_neuroml(graph, save_to=None, format=None):
     
     print('Converting graph: %s to NeuroML'%(graph.id))
@@ -31,7 +33,8 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
         
         
         model.add(ct)
-        model.add(lems.Component(node_comp, node_comp_type))
+        comp = lems.Component(node_comp, node_comp_type)
+        model.add(comp)
         
         cell = neuromllite.Cell(id=node_comp, lems_source_file=lems_definitions)
         
@@ -43,9 +46,26 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                     properties={'color':'0.2 0.2 0.2', 'radius':3})
         net.populations.append(pop)
         
+        for p in node.parameters:
+            ct.add(lems.Parameter(p, 'none'))
+            comp.parameters[p]=node.parameters[p]
+        
+        for ip in node.input_ports:
+            ct.add(lems.Exposure(ip.id, 'none'))
+            ct.dynamics.add(lems.DerivedVariable(name=ip.id,dimension='none', value='0.11', exposure=ip.id)) 
+            
+        for f in node.functions:
+            ct.add(lems.Exposure(f.id, 'none'))
+            func_info = mdf_functions[f.function]
+            expr = func_info['expression_string']
+            expr2 = substitute_args(expr, f.args)
+            for arg in f.args:
+                expr+=';%s=%s'%(arg,f.args[arg])
+            ct.dynamics.add(lems.DerivedVariable(name=f.id,dimension='none', value='%s'%(expr2), exposure=f.id)) 
+            
         for op in node.output_ports:
             ct.add(lems.Exposure(op.id, 'none'))
-            ct.dynamics.add(lems.DerivedVariable(name=op.id,dimension='none', value='1', exposure=op.id)) 
+            ct.dynamics.add(lems.DerivedVariable(name=op.id,dimension='none', value=op.value, exposure=op.id)) 
         
     if len(graph.edges)>0:
 
@@ -56,7 +76,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
         
     for edge in graph.edges:
         print('    Edge: %s connects %s to %s'%(edge.id,edge.sender,edge.receiver))
-
+        '''
         ssyn_id = 'silentSyn_proj_%s'%edge.id
         silentDLin = neuromllite.Synapse(id=ssyn_id, 
                              lems_source_file=lems_definitions)
@@ -71,7 +91,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                                            pre_synapse=silentDLin.id,
                                            type='continuousProjection',
                                            weight=1,
-                                           random_connectivity=neuromllite.RandomConnectivity(probability=1)))
+                                           random_connectivity=neuromllite.RandomConnectivity(probability=1)))'''
         
     # Much more todo...   
     
@@ -98,10 +118,20 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                          
         recordVariables = {}
         for node in graph.nodes:
+            for ip in node.input_ports:
+                if not ip.id in recordVariables:
+                    recordVariables[ip.id] = {}
+                recordVariables[ip.id][node.id] = 0
+                
+            for f in node.functions:
+                if not f.id in recordVariables:
+                    recordVariables[f.id] = {}
+                recordVariables[f.id][node.id] = 0
             for op in node.output_ports:
                 if not op.id in recordVariables:
                     recordVariables[op.id] = {}
                 recordVariables[op.id][node.id] = 0
+                
                 
         sim.recordVariables = recordVariables
         sim.to_json_file()
