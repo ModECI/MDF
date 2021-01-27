@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup
 
 
 import modeci_mdf
@@ -14,7 +14,8 @@ setup(name='modeci-mdf',
       url='https://www.modeci.org',
       packages=['modeci_mdf'],
       install_requires=[
-        'neuromllite>=0.1.9',
+        'neuromllite>=0.2.2',
+        'pylems>=0.5.0',
         'matplotlib'],
       classifiers = [
         'Intended Audience :: Science/Research',

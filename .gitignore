@@ -1,5 +1,7 @@
 /__pycache__
 /build
+/dist
+*egg-info
 *$py.class
 /modeci_mdf/__pycache__
 __pycache__
