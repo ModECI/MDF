@@ -11,3 +11,5 @@ __pycache__
 x86_64
 *.mod
 report.*txt
+*.pyc
+/private

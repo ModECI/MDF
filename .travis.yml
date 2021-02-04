@@ -1,0 +1,15 @@
+language: python
+
+python:
+  - "3.8"
+  - "3.9"
+
+# command to install dependencies
+install:
+  - pip install .
+
+
+script:
+  ###       Run main tests
+
+  - ./test_all.sh
