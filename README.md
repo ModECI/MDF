@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/ModECI/MDF.svg?branch=main)](https://travis-ci.com/ModECI/MDF)
 # ModECI Model Description Format
 
 **Work in progress!!!**
@@ -5,7 +6,7 @@
 **Subject to change without notice!**
 
 
-Previous work in this area, taken from [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF):
+For previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF):
 
 Model Description Format (MDF)
 ========================================
