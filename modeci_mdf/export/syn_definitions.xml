@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<Lems xmlns="http://www.neuroml.org/lems/0.7.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/lems/0.7.3 https://raw.githubusercontent.com/LEMS/LEMS/development/Schemas/LEMS/LEMS_v0.7.3.xsd">
+
+
+    <ComponentType name="baseGradedSynapseDL"
+                   extends="baseSynapseDL"
+                   description="Base type for dimensionless graded synapses">
+    </ComponentType>
+
+
+
+    <ComponentType name="silentRateSynapseDL"
+                   extends="baseGradedSynapseDL"
+                   description="Dummy synapse which emits no current. Used as presynaptic endpoint for analog synaptic connection.">
+
+        <Property name="weight" dimension="none" defaultValue="1"/> <!-- Not used...-->
+
+        <Exposure name="I" dimension="none"/>
+
+        <InstanceRequirement name="peer" type="baseGradedSynapseDL"/>
+
+        <Dynamics>
+            <DerivedVariable name="I" exposure="I" dimension="none" value="0"/>
+        </Dynamics>
+
+    </ComponentType>
+
+
+    <ComponentType name="rateSynapseDL"
+                   extends="baseGradedSynapseDL"
+                   description="...">
+
+        <Property name="weight" dimension="none" defaultValue="1"/>
+
+        <Constant name="SEC" dimension="time" value="1s"/>
+        <!--<Requirement name="out_port" dimension="none"/>-->
+
+        <Exposure name="I" dimension="none"/>
+
+
+        <InstanceRequirement name="peer" type="baseSynapseDL"/>
+
+        <Dynamics>
+            <!--<DerivedVariable name="rpeer" dimension="none" select="peer/out_port"/>weight * rpeer"/>-->
+            <DerivedVariable name="I" exposure="I" dimension="none" value="0"/>
+        </Dynamics>
+
+    </ComponentType>
+
+    <silentRateSynapseDL id="silentDL"/>
+    <silentRateSynapseDL id="silentSyn_proj_input_edge"/>
+    <silentRateSynapseDL id="silentSynX"/>
+    <rateSynapseDL id="rsDL" />
+
+</Lems>

@@ -13,3 +13,4 @@ x86_64
 report.*txt
 *.pyc
 /private
+/modeci_mdf/export/clean.sh
