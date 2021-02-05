@@ -19,4 +19,6 @@ python SimpleScheduler.py ../examples/ABCD.json
 cd export
 
 python NeuroML.py
+#python NeuroML.py -run
 python NeuroML.py ../../examples/ABCD.json
+#python NeuroML.py ../../examples/ABCD.json -run
