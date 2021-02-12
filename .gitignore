@@ -14,3 +14,5 @@ report.*txt
 *.pyc
 /private
 /modeci_mdf/export/clean.sh
+/modeci_mdf/export/*gv*
+/modeci_mdf/export/Sim*.json

@@ -48,8 +48,8 @@
     </ComponentType>
 
     <silentRateSynapseDL id="silentDL"/>
-    <silentRateSynapseDL id="silentSyn_proj_input_edge"/>
-    <silentRateSynapseDL id="silentSynX"/>
+    <!--<silentRateSynapseDL id="silentSyn_proj_input_edge"/>
+    <silentRateSynapseDL id="silentSynX"/>-->
     <rateSynapseDL id="rsDL" />
 
 </Lems>

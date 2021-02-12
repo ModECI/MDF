@@ -7,7 +7,6 @@ Work in progress...
 
 import sys
 import neuromllite
-
 import lems.api as lems
 
 from modeci_mdf.standardfunctions import mdf_functions, substitute_args
@@ -27,13 +26,14 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
         node_comp_type = '%s__definition'%node.id
         node_comp = '%s__instance'%node.id
+
+        # Create the ComponentType which defines behaviour of the general class
         ct = lems.ComponentType(node_comp_type, extends="baseCellMembPotDL")
-
         ct.add(lems.Attachments("synapses","basePointCurrentDL"))
-
         ct.dynamics.add(lems.DerivedVariable(name='V',dimension='none', value='0', exposure='V'))
-
         model.add(ct)
+
+        # Define the Component - an instance of the ComponentType
         comp = lems.Component(node_comp, node_comp_type)
         model.add(comp)
 
@@ -53,7 +53,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
         for ip in node.input_ports:
             ct.add(lems.Exposure(ip.id, 'none'))
-            ct.dynamics.add(lems.DerivedVariable(name=ip.id,dimension='none', value='0.11', exposure=ip.id))
+            ct.dynamics.add(lems.DerivedVariable(name=ip.id,dimension='none', value='-0.11111111', exposure=ip.id))
 
         for f in node.functions:
             ct.add(lems.Exposure(f.id, 'none'))
@@ -79,14 +79,13 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
     for edge in graph.edges:
         print('    Edge: %s connects %s to %s'%(edge.id,edge.sender,edge.receiver))
 
-
         ssyn_id = 'silentSyn_proj_%s'%edge.id
         ssyn_id = 'silentSyn_proj_%s'%edge.id
         #ssyn_id = 'silentSynX'
         silentDLin = neuromllite.Synapse(id=ssyn_id,
                              lems_source_file=lems_definitions)
 
-        #model.add(lems.Component(ssyn_id, 'silentSynapse'))
+        model.add(lems.Component(ssyn_id, 'silentRateSynapseDL'))
 
         net.synapses.append(silentDLin)
 
@@ -100,7 +99,6 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                                            random_connectivity=neuromllite.RandomConnectivity(probability=1)))
 
     # Much more todo...
-
 
     model.export_to_file(lems_definitions)
 
@@ -171,6 +169,7 @@ if __name__ == "__main__":
 
     print('------------------')
     nmllite_file = example.replace('.json','.nmllite.json')
+    #nmllite_file = example.split('/')[-1].replace('.json','.nmllite.json')
     net, sim = mdf_to_neuroml(mod_graph, save_to=nmllite_file, format=model.format)
 
     if run:
@@ -186,4 +185,5 @@ if __name__ == "__main__":
                      target_dir=None,
                      num_processors=1)
         for t in traces:
-            print('    %s = %s'%(t,traces[t][-1]))
+            if t is not 't': # the time array
+                print('    %s = %s'%(t,traces[t][-1]))
