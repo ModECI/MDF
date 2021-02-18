@@ -29,7 +29,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
         # Create the ComponentType which defines behaviour of the general class
         ct = lems.ComponentType(node_comp_type, extends="baseCellMembPotDL")
-        ct.add(lems.Attachments("synapses","basePointCurrentDL"))
+        ct.add(lems.Attachments("only_input_port","basePointCurrentDL"))
         ct.dynamics.add(lems.DerivedVariable(name='V',dimension='none', value='0', exposure='V'))
         model.add(ct)
 
@@ -38,7 +38,6 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
         model.add(comp)
 
         cell = neuromllite.Cell(id=node_comp, lems_source_file=lems_definitions)
-
         net.cells.append(cell)
 
         pop = neuromllite.Population(id=node.id,
@@ -51,9 +50,12 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
             ct.add(lems.Parameter(p, 'none'))
             comp.parameters[p]=node.parameters[p]
 
+        if len(node.input_ports)>1:
+            raise Exception('Currently only max 1 input port supported in NeuroML...')
+
         for ip in node.input_ports:
             ct.add(lems.Exposure(ip.id, 'none'))
-            ct.dynamics.add(lems.DerivedVariable(name=ip.id,dimension='none', value='-0.11111111', exposure=ip.id))
+            ct.dynamics.add(lems.DerivedVariable(name=ip.id,dimension='none', select="only_input_port[*]/I", reduce="add", exposure=ip.id))
 
         for f in node.functions:
             ct.add(lems.Exposure(f.id, 'none'))
@@ -64,9 +66,15 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                 expr+=';%s=%s'%(arg,f.args[arg])
             ct.dynamics.add(lems.DerivedVariable(name=f.id,dimension='none', value='%s'%(expr2), exposure=f.id))
 
+        if len(node.output_ports)>1:
+            raise Exception('Currently only max 1 output port supported in NeuroML...')
+
         for op in node.output_ports:
             ct.add(lems.Exposure(op.id, 'none'))
             ct.dynamics.add(lems.DerivedVariable(name=op.id,dimension='none', value=op.value, exposure=op.id))
+            only_output_port = 'only_output_port'
+            ct.add(lems.Exposure(only_output_port, 'none'))
+            ct.dynamics.add(lems.DerivedVariable(name=only_output_port,dimension='none', value=op.id, exposure=only_output_port))
 
     if len(graph.edges)>0:
 

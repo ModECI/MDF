@@ -33,16 +33,14 @@
         <Property name="weight" dimension="none" defaultValue="1"/>
 
         <Constant name="SEC" dimension="time" value="1s"/>
-        <!--<Requirement name="out_port" dimension="none"/>-->
 
         <Exposure name="I" dimension="none"/>
-
 
         <InstanceRequirement name="peer" type="baseSynapseDL"/>
 
         <Dynamics>
-            <!--<DerivedVariable name="rpeer" dimension="none" select="peer/out_port"/>weight * rpeer"/>-->
-            <DerivedVariable name="I" exposure="I" dimension="none" value="0"/>
+            <DerivedVariable name="rpeer" dimension="none" select="peer/only_output_port"/>
+            <DerivedVariable name="I" exposure="I" dimension="none" value="weight * rpeer"/>
         </Dynamics>
 
     </ComponentType>

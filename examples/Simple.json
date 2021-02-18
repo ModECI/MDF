@@ -8,7 +8,7 @@
                         {
                             "input_node": {
                                 "parameters": {
-                                    "input_level": 1
+                                    "input_level": 0.5
                                 },
                                 "output_ports": [
                                     {

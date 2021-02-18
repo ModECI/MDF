@@ -13,7 +13,7 @@ if __name__ == "__main__":
     mod_graph = ModelGraph(id='simple_example')
     mod.graphs.append(mod_graph)
 
-    input_node  = Node(id='input_node', parameters={'input_level':1})
+    input_node  = Node(id='input_node', parameters={'input_level':0.5})
     op1 = OutputPort(id='out_port')
     op1.value = 'input_level'
     input_node.output_ports.append(op1)
@@ -48,4 +48,3 @@ if __name__ == "__main__":
     print('------------------')
     print(mod.to_json())
     new_file = mod.to_json_file('%s.json'%mod.id)
-
