@@ -22,8 +22,8 @@
                         {
                             "A": {
                                 "parameters": {
-                                    "logistic_gain": 3,
-                                    "slope": 0.5
+                                    "slope": 2.1,
+                                    "intercept": 2.2
                                 },
                                 "input_ports": [
                                     {
@@ -34,20 +34,12 @@
                                 ],
                                 "functions": [
                                     {
-                                        "logistic_1": {
-                                            "function": "logistic",
-                                            "args": {
-                                                "variable0": "input_port1",
-                                                "gain": "logistic_gain"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "linear_1": {
+                                        "linear_func": {
                                             "function": "linear",
                                             "args": {
-                                                "variable0": "logistic_1",
-                                                "slope": "slope"
+                                                "variable0": "input_port1",
+                                                "slope": "slope",
+                                                "intercept": "intercept"
                                             }
                                         }
                                     }
@@ -55,7 +47,7 @@
                                 "output_ports": [
                                     {
                                         "output_1": {
-                                            "value": "linear_1"
+                                            "value": "linear_func"
                                         }
                                     }
                                 ]
@@ -64,8 +56,9 @@
                         {
                             "B": {
                                 "parameters": {
-                                    "logistic_gain": 3,
-                                    "slope": 0.5
+                                    "gain": 1.0,
+                                    "bias": 0.0,
+                                    "offset": 0.0
                                 },
                                 "input_ports": [
                                     {
@@ -76,20 +69,13 @@
                                 ],
                                 "functions": [
                                     {
-                                        "logistic_1": {
+                                        "logistic_func": {
                                             "function": "logistic",
                                             "args": {
                                                 "variable0": "input_port1",
-                                                "gain": "logistic_gain"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "linear_1": {
-                                            "function": "linear",
-                                            "args": {
-                                                "variable0": "logistic_1",
-                                                "slope": "slope"
+                                                "gain": "gain",
+                                                "bias": "bias",
+                                                "offset": "offset"
                                             }
                                         }
                                     }
@@ -97,7 +83,7 @@
                                 "output_ports": [
                                     {
                                         "output_1": {
-                                            "value": "linear_1"
+                                            "value": "logistic_func"
                                         }
                                     }
                                 ]
@@ -106,8 +92,10 @@
                         {
                             "C": {
                                 "parameters": {
-                                    "logistic_gain": 3,
-                                    "slope": 0.5
+                                    "scale": 1.0,
+                                    "rate": 1.0,
+                                    "bias": 0.0,
+                                    "offset": 0.0
                                 },
                                 "input_ports": [
                                     {
@@ -118,20 +106,14 @@
                                 ],
                                 "functions": [
                                     {
-                                        "logistic_1": {
-                                            "function": "logistic",
+                                        "exponential_func": {
+                                            "function": "exponential",
                                             "args": {
                                                 "variable0": "input_port1",
-                                                "gain": "logistic_gain"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "linear_1": {
-                                            "function": "linear",
-                                            "args": {
-                                                "variable0": "logistic_1",
-                                                "slope": "slope"
+                                                "scale": "scale",
+                                                "rate": "rate",
+                                                "bias": "bias",
+                                                "offset": "offset"
                                             }
                                         }
                                     }
@@ -139,7 +121,7 @@
                                 "output_ports": [
                                     {
                                         "output_1": {
-                                            "value": "linear_1"
+                                            "value": "exponential_func"
                                         }
                                     }
                                 ]
@@ -148,8 +130,7 @@
                         {
                             "D": {
                                 "parameters": {
-                                    "logistic_gain": 3,
-                                    "slope": 0.5
+                                    "scale": 1.0
                                 },
                                 "input_ports": [
                                     {
@@ -160,20 +141,11 @@
                                 ],
                                 "functions": [
                                     {
-                                        "logistic_1": {
-                                            "function": "logistic",
+                                        "sin_func": {
+                                            "function": "sin",
                                             "args": {
                                                 "variable0": "input_port1",
-                                                "gain": "logistic_gain"
-                                            }
-                                        }
-                                    },
-                                    {
-                                        "linear_1": {
-                                            "function": "linear",
-                                            "args": {
-                                                "variable0": "logistic_1",
-                                                "slope": "slope"
+                                                "scale": "scale"
                                             }
                                         }
                                     }
@@ -181,7 +153,7 @@
                                 "output_ports": [
                                     {
                                         "output_1": {
-                                            "value": "linear_1"
+                                            "value": "sin_func"
                                         }
                                     }
                                 ]

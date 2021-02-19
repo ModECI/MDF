@@ -13,3 +13,4 @@ script:
   ###       Run main tests
 
   - ./test_all.sh
+  - pip freeze  # List currently installed Python packages

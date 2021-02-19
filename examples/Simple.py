@@ -23,13 +23,13 @@ if __name__ == "__main__":
     processing_node = Node(id='processing_node')
     mod_graph.nodes.append(processing_node)
 
-    processing_node.parameters = {'logistic_gain':3, 'slope':0.5}
+    processing_node.parameters = {'logistic_gain':3, 'slope':0.5, 'intercept':0}
     ip1 = InputPort(id='input_port1', shape='(1,)')
     processing_node.input_ports.append(ip1)
 
-    f1 = Function(id='linear_1', function='linear', args={'variable0':ip1.id,'slope':'slope'})
+    f1 = Function(id='linear_1', function='linear', args={'variable0':ip1.id,'slope':'slope','intercept':'intercept'})
     processing_node.functions.append(f1)
-    f2 = Function(id='logistic_1', function='logistic', args={'variable0':f1.id,'gain':'logistic_gain'})
+    f2 = Function(id='logistic_1', function='logistic', args={'variable0':f1.id,'gain':'logistic_gain','bias':0,'offset':0})
     processing_node.functions.append(f2)
     processing_node.output_ports.append(OutputPort(id='output_1', value='logistic_1'))
 

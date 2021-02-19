@@ -40,7 +40,7 @@ class EvaluableFunction():
 
         func_params = {}
         func_params.update(parameters)
-        if self.verbose: print('    ---  Evaluating %s with %s, i.e. %s'%(self.function,params_info(func_params),expr))
+        if self.verbose: print('    ---  Evaluating %s with %s, i.e. [%s]'%(self.function,params_info(func_params),expr))
         for arg in self.function.args:
             func_params[arg] = evaluate_expr(self.function.args[arg], func_params, verbose=False)
             if self.verbose: print('      Arg %s became %s'%(arg, func_params[arg]))
@@ -164,6 +164,7 @@ if __name__ == "__main__":
     verbose = True
     if len(sys.argv)==2:
         example = sys.argv[1]
+        verbose = True
         verbose = False
 
     mod_graph = load_mdf_json(example).graphs[0]
