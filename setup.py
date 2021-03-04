@@ -16,7 +16,8 @@ setup(name='modeci-mdf',
       install_requires=[
         'neuromllite>=0.2.2',
         'pylems>=0.5.0',
-        'matplotlib'],
+        'matplotlib',
+        'graphviz'],
       classifiers = [
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
