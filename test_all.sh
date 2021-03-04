@@ -22,3 +22,6 @@ python NeuroML.py
 #python NeuroML.py -run
 python NeuroML.py ../../examples/ABCD.json
 #python NeuroML.py ../../examples/ABCD.json -run
+
+python GraphViz.py ../../examples/Simple.json 1 -noview
+python GraphViz.py ../../examples/ABCD.json 3 -noview
