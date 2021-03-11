@@ -17,6 +17,7 @@ setup(name='modeci-mdf',
         'neuromllite>=0.3.0',
         'pylems>=0.5.0',
         'matplotlib',
+        'pyyaml',
         'graphviz'],
       classifiers = [
         'Intended Audience :: Science/Research',
