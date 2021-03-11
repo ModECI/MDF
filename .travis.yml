@@ -11,6 +11,11 @@ python:
 
 # command to install dependencies
 install:
+  - git clone https://github.com/NeuroML/NeuroMLlite.git
+  - cd NeuroMLlite
+  - git checkout update_format  # specific branch of NeuroMLlite to use...
+  - python setup.py install
+  - cd ..
   - pip install .
 
 

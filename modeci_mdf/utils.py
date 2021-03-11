@@ -3,7 +3,13 @@
     Example of ModECI MDF - Work in progress!!!
 '''
 
-from modeci_mdf.MDF import *
+from modeci_mdf.MDF import Node
+from modeci_mdf.MDF import InputPort
+from modeci_mdf.MDF import Function
+from modeci_mdf.MDF import OutputPort
+from modeci_mdf.MDF import Edge
+from modeci_mdf.MDF import Model
+from modeci_mdf.MDF import Node
 
 def create_example_node(node_id, graph):
 
@@ -52,8 +58,9 @@ def load_mdf_json(filename):
 
     data = load_json(filename)
 
-    print("Loaded graph from %s"%filename)
-
+    print("Loaded a graph from %s, Root(s): %s"%(filename, data.keys()))
+    if data.keys() == 'graphs':
+        data = {'UNSPECIFIED':data}
     model = Model()
     model = _parse_element(data, model)
 
