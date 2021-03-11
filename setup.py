@@ -14,7 +14,7 @@ setup(name='modeci-mdf',
       url='https://www.modeci.org',
       packages=['modeci_mdf'],
       install_requires=[
-        'neuromllite>=0.2.2',
+        'neuromllite>=0.3.0',
         'pylems>=0.5.0',
         'matplotlib',
         'graphviz'],
