@@ -49,6 +49,14 @@ def print_summary(graph):
 
 
 
+def load_mdf(filename):
+
+    if filename.endswith('yaml') or filename.endswith('yml'):
+        return load_mdf_yaml(filename)
+    else:
+        return load_mdf_json(filename)
+
+
 def load_mdf_json(filename):
     """
     Load an MDF JSON file
@@ -57,6 +65,23 @@ def load_mdf_json(filename):
     from neuromllite.utils import load_json, _parse_element
 
     data = load_json(filename)
+
+    print("Loaded a graph from %s, Root(s): %s"%(filename, data.keys()))
+    if data.keys() == 'graphs':
+        data = {'UNSPECIFIED':data}
+    model = Model()
+    model = _parse_element(data, model)
+
+    return model
+
+def load_mdf_yaml(filename):
+    """
+    Load an MDF YAML file
+    """
+
+    from neuromllite.utils import load_yaml, _parse_element
+
+    data = load_yaml(filename)
 
     print("Loaded a graph from %s, Root(s): %s"%(filename, data.keys()))
     if data.keys() == 'graphs':

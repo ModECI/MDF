@@ -48,3 +48,4 @@ if __name__ == "__main__":
     print('------------------')
     print(mod.to_json())
     new_file = mod.to_json_file('%s.json'%mod.id)
+    new_file = mod.to_yaml_file('%s.yaml'%mod.id)
