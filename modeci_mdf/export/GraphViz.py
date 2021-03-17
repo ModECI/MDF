@@ -136,7 +136,7 @@ def mdf_to_graphviz(mdf_graph,
         label = '%s'%edge.id
         if level>=LEVEL_2:
             label += ' (%s -&gt; %s)'%(format_output(edge.sender_port), format_input(edge.receiver_port))
-        graph.edge(edge.sender, edge.receiver, arrowhead=DEFAULT_ARROW_SHAPE, label='<%s>'%label)
+        graph.edge(edge.sender, edge.receiver, arrowhead=DEFAULT_ARROW_SHAPE, label='<%s>'%label if level>=LEVEL_2 else '')
 
     if view_on_render:
         graph.view()
