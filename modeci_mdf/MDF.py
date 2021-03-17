@@ -18,10 +18,10 @@ class Model(BaseWithId):
 
         self.allowed_children = collections.OrderedDict([
                                    ('graphs',('The definition of top level entry ...', ModelGraph))])
-                                   
+
         self.allowed_fields = collections.OrderedDict([('format',('Information on verson of MDF',str))])
 
-        super(Model, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class ModelGraph(BaseWithId):
@@ -34,9 +34,9 @@ class ModelGraph(BaseWithId):
 
         self.allowed_fields = collections.OrderedDict([('parameters',('Dict of global parameters for the network',dict))])
 
-        super(ModelGraph, self).__init__(**kwargs)
-        
-        
+        super().__init__(**kwargs)
+
+
     def get_node(self, id):
         for node in self.nodes:
             if id == node.id:
@@ -54,7 +54,7 @@ class Node(BaseWithId):
         self.allowed_fields = collections.OrderedDict([('type',('Type...',str)),
                                ('parameters',('Dict of parameters for the node',dict))])
 
-        super(Node, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class Function(BaseWithId):
@@ -64,7 +64,7 @@ class Function(BaseWithId):
         self.allowed_fields = collections.OrderedDict([('function',('...',str)),
                                ('args',('Dict of args...',dict))])
 
-        super(Function, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class InputPort(BaseWithId):
@@ -73,7 +73,7 @@ class InputPort(BaseWithId):
 
         self.allowed_fields = collections.OrderedDict([('shape',('...',str))])
 
-        super(InputPort, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class OutputPort(BaseWithId):
@@ -82,7 +82,7 @@ class OutputPort(BaseWithId):
 
         self.allowed_fields = collections.OrderedDict([('value',('...',str))])
 
-        super(OutputPort, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class Edge(BaseWithId):
@@ -95,7 +95,7 @@ class Edge(BaseWithId):
                 ('sender_port',('...',str)),
                 ('receiver_port',('...',str))])
 
-        super(Edge, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 if __name__ == "__main__":
@@ -110,4 +110,3 @@ if __name__ == "__main__":
     print('------------------')
     print(mod_graph0.to_json())
     print('==================')
-

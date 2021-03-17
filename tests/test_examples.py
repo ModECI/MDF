@@ -23,4 +23,3 @@ def test_examples():
     # Cleanup, not sure I need this but just to be safe cause this is weird.
     os.chdir('..')
     sys.path.pop()
-
