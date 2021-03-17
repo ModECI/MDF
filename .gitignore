@@ -17,6 +17,9 @@ report.*txt
 /modeci_mdf/export/*gv*
 /modeci_mdf/export/Sim*.json
 
+# SCM Versioning
+modeci_mdf/version.py
+
 # PyCharm project
 .idea/
 
