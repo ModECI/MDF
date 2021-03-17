@@ -158,7 +158,7 @@ def evaluate(graph):
 
 if __name__ == "__main__":
 
-    from modeci_mdf.utils import load_mdf_json, print_summary
+    from modeci_mdf.utils import load_mdf, print_summary
 
     example = '../examples/Simple.json'
     verbose = True
@@ -167,7 +167,7 @@ if __name__ == "__main__":
         verbose = True
         verbose = False
 
-    mod_graph = load_mdf_json(example).graphs[0]
+    mod_graph = load_mdf(example).graphs[0]
 
     print('Loaded Graph:')
     print_summary(mod_graph)

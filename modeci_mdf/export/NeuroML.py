@@ -156,7 +156,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
 if __name__ == "__main__":
 
-    from modeci_mdf.utils import load_mdf_json, print_summary
+    from modeci_mdf.utils import load_mdf, print_summary
 
     example = '../../examples/Simple.json'
     verbose = True
@@ -169,7 +169,7 @@ if __name__ == "__main__":
         example = sys.argv[1]
         verbose = False
 
-    model = load_mdf_json(example)
+    model = load_mdf(example)
     mod_graph = model.graphs[0]
 
     print('Loaded Graph:')
