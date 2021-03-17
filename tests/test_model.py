@@ -1,6 +1,22 @@
 from modeci_mdf.MDF import Model, ModelGraph, Node, OutputPort
 
 
+def test_model_graph_to_json():
+    """
+    Check if dumping a model to a simple JSON string works.
+    """
+
+    mod_graph0 = ModelGraph(id='Test', parameters={'speed': 4})
+
+    node = Node(id='N0', parameters={'rate': 5})
+
+    mod_graph0.nodes.append(node)
+
+    # Export to JSON and see if we can load back in
+    import json
+    d = json.loads(mod_graph0.to_json())
+
+
 def test_no_input_ports_to_json(tmpdir):
     """
     Test the edge case of exporting a model to JSON when it has a node with no input ports
