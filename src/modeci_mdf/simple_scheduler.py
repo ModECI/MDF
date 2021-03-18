@@ -1,7 +1,6 @@
 import sys
 
-from modeci_mdf.MDF import *
-from modeci_mdf.standardfunctions import mdf_functions, create_python_expression
+from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
 
@@ -159,7 +158,7 @@ def evaluate(graph):
 def main():
     from modeci_mdf.utils import load_mdf, print_summary
 
-    example = '../examples/Simple.json'
+    example = '../../examples/Simple.json'
     verbose = True
     if len(sys.argv)==2:
         example = sys.argv[1]

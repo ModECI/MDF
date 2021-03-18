@@ -1,10 +1,8 @@
-import collections
-
 """
     Example of ModECI MDF - Work in progress!!!
 """
 
-from modeci_mdf.MDF import *
+from modeci_mdf.mdf import *
 from modeci_mdf import MODECI_MDF_VERSION
 
 

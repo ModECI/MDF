@@ -1,53 +1,67 @@
 {
     "simple_example": {
-        "version": "NeuroMLlite v0.3.0",
+        "version": "NeuroMLlite v0.2.4",
         "notes": "NeuroMLlite export of ModECI MDF v0.1 graph: simple_example",
-        "cells": {
-            "input_node__instance": {
-                "lems_source_file": "simple_example_lems_definitions.xml"
-            },
-            "processing_node__instance": {
-                "lems_source_file": "simple_example_lems_definitions.xml"
-            }
-        },
-        "synapses": {
-            "rsDL": {
-                "lems_source_file": "simple_example_lems_definitions.xml"
-            },
-            "silentSyn_proj_input_edge": {
-                "lems_source_file": "simple_example_lems_definitions.xml"
-            }
-        },
-        "populations": {
-            "input_node": {
-                "size": "1",
-                "component": "input_node__instance",
-                "properties": {
-                    "color": "0.2 0.2 0.2",
-                    "radius": 3
+        "cells": [
+            {
+                "input_node__instance": {
+                    "lems_source_file": "simple_example_lems_definitions.xml"
                 }
             },
-            "processing_node": {
-                "size": "1",
-                "component": "processing_node__instance",
-                "properties": {
-                    "color": "0.2 0.2 0.2",
-                    "radius": 3
+            {
+                "processing_node__instance": {
+                    "lems_source_file": "simple_example_lems_definitions.xml"
                 }
             }
-        },
-        "projections": {
-            "proj_input_edge": {
-                "presynaptic": "input_node",
-                "postsynaptic": "processing_node",
-                "synapse": "rsDL",
-                "pre_synapse": "silentSyn_proj_input_edge",
-                "type": "continuousProjection",
-                "weight": 1,
-                "random_connectivity": {
-                    "probability": 1
+        ],
+        "synapses": [
+            {
+                "rsDL": {
+                    "lems_source_file": "simple_example_lems_definitions.xml"
+                }
+            },
+            {
+                "silentSyn_proj_input_edge": {
+                    "lems_source_file": "simple_example_lems_definitions.xml"
                 }
             }
-        }
+        ],
+        "populations": [
+            {
+                "input_node": {
+                    "size": "1",
+                    "component": "input_node__instance",
+                    "properties": {
+                        "color": "0.2 0.2 0.2",
+                        "radius": 3
+                    }
+                }
+            },
+            {
+                "processing_node": {
+                    "size": "1",
+                    "component": "processing_node__instance",
+                    "properties": {
+                        "color": "0.2 0.2 0.2",
+                        "radius": 3
+                    }
+                }
+            }
+        ],
+        "projections": [
+            {
+                "proj_input_edge": {
+                    "presynaptic": "input_node",
+                    "postsynaptic": "processing_node",
+                    "synapse": "rsDL",
+                    "pre_synapse": "silentSyn_proj_input_edge",
+                    "type": "continuousProjection",
+                    "weight": 1,
+                    "random_connectivity": {
+                        "probability": 1
+                    }
+                }
+            }
+        ]
     }
 }
