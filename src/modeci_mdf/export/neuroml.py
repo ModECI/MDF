@@ -9,7 +9,7 @@ import sys
 import neuromllite
 import lems.api as lems
 
-from modeci_mdf.standardfunctions import mdf_functions, substitute_args
+from modeci_mdf.standard_functions import mdf_functions, substitute_args
 
 def mdf_to_neuroml(graph, save_to=None, format=None):
 
@@ -158,7 +158,7 @@ if __name__ == "__main__":
 
     from modeci_mdf.utils import load_mdf, print_summary
 
-    example = '../../examples/Simple.json'
+    example = '../../../examples/Simple.json'
     verbose = True
     run = False
     if '-run' in sys.argv:
@@ -193,5 +193,5 @@ if __name__ == "__main__":
                      target_dir=None,
                      num_processors=1)
         for t in traces:
-            if t is not 't': # the time array
+            if t != 't': # the time array
                 print('    %s = %s'%(t,traces[t][-1]))

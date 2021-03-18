@@ -1,15 +1,13 @@
-
 '''
     Example of ModECI MDF - Work in progress!!!
 '''
 
-from modeci_mdf.MDF import Node
-from modeci_mdf.MDF import InputPort
-from modeci_mdf.MDF import Function
-from modeci_mdf.MDF import OutputPort
-from modeci_mdf.MDF import Edge
-from modeci_mdf.MDF import Model
-from modeci_mdf.MDF import Node
+from modeci_mdf.mdf import InputPort
+from modeci_mdf.mdf import Function
+from modeci_mdf.mdf import OutputPort
+from modeci_mdf.mdf import Edge
+from modeci_mdf.mdf import Model
+from modeci_mdf.mdf import Node
 
 def create_example_node(node_id, graph):
 
