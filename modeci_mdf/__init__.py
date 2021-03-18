@@ -1,5 +1,3 @@
-
-
 # Version of the specification for MDF
 MODECI_MDF_VERSION = '0.1'
 

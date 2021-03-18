@@ -156,8 +156,7 @@ def evaluate(graph):
     pass
 
 
-if __name__ == "__main__":
-
+def main():
     from modeci_mdf.utils import load_mdf, print_summary
 
     example = '../examples/Simple.json'
@@ -175,3 +174,7 @@ if __name__ == "__main__":
     print('------------------')
     eg = EvaluableGraph(mod_graph, verbose)
     eg.evaluate()
+
+
+if __name__ == "__main__":
+    main()

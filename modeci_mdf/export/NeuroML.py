@@ -193,5 +193,5 @@ if __name__ == "__main__":
                      target_dir=None,
                      num_processors=1)
         for t in traces:
-            if t is not 't': # the time array
+            if t != 't': # the time array
                 print('    %s = %s'%(t,traces[t][-1]))
