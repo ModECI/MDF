@@ -11,7 +11,7 @@ import torch
 from torch import nn
 import numpy as np
 
-import ABCD_python as abcd
+import abcd_python as abcd
 
 in_size = 1
 out_size = 1

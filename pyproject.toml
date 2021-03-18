@@ -9,4 +9,4 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
-write_to = "modeci_mdf/version.py"
+write_to = "src/modeci_mdf/version.py"

@@ -1,4 +1,4 @@
-from modeci_mdf.MDF import Model, ModelGraph, Node, OutputPort
+from modeci_mdf.mdf import Model, ModelGraph, Node, OutputPort
 
 
 def test_model_graph_to_json():

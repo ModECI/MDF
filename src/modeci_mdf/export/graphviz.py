@@ -6,11 +6,10 @@ Work in progress...
 '''
 
 import sys
-import neuromllite
 
-from graphviz import Digraph
+import graphviz
 
-from modeci_mdf.standardfunctions import mdf_functions, substitute_args
+from modeci_mdf.standard_functions import mdf_functions
 
 engines = {'d':'dot',
            'c':'circo',
@@ -86,7 +85,7 @@ def mdf_to_graphviz(mdf_graph,
 
     print('Converting MDF graph: %s to graphviz'%(mdf_graph.id))
 
-    graph = Digraph(mdf_graph.id, filename='%s.gv'%mdf_graph.id, engine=engine, format=output_format)
+    graph = graphviz.Digraph(mdf_graph.id, filename='%s.gv'%mdf_graph.id, engine=engine, format=output_format)
 
     for node in mdf_graph.nodes:
         print('    Node: %s'%node.id)
@@ -151,7 +150,7 @@ if __name__ == "__main__":
     verbose = True
 
     if len(sys.argv)<3:
-        print('Usage:\n\n  python GraphViz.py MDF_JSON_FILE level [%s]\n\n'%NO_VIEW+
+        print('Usage:\n\n  python graphviz.py MDF_JSON_FILE level [%s]\n\n'%NO_VIEW+
         'where level = 1, 2 or 3. Include %s to supress viewing generated graph on render\n'%NO_VIEW)
         exit()
 

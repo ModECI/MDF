@@ -1,15 +1,13 @@
-import collections
-
 """
     Example of ModECI MDF - Work in progress!!!
 """
 
-from modeci_mdf.MDF import *
+from modeci_mdf.mdf import *
 from modeci_mdf import MODECI_MDF_VERSION
 
-from modeci_mdf.utils import create_example_node, simple_connect, print_summary
+from modeci_mdf.utils import simple_connect, print_summary
 
-import ABCD_python as abcd
+import abcd_python as abcd
 
 
 def main():

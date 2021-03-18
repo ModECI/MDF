@@ -42,4 +42,4 @@ repos:
 #  rev: v0.800
 #  hooks:
 #  - id: mypy
-#    files: modeci_mdf
+#    files: src

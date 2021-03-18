@@ -14,11 +14,11 @@ def test_examples():
     os.chdir('examples')
     sys.path.append('.')
 
-    import examples.ABCD
-    examples.ABCD.main()
+    import examples.abcd
+    examples.abcd.main()
 
-    import examples.Simple
-    examples.Simple.main()
+    import examples.simple
+    examples.simple.main()
 
     # Cleanup, not sure I need this but just to be safe cause this is weird.
     os.chdir('..')

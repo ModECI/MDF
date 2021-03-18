@@ -3,7 +3,7 @@
 /dist
 *egg-info
 *$py.class
-/modeci_mdf/__pycache__
+/src/modeci_mdf/__pycache__
 __pycache__
 *.gv
 /modeci_mdf/export/*.png
@@ -13,12 +13,12 @@ x86_64
 report.*txt
 *.pyc
 /private
-/modeci_mdf/export/clean.sh
-/modeci_mdf/export/*gv*
-/modeci_mdf/export/Sim*.json
+/src/modeci_mdf/export/clean.sh
+/src/modeci_mdf/export/*gv*
+/src/modeci_mdf/export/Sim*.json
 
 # SCM Versioning
-modeci_mdf/version.py
+src/modeci_mdf/version.py
 
 # PyCharm project
 .idea/
@@ -173,3 +173,10 @@ Thumbs.db #thumbnail cache on Windows
 .prof
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+/src/modeci_mdf/export/abcd_example_lems_definitions.xml
+/src/modeci_mdf/export/simple_example_lems_definitions.xml
+/simple_example.gv.pdf
+/abcd_example_lems_definitions.xml
+/abcd_example.gv.pdf
+/Simabcd_example.json
