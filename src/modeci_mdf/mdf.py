@@ -19,9 +19,32 @@ class Model(BaseWithId):
         self.allowed_children = collections.OrderedDict([
                                    ('graphs',('The definition of top level entry ...', ModelGraph))])
 
-        self.allowed_fields = collections.OrderedDict([('format',('Information on verson of MDF',str))])
+        self.allowed_fields = collections.OrderedDict([('format',('Information on verson of MDF',str)),
+                                  ('generating_application',('Information on what application generated/saved this file',str))])
 
         super().__init__(**kwargs)
+
+    def _include_metadata(self):
+
+        from modeci_mdf import MODECI_MDF_VERSION
+        from modeci_mdf import __version__
+        self.format = 'ModECI MDF v%s' % MODECI_MDF_VERSION
+        self.generating_application = 'Python modeci-mdf v%s' % __version__
+
+
+    # Overrides BaseWithId.to_json_file
+    def to_json_file(self, filename, include_metadata=True):
+
+        if include_metadata: self._include_metadata()
+
+        new_file = super().to_json_file(filename)
+
+    # Overrides BaseWithId.to_yaml_file
+    def to_yaml_file(self, filename, include_metadata=True):
+
+        if include_metadata: self._include_metadata()
+
+        new_file = super().to_yaml_file(filename)
 
 
 class ModelGraph(BaseWithId):

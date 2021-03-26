@@ -3,11 +3,10 @@
 """
 
 from modeci_mdf.mdf import *
-from modeci_mdf import MODECI_MDF_VERSION
 
 
 def main():
-    mod = Model(id='Simple', format='ModECI MDF v%s' % MODECI_MDF_VERSION)
+    mod = Model(id='Simple')
     mod_graph = ModelGraph(id='simple_example')
     mod.graphs.append(mod_graph)
 
@@ -44,6 +43,7 @@ def main():
 
     print('------------------')
     print(mod.to_json())
+
     new_file = mod.to_json_file('%s.json' % mod.id)
     new_file = mod.to_yaml_file('%s.yaml' % mod.id)
 

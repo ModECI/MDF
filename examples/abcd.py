@@ -3,7 +3,6 @@
 """
 
 from modeci_mdf.mdf import *
-from modeci_mdf import MODECI_MDF_VERSION
 
 from modeci_mdf.utils import simple_connect, print_summary
 
@@ -11,7 +10,7 @@ import abcd_python as abcd
 
 
 def main():
-    mod = Model(id='ABCD', format='ModECI MDF v%s' % MODECI_MDF_VERSION)
+    mod = Model(id='ABCD')
     mod_graph = ModelGraph(id='abcd_example')
     mod.graphs.append(mod_graph)
 

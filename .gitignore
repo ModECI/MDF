@@ -180,3 +180,4 @@ Thumbs.db #thumbnail cache on Windows
 /abcd_example_lems_definitions.xml
 /abcd_example.gv.pdf
 /Simabcd_example.json
+/examples/*.gv*
