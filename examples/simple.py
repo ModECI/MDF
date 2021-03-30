@@ -7,7 +7,7 @@ from modeci_mdf.mdf import *
 
 def main():
     mod = Model(id='Simple')
-    mod_graph = ModelGraph(id='simple_example')
+    mod_graph = Graph(id='simple_example')
     mod.graphs.append(mod_graph)
 
     input_node = Node(id='input_node', parameters={'input_level': 0.5})

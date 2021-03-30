@@ -28,3 +28,5 @@ with open('MDF_specification.json','w') as d:
     d.write(json.dumps(doc,indent=4))
 with open('MDF_specification.yaml','w') as d:
     d.write(yaml.dump(doc,indent=4,sort_keys=False))
+
+print('Written documentation')

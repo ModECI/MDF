@@ -3,10 +3,11 @@
     "comment": "**Note: specification in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**\n\n",
     "specification": {
         "Model": {
+            "definition": "The top level Model containing a number of _Graph_s",
             "allowed_parameters": {
                 "format": {
                     "type": "str",
-                    "description": "Information on verson of MDF"
+                    "description": "Information on the version of MDF used in this file"
                 },
                 "generating_application": {
                     "type": "str",
@@ -23,16 +24,16 @@
             },
             "allowed_children": {
                 "graphs": {
-                    "type": "ModelGraph",
-                    "description": "The definition of top level entry ..."
+                    "type": "Graph",
+                    "description": "The list of _Graph_s in this Model"
                 }
             }
         },
-        "ModelGraph": {
+        "Graph": {
             "allowed_parameters": {
                 "parameters": {
                     "type": "dict",
-                    "description": "Dict of global parameters for the network"
+                    "description": "Dict of global parameters for the Graph"
                 },
                 "id": {
                     "type": "str",
@@ -46,11 +47,11 @@
             "allowed_children": {
                 "nodes": {
                     "type": "Node",
-                    "description": "The definition of node ..."
+                    "description": "The _Node_s present in the Graph"
                 },
                 "edges": {
                     "type": "Edge",
-                    "description": "The definition of edge..."
+                    "description": "The _Edge_s between _Node_s in the Graph"
                 }
             }
         },
@@ -62,7 +63,7 @@
                 },
                 "parameters": {
                     "type": "dict",
-                    "description": "Dict of parameters for the node"
+                    "description": "Dict of parameters for the Node"
                 },
                 "id": {
                     "type": "str",
@@ -76,15 +77,15 @@
             "allowed_children": {
                 "input_ports": {
                     "type": "InputPort",
-                    "description": "Dict of ..."
+                    "description": "The _InputPort_s into the Node"
                 },
                 "functions": {
                     "type": "Function",
-                    "description": "Dict of functions for the node"
+                    "description": "The _Function_s for the Node"
                 },
                 "output_ports": {
                     "type": "OutputPort",
-                    "description": "Dict of ..."
+                    "description": "The _OutputPort_s into the Node"
                 }
             }
         },
@@ -92,7 +93,7 @@
             "allowed_parameters": {
                 "shape": {
                     "type": "str",
-                    "description": "..."
+                    "description": "The shape of the variable (limited support so far...)"
                 },
                 "id": {
                     "type": "str",
@@ -108,11 +109,11 @@
             "allowed_parameters": {
                 "function": {
                     "type": "str",
-                    "description": "..."
+                    "description": "Which of the in-build MDF functions (linear etc.) this uses"
                 },
                 "args": {
                     "type": "dict",
-                    "description": "Dict of args..."
+                    "description": "Dictionary of arguments for the Function"
                 },
                 "id": {
                     "type": "str",
@@ -128,7 +129,7 @@
             "allowed_parameters": {
                 "value": {
                     "type": "str",
-                    "description": "..."
+                    "description": "The value of the OutputPort in terms of the _InputPort_ and _Function_ values"
                 },
                 "id": {
                     "type": "str",
@@ -144,19 +145,19 @@
             "allowed_parameters": {
                 "sender": {
                     "type": "str",
-                    "description": "..."
+                    "description": "The _Node_ which is the source of the Edge"
                 },
                 "receiver": {
                     "type": "str",
-                    "description": "..."
+                    "description": "The _Node_ which is the target of the Edge"
                 },
                 "sender_port": {
                     "type": "str",
-                    "description": "..."
+                    "description": "The _OutputPort_ on the sender _Node_"
                 },
                 "receiver_port": {
                     "type": "str",
-                    "description": "..."
+                    "description": "The _InputPort_ on the sender _Node_"
                 },
                 "id": {
                     "type": "str",

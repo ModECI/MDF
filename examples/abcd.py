@@ -11,7 +11,7 @@ import abcd_python as abcd
 
 def main():
     mod = Model(id='ABCD')
-    mod_graph = ModelGraph(id='abcd_example')
+    mod_graph = Graph(id='abcd_example')
     mod.graphs.append(mod_graph)
 
     input_node = Node(id='input0', parameters={'input_level': 0.0})
