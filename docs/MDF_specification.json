@@ -57,10 +57,6 @@
         },
         "Node": {
             "allowed_parameters": {
-                "type": {
-                    "type": "str",
-                    "description": "Type..."
-                },
                 "parameters": {
                     "type": "dict",
                     "description": "Dict of parameters for the Node"

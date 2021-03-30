@@ -46,9 +46,6 @@ specification: !!python/object/apply:collections.OrderedDict
                     description: The _Edge_s between _Node_s in the Graph
     -   - Node
         -   allowed_parameters:
-                type:
-                    type: str
-                    description: Type...
                 parameters:
                     type: dict
                     description: Dict of parameters for the Node

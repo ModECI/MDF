@@ -43,9 +43,7 @@ The top level Model containing a number of <a href="#graph">Graph</a>s
 
 ## Node
 #### Allowed parameters
-<table><tr><td><b>type</b></td><td>str</td><td><i>Type...</i></td></tr>
-
-<tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of parameters for the Node</i></td></tr>
+<table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of parameters for the Node</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 

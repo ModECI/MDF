@@ -76,8 +76,7 @@ class Node(BaseWithId):
              ('functions',('The _Function_s for the Node',Function)),
              ('output_ports',('The _OutputPort_s into the Node',OutputPort))])
 
-        self.allowed_fields = collections.OrderedDict([('type',('Type...',str)),
-                               ('parameters',('Dict of parameters for the Node',dict))])
+        self.allowed_fields = collections.OrderedDict([('parameters',('Dict of parameters for the Node',dict))])
 
         super().__init__(**kwargs)
 
