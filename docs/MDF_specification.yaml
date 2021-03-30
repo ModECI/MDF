@@ -1,0 +1,125 @@
+version: ModECI MDF v0.1
+comment: '**Note: specification in development! Subject to change without (much) notice.
+    See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification)
+    for ongoing discussions.**
+
+
+    '
+specification: !!python/object/apply:collections.OrderedDict
+-   -   - Model
+        -   allowed_parameters:
+                format:
+                    type: str
+                    description: Information on verson of MDF
+                generating_application:
+                    type: str
+                    description: Information on what application generated/saved this
+                        file
+                id:
+                    type: str
+                    description: Unique ID of element
+                notes:
+                    type: str
+                    description: Human readable notes
+            allowed_children:
+                graphs:
+                    type: ModelGraph
+                    description: The definition of top level entry ...
+    -   - ModelGraph
+        -   allowed_parameters:
+                parameters:
+                    type: dict
+                    description: Dict of global parameters for the network
+                id:
+                    type: str
+                    description: Unique ID of element
+                notes:
+                    type: str
+                    description: Human readable notes
+            allowed_children:
+                nodes:
+                    type: Node
+                    description: The definition of node ...
+                edges:
+                    type: Edge
+                    description: The definition of edge...
+    -   - Node
+        -   allowed_parameters:
+                type:
+                    type: str
+                    description: Type...
+                parameters:
+                    type: dict
+                    description: Dict of parameters for the node
+                id:
+                    type: str
+                    description: Unique ID of element
+                notes:
+                    type: str
+                    description: Human readable notes
+            allowed_children:
+                input_ports:
+                    type: InputPort
+                    description: Dict of ...
+                functions:
+                    type: Function
+                    description: Dict of functions for the node
+                output_ports:
+                    type: OutputPort
+                    description: Dict of ...
+    -   - InputPort
+        -   allowed_parameters:
+                shape:
+                    type: str
+                    description: '...'
+                id:
+                    type: str
+                    description: Unique ID of element
+                notes:
+                    type: str
+                    description: Human readable notes
+    -   - Function
+        -   allowed_parameters:
+                function:
+                    type: str
+                    description: '...'
+                args:
+                    type: dict
+                    description: Dict of args...
+                id:
+                    type: str
+                    description: Unique ID of element
+                notes:
+                    type: str
+                    description: Human readable notes
+    -   - OutputPort
+        -   allowed_parameters:
+                value:
+                    type: str
+                    description: '...'
+                id:
+                    type: str
+                    description: Unique ID of element
+                notes:
+                    type: str
+                    description: Human readable notes
+    -   - Edge
+        -   allowed_parameters:
+                sender:
+                    type: str
+                    description: '...'
+                receiver:
+                    type: str
+                    description: '...'
+                sender_port:
+                    type: str
+                    description: '...'
+                receiver_port:
+                    type: str
+                    description: '...'
+                id:
+                    type: str
+                    description: Unique ID of element
+                notes:
+                    type: str
+                    description: Human readable notes

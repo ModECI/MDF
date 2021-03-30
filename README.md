@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/ModECI/MDF.svg?branch=main)](https://travis-ci.com/ModECI/MDF)
 # ModECI Model Description Format
 
-**Work in progress!!!**
+**Work in progress!!! See [open issues](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification)**
 
 **Subject to change without notice!**
 

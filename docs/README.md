@@ -1,6 +1,7 @@
 # Specification of ModECI v0.1
 **Note: specification in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**
 
+
 ## Model
 #### Allowed parameters
 <table><tr><td><b>format</b></td><td>str</td><td><i>Information on verson of MDF</i></td></tr>
