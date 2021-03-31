@@ -1,7 +1,5 @@
 # Specification of ModECI v0.1
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**
-
-
 ## Model
 The top level Model containing a number of <a href="#graph">Graph</a>s of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
 #### Allowed parameters
@@ -66,7 +64,7 @@ A self contained unit of evaluation recieving input from other Nodes on <a href=
 
 ## InputPort
 #### Allowed parameters
-<table><tr><td><b>shape</b></td><td>str</td><td><i>The shape of the variable (limited support so far...)</i></td></tr>
+<table><tr><td><b>shape</b></td><td>str</td><td><i>The shape of the variable (note: there is limited support for this so far...)</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
@@ -106,7 +104,7 @@ A single value which is evaluated as a function of values on <a href="#inputport
 
 <tr><td><b>receiver</b></td><td>str</td><td><i>The id of the <a href="#node">Node</a> which is the target of the Edge</i></td></tr>
 
-<tr><td><b>sender_port</b></td><td>str</td><td><i>The id of the <a href="#outputport">OutputPort</a> on the sender <a href="#node">Node</a>, whose value sshould be sent to the receiver<a href="#port">port</a></i></td></tr>
+<tr><td><b>sender_port</b></td><td>str</td><td><i>The id of the <a href="#outputport">OutputPort</a> on the sender <a href="#node">Node</a>, whose value should be sent to the receiver<a href="#port">port</a></i></td></tr>
 
 <tr><td><b>receiver_port</b></td><td>str</td><td><i>The id of the <a href="#inputport">InputPort</a> on the sender <a href="#node">Node</a></i></td></tr>
 

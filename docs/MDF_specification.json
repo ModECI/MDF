@@ -1,6 +1,6 @@
 {
     "version": "ModECI MDF v0.1",
-    "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**\n\n",
+    "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**",
     "specification": {
         "Model": {
             "definition": "The top level Model containing a number of _Graph_s of _Node_s connected via _Edge_s.",
@@ -91,7 +91,7 @@
             "allowed_parameters": {
                 "shape": {
                     "type": "str",
-                    "description": "The shape of the variable (limited support so far...)"
+                    "description": "The shape of the variable (note: there is limited support for this so far...)"
                 },
                 "id": {
                     "type": "str",
@@ -152,7 +152,7 @@
                 },
                 "sender_port": {
                     "type": "str",
-                    "description": "The id of the _OutputPort_ on the sender _Node_, whose value sshould be sent to the receiver_port"
+                    "description": "The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port"
                 },
                 "receiver_port": {
                     "type": "str",

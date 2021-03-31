@@ -31,22 +31,22 @@ if len(mdf_functions)==0:
     STANDARD_ARG_0 = 'variable0'
 
     _add_mdf_function('linear',
-                      description='Linear function...',
+                      description='A linear function, calculated from a slope and an intercept',
                       arguments=[STANDARD_ARG_0, 'slope', 'intercept'],
                       expression_string='(%s * slope + intercept)'%(STANDARD_ARG_0))
 
     _add_mdf_function('logistic',
-                      description='Logistic function...',
+                      description='Logistic function',
                       arguments=[STANDARD_ARG_0, 'gain', 'bias', 'offset'],
                       expression_string='1/(1 + exp(-1*gain*(%s + bias) + offset))'%(STANDARD_ARG_0))
 
     _add_mdf_function('exponential',
-                      description='Exp function...',
+                      description='Exponential function',
                       arguments=[STANDARD_ARG_0, 'scale', 'rate', 'bias', 'offset'],
                       expression_string='scale * exp((rate * %s) + bias) + offset'%(STANDARD_ARG_0))
 
     _add_mdf_function('sin',
-                      description='Sine function...',
+                      description='Sine function',
                       arguments=[STANDARD_ARG_0, 'scale'],
                       expression_string='scale * sin(%s)'%(STANDARD_ARG_0))
 
