@@ -1,9 +1,9 @@
 {
     "version": "ModECI MDF v0.1",
-    "comment": "**Note: specification in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**\n\n",
+    "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**\n\n",
     "specification": {
         "Model": {
-            "definition": "The top level Model containing a number of _Graph_s",
+            "definition": "The top level Model containing a number of _Graph_s of _Node_s connected via _Edge_s.",
             "allowed_parameters": {
                 "format": {
                     "type": "str",
@@ -30,6 +30,7 @@
             }
         },
         "Graph": {
+            "definition": "A directed graph of _Node_s connected via _Edge_s.",
             "allowed_parameters": {
                 "parameters": {
                     "type": "dict",
@@ -56,6 +57,7 @@
             }
         },
         "Node": {
+            "definition": "A self contained unit of evaluation recieving input from other Nodes on _InputPort_s. The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s",
             "allowed_parameters": {
                 "parameters": {
                     "type": "dict",
@@ -81,7 +83,7 @@
                 },
                 "output_ports": {
                     "type": "OutputPort",
-                    "description": "The _OutputPort_s into the Node"
+                    "description": "The _OutputPort_s containing evaluated quantities from the Node"
                 }
             }
         },
@@ -102,6 +104,7 @@
             }
         },
         "Function": {
+            "definition": "A single value which is evaluated as a function of values on _InputPort_s and other Functions",
             "allowed_parameters": {
                 "function": {
                     "type": "str",
@@ -109,11 +112,11 @@
                 },
                 "args": {
                     "type": "dict",
-                    "description": "Dictionary of arguments for the Function"
+                    "description": "Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"
                 },
                 "id": {
                     "type": "str",
-                    "description": "Unique ID of element"
+                    "description": "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value"
                 },
                 "notes": {
                     "type": "str",
@@ -141,19 +144,19 @@
             "allowed_parameters": {
                 "sender": {
                     "type": "str",
-                    "description": "The _Node_ which is the source of the Edge"
+                    "description": "The id of the _Node_ which is the source of the Edge"
                 },
                 "receiver": {
                     "type": "str",
-                    "description": "The _Node_ which is the target of the Edge"
+                    "description": "The id of the _Node_ which is the target of the Edge"
                 },
                 "sender_port": {
                     "type": "str",
-                    "description": "The _OutputPort_ on the sender _Node_"
+                    "description": "The id of the _OutputPort_ on the sender _Node_, whose value sshould be sent to the receiver_port"
                 },
                 "receiver_port": {
                     "type": "str",
-                    "description": "The _InputPort_ on the sender _Node_"
+                    "description": "The id of the _InputPort_ on the sender _Node_"
                 },
                 "id": {
                     "type": "str",

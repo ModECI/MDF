@@ -14,7 +14,7 @@ from neuromllite.BaseTypes import BaseWithId
 
 class Model(BaseWithId):
 
-    _definition = 'The top level Model containing a number of _Graph_s'
+    _definition = 'The top level Model containing a number of _Graph_s of _Node_s connected via _Edge_s.'
 
     def __init__(self, **kwargs):
 
@@ -51,6 +51,8 @@ class Model(BaseWithId):
 
 class Graph(BaseWithId):
 
+    _definition = 'A directed graph of _Node_s connected via _Edge_s.'
+
     def __init__(self, **kwargs):
 
         self.allowed_children = collections.OrderedDict([
@@ -70,11 +72,14 @@ class Graph(BaseWithId):
 
 class Node(BaseWithId):
 
+    _definition = 'A self contained unit of evaluation recieving input from other Nodes on _InputPort_s. ' +\
+                  'The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s'
+
     def __init__(self, **kwargs):
 
         self.allowed_children = collections.OrderedDict([('input_ports',('The _InputPort_s into the Node',InputPort)),
              ('functions',('The _Function_s for the Node',Function)),
-             ('output_ports',('The _OutputPort_s into the Node',OutputPort))])
+             ('output_ports',('The _OutputPort_s containing evaluated quantities from the Node',OutputPort))])
 
         self.allowed_fields = collections.OrderedDict([('parameters',('Dict of parameters for the Node',dict))])
 
@@ -83,19 +88,23 @@ class Node(BaseWithId):
 
 class Function(BaseWithId):
 
+    _definition = 'A single value which is evaluated as a function of values on _InputPort_s and other Functions'
+
     def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict([('function',('Which of the in-build MDF functions (linear etc.) this uses',str)),
-                               ('args',('Dictionary of arguments for the Function',dict))])
+                               ('args',('Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',dict))])
 
         super().__init__(**kwargs)
+
+        self.allowed_fields['id'] = ('The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value',str)
 
 
 class InputPort(BaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_fields = collections.OrderedDict([('shape',('The shape of the variable (limited support so far...)',str))])
+        self.allowed_fields = collections.OrderedDict([('shape',('The shape of the variable (note: there is limited support for this so far...)',str))])
 
         super().__init__(**kwargs)
 
@@ -114,10 +123,10 @@ class Edge(BaseWithId):
     def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict([
-                ('sender',('The _Node_ which is the source of the Edge',str)),
-                ('receiver',('The _Node_ which is the target of the Edge',str)),
-                ('sender_port',('The _OutputPort_ on the sender _Node_',str)),
-                ('receiver_port',('The _InputPort_ on the sender _Node_',str))])
+                ('sender',('The id of the _Node_ which is the source of the Edge',str)),
+                ('receiver',('The id of the _Node_ which is the target of the Edge',str)),
+                ('sender_port',('The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port',str)),
+                ('receiver_port',('The id of the _InputPort_ on the sender _Node_',str))])
 
         super().__init__(**kwargs)
 
