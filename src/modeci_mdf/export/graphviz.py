@@ -56,9 +56,10 @@ def format_output(s):
 
 def match_in_expr(s, node):
 
-    for p in node.parameters:
-        if p in s:
-            s = s.replace(p, format_param(p))
+    if node.parameters:
+        for p in node.parameters:
+            if p in s:
+                s = s.replace(p, format_param(p))
 
     for ip in node.input_ports:
         if ip.id in s:
@@ -94,7 +95,7 @@ def mdf_to_graphviz(mdf_graph,
         info += '<tr><td colspan="2"><b>%s</b></td></tr>'%(node.id)
 
         if level>=LEVEL_2:
-            if len(node.parameters):
+            if node.parameters and len(node.parameters)>0:
 
                 info += '<tr><td>%s'%format_label('PARAMS')
                 for p in node.parameters:
@@ -102,12 +103,12 @@ def mdf_to_graphviz(mdf_graph,
                 info = info[:-2]
                 info += '</td></tr>'
 
-            if len(node.input_ports):
+            if node.input_ports and len(node.input_ports)>0:
                 for ip in node.input_ports:
                     info += '<tr><td>%s%s %s</td></tr>'%(format_label('IN'),format_input(ip.id), ip.shape if level>=LEVEL_3 else '')
 
 
-            if len(node.functions):
+            if node.functions and len(node.functions)>0:
                 for f in node.functions:
                     func_info = mdf_functions[f.function]
                     info += '<tr><td>%s%s = %s(%s)</td></tr>'%(format_label('FUNC'),
@@ -118,7 +119,7 @@ def mdf_to_graphviz(mdf_graph,
                         info += '<tr><td colspan="2">%s</td></tr>'%(format_standard_func('%s(%s) = %s'%(f.function, ', '.join([a for a in f.args]), func_info['expression_string'])))
                         #info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
 
-            if len(node.output_ports):
+            if node.output_ports and len(node.output_ports)>0:
                 for op in node.output_ports:
                     info += '<tr><td>%s%s = %s</td></tr>'%(format_label('OUT'),
                                  format_output(op.id),
