@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Work in progress!!!
+    Example of ModECI MDF - A simple 4 node graph
 """
 
 from modeci_mdf.mdf import *

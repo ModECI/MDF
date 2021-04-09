@@ -10,7 +10,7 @@ def main():
     mod_graph = ModelGraph(id="array_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input_node", parameters={"input_level": [1,2,3]})
+    input_node = Node(id="input_node", parameters={"input_level": [[1,2,3],[0,0,5]]})
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
@@ -19,9 +19,9 @@ def main():
     middle_node = Node(id="middle_node")
     mod_graph.nodes.append(middle_node)
 
-    middle_node.parameters = {"a": 1, "slope": 0.5, "intercept": [0,1,0]}
+    middle_node.parameters = {"slope": 0.5, "intercept": [[0,1,0],[2,2,2]]}
 
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    ip1 = InputPort(id="input_port1")
     middle_node.input_ports.append(ip1)
 
     f1 = Function(
