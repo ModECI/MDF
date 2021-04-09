@@ -1,56 +1,51 @@
 [![Build Status](https://travis-ci.com/ModECI/MDF.svg?branch=main)](https://travis-ci.com/ModECI/MDF)
-# ModECI Model Description Format
+# ModECI Model Description Format (MDF)
 
-**Work in progress!!!**
+**Work in progress!!! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](https://modeci.github.io/Website/About.html) to get in contact regarding MDF.**
 
-**Subject to change without notice!**
+*For previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF)*
 
-
-For previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF):
-
-Model Description Format (MDF)
-========================================
 
 Overview
 --------
 
-The purpose of the BIDS-MSF is to provide a standard, JSON-based format for describing computational models of
-brain and/or mental function.  The goal is to provide a common exchange format that allows models created in one
-environment that supports the standard to be expressed in a form -- and in sufficient detail -- that it can be
+The purpose of the MSF is to provide a standard, JSON-based format (though other serializations like YAML, HDF5 are envisioned)
+for describing computational models of brain and/or mental function.  The goal is to provide a common exchange format that allows models created in one
+environment that supports the standard to be expressed in a form - and in sufficient detail - that it can be
 imported into another modeling environment that supports the standard, and then executed in that environment with
-identical results,  and/or integrated with other models in that environment.
+identical results (within a certain tolerance), and/or integrated with other models in that environment.
 
-The format assumes that models can be expressed as graphs, in which each node is a computational component, and edges
+The format assumes that models can be expressed as graphs, in which each **node** is a computational component, and **edges**
 specify connections between them that (at least partially) determine the flow of computation.  In this respect,
-they are similar to more generic forms of computational graphs.  However the standard supports the expression of
+they are similar to more generic forms of computational graphs.  However, the standard supports the expression of
 more specific elements within nodes and edges that are central to models of brain function (e.g., the inclusion of
-"ports" in nodes that are dedicated to processing the input and/or output of a node; and the "weight" and/or "function"
+**ports** in nodes that are dedicated to processing the input and/or output of a node; and the **weight** and/or **function**
 of an edge that allows it to do more than simply relay information unmodified from one node to another.  Finally, the
 standard allows elements that are specific to a particular modeling environment to be expressed in a circumscribed
 form, so that the format can be used to "serialize" models from that environment, and makes them accessible to other
 environments that specifically support those constructs from the origin environment.  This latter capability provides
 a way not only for extending the standard to accommodate the specific needs of individual environments, but also as a
-path toward extending the standard:  recurring extensions that serve similar purposes help identify targets for the
+path toward extending the standard: recurring extensions that serve similar purposes help identify targets for the
 definition of new components of the core standard itself.
 
 The format is currently under development, and should be considered a prototype for a more complete standard.
 Among the targets for extension are standards for specifying process control flow.  At present, to execute a model
-specified in the format, the environment must either assume that process conrol flow is determined by the structure
+specified in the format, the environment must either assume that process control flow is determined by the structure
 of the graph (i.e., edges are directed, the graph is acyclic, and nodes execute in the order of dependencies), or
 that process control flow is specified in environment-specific entries.  A goal of further development is to provide
-standard ways of expressing both time-based and condition-based specifications for execution timing and order. Progress on this topic is under [Conditions](#Conditions) and [Graphs](#Graphs).
+standard ways of expressing both time-based and condition-based specifications for execution timing and order. Progress on this topic is outlined under [Conditions](#conditions) and [Graphs](#graphs) below.
 
 Basic Constructs
 ----------------
 
-The BIDS-MDF format assumes that a model can be expressed as a graph made up of the following four basic types of
+MDF assumes that a model can be expressed as a **graph** made up of the following four basic types of
 objects:
 
 * **nodes** - the basic computational elements of a model;
 
 * **edges** - directed connections between **nodes** that help determine the flow of computations;
 
-* **ports** - components that belong to a **node** and mediate its **function** and its incoming and outgoing
+* **ports** - specifically **input_ports** and **output_ports**: components that belong to a **node** and mediate its **functions** and its incoming and outgoing
               **edge(s)**;
 
 * **functions** - can belong to any of the other components, and specify the particular computation(s) carried
@@ -62,8 +57,11 @@ In addition, the standard allows the specification of **parameters** for **nodes
 Overall structure
 -----------------
 
-The BIDS-MDF is a hierarchically organized format using JSON-compliant syntax, that can be used to describe one or
-more models in a single text file.  The outermost level of the specification is a dictionary with a single entry named
+MDF is a hierarchically organized format using JSON-compliant syntax, that can be used to describe one or
+more models in a single text file. Equivalent (lossless) serializations of the format in YAML and other
+format will be supported, but the language elements are described below using JSON for clarity.
+
+The outermost level of the specification is a dictionary with a single entry named
 ``graphs``, the value of which is a list of  **graph** objects.  Each **graph** object is a dictionary that
 defines a single model.  Each **graph** dictionary must have at least two entries, named ``nodes`` and ``edges``,
 each of which is a dictionary with entries describing the **nodes** and **edges** of the graph, respectively.
@@ -73,7 +71,7 @@ themselves graphs, which can be used to describe hierarchically-structured model
 and ``edges`` entries, a ``graph`` object can have additional entries, some of which are generic (such as the ``names``
 entry in the example below;  see ``Entries common to all objects`` for a full listing);  it can also include a
 ``parameters`` entry, that contains specifications required by specific environments.  The following provides an
-example of the overall scheme of a BIDS-MDF specification:
+example of the overall scheme of a MDF specification:
 
 [//]: # "Should we add schedulers as a standard/generic parameter type to deal with aspects of computational flow
 that are not determined by the structure of the graph itself??;  controller is another example of this (that we have
@@ -127,7 +125,7 @@ entries.
 Entries common to all objects
 -----------------------------
 
-The following entries can be used in any BIDS-MDF object (using the strings shown below as their keys):
+The following entries can be used in any MDF object (using the strings shown below as their keys):
 
 * ``name`` : a label for the object
 
@@ -150,7 +148,7 @@ The following entries can be used in any BIDS-MDF object (using the strings show
                   }
               }
 
-  Here, the ``generic`` entry of ``type`` is used to specify that it is a graph (recognized by the BIDS-MSF standard),
+  Here, the ``generic`` entry of ``type`` is used to specify that it is a graph (recognized by the MDF standard),
   while the ``PNL`` entry is used to specify the PNL-specific designation of a graph ("Composition").
 
 

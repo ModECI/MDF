@@ -29,4 +29,9 @@ python -m modeci_mdf.export.neuroml ABCD.json
 
 python -m modeci_mdf.export.graphviz Simple.json 3 -noview
 python -m modeci_mdf.export.graphviz ABCD.json 1 -noview
+
 python -m modeci_mdf.export.graphviz Arrays.json 2 -noview
+
+cd ../docs
+python generate.py
+cd -
