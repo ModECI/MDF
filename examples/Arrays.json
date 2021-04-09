@@ -1,0 +1,65 @@
+{
+    "Arrays": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.2",
+        "graphs": {
+            "array_example": {
+                "nodes": {
+                    "input_node": {
+                        "parameters": {
+                            "input_level": [
+                                1,
+                                2,
+                                3
+                            ]
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        }
+                    },
+                    "middle_node": {
+                        "parameters": {
+                            "a": 1,
+                            "slope": 0.5,
+                            "intercept": [
+                                0,
+                                1,
+                                0
+                            ]
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "linear_1": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "slope": "slope",
+                                    "intercept": "intercept"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_1"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "input_edge": {
+                        "sender": "input_node",
+                        "receiver": "middle_node",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port1"
+                    }
+                }
+            }
+        }
+    }
+}

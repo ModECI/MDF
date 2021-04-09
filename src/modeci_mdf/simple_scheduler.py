@@ -3,16 +3,7 @@ import sys
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
-
-
-def params_info(parameters):
-    pi = "["
-    for p in parameters:
-        if not p == "__builtins__":
-            pi += "%s=%s," % (p, parameters[p])
-    pi = pi[:-1]
-    pi += "]"
-    return pi
+from neuromllite.utils import _params_info
 
 
 def evaluate_expr(expr, func_params, verbose=False):
@@ -21,7 +12,7 @@ def evaluate_expr(expr, func_params, verbose=False):
     if type(e) == str:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
-            % (expr, params_info(func_params), e, type(e))
+            % (expr, _params_info(func_params), e, type(e))
         )
     return e
 
@@ -48,7 +39,7 @@ class EvaluableFunction:
         if self.verbose:
             print(
                 "    ---  Evaluating %s with %s, i.e. [%s]"
-                % (self.function, params_info(func_params), expr)
+                % (self.function, _params_info(func_params), expr)
             )
         for arg in self.function.args:
             func_params[arg] = evaluate_expr(
@@ -60,7 +51,7 @@ class EvaluableFunction:
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
-                % (self.function, params_info(func_params), self.curr_value)
+                % (self.function, _params_info(func_params), self.curr_value)
             )
         return self.curr_value
 
@@ -74,14 +65,14 @@ class EvaluableOutput:
         if self.verbose:
             print(
                 "    Evaluating %s with %s "
-                % (self.output_port, params_info(parameters))
+                % (self.output_port, _params_info(parameters))
             )
         self.curr_value = evaluate_expr(
             self.output_port.value, parameters, verbose=False
         )
         print(
             "    Evaluated %s with %s \n       =\t%s"
-            % (self.output_port, params_info(parameters), self.curr_value)
+            % (self.output_port, _params_info(parameters), self.curr_value)
         )
         return self.curr_value
 
@@ -100,7 +91,7 @@ class EvaluableInput:
     def evaluate(self, parameters):
         print(
             "    Evaluated %s with %s =\t%s"
-            % (self.input_port, params_info(parameters), self.curr_value)
+            % (self.input_port, _params_info(parameters), self.curr_value)
         )
         return self.curr_value
 
@@ -130,7 +121,7 @@ class EvaluableNode:
 
         print(
             "  Evaluating Node: %s with %s"
-            % (self.node.id, params_info(self.node.parameters))
+            % (self.node.id, _params_info(self.node.parameters))
         )
         curr_params = {}
         curr_params.update(self.node.parameters)
