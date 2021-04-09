@@ -100,7 +100,9 @@ A single value which is evaluated as a function of values on <a href="#inputport
 
 ## Edge
 #### Allowed parameters
-<table><tr><td><b>sender</b></td><td>str</td><td><i>The id of the <a href="#node">Node</a> which is the source of the Edge</i></td></tr>
+<table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of parameters for the Edge</i></td></tr>
+
+<tr><td><b>sender</b></td><td>str</td><td><i>The id of the <a href="#node">Node</a> which is the source of the Edge</i></td></tr>
 
 <tr><td><b>receiver</b></td><td>str</td><td><i>The id of the <a href="#node">Node</a> which is the target of the Edge</i></td></tr>
 

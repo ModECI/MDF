@@ -169,11 +169,12 @@ class EvaluableGraph:
             pre_node = self.enodes[edge.sender]
             post_node = self.enodes[edge.receiver]
             value = pre_node.evaluable_outputs[edge.sender_port].curr_value
+            weight = 1 if not edge.parameters or not 'weight' in edge.parameters else edge.parameters['weight']
             print(
-                "  Edge %s connects %s to %s, passing %s"
-                % (edge.id, pre_node.node.id, post_node.node.id, value)
+                "  Edge %s connects %s to %s, passing %s with weight %s"
+                % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
             )
-            post_node.evaluable_inputs[edge.receiver_port].set_input_value(value)
+            post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
             post_node.evaluate_next()
 
 

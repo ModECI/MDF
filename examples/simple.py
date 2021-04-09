@@ -20,7 +20,7 @@ def main():
     mod_graph.nodes.append(processing_node)
 
     processing_node.parameters = {"logistic_gain": 3, "slope": 0.5, "intercept": 0}
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    ip1 = InputPort(id="input_port1")
     processing_node.input_ports.append(ip1)
 
     f1 = Function(
@@ -39,10 +39,11 @@ def main():
 
     e1 = Edge(
         id="input_edge",
+        parameters={"weight": 0.55},
         sender=input_node.id,
         sender_port=op1.id,
         receiver=processing_node.id,
-        receiver_port=ip1.id,
+        receiver_port=ip1.id
     )
 
     mod_graph.edges.append(e1)

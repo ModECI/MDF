@@ -9,6 +9,7 @@ import collections
 #  Try: pip install neuromllite
 from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
+from neuromllite import EvaluableExpression
 
 
 
@@ -123,6 +124,7 @@ class Edge(BaseWithId):
     def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict([
+                ('parameters',('Dict of parameters for the Edge',dict)),
                 ('sender',('The id of the _Node_ which is the source of the Edge',str)),
                 ('receiver',('The id of the _Node_ which is the target of the Edge',str)),
                 ('sender_port',('The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port',str)),

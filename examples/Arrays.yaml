@@ -9,10 +9,8 @@ Arrays:
                         input_level:
                         -   - 1
                             - 2
-                            - 3
-                        -   - 0
-                            - 0
-                            - 5
+                        -   - 3
+                            - 4
                     output_ports:
                         out_port:
                             value: input_level
@@ -22,9 +20,7 @@ Arrays:
                         intercept:
                         -   - 0
                             - 1
-                            - 0
                         -   - 2
-                            - 2
                             - 2
                     input_ports:
                         input_port1: {}
@@ -40,6 +36,12 @@ Arrays:
                             value: linear_1
             edges:
                 input_edge:
+                    parameters:
+                        weight:
+                        -   - 1
+                            - 0
+                        -   - 0
+                            - 1
                     sender: input_node
                     receiver: middle_node
                     sender_port: out_port

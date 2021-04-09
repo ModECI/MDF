@@ -142,6 +142,10 @@
         },
         "Edge": {
             "allowed_parameters": {
+                "parameters": {
+                    "type": "dict",
+                    "description": "Dict of parameters for the Edge"
+                },
                 "sender": {
                     "type": "str",
                     "description": "The id of the _Node_ which is the source of the Edge"

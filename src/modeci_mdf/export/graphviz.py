@@ -51,6 +51,9 @@ def format_func(s):
 def format_standard_func(s):
     return '<i>%s</i>'%(s)
 
+def format_standard_func_long(s):
+    return '<font size="4"><i>%s</i></font>'%(s)
+
 def format_output(s):
     return '<font color="%s">%s</font>'%(COLOR_OUTPUT,s)
 
@@ -76,7 +79,7 @@ def match_in_expr(s, node):
 
 def mdf_to_graphviz(mdf_graph,
                     engine='dot',
-                    output_format=None,
+                    output_format='png',
                     view_on_render=False,
                     level=LEVEL_2):
 
@@ -116,7 +119,7 @@ def mdf_to_graphviz(mdf_graph,
                                              format_standard_func(f.function),
                                              ', '.join([match_in_expr(str(f.args[a]), node) for a in f.args]))
                     if level>=LEVEL_3:
-                        info += '<tr><td colspan="2">%s</td></tr>'%(format_standard_func('%s(%s) = %s'%(f.function, ', '.join([a for a in f.args]), func_info['expression_string'])))
+                        info += '<tr><td colspan="2">%s</td></tr>'%(format_standard_func_long('%s(%s) = %s'%(f.function, ', '.join([a for a in f.args]), func_info['expression_string'])))
                         #info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
 
             if node.output_ports and len(node.output_ports)>0:
@@ -136,6 +139,10 @@ def mdf_to_graphviz(mdf_graph,
         label = '%s'%edge.id
         if level>=LEVEL_2:
             label += ' (%s -&gt; %s)'%(format_output(edge.sender_port), format_input(edge.receiver_port))
+            if edge.parameters:
+                for p in edge.parameters:
+                    label += '<br/>%s: <b>%s</b>'%(p, format_num(edge.parameters[p]))
+
         graph.edge(edge.sender, edge.receiver, arrowhead=DEFAULT_ARROW_SHAPE, label='<%s>'%label if level>=LEVEL_2 else '')
 
     if view_on_render:
