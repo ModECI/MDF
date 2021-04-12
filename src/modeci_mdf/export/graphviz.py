@@ -108,7 +108,7 @@ def mdf_to_graphviz(mdf_graph,
 
             if node.input_ports and len(node.input_ports)>0:
                 for ip in node.input_ports:
-                    info += '<tr><td>%s%s %s</td></tr>'%(format_label('IN'),format_input(ip.id), ip.shape if level>=LEVEL_3 else '')
+                    info += '<tr><td>%s%s %s</td></tr>'%(format_label('IN'),format_input(ip.id), ip.shape if level>=LEVEL_3 and ip.shape is not None else '')
 
 
             if node.functions and len(node.functions)>0:

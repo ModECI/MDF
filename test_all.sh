@@ -33,7 +33,7 @@ mv simple_example.gv.png simple.png
 python -m modeci_mdf.export.graphviz Simple.json 3 -noview
 python -m modeci_mdf.export.graphviz ABCD.json 1 -noview
 
-python -m modeci_mdf.export.graphviz Arrays.json 2 -noview
+python -m modeci_mdf.export.graphviz Arrays.json 3 -noview
 
 cd ../docs
 python generate.py

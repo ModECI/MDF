@@ -43,7 +43,7 @@ def main():
         sender=input_node.id,
         sender_port=op1.id,
         receiver=processing_node.id,
-        receiver_port=ip1.id
+        receiver_port=ip1.id,
     )
 
     mod_graph.edges.append(e1)
