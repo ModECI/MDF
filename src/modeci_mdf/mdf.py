@@ -131,6 +131,18 @@ class Edge(BaseWithId):
         super().__init__(**kwargs)
 
 
+class Condition(BaseWithId):
+
+    def __init__(self, **kwargs):
+
+        self.allowed_fields = collections.OrderedDict([
+            ('type', ('Type...', str)),
+            ('args', ('Dict of args...', dict))
+        ])
+
+        super().__init__(**kwargs)
+
+
 if __name__ == "__main__":
 
     mod_graph0 = Graph(id='Test', parameters={'speed':4})
