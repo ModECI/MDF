@@ -3,6 +3,8 @@ set -ex
 
 python setup.py install
 
+pytest
+
 cd examples
 
 python simple.py

@@ -3,13 +3,13 @@
 
 **Work in progress!!! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](https://modeci.github.io/Website/About.html) to get in contact regarding MDF.**
 
-*For previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF)*
+*The MDF format was first proposed following a meeting organised at Princeton in July 2019 by Russ Poldrack of the Center for Reproducible Neuroscience (CRN) at Stanford and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative. For more on the previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF).*
 
 
 Overview
 --------
 
-The purpose of the MSF is to provide a standard, JSON-based format (though other serializations like YAML, HDF5 are envisioned)
+The purpose of the MDF is to provide a standard, JSON-based format (though other serializations like YAML, HDF5 are envisioned)
 for describing computational models of brain and/or mental function.  The goal is to provide a common exchange format that allows models created in one
 environment that supports the standard to be expressed in a form - and in sufficient detail - that it can be
 imported into another modeling environment that supports the standard, and then executed in that environment with

@@ -21,6 +21,6 @@ install:
 
 script:
   ###       Run main tests
-
+  - pip install pytest-benchmark
   - ./test_all.sh
   - pip freeze  # List currently installed Python packages
