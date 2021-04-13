@@ -4,11 +4,12 @@ from modeci_mdf.standard_functions import mdf_functions, create_python_expressio
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
 from neuromllite.utils import _params_info
+from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
 
-def evaluate_expr(expr, func_params, verbose=False):
+def evaluate_expr(expr, func_params, array_format=FORMAT_NUMPY, verbose=True):
 
-    e = evaluate_params_nmllite(expr, func_params, verbose=verbose)
+    e = evaluate_params_nmllite(expr, func_params, array_format=array_format, verbose=verbose)
     if type(e) == str:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
