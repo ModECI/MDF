@@ -18,10 +18,33 @@ class Model(BaseWithId):
 
         self.allowed_children = collections.OrderedDict([
                                    ('graphs',('The definition of top level entry ...', ModelGraph))])
-                                   
-        self.allowed_fields = collections.OrderedDict([('format',('Information on verson of MDF',str))])
 
-        super(Model, self).__init__(**kwargs)
+        self.allowed_fields = collections.OrderedDict([('format',('Information on verson of MDF',str)),
+                                  ('generating_application',('Information on what application generated/saved this file',str))])
+
+        super().__init__(**kwargs)
+
+    def _include_metadata(self):
+
+        from modeci_mdf import MODECI_MDF_VERSION
+        from modeci_mdf import __version__
+        self.format = 'ModECI MDF v%s' % MODECI_MDF_VERSION
+        self.generating_application = 'Python modeci-mdf v%s' % __version__
+
+
+    # Overrides BaseWithId.to_json_file
+    def to_json_file(self, filename, include_metadata=True):
+
+        if include_metadata: self._include_metadata()
+
+        new_file = super().to_json_file(filename)
+
+    # Overrides BaseWithId.to_yaml_file
+    def to_yaml_file(self, filename, include_metadata=True):
+
+        if include_metadata: self._include_metadata()
+
+        new_file = super().to_yaml_file(filename)
 
 
 class ModelGraph(BaseWithId):
@@ -34,9 +57,9 @@ class ModelGraph(BaseWithId):
 
         self.allowed_fields = collections.OrderedDict([('parameters',('Dict of global parameters for the network',dict))])
 
-        super(ModelGraph, self).__init__(**kwargs)
-        
-        
+        super().__init__(**kwargs)
+
+
     def get_node(self, id):
         for node in self.nodes:
             if id == node.id:
@@ -54,7 +77,7 @@ class Node(BaseWithId):
         self.allowed_fields = collections.OrderedDict([('type',('Type...',str)),
                                ('parameters',('Dict of parameters for the node',dict))])
 
-        super(Node, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class Function(BaseWithId):
@@ -64,7 +87,7 @@ class Function(BaseWithId):
         self.allowed_fields = collections.OrderedDict([('function',('...',str)),
                                ('args',('Dict of args...',dict))])
 
-        super(Function, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class InputPort(BaseWithId):
@@ -73,7 +96,7 @@ class InputPort(BaseWithId):
 
         self.allowed_fields = collections.OrderedDict([('shape',('...',str))])
 
-        super(InputPort, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class OutputPort(BaseWithId):
@@ -82,7 +105,7 @@ class OutputPort(BaseWithId):
 
         self.allowed_fields = collections.OrderedDict([('value',('...',str))])
 
-        super(OutputPort, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class Edge(BaseWithId):
@@ -95,7 +118,7 @@ class Edge(BaseWithId):
                 ('sender_port',('...',str)),
                 ('receiver_port',('...',str))])
 
-        super(Edge, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 if __name__ == "__main__":
@@ -110,4 +133,3 @@ if __name__ == "__main__":
     print('------------------')
     print(mod_graph0.to_json())
     print('==================')
-

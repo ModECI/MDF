@@ -5,23 +5,23 @@ python setup.py install
 
 cd examples
 
-python Simple.py
-python ABCD.py
+python simple.py
+python abcd.py
 
 cd ..
 
-cd modeci_mdf
+python -m modeci_mdf.mdf
+python -m modeci_mdf.simple_scheduler examples/Simple.json
+python -m modeci_mdf.simple_scheduler examples/Simple.yaml
+python -m modeci_mdf.simple_scheduler examples/ABCD.json
+python -m modeci_mdf.simple_scheduler examples/ABCD.yaml
 
-python MDF.py
-python SimpleScheduler.py
-python SimpleScheduler.py ../examples/ABCD.json
 
-cd export
+cd examples
 
-python NeuroML.py
-#python NeuroML.py -run
-python NeuroML.py ../../examples/ABCD.json
-#python NeuroML.py ../../examples/ABCD.json -run
+python -m modeci_mdf.export.neuroml Simple.json
+python -m modeci_mdf.export.neuroml ABCD.json
+#python -m modeci_mdf.export.neuroml examples/ABCD.json -run
 
-python GraphViz.py ../../examples/Simple.json 1 -noview
-python GraphViz.py ../../examples/ABCD.json 3 -noview
+python -m modeci_mdf.export.graphviz Simple.json 3 -noview
+python -m modeci_mdf.export.graphviz ABCD.json 1 -noview

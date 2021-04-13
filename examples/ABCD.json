@@ -1,6 +1,7 @@
 {
     "ABCD": {
         "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.2",
         "graphs": {
             "abcd_example": {
                 "nodes": {

@@ -6,11 +6,10 @@ Work in progress...
 '''
 
 import sys
-import neuromllite
 
-from graphviz import Digraph
+import graphviz
 
-from modeci_mdf.standardfunctions import mdf_functions, substitute_args
+from modeci_mdf.standard_functions import mdf_functions
 
 engines = {'d':'dot',
            'c':'circo',
@@ -57,9 +56,10 @@ def format_output(s):
 
 def match_in_expr(s, node):
 
-    for p in node.parameters:
-        if p in s:
-            s = s.replace(p, format_param(p))
+    if node.parameters:
+        for p in node.parameters:
+            if p in s:
+                s = s.replace(p, format_param(p))
 
     for ip in node.input_ports:
         if ip.id in s:
@@ -86,7 +86,7 @@ def mdf_to_graphviz(mdf_graph,
 
     print('Converting MDF graph: %s to graphviz'%(mdf_graph.id))
 
-    graph = Digraph(mdf_graph.id, filename='%s.gv'%mdf_graph.id, engine=engine, format=output_format)
+    graph = graphviz.Digraph(mdf_graph.id, filename='%s.gv'%mdf_graph.id, engine=engine, format=output_format)
 
     for node in mdf_graph.nodes:
         print('    Node: %s'%node.id)
@@ -95,7 +95,7 @@ def mdf_to_graphviz(mdf_graph,
         info += '<tr><td colspan="2"><b>%s</b></td></tr>'%(node.id)
 
         if level>=LEVEL_2:
-            if len(node.parameters):
+            if node.parameters and len(node.parameters)>0:
 
                 info += '<tr><td>%s'%format_label('PARAMS')
                 for p in node.parameters:
@@ -103,12 +103,12 @@ def mdf_to_graphviz(mdf_graph,
                 info = info[:-2]
                 info += '</td></tr>'
 
-            if len(node.input_ports):
+            if node.input_ports and len(node.input_ports)>0:
                 for ip in node.input_ports:
                     info += '<tr><td>%s%s %s</td></tr>'%(format_label('IN'),format_input(ip.id), ip.shape if level>=LEVEL_3 else '')
 
 
-            if len(node.functions):
+            if node.functions and len(node.functions)>0:
                 for f in node.functions:
                     func_info = mdf_functions[f.function]
                     info += '<tr><td>%s%s = %s(%s)</td></tr>'%(format_label('FUNC'),
@@ -119,7 +119,7 @@ def mdf_to_graphviz(mdf_graph,
                         info += '<tr><td colspan="2">%s</td></tr>'%(format_standard_func('%s(%s) = %s'%(f.function, ', '.join([a for a in f.args]), func_info['expression_string'])))
                         #info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
 
-            if len(node.output_ports):
+            if node.output_ports and len(node.output_ports)>0:
                 for op in node.output_ports:
                     info += '<tr><td>%s%s = %s</td></tr>'%(format_label('OUT'),
                                  format_output(op.id),
@@ -151,7 +151,7 @@ if __name__ == "__main__":
     verbose = True
 
     if len(sys.argv)<3:
-        print('Usage:\n\n  python GraphViz.py MDF_JSON_FILE level [%s]\n\n'%NO_VIEW+
+        print('Usage:\n\n  python graphviz.py MDF_JSON_FILE level [%s]\n\n'%NO_VIEW+
         'where level = 1, 2 or 3. Include %s to supress viewing generated graph on render\n'%NO_VIEW)
         exit()
 

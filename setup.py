@@ -2,28 +2,24 @@
 
 from setuptools import setup
 
+# Most of this packages settings are defined in setup.cfg
+# FIXME: Not sure of the best way to setup extras_require from setup.cfg
+extras = {
+    "test": [
+        "pytest",
+        "pytest-benchmark",
+        "typing_extensions; python_version<'3.8'",
+    ],
+    "docs": [
+        "Sphinx~=3.0",
+        "recommonmark>=0.5.0",
+        "sphinx_book_theme==0.38.0",
+        "nbsphinx",
+        "sphinx_copybutton",
+    ],
+    "dev": [],
+}
+extras["all"] = sum(extras.values(), [])
+extras["dev"] += extras["test"]
 
-import modeci_mdf
-version = modeci_mdf.__version__
-
-setup(name='modeci-mdf',
-      version=version,
-      description='ModECI (Model Exchange and Convergence Initiative) Model Description Format',
-      author='Padraig Gleeson; ...',
-      author_email='p.gleeson@gmail.com',
-      url='https://www.modeci.org',
-      packages=['modeci_mdf'],
-      install_requires=[
-        'neuromllite>=0.3.0',
-        'pylems>=0.5.0',
-        'matplotlib',
-        'pyyaml',
-        'graphviz'],
-      classifiers = [
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)',
-        'Natural Language :: English',
-        'Operating System :: OS Independent',
-        'Programming Language :: Python :: 3.6',
-        'Topic :: Scientific/Engineering']
-     )
+setup(extras_require=extras)
