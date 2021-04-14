@@ -28,12 +28,12 @@ def main():
         function="linear",
         args={"variable0": ip1.id, "slope": "lin_slope", "intercept": "lin_intercept"},
     )
-    processing_node.functions.append(f1)
     f2 = Function(
         id="logistic_1",
         function="logistic",
         args={"variable0": f1.id, "gain": "log_gain", "bias": 0, "offset": 0},
     )
+    processing_node.functions.append(f1)
     processing_node.functions.append(f2)
     processing_node.output_ports.append(OutputPort(id="output_1", value="logistic_1"))
 

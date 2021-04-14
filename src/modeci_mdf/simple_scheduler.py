@@ -1,4 +1,5 @@
 import sys
+import sympy
 
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
@@ -6,11 +7,16 @@ from neuromllite.utils import evaluate as evaluate_params_nmllite
 from neuromllite.utils import _params_info
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
+from collections import OrderedDict
+
 FORMAT_DEFAULT = FORMAT_NUMPY
+
 
 def evaluate_expr(expr, func_params, array_format=FORMAT_DEFAULT, verbose=True):
 
-    e = evaluate_params_nmllite(expr, func_params, array_format=array_format, verbose=verbose)
+    e = evaluate_params_nmllite(
+        expr, func_params, array_format=array_format, verbose=verbose
+    )
     if type(e) == str:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
@@ -45,11 +51,16 @@ class EvaluableFunction:
             )
         for arg in self.function.args:
             func_params[arg] = evaluate_expr(
-                self.function.args[arg], func_params, verbose=False, array_format=array_format
+                self.function.args[arg],
+                func_params,
+                verbose=False,
+                array_format=array_format,
             )
             if self.verbose:
                 print("      Arg %s became %s" % (arg, func_params[arg]))
-        self.curr_value = evaluate_expr(expr, func_params, verbose=False, array_format=array_format)
+        self.curr_value = evaluate_expr(
+            expr, func_params, verbose=False, array_format=array_format
+        )
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
@@ -103,15 +114,48 @@ class EvaluableNode:
         self.verbose = verbose
         self.node = node
         self.evaluable_inputs = {}
-        self.evaluable_functions = {}
+        self.evaluable_functions = OrderedDict()
         self.evaluable_outputs = {}
+
+        all_known_vars = []
+        if node.parameters:
+            for p in node.parameters:
+                all_known_vars.append(p)
 
         for ip in node.input_ports:
             rip = EvaluableInput(ip, self.verbose)
             self.evaluable_inputs[ip.id] = rip
-        for f in node.functions:
-            rf = EvaluableFunction(f, self.verbose)
-            self.evaluable_functions[f.id] = rf
+            all_known_vars.append(ip.id)
+
+        all_funcs = [f for f in node.functions]
+
+        # Order the functions into the correct sequence
+        while len(all_funcs) > 0:
+            f = all_funcs.pop(0)  # pop first off list
+            if verbose:
+                print(
+                    "Checking whether function: %s with args %s is sufficiently determined by known vars %s"
+                    % (f.id, f.args, all_known_vars)
+                )
+            all_req_vars = []
+            for arg in f.args:
+                func_expr = sympy.simplify(f.args[arg])
+                all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+
+            all_present = [v in all_known_vars for v in all_req_vars]
+
+            if verbose:
+                print(
+                    "Are all of %s in %s? %s"
+                    % (all_req_vars, all_known_vars, all_present)
+                )
+            if all(all_present):
+                rf = EvaluableFunction(f, self.verbose)
+                self.evaluable_functions[f.id] = rf
+                all_known_vars.append(f.id)
+            else:
+                all_funcs.append(f)  # Add back to end of list...
+
         for op in node.output_ports:
             rop = EvaluableOutput(op, self.verbose)
             self.evaluable_outputs[op.id] = rop
@@ -130,10 +174,14 @@ class EvaluableNode:
             curr_params.update(self.node.parameters)
 
         for eip in self.evaluable_inputs:
-            i = self.evaluable_inputs[eip].evaluate(curr_params, array_format=array_format)
+            i = self.evaluable_inputs[eip].evaluate(
+                curr_params, array_format=array_format
+            )
             curr_params[eip] = i
         for ef in self.evaluable_functions:
-            curr_params[ef] = self.evaluable_functions[ef].evaluate(curr_params, array_format=array_format)
+            curr_params[ef] = self.evaluable_functions[ef].evaluate(
+                curr_params, array_format=array_format
+            )
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
 
@@ -163,7 +211,8 @@ class EvaluableGraph:
 
     def evaluate(self, array_format=FORMAT_DEFAULT):
         print(
-            "\nEvaluating graph: %s, root nodes: %s, with array format %s" % (self.graph.id, self.root_nodes, array_format)
+            "\nEvaluating graph: %s, root nodes: %s, with array format %s"
+            % (self.graph.id, self.root_nodes, array_format)
         )
         for rn in self.root_nodes:
             self.enodes[rn].evaluate_next(array_format=array_format)
@@ -172,15 +221,19 @@ class EvaluableGraph:
             pre_node = self.enodes[edge.sender]
             post_node = self.enodes[edge.receiver]
             value = pre_node.evaluable_outputs[edge.sender_port].curr_value
-            weight = 1 if not edge.parameters or not 'weight' in edge.parameters else edge.parameters['weight']
+            weight = (
+                1
+                if not edge.parameters or not "weight" in edge.parameters
+                else edge.parameters["weight"]
+            )
             print(
                 "  Edge %s connects %s to %s, passing %s with weight %s"
                 % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
             )
-            post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
+            post_node.evaluable_inputs[edge.receiver_port].set_input_value(
+                value * weight
+            )
             post_node.evaluate_next(array_format=array_format)
-
-
 
 
 def main(example_file, verbose=True):

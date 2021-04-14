@@ -1,6 +1,6 @@
 {
     "abcd_example": {
-        "version": "NeuroMLlite v0.3.0",
+        "version": "NeuroMLlite v0.3.1",
         "notes": "NeuroMLlite export of ModECI MDF v0.1 graph: abcd_example",
         "cells": {
             "input0__instance": {

@@ -187,3 +187,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/small_test.yaml
 /examples/medium_test.gv.png
 /examples/small_test.gv.png
+/sym*.ipynb
