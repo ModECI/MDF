@@ -126,7 +126,8 @@ class EvaluableNode:
             % (self.node.id, _params_info(self.node.parameters))
         )
         curr_params = {}
-        curr_params.update(self.node.parameters)
+        if self.node.parameters:
+            curr_params.update(self.node.parameters)
 
         for eip in self.evaluable_inputs:
             i = self.evaluable_inputs[eip].evaluate(curr_params, array_format=array_format)

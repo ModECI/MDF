@@ -185,3 +185,5 @@ Thumbs.db #thumbnail cache on Windows
 /examples/medium_test.yaml
 /examples/small_test.json
 /examples/small_test.yaml
+/examples/medium_test.gv.png
+/examples/small_test.gv.png

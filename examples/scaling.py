@@ -18,6 +18,7 @@ def generate_test_model(
     seed=1234,
 ):
     np.random.seed(seed)
+
     mod = Model(id=id)
     mod_graph = Graph(id=id)
     mod.graphs.append(mod_graph)
@@ -27,35 +28,61 @@ def generate_test_model(
         parameters={"input_level": np.random.random_sample(input_shape).tolist()},
     )
 
-    op1 = OutputPort(id="out_port", value="input_level")
-    input_node.output_ports.append(op1)
+    input_node.output_ports.append(OutputPort(id="out_port", value="input_level"))
+
     mod_graph.nodes.append(input_node)
 
-    middle_node = Node(
-        id="hidden_node",
-        parameters={"slope": 0.5, "intercept": np.random.random_sample(hidden_shape).tolist()},
+    last_node = input_node
+
+    for i in range(hidden_layers):
+
+        hidden_node = Node(
+            id="hidden_node_%i"%i,
+            parameters={"slope0": 0.5, "intercept0": np.random.random_sample(hidden_shape).tolist()},
+        )
+
+        hidden_node.input_ports.append(InputPort(id="in_port"))
+        mod_graph.nodes.append(hidden_node)
+
+        f1 = Function(
+            id="linear_1",
+            function="linear",
+            args={"variable0": hidden_node.input_ports[0].id,
+                  "slope": "slope0",
+                  "intercept": "intercept0"},
+        )
+        hidden_node.functions.append(f1)
+
+        hidden_node.output_ports.append(OutputPort(id="out_port", value="linear_1"))
+
+        e1 = Edge(
+            id="edge_%i"%i,
+            parameters={"weight": np.random.random_sample(input_shape).tolist()},
+            sender=last_node.id,
+            sender_port=last_node.output_ports[0].id,
+            receiver=hidden_node.id,
+            receiver_port=hidden_node.input_ports[0].id,
+        )
+
+        mod_graph.edges.append(e1)
+
+        last_node = hidden_node
+
+    output_node = Node(
+        id="output_node",
     )
 
-    ip1 = InputPort(id="input_port1")
-    middle_node.input_ports.append(ip1)
-    mod_graph.nodes.append(middle_node)
-
-    f1 = Function(
-        id="linear_1",
-        function="linear",
-        args={"variable0": ip1.id, "slope": "slope", "intercept": "intercept"},
-    )
-    middle_node.functions.append(f1)
-
-    middle_node.output_ports.append(OutputPort(id="output_1", value="linear_1"))
+    output_node.input_ports.append(InputPort(id="in_port"))
+    output_node.output_ports.append(OutputPort(id="out_port", value="in_port"))
+    mod_graph.nodes.append(output_node)
 
     e1 = Edge(
-        id="input_edge",
+        id="edge_%i"%(i+1),
         parameters={"weight": np.random.random_sample(input_shape).tolist()},
-        sender=input_node.id,
-        sender_port=op1.id,
-        receiver=middle_node.id,
-        receiver_port=ip1.id,
+        sender=last_node.id,
+        sender_port=last_node.output_ports[0].id,
+        receiver=output_node.id,
+        receiver_port=output_node.input_ports[0].id,
     )
 
     mod_graph.edges.append(e1)
@@ -68,11 +95,16 @@ def generate_test_model(
 
 
 if __name__ == "__main__":
-    mod_graph = generate_test_model("small_test")
+
+    mod_graph = generate_test_model("small_test", save_to_file=True)
 
     scale = 20
     mod_graph = generate_test_model(
-        "medium_test", input_shape=(scale, scale), hidden_shape=(scale, scale)
+        "medium_test",
+        input_shape=(scale, scale),
+        hidden_shape=(scale, scale),
+        hidden_layers = 5,
+        save_to_file=True
     )
 
     if "-run" in sys.argv:
