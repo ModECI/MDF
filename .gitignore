@@ -181,3 +181,7 @@ Thumbs.db #thumbnail cache on Windows
 /abcd_example.gv.pdf
 /Simabcd_example.json
 /examples/*.gv.pdf
+/examples/medium_test.json
+/examples/medium_test.yaml
+/examples/small_test.json
+/examples/small_test.yaml

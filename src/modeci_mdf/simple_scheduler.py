@@ -6,8 +6,9 @@ from neuromllite.utils import evaluate as evaluate_params_nmllite
 from neuromllite.utils import _params_info
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
+FORMAT_DEFAULT = FORMAT_NUMPY
 
-def evaluate_expr(expr, func_params, array_format=FORMAT_NUMPY, verbose=True):
+def evaluate_expr(expr, func_params, array_format=FORMAT_DEFAULT, verbose=True):
 
     e = evaluate_params_nmllite(expr, func_params, array_format=array_format, verbose=verbose)
     if type(e) == str:
@@ -23,7 +24,7 @@ class EvaluableFunction:
         self.verbose = verbose
         self.function = function
 
-    def evaluate(self, parameters):
+    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
 
         expr = None
         for f in mdf_functions:
@@ -44,11 +45,11 @@ class EvaluableFunction:
             )
         for arg in self.function.args:
             func_params[arg] = evaluate_expr(
-                self.function.args[arg], func_params, verbose=False
+                self.function.args[arg], func_params, verbose=False, array_format=array_format
             )
             if self.verbose:
                 print("      Arg %s became %s" % (arg, func_params[arg]))
-        self.curr_value = evaluate_expr(expr, func_params, verbose=False)
+        self.curr_value = evaluate_expr(expr, func_params, verbose=False, array_format=array_format)
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
@@ -62,14 +63,14 @@ class EvaluableOutput:
         self.verbose = verbose
         self.output_port = output_port
 
-    def evaluate(self, parameters):
+    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print(
                 "    Evaluating %s with %s "
                 % (self.output_port, _params_info(parameters))
             )
         self.curr_value = evaluate_expr(
-            self.output_port.value, parameters, verbose=False
+            self.output_port.value, parameters, verbose=False, array_format=array_format
         )
         print(
             "    Evaluated %s with %s \n       =\t%s"
@@ -89,7 +90,7 @@ class EvaluableInput:
             print("    Input value in %s set to %s" % (self.input_port.id, value))
         self.curr_value = value
 
-    def evaluate(self, parameters):
+    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         print(
             "    Evaluated %s with %s =\t%s"
             % (self.input_port, _params_info(parameters), self.curr_value)
@@ -118,7 +119,7 @@ class EvaluableNode:
     def initialize(self):
         pass
 
-    def evaluate_next(self):
+    def evaluate_next(self, array_format=FORMAT_DEFAULT):
 
         print(
             "  Evaluating Node: %s with %s"
@@ -128,12 +129,12 @@ class EvaluableNode:
         curr_params.update(self.node.parameters)
 
         for eip in self.evaluable_inputs:
-            i = self.evaluable_inputs[eip].evaluate(curr_params)
+            i = self.evaluable_inputs[eip].evaluate(curr_params, array_format=array_format)
             curr_params[eip] = i
         for ef in self.evaluable_functions:
-            curr_params[ef] = self.evaluable_functions[ef].evaluate(curr_params)
+            curr_params[ef] = self.evaluable_functions[ef].evaluate(curr_params, array_format=array_format)
         for eop in self.evaluable_outputs:
-            self.evaluable_outputs[eop].evaluate(curr_params)
+            self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
 
     def get_output(self, id):
         for rop in self.evaluable_outputs:
@@ -159,12 +160,12 @@ class EvaluableGraph:
         for edge in graph.edges:
             self.root_nodes.remove(edge.receiver)
 
-    def evaluate(self):
+    def evaluate(self, array_format=FORMAT_DEFAULT):
         print(
-            "\nEvaluating graph: %s, root nodes: %s" % (self.graph.id, self.root_nodes)
+            "\nEvaluating graph: %s, root nodes: %s, with array format %s" % (self.graph.id, self.root_nodes, array_format)
         )
         for rn in self.root_nodes:
-            self.enodes[rn].evaluate_next()
+            self.enodes[rn].evaluate_next(array_format=array_format)
 
         for edge in self.graph.edges:
             pre_node = self.enodes[edge.sender]
@@ -176,11 +177,9 @@ class EvaluableGraph:
                 % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
             )
             post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
-            post_node.evaluate_next()
+            post_node.evaluate_next(array_format=array_format)
 
 
-def evaluate(graph):
-    pass
 
 
 def main():
