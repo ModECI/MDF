@@ -183,25 +183,28 @@ class EvaluableGraph:
 
 
 
-def main():
+def main(example_file, verbose=True):
+
     from modeci_mdf.utils import load_mdf, print_summary
 
-    example = "../../examples/Simple.json"
-    verbose = True
-    if len(sys.argv) == 2:
-        example = sys.argv[1]
-        verbose = True
-        verbose = False
+    mod_graph = load_mdf(example_file).graphs[0]
 
-    mod_graph = load_mdf(example).graphs[0]
+    if verbose:
+        print("Loaded Graph:")
+        print_summary(mod_graph)
 
-    print("Loaded Graph:")
-    print_summary(mod_graph)
-
-    print("------------------")
+        print("------------------")
     eg = EvaluableGraph(mod_graph, verbose)
     eg.evaluate()
 
 
 if __name__ == "__main__":
-    main()
+
+    example_file = "../../examples/Simple.json"
+    verbose = True
+    if len(sys.argv) == 2:
+        example_file = sys.argv[1]
+        verbose = True
+        verbose = False
+
+    main(example_file, verbose)

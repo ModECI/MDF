@@ -3,7 +3,6 @@ import os
 import sys
 
 
-#@pytest.mark.xfail(reason="Model.to_yaml_file() seems to be broken.")
 def test_examples():
     """
     Run the examples and make sure they don't crash.
