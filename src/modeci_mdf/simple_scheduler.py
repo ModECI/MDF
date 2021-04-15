@@ -57,9 +57,9 @@ class EvaluableFunction:
                 array_format=array_format,
             )
             if self.verbose:
-                print("      Arg %s became %s" % (arg, func_params[arg]))
+                print("      Arg: %s became: %s" % (arg, func_params[arg]))
         self.curr_value = evaluate_expr(
-            expr, func_params, verbose=False, array_format=array_format
+            expr, func_params, verbose=self.verbose, array_format=array_format
         )
         if self.verbose:
             print(

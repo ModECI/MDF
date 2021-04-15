@@ -8,6 +8,7 @@ Work in progress...
 import sys
 
 import graphviz
+import numpy as np
 
 from modeci_mdf.standard_functions import mdf_functions
 
@@ -37,7 +38,13 @@ def format_label(s):
     return '<font color="%s"><b>%s: </b></font></td><td>'%(COLOR_LABEL,s)
 
 def format_num(s):
-    return '<font color="%s"><b>%s</b></font>'%(COLOR_NUM,s)
+    if type(s)==np.ndarray:
+        ss = '%s'%(np.array2string(s,threshold=4, edgeitems=1))
+        info = ' (NP %s %s)'%(s.shape,s.dtype)
+    else:
+        ss = s
+        info = ''
+    return '<font color="%s"><b>%s</b>%s</font>'%(COLOR_NUM,ss,info)
 
 def format_param(s):
     return '<font color="%s">%s</font>'%(COLOR_PARAM,s)
@@ -102,31 +109,36 @@ def mdf_to_graphviz(mdf_graph,
 
                 info += '<tr><td>%s'%format_label('PARAMS')
                 for p in node.parameters:
-                    info += '%s = %s; '%(format_param(p), format_num(node.parameters[p]))
-                info = info[:-2]
+                    nn = format_num(node.parameters[p])
+                    info += '%s = %s%s'%(format_param(p), nn, '<br/>' if len(nn)>40 else ';    ')
+                info = info[:-5]
                 info += '</td></tr>'
 
             if node.input_ports and len(node.input_ports)>0:
                 for ip in node.input_ports:
-                    info += '<tr><td>%s%s %s</td></tr>'%(format_label('IN'),format_input(ip.id), ip.shape if level>=LEVEL_3 and ip.shape is not None else '')
+                    info += '<tr><td>%s%s %s</td></tr>'%(format_label('IN'),
+                                                         format_input(ip.id),
+                                                         '(shape: %s)'%ip.shape if level>=LEVEL_2 and ip.shape is not None else '')
 
 
             if node.functions and len(node.functions)>0:
                 for f in node.functions:
-                    func_info = mdf_functions[f.function]
+                    argstr = ', '.join([match_in_expr(str(f.args[a]), node) for a in f.args]) if f.args else '???'
                     info += '<tr><td>%s%s = %s(%s)</td></tr>'%(format_label('FUNC'),
                                              format_func(f.id),
                                              format_standard_func(f.function),
-                                             ', '.join([match_in_expr(str(f.args[a]), node) for a in f.args]))
+                                             argstr)
                     if level>=LEVEL_3:
+                        func_info = mdf_functions[f.function]
                         info += '<tr><td colspan="2">%s</td></tr>'%(format_standard_func_long('%s(%s) = %s'%(f.function, ', '.join([a for a in f.args]), func_info['expression_string'])))
                         #info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
 
             if node.output_ports and len(node.output_ports)>0:
                 for op in node.output_ports:
-                    info += '<tr><td>%s%s = %s</td></tr>'%(format_label('OUT'),
+                    info += '<tr><td>%s%s = %s %s</td></tr>'%(format_label('OUT'),
                                  format_output(op.id),
-                                 match_in_expr(op.value,node))
+                                 match_in_expr(op.value,node),
+                                 '(shape: %s)'%op.shape if level>=LEVEL_2 and op.shape is not None else '')
 
         info += '</table>'
 

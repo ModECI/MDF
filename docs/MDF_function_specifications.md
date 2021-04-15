@@ -2,7 +2,7 @@
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**
 These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py
 ## All functions:
- | <a href="#linear">linear</a> | <a href="#logistic">logistic</a> | <a href="#exponential">exponential</a> | <a href="#sin">sin</a> | 
+ | <a href="#linear">linear</a> | <a href="#logistic">logistic</a> | <a href="#exponential">exponential</a> | <a href="#sin">sin</a> | <a href="#matmul">MatMul</a> | 
 ## linear
  <p><i>A linear function, calculated from a slope and an intercept</i></p> 
 <p><b>linear(variable0, slope, intercept)</b> = (variable0 * slope + intercept)</p> 
@@ -22,3 +22,8 @@ These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modec
  <p><i>Sine function</i></p> 
 <p><b>sin(variable0, scale)</b> = scale * sin(variable0)</p> 
 <p>Python version: scale * math.sin(variable0)</p> 
+
+## MatMul
+ <p><i>Matrix multiplication (work in progress...)</i></p> 
+<p><b>MatMul(A, B)</b> = A @ B</p> 
+<p>Python version: A @ B</p> 

@@ -59,6 +59,13 @@ if len(mdf_functions) == 0:
         expression_string="scale * sin(%s)" % (STANDARD_ARG_0),
     )
 
+    _add_mdf_function(
+        "MatMul",
+        description="Matrix multiplication (work in progress...)",
+        arguments=['A', 'B'],
+        expression_string="A @ B",
+    )
+
 
 if __name__ == "__main__":
 

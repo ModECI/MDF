@@ -36,5 +36,13 @@
             "scale"
         ],
         "expression_string": "scale * sin(variable0)"
+    },
+    "MatMul": {
+        "description": "Matrix multiplication (work in progress...)",
+        "arguments": [
+            "A",
+            "B"
+        ],
+        "expression_string": "A @ B"
     }
 }
