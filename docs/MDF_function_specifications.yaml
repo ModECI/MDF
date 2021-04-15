@@ -34,3 +34,8 @@ MatMul:
     - A
     - B
     expression_string: A @ B
+Relu:
+    description: Rectified linear function (work in progress...)
+    arguments:
+    - A
+    expression_string: maximum(A,0)

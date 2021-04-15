@@ -14,6 +14,8 @@ def create_python_expression(expression_string):
 
     for func in ["exp", "sin"]:
         expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
+    for func in ["maximum"]:
+        expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
     return expression_string
 
 
@@ -64,6 +66,13 @@ if len(mdf_functions) == 0:
         description="Matrix multiplication (work in progress...)",
         arguments=['A', 'B'],
         expression_string="A @ B",
+    )
+
+    _add_mdf_function(
+        "Relu",
+        description="Rectified linear function (work in progress...)",
+        arguments=['A'],
+        expression_string="maximum(A,0)",
     )
 
 

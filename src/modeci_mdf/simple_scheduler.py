@@ -83,10 +83,12 @@ class EvaluableOutput:
         self.curr_value = evaluate_expr(
             self.output_port.value, parameters, verbose=False, array_format=array_format
         )
-        print(
-            "    Evaluated %s with %s \n       =\t%s"
-            % (self.output_port, _params_info(parameters), self.curr_value)
-        )
+
+        if self.verbose:
+            print(
+                "    Evaluated %s with %s \n       =\t%s"
+                % (self.output_port, _params_info(parameters), self.curr_value)
+            )
         return self.curr_value
 
 
@@ -102,10 +104,11 @@ class EvaluableInput:
         self.curr_value = value
 
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
-        print(
-            "    Evaluated %s with %s =\t%s"
-            % (self.input_port, _params_info(parameters), self.curr_value)
-        )
+        if self.verbose:
+            print(
+                "    Evaluated %s with %s =\t%s"
+                % (self.input_port, _params_info(parameters), self.curr_value)
+            )
         return self.curr_value
 
 
@@ -165,10 +168,11 @@ class EvaluableNode:
 
     def evaluate_next(self, array_format=FORMAT_DEFAULT):
 
-        print(
-            "  Evaluating Node: %s with %s"
-            % (self.node.id, _params_info(self.node.parameters))
-        )
+        if self.verbose:
+            print(
+                "  Evaluating Node: %s with %s"
+                % (self.node.id, _params_info(self.node.parameters))
+            )
         curr_params = {}
         if self.node.parameters:
             curr_params.update(self.node.parameters)
@@ -226,10 +230,12 @@ class EvaluableGraph:
                 if not edge.parameters or not "weight" in edge.parameters
                 else edge.parameters["weight"]
             )
-            print(
-                "  Edge %s connects %s to %s, passing %s with weight %s"
-                % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
-            )
+
+            if self.verbose:
+                print(
+                    "  Edge %s connects %s to %s, passing %s with weight %s"
+                    % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
+                )
             post_node.evaluable_inputs[edge.receiver_port].set_input_value(
                 value * weight
             )
