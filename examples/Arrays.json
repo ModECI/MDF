@@ -1,13 +1,22 @@
 {
-    "Simple": {
+    "Arrays": {
         "format": "ModECI MDF v0.1",
         "generating_application": "Python modeci-mdf v0.1.3",
         "graphs": {
-            "simple_example": {
+            "array_example": {
                 "nodes": {
                     "input_node": {
                         "parameters": {
-                            "input_level": 0.5
+                            "input_level": [
+                                [
+                                    1,
+                                    2
+                                ],
+                                [
+                                    3,
+                                    4
+                                ]
+                            ]
                         },
                         "output_ports": {
                             "out_port": {
@@ -15,11 +24,19 @@
                             }
                         }
                     },
-                    "processing_node": {
+                    "middle_node": {
                         "parameters": {
-                            "lin_slope": 0.5,
-                            "lin_intercept": 0,
-                            "log_gain": 3
+                            "slope": 0.5,
+                            "intercept": [
+                                [
+                                    0,
+                                    1
+                                ],
+                                [
+                                    2,
+                                    2
+                                ]
+                            ]
                         },
                         "input_ports": {
                             "input_port1": {}
@@ -29,23 +46,14 @@
                                 "function": "linear",
                                 "args": {
                                     "variable0": "input_port1",
-                                    "slope": "lin_slope",
-                                    "intercept": "lin_intercept"
-                                }
-                            },
-                            "logistic_1": {
-                                "function": "logistic",
-                                "args": {
-                                    "variable0": "linear_1",
-                                    "gain": "log_gain",
-                                    "bias": 0,
-                                    "offset": 0
+                                    "slope": "slope",
+                                    "intercept": "intercept"
                                 }
                             }
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "logistic_1"
+                                "value": "linear_1"
                             }
                         }
                     }
@@ -53,10 +61,19 @@
                 "edges": {
                     "input_edge": {
                         "parameters": {
-                            "weight": 0.55
+                            "weight": [
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ]
+                            ]
                         },
                         "sender": "input_node",
-                        "receiver": "processing_node",
+                        "receiver": "middle_node",
                         "sender_port": "out_port",
                         "receiver_port": "input_port1"
                     }

@@ -1,6 +1,6 @@
 ABCD:
     format: ModECI MDF v0.1
-    generating_application: Python modeci-mdf v0.1.2
+    generating_application: Python modeci-mdf v0.1.3
     graphs:
         abcd_example:
             nodes:
