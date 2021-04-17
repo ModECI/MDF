@@ -76,7 +76,13 @@ class Graph(BaseWithId):
         )
 
         self.allowed_fields = collections.OrderedDict(
-            [("parameters", ("Dict of global parameters for the Graph", dict))]
+            [
+                ("parameters", ("Dict of global parameters for the Graph", dict)),
+                (
+                    "conditions",
+                    ("The _ConditionSet_ for scheduling of the Graph", dict),
+                ),
+            ]
         )
 
         super().__init__(**kwargs)
@@ -85,6 +91,20 @@ class Graph(BaseWithId):
         for node in self.nodes:
             if id == node.id:
                 return node
+
+    @property
+    def dependency_dict(self):
+        # assumes no cycles, need to develop a way to prune if cyclic
+        # graphs are to be supported
+        dependencies = {n: set() for n in self.nodes}
+
+        for edge in self.edges:
+            sender = self.get_node(edge.sender)
+            receiver = self.get_node(edge.receiver)
+
+            dependencies[receiver].add(sender)
+
+        return dependencies
 
 
 class Node(BaseWithId):
@@ -223,14 +243,42 @@ class Edge(BaseWithId):
         super().__init__(**kwargs)
 
 
-class Condition(BaseWithId):
+class ConditionSet(Base):
     def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict(
-            [("type", ("Type...", str)), ("args", ("Dict of args...", dict))]
+            [
+                (
+                    "node_specific",
+                    ("The _Condition_s corresponding to each _Node_", dict),
+                ),
+                (
+                    "termination",
+                    ("The _Condition_s that indicate when model execution ends", dict),
+                ),
+            ]
         )
 
         super().__init__(**kwargs)
+
+
+class Condition(Base):
+    def __init__(self, type=None, **kwargs):
+
+        self.allowed_fields = collections.OrderedDict(
+            [
+                ("type", ("The type of _Condition_ from the library", str)),
+                (
+                    "args",
+                    (
+                        "The dictionary of arguments needed to evaluate the _Condition_",
+                        dict,
+                    ),
+                ),
+            ]
+        )
+
+        super().__init__(type=type, args=kwargs)
 
 
 if __name__ == "__main__":
