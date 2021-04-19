@@ -69,6 +69,29 @@ class EvaluableFunction:
         return self.curr_value
 
 
+
+class EvaluableState:
+    def __init__(self, state, verbose=False):
+        self.verbose = verbose
+        self.state = state
+
+    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
+        if self.verbose:
+            print(
+                "    Evaluating %s with %s "
+                % (self.state, _params_info(parameters))
+            )
+        self.curr_value = evaluate_expr(
+            self.state.default_initial_value, parameters, verbose=False, array_format=array_format
+        )
+
+        if self.verbose:
+            print(
+                "    Evaluated %s with %s \n       =\t%s"
+                % (self.state, _params_info(parameters), self.curr_value)
+            )
+        return self.curr_value
+
 class EvaluableOutput:
     def __init__(self, output_port, verbose=False):
         self.verbose = verbose
@@ -118,6 +141,7 @@ class EvaluableNode:
         self.node = node
         self.evaluable_inputs = {}
         self.evaluable_functions = OrderedDict()
+        self.evaluable_states = OrderedDict()
         self.evaluable_outputs = {}
 
         all_known_vars = []
@@ -159,6 +183,10 @@ class EvaluableNode:
             else:
                 all_funcs.append(f)  # Add back to end of list...
 
+        for s in node.states:
+            es = EvaluableState(s, self.verbose)
+            self.evaluable_states[s.id] = es
+
         for op in node.output_ports:
             rop = EvaluableOutput(op, self.verbose)
             self.evaluable_outputs[op.id] = rop
@@ -184,6 +212,10 @@ class EvaluableNode:
             curr_params[eip] = i
         for ef in self.evaluable_functions:
             curr_params[ef] = self.evaluable_functions[ef].evaluate(
+                curr_params, array_format=array_format
+            )
+        for es in self.evaluable_states:
+            curr_params[es] = self.evaluable_states[es].evaluate(
                 curr_params, array_format=array_format
             )
         for eop in self.evaluable_outputs:

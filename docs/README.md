@@ -57,6 +57,8 @@ A self contained unit of evaluation recieving input from other Nodes on <a href=
 
 <tr><td><b>functions</b></td><td><a href="#function">Function</a></td><td><i>The <a href="#function">Function</a>s for the Node</i></td></tr>
 
+<tr><td><b>states</b></td><td><a href="#state">State</a></td><td><i>The <a href="#state">State</a>s of the Node</i></td></tr>
+
 <tr><td><b>output_ports</b></td><td><a href="#outputport">OutputPort</a></td><td><i>The <a href="#outputport">OutputPort</a>s containing evaluated quantities from the Node</i></td></tr>
 
 
@@ -81,6 +83,18 @@ A single value which is evaluated as a function of values on <a href="#inputport
 <tr><td><b>args</b></td><td>dict</td><td><i>Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>The unique (for this <a href="#node">Node</a>) id of the function, which will be used in other Functions and the <a href="#outputport">OutputPort</a>s for its value</i></td></tr>
+
+<tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>
+
+
+</table>
+
+## State
+A state variable of a <a href="#node">Node</a>, i.e. has a value that persists between evaluations of the <a href="#node">Node</a>.
+#### Allowed parameters
+<table><tr><td><b>default_initial_value</b></td><td>str</td><td><i>The initial value of the state variable</i></td></tr>
+
+<tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
 <tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>
 

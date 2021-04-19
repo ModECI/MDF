@@ -81,6 +81,10 @@
                     "type": "Function",
                     "description": "The _Function_s for the Node"
                 },
+                "states": {
+                    "type": "State",
+                    "description": "The _State_s of the Node"
+                },
                 "output_ports": {
                     "type": "OutputPort",
                     "description": "The _OutputPort_s containing evaluated quantities from the Node"
@@ -117,6 +121,23 @@
                 "id": {
                     "type": "str",
                     "description": "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value"
+                },
+                "notes": {
+                    "type": "str",
+                    "description": "Human readable notes"
+                }
+            }
+        },
+        "State": {
+            "definition": "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_.",
+            "allowed_parameters": {
+                "default_initial_value": {
+                    "type": "str",
+                    "description": "The initial value of the state variable"
+                },
+                "id": {
+                    "type": "str",
+                    "description": "Unique ID of element"
                 },
                 "notes": {
                     "type": "str",

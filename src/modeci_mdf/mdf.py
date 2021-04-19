@@ -80,6 +80,7 @@ class Node(BaseWithId):
 
         self.allowed_children = collections.OrderedDict([('input_ports',('The _InputPort_s into the Node',InputPort)),
              ('functions',('The _Function_s for the Node',Function)),
+             ('states',('The _State_s of the Node',State)),
              ('output_ports',('The _OutputPort_s containing evaluated quantities from the Node',OutputPort))])
 
         self.allowed_fields = collections.OrderedDict([('parameters',('Dict of parameters for the Node',dict))])
@@ -118,6 +119,17 @@ class OutputPort(BaseWithId):
 
         super().__init__(**kwargs)
 
+
+
+class State(BaseWithId):
+
+    _definition = 'A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_.'
+
+    def __init__(self, **kwargs):
+
+        self.allowed_fields = collections.OrderedDict([('default_initial_value',('The initial value of the state variable',str))])
+
+        super().__init__(**kwargs)
 
 class Edge(BaseWithId):
 
