@@ -1,4 +1,6 @@
 import collections
+import yaml
+import json
 
 '''
     Defines the structure of ModECI MDF - Work in progress!!!
@@ -31,7 +33,6 @@ class Model(BaseWithId):
         self.format = 'ModECI MDF v%s' % MODECI_MDF_VERSION
         self.generating_application = 'Python modeci-mdf v%s' % __version__
 
-
     # Overrides BaseWithId.to_json_file
     def to_json_file(self, filename, include_metadata=True):
 
@@ -45,6 +46,12 @@ class Model(BaseWithId):
         if include_metadata: self._include_metadata()
 
         new_file = super().to_yaml_file(filename)
+
+    def to_yaml(self, include_metadata=True):
+
+        if include_metadata: self._include_metadata()
+
+        return yaml.dump(json.loads(self.to_json()), default_flow_style=False, sort_keys=False)
 
 
 class ModelGraph(BaseWithId):
@@ -70,6 +77,11 @@ class Node(BaseWithId):
 
     def __init__(self, **kwargs):
 
+        # It seems empty dictionaries cause JSON dump errors. This looks like a bug in neuromllite.  This is a work
+        # around that just removes them.
+        if 'parameters' in kwargs and not kwargs['parameters']:
+            del kwargs['parameters']
+
         self.allowed_children = collections.OrderedDict([('input_ports',('Dict of ...',InputPort)),
              ('functions',('Dict of functions for the node',Function)),
              ('output_ports',('Dict of ...',OutputPort))])
@@ -84,6 +96,11 @@ class Function(BaseWithId):
 
     def __init__(self, **kwargs):
 
+        # It seems empty dictionaries cause JSON dump errors. This looks like a bug in neuromllite.  This is a work
+        # around that just removes them.
+        if 'args' in kwargs and not kwargs['args']:
+            del kwargs['args']
+
         self.allowed_fields = collections.OrderedDict([('function',('...',str)),
                                ('args',('Dict of args...',dict))])
 
@@ -94,7 +111,10 @@ class InputPort(BaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_fields = collections.OrderedDict([('shape',('...',str))])
+        self.allowed_fields = collections.OrderedDict([
+            ('shape',('...',str)),
+            ('type', ('...', str))
+        ])
 
         super().__init__(**kwargs)
 

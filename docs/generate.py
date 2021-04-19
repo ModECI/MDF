@@ -1,4 +1,3 @@
-
 from modeci_mdf.mdf import *
 
 from modeci_mdf import MODECI_MDF_VERSION

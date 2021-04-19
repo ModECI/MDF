@@ -9,7 +9,7 @@ def params_info(parameters):
     pi = "["
     for p in parameters:
         if not p == "__builtins__":
-            pi += "%s=%s," % (p, parameters[p])
+            pi += "{}={},".format(p, parameters[p])
     pi = pi[:-1]
     pi += "]"
     return pi
@@ -38,7 +38,7 @@ class EvaluableFunction:
             if self.function.function == f:
                 expr = create_python_expression(mdf_functions[f]["expression_string"])
         if not expr:
-            raise "Unknown function: %s. Known functions: %s" % (
+            raise "Unknown function: {}. Known functions: {}".format(
                 self.function.function,
                 mdf_functions.keys,
             )
@@ -55,7 +55,7 @@ class EvaluableFunction:
                 self.function.args[arg], func_params, verbose=False
             )
             if self.verbose:
-                print("      Arg %s became %s" % (arg, func_params[arg]))
+                print("      Arg {} became {}".format(arg, func_params[arg]))
         self.curr_value = evaluate_expr(expr, func_params, verbose=False)
         if self.verbose:
             print(
@@ -94,7 +94,7 @@ class EvaluableInput:
 
     def set_input_value(self, value):
         if self.verbose:
-            print("    Input value in %s set to %s" % (self.input_port.id, value))
+            print(f"    Input value in {self.input_port.id} set to {value}")
         self.curr_value = value
 
     def evaluate(self, parameters):
@@ -169,7 +169,7 @@ class EvaluableGraph:
 
     def evaluate(self):
         print(
-            "\nEvaluating graph: %s, root nodes: %s" % (self.graph.id, self.root_nodes)
+            f"\nEvaluating graph: {self.graph.id}, root nodes: {self.root_nodes}"
         )
         for rn in self.root_nodes:
             self.enodes[rn].evaluate_next()

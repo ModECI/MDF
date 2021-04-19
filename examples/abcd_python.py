@@ -37,7 +37,7 @@ def evaluate(input):
     B = 1 / (1 + math.exp(-1 * B_gain * (A + B_bias) + B_offset))
     C = C_scale * math.exp((C_rate * B) + C_bias) + C_offset
     D = D_scale * math.sin(C)
-    print("  Input value %s:\tA=%s,\tB=%s,\tC=%s,\tD=%s" % (input, A, B, C, D))
+    print(f"  Input value {input}:\tA={A},\tB={B},\tC={C},\tD={D}")
     return A, B, C, D
 
 

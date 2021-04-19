@@ -39,7 +39,7 @@ def create_example_node(node_id, graph):
 def simple_connect(pre_node, post_node, graph):
 
     e1 = Edge(
-        id="edge_%s_%s" % (pre_node.id, post_node.id),
+        id=f"edge_{pre_node.id}_{post_node.id}",
         sender=pre_node.id,
         sender_port=pre_node.output_ports[0].id,
         receiver=post_node.id,
@@ -78,7 +78,7 @@ def load_mdf_json(filename):
 
     data = load_json(filename)
 
-    print("Loaded a graph from %s, Root(s): %s" % (filename, data.keys()))
+    print(f"Loaded a graph from {filename}, Root(s): {data.keys()}")
     if data.keys() == "graphs":
         data = {"UNSPECIFIED": data}
     model = Model()
@@ -96,7 +96,7 @@ def load_mdf_yaml(filename):
 
     data = load_yaml(filename)
 
-    print("Loaded a graph from %s, Root(s): %s" % (filename, data.keys()))
+    print(f"Loaded a graph from {filename}, Root(s): {data.keys()}")
     if data.keys() == "graphs":
         data = {"UNSPECIFIED": data}
     model = Model()
