@@ -5,6 +5,21 @@
         "graphs": {
             "state_example": {
                 "nodes": {
+                    "counter_node": {
+                        "parameters": {
+                            "increment": 1
+                        },
+                        "states": {
+                            "count": {
+                                "value": "count + increment"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "count"
+                            }
+                        }
+                    },
                     "sine_node": {
                         "parameters": {
                             "amp": 3

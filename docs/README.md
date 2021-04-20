@@ -94,6 +94,8 @@ A state variable of a <a href="#node">Node</a>, i.e. has a value that persists b
 #### Allowed parameters
 <table><tr><td><b>default_initial_value</b></td><td>str</td><td><i>The initial value of the state variable</i></td></tr>
 
+<tr><td><b>value</b></td><td>str</td><td><i>The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values</i></td></tr>
+
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
 <tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>

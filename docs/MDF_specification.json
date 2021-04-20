@@ -135,6 +135,10 @@
                     "type": "str",
                     "description": "The initial value of the state variable"
                 },
+                "value": {
+                    "type": "str",
+                    "description": "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values"
+                },
                 "id": {
                     "type": "str",
                     "description": "Unique ID of element"

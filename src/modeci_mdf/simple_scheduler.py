@@ -73,16 +73,28 @@ class EvaluableState:
     def __init__(self, state, verbose=False):
         self.verbose = verbose
         self.state = state
+        self.curr_value = 0
 
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print("    Evaluating %s with %s " % (self.state, _params_info(parameters)))
-        self.curr_value = evaluate_expr(
-            self.state.default_initial_value,
-            parameters,
-            verbose=False,
-            array_format=array_format,
-        )
+
+        if self.state.default_initial_value:
+
+            self.curr_value = evaluate_expr(
+                self.state.default_initial_value,
+                parameters,
+                verbose=False,
+                array_format=array_format,
+            )
+        elif self.state.value:
+
+            self.curr_value = evaluate_expr(
+                self.state.value,
+                parameters,
+                verbose=False,
+                array_format=array_format,
+            )
 
         if self.verbose:
             print(
@@ -214,6 +226,10 @@ class EvaluableNode:
             curr_params[ef] = self.evaluable_functions[ef].evaluate(
                 curr_params, array_format=array_format
             )
+        # First set params to previous state values...
+        for es in self.evaluable_states:
+            curr_params[es] = self.evaluable_states[es].curr_value
+        # Now set params to new state values...
         for es in self.evaluable_states:
             curr_params[es] = self.evaluable_states[es].evaluate(
                 curr_params, array_format=array_format

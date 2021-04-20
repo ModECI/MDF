@@ -188,3 +188,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/medium_test.gv.png
 /examples/small_test.gv.png
 /sym*.ipynb
+/black*.sh

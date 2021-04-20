@@ -198,7 +198,14 @@ class State(BaseWithId):
                 (
                     "default_initial_value",
                     ("The initial value of the state variable", str),
-                )
+                ),
+                (
+                    "value",
+                    (
+                        "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values",
+                        str,
+                    ),
+                ),
             ]
         )
 
