@@ -96,6 +96,8 @@ A state variable of a <a href="#node">Node</a>, i.e. has a value that persists b
 
 <tr><td><b>value</b></td><td>str</td><td><i>The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values</i></td></tr>
 
+<tr><td><b>time_derivative</b></td><td>str</td><td><i>How the state varies with time, i.e. ds/dt. Units of time are seconds.</i></td></tr>
+
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
 <tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>

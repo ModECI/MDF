@@ -139,6 +139,10 @@
                     "type": "str",
                     "description": "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values"
                 },
+                "time_derivative": {
+                    "type": "str",
+                    "description": "How the state varies with time, i.e. ds/dt. Units of time are seconds."
+                },
                 "id": {
                     "type": "str",
                     "description": "Unique ID of element"

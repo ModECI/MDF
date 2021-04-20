@@ -75,19 +75,11 @@ class EvaluableState:
         self.state = state
         self.curr_value = 0
 
-    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
+    def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print("    Evaluating %s with %s " % (self.state, _params_info(parameters)))
 
-        if self.state.default_initial_value:
-
-            self.curr_value = evaluate_expr(
-                self.state.default_initial_value,
-                parameters,
-                verbose=False,
-                array_format=array_format,
-            )
-        elif self.state.value:
+        if self.state.value:
 
             self.curr_value = evaluate_expr(
                 self.state.value,
@@ -95,6 +87,23 @@ class EvaluableState:
                 verbose=False,
                 array_format=array_format,
             )
+        else:
+            if time_increment==None:
+
+                self.curr_value = evaluate_expr(
+                    self.state.default_initial_value,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+            else:
+                td = evaluate_expr(
+                    self.state.time_derivative,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+                self.curr_value += td * time_increment
 
         if self.verbose:
             print(
@@ -166,6 +175,11 @@ class EvaluableNode:
             self.evaluable_inputs[ip.id] = rip
             all_known_vars.append(ip.id)
 
+        for s in node.states:
+            es = EvaluableState(s, self.verbose)
+            self.evaluable_states[s.id] = es
+            all_known_vars.append(s.id)
+
         all_funcs = [f for f in node.functions]
 
         # Order the functions into the correct sequence
@@ -193,11 +207,11 @@ class EvaluableNode:
                 self.evaluable_functions[f.id] = rf
                 all_known_vars.append(f.id)
             else:
-                all_funcs.append(f)  # Add back to end of list...
-
-        for s in node.states:
-            es = EvaluableState(s, self.verbose)
-            self.evaluable_states[s.id] = es
+                if len(all_funcs)==0:
+                    raise Exception("Error! Could not evaluate function: %s with args %s using known vars %s"
+                    % (f.id, f.args, all_known_vars))
+                else:
+                    all_funcs.append(f)  # Add back to end of list...
 
         for op in node.output_ports:
             rop = EvaluableOutput(op, self.verbose)
@@ -206,7 +220,7 @@ class EvaluableNode:
     def initialize(self):
         pass
 
-    def evaluate_next(self, array_format=FORMAT_DEFAULT):
+    def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
 
         if self.verbose:
             print(
@@ -222,18 +236,24 @@ class EvaluableNode:
                 curr_params, array_format=array_format
             )
             curr_params[eip] = i
+
+        # First set params to previous state values for use in funcs and states...
+        for es in self.evaluable_states:
+            curr_params[es] = self.evaluable_states[es].curr_value
+        print(99)
+        print(curr_params)
         for ef in self.evaluable_functions:
             curr_params[ef] = self.evaluable_functions[ef].evaluate(
                 curr_params, array_format=array_format
             )
-        # First set params to previous state values...
-        for es in self.evaluable_states:
-            curr_params[es] = self.evaluable_states[es].curr_value
-        # Now set params to new state values...
+
+        # Now evaluate and set params to new state values for use in output...
         for es in self.evaluable_states:
             curr_params[es] = self.evaluable_states[es].evaluate(
-                curr_params, array_format=array_format
+                curr_params, time_increment=time_increment,
+                array_format=array_format
             )
+
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
 
@@ -261,13 +281,13 @@ class EvaluableGraph:
         for edge in graph.edges:
             self.root_nodes.remove(edge.receiver)
 
-    def evaluate(self, array_format=FORMAT_DEFAULT):
+    def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
         print(
             "\nEvaluating graph: %s, root nodes: %s, with array format %s"
             % (self.graph.id, self.root_nodes, array_format)
         )
         for rn in self.root_nodes:
-            self.enodes[rn].evaluate_next(array_format=array_format)
+            self.enodes[rn].evaluate(array_format=array_format, time_increment=time_increment)
 
         for edge in self.graph.edges:
             pre_node = self.enodes[edge.sender]
@@ -287,7 +307,7 @@ class EvaluableGraph:
             post_node.evaluable_inputs[edge.receiver_port].set_input_value(
                 value * weight
             )
-            post_node.evaluate_next(array_format=array_format)
+            post_node.evaluate(array_format=array_format, time_increment=time_increment)
 
 
 def main(example_file, verbose=True):

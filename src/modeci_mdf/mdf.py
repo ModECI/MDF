@@ -206,6 +206,13 @@ class State(BaseWithId):
                         str,
                     ),
                 ),
+                (
+                    "time_derivative",
+                    (
+                        "How the state varies with time, i.e. ds/dt. Units of time are seconds.",
+                        str,
+                    ),
+                ),
             ]
         )
 

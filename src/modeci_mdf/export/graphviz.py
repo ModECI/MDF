@@ -34,6 +34,7 @@ COLOR_NUM = "#444444"
 COLOR_PARAM = "#999944"
 COLOR_INPUT = "#188855"
 COLOR_FUNC = "#111199"
+COLOR_STATE = "#1666ff"
 COLOR_OUTPUT = "#cc3355"
 
 
@@ -63,6 +64,10 @@ def format_func(s):
     return '<font color="%s">%s</font>' % (COLOR_FUNC, s)
 
 
+def format_state(s):
+    return '<font color="%s">%s</font>' % (COLOR_STATE, s)
+
+
 def format_standard_func(s):
     return "<i>%s</i>" % (s)
 
@@ -89,6 +94,10 @@ def match_in_expr(s, node):
     for f in node.functions:
         if f.id in s:
             s = s.replace(f.id, format_func(f.id))
+
+    for st in node.states:
+        if st.id in s:
+            s = s.replace(st.id, format_state(st.id))
 
     for op in node.output_ports:
         if op.id in s:
@@ -170,6 +179,19 @@ def mdf_to_graphviz(
                             )
                         )
                         # info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
+
+
+            if node.states and len(node.states) > 0:
+                for st in node.states:
+                    v = ''
+                    if st.value: v+='value: %s'%format_state(st.value)
+                    if st.default_initial_value: v+='def init value: %s'%format_state(st.default_initial_value)
+                    if st.time_derivative: v+=', d/dt: %s'%format_state(st.time_derivative)
+                    info += "<tr><td>%s%s: %s</td></tr>" % (
+                        format_label("STATE"),
+                        format_state(st.id),
+                        v
+                    )
 
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
