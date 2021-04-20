@@ -37,8 +37,11 @@ def generate_test_model(
     for i in range(hidden_layers):
 
         hidden_node = Node(
-            id="hidden_node_%i"%i,
-            parameters={"slope0": 0.5, "intercept0": np.random.random_sample(hidden_shape).tolist()},
+            id="hidden_node_%i" % i,
+            parameters={
+                "slope0": 0.5,
+                "intercept0": np.random.random_sample(hidden_shape).tolist(),
+            },
         )
 
         hidden_node.input_ports.append(InputPort(id="in_port"))
@@ -47,16 +50,18 @@ def generate_test_model(
         f1 = Function(
             id="linear_1",
             function="linear",
-            args={"variable0": hidden_node.input_ports[0].id,
-                  "slope": "slope0",
-                  "intercept": "intercept0"},
+            args={
+                "variable0": hidden_node.input_ports[0].id,
+                "slope": "slope0",
+                "intercept": "intercept0",
+            },
         )
         hidden_node.functions.append(f1)
 
         hidden_node.output_ports.append(OutputPort(id="out_port", value="linear_1"))
 
         e1 = Edge(
-            id="edge_%i"%i,
+            id="edge_%i" % i,
             parameters={"weight": np.random.random_sample(input_shape).tolist()},
             sender=last_node.id,
             sender_port=last_node.output_ports[0].id,
@@ -77,7 +82,7 @@ def generate_test_model(
     mod_graph.nodes.append(output_node)
 
     e1 = Edge(
-        id="edge_%i"%(i+1),
+        id="edge_%i" % (i + 1),
         parameters={"weight": np.random.random_sample(input_shape).tolist()},
         sender=last_node.id,
         sender_port=last_node.output_ports[0].id,
@@ -103,8 +108,8 @@ if __name__ == "__main__":
         "medium_test",
         input_shape=(scale, scale),
         hidden_shape=(scale, scale),
-        hidden_layers = 5,
-        save_to_file=True
+        hidden_layers=5,
+        save_to_file=True,
     )
 
     if "-run" in sys.argv:
@@ -116,4 +121,4 @@ if __name__ == "__main__":
         eg = EvaluableGraph(mod_graph, verbose=False)
         eg.evaluate(array_format=format)
 
-        print('Finished evaluating graph using array format %s'%format)
+        print("Finished evaluating graph using array format %s" % format)
