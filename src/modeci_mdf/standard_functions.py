@@ -64,14 +64,14 @@ if len(mdf_functions) == 0:
     _add_mdf_function(
         "MatMul",
         description="Matrix multiplication (work in progress...)",
-        arguments=['A', 'B'],
+        arguments=["A", "B"],
         expression_string="A @ B",
     )
 
     _add_mdf_function(
         "Relu",
         description="Rectified linear function (work in progress...)",
-        arguments=['A'],
+        arguments=["A"],
         expression_string="maximum(A,0)",
     )
 
