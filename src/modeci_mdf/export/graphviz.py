@@ -184,9 +184,9 @@ def mdf_to_graphviz(
             if node.states and len(node.states) > 0:
                 for st in node.states:
                     v = ''
-                    if st.value: v+='value: %s'%format_state(st.value)
-                    if st.default_initial_value: v+='def init value: %s'%format_state(st.default_initial_value)
-                    if st.time_derivative: v+=', d/dt: %s'%format_state(st.time_derivative)
+                    if st.value: v+='<i>value:</i> %s'%match_in_expr(st.value, node)
+                    if st.default_initial_value: v+='<i>def init value:</i> %s'%match_in_expr(st.default_initial_value, node)
+                    if st.time_derivative: v+=', <i>d/dt:</i> %s'%match_in_expr(st.time_derivative, node)
                     info += "<tr><td>%s%s: %s</td></tr>" % (
                         format_label("STATE"),
                         format_state(st.id),

@@ -4,7 +4,7 @@
 
 ### Simple
 
-[Python source](simple.py) | [JSON](simple.json) | [YAML](simple.yaml)
+[Python source](simple.py) | [JSON](Simple.json) | [YAML](Simple.yaml)
 
 A simple example with 2 [Nodes](../docs/README.md#node) connected by an [Edge](../docs/README.md#edge):
 
