@@ -222,24 +222,28 @@ class EvaluableGraph:
             self.enodes[rn].evaluate_next(array_format=array_format)
 
         for edge in self.graph.edges:
-            pre_node = self.enodes[edge.sender]
-            post_node = self.enodes[edge.receiver]
-            value = pre_node.evaluable_outputs[edge.sender_port].curr_value
-            weight = (
-                1
-                if not edge.parameters or not "weight" in edge.parameters
-                else edge.parameters["weight"]
-            )
+            self.evaluate_edge(edge, array_format=array_format)
+            self.enodes[edge.receiver].evaluate_next(array_format=array_format)
 
-            if self.verbose:
-                print(
-                    "  Edge %s connects %s to %s, passing %s with weight %s"
-                    % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
-                )
-            post_node.evaluable_inputs[edge.receiver_port].set_input_value(
-                value * weight
+    def evaluate_edge(self, edge, array_format=FORMAT_DEFAULT):
+        pre_node = self.enodes[edge.sender]
+        post_node = self.enodes[edge.receiver]
+        value = pre_node.evaluable_outputs[edge.sender_port].curr_value
+        weight = (
+            1
+            if not edge.parameters or not "weight" in edge.parameters
+            else edge.parameters["weight"]
+        )
+
+        if self.verbose:
+            print(
+                "  Edge %s connects %s to %s, passing %s with weight %s"
+                % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
             )
-            post_node.evaluate_next(array_format=array_format)
+        post_node.evaluable_inputs[edge.receiver_port].set_input_value(
+            value * weight
+        )
+
 
 
 def main(example_file, verbose=True):
