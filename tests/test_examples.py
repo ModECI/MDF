@@ -13,15 +13,25 @@ def test_examples():
     os.chdir("examples")
     sys.path.append(".")
 
+    import simple
+
+    simple.main()
+    print("Tested simple model")
+
     import abcd
 
     abcd.main()
     print("Tested ABCD model")
 
-    import simple
+    import arrays
 
-    simple.main()
-    print("Tested simple model")
+    arrays.main()
+    print("Tested Arrays model")
+
+    import states
+
+    states.main()
+    print("Tested States model")
 
     # Cleanup, not sure I need this but just to be safe cause this is weird.
     os.chdir("..")

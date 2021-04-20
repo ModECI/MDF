@@ -69,7 +69,6 @@ class EvaluableFunction:
         return self.curr_value
 
 
-
 class EvaluableState:
     def __init__(self, state, verbose=False):
         self.verbose = verbose
@@ -77,12 +76,12 @@ class EvaluableState:
 
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
-            print(
-                "    Evaluating %s with %s "
-                % (self.state, _params_info(parameters))
-            )
+            print("    Evaluating %s with %s " % (self.state, _params_info(parameters)))
         self.curr_value = evaluate_expr(
-            self.state.default_initial_value, parameters, verbose=False, array_format=array_format
+            self.state.default_initial_value,
+            parameters,
+            verbose=False,
+            array_format=array_format,
         )
 
         if self.verbose:
@@ -91,6 +90,7 @@ class EvaluableState:
                 % (self.state, _params_info(parameters), self.curr_value)
             )
         return self.curr_value
+
 
 class EvaluableOutput:
     def __init__(self, output_port, verbose=False):

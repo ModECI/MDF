@@ -5,6 +5,7 @@
 from modeci_mdf.mdf import *
 import sys
 
+
 def main():
     mod = Model(id="States")
     mod_graph = Graph(id="state_example")
@@ -23,8 +24,7 @@ def main():
     new_file = mod.to_json_file("%s.json" % mod.id)
     new_file = mod.to_yaml_file("%s.yaml" % mod.id)
 
-
-    if '-run' in sys.argv:
+    if "-run" in sys.argv:
         verbose = True
         from modeci_mdf.utils import load_mdf, print_summary
 
