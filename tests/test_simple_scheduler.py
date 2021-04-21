@@ -10,6 +10,12 @@ def test_simple_scheduler_main(tmpdir):
     mdf_formats = ['json','yaml']
     array_formats = [FORMAT_NUMPY, FORMAT_TENSORFLOW]
 
+    # For now, don't make tensorflow a requiremnt...
+    try:
+        import tensorflow
+    except:
+        array_formats = [FORMAT_NUMPY]
+
     for mdf_format in mdf_formats:
         for array_format in array_formats:
 
