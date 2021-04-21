@@ -240,8 +240,7 @@ class EvaluableNode:
         # First set params to previous state values for use in funcs and states...
         for es in self.evaluable_states:
             curr_params[es] = self.evaluable_states[es].curr_value
-        print(99)
-        print(curr_params)
+
         for ef in self.evaluable_functions:
             curr_params[ef] = self.evaluable_functions[ef].evaluate(
                 curr_params, array_format=array_format
@@ -310,7 +309,9 @@ class EvaluableGraph:
             post_node.evaluate(array_format=array_format, time_increment=time_increment)
 
 
-def main(example_file, verbose=True):
+from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
+def main(example_file, array_format=FORMAT_NUMPY, verbose=True):
 
     from modeci_mdf.utils import load_mdf, print_summary
 
@@ -322,7 +323,9 @@ def main(example_file, verbose=True):
 
         print("------------------")
     eg = EvaluableGraph(mod_graph, verbose)
-    eg.evaluate()
+    eg.evaluate(array_format=array_format)
+
+    return eg
 
 
 if __name__ == "__main__":
