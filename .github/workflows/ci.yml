@@ -42,6 +42,10 @@ jobs:
     - name: Install NeuroMLlite
       run: python -m pip install git+https://github.com/NeuroML/NeuroMLlite.git@master
 
+    - name: Install GPy (py3.9)
+      if: ${{ matrix.python-version == '3.9' }}
+      run: python -m pip install git+https://github.com/SheffieldML/GPy.git@devel
+
     - name: Install package
       run: python -m pip install .[test]
 
