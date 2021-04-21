@@ -16,8 +16,8 @@ install:
   - git checkout master  # specific branch of NeuroMLlite to use...
   - python setup.py install
   - cd ..
+  - if [[ ${TRAVIS_PYTHON_VERSION} == "3.9" ]]; then python -m pip install git+https://github.com/SheffieldML/GPy.git@devel; fi
   - pip install .
-
 
 script:
   ###       Run main tests
