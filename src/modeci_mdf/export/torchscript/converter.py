@@ -18,19 +18,21 @@ from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Func
 logger = logging.getLogger(__name__)
 
 
-def make_node_id(node: torch.Node):
+def make_node_id(node: torch.Node) -> str:
     """Helper function to get a unique name (used in MDF as id) from a TorchScript Node object"""
     return "_".join(
         [node.kind().split("::")[-1]] + [str(o.unique()) for o in node.outputs()]
     )
 
 
-def make_func_id(node: torch.Node):
+def make_func_id(node: torch.Node) -> str:
     """Helper function to get a unique name (used in MDF as id) for a TorchScript node's op/function."""
     return f"{node.kind()}_1"
 
 
-def make_model_graph_name(model: Union[torch.ScriptModule, torch.ScriptFunction]):
+def make_model_graph_name(
+    model: Union[torch.ScriptModule, torch.ScriptFunction]
+) -> Tuple[str, str]:
     """Helper function that generates a clean graph and model name from a TorchScript model"""
     # Get a name for this module
     try:
@@ -84,7 +86,7 @@ def get_shape(node: torch.Node) -> Dict:
     return outputs
 
 
-def get_value(node) -> Dict:
+def get_value(node: torch.Node) -> Dict:
     outputs = dict()
     for o in node.outputs():
         typeIs = o.type().str()
