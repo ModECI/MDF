@@ -15,26 +15,6 @@ import torch
 
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Function
 
-from torch.jit.supported_ops import (
-    _get_tensor_ops,
-    _get_nn_functional_ops,
-    _get_torchscript_builtins,
-    _get_global_builtins,
-    _get_math_builtins,
-)
-
-op_gathering_fns = (
-    _get_tensor_ops,
-    _get_nn_functional_ops,
-    _get_torchscript_builtins,
-    _get_global_builtins,
-    _get_math_builtins,
-)
-
-supported_ops = list(
-    itertools.chain.from_iterable([fn()[1] for fn in op_gathering_fns])
-)
-
 logger = logging.getLogger(__name__)
 
 

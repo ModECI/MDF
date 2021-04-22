@@ -45,11 +45,13 @@ def test_no_input_ports_to_json(tmpdir):
 
     assert data["abcd_example"]["nodes"]["input0"]["parameters"]["input_level"] == 10.0
 
+
 def test_node_params_empty_dict():
     """
     Test whether we don't a serialization error when passing empty dicts to Node parameters
     """
     Node(parameters={}).to_json()
+
 
 def test_func_args_empty_dict():
     """

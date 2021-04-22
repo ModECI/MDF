@@ -14,19 +14,22 @@ def _check_model(model):
     json_str = mdf_model.to_json()
 
     # Load the JSON
-    #load_mdf_json()
+    # load_mdf_json()
 
 
 def test_simple_module():
     """Test a simple torch.nn.Module"""
+
     class Simple(torch.nn.Module):
         def forward(self, x, y):
             return x + y
 
     _check_model(Simple())
 
+
 def test_simple_function():
     """Test a simple function"""
+
     def simple(x, y):
         return x + y
 

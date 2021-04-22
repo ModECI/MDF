@@ -15,15 +15,17 @@ else:
 
 
 class LCALayer(torch.nn.Module):
-    def __init__(self,
-                 threshold: Union[float, None] = 1.0,
-                 leak: float = 0.1,
-                 competition: float = 0.1,
-                 self_excitation: float = 0.0,
-                 non_decision_time: float = 0.0,
-                 activation_function: Callable = torch.relu,
-                 noise: Union[float, torch.Tensor, None] = 1.0,
-                 time_step_size: float = 0.01):
+    def __init__(
+        self,
+        threshold: Union[float, None] = 1.0,
+        leak: float = 0.1,
+        competition: float = 0.1,
+        self_excitation: float = 0.0,
+        non_decision_time: float = 0.0,
+        activation_function: Callable = torch.relu,
+        noise: Union[float, torch.Tensor, None] = 1.0,
+        time_step_size: float = 0.01,
+    ):
         """
         An implementation of a Leaky Competing Accumulator as a layer. Each call to forward of this module only
         implements one time step of the integration. See module LCAModel if you want to simulate an LCA to completion.
@@ -57,14 +59,18 @@ class LCALayer(torch.nn.Module):
         self.noise = noise
         self.time_step_size = time_step_size
         self.non_decision_time = non_decision_time
-        self._sqrt_step_size = torch.sqrt(torch.tensor(0.001, requires_grad=require_grad).to(dev))
+        self._sqrt_step_size = torch.sqrt(
+            torch.tensor(0.001, requires_grad=require_grad).to(dev)
+        )
         self.threshold = threshold
         self.activation_function = activation_function
 
-    def forward(self,
-                input: torch.Tensor,
-                pre_activities: torch.Tensor,
-                activities: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def forward(
+        self,
+        input: torch.Tensor,
+        pre_activities: torch.Tensor,
+        activities: torch.Tensor,
+    ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         Compute one time step of integration for a batch of independent leaky competing accumulator
         instances.
@@ -90,7 +96,9 @@ class LCALayer(torch.nn.Module):
 
         # If threshold is provided, only integrate accumulators until they reach the threshold.
         if self.threshold is not None:
-            active = torch.all(torch.abs(activities) < self.threshold, dim=1, keepdim=True)
+            active = torch.all(
+                torch.abs(activities) < self.threshold, dim=1, keepdim=True
+            )
 
         # Construct a gamma matrix, this is multiplied by each accumulator vector to compute
         # the competitive inhibition and self excitation between units.
@@ -98,15 +106,24 @@ class LCALayer(torch.nn.Module):
         gamma.fill_diagonal_(self.self_excitation)
 
         # Perform one time step of the integration
-        pre_activities = pre_activities + (input - self.leak * pre_activities +
-                                           torch.sum(torch.matmul(activities, gamma),
-                                                     dim=1, keepdim=True)) * active * self.time_step_size
+        pre_activities = (
+            pre_activities
+            + (
+                input
+                - self.leak * pre_activities
+                + torch.sum(torch.matmul(activities, gamma), dim=1, keepdim=True)
+            )
+            * active
+            * self.time_step_size
+        )
 
         # If standard deviation of noise is provided. Generate a noise for each accumulator.
         # Only active accumulators will get noise
         if self.noise is not None:
-            dw = torch.normal(mean=torch.zeros(activities.size(), device=dev),
-                              std=active * self.noise * torch.ones(activities.size(), device=dev))
+            dw = torch.normal(
+                mean=torch.zeros(activities.size(), device=dev),
+                std=active * self.noise * torch.ones(activities.size(), device=dev),
+            )
             pre_activities = pre_activities + dw * self._sqrt_step_size
 
         # Calculate the post activation function activities. Don't overwrite pre_activities, we will need these for
@@ -117,12 +134,14 @@ class LCALayer(torch.nn.Module):
 
 
 class LCAModel(torch.nn.Module):
-    def __init__(self,
-                 lca_layer: LCALayer,
-                 num_lca_dim: int,
-                 num_simulations: int = 10000,
-                 num_time_steps: int = 3000,
-                 save_activities: bool = False):
+    def __init__(
+        self,
+        lca_layer: LCALayer,
+        num_lca_dim: int,
+        num_simulations: int = 10000,
+        num_time_steps: int = 3000,
+        save_activities: bool = False,
+    ):
         """
         A model that simulates a leaky competing accumulator model (Usher and McClelland).
 
@@ -164,15 +183,21 @@ class LCAModel(torch.nn.Module):
         active = torch.ones(size=(self.num_simulations, 1), device=dev)
 
         if self.save_activities:
-            pre_activities = torch.zeros(size=(self.num_simulations,
-                                               self.num_lca_dim,
-                                               self.num_time_steps + 1), device=dev)
-            activities = torch.zeros(size=(self.num_simulations,
-                                           self.num_lca_dim,
-                                           self.num_time_steps + 1), device=dev)
+            pre_activities = torch.zeros(
+                size=(self.num_simulations, self.num_lca_dim, self.num_time_steps + 1),
+                device=dev,
+            )
+            activities = torch.zeros(
+                size=(self.num_simulations, self.num_lca_dim, self.num_time_steps + 1),
+                device=dev,
+            )
         else:
-            pre_activities = torch.zeros(size=(self.num_simulations, self.num_lca_dim), device=dev)
-            activities = torch.zeros(size=(self.num_simulations, self.num_lca_dim), device=dev)
+            pre_activities = torch.zeros(
+                size=(self.num_simulations, self.num_lca_dim), device=dev
+            )
+            activities = torch.zeros(
+                size=(self.num_simulations, self.num_lca_dim), device=dev
+            )
 
         rts = torch.zeros(size=(self.num_simulations, 1), device=dev)
 
@@ -182,13 +207,19 @@ class LCAModel(torch.nn.Module):
 
             # Compute the LCA activities
             if self.save_activities:
-                pre_activities[:, :, time_i+1], activities[:, :, time_i+1], active = \
-                    self.lca_layer(input=input,
-                             pre_activities=pre_activities[:, :, time_i],
-                             activities=activities[:, :, time_i])
+                (
+                    pre_activities[:, :, time_i + 1],
+                    activities[:, :, time_i + 1],
+                    active,
+                ) = self.lca_layer(
+                    input=input,
+                    pre_activities=pre_activities[:, :, time_i],
+                    activities=activities[:, :, time_i],
+                )
             else:
-                pre_activities, activities, active = self.lca_layer(input=input, pre_activities=pre_activities,
-                                                                    activities=activities)
+                pre_activities, activities, active = self.lca_layer(
+                    input=input, pre_activities=pre_activities, activities=activities
+                )
 
             # Only increment reaction time for active simulations
             rts = rts + active
@@ -207,7 +238,9 @@ class LCAModel(torch.nn.Module):
 
             # Find any simulations that had multiple accumulators cross the threshold at the same time.
             # Exclude these for simplicity.
-            good = torch.logical_and(torch.sum(activities == max_values, dim=1) == 1, ~torch.squeeze(active))
+            good = torch.logical_and(
+                torch.sum(activities == max_values, dim=1) == 1, ~torch.squeeze(active)
+            )
             decisions = decisions[good]
             rts = rts[good]
 
@@ -230,7 +263,8 @@ if __name__ == "__main__":
     else:
         num_simulations = 50000
 
-    lca = LCAModel(lca_layer=LCALayer(
+    lca = LCAModel(
+        lca_layer=LCALayer(
             threshold=0.16,
             leak=1.22,
             competition=5.53,
@@ -238,11 +272,12 @@ if __name__ == "__main__":
             non_decision_time=0.45,
             activation_function=torch.relu,
             noise=np.sqrt(0.1),
-            time_step_size=0.001),
+            time_step_size=0.001,
+        ),
         num_lca_dim=2,
         num_simulations=num_simulations,
         num_time_steps=3000,
-        save_activities=save_activities
+        save_activities=save_activities,
     )
 
     # Compile things for a bit of a performance boost
@@ -251,7 +286,7 @@ if __name__ == "__main__":
     # Create some input for the LCA, typically this would be generated from another part of the model
     # that processes stimulus or tasks information into an N sized vector, where N is the number of
     # dimensions in the LCA accumulator.
-    input = torch.Tensor([1.02, 1.02+0.25]).to(dev)
+    input = torch.Tensor([1.02, 1.02 + 0.25]).to(dev)
 
     # Warm things up before running things for timing
     lca(input)
@@ -277,17 +312,21 @@ if __name__ == "__main__":
     if save_activities:
         pre_activities = np.transpose(pre_activities[0, :, :])
         activities = np.transpose(activities[0, :, :])
-        rt_i = max(np.argmax(activities, axis=0))+1
+        rt_i = max(np.argmax(activities, axis=0)) + 1
         activities = activities[0:rt_i, :]
         pre_activities = pre_activities[0:rt_i, :]
-        preact_df = pd.DataFrame(pre_activities, columns=[f"{i}" for i in range(pre_activities.shape[1])])
-        preact_df['name'] = 'pre activation'
-        preact_df['t'] = np.arange(rt_i) * lca.lca_layer.time_step_size
-        act_df = pd.DataFrame(activities, columns=[f"{i}" for i in range(activities.shape[1])])
-        act_df['name'] = 'post activation'
-        act_df['t'] = np.arange(rt_i) * lca.lca_layer.time_step_size
+        preact_df = pd.DataFrame(
+            pre_activities, columns=[f"{i}" for i in range(pre_activities.shape[1])]
+        )
+        preact_df["name"] = "pre activation"
+        preact_df["t"] = np.arange(rt_i) * lca.lca_layer.time_step_size
+        act_df = pd.DataFrame(
+            activities, columns=[f"{i}" for i in range(activities.shape[1])]
+        )
+        act_df["name"] = "post activation"
+        act_df["t"] = np.arange(rt_i) * lca.lca_layer.time_step_size
         results = pd.concat([preact_df, act_df])
-        results = pd.melt(results, id_vars=['name', 't'], var_name='lca_unit')
+        results = pd.melt(results, id_vars=["name", "t"], var_name="lca_unit")
 
         g = sns.FacetGrid(results, col="name", hue="lca_unit")
         g.map_dataframe(sns.lineplot, x="t", y="value")
@@ -296,16 +335,16 @@ if __name__ == "__main__":
 
         ax1, ax2 = g.axes[0]
 
-        ax1.axhline(lca.lca_layer.threshold, ls='--')
-        ax2.axhline(lca.lca_layer.threshold, ls='--')
+        ax1.axhline(lca.lca_layer.threshold, ls="--")
+        ax2.axhline(lca.lca_layer.threshold, ls="--")
 
-        ax1.axvline((rt_i-1)*lca.lca_layer.time_step_size, ls='--')
-        ax2.axvline((rt_i-1)*lca.lca_layer.time_step_size, ls='--')
+        ax1.axvline((rt_i - 1) * lca.lca_layer.time_step_size, ls="--")
+        ax2.axvline((rt_i - 1) * lca.lca_layer.time_step_size, ls="--")
 
         plt.show()
 
     else:
-        results = pd.DataFrame({'reaction_time': rts, 'decision': decisions})
-        sns.kdeplot(data=results, x='reaction_time', hue='decision')
+        results = pd.DataFrame({"reaction_time": rts, "decision": decisions})
+        sns.kdeplot(data=results, x="reaction_time", hue="decision")
         plt.xlim([0.0, 3.5])
         plt.show()
