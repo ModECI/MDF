@@ -13,7 +13,7 @@ python:
 install:
   - git clone https://github.com/NeuroML/NeuroMLlite.git
   - cd NeuroMLlite
-  - git checkout update_format  # specific branch of NeuroMLlite to use...
+  - git checkout master  # specific branch of NeuroMLlite to use...
   - python setup.py install
   - cd ..
   - pip install .
@@ -21,6 +21,6 @@ install:
 
 script:
   ###       Run main tests
-
+  - pip install pytest-benchmark
   - ./test_all.sh
   - pip freeze  # List currently installed Python packages

@@ -1,0 +1,79 @@
+LeakyCompetingAccumulator:
+  format: ModECI MDF v0.1
+  generating_application: Python modeci-mdf v0.1.2
+
+  graphs:
+    lca_2:
+      nodes:
+        input_layer:
+          input_ports:
+            input:
+              shape: (2,)
+          output_ports:
+            out_port:
+              value: input
+
+        accumulator_layer:
+          parameters:
+            leak: 0.2
+            competition: 0.4
+            self_excitation: 0.0
+            noise_std: 1.0
+            time_step_size: 0.001
+            starting_value: 0.0
+
+          input_ports:
+            input:
+              shape: (2,)
+
+            prev_activity:
+              shape: (2,)
+              initializer: [starting_value, starting_value]
+
+          functions:
+            lca_integrate_timestep:
+              function: lca_timestep
+                # dx[i] = input[i] - (leak-self_excitation)*activity[i] - np.sum(competition*np.delete(activity, i)))
+                # dW[i] = np.random.normal(loc=0.0, scale=noise_std*sqrt(time_step_size))
+                # output[i] = activity[i] + dx[i] + dW[i]
+                # output[i] = max(0.0, output[i])
+                # return output
+              args:
+                input: input
+                activity: prev_activity
+
+          output_ports:
+            output:
+              value: lca_timestep
+              shape: (2,)
+
+      edges:
+        input_to_accumulator:
+          sender: input_layer
+          sender_port: out_port
+          receiver: accumulator_layer
+          receiver_port: input
+
+        recurrent_activity:
+          sender: accumulator_layer
+          sender_port: output
+          receiver: accumulator_layer
+          receiver_port: prev_activity
+
+      conditions:
+        node_specific:
+          accumulator_layer:
+            type: or
+            args:
+            - type: TimeInterval
+              args: []
+              kwargs:
+                end: 3000
+                interval: 1
+                unit: ms
+            - type: Threshold
+              args: []
+              kwargs:
+                parameter: output[i]
+                threshold: 0.8
+                direction: ">="
