@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.com/ModECI/MDF.svg?branch=main)](https://travis-ci.com/ModECI/MDF)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # ModECI Model Description Format (MDF)
 
 **Work in progress!!! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](https://modeci.github.io/Website/About.html) to get in contact regarding MDF.**
