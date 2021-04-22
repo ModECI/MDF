@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Work in progress!!!
+    Example of ModECI MDF - A simple 2 node graph.
 """
 
 from modeci_mdf.mdf import *
@@ -7,7 +7,7 @@ from modeci_mdf.mdf import *
 
 def main():
     mod = Model(id="Simple")
-    mod_graph = ModelGraph(id="simple_example")
+    mod_graph = Graph(id="simple_example")
     mod.graphs.append(mod_graph)
 
     input_node = Node(id="input_node", parameters={"input_level": 0.5})
@@ -19,26 +19,27 @@ def main():
     processing_node = Node(id="processing_node")
     mod_graph.nodes.append(processing_node)
 
-    processing_node.parameters = {"logistic_gain": 3, "slope": 0.5, "intercept": 0}
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    processing_node.parameters = {"lin_slope": 0.5, "lin_intercept": 0, "log_gain": 3}
+    ip1 = InputPort(id="input_port1")
     processing_node.input_ports.append(ip1)
 
     f1 = Function(
         id="linear_1",
         function="linear",
-        args={"variable0": ip1.id, "slope": "slope", "intercept": "intercept"},
+        args={"variable0": ip1.id, "slope": "lin_slope", "intercept": "lin_intercept"},
     )
-    processing_node.functions.append(f1)
     f2 = Function(
         id="logistic_1",
         function="logistic",
-        args={"variable0": f1.id, "gain": "logistic_gain", "bias": 0, "offset": 0},
+        args={"variable0": f1.id, "gain": "log_gain", "bias": 0, "offset": 0},
     )
+    processing_node.functions.append(f1)
     processing_node.functions.append(f2)
     processing_node.output_ports.append(OutputPort(id="output_1", value="logistic_1"))
 
     e1 = Edge(
         id="input_edge",
+        parameters={"weight": 0.55},
         sender=input_node.id,
         sender_port=op1.id,
         receiver=processing_node.id,

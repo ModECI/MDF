@@ -1,0 +1,41 @@
+linear:
+    description: A linear function, calculated from a slope and an intercept
+    arguments:
+    - variable0
+    - slope
+    - intercept
+    expression_string: (variable0 * slope + intercept)
+logistic:
+    description: Logistic function
+    arguments:
+    - variable0
+    - gain
+    - bias
+    - offset
+    expression_string: 1/(1 + exp(-1*gain*(variable0 + bias) + offset))
+exponential:
+    description: Exponential function
+    arguments:
+    - variable0
+    - scale
+    - rate
+    - bias
+    - offset
+    expression_string: scale * exp((rate * variable0) + bias) + offset
+sin:
+    description: Sine function
+    arguments:
+    - variable0
+    - scale
+    expression_string: scale * sin(variable0)
+MatMul:
+    description: Matrix multiplication (work in progress...)
+    arguments:
+    - A
+    - B
+    expression_string: A @ B
+Relu:
+    description: Rectified linear function (work in progress...)
+    arguments:
+    - A
+    expression_string: maximum(A,0)
