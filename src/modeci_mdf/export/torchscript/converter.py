@@ -13,7 +13,7 @@ from typing import Union, Dict, Any
 
 import torch
 
-from modeci_mdf.mdf import Model, ModelGraph, Node, Edge, InputPort, OutputPort, Function
+from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Function
 
 from torch.jit.supported_ops import (
         _get_tensor_ops,
@@ -185,7 +185,7 @@ def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str,
     return mdf_node
 
 
-def torchscript_to_mdf(model: torch.ScriptModule, mdf_graph: ModelGraph = None) -> Union[Model, ModelGraph]:
+def torchscript_to_mdf(model: torch.ScriptModule, mdf_graph: Graph = None) -> Union[Model, Graph]:
     """
     Convert a TorchScript model to an MDF model.
 
@@ -214,7 +214,7 @@ def torchscript_to_mdf(model: torch.ScriptModule, mdf_graph: ModelGraph = None) 
         model_name, graph_name = make_model_graph_name(model)
 
         mdf_model = Model(id=model_name)
-        mdf_graph = ModelGraph(id=graph_name)
+        mdf_graph = Graph(id=graph_name)
         mdf_model.graphs.append(mdf_graph)
     else:
         mdf_model = None

@@ -1,4 +1,4 @@
-from modeci_mdf.mdf import Model, Graph, Node, OutputPort
+from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function
 
 
 def test_model_graph_to_json():
@@ -44,3 +44,15 @@ def test_no_input_ports_to_json(tmpdir):
         data = json.load(f)
 
     assert data["abcd_example"]["nodes"]["input0"]["parameters"]["input_level"] == 10.0
+
+def test_node_params_empty_dict():
+    """
+    Test whether we don't a serialization error when passing empty dicts to Node parameters
+    """
+    Node(parameters={}).to_json()
+
+def test_func_args_empty_dict():
+    """
+    Test whether we don't a serialization error when passing empty dicts to Function args
+    """
+    Function(args={}).to_json()
