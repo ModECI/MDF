@@ -5,20 +5,35 @@ This code was originally inspired by the following blog post:
 
     Mike He, "From Models to Computation Graphs (Part I)", https://ad1024.space/articles/22
 """
-from modeci_mdf.mdf import Model, ModelGraph, Node, Edge, InputPort, OutputPort, Function
-from modeci_mdf.export.torchscript.pytorch_codegen_model import FunctionSchema
-from modeci_mdf.export.torchscript.builtins import _get_builtin_table
-
-torchscript_builtins = _get_builtin_table()
-
-from typing import Union, Dict, List, Any
-
-import torch
 import re
 import logging
+import os
+import itertools
+from typing import Union, Dict, Any
+
+import torch
+
+from modeci_mdf.mdf import Model, ModelGraph, Node, Edge, InputPort, OutputPort, Function
+
+from torch.jit.supported_ops import (
+        _get_tensor_ops,
+        _get_nn_functional_ops,
+        _get_torchscript_builtins,
+        _get_global_builtins,
+        _get_math_builtins,
+    )
+
+op_gathering_fns = (
+        _get_tensor_ops,
+        _get_nn_functional_ops,
+        _get_torchscript_builtins,
+        _get_global_builtins,
+        _get_math_builtins,
+    )
+
+supported_ops = list(itertools.chain.from_iterable([fn()[1] for fn in op_gathering_fns]))
 
 logger = logging.getLogger(__name__)
-
 
 def make_node_id(node: torch.Node):
     """Helper function to get a unique name (used in MDF as id) from a TorchScript Node object"""
@@ -102,13 +117,13 @@ def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str,
     if op == "prim::Constant":
         return None
 
-    schema = FunctionSchema.parse(node.schema()) if 'no schema' not in node.schema() else None
+    schema = torch._C.parse_schema(node.schema()) if 'no schema' not in node.schema() else None
 
     outputs = [o.unique() for o in node.outputs()]
     inputs = [i.unique() for i in node.inputs()]
 
     if schema:
-        schema_args = schema.arguments.flat_non_out
+        schema_args = schema.arguments
 
         # Get any input to this node that is TorchScript node.kind() prim::Constant, make it a parameter
         parameters = {schema_args[i].name: consts[inp] for i, inp in enumerate(inputs) if inp in consts}
