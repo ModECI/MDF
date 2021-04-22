@@ -110,6 +110,12 @@ class Node(BaseWithId):
             ]
         )
 
+        # It seems empty dictionaries cause JSON dump errors. This looks like a bug in neuromllite.  This is a work
+        # around that just removes them.
+        if 'parameters' in kwargs and not kwargs['parameters']:
+            del kwargs['parameters']
+
+
         self.allowed_fields = collections.OrderedDict(
             [("parameters", ("Dict of parameters for the Node", dict))]
         )
@@ -122,6 +128,11 @@ class Function(BaseWithId):
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
 
     def __init__(self, **kwargs):
+
+        # It seems empty dictionaries cause JSON dump errors. This looks like a bug in neuromllite.  This is a work
+        # around that just removes them.
+        if 'args' in kwargs and not kwargs['args']:
+            del kwargs['args']
 
         self.allowed_fields = collections.OrderedDict(
             [
