@@ -16,44 +16,52 @@ import torch
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Function
 
 from torch.jit.supported_ops import (
-        _get_tensor_ops,
-        _get_nn_functional_ops,
-        _get_torchscript_builtins,
-        _get_global_builtins,
-        _get_math_builtins,
-    )
+    _get_tensor_ops,
+    _get_nn_functional_ops,
+    _get_torchscript_builtins,
+    _get_global_builtins,
+    _get_math_builtins,
+)
 
 op_gathering_fns = (
-        _get_tensor_ops,
-        _get_nn_functional_ops,
-        _get_torchscript_builtins,
-        _get_global_builtins,
-        _get_math_builtins,
-    )
+    _get_tensor_ops,
+    _get_nn_functional_ops,
+    _get_torchscript_builtins,
+    _get_global_builtins,
+    _get_math_builtins,
+)
 
-supported_ops = list(itertools.chain.from_iterable([fn()[1] for fn in op_gathering_fns]))
+supported_ops = list(
+    itertools.chain.from_iterable([fn()[1] for fn in op_gathering_fns])
+)
 
 logger = logging.getLogger(__name__)
 
+
 def make_node_id(node: torch.Node):
     """Helper function to get a unique name (used in MDF as id) from a TorchScript Node object"""
-    return '_'.join([node.kind().split("::")[-1]] + [str(o.unique()) for o in node.outputs()])
+    return "_".join(
+        [node.kind().split("::")[-1]] + [str(o.unique()) for o in node.outputs()]
+    )
+
 
 def make_func_id(node: torch.Node):
     """Helper function to get a unique name (used in MDF as id) for a TorchScript node's op/function."""
     return f"{node.kind()}_1"
 
+
 def make_model_graph_name(model: Union[torch.ScriptModule, torch.ScriptFunction]):
     """Helper function that generates a clean graph and model name from a TorchScript model"""
     # Get a name for this module
     try:
-        model_name = model.original_name.split('.')[-1]
+        model_name = model.original_name.split(".")[-1]
         graph_name = f"{model_name}Graph"
     except AttributeError:
-        model_name = model.qualified_name.split('.')[-1]
+        model_name = model.qualified_name.split(".")[-1]
         graph_name = f"{model_name}_graph"
 
     return model_name, graph_name
+
 
 def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
     """
@@ -66,7 +74,7 @@ def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
         A Dict that maps the constant nodes unique TorchScript node ID string to its value.
     """
     consts = {}
-    for n in graph.findAllNodes('prim::Constant'):
+    for n in graph.findAllNodes("prim::Constant"):
         for o in n.outputs():
             value = o.toIValue()
 
@@ -80,24 +88,34 @@ def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
 
     return consts
 
+
 def get_shape(node: torch.Node) -> Dict:
     """Helper function for extracting shape for each node output """
     outputs = dict()
     for o in node.outputs():
         typeIs = o.type()
-        outputs[o.unique()] = dict(type=re.match(r'\w+', typeIs.str()).group(), sizes=tuple(typeIs.sizes()))
+        outputs[o.unique()] = dict(
+            type=re.match(r"\w+", typeIs.str()).group(), sizes=tuple(typeIs.sizes())
+        )
     return outputs
+
 
 def get_value(node) -> Dict:
     outputs = dict()
     for o in node.outputs():
         typeIs = o.type().str()
         value = o.toIValue()
-        outputs[o.unique()] = dict(type=typeIs, value=value,
-                                   sizes=len(list(node.outputs())) if typeIs.endswith('[]') else 1)
+        outputs[o.unique()] = dict(
+            type=typeIs,
+            value=value,
+            sizes=len(list(node.outputs())) if typeIs.endswith("[]") else 1,
+        )
     return outputs
 
-def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str, Any] = None) -> Union[Node, None]:
+
+def torchnode_to_mdfnode(
+    node: torch.Node, graph: torch.Graph, consts: Dict[str, Any] = None
+) -> Union[Node, None]:
     """
     Convert a TorchScript node to an MDF node.
 
@@ -117,7 +135,11 @@ def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str,
     if op == "prim::Constant":
         return None
 
-    schema = torch._C.parse_schema(node.schema()) if 'no schema' not in node.schema() else None
+    schema = (
+        torch._C.parse_schema(node.schema())
+        if "no schema" not in node.schema()
+        else None
+    )
 
     outputs = [o.unique() for o in node.outputs()]
     inputs = [i.unique() for i in node.inputs()]
@@ -126,14 +148,22 @@ def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str,
         schema_args = schema.arguments
 
         # Get any input to this node that is TorchScript node.kind() prim::Constant, make it a parameter
-        parameters = {schema_args[i].name: consts[inp] for i, inp in enumerate(inputs) if inp in consts}
+        parameters = {
+            schema_args[i].name: consts[inp]
+            for i, inp in enumerate(inputs)
+            if inp in consts
+        }
 
     else:
-        logger.warning(f"Schema not found for TorchScript node ({node}), using placeholders for argument names.")
+        logger.warning(
+            f"Schema not found for TorchScript node ({node}), using placeholders for argument names."
+        )
         schema_args = [f"arg{i}" for i in range(len(inputs))]
 
         # Get any input to this node that is TorchScript node.kind() prim::Constant, make it a parameter
-        parameters = {schema_args[i]: consts[inp] for i, inp in enumerate(inputs) if inp in consts}
+        parameters = {
+            schema_args[i]: consts[inp] for i, inp in enumerate(inputs) if inp in consts
+        }
 
     mdf_node = Node(id=make_node_id(node), parameters=parameters)
 
@@ -161,7 +191,9 @@ def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str,
             except RuntimeError:
                 shape = "(?)"
 
-            mdf_node.input_ports.append(InputPort(id=ip_name, shape=shape, type=str(inp_type)))
+            mdf_node.input_ports.append(
+                InputPort(id=ip_name, shape=shape, type=str(inp_type))
+            )
 
     # Construct the arguments for the function
     if schema:
@@ -169,14 +201,16 @@ def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str,
         ip_i = 0
         for arg_i, arg in enumerate(schema_args):
             if inputs[arg_i] in consts:
-                value = arg.name  # Just use the parameter name, there is no input port for constants
+                value = (
+                    arg.name
+                )  # Just use the parameter name, there is no input port for constants
             else:
                 value = mdf_node.input_ports[ip_i].id
                 ip_i = ip_i + 1
 
             arguments[arg.name] = value
     else:
-        arguments = {f'arg{i}': ip.id for i, ip in enumerate(mdf_node.input_ports)}
+        arguments = {f"arg{i}": ip.id for i, ip in enumerate(mdf_node.input_ports)}
 
     # Add function
     f = Function(id=make_func_id(node), function=op, args=arguments)
@@ -185,7 +219,9 @@ def torchnode_to_mdfnode(node: torch.Node, graph: torch.Graph, consts: Dict[str,
     return mdf_node
 
 
-def torchscript_to_mdf(model: torch.ScriptModule, mdf_graph: Graph = None) -> Union[Model, Graph]:
+def torchscript_to_mdf(
+    model: torch.ScriptModule, mdf_graph: Graph = None
+) -> Union[Model, Graph]:
     """
     Convert a TorchScript model to an MDF model.
 
@@ -204,8 +240,10 @@ def torchscript_to_mdf(model: torch.ScriptModule, mdf_graph: Graph = None) -> Un
     except AttributeError:
 
         # Looks like the model is not compiled. Lets try to compile it
-        logger.warning("Model argument does not appear to be a torch.ScriptModule or torch.ScriptFunction, trying to "
-                       "JIT compile it ... cross your fingers.")
+        logger.warning(
+            "Model argument does not appear to be a torch.ScriptModule or torch.ScriptFunction, trying to "
+            "JIT compile it ... cross your fingers."
+        )
         model = torch.jit.script(model)
 
     # If mdf_graph is None we are probably at the top level of the possibly recursive construction process of a
@@ -248,11 +286,13 @@ def torchscript_to_mdf(model: torch.ScriptModule, mdf_graph: Graph = None) -> Un
                 from_port = mdf_node.output_ports[outputs.index(edge)].id
                 to_id = make_node_id(to)
                 to_port = mdf_node.output_ports[outputs.index(edge)].id
-                mdf_edge = Edge(id=f"{from_id}_{to_id}",
-                                sender=from_id,
-                                sender_port=f"{from_port}",
-                                receiver=to_id,
-                                receiver_port=f"{to_port}")
+                mdf_edge = Edge(
+                    id=f"{from_id}_{to_id}",
+                    sender=from_id,
+                    sender_port=f"{from_port}",
+                    receiver=to_id,
+                    receiver_port=f"{to_port}",
+                )
                 mdf_graph.edges.append(mdf_edge)
 
     # If we haven't wrapped this graph in a model class
@@ -261,8 +301,10 @@ def torchscript_to_mdf(model: torch.ScriptModule, mdf_graph: Graph = None) -> Un
     else:
         return mdf_model
 
+
 if __name__ == "__main__":
     """Test a simple function"""
+
     def simple(x, y):
         b = x + y
         return 2 * b

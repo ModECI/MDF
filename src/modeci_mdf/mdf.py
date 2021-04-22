@@ -165,7 +165,8 @@ class InputPort(BaseWithId):
                     "type",
                     (
                         "The type of the variable (note: there is limited support for this so far ",
-                        str)
+                        str,
+                    ),
                 ),
             ]
         )

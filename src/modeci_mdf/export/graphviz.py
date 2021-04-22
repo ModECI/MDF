@@ -197,7 +197,9 @@ def mdf_to_graphviz(
             )
             if edge.parameters:
                 for p in edge.parameters:
-                    label += "<br/>{}: <b>{}</b>".format(p, format_num(edge.parameters[p]))
+                    label += "<br/>{}: <b>{}</b>".format(
+                        p, format_num(edge.parameters[p])
+                    )
 
         graph.edge(
             edge.sender,

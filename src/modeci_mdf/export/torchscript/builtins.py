@@ -5,7 +5,13 @@ import torch
 import torch.backends.cudnn as cudnn
 
 from torch._six import PY37
-from torch.nn.modules.utils import _single, _pair, _triple, _quadruple, _list_with_default
+from torch.nn.modules.utils import (
+    _single,
+    _pair,
+    _triple,
+    _quadruple,
+    _list_with_default,
+)
 
 from collections import OrderedDict
 from typing import Dict, Optional, Callable
@@ -93,18 +99,31 @@ _builtin_ops = [
 # in these cases, we want to resolve the function to their python implementation
 # instead looking up a builtin "aten::" schema
 
+
 def _gen_torch_functional_registered_ops():
     # eventually ops should encompass all of torch/functional.py, (torch.functional.__all__)
     # but we are currently only able to compile some of the functions. additionally,
     # some functions directly map to their aten:: implementations.
     # TODO: add support for more ops
-    ops = ["stft", "istft", "lu", "lu_unpack", "cdist", "norm", "unique", "unique_consecutive"]
+    ops = [
+        "stft",
+        "istft",
+        "lu",
+        "lu_unpack",
+        "cdist",
+        "norm",
+        "unique",
+        "unique_consecutive",
+    ]
     return {getattr(torch.functional, name) for name in ops}
+
 
 _functional_registered_ops = _gen_torch_functional_registered_ops()
 
+
 def _is_special_functional_bound_op(fn):
     return fn in _functional_registered_ops
+
 
 # lazily built to ensure the correct initialization order
 def _get_builtin_table():
@@ -116,8 +135,13 @@ def _get_builtin_table():
     def register_all(mod):
         for name in dir(mod):
             v = getattr(mod, name)
-            if callable(v) and not _is_special_functional_bound_op(v) and v is not torch.no_grad:
+            if (
+                callable(v)
+                and not _is_special_functional_bound_op(v)
+                and v is not torch.no_grad
+            ):
                 _builtin_ops.append((v, "aten::" + name))
+
     for mod in _modules_containing_builtins:
         register_all(mod)
 
@@ -127,6 +151,7 @@ def _get_builtin_table():
         _builtin_ops.append((math.remainder, "aten::mathremainder"))  # type: ignore
 
     import torch.distributed.autograd as dist_autograd
+
     if dist_autograd.is_available():
         _builtin_ops.append((dist_autograd.get_gradients, "aten::get_gradients"))  # type: ignore
         _builtin_ops.append((dist_autograd.backward, "aten::dist_backward"))  # type: ignore
