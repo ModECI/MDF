@@ -9,7 +9,7 @@ import re
 import logging
 import os
 import itertools
-from typing import Union, Dict, Any
+from typing import Union, Dict, Any, Tuple
 
 import torch
 
