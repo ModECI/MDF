@@ -17,7 +17,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
     print("Converting graph: %s to NeuroML" % (graph.id))
 
     net = neuromllite.Network(id=graph.id)
-    net.notes = "NeuroMLlite export of %s graph: %s" % (
+    net.notes = "NeuroMLlite export of {} graph: {}".format(
         format if format else "MDF",
         graph.id,
     )
@@ -79,7 +79,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
             expr = func_info["expression_string"]
             expr2 = substitute_args(expr, f.args)
             for arg in f.args:
-                expr += ";%s=%s" % (arg, f.args[arg])
+                expr += ";{}={}".format(arg, f.args[arg])
             ct.dynamics.add(
                 lems.DerivedVariable(
                     name=f.id, dimension="none", value="%s" % (expr2), exposure=f.id
@@ -116,7 +116,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
         # silentSynDL = neuromllite.Synapse(id=syn_id, lems_source_file=lems_definitions)
 
     for edge in graph.edges:
-        print("    Edge: %s connects %s to %s" % (edge.id, edge.sender, edge.receiver))
+        print(f"    Edge: {edge.id} connects {edge.sender} to {edge.receiver}")
 
         ssyn_id = "silentSyn_proj_%s" % edge.id
         ssyn_id = "silentSyn_proj_%s" % edge.id
@@ -231,4 +231,4 @@ if __name__ == "__main__":
         )
         for t in traces:
             if t != "t":  # the time array
-                print("    %s = %s" % (t, traces[t][-1]))
+                print("    {} = {}".format(t, traces[t][-1]))

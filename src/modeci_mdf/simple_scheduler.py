@@ -37,7 +37,7 @@ class EvaluableFunction:
             if self.function.function == f:
                 expr = create_python_expression(mdf_functions[f]["expression_string"])
         if not expr:
-            raise "Unknown function: %s. Known functions: %s" % (
+            raise "Unknown function: {}. Known functions: {}".format(
                 self.function.function,
                 mdf_functions.keys,
             )
@@ -57,7 +57,7 @@ class EvaluableFunction:
                 array_format=array_format,
             )
             if self.verbose:
-                print("      Arg: %s became: %s" % (arg, func_params[arg]))
+                print("      Arg: {} became: {}".format(arg, func_params[arg]))
         self.curr_value = evaluate_expr(
             expr, func_params, verbose=self.verbose, array_format=array_format
         )
@@ -100,7 +100,7 @@ class EvaluableInput:
 
     def set_input_value(self, value):
         if self.verbose:
-            print("    Input value in %s set to %s" % (self.input_port.id, value))
+            print(f"    Input value in {self.input_port.id} set to {value}")
         self.curr_value = value
 
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):

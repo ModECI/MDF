@@ -55,7 +55,7 @@ with open("MDF_function_specifications.md", "w") as d:
 
     d.write("## All functions:\n | ")
     for f in mdf_functions:
-        d.write('<a href="#%s">%s</a> | ' % (f.lower(), f))
+        d.write(f'<a href="#{f.lower()}">{f}</a> | ')
 
     for f in mdf_functions:
 

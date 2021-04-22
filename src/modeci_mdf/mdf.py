@@ -152,7 +152,6 @@ class Function(BaseWithId):
 
 class InputPort(BaseWithId):
     def __init__(self, **kwargs):
-
         self.allowed_fields = collections.OrderedDict(
             [
                 (
@@ -161,7 +160,14 @@ class InputPort(BaseWithId):
                         "The shape of the variable (note: there is limited support for this so far...)",
                         str,
                     ),
-                )
+                ),
+                (
+                    "type",
+                    (
+                        "The type of the variable (note: there is limited support for this so far ",
+                        str,
+                    ),
+                ),
             ]
         )
 
