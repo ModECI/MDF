@@ -61,8 +61,12 @@ def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
             # FIXME: It doesn't seem like these types are being serialized to JSON properly, encode as strings for now
             if value is None:
                 value = "None"
-            if type(value) is bool:
+            elif type(value) is bool:
                 value = str(value).lower()
+            elif type(value) is torch.device:
+                value = str(value)
+            elif type(value) is torch.Tensor:
+                value = value.numpy().tolist()
 
             consts[o.unique()] = value
 
@@ -243,6 +247,12 @@ def torchscript_to_mdf(
     # Get any inputs to the graph, and their debug names
     graph_inputs = {inp.unique(): inp.debugName() for inp in graph.inputs()}
 
+    # For every node, cache its input edges. This will let us look this up quickly for
+    # any node.
+    node_to_in_edge = {
+        node: [i.unique() for i in node.inputs()] for node in graph.nodes()
+    }
+
     for node in graph.nodes():
 
         mdf_node = torchnode_to_mdfnode(node=node, graph=graph, consts=consts)
@@ -258,7 +268,9 @@ def torchscript_to_mdf(
         # O(n^2) in terms of the number of the nodes!
         outputs = [o.unique() for o in node.outputs()]
         for to in graph.nodes():
-            to_inputs = [i.unique() for i in to.inputs()]
+
+            # Lookup this nodes input edges
+            to_inputs = node_to_in_edge[to]
 
             edges = set(outputs) & set(to_inputs)
             for edge in edges:
