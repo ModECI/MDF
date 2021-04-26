@@ -12,14 +12,14 @@ def main():
     mod_graph = Graph(id="array_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input_node", parameters={"input_level": [[1, 2], [3, 4]]})
+    input_node = Node(id="input_node", parameters={"input_level": [[1, 2.], [3, 4]]})
 
     op1 = OutputPort(id="out_port", value="input_level")
     input_node.output_ports.append(op1)
     mod_graph.nodes.append(input_node)
 
     middle_node = Node(
-        id="middle_node", parameters={"slope": 0.5, "intercept": np.array([[0, 1], [2, 2]])}
+        id="middle_node", parameters={"slope": 0.5, "intercept": np.array([[0, 1.], [2, 2]])}
     )
 
     ip1 = InputPort(id="input_port1")

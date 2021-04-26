@@ -12,7 +12,7 @@ from collections import OrderedDict
 FORMAT_DEFAULT = FORMAT_NUMPY
 
 
-def evaluate_expr(expr, func_params, array_format, verbose=True):
+def evaluate_expr(expr, func_params, array_format, verbose=False):
 
     e = evaluate_params_nmllite(
         expr, func_params, array_format=array_format, verbose=verbose
@@ -53,7 +53,7 @@ class EvaluableFunction:
             func_params[arg] = evaluate_expr(
                 self.function.args[arg],
                 func_params,
-                verbose=True,
+                verbose=False,
                 array_format=array_format,
             )
             if self.verbose:
@@ -311,7 +311,7 @@ class EvaluableGraph:
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
-def main(example_file, array_format=FORMAT_NUMPY, verbose=True):
+def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
 
     from modeci_mdf.utils import load_mdf, print_summary
 

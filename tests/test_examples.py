@@ -28,6 +28,11 @@ def test_examples():
     arrays.main()
     print("Tested Arrays model")
 
+    import scaling
+
+    scaling.main()
+    print("Tested Scaling model")
+
     import states
 
     states.main()
