@@ -66,6 +66,8 @@ A self contained unit of evaluation recieving input from other Nodes on <a href=
 #### Allowed parameters
 <table><tr><td><b>shape</b></td><td>str</td><td><i>The shape of the variable (note: there is limited support for this so far...)</i></td></tr>
 
+<tr><td><b>type</b></td><td>str</td><td><i>The type of the variable (note: there is limited support for this so far </i></td></tr>
+
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
 <tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>
@@ -116,3 +118,4 @@ A single value which is evaluated as a function of values on <a href="#inputport
 
 
 </table>
+

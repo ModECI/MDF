@@ -93,6 +93,10 @@
                     "type": "str",
                     "description": "The shape of the variable (note: there is limited support for this so far...)"
                 },
+                "type": {
+                    "type": "str",
+                    "description": "The type of the variable (note: there is limited support for this so far "
+                },
                 "id": {
                     "type": "str",
                     "description": "Unique ID of element"
