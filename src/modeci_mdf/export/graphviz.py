@@ -39,29 +39,29 @@ COLOR_OUTPUT = "#cc3355"
 
 
 def format_label(s):
-    return '<font color="%s"><b>%s: </b></font></td><td>' % (COLOR_LABEL, s)
+    return f'<font color="{COLOR_LABEL}"><b>{s}: </b></font></td><td>'
 
 
 def format_num(s):
     if type(s) == np.ndarray:
         ss = "%s" % (np.array2string(s, threshold=4, edgeitems=1))
-        info = " (NP %s %s)" % (s.shape, s.dtype)
+        info = f" (NP {s.shape} {s.dtype})"
     else:
         ss = s
         info = ""
-    return '<font color="%s"><b>%s</b>%s</font>' % (COLOR_NUM, ss, info)
+    return f'<font color="{COLOR_NUM}"><b>{ss}</b>{info}</font>'
 
 
 def format_param(s):
-    return '<font color="%s">%s</font>' % (COLOR_PARAM, s)
+    return f'<font color="{COLOR_PARAM}">{s}</font>'
 
 
 def format_input(s):
-    return '<font color="%s">%s</font>' % (COLOR_INPUT, s)
+    return f'<font color="{COLOR_INPUT}">{s}</font>'
 
 
 def format_func(s):
-    return '<font color="%s">%s</font>' % (COLOR_FUNC, s)
+    return f'<font color="{COLOR_FUNC}">{s}</font>'
 
 
 def format_state(s):
@@ -77,7 +77,7 @@ def format_standard_func_long(s):
 
 
 def format_output(s):
-    return '<font color="%s">%s</font>' % (COLOR_OUTPUT, s)
+    return f'<font color="{COLOR_OUTPUT}">{s}</font>'
 
 
 def match_in_expr(s, node):
@@ -135,7 +135,7 @@ def mdf_to_graphviz(
                 info += "<tr><td>%s" % format_label("PARAMS")
                 for p in node.parameters:
                     nn = format_num(node.parameters[p])
-                    info += "%s = %s%s" % (
+                    info += "{} = {}{}".format(
                         format_param(p),
                         nn,
                         "<br/>" if len(nn) > 40 else ";    ",
@@ -145,7 +145,7 @@ def mdf_to_graphviz(
 
             if node.input_ports and len(node.input_ports) > 0:
                 for ip in node.input_ports:
-                    info += "<tr><td>%s%s %s</td></tr>" % (
+                    info += "<tr><td>{}{} {}</td></tr>".format(
                         format_label("IN"),
                         format_input(ip.id),
                         "(shape: %s)" % ip.shape
@@ -160,7 +160,7 @@ def mdf_to_graphviz(
                         if f.args
                         else "???"
                     )
-                    info += "<tr><td>%s%s = %s(%s)</td></tr>" % (
+                    info += "<tr><td>{}{} = {}({})</td></tr>".format(
                         format_label("FUNC"),
                         format_func(f.id),
                         format_standard_func(f.function),
@@ -195,7 +195,7 @@ def mdf_to_graphviz(
 
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
-                    info += "<tr><td>%s%s = %s %s</td></tr>" % (
+                    info += "<tr><td>{}{} = {} {}</td></tr>".format(
                         format_label("OUT"),
                         format_output(op.id),
                         match_in_expr(op.value, node),
@@ -209,17 +209,19 @@ def mdf_to_graphviz(
         graph.node(node.id, label="<%s>" % info)
 
     for edge in mdf_graph.edges:
-        print("    Edge: %s connects %s to %s" % (edge.id, edge.sender, edge.receiver))
+        print(f"    Edge: {edge.id} connects {edge.sender} to {edge.receiver}")
 
         label = "%s" % edge.id
         if level >= LEVEL_2:
-            label += " (%s -&gt; %s)" % (
+            label += " ({} -&gt; {})".format(
                 format_output(edge.sender_port),
                 format_input(edge.receiver_port),
             )
             if edge.parameters:
                 for p in edge.parameters:
-                    label += "<br/>%s: <b>%s</b>" % (p, format_num(edge.parameters[p]))
+                    label += "<br/>{}: <b>{}</b>".format(
+                        p, format_num(edge.parameters[p])
+                    )
 
         graph.edge(
             edge.sender,

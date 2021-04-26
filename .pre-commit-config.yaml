@@ -43,3 +43,8 @@ repos:
 #  hooks:
 #  - id: mypy
 #    files: src
+
+- repo: https://github.com/psf/black
+  rev: 20.8b1
+  hooks:
+  - id: black
