@@ -4,6 +4,7 @@
 
 from modeci_mdf.mdf import *
 import sys
+import numpy as np
 
 
 def main():
@@ -18,7 +19,7 @@ def main():
     mod_graph.nodes.append(input_node)
 
     middle_node = Node(
-        id="middle_node", parameters={"slope": 0.5, "intercept": [[0, 1], [2, 2]]}
+        id="middle_node", parameters={"slope": 0.5, "intercept": np.array([[0, 1], [2, 2]])}
     )
 
     ip1 = InputPort(id="input_port1")

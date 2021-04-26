@@ -73,7 +73,7 @@ def format_standard_func(s):
 
 
 def format_standard_func_long(s):
-    return '<font size="4"><i>%s</i></font>' % (s)
+    return '<i>%s</i>' % (s)
 
 
 def format_output(s):

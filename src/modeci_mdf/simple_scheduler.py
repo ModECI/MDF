@@ -4,7 +4,7 @@ import sympy
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
-from neuromllite.utils import _params_info
+from neuromllite.utils import _params_info, _val_info
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
 from collections import OrderedDict
@@ -12,7 +12,7 @@ from collections import OrderedDict
 FORMAT_DEFAULT = FORMAT_NUMPY
 
 
-def evaluate_expr(expr, func_params, array_format=FORMAT_DEFAULT, verbose=True):
+def evaluate_expr(expr, func_params, array_format, verbose=True):
 
     e = evaluate_params_nmllite(
         expr, func_params, array_format=array_format, verbose=verbose
@@ -46,25 +46,25 @@ class EvaluableFunction:
         func_params.update(parameters)
         if self.verbose:
             print(
-                "    ---  Evaluating %s with %s, i.e. [%s]"
+                "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
         for arg in self.function.args:
             func_params[arg] = evaluate_expr(
                 self.function.args[arg],
                 func_params,
-                verbose=False,
+                verbose=True,
                 array_format=array_format,
             )
             if self.verbose:
-                print("      Arg: %s became: %s" % (arg, func_params[arg]))
+                print("      Arg: %s became: %s" % (arg, _val_info(func_params[arg])))
         self.curr_value = evaluate_expr(
             expr, func_params, verbose=self.verbose, array_format=array_format
         )
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
-                % (self.function, _params_info(func_params), self.curr_value)
+                % (self.function, _params_info(func_params), _val_info(self.curr_value))
             )
         return self.curr_value
 
@@ -108,7 +108,7 @@ class EvaluableState:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.state, _params_info(parameters), self.curr_value)
+                % (self.state, _params_info(parameters), _val_info(self.curr_value))
             )
         return self.curr_value
 
@@ -131,7 +131,7 @@ class EvaluableOutput:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.output_port, _params_info(parameters), self.curr_value)
+                % (self.output_port, _params_info(parameters), _val_info(self.curr_value))
             )
         return self.curr_value
 
@@ -144,14 +144,14 @@ class EvaluableInput:
 
     def set_input_value(self, value):
         if self.verbose:
-            print("    Input value in %s set to %s" % (self.input_port.id, value))
+            print("    Input value in %s set to: %s" % (self.input_port.id, _val_info(value)))
         self.curr_value = value
 
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
-                % (self.input_port, _params_info(parameters), self.curr_value)
+                % (self.input_port, _params_info(parameters), _val_info(self.curr_value))
             )
         return self.curr_value
 
@@ -187,7 +187,7 @@ class EvaluableNode:
             f = all_funcs.pop(0)  # pop first off list
             if verbose:
                 print(
-                    "Checking whether function: %s with args %s is sufficiently determined by known vars %s"
+                    "    Checking whether function: %s with args %s is sufficiently determined by known vars %s"
                     % (f.id, f.args, all_known_vars)
                 )
             all_req_vars = []
@@ -199,7 +199,7 @@ class EvaluableNode:
 
             if verbose:
                 print(
-                    "Are all of %s in %s? %s"
+                    "    Are all of %s in %s? %s"
                     % (all_req_vars, all_known_vars, all_present)
                 )
             if all(all_present):
@@ -301,7 +301,7 @@ class EvaluableGraph:
             if self.verbose:
                 print(
                     "  Edge %s connects %s to %s, passing %s with weight %s"
-                    % (edge.id, pre_node.node.id, post_node.node.id, value, weight)
+                    % (edge.id, pre_node.node.id, post_node.node.id, _val_info(value), _val_info(weight))
                 )
             post_node.evaluable_inputs[edge.receiver_port].set_input_value(
                 value * weight
