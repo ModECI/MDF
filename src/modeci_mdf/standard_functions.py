@@ -12,7 +12,7 @@ def _add_mdf_function(name, description, arguments, expression_string):
 
 def create_python_expression(expression_string):
 
-    for func in ["exp", "sin"]:
+    for func in ["exp", "sin", "cos"]:
         expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
@@ -59,6 +59,13 @@ if len(mdf_functions) == 0:
         description="Sine function",
         arguments=[STANDARD_ARG_0, "scale"],
         expression_string="scale * sin(%s)" % (STANDARD_ARG_0),
+    )
+
+    _add_mdf_function(
+        "cos",
+        description="Cosine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * cos(%s)" % (STANDARD_ARG_0),
     )
 
     _add_mdf_function(

@@ -1,5 +1,6 @@
 """
-    Example of ModECI MDF - Testing arrays as inputs
+    Example of ModECI MDF - Testing arrays as inputs - this allows graphs of
+    various scales/sizes to be generated for testing purposes
 """
 
 from modeci_mdf.mdf import *
@@ -99,8 +100,7 @@ def generate_test_model(
     return mod_graph
 
 
-if __name__ == "__main__":
-
+def main():
     mod_graph = generate_test_model("small_test", save_to_file=True)
 
     scale = 20
@@ -122,3 +122,7 @@ if __name__ == "__main__":
         eg.evaluate(array_format=format)
 
         print("Finished evaluating graph using array format %s" % format)
+
+
+if __name__ == "__main__":
+    main()

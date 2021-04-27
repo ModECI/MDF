@@ -3,6 +3,8 @@
 """
 
 from modeci_mdf.mdf import *
+import sys
+import numpy as np
 
 
 def main():
@@ -10,14 +12,14 @@ def main():
     mod_graph = Graph(id="array_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input_node", parameters={"input_level": [[1, 2], [3, 4]]})
+    input_node = Node(id="input_node", parameters={"input_level": [[1, 2.], [3, 4]]})
 
     op1 = OutputPort(id="out_port", value="input_level")
     input_node.output_ports.append(op1)
     mod_graph.nodes.append(input_node)
 
     middle_node = Node(
-        id="middle_node", parameters={"slope": 0.5, "intercept": [[0, 1], [2, 2]]}
+        id="middle_node", parameters={"slope": 0.5, "intercept": np.array([[0, 1.], [2, 2]])}
     )
 
     ip1 = InputPort(id="input_port1")
@@ -46,6 +48,17 @@ def main():
 
     new_file = mod.to_json_file("%s.json" % mod.id)
     new_file = mod.to_yaml_file("%s.yaml" % mod.id)
+
+    if "-run" in sys.argv:
+        verbose = True
+        #verbose = False
+        from modeci_mdf.simple_scheduler import EvaluableGraph
+
+        from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
+        format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
+        eg = EvaluableGraph(mod_graph, verbose=True)
+        eg.evaluate(array_format=format)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ Arrays:
                     parameters:
                         input_level:
                         -   - 1
-                            - 2
+                            - 2.0
                         -   - 3
                             - 4
                     output_ports:
@@ -18,10 +18,10 @@ Arrays:
                     parameters:
                         slope: 0.5
                         intercept:
-                        -   - 0
-                            - 1
-                        -   - 2
-                            - 2
+                        -   - 0.0
+                            - 1.0
+                        -   - 2.0
+                            - 2.0
                     input_ports:
                         input_port1: {}
                     functions:
