@@ -73,18 +73,35 @@ for key, val in ddm_params.items():
 rt, decision = ddm(**ddm_params)
 
 #%%
-mdf_model = torchscript_to_mdf(ddm)
 
-print(mdf_model.to_yaml())
+from torch.onnx.utils import _model_to_graph
+from torch.onnx import TrainingMode
+
+graph, params_dict, torch_out = _model_to_graph(
+    model=torch.jit.script(ddm),
+    args=tuple(ddm_params.values()),
+    example_outputs=(rt, decision),
+    do_constant_folding=False,
+    training=TrainingMode.EVAL,
+    _retain_param_name=True,
+    operator_export_type=torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK,
+    dynamic_axes={},
+)
+
+
+# mdf_model = torchscript_to_mdf(ddm)
+#
+# print(mdf_model.to_yaml())
 
 #%%
 # with open('ddm.onnx', 'wb') as file:
-#     torch.onnx.export(model=torch.jit.script(DriftDiffusionModel()),
-#                       args=tuple(ddm_params.values()) + (torch.tensor(NUM_WALKERS),),
-#                       example_outputs=(rts, decision),
+#     torch.onnx.export(model=torch.jit.script(ddm),
+#                       args=tuple(ddm_params.values()),
+#                       example_outputs=(rt, decision),
 #                       f=file,
 #                       verbose=True,
-#                       opset_version=12)
+#                       opset_version=12,
+#                       operator_export_type=torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK)
 
 #%%
 # import seaborn as sns

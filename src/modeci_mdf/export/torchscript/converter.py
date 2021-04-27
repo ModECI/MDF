@@ -232,6 +232,14 @@ def torchscript_to_mdf(
         )
         model = torch.jit.script(model)
 
+    # Call out to a part of the ONNX exporter that simiplifies the graph before ONNX export.
+    import torch.onnx.symbolic_helper
+    from torch.onnx.utils import _optimize_graph
+
+    graph = _optimize_graph(
+        graph=graph, operator_export_type=torch._C._onnx.OperatorExportTypes.RAW
+    )
+
     # If mdf_graph is None we are probably at the top level of the possibly recursive construction process of a
     # TorchScript -> MDF conversion. In this case, we will construct a MDF Model and graph to for the top level.
     if mdf_graph is None:
