@@ -278,35 +278,45 @@ class EvaluableGraph:
             self.root_nodes.append(node.id)
 
         for edge in graph.edges:
-            self.root_nodes.remove(edge.receiver)
+            if edge.receiver in self.root_nodes:  # It could have been already removed...
+                self.root_nodes.remove(edge.receiver)
 
     def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
         print(
             "\nEvaluating graph: %s, root nodes: %s, with array format %s"
             % (self.graph.id, self.root_nodes, array_format)
         )
+        evaluated_nodes = []
         for rn in self.root_nodes:
             self.enodes[rn].evaluate(array_format=array_format, time_increment=time_increment)
+            evaluated_nodes.append(rn)
 
-        for edge in self.graph.edges:
-            pre_node = self.enodes[edge.sender]
-            post_node = self.enodes[edge.receiver]
-            value = pre_node.evaluable_outputs[edge.sender_port].curr_value
-            weight = (
-                1
-                if not edge.parameters or not "weight" in edge.parameters
-                else edge.parameters["weight"]
-            )
+        edges_to_eval = [edge for edge in self.graph.edges]
 
-            if self.verbose:
-                print(
-                    "  Edge %s connects %s to %s, passing %s with weight %s"
-                    % (edge.id, pre_node.node.id, post_node.node.id, _val_info(value), _val_info(weight))
+        while len(edges_to_eval)>0:
+            edge = edges_to_eval.pop(0)
+            if edge.sender not in evaluated_nodes:
+                edges_to_eval.append(edge)  # Add back to end of list...
+            else:
+                pre_node = self.enodes[edge.sender]
+                post_node = self.enodes[edge.receiver]
+                value = pre_node.evaluable_outputs[edge.sender_port].curr_value
+                weight = (
+                    1
+                    if not edge.parameters or not "weight" in edge.parameters
+                    else edge.parameters["weight"]
                 )
-            post_node.evaluable_inputs[edge.receiver_port].set_input_value(
-                value * weight
-            )
-            post_node.evaluate(array_format=array_format, time_increment=time_increment)
+
+                if self.verbose:
+                    print(
+                        "  Edge %s connects %s to %s, passing %s with weight %s"
+                        % (edge.id, pre_node.node.id, post_node.node.id, _val_info(value), _val_info(weight))
+                    )
+                post_node.evaluable_inputs[edge.receiver_port].set_input_value(
+                    value * weight
+                )
+                post_node.evaluate(array_format=array_format, time_increment=time_increment)
+                evaluated_nodes.append(post_node.node.id)
 
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
@@ -332,9 +342,14 @@ if __name__ == "__main__":
 
     example_file = "../../examples/Simple.json"
     verbose = True
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
         example_file = sys.argv[1]
+
+    if '-v' in sys.argv:
         verbose = True
+    else:
         verbose = False
 
-    main(example_file, verbose)
+    print('Executing MDF file %s with simple scheduler'%example_file)
+
+    main(example_file, verbose=verbose)
