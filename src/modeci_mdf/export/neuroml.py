@@ -6,13 +6,14 @@ Work in progress...
 """
 
 import sys
+import os
 import neuromllite
 import lems.api as lems
 
 from modeci_mdf.standard_functions import mdf_functions, substitute_args
 
 
-def mdf_to_neuroml(graph, save_to=None, format=None):
+def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
 
     print("Converting graph: %s to NeuroML" % (graph.id))
 
@@ -48,7 +49,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
         pop = neuromllite.Population(
             id=node.id,
-            size="1",
+            size=1,
             component=cell.id,
             properties={"color": "0.2 0.2 0.2", "radius": 3},
         )
@@ -86,6 +87,32 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
                 )
             )
 
+        on_start = None
+        for s in node.states:
+            ct.add(lems.Exposure(s.id, "none"))
+            ct.dynamics.add(
+                lems.StateVariable(
+                    name=s.id, dimension="none", exposure=s.id
+                )
+            )
+            if s.default_initial_value:
+                if on_start is None:
+                    on_start = lems.OnStart()
+                    ct.dynamics.add(on_start)
+                sa = lems.StateAssignment(variable=s.id, value=s.default_initial_value)
+                on_start.actions.append(sa)
+
+            if s.value:
+                oc = lems.OnCondition(test="t .gt. 0")
+                ct.dynamics.add(oc)
+                sa = lems.StateAssignment(variable=s.id, value=s.value)
+                oc.actions.append(sa)
+
+            if s.time_derivative:
+                td = lems.TimeDerivative(variable=s.id, value=s.time_derivative)
+                ct.dynamics.add(td)
+
+
         if len(node.output_ports) > 1:
             raise Exception("Currently only max 1 output port supported in NeuroML...")
 
@@ -109,7 +136,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
     if len(graph.edges) > 0:
 
-        model.add(lems.Include("syn_definitions.xml"))
+        model.add(lems.Include(os.path.join(os.path.dirname(__file__), "syn_definitions.xml")))
         rsDL = neuromllite.Synapse(id="rsDL", lems_source_file=lems_definitions)
         net.synapses.append(rsDL)
         # syn_id = 'silentSyn'
@@ -152,7 +179,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
     ################################################################################
     ###   Build Simulation object & save as JSON
 
-    simtime = 1000
+    simtime = 1000*run_duration_sec
     dt = 0.1
     sim = neuromllite.Simulation(
         id="Sim%s" % net.id,
@@ -212,7 +239,7 @@ if __name__ == "__main__":
     print("------------------")
     nmllite_file = example.replace(".json", ".nmllite.json")
     # nmllite_file = example.split('/')[-1].replace('.json','.nmllite.json')
-    net, sim = mdf_to_neuroml(mod_graph, save_to=nmllite_file, format=model.format)
+    net, sim = mdf_to_neuroml(mod_graph, save_to=nmllite_file, format=model.format, run_duration_sec=2)
 
     if run:
         sf = "%s.json" % sim.id
