@@ -37,3 +37,13 @@ def test_simple_scheduler_main(tmpdir):
             assert output==1
             output = eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value
             assert output==0
+
+
+@pytest.mark.parametrize(
+    "fi", ["examples/abc_conditions.json", "examples/abc_conditions.yaml"]
+)
+def test_condition_scheduler_main(fi):
+
+    import modeci_mdf.condition_scheduler
+
+    modeci_mdf.condition_scheduler.main(fi)
