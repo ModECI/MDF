@@ -28,6 +28,12 @@ sin:
     - variable0
     - scale
     expression_string: scale * sin(variable0)
+cos:
+    description: Cosine function
+    arguments:
+    - variable0
+    - scale
+    expression_string: scale * cos(variable0)
 MatMul:
     description: Matrix multiplication (work in progress...)
     arguments:

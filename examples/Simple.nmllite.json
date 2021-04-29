@@ -1,6 +1,6 @@
 {
     "simple_example": {
-        "version": "NeuroMLlite v0.3.1",
+        "version": "NeuroMLlite v0.3.2",
         "notes": "NeuroMLlite export of ModECI MDF v0.1 graph: simple_example",
         "cells": {
             "input_node__instance": {
@@ -20,7 +20,7 @@
         },
         "populations": {
             "input_node": {
-                "size": "1",
+                "size": 1,
                 "component": "input_node__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
@@ -28,7 +28,7 @@
                 }
             },
             "processing_node": {
-                "size": "1",
+                "size": 1,
                 "component": "processing_node__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",

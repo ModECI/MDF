@@ -100,6 +100,7 @@ class Node(BaseWithId):
             [
                 ("input_ports", ("The _InputPort_s into the Node", InputPort)),
                 ("functions", ("The _Function_s for the Node", Function)),
+                ("states", ("The _State_s of the Node", State)),
                 (
                     "output_ports",
                     (
@@ -186,6 +187,38 @@ class OutputPort(BaseWithId):
                         str,
                     ),
                 )
+            ]
+        )
+
+        super().__init__(**kwargs)
+
+
+class State(BaseWithId):
+
+    _definition = "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
+
+    def __init__(self, **kwargs):
+
+        self.allowed_fields = collections.OrderedDict(
+            [
+                (
+                    "default_initial_value",
+                    ("The initial value of the state variable", str),
+                ),
+                (
+                    "value",
+                    (
+                        "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values",
+                        str,
+                    ),
+                ),
+                (
+                    "time_derivative",
+                    (
+                        "How the state varies with time, i.e. ds/dt. Units of time are seconds.",
+                        str,
+                    ),
+                ),
             ]
         )
 

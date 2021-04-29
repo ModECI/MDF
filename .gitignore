@@ -188,3 +188,14 @@ Thumbs.db #thumbnail cache on Windows
 /examples/medium_test.gv.png
 /examples/small_test.gv.png
 /sym*.ipynb
+/black*.sh
+/examples/*.dat
+/examples/LEMS*.xml
+/examples/*_example.json
+/examples/*_example.net.nml
+/examples/*__lems.xml
+/examples/States.nmllite.json
+/examples/clean.sh
+/examples/simple_example_lems_definitions.xml
+/examples/state_example_lems_definitions.xml
+/examples/abcd_example_lems_definitions.xml

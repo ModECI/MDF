@@ -1,6 +1,6 @@
 {
     "abcd_example": {
-        "version": "NeuroMLlite v0.3.1",
+        "version": "NeuroMLlite v0.3.2",
         "notes": "NeuroMLlite export of ModECI MDF v0.1 graph: abcd_example",
         "cells": {
             "input0__instance": {
@@ -38,7 +38,7 @@
         },
         "populations": {
             "input0": {
-                "size": "1",
+                "size": 1,
                 "component": "input0__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
@@ -46,7 +46,7 @@
                 }
             },
             "A": {
-                "size": "1",
+                "size": 1,
                 "component": "A__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
@@ -54,7 +54,7 @@
                 }
             },
             "B": {
-                "size": "1",
+                "size": 1,
                 "component": "B__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
@@ -62,7 +62,7 @@
                 }
             },
             "C": {
-                "size": "1",
+                "size": 1,
                 "component": "C__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
@@ -70,7 +70,7 @@
                 }
             },
             "D": {
-                "size": "1",
+                "size": 1,
                 "component": "D__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
