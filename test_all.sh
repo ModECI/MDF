@@ -9,12 +9,12 @@ pip install .
 pytest
 
 
-python -m modeci_mdf.export.neuroml examples/Simple.json
-python -m modeci_mdf.export.neuroml examples/Simple.json -run
-python -m modeci_mdf.export.neuroml examples/ABCD.json
-python -m modeci_mdf.export.neuroml examples/ABCD.json -run
-
 cd examples
+
+python -m modeci_mdf.export.neuroml Simple.json -run
+python -m modeci_mdf.export.neuroml ABCD.json -run
+python -m modeci_mdf.export.neuroml States.json -run
+
 
 python -m modeci_mdf.export.graphviz Simple.json 1 -noview
 mv simple_example.gv.png simple.png
