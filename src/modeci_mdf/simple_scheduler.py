@@ -334,30 +334,34 @@ class EvaluableGraph:
             )
 
         for edge in self.graph.edges:
-            pre_node = self.enodes[edge.sender]
-            post_node = self.enodes[edge.receiver]
-            value = pre_node.evaluable_outputs[edge.sender_port].curr_value
-            weight = (
-                1
-                if not edge.parameters or not "weight" in edge.parameters
-                else edge.parameters["weight"]
+            self.evaluate_edge(edge, array_format=array_format)
+            self.enodes[edge.receiver].evaluate(
+                time_increment=time_increment, array_format=array_format
             )
 
-            if self.verbose:
-                print(
-                    "  Edge %s connects %s to %s, passing %s with weight %s"
-                    % (
-                        edge.id,
-                        pre_node.node.id,
-                        post_node.node.id,
-                        _val_info(value),
-                        _val_info(weight),
-                    )
+    def evaluate_edge(self, edge, time_increment=None, array_format=FORMAT_DEFAULT):
+        pre_node = self.enodes[edge.sender]
+        post_node = self.enodes[edge.receiver]
+        value = pre_node.evaluable_outputs[edge.sender_port].curr_value
+        weight = (
+            1
+            if not edge.parameters or not "weight" in edge.parameters
+            else edge.parameters["weight"]
+        )
+
+        if self.verbose:
+            print(
+                "  Edge %s connects %s to %s, passing %s with weight %s"
+                % (
+                    edge.id,
+                    pre_node.node.id,
+                    post_node.node.id,
+                    _val_info(value),
+                    _val_info(weight),
                 )
-            post_node.evaluable_inputs[edge.receiver_port].set_input_value(
-                value * weight
             )
-            post_node.evaluate(array_format=array_format, time_increment=time_increment)
+        post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
+        post_node.evaluate(time_increment=time_increment, array_format=array_format)
 
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
