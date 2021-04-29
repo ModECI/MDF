@@ -6,6 +6,7 @@ Work in progress...
 """
 
 import sys
+import os
 import neuromllite
 import lems.api as lems
 
@@ -48,7 +49,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
         pop = neuromllite.Population(
             id=node.id,
-            size="1",
+            size=1,
             component=cell.id,
             properties={"color": "0.2 0.2 0.2", "radius": 3},
         )
@@ -109,7 +110,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None):
 
     if len(graph.edges) > 0:
 
-        model.add(lems.Include("syn_definitions.xml"))
+        model.add(lems.Include(os.path.join(os.path.dirname(__file__), "syn_definitions.xml")))
         rsDL = neuromllite.Synapse(id="rsDL", lems_source_file=lems_definitions)
         net.synapses.append(rsDL)
         # syn_id = 'silentSyn'
