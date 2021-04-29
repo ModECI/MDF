@@ -11,6 +11,16 @@ except ImportError as e:
 from modeci_mdf.simple_scheduler import FORMAT_DEFAULT, EvaluableGraph
 
 
+# generic mappings
+_time_scales = {
+    "CONSIDERATION_SET_EXECUTION": scheduling.time.TimeScale.TIME_STEP,
+    "ENVIRONMENT_STATE_UPDATE": scheduling.time.TimeScale.TRIAL,
+    "ENVIRONMENT_SEQUENCE": scheduling.time.TimeScale.RUN,
+}
+for new, orig in _time_scales.items():
+    setattr(scheduling.time.TimeScale, new, orig)
+
+
 class EvaluableGraphWithConditions(EvaluableGraph):
     def __init__(self, graph, verbose=False):
         super().__init__(graph, verbose=verbose)

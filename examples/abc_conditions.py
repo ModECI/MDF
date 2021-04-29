@@ -82,7 +82,7 @@ def main():
 
     mod_graph.conditions = ConditionSet(
         node_specific={a.id: cond_a, b.id: cond_b, c.id: cond_c},
-        termination={"trial": cond_term},
+        termination={"environment_state_update": cond_term},
     )
 
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
