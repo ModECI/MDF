@@ -59,6 +59,11 @@ def make_func_id(node: torch.Node) -> str:
     return f"{node.kind()}_1"
 
 
+def make_port_name(name: str):
+    """Turn unique TorchScript output and input value names into valid MDF input and outport names"""
+    return "_" + str(name).replace(".", "_")
+
+
 def make_model_graph_name(
     model: Union[torch.ScriptModule, torch.ScriptFunction]
 ) -> Tuple[str, str]:
@@ -134,6 +139,11 @@ def process_onnx_schema(
             - A dict mapping parameters (ONNX attributes) names mapping to values
     """
 
+    # Convert the graph inputs to their MDF port names
+    graph_inputs = {
+        make_port_name(k): make_port_name(v) for k, v in graph_inputs.items()
+    }
+
     # Get the input node names
     inputs = [i.unique() for i in node.inputs()]
 
@@ -151,26 +161,29 @@ def process_onnx_schema(
                 ):
                     schema_args = {
                         schema.inputs[0].name: str(
-                            [inp for i, inp in enumerate(inputs)]
+                            [make_port_name(inp) for i, inp in enumerate(inputs)]
                         )
                     }
                 else:
                     schema_args = {
-                        schema.inputs[i].name: inp for i, inp in enumerate(inputs)
+                        schema.inputs[i].name: make_port_name(inp)
+                        for i, inp in enumerate(inputs)
                     }
 
         except onnx.onnx_cpp2py_export.defs.SchemaError:
             logger.warning(
                 f"Could not find ONNX OpSchema for op {node.kind()}, using placeholder names for arguments."
             )
-            schema_args = {f"arg{i}": inp for i, inp in enumerate(inputs)}
+            schema_args = {
+                f"arg{i}": make_port_name(inp) for i, inp in enumerate(inputs)
+            }
     else:
         raise ValueError(f"Cannot process ONNX schema for non ONNX node: {node}")
 
     # Replace any instance of a graph input with its debug name
     for arg_name, ip_name in schema_args.items():
         if ip_name in graph_inputs:
-            schema_args[arg_name] = graph_inputs[ip_name].replace(".", "_")
+            schema_args[arg_name] = graph_inputs[ip_name]
 
     # ONNX attributes are equivalent to MDF parameters really
     parameters = {
@@ -264,7 +277,9 @@ def torchnode_to_mdfnode(
 
     # Add any output ports
     for o in outputs:
-        mdf_node.output_ports.append(OutputPort(id=o, value=make_func_id(node)))
+        mdf_node.output_ports.append(
+            OutputPort(id=make_port_name(o), value=make_func_id(node))
+        )
 
     # Add any input ports to the node, exclude inputs from constant nodes, these are parameters now
     for inp_i, inp in enumerate(inputs):
@@ -273,7 +288,8 @@ def torchnode_to_mdfnode(
             ip_name = graph_inputs[inp] if inp in graph_inputs else inp
 
             # Fixup ip_name if it contains any "." characters
-            ip_name = str(ip_name).replace(".", "_")
+            # Also add an preceding "_" so its interpretted as string
+            ip_name = make_port_name(ip_name)
 
             # Try to get the shape and type of the input port
             inp_type = node.inputsAt(inp_i).type()
@@ -416,11 +432,15 @@ def torchscript_to_mdf(
                 )
                 mdf_graph.edges.append(mdf_edge)
 
+    # Replace in "." for "_" in parameter names. We have done this elsewhere when creating the input ports for these
+    # parameters.
+    params_dict = {make_port_name(k): v for k, v in params_dict.items()}
+
     # If we haven't wrapped this graph in a model class
     if mdf_model is None:
-        return mdf_graph
+        return mdf_graph, params_dict
     else:
-        return mdf_model
+        return mdf_model, params_dict
 
 
 if __name__ == "__main__":
@@ -460,7 +480,7 @@ if __name__ == "__main__":
 
     model.eval()
 
-    mdf_model = torchscript_to_mdf(
+    mdf_model, params_dict = torchscript_to_mdf(
         model=model,
         args=(galaxy_images_output, ebv_output),
         example_outputs=output,
@@ -470,5 +490,7 @@ if __name__ == "__main__":
 
     mdf_graph = mdf_model.graphs[0]
 
-    eg = EvaluableGraph(graph=mdf_graph, verbose=True)
+    params_dict["_input_1"] = galaxy_images_output
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=True, initializer=params_dict)
     eg.evaluate()

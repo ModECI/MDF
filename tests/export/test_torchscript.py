@@ -24,7 +24,7 @@ def test_simple_module():
         def forward(self, x, y):
             return x + y
 
-    mdf_model = torchscript_to_mdf(
+    mdf_model, param_dict = torchscript_to_mdf(
         model=Simple(),
         args=(torch.tensor(0.0), torch.tensor(0.0)),
         example_outputs=(torch.tensor(0.0)),
@@ -40,7 +40,7 @@ def test_simple_function():
     def simple(x, y):
         return x + y
 
-    mdf_model = torchscript_to_mdf(
+    mdf_model, param_dict = torchscript_to_mdf(
         model=simple,
         args=(torch.tensor(0.0), torch.tensor(0.0)),
         example_outputs=(torch.tensor(0.0)),

@@ -34,7 +34,6 @@ def test_conv():
     ).astype(np.float32)
 
     out = onnx_ops.conv(x, W)
-    out = onnx_ops.conv(x, W)
 
 
 def test_pad():
@@ -44,9 +43,17 @@ def test_pad():
 
     out = onnx_ops.pad(x, pads, value, mode="constant")
 
+    # Try attributes without keyword
+    out2 = onnx_ops.pad(x, pads, value, "constant")
+
+    assert np.all(out == out2)
+
 
 def test_unsqueeze():
     data = np.zeros((3, 2))
-    axes = np.array([0, 1]).astype(np.int64)
+    axes = [0]
 
     out = onnx_ops.unsqueeze(data=data, axes=axes)
+
+    assert out.ndim == 3
+    assert out.shape == (1, 3, 2)

@@ -1,7 +1,16 @@
+"""
+This module programmatically defines every ONNX operation as a python callable function. Executing ONNX graphs in this
+way somewhat defeats the performance purposes of ONNX since the overhead for each operation will be high. However, this
+is allows us to test the MDF scheduler (which invokes Python functions) on any MDF defined over ONNX operations. In the
+future, the MDF should probably just compile to ONNX (or some other IR) for execution.
+"""
+
 import numpy as np
 import onnxruntime as ort
 import onnx.defs
-from skl2onnx.algebra.onnx_ops import OnnxPad, OnnxConv  # noqa
+
+# Currently using sklearn2onnx API to define ONNX operations. This dependency can probably be removed pretty easilly.
+import skl2onnx.algebra.onnx_ops
 
 from typing import Dict, Tuple, Any, List, Callable
 
@@ -35,6 +44,16 @@ def predict_with_onnxruntime(model_def, *inputs) -> Dict[str, np.array]:
     return {name: output for name, output in zip(names, res)}
 
 
+def convert_type(v):
+    if type(v) == list:
+        v = np.array(v)
+
+        if v.dtype == np.int32:
+            v = v.astype(np.int64)
+
+    return v
+
+
 def run_onnx_op(
     op_name: str, inputs: Dict[str, np.array], output_names: List[str], **attributes
 ):
@@ -60,6 +79,8 @@ def run_onnx_op(
     # If the op name has the onnx namespace prefix, remove it.
     if "onnx::" in op_name:
         op_name = op_name.split("::")[-1]
+
+    inputs = {k: convert_type(v) for k, v in inputs.items()}
 
     op_class = import_class(f"skl2onnx.algebra.onnx_ops.Onnx{op_name}")
     input_names = list(inputs.keys())
@@ -111,12 +132,6 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
 
         input_names = [inp.name for inp in schema.inputs]
 
-        if len(args) > len(schema.inputs):
-            raise ValueError(
-                f"Too many inputs passed to ONNX operation {schema.name}. "
-                f"Expected {len(schema.inputs)} but received {len(args)}"
-            )
-
         inputs_dict = {}
 
         # First, check if kwargs contains any inputs
@@ -128,7 +143,7 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
         arg_i = 0
         for inp_name in input_names:
             if inp_name not in inputs_dict:
-                if arg_i < len(args):
+                if arg_i < len(args) and arg_i < len(input_names):
                     inputs_dict[inp_name] = args[arg_i]
                     arg_i = arg_i + 1
 
@@ -138,6 +153,20 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
                 del kwargs[input_arg]
 
         output_names = [out.name for out in schema.outputs]
+
+        # If we have any remaining args. Assume they are attributes and assign them in order
+        attribute_i = 0
+        schema_attributes = list(schema.attributes)
+        for arg in [arg for arg in args[arg_i:]]:
+            while attribute_i < len(schema.attributes):
+                att_name = schema_attributes[attribute_i]
+
+                # If this attribute is already in kwargs, skip it
+                if att_name in kwargs:
+                    attribute_i = attribute_i + 1
+                else:
+                    kwargs[att_name] = arg
+                    break
 
         # Check to make sure all the remaining kwargs are attributes
         for kw in kwargs:

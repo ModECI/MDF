@@ -11,6 +11,8 @@ from collections import OrderedDict
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
+import modeci_mdf.onnx_functions as onnx_ops
+
 
 def evaluate_expr(expr, func_params, array_format, verbose=False):
 
@@ -59,10 +61,26 @@ class EvaluableFunction:
                 array_format=array_format,
             )
             if self.verbose:
-                print("      Arg: {} became: {}".format(arg, _val_info(func_params[arg])))
-        self.curr_value = evaluate_expr(
-            expr, func_params, verbose=self.verbose, array_format=array_format
-        )
+                print(
+                    "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+                )
+
+        # If this is an ONNX operation, evaluate it withouth neuromlite.
+        if "onnx_ops." in expr:
+            # Get the ONNX function
+            onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
+            kwargs_for_onnx = {
+                **{arg: func_params[arg] for arg in self.function.args},
+                **parameters,
+            }
+            for v in self.function.args.values():
+                del kwargs_for_onnx[v]
+            self.curr_value = onnx_function(**kwargs_for_onnx)
+        else:
+            self.curr_value = evaluate_expr(
+                expr, func_params, verbose=self.verbose, array_format=array_format
+            )
+
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
@@ -79,7 +97,11 @@ class EvaluableState:
 
     def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
         if self.verbose:
-            print("    Evaluating %s with %s " % (self.state, _params_info(parameters)))
+            print(
+                "    Evaluating {} with {} ".format(
+                    self.state, _params_info(parameters)
+                )
+            )
 
         if self.state.value:
 
@@ -90,7 +112,7 @@ class EvaluableState:
                 array_format=array_format,
             )
         else:
-            if time_increment==None:
+            if time_increment == None:
 
                 self.curr_value = evaluate_expr(
                     self.state.default_initial_value,
@@ -133,7 +155,11 @@ class EvaluableOutput:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.output_port, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.output_port,
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
         return self.curr_value
 
@@ -153,7 +179,11 @@ class EvaluableInput:
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
-                % (self.input_port, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.input_port,
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
         return self.curr_value
 
@@ -209,9 +239,11 @@ class EvaluableNode:
                 self.evaluable_functions[f.id] = rf
                 all_known_vars.append(f.id)
             else:
-                if len(all_funcs)==0:
-                    raise Exception("Error! Could not evaluate function: %s with args %s using known vars %s"
-                    % (f.id, f.args, all_known_vars))
+                if len(all_funcs) == 0:
+                    raise Exception(
+                        "Error! Could not evaluate function: %s with args %s using known vars %s"
+                        % (f.id, f.args, all_known_vars)
+                    )
                 else:
                     all_funcs.append(f)  # Add back to end of list...
 
@@ -251,8 +283,7 @@ class EvaluableNode:
         # Now evaluate and set params to new state values for use in output...
         for es in self.evaluable_states:
             curr_params[es] = self.evaluable_states[es].evaluate(
-                curr_params, time_increment=time_increment,
-                array_format=array_format
+                curr_params, time_increment=time_increment, array_format=array_format
             )
 
         for eop in self.evaluable_outputs:
@@ -265,7 +296,7 @@ class EvaluableNode:
 
 
 class EvaluableGraph:
-    def __init__(self, graph, verbose=False):
+    def __init__(self, graph, verbose=False, initializer=None):
         self.verbose = verbose
         print("\nInit graph: %s" % graph.id)
         self.graph = graph
@@ -279,10 +310,17 @@ class EvaluableGraph:
             if self.verbose:
                 print("\n  Init node: %s" % node.id)
             en = EvaluableNode(node, self.verbose)
+
+            # Any values that are set via the passed in initalizer, set their values. This lets us avoid creating
+            # dummy input nodes with parameters for evaluating the graph
+            for inp_name, inp in en.evaluable_inputs.items():
+                if initializer and inp_name in initializer:
+                    inp.set_input_value(initializer[inp_name])
+
             self.enodes[node.id] = en
 
             # If this node is not receiving input from some edge, it is root node to the graph.
-            if node not in all_receiver_nodes:
+            if node.id not in all_receiver_nodes:
                 self.root_nodes.append(node.id)
 
     def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
@@ -291,7 +329,9 @@ class EvaluableGraph:
             % (self.graph.id, self.root_nodes, array_format)
         )
         for rn in self.root_nodes:
-            self.enodes[rn].evaluate(array_format=array_format, time_increment=time_increment)
+            self.enodes[rn].evaluate(
+                array_format=array_format, time_increment=time_increment
+            )
 
         for edge in self.graph.edges:
             pre_node = self.enodes[edge.sender]
@@ -306,7 +346,13 @@ class EvaluableGraph:
             if self.verbose:
                 print(
                     "  Edge %s connects %s to %s, passing %s with weight %s"
-                    % (edge.id, pre_node.node.id, post_node.node.id, _val_info(value), _val_info(weight))
+                    % (
+                        edge.id,
+                        pre_node.node.id,
+                        post_node.node.id,
+                        _val_info(value),
+                        _val_info(weight),
+                    )
                 )
             post_node.evaluable_inputs[edge.receiver_port].set_input_value(
                 value * weight
@@ -315,6 +361,7 @@ class EvaluableGraph:
 
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
 
 def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
 
