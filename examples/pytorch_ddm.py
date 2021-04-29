@@ -72,26 +72,14 @@ for key, val in ddm_params.items():
 # Run a single ddm
 rt, decision = ddm(**ddm_params)
 
-#%%
-
-from torch.onnx.utils import _model_to_graph
-from torch.onnx import TrainingMode
-
-graph, params_dict, torch_out = _model_to_graph(
-    model=torch.jit.script(ddm),
+mdf_model = torchscript_to_mdf(
+    model=ddm,
     args=tuple(ddm_params.values()),
     example_outputs=(rt, decision),
-    do_constant_folding=False,
-    training=TrainingMode.EVAL,
-    _retain_param_name=True,
-    operator_export_type=torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK,
-    dynamic_axes={},
+    use_onnx_ops=False,
 )
 
-
-# mdf_model = torchscript_to_mdf(ddm)
-#
-# print(mdf_model.to_yaml())
+print(mdf_model.to_yaml())
 
 #%%
 # with open('ddm.onnx', 'wb') as file:

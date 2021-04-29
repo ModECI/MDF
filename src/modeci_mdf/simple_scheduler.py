@@ -37,9 +37,11 @@ class EvaluableFunction:
             if self.function.function == f:
                 expr = create_python_expression(mdf_functions[f]["expression_string"])
         if not expr:
-            raise "Unknown function: {}. Known functions: {}".format(
-                self.function.function,
-                mdf_functions.keys,
+            raise ValueError(
+                "Unknown function: {}. Known functions: {}".format(
+                    self.function.function,
+                    mdf_functions.keys,
+                )
             )
 
         func_params = {}
@@ -203,15 +205,18 @@ class EvaluableGraph:
         self.enodes = {}
         self.root_nodes = []
 
+        # Get all nodes that are specified as receivers from an edge.
+        all_receiver_nodes = {edge.receiver for edge in graph.edges}
+
         for node in graph.nodes:
             if self.verbose:
                 print("\n  Init node: %s" % node.id)
             en = EvaluableNode(node, self.verbose)
             self.enodes[node.id] = en
-            self.root_nodes.append(node.id)
 
-        for edge in graph.edges:
-            self.root_nodes.remove(edge.receiver)
+            # If this node is not receiving input from some edge, it is root node to the graph.
+            if node not in all_receiver_nodes:
+                self.root_nodes.append(node.id)
 
     def evaluate(self, array_format=FORMAT_DEFAULT):
         print(

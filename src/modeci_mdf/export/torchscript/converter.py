@@ -6,16 +6,45 @@ This code was originally inspired by the following blog post:
     Mike He, "From Models to Computation Graphs (Part I)", https://ad1024.space/articles/22
 """
 import re
+import inspect
 import logging
 import os
 import itertools
-from typing import Union, Dict, Any, Tuple
+from typing import Union, Dict, Any, Tuple, List, Callable
+import onnx.defs
 
 import torch
 
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Function
+from modeci_mdf.export.onnx import get_onnx_attribute
 
 logger = logging.getLogger(__name__)
+
+
+def get_mdf_graph_inputs(mdf_graph: Graph) -> List[Tuple[Node, InputPort]]:
+    """Simple helper to enumerate InputPorts for and MDF graph that specify no incoming edge."""
+
+    # Get all input ports
+    all_ips = [
+        (node, ip) for node in mdf_model.graphs[0].nodes for ip in node.input_ports
+    ]
+
+    # Get all sender ports
+    all_sender_ports = {(e.sender, e.sender_port) for e in graph.edges}
+
+    graph_inputs = filter(lambda x: x not in all_sender_ports, all_ips)
+
+    return graph_inputs
+
+
+def convert_to_serializable(value):
+    """Helper function that converts some common unserializable types to JSON seriralizable types"""
+    if type(value) is torch.device:
+        value = str(value)
+    elif type(value) is torch.Tensor:
+        value = value.numpy().tolist()
+
+    return value
 
 
 def make_node_id(node: torch.Node) -> str:
@@ -39,10 +68,116 @@ def make_model_graph_name(
         model_name = model.original_name.split(".")[-1]
         graph_name = f"{model_name}Graph"
     except AttributeError:
-        model_name = model.qualified_name.split(".")[-1]
-        graph_name = f"{model_name}_graph"
+        try:
+            model_name = model.qualified_name.split(".")[-1]
+            graph_name = f"{model_name}_graph"
+        except AttributeError:
+            # It hasn't been compiled yet, use the class name I guess
+            model_name = type(model).__name__.split(".")[-1]
+            graph_name = f"{model_name}Graph"
 
     return model_name, graph_name
+
+
+def process_torch_schema(
+    node: torch.Node, consts: Dict
+) -> Tuple[List[str], Dict[str, Any]]:
+    """
+    Parse a TorchScript node schema into argument names and constant attributes (parameters in MDF)
+
+    Args:
+        node: The TorchScript node to retrieve the schema from.
+        consts: The constant nodes Dict for the graph we are working with.
+
+    Returns:
+        A tuple containing a list of argument names and Dict of parameter names and values.
+    """
+
+    # Get the input node names
+    inputs = [i.unique() for i in node.inputs()]
+
+    # If this is a TorchScript funciton (aten::*), it should have a schema string to parse.
+    if "no schema" not in node.schema():
+        schema = torch._C.parse_schema(node.schema())
+
+        # Get the arguments and covert to a simple List[str]
+        schema_args = schema.arguments
+        schema_args = [schema_args[i].name for i, inp in enumerate(inputs)]
+
+    else:
+        logger.warning(
+            f"Schema not found for TorchScript node ({node}), using placeholders for argument names."
+        )
+        schema_args = [f"arg{i}" for i in range(len(inputs))]
+
+    # Get any input to this node that is TorchScript node.kind() prim::Constant, make those a parameter
+    parameters = {
+        schema_args[i]: consts[inp] for i, inp in enumerate(inputs) if inp in consts
+    }
+
+    return schema_args, parameters
+
+
+def process_onnx_schema(
+    node: torch.Node, graph_inputs: Dict[str, str]
+) -> Tuple[Dict[str, str], Dict[str, Any]]:
+    """
+    Retrieve the argument names and attributes (parameters in MDF) for this Operation.
+
+    Args:
+        op: The TorchScript node containing the ONNX operation.
+        graph_inputs: A dict mapping graph level input unique ids to their debug names
+
+    Returns:
+        A two element tuple:
+            - A dict representing argument names mapping to input port ids
+            - A dict mapping parameters (ONNX attributes) names mapping to values
+    """
+
+    # Get the input node names
+    inputs = [i.unique() for i in node.inputs()]
+
+    # If this is an ONNX op, we need to get the schema from ONNX
+    if "onnx::" in node.kind():
+        try:
+            schema = onnx.defs.get_schema(node.kind().split("::")[-1])
+
+            schema_args = {}
+            if len(schema.inputs) > 0:
+                # If the first argument is variadic. Represent this as a list of input port names
+                if (
+                    schema.inputs[0].option
+                    == onnx.defs.OpSchema.FormalParameterOption.Variadic
+                ):
+                    schema_args = {
+                        schema.inputs[0].name: str(
+                            [inp for i, inp in enumerate(inputs)]
+                        )
+                    }
+                else:
+                    schema_args = {
+                        schema.inputs[i].name: inp for i, inp in enumerate(inputs)
+                    }
+
+        except onnx.onnx_cpp2py_export.defs.SchemaError:
+            logger.warning(
+                f"Could not find ONNX OpSchema for op {node.kind()}, using placeholder names for arguments."
+            )
+            schema_args = {f"arg{i}": inp for i, inp in enumerate(inputs)}
+    else:
+        raise ValueError(f"Cannot process ONNX schema for non ONNX node: {node}")
+
+    # Replace any instance of a graph input with its debug name
+    for arg_name, ip_name in schema_args.items():
+        if ip_name in graph_inputs:
+            schema_args[arg_name] = graph_inputs[ip_name].replace(".", "_")
+
+    # ONNX attributes are equivalent to MDF parameters really
+    parameters = {
+        aname: convert_to_serializable(node[aname]) for aname in node.attributeNames()
+    }
+
+    return schema_args, parameters
 
 
 def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
@@ -58,19 +193,7 @@ def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
     consts = {}
     for n in graph.findAllNodes("prim::Constant"):
         for o in n.outputs():
-            value = o.toIValue()
-
-            # FIXME: It doesn't seem like these types are being serialized to JSON properly, encode as strings for now
-            if value is None:
-                value = "None"
-            elif type(value) is bool:
-                value = str(value).lower()
-            elif type(value) is torch.device:
-                value = str(value)
-            elif type(value) is torch.Tensor:
-                value = value.numpy().tolist()
-
-            consts[o.unique()] = value
+            consts[o.unique()] = convert_to_serializable(o.toIValue())
 
     return consts
 
@@ -121,42 +244,6 @@ def torchnode_to_mdfnode(
     if op == "prim::Constant":
         return None
 
-    schema = (
-        torch._C.parse_schema(node.schema())
-        if "no schema" not in node.schema()
-        else None
-    )
-
-    outputs = [o.unique() for o in node.outputs()]
-    inputs = [i.unique() for i in node.inputs()]
-
-    if schema:
-        schema_args = schema.arguments
-
-        # Get any input to this node that is TorchScript node.kind() prim::Constant, make it a parameter
-        parameters = {
-            schema_args[i].name: consts[inp]
-            for i, inp in enumerate(inputs)
-            if inp in consts
-        }
-
-    else:
-        logger.warning(
-            f"Schema not found for TorchScript node ({node}), using placeholders for argument names."
-        )
-        schema_args = [f"arg{i}" for i in range(len(inputs))]
-
-        # Get any input to this node that is TorchScript node.kind() prim::Constant, make it a parameter
-        parameters = {
-            schema_args[i]: consts[inp] for i, inp in enumerate(inputs) if inp in consts
-        }
-
-    mdf_node = Node(id=make_node_id(node), parameters=parameters)
-
-    # Add any output ports
-    for o in outputs:
-        mdf_node.output_ports.append(OutputPort(id=o, value=make_func_id(node)))
-
     # Get all constant nodes in the graph if the user didn't pass them in.
     if consts is None:
         consts = get_graph_constants(graph)
@@ -164,11 +251,29 @@ def torchnode_to_mdfnode(
     # Get any inputs to the graph, and their debug names
     graph_inputs = {inp.unique(): inp.debugName() for inp in graph.inputs()}
 
+    outputs = [o.unique() for o in node.outputs()]
+    inputs = [i.unique() for i in node.inputs()]
+
+    # Get the argument names and parameter names and values for this Node's operation
+    if "onnx::" in op:
+        arguments, parameters = process_onnx_schema(node, graph_inputs)
+    else:
+        arguments, parameters = process_torch_schema(node, consts, graph_inputs)
+
+    mdf_node = Node(id=make_node_id(node), parameters=parameters)
+
+    # Add any output ports
+    for o in outputs:
+        mdf_node.output_ports.append(OutputPort(id=o, value=make_func_id(node)))
+
     # Add any input ports to the node, exclude inputs from constant nodes, these are parameters now
     for inp_i, inp in enumerate(inputs):
         if inp not in consts:
             # If this is a graph level input, use its names for the input port id
             ip_name = graph_inputs[inp] if inp in graph_inputs else inp
+
+            # Fixup ip_name if it contains any "." characters
+            ip_name = str(ip_name).replace(".", "_")
 
             # Try to get the shape and type of the input port
             inp_type = node.inputsAt(inp_i).type()
@@ -181,23 +286,6 @@ def torchnode_to_mdfnode(
                 InputPort(id=ip_name, shape=shape, type=str(inp_type))
             )
 
-    # Construct the arguments for the function
-    if schema:
-        arguments = {}
-        ip_i = 0
-        for arg_i, arg in enumerate(schema_args):
-            if inputs[arg_i] in consts:
-                value = (
-                    arg.name
-                )  # Just use the parameter name, there is no input port for constants
-            else:
-                value = mdf_node.input_ports[ip_i].id
-                ip_i = ip_i + 1
-
-            arguments[arg.name] = value
-    else:
-        arguments = {f"arg{i}": ip.id for i, ip in enumerate(mdf_node.input_ports)}
-
     # Add function
     f = Function(id=make_func_id(node), function=op, args=arguments)
     mdf_node.functions.append(f)
@@ -206,13 +294,27 @@ def torchnode_to_mdfnode(
 
 
 def torchscript_to_mdf(
-    model: torch.ScriptModule, mdf_graph: Graph = None
+    model: Union[Callable, torch.nn.Module, torch.ScriptFunction, torch.ScriptModule],
+    args: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
+    example_outputs: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
+    trace: bool = False,
+    use_onnx_ops: bool = True,
+    mdf_graph: Graph = None,
 ) -> Union[Model, Graph]:
-    """
-    Convert a TorchScript model to an MDF model.
+    r"""
+    Convert a TorchScript model to an MDF model. By default, this function will invoke `torch.jit.script` on the
+    model to compile it down to TorchScript IR and simplify the graph before exporting the MDF. The default is
+    to use ONNX operations when possible and fallback to ATEN\Torch ops when ONNX support is not available
+    (`torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK` mode). To use allATEN\Torch ops, set use_onnx_ops to False.
 
     Args:
         model: The model to translate into MDF.
+        args: The input arguments for this model. If a nn.Module is passed then the model will be traced with these
+            inputs. If a ScriptModule is passed, they are still needed to deterimine input shapes.
+        example_outputs: Example outputs from the model for determing output shapes.
+        trace: Force the use of tracing to compile the model. The default is to use torch.jit.script
+        use_onnx_ops: Use ONNX ops when possible, fallback to ATEN ops when not available. Default is True. If False,
+            use only ATEN ops.
         mdf_graph: If the graph that is constructed should be added to an existing mdf model, pass it here. By default,
             this is None which means a new MDF Model instance will be constructed and returned.
 
@@ -222,22 +324,39 @@ def torchscript_to_mdf(
 
     # Get the graph and nodes from the TorchScript model
     try:
+        # If the graph attribute is available, we are dealing with a already jitted model (ScriptModule, ScriptFunciton,
+        # etc.)
         graph = model.graph
+        jit_model = model
     except AttributeError:
 
-        # Looks like the model is not compiled. Lets try to compile it
-        logger.warning(
-            "Model argument does not appear to be a torch.ScriptModule or torch.ScriptFunction, trying to "
-            "JIT compile it ... cross your fingers."
-        )
-        model = torch.jit.script(model)
+        # Lets jit things, if the user doesn't want to trace or we are dealing with a standard Python function, we need
+        # to JIT script it.
+        if not trace or inspect.isfunction(model):
+            jit_model = torch.jit.script(model)
+            graph = jit_model.graph
+        else:
+            # If the user wants to trace, _model_to_graph below will take care of that for us.
+            graph = None
+
+    if use_onnx_ops:
+        operator_export_type = torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK
+    else:
+        operator_export_type = torch._C._onnx.OperatorExportTypes.RAW
 
     # Call out to a part of the ONNX exporter that simiplifies the graph before ONNX export.
-    import torch.onnx.symbolic_helper
-    from torch.onnx.utils import _optimize_graph
+    from torch.onnx.utils import _model_to_graph
+    from torch.onnx import TrainingMode
 
-    graph = _optimize_graph(
-        graph=graph, operator_export_type=torch._C._onnx.OperatorExportTypes.RAW
+    graph, params_dict, torch_out = _model_to_graph(
+        model=jit_model if graph else model,
+        args=args,
+        example_outputs=example_outputs,
+        do_constant_folding=False,
+        training=TrainingMode.EVAL,
+        _retain_param_name=True,
+        operator_export_type=operator_export_type,
+        dynamic_axes={},
     )
 
     # If mdf_graph is None we are probably at the top level of the possibly recursive construction process of a
@@ -307,11 +426,49 @@ def torchscript_to_mdf(
 if __name__ == "__main__":
     """Test a simple function"""
 
-    def simple(x, y):
-        b = x + y
-        return 2 * b
+    import torch
+    import torch.nn as nn
 
-    model = torch.jit.script(simple)
-    mdf_model = torchscript_to_mdf(model)
+    from modeci_mdf.simple_scheduler import EvaluableGraph
 
+    class InceptionBlocks(nn.Module):
+        def __init__(self):
+            super().__init__()
+
+            self.asymmetric_pad = nn.ZeroPad2d((0, 1, 0, 1))
+            self.conv2d = nn.Conv2d(
+                in_channels=5, out_channels=64, kernel_size=(5, 5), padding=2, bias=True
+            )
+            self.prelu = nn.PReLU(init=0.0)
+            self.averagepooling2d = nn.AvgPool2d((2, 2), stride=2, padding=0)
+
+        def forward(self, galaxy_images_output, ebv_output):
+            conv2d_output = self.conv2d(galaxy_images_output)
+            prelu_output = self.prelu(conv2d_output)
+            averagepooling2d_output = self.averagepooling2d(prelu_output)
+
+            return averagepooling2d_output
+
+    torch.manual_seed(0)
+
+    galaxy_images_output = torch.zeros((1, 5, 64, 64))
+    ebv_output = torch.zeros((1,))
+
+    model = InceptionBlocks()
+
+    output = model(galaxy_images_output, ebv_output)
+
+    model.eval()
+
+    mdf_model = torchscript_to_mdf(
+        model=model,
+        args=(galaxy_images_output, ebv_output),
+        example_outputs=output,
+        trace=True,
+    )
     print(mdf_model.to_yaml())
+
+    mdf_graph = mdf_model.graphs[0]
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=True)
+    eg.evaluate()
