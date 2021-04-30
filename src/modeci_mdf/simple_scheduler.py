@@ -11,8 +11,6 @@ from collections import OrderedDict
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
-import modeci_mdf.onnx_functions as onnx_ops
-
 
 def evaluate_expr(expr, func_params, array_format, verbose=False):
 
@@ -39,11 +37,9 @@ class EvaluableFunction:
             if self.function.function == f:
                 expr = create_python_expression(mdf_functions[f]["expression_string"])
         if not expr:
-            raise ValueError(
-                "Unknown function: {}. Known functions: {}".format(
-                    self.function.function,
-                    mdf_functions.keys,
-                )
+            raise "Unknown function: {}. Known functions: {}".format(
+                self.function.function,
+                mdf_functions.keys,
             )
 
         func_params = {}
@@ -64,23 +60,9 @@ class EvaluableFunction:
                 print(
                     "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
                 )
-
-        # If this is an ONNX operation, evaluate it withouth neuromlite.
-        if "onnx_ops." in expr:
-            # Get the ONNX function
-            onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
-            kwargs_for_onnx = {
-                **{arg: func_params[arg] for arg in self.function.args},
-                **parameters,
-            }
-            for v in self.function.args.values():
-                del kwargs_for_onnx[v]
-            self.curr_value = onnx_function(**kwargs_for_onnx)
-        else:
-            self.curr_value = evaluate_expr(
-                expr, func_params, verbose=self.verbose, array_format=array_format
-            )
-
+        self.curr_value = evaluate_expr(
+            expr, func_params, verbose=self.verbose, array_format=array_format
+        )
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
@@ -303,19 +285,33 @@ class EvaluableGraph:
         self.enodes = {}
         self.root_nodes = []
 
-        # Get all nodes that are specified as receivers from an edge.
-        all_receiver_nodes = {edge.receiver for edge in graph.edges}
-
         for node in graph.nodes:
             if self.verbose:
                 print("\n  Init node: %s" % node.id)
             en = EvaluableNode(node, self.verbose)
-
             self.enodes[node.id] = en
+            self.root_nodes.append(node.id)
 
-            # If this node is not receiving input from some edge, it is root node to the graph.
-            if node.id not in all_receiver_nodes:
-                self.root_nodes.append(node.id)
+        for edge in graph.edges:
+            if (
+                edge.receiver in self.root_nodes
+            ):  # It could have been already removed...
+                self.root_nodes.remove(edge.receiver)
+
+        self.ordered_edges = []
+        evaluated_nodes = []
+        for rn in self.root_nodes:
+            evaluated_nodes.append(rn)
+
+        edges_to_eval = [edge for edge in self.graph.edges]
+
+        while len(edges_to_eval) > 0:
+            edge = edges_to_eval.pop(0)
+            if edge.sender not in evaluated_nodes:
+                edges_to_eval.append(edge)  # Add back to end of list...
+            else:
+                self.ordered_edges.append(edge)
+                evaluated_nodes.append(edge.receiver)
 
     def evaluate(
         self, time_increment=None, array_format=FORMAT_DEFAULT, initializer=None
@@ -328,16 +324,12 @@ class EvaluableGraph:
                 if initializer and inp_name in initializer:
                     inp.set_input_value(initializer[inp_name])
 
-        print(
-            "\nEvaluating graph: %s, root nodes: %s, with array format %s"
-            % (self.graph.id, self.root_nodes, array_format)
-        )
         for rn in self.root_nodes:
             self.enodes[rn].evaluate(
                 array_format=array_format, time_increment=time_increment
             )
 
-        for edge in self.graph.edges:
+        for edge in self.ordered_edges:
             self.evaluate_edge(edge, array_format=array_format)
             self.enodes[edge.receiver].evaluate(
                 time_increment=time_increment, array_format=array_format

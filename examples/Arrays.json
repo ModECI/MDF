@@ -2,7 +2,6 @@
     "Arrays": {
         "format": "ModECI MDF v0.1",
         "generating_application": "Python modeci-mdf v0.1.3",
-        "onnx_opset_version": 14,
         "graphs": {
             "array_example": {
                 "nodes": {

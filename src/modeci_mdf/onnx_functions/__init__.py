@@ -111,9 +111,12 @@ def get_all_schemas_version(max_version):
     return list(schemas.values())
 
 
-def get_onnx_ops(opset_version) -> List[Dict]:
+def get_onnx_ops(opset_version: int = onnx.defs.onnx_opset_version()) -> List[Dict]:
     """
     Enumerate all available ONNX operations and generate MDF function specifications for each one.
+
+    Args:
+        opset_version: The opset version to use.
 
     Returns:
         A list of MDF function specifications. Each entry is a Dict that is feed directly to
