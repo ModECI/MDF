@@ -281,17 +281,31 @@ class EvaluableGraph:
             if edge.receiver in self.root_nodes:  # It could have been already removed...
                 self.root_nodes.remove(edge.receiver)
 
+        self.ordered_edges = []
+        evaluated_nodes = []
+        for rn in self.root_nodes:
+            evaluated_nodes.append(rn)
+
+        edges_to_eval = [edge for edge in self.graph.edges]
+
+        while len(edges_to_eval)>0:
+            edge = edges_to_eval.pop(0)
+            if edge.sender not in evaluated_nodes:
+                edges_to_eval.append(edge)  # Add back to end of list...
+            else:
+                self.ordered_edges.append(edge)
+                evaluated_nodes.append(edge.receiver)
+
+
     def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
         print(
             "\nEvaluating graph: %s, root nodes: %s, with array format %s"
             % (self.graph.id, self.root_nodes, array_format)
         )
-        evaluated_nodes = []
         for rn in self.root_nodes:
             self.enodes[rn].evaluate(array_format=array_format, time_increment=time_increment)
-            evaluated_nodes.append(rn)
 
-        for edge in self.graph.edges:
+        for edge in self.ordered_edges:
             self.evaluate_edge(edge, array_format=array_format)
             self.enodes[edge.receiver].evaluate(
                 time_increment=time_increment, array_format=array_format
