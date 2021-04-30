@@ -25,6 +25,8 @@ A directed graph of <a href="#node">Node</a>s connected via <a href="#edge">Edge
 #### Allowed parameters
 <table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of global parameters for the Graph</i></td></tr>
 
+<tr><td><b>conditions</b></td><td>dict</td><td><i>The <a href="#conditionset">ConditionSet</a> for scheduling of the Graph</i></td></tr>
+
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
 <tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>

@@ -278,7 +278,24 @@ class EvaluableGraph:
             self.root_nodes.append(node.id)
 
         for edge in graph.edges:
-            self.root_nodes.remove(edge.receiver)
+            if edge.receiver in self.root_nodes:  # It could have been already removed...
+                self.root_nodes.remove(edge.receiver)
+
+        self.ordered_edges = []
+        evaluated_nodes = []
+        for rn in self.root_nodes:
+            evaluated_nodes.append(rn)
+
+        edges_to_eval = [edge for edge in self.graph.edges]
+
+        while len(edges_to_eval)>0:
+            edge = edges_to_eval.pop(0)
+            if edge.sender not in evaluated_nodes:
+                edges_to_eval.append(edge)  # Add back to end of list...
+            else:
+                self.ordered_edges.append(edge)
+                evaluated_nodes.append(edge.receiver)
+
 
     def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
         print(
@@ -288,7 +305,7 @@ class EvaluableGraph:
         for rn in self.root_nodes:
             self.enodes[rn].evaluate(array_format=array_format, time_increment=time_increment)
 
-        for edge in self.graph.edges:
+        for edge in self.ordered_edges:
             self.evaluate_edge(edge, array_format=array_format)
             self.enodes[edge.receiver].evaluate(
                 time_increment=time_increment, array_format=array_format
@@ -343,9 +360,14 @@ if __name__ == "__main__":
 
     example_file = "../../examples/Simple.json"
     verbose = True
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
         example_file = sys.argv[1]
+
+    if '-v' in sys.argv:
         verbose = True
+    else:
         verbose = False
 
-    main(example_file, verbose)
+    print('Executing MDF file %s with simple scheduler'%example_file)
+
+    main(example_file, verbose=verbose)
