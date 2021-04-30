@@ -322,12 +322,11 @@ or ``receiver`` **node**.
 #### **Conditions**
 
 These must include a **type**, among options of an accepted library of
-conditions (TBD), as well as any **args** and **kwargs necessary to
+conditions (TBD), as well as any **args** necessary to
 determine satisfaction of the relevant condition.
 
 * ``type`` : the name of the condition
-* ``args`` : unnamed, and possibly ordered or variable-length, arguments used to evaluate the condition
-* ``kwargs`` : named arguments used to evaluate the condition
+* ``args`` : named arguments used to evaluate the condition
 
 #### **Graphs**
 
@@ -339,76 +338,61 @@ pattern of execution.
   * ``termination`` : a dictionary mapping time scales of model execution to **condition**s indicating when they end
 
   Each node or time scale may have exactly one condition, however binary
-  conditions like `and`, `or`, and `not`, may combine multiple
+  conditions like `And`, `Or`, and `Not`, may combine multiple
   conditions into one in an unambiguous way. This is sufficient to
   describe a wide variety of execution patterns that go beyond an
   implied ordering based on the structure of the graph, as in the
   example below:
 
-      {
-          "node_specific": {
-              "A": {
-                  "type": "and",
-                  "args": [
-                      {
-                          "type": "TimeInterval",
-                          "args": [],
-                          "kwargs": {
-                              "end": 1000,
-                              "interval": 2,
-                              "unit": "ms"
-                          }
-                      },
-                      {
-                          "type": "Threshold",
-                          "args": [],
-                          "kwargs": {
-                              "parameter": "value",
-                              "threshold": "10",
-                              "direction": "<="
-                          }
-                      }
-                  ]
-              },
-              "B": {
-                  "type": "WhenFinished",
-                  "args": [],
-                  "kwargs": {
-                      "dependency": "A"
-                  }
-              },
-              "C": {
-                  "type": "EveryNCalls",
-                  "args": [],
-                  "kwargs": {
-                      "dependency": "B",
-                      "calls": 2
-                  }
-              }
-          },
-          "termination": {
-              "run": {
-                  "type": "AfterNTrials",
-                  "args": [],
-                  "kwargs": {
-                      "trials": 5
-                  }
-              },
-              "trial": {
-                  "type": "AtNCalls",
-                  "args": [],
-                  "kwargs": {
-                      "dependency": "C",
-                      "calls": 1
-                  }
-              }
-          }
-      }
+        "conditions": {
+            "node_specific": {
+                "A": {
+                    "type": "Always",
+                    "args": {}
+                },
+                "B": {
+                    "type": "EveryNCalls",
+                    "args": {
+                        "dependency": "A",
+                        "n": 1
+                    }
+                },
+                "C": {
+                    "type": "EveryNCalls",
+                    "args": {
+                        "dependency": "A",
+                        "n": 3
+                    }
+                }
+            },
+            "termination": {
+                "trial": {
+                    "type": "And",
+                    "args": {
+                        "dependencies": [
+                            {
+                                "type": "AfterNCalls",
+                                "args": {
+                                    "dependency": "C",
+                                    "n": 2
+                                }
+                            },
+                            {
+                                "type": "JustRan",
+                                "args": {
+                                    "dependency": "A"
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
 
-    In this example, node `A` runs only while its condition `and` is
-    true. This `and` is comprised of a `TimeInterval` and a `Threshold`,
-    creating a condition that is only true at even milliseconds for the
-    first 1000 milliseconds of the trial at which the `value` parameter
-    of `A` has also not exceeded 10. The trial finishes when the trial
-    termination condition is satisfied - when `C` has been executed
-    once.
+    In this example, node `C` runs only while its condition
+    `EveryNCalls` with `dependency` `A` and `n = 3` is true. This
+    results in `C` executing only every third time `A` executes. The
+    `trial` finishes when the trial termination condition - `And` - is
+    satisfied. This `And` is comprised of an `AfterNCalls` and a
+    `JustRan`, creating a condition that is only true after both `C` has
+    run at least twice and `A` has run in the last `time step`.

@@ -36,6 +36,10 @@
                     "type": "dict",
                     "description": "Dict of global parameters for the Graph"
                 },
+                "conditions": {
+                    "type": "dict",
+                    "description": "The _ConditionSet_ for scheduling of the Graph"
+                },
                 "id": {
                     "type": "str",
                     "description": "Unique ID of element"
