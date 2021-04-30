@@ -28,16 +28,26 @@ class EvaluableGraphWithConditions(EvaluableGraph):
         if self.verbose:
             print("\n  Init scheduler")
 
-        self.scheduler = scheduling.Scheduler(
-            graph=self.graph.dependency_dict,
-            conditions={
+        try:
+            conditions = {
                 self.graph.get_node(node): self.parse_condition(cond)
                 for node, cond in self.graph.conditions["node_specific"].items()
-            },
-            termination_conds={
+            }
+        except (TypeError, KeyError):
+            conditions = {}
+
+        try:
+            termination_conds = {
                 scale: self.parse_condition(cond)
                 for scale, cond in self.graph.conditions["termination"].items()
-            },
+            }
+        except (TypeError, KeyError):
+            termination_conds = {}
+
+        self.scheduler = scheduling.Scheduler(
+            graph=self.graph.dependency_dict,
+            conditions=conditions,
+            termination_conds=termination_conds,
         )
 
     def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
