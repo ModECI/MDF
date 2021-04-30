@@ -11,6 +11,8 @@ from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
 
+import onnx.defs
+
 
 class Model(BaseWithId):
 
@@ -31,6 +33,10 @@ class Model(BaseWithId):
                 (
                     "generating_application",
                     ("Information on what application generated/saved this file", str),
+                ),
+                (
+                    "onnx_opset_version",
+                    ("Any ONNX ops must conform to this version.", int),
                 ),
             ]
         )

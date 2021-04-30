@@ -363,6 +363,10 @@ def torchscript_to_mdf(
     # Call out to a part of the ONNX exporter that simiplifies the graph before ONNX export.
     from torch.onnx.utils import _model_to_graph
     from torch.onnx import TrainingMode
+    from torch.onnx.symbolic_helper import (
+        _export_onnx_opset_version,
+        _set_opset_version,
+    )
 
     graph, params_dict, torch_out = _model_to_graph(
         model=jit_model if graph else model,
@@ -440,6 +444,10 @@ def torchscript_to_mdf(
     if mdf_model is None:
         return mdf_graph, params_dict
     else:
+
+        # Set the ONNX opset version
+        mdf_model.onnx_opset_version = _export_onnx_opset_version
+
         return mdf_model, params_dict
 
 
@@ -449,7 +457,7 @@ if __name__ == "__main__":
     import torch
     import torch.nn as nn
 
-    from modeci_mdf.simple_scheduler import EvaluableGraph
+    from modeci_mdf.condition_scheduler import EvaluableGraphWithConditions
 
     class InceptionBlocks(nn.Module):
         def __init__(self):
@@ -492,5 +500,5 @@ if __name__ == "__main__":
 
     params_dict["_input_1"] = galaxy_images_output
 
-    eg = EvaluableGraph(graph=mdf_graph, verbose=True, initializer=params_dict)
-    eg.evaluate()
+    eg = EvaluableGraphWithConditions(graph=mdf_graph, verbose=True)
+    eg.evaluate(initializer=params_dict)

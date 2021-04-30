@@ -2,8 +2,6 @@
 Test some individual ONNX operator calls.
 """
 import numpy as np
-from modeci_mdf.onnx_functions import run_onnx_op
-
 import modeci_mdf.onnx_functions as onnx_ops
 
 

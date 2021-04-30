@@ -296,7 +296,7 @@ class EvaluableNode:
 
 
 class EvaluableGraph:
-    def __init__(self, graph, verbose=False, initializer=None):
+    def __init__(self, graph, verbose=False):
         self.verbose = verbose
         print("\nInit graph: %s" % graph.id)
         self.graph = graph
@@ -311,19 +311,23 @@ class EvaluableGraph:
                 print("\n  Init node: %s" % node.id)
             en = EvaluableNode(node, self.verbose)
 
-            # Any values that are set via the passed in initalizer, set their values. This lets us avoid creating
-            # dummy input nodes with parameters for evaluating the graph
-            for inp_name, inp in en.evaluable_inputs.items():
-                if initializer and inp_name in initializer:
-                    inp.set_input_value(initializer[inp_name])
-
             self.enodes[node.id] = en
 
             # If this node is not receiving input from some edge, it is root node to the graph.
             if node.id not in all_receiver_nodes:
                 self.root_nodes.append(node.id)
 
-    def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
+    def evaluate(
+        self, time_increment=None, array_format=FORMAT_DEFAULT, initializer=None
+    ):
+
+        # Any values that are set via the passed in initalizer, set their values. This lets us avoid creating
+        # dummy input nodes with parameters for evaluating the graph
+        for en_id, en in self.enodes.items():
+            for inp_name, inp in en.evaluable_inputs.items():
+                if initializer and inp_name in initializer:
+                    inp.set_input_value(initializer[inp_name])
+
         print(
             "\nEvaluating graph: %s, root nodes: %s, with array format %s"
             % (self.graph.id, self.root_nodes, array_format)
@@ -361,7 +365,7 @@ class EvaluableGraph:
                 )
             )
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
-        post_node.evaluate(time_increment=time_increment, array_format=array_format)
+        # post_node.evaluate(time_increment=time_increment, array_format=array_format)
 
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW

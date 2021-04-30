@@ -55,7 +55,11 @@ def convert_type(v):
 
 
 def run_onnx_op(
-    op_name: str, inputs: Dict[str, np.array], output_names: List[str], **attributes
+    op_name: str,
+    inputs: Dict[str, np.array],
+    output_names: List[str],
+    opset_version: int = onnx.defs.onnx_opset_version(),
+    **attributes,
 ):
     """
     Simple helper function that invokes a single ONNX operator with
@@ -86,11 +90,28 @@ def run_onnx_op(
     input_names = list(inputs.keys())
     input_vals = list(inputs.values())
     op = op_class(*input_names, output_names=output_names, **attributes)
-    model_def = op.to_onnx(inputs)
+    model_def = op.to_onnx(inputs, target_opset=opset_version)
     return predict_with_onnxruntime(model_def, *input_vals)
 
 
-def get_onnx_ops() -> List[Dict]:
+def get_all_schemas_version(max_version):
+    schemas = {}
+
+    for schema in onnx.defs.get_all_schemas_with_history():
+        # Only get ONNX ops available for this version
+        if schema.domain == "" and schema.since_version <= max_version:
+            if (
+                schema.name in schemas
+                and schemas[schema.name].since_version < schema.since_version
+            ):
+                schemas[schema.name] = schema
+            elif schema.name not in schemas:
+                schemas[schema.name] = schema
+
+    return list(schemas.values())
+
+
+def get_onnx_ops(opset_version) -> List[Dict]:
     """
     Enumerate all available ONNX operations and generate MDF function specifications for each one.
 
@@ -100,7 +121,7 @@ def get_onnx_ops() -> List[Dict]:
     """
 
     mdf_funcspecs = []
-    for schema in onnx.defs.get_all_schemas() + onnx.defs.get_function_ops():
+    for schema in get_all_schemas_version(opset_version):
         args_list = [input.name for input in schema.inputs]
         params_list = [p for p in schema.attributes]
         args_params_str = ", ".join(args_list + params_list)
@@ -187,7 +208,7 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
     return onnx_wrapper
 
 
-def _define_onnx_functions():
+def _define_onnx_functions(opset_version):
     """
     Enumerate all ONNX operators and define Python Callable functions for each one. This kind of defeats the purpose of
     ONNX since we are paying the overhead for invoking each of these functions separately from Python. However, for now,
@@ -197,7 +218,7 @@ def _define_onnx_functions():
 
     current_module = sys.modules[__name__]
 
-    for schema in onnx.defs.get_all_schemas() + onnx.defs.get_function_ops():
+    for schema in get_all_schemas_version(opset_version):
 
         onnx_wrapper = _make_onnx_function(schema)
 
@@ -207,4 +228,4 @@ def _define_onnx_functions():
         setattr(current_module, func_name, onnx_wrapper)
 
 
-_define_onnx_functions()
+_define_onnx_functions(onnx.defs.onnx_opset_version())

@@ -255,13 +255,14 @@ def main():
 
     model.eval()
 
-    mdf_model = torchscript_to_mdf(
+    mdf_model, param_dict = torchscript_to_mdf(
         model=model,
         args=(galaxy_images_output, ebv_output),
         example_outputs=output,
         trace=True,
     )
-    print(mdf_model.to_yaml())
+
+    mdf_model.to_json_file("examples/inception.json")
 
 
 if __name__ == "__main__":
