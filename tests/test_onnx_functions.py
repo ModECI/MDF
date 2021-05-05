@@ -3,6 +3,7 @@ Test some individual ONNX operator calls.
 """
 import numpy as np
 import modeci_mdf.onnx_functions as onnx_ops
+import torch
 
 
 def test_conv():
@@ -45,6 +46,19 @@ def test_pad():
     out2 = onnx_ops.pad(x, pads, value, "constant")
 
     assert np.all(out == out2)
+
+
+def test_pad_diff_types():
+    """Check if pad can handle the case were a different type is passed to constant_value than the type of the data"""
+
+    args = {
+        "data": np.zeros((1, 48, 32, 32), dtype=np.float32),
+        "pads": np.array([0, 0, 0, 0, 0, 0, 1, 1], dtype=np.int64),
+        "constant_value": 1.5,
+        "mode": "constant",
+    }
+
+    onnx_ops.pad(**args)
 
 
 def test_unsqueeze():

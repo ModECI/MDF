@@ -56,7 +56,7 @@ def convert_type(v):
     if type(v) == list:
         v = np.array(v)
 
-    if type(v) == int:
+    if type(v) == int or type(v) == float:
         v = np.atleast_1d(v)
 
     if hasattr(v, "dtype") and v.dtype == np.int32:
@@ -96,6 +96,15 @@ def run_onnx_op(
         op_name = op_name.split("::")[-1]
 
     inputs = {k: convert_type(v) for k, v in inputs.items()}
+
+    # In the case of the Pad operator, if constant_value argument is passed with different dtype
+    # to the data, cast it.
+    if op_name == "Pad":
+        if "constant_value" in inputs:
+            cval = inputs["constant_value"]
+            data = list(inputs.values())[0]
+            if cval.dtype != data.dtype:
+                inputs["constant_value"] = cval.astype(data.dtype)
 
     op_class = import_class(f"skl2onnx.algebra.onnx_ops.Onnx{op_name}")
     input_names = list(inputs.keys())

@@ -67,12 +67,25 @@ class EvaluableFunction:
         if "onnx_ops." in expr:
             # Get the ONNX function
             onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
-            kwargs_for_onnx = {
-                **{arg: func_params[arg] for arg in self.function.args},
-                **parameters,
-            }
-            for v in self.function.args.values():
-                del kwargs_for_onnx[v]
+
+            # ONNX functions expect input args or kwargs first, followed by parameters (called attributes in ONNX) as
+            # kwargs. Lets construct this.
+            kwargs_for_onnx = {}
+            for kw, arg_expr in self.function.args.items():
+
+                # If this arg is a list of args, we are dealing with a variadic argument. Expand these
+                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = eval(arg_expr)
+                    kwargs_for_onnx.update({a: func_params[a] for a in arg_expr_list})
+                else:
+                    kwargs_for_onnx[kw] = func_params[kw]
+
+            # Now add anything in parameters that isn't already specified as an input argument
+            for kw, arg in parameters.items():
+                if kw not in self.function.args.values():
+                    kwargs_for_onnx[kw] = arg
+
             self.curr_value = onnx_function(**kwargs_for_onnx)
         else:
             self.curr_value = evaluate_expr(

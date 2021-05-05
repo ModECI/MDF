@@ -1,17 +1,17 @@
-import collections
-
 """
     Defines the structure of ModECI MDF - Work in progress!!!
 """
 
+import collections
+import onnx.defs
+
+from typing import List, Tuple, Dict
 
 # Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
 #  Try: pip install neuromllite
 from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
-
-import onnx.defs
 
 
 class Model(BaseWithId):
@@ -111,6 +111,24 @@ class Graph(BaseWithId):
             dependencies[receiver].add(sender)
 
         return dependencies
+
+    @property
+    def inputs(self: "Graph") -> List[Tuple["Node", "InputPort"]]:
+        """
+        Enumerate all Node, InputPort pairs that specify no incoming edge. These are input ports
+        for the graph itself and must be provided values to evaluate.
+
+        Returns:
+            A list of Node, InputPort tuples
+        """
+
+        # Get all input ports
+        all_ips = [(node, ip) for node in self.nodes for ip in self.input_ports]
+
+        # Get all sender ports
+        all_sender_ports = {(e.sender, e.sender_port) for e in self.edges}
+
+        return list(filter(lambda x: x not in all_sender_ports, all_ips))
 
 
 class Node(BaseWithId):

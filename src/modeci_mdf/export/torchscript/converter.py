@@ -26,22 +26,6 @@ from modeci_mdf.onnx_functions import onnx_opset_version as modeci_onnx_opset_ve
 logger = logging.getLogger(__name__)
 
 
-def get_mdf_graph_inputs(mdf_graph: Graph) -> List[Tuple[Node, InputPort]]:
-    """Simple helper to enumerate InputPorts for and MDF graph that specify no incoming edge."""
-
-    # Get all input ports
-    all_ips = [
-        (node, ip) for node in mdf_model.graphs[0].nodes for ip in node.input_ports
-    ]
-
-    # Get all sender ports
-    all_sender_ports = {(e.sender, e.sender_port) for e in graph.edges}
-
-    graph_inputs = filter(lambda x: x not in all_sender_ports, all_ips)
-
-    return graph_inputs
-
-
 def convert_to_serializable(value):
     """Helper function that converts some common unserializable types to JSON seriralizable types"""
     if type(value) is torch.device:
@@ -859,11 +843,12 @@ if __name__ == "__main__":
     mdf_graph = mdf_model.graphs[0]
 
     params_dict["input_1"] = galaxy_images_output
+    params_dict["_1"] = ebv_output.numpy()
 
     eg = EvaluableGraphWithConditions(graph=mdf_graph, verbose=False)
     eg.evaluate(initializer=params_dict)
 
     assert np.allclose(
         output.detach().numpy(),
-        eg.enodes["AveragePool_11"].evaluable_outputs["_11"].curr_value,
+        eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
     )
