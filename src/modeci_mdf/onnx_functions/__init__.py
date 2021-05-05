@@ -14,6 +14,13 @@ import skl2onnx.algebra.onnx_ops
 
 from typing import Dict, Tuple, Any, List, Callable
 
+OpSchema = onnx.defs.OpSchema
+FormalParameterOption = OpSchema.FormalParameterOption
+
+# Use the same ONNX opset version that torch is using for defaults now
+# from torch.onnx.symbolic_helper import _default_onnx_opset_version as onnx_opset_version
+onnx_opset_version = 13
+
 
 def import_class(name: str) -> Any:
     """Import from a module specified by a string"""
@@ -45,11 +52,15 @@ def predict_with_onnxruntime(model_def, *inputs) -> Dict[str, np.array]:
 
 
 def convert_type(v):
+
     if type(v) == list:
         v = np.array(v)
 
-        if v.dtype == np.int32:
-            v = v.astype(np.int64)
+    if type(v) == int:
+        v = np.atleast_1d(v)
+
+    if hasattr(v, "dtype") and v.dtype == np.int32:
+        v = v.astype(np.int64)
 
     return v
 
@@ -58,7 +69,7 @@ def run_onnx_op(
     op_name: str,
     inputs: Dict[str, np.array],
     output_names: List[str],
-    opset_version: int = onnx.defs.onnx_opset_version(),
+    opset_version: int = onnx_opset_version,
     **attributes,
 ):
     """
@@ -89,8 +100,10 @@ def run_onnx_op(
     op_class = import_class(f"skl2onnx.algebra.onnx_ops.Onnx{op_name}")
     input_names = list(inputs.keys())
     input_vals = list(inputs.values())
-    op = op_class(*input_names, output_names=output_names, **attributes)
-    model_def = op.to_onnx(inputs, target_opset=opset_version)
+    op = op_class(
+        *input_names, output_names=output_names, op_version=opset_version, **attributes
+    )
+    model_def = op.to_onnx(inputs)
     return predict_with_onnxruntime(model_def, *input_vals)
 
 
@@ -111,7 +124,7 @@ def get_all_schemas_version(max_version):
     return list(schemas.values())
 
 
-def get_onnx_ops(opset_version: int = onnx.defs.onnx_opset_version()) -> List[Dict]:
+def get_onnx_ops(opset_version: int = onnx_opset_version) -> List[Dict]:
     """
     Enumerate all available ONNX operations and generate MDF function specifications for each one.
 
@@ -154,43 +167,77 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
 
     def onnx_wrapper(*args, **kwargs):
 
+        # If we are dealing with cosntant, just return it.
+        if schema.name == "Constant":
+            value = args[0] if len(args) > 0 else list(kwargs.values())[0]
+            return value
+
+        # We have a workaround for ConstantOfShape, for some reason shape inference fails
+        # if the optional value is passed as a numpy array. Convert to a TensorProto
+        elif schema.name == "ConstantOfShape":
+            if "value" in kwargs:
+                kwargs["value"] = onnx.numpy_helper.from_array(
+                    convert_type(kwargs["value"])
+                )
+            elif len(args) > 1:
+                args[1] = onnx.numpy_helper.from_array(convert_type(kwargs["value"]))
+
         input_names = [inp.name for inp in schema.inputs]
 
         inputs_dict = {}
 
-        # First, check if kwargs contains any inputs
-        for kw, arg in kwargs.items():
-            if kw in input_names:
-                inputs_dict[kw] = arg
+        # If the first argument is varidic, then any kwargs that are not in attributes
+        # or are not passed as kwargs should passed into the input dict
+        if (
+            len(schema.inputs) > 0
+            and schema.inputs[0].option == FormalParameterOption.Variadic
+        ):
 
-        # Assign any input names that have not yet been assigned by kwargs the remaning positional args
-        arg_i = 0
-        for inp_name in input_names:
-            if inp_name not in inputs_dict:
-                if arg_i < len(args) and arg_i < len(input_names):
-                    inputs_dict[inp_name] = args[arg_i]
-                    arg_i = arg_i + 1
+            for i, arg in enumerate(args):
+                inputs_dict[f"input{i}"] = arg
 
-        # Remove any input argument specified in kwargs
-        for input_arg in inputs_dict:
-            if input_arg in kwargs:
-                del kwargs[input_arg]
+            remove_list = []
+            for kw, arg in kwargs.items():
+                if kw not in schema.attributes:
+                    inputs_dict[kw] = arg
+                    remove_list.append(kw)
 
-        output_names = [out.name for out in schema.outputs]
+            # Remove any kwarg we have assigned to input, it is not an attribute
+            for kw in remove_list:
+                del kwargs[kw]
 
-        # If we have any remaining args. Assume they are attributes and assign them in order
-        attribute_i = 0
-        schema_attributes = list(schema.attributes)
-        for arg in [arg for arg in args[arg_i:]]:
-            while attribute_i < len(schema.attributes):
-                att_name = schema_attributes[attribute_i]
+        else:
+            # First, check if kwargs contains any inputs
+            for kw, arg in kwargs.items():
+                if kw in input_names:
+                    inputs_dict[kw] = arg
 
-                # If this attribute is already in kwargs, skip it
-                if att_name in kwargs:
-                    attribute_i = attribute_i + 1
-                else:
-                    kwargs[att_name] = arg
-                    break
+            # Assign any input names that have not yet been assigned by kwargs the remaning positional args
+            arg_i = 0
+            for inp_name in input_names:
+                if inp_name not in inputs_dict:
+                    if arg_i < len(args) and arg_i < len(input_names):
+                        inputs_dict[inp_name] = args[arg_i]
+                        arg_i = arg_i + 1
+
+            # Remove any input argument specified in kwargs
+            for input_arg in inputs_dict:
+                if input_arg in kwargs:
+                    del kwargs[input_arg]
+
+            # If we have any remaining args. Assume they are attributes and assign them in order
+            attribute_i = 0
+            schema_attributes = list(schema.attributes)
+            for arg in [arg for arg in args[arg_i:]]:
+                while attribute_i < len(schema.attributes):
+                    att_name = schema_attributes[attribute_i]
+
+                    # If this attribute is already in kwargs, skip it
+                    if att_name in kwargs:
+                        attribute_i = attribute_i + 1
+                    else:
+                        kwargs[att_name] = arg
+                        break
 
         # Check to make sure all the remaining kwargs are attributes
         for kw in kwargs:
@@ -198,6 +245,8 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
                 raise ValueError(
                     f"Passed unkown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
                 )
+
+        output_names = [out.name for out in schema.outputs]
 
         out_dict = run_onnx_op(
             op_name=schema.name, inputs=inputs_dict, output_names=output_names, **kwargs
@@ -231,4 +280,4 @@ def _define_onnx_functions(opset_version):
         setattr(current_module, func_name, onnx_wrapper)
 
 
-_define_onnx_functions(onnx.defs.onnx_opset_version())
+_define_onnx_functions(onnx_opset_version)

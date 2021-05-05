@@ -55,3 +55,24 @@ def test_unsqueeze():
 
     assert out.ndim == 3
     assert out.shape == (1, 3, 2)
+
+
+def test_mul():
+    A = np.ones((1, 3)) * 2.0
+    B = np.ones((3, 1))
+    assert np.allclose(A * B, onnx_ops.mul(A, B))
+
+    A = 1
+    B = 2
+    assert np.allclose(A * B, onnx_ops.mul(A, B))
+
+
+def test_constantofshape():
+    out = onnx_ops.constantofshape(np.array([4, 4], dtype=np.int64), value=[0])
+    assert np.allclose(out, np.zeros((4, 4), dtype=np.int64))
+
+
+def test_concat():
+    input = (np.ones(3), np.ones(3), np.ones(3))
+    out = onnx_ops.concat(*input, axis=0)
+    assert np.allclose(out, np.concatenate(input, axis=0))

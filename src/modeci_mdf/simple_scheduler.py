@@ -11,6 +11,8 @@ from collections import OrderedDict
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
+import modeci_mdf.onnx_functions as onnx_ops
+
 
 def evaluate_expr(expr, func_params, array_format, verbose=False):
 
@@ -60,9 +62,23 @@ class EvaluableFunction:
                 print(
                     "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
                 )
-        self.curr_value = evaluate_expr(
-            expr, func_params, verbose=self.verbose, array_format=array_format
-        )
+
+        # If this is an ONNX operation, evaluate it withouth neuromlite.
+        if "onnx_ops." in expr:
+            # Get the ONNX function
+            onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
+            kwargs_for_onnx = {
+                **{arg: func_params[arg] for arg in self.function.args},
+                **parameters,
+            }
+            for v in self.function.args.values():
+                del kwargs_for_onnx[v]
+            self.curr_value = onnx_function(**kwargs_for_onnx)
+        else:
+            self.curr_value = evaluate_expr(
+                expr, func_params, verbose=self.verbose, array_format=array_format
+            )
+
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
@@ -206,8 +222,18 @@ class EvaluableNode:
                 )
             all_req_vars = []
             for arg in f.args:
-                func_expr = sympy.simplify(f.args[arg])
-                all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+                arg_expr = f.args[arg]
+
+                # If we are dealing with a list of symbols, each must treated separately
+                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = eval(arg_expr)
+                else:
+                    arg_expr_list = [arg_expr]
+
+                for e in arg_expr_list:
+                    func_expr = sympy.simplify(e)
+                    all_req_vars.extend([str(s) for s in func_expr.free_symbols])
 
             all_present = [v in all_known_vars for v in all_req_vars]
 
