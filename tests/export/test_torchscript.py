@@ -6,7 +6,7 @@ torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
 
 from modeci_mdf.export.torchscript.converter import torchscript_to_mdf
-from modeci_mdf.condition_scheduler import EvaluableGraphWithConditions
+from modeci_mdf.scheduler import EvaluableGraph
 
 
 def _check_model(mdf_model):
@@ -423,7 +423,7 @@ def test_inception():
 
     model = InceptionBlocks()
 
-    output = model(galaxy_images_output, ebv_output)
+    output = model(galaxy_images_output, ebv_output).detach().numpy()
 
     model.eval()
 
@@ -440,10 +440,10 @@ def test_inception():
     params_dict["input_1"] = galaxy_images_output
     params_dict["_1"] = ebv_output.numpy()
 
-    eg = EvaluableGraphWithConditions(graph=mdf_graph, verbose=False)
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
     eg.evaluate(initializer=params_dict)
 
     assert np.allclose(
-        output.detach().numpy(),
+        output,
         eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
     )
