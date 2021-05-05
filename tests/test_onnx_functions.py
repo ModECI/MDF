@@ -1,12 +1,15 @@
 """
-Test some individual ONNX operator calls.
+Test some individual ONNX operator calls. We should probably find a better way to
+test these more exhaustively by hooking into ONNX's testing framework. For now,
+I have hand coded some tests for operators that are used in the examples we have
+worked on. There could be broken operators.
 """
 import numpy as np
 import modeci_mdf.onnx_functions as onnx_ops
-import torch
 
 
 def test_conv():
+    """Test ONNX Conv function"""
     x = np.array(
         [
             [
@@ -36,6 +39,7 @@ def test_conv():
 
 
 def test_pad():
+    """Test ONNX Pad function"""
     x = np.zeros((3, 2))
     value = np.array(1.5)
     pads = np.array([0, 1, 0, 1]).astype(np.int64)
@@ -49,7 +53,7 @@ def test_pad():
 
 
 def test_pad_diff_types():
-    """Check if pad can handle the case were a different type is passed to constant_value than the type of the data"""
+    """Check if Pad can handle the case were a different type is passed to constant_value than the type of the data"""
 
     args = {
         "data": np.zeros((1, 48, 32, 32), dtype=np.float32),
@@ -62,6 +66,7 @@ def test_pad_diff_types():
 
 
 def test_unsqueeze():
+    """Test ONNX unsqueeze function."""
     data = np.zeros((3, 2))
     axes = [0]
 
@@ -72,6 +77,7 @@ def test_unsqueeze():
 
 
 def test_mul():
+    """Test element-wise tensor multiplication (Mul)"""
     A = np.ones((1, 3)) * 2.0
     B = np.ones((3, 1))
     assert np.allclose(A * B, onnx_ops.mul(A, B))
@@ -82,11 +88,13 @@ def test_mul():
 
 
 def test_constantofshape():
+    """Test ConstantOfShape function."""
     out = onnx_ops.constantofshape(np.array([4, 4], dtype=np.int64), value=[0])
     assert np.allclose(out, np.zeros((4, 4), dtype=np.int64))
 
 
 def test_concat():
+    """Test ONNX Concat function. This is a variable number of inputs operator."""
     input = (np.ones(3), np.ones(3), np.ones(3))
     out = onnx_ops.concat(*input, axis=0)
     assert np.allclose(out, np.concatenate(input, axis=0))

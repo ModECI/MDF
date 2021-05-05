@@ -1,8 +1,8 @@
 """
 This module programmatically defines every ONNX operation as a python callable function. Executing ONNX graphs in this
 way somewhat defeats the performance purposes of ONNX since the overhead for each operation will be high. However, this
-is allows us to test the MDF scheduler (which invokes Python functions) on any MDF defined over ONNX operations. In the
-future, the MDF should probably just compile to ONNX (or some other IR) for execution.
+allows us to test the MDF scheduler (which invokes Python functions) on any MDF model defined over ONNX operations. In
+the future, the MDF should probably just compile to ONNX (or some other IR) for execution.
 """
 
 import numpy as np
@@ -289,4 +289,5 @@ def _define_onnx_functions(opset_version):
         setattr(current_module, func_name, onnx_wrapper)
 
 
+# Define all ONNX operators as functions on this module.
 _define_onnx_functions(onnx_opset_version)
