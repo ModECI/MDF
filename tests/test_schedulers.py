@@ -44,6 +44,6 @@ def test_simple_scheduler_main(tmpdir):
 )
 def test_condition_scheduler_main(fi):
 
-    import modeci_mdf.condition_scheduler
+    import modeci_mdf.simple_scheduler
 
-    modeci_mdf.condition_scheduler.main(fi)
+    modeci_mdf.simple_scheduler.main(fi)

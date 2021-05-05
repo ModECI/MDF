@@ -1,3 +1,4 @@
+import os
 import sys
 import sympy
 
@@ -9,7 +10,25 @@ from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
 from collections import OrderedDict
 
+
+try:
+    import psyneulink.core.scheduling as scheduling
+except ImportError as e:
+    raise ImportError(
+        "Conditional scheduling currently requires psyneulink (pip install psyneulink)"
+    ) from e
+
+
 FORMAT_DEFAULT = FORMAT_NUMPY
+
+# generic mappings for time
+_time_scales = {
+    "CONSIDERATION_SET_EXECUTION": scheduling.time.TimeScale.TIME_STEP,
+    "ENVIRONMENT_STATE_UPDATE": scheduling.time.TimeScale.TRIAL,
+    "ENVIRONMENT_SEQUENCE": scheduling.time.TimeScale.RUN,
+}
+for new, orig in _time_scales.items():
+    setattr(scheduling.time.TimeScale, new, orig)
 
 
 def evaluate_expr(expr, func_params, array_format, verbose=False):
@@ -296,20 +315,69 @@ class EvaluableGraph:
                 self.ordered_edges.append(edge)
                 evaluated_nodes.append(edge.receiver)
 
+        try:
+            conditions = {
+                self.graph.get_node(node): self.parse_condition(cond)
+                for node, cond in self.graph.conditions["node_specific"].items()
+            }
+        except (TypeError, KeyError):
+            conditions = {}
+
+        try:
+            termination_conds = {
+                scale: self.parse_condition(cond)
+                for scale, cond in self.graph.conditions["termination"].items()
+            }
+        except (TypeError, KeyError):
+            termination_conds = {}
+
+        self.scheduler = scheduling.Scheduler(
+            graph=self.graph.dependency_dict,
+            conditions=conditions,
+            termination_conds=termination_conds,
+        )
 
     def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
         print(
-            "\nEvaluating graph: %s, root nodes: %s, with array format %s"
+            "\nEvaluating graph: %s, root nodes: %s, with array format %s,"
             % (self.graph.id, self.root_nodes, array_format)
         )
-        for rn in self.root_nodes:
-            self.enodes[rn].evaluate(array_format=array_format, time_increment=time_increment)
+        str_conds_nb = "\n  ".join(
+            [
+                "%s: %s" % (node.id, cond)
+                for node, cond in self.scheduler.conditions.conditions.items()
+            ]
+        )
+        str_conds_term = "\n  ".join(
+            [
+                "%s: %s" % (scale, cond)
+                for scale, cond in self.scheduler.termination_conds.items()
+            ]
+        )
+        print(" node-based conditions\n  %s" % str_conds_nb)
+        print(" termination conditions\n  %s" % str_conds_term)
 
-        for edge in self.ordered_edges:
-            self.evaluate_edge(edge, array_format=array_format)
-            self.enodes[edge.receiver].evaluate(
-                time_increment=time_increment, array_format=array_format
-            )
+        incoming_edges = {n: set() for n in self.graph.nodes}
+        for edge in self.graph.edges:
+            incoming_edges[self.graph.get_node(edge.receiver)].add(edge)
+
+        for ts in self.scheduler.run():
+            if self.verbose:
+                print(
+                    " Evaluating time step: %s"
+                    % self.scheduler.get_clock(None).simple_time
+                )
+            for node in ts:
+                for edge in incoming_edges[node]:
+                    self.evaluate_edge(
+                        edge, time_increment=time_increment, array_format=array_format
+                    )
+                self.enodes[node.id].evaluate(
+                    time_increment=time_increment, array_format=array_format
+                )
+
+        if self.verbose:
+            print("Trial terminated")
 
     def evaluate_edge(self, edge, time_increment=None, array_format=FORMAT_DEFAULT):
         pre_node = self.enodes[edge.sender]
@@ -334,6 +402,36 @@ class EvaluableGraph:
             )
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
 
+    def parse_condition(self, condition):
+        try:
+            typ = getattr(scheduling.condition, condition["type"])
+        except AttributeError as e:
+            raise ValueError(
+                "Unsupported condition type: %s" % condition["type"]
+            ) from e
+        except TypeError as e:
+            raise TypeError("Invalid condition dictionary: %s" % condition) from e
+
+        for k, v in condition["args"].items():
+            new_v = self.graph.get_node(v)
+            if new_v is not None:
+                # arg is a node id
+                condition["args"][k] = new_v
+
+            try:
+                if isinstance(v, list):
+                    # arg is a list all of conditions
+                    new_v = [self.parse_condition(item) for item in v]
+                else:
+                    # arg is another condition
+                    new_v = self.parse_condition(v)
+            except (TypeError, ValueError):
+                pass
+            else:
+                condition["args"][k] = new_v
+
+        return typ(**condition["args"])
+
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
@@ -357,7 +455,9 @@ def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
 
 if __name__ == "__main__":
 
-    example_file = "../../examples/Simple.json"
+    example_file = os.path.join(
+        os.path.dirname(__file__), "..", "..", "examples/Simple.json"
+    )
     verbose = True
     if len(sys.argv) >= 2:
         example_file = sys.argv[1]
@@ -367,6 +467,6 @@ if __name__ == "__main__":
     else:
         verbose = False
 
-    print('Executing MDF file %s with simple scheduler'%example_file)
+    print("Executing MDF file %s with scheduler" % example_file)
 
     main(example_file, verbose=verbose)
