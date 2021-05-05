@@ -383,7 +383,6 @@ class EvaluableGraph:
                 )
             )
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
-        # post_node.evaluate(time_increment=time_increment, array_format=array_format)
 
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
