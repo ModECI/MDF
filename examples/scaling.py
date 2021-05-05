@@ -4,7 +4,7 @@
 """
 
 from modeci_mdf.mdf import *
-from modeci_mdf.simple_scheduler import EvaluableGraph
+from modeci_mdf.scheduler import EvaluableGraph
 import numpy as np
 import sys
 
