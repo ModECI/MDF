@@ -9,7 +9,7 @@ pip install .
 pytest
 
 
-cd examples
+cd examples/MDF
 
 python -m modeci_mdf.export.neuroml Simple.json -run
 python -m modeci_mdf.export.neuroml ABCD.json -run
@@ -26,6 +26,6 @@ python -m modeci_mdf.export.graphviz ABCD.json 1 -noview
 python -m modeci_mdf.export.graphviz Arrays.json 3 -noview
 python -m modeci_mdf.export.graphviz States.yaml 3 -noview
 
-cd ../docs
+cd ../../docs
 python generate.py
 cd -
