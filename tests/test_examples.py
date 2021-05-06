@@ -40,7 +40,7 @@ def test_examples():
 
     import abc_conditions
 
-    states.main()
+    abc_conditions.main()
     print("Tested Conditions model")
 
     # Cleanup, not sure I need this but just to be safe cause this is weird.

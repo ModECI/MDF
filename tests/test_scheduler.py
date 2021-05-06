@@ -39,11 +39,33 @@ def test_simple_scheduler_main(tmpdir):
             assert output==0
 
 
+_abc_conditions_expected_output = [
+    {"input0"},
+    {"A"},
+    {"A"},
+    {"B"},
+    {"A"},
+    {"C"},
+    {"A"},
+    {"B"},
+    {"A"},
+    {"A"},
+    {"C", "B"},
+    {"A"},
+]
+
 @pytest.mark.parametrize(
-    "fi", ["examples/MDF/abc_conditions.json", "examples/MDF/abc_conditions.yaml"]
+    "fi, expected_output",
+    [
+        ("examples/MDF/abc_conditions.json", _abc_conditions_expected_output),
+        ("examples/MDF/abc_conditions.yaml", _abc_conditions_expected_output),
+    ],
 )
-def test_condition_scheduler_main(fi):
+def test_condition_scheduler_main(fi, expected_output):
 
     import modeci_mdf.scheduler
 
-    modeci_mdf.scheduler.main(fi)
+    eg = modeci_mdf.scheduler.main(fi)
+    output = [set([n.id for n in nodes]) for nodes in eg.scheduler.execution_list[None]]
+
+    assert output == expected_output
