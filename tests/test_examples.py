@@ -10,7 +10,7 @@ def test_examples():
 
     # The examples import some modules in the local examples directory. Easiest
     # thing is to just chdir and add current to the path.
-    os.chdir("examples")
+    os.chdir("examples/MDF")
     sys.path.append(".")
 
     import simple
@@ -38,7 +38,12 @@ def test_examples():
     states.main()
     print("Tested States model")
 
+    import abc_conditions
+
+    states.main()
+    print("Tested Conditions model")
+
     # Cleanup, not sure I need this but just to be safe cause this is weird.
-    os.chdir("..")
+    os.chdir("../..")
     sys.path.pop()
     print("Done example tests")
