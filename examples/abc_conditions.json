@@ -33,7 +33,7 @@
                         }
                     },
                     "termination": {
-                        "trial": {
+                        "environment_state_update": {
                             "type": "And",
                             "args": {
                                 "dependencies": [
