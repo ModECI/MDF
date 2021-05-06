@@ -6,6 +6,13 @@
             "abc_conditions_example": {
                 "conditions": {
                     "node_specific": {
+                        "input0": {
+                            "type": "BeforeNCalls",
+                            "args": {
+                                "dependency": "input0",
+                                "n": 1
+                            }
+                        },
                         "A": {
                             "type": "Always",
                             "args": {}
@@ -14,7 +21,7 @@
                             "type": "EveryNCalls",
                             "args": {
                                 "dependency": "A",
-                                "n": 1
+                                "n": 2
                             }
                         },
                         "C": {
@@ -26,7 +33,7 @@
                         }
                     },
                     "termination": {
-                        "trial": {
+                        "environment_state_update": {
                             "type": "And",
                             "args": {
                                 "dependencies": [
