@@ -48,18 +48,6 @@ def make_func_id(node: torch.Node) -> str:
     return f"{node.kind()}_1"
 
 
-def make_port_name(name: str):
-    """Turn unique TorchScript output and input value names into valid MDF input and outport names"""
-    new_name = str(name).replace(".", "_")
-
-    # If the first character is a digit, precede with an underscore so this can never be interpreted
-    # as number down the line.
-    if new_name[0].isdigit():
-        new_name = "_" + new_name
-
-    return new_name
-
-
 def make_model_graph_name(
     model: Union[torch.ScriptModule, torch.ScriptFunction]
 ) -> Tuple[str, str]:
@@ -120,25 +108,20 @@ def process_torch_schema(
 
 
 def process_onnx_schema(
-    node: torch.Node, graph_inputs: Dict[str, str]
+    node: torch.Node, port_mapper: "PortMapper"
 ) -> Tuple[Dict[str, str], Dict[str, Any]]:
     """
     Retrieve the argument names and attributes (parameters in MDF) for this Operation.
 
     Args:
         op: The TorchScript node containing the ONNX operation.
-        graph_inputs: A dict mapping graph level input unique ids to their debug names
+        port_mapper: The utitlity class for assigning TorchScript input output ids to Input Output Port ids.
 
     Returns:
         A two element tuple:
             - A dict representing argument names mapping to input port ids
             - A dict mapping parameters (ONNX attributes) names mapping to values
     """
-
-    # Convert the graph inputs to their MDF port names
-    graph_inputs = {
-        make_port_name(k): make_port_name(v) for k, v in graph_inputs.items()
-    }
 
     # Get the input node names
     inputs = [i.unique() for i in node.inputs()]
@@ -157,12 +140,15 @@ def process_onnx_schema(
                 ):
                     schema_args = {
                         schema.inputs[0].name: str(
-                            [make_port_name(inp) for i, inp in enumerate(inputs)]
+                            [
+                                port_mapper.id_to_port(inp)
+                                for i, inp in enumerate(inputs)
+                            ]
                         )
                     }
                 else:
                     schema_args = {
-                        schema.inputs[i].name: make_port_name(inp)
+                        schema.inputs[i].name: port_mapper.id_to_port(inp)
                         for i, inp in enumerate(inputs)
                     }
 
@@ -171,15 +157,10 @@ def process_onnx_schema(
                 f"Could not find ONNX OpSchema for op {node.kind()}, using placeholder names for arguments."
             )
             schema_args = {
-                f"arg{i}": make_port_name(inp) for i, inp in enumerate(inputs)
+                f"arg{i}": port_mapper.id_to_port(inp) for i, inp in enumerate(inputs)
             }
     else:
         raise ValueError(f"Cannot process ONNX schema for non ONNX node: {node}")
-
-    # Replace any instance of a graph input with its debug name
-    for arg_name, ip_name in schema_args.items():
-        if ip_name in graph_inputs:
-            schema_args[arg_name] = graph_inputs[ip_name]
 
     # ONNX attributes are equivalent to MDF parameters really
     parameters = {
@@ -207,32 +188,86 @@ def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
     return consts
 
 
-def get_shape(node: torch.Node) -> Dict:
-    """Helper function for extracting shape for each node output """
-    outputs = dict()
-    for o in node.outputs():
-        typeIs = o.type()
-        outputs[o.unique()] = dict(
-            type=re.match(r"\w+", typeIs.str()).group(), sizes=tuple(typeIs.sizes())
-        )
-    return outputs
+class PortMapper:
+    r"""
+    A simple class that handles mapping TorchScript input\ouput ids to MDF InputPort\OutputPort ids. It keeps track of
+    annoying details like graph level inputs and stuff.
+    """
 
+    def __init__(self, graph: torch.Graph, args: Tuple):
 
-def get_value(node: torch.Node) -> Dict:
-    outputs = dict()
-    for o in node.outputs():
-        typeIs = o.type().str()
-        value = o.toIValue()
-        outputs[o.unique()] = dict(
-            type=typeIs,
-            value=value,
-            sizes=len(list(node.outputs())) if typeIs.endswith("[]") else 1,
-        )
-    return outputs
+        # Keep generate special names for all the graph inputs and parameters
+        self.graph_inputs = PortMapper._get_graph_inputs_dict(graph, args)
+
+    def id_to_port(self, id: str):
+        """Turn unique TorchScript output and input value names into valid MDF input and outport names"""
+
+        # If this id is a graph input, use its debug name
+        if id in self.graph_inputs:
+            id = self.graph_inputs[id]
+
+        new_name = str(id).replace(".", "_")
+
+        # If the first character is a digit, precede with an underscore so this can never be interpreted
+        # as number down the line.
+        if new_name[0].isdigit():
+            new_name = "_" + new_name
+
+        return new_name
+
+    def port_to_id(self, name: str):
+        """Transform a port name back to is TorchScript ID"""
+
+        # If first character is underscore, remove it
+        id = name
+        if name[0] == "_":
+            id = name[1:]
+
+        # Replace any remaining underscores with '.'
+        id = id.replace("_", ".")
+
+        # If this is a numeric id, make it an int again
+        if id[0].isdigit():
+            id = int(id)
+
+        # If this id is actually a debugName from a graph input, use that
+        for input_id, debug_name in self.graph_inputs.items():
+            if debug_name == id:
+                return input_id
+
+        return id
+
+    @staticmethod
+    def _get_graph_inputs_dict(
+        graph: torch.Graph, args: Tuple[torch.Tensor]
+    ) -> Dict[str, str]:
+        """
+        Create a dict mapping graph input torch.Node ids to default names. The default names are just:
+            - input1
+            - input2
+            - etc.
+
+        Any parameters for the model will also be graph inputs but their node.debugName() will be used
+        instead.
+        """
+        graph_inputs = {
+            inp.unique(): inp.debugName() for i, inp in enumerate(graph.inputs())
+        }
+
+        # The first len(args) inputs should be the input arguments to the function or forward method. Lets
+        # canonicalize them.
+        input_ids = list(graph_inputs.keys())
+        for i in range(len(args)):
+            graph_inputs[input_ids[i]] = f"input{i + 1}"
+
+        return graph_inputs
 
 
 def torchnode_to_mdfnode(
-    node: torch.Node, graph: torch.Graph, consts: Dict[str, Any] = None
+    node: torch.Node,
+    graph: torch.Graph,
+    consts: Dict[str, Any],
+    port_mapper: "PortMapper",
 ) -> Union[Node, None]:
     """
     Convert a TorchScript node to an MDF node.
@@ -253,39 +288,27 @@ def torchnode_to_mdfnode(
     if op == "prim::Constant":
         return None
 
-    # Get all constant nodes in the graph if the user didn't pass them in.
-    if consts is None:
-        consts = get_graph_constants(graph)
-
-    # Get any inputs to the graph, and their debug names
-    graph_inputs = {inp.unique(): inp.debugName() for inp in graph.inputs()}
-
     outputs = [o.unique() for o in node.outputs()]
     inputs = [i.unique() for i in node.inputs()]
 
     # Get the argument names and parameter names and values for this Node's operation
     if "onnx::" in op:
-        arguments, parameters = process_onnx_schema(node, graph_inputs)
+        arguments, parameters = process_onnx_schema(node, port_mapper)
     else:
-        arguments, parameters = process_torch_schema(node, consts, graph_inputs)
+        arguments, parameters = process_torch_schema(node, consts, port_mapper)
 
     mdf_node = Node(id=make_node_id(node), parameters=parameters)
 
     # Add any output ports
     for o in outputs:
         mdf_node.output_ports.append(
-            OutputPort(id=make_port_name(o), value=make_func_id(node))
+            OutputPort(id=port_mapper.id_to_port(o), value=make_func_id(node))
         )
 
     # Add any input ports to the node, exclude inputs from constant nodes, these are parameters now
     for inp_i, inp in enumerate(inputs):
         if inp not in consts:
-            # If this is a graph level input, use its names for the input port id
-            ip_name = graph_inputs[inp] if inp in graph_inputs else inp
-
-            # Fixup ip_name if it contains any "." characters
-            # Also add an preceding "_" so its interpretted as string
-            ip_name = make_port_name(ip_name)
+            ip_name = port_mapper.id_to_port(inp)
 
             # Try to get the shape and type of the input port
             inp_type = node.inputsAt(inp_i).type()
@@ -392,8 +415,10 @@ def torchscript_to_mdf(
     # Get all constant nodes in the graph
     consts = get_graph_constants(graph)
 
-    # Get any inputs to the graph, and their debug names
-    graph_inputs = {inp.unique(): inp.debugName() for inp in graph.inputs()}
+    # Get any inputs to the graph, and their debug names. Pass args so we know how
+    # many original input arguments the graph has. ONNX lowering from _model_to_graph
+    # makes all parameters to the model inputs.
+    port_mapper = PortMapper(graph=graph, args=args)
 
     # For every node, cache its input edges. This will let us look this up quickly for
     # any node.
@@ -403,7 +428,9 @@ def torchscript_to_mdf(
 
     for node in graph.nodes():
 
-        mdf_node = torchnode_to_mdfnode(node=node, graph=graph, consts=consts)
+        mdf_node = torchnode_to_mdfnode(
+            node=node, graph=graph, consts=consts, port_mapper=port_mapper
+        )
 
         # If we are excluding this node from the MDF graph, skip it.
         if mdf_node is None:
@@ -437,7 +464,7 @@ def torchscript_to_mdf(
 
     # Replace in "." for "_" in parameter names. We have done this elsewhere when creating the input ports for these
     # parameters.
-    params_dict = {make_port_name(k): v for k, v in params_dict.items()}
+    params_dict = {port_mapper.id_to_port(k): v for k, v in params_dict.items()}
 
     # If we haven't wrapped this graph in a model class
     if mdf_model is None:
@@ -451,404 +478,12 @@ def torchscript_to_mdf(
 
 
 if __name__ == "__main__":
-    """Test a simple function"""
 
-    import torch
-    import torch.nn as nn
+    def simple(x, y):
+        return x + y
 
-    from modeci_mdf.condition_scheduler import EvaluableGraphWithConditions
-
-    class InceptionBlocks(nn.Module):
-        def __init__(self):
-            super().__init__()
-
-            self.asymmetric_pad = nn.ZeroPad2d((0, 1, 0, 1))
-            self.conv2d = nn.Conv2d(
-                in_channels=5, out_channels=64, kernel_size=(5, 5), padding=2, bias=True
-            )
-            self.prelu = nn.PReLU(init=0.0)
-            self.averagepooling2d = nn.AvgPool2d((2, 2), stride=2, padding=0)
-            self.conv2d2 = nn.Conv2d(
-                in_channels=64,
-                out_channels=48,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu2 = nn.PReLU(init=0.0)
-            self.conv2d3 = nn.Conv2d(
-                in_channels=48,
-                out_channels=64,
-                kernel_size=(3, 3),
-                padding=1,
-                bias=True,
-            )
-            self.prelu3 = nn.PReLU(init=0.0)
-            self.conv2d4 = nn.Conv2d(
-                in_channels=64,
-                out_channels=48,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu4 = nn.PReLU(init=0.0)
-            self.averagepooling2d2 = nn.AvgPool2d((2, 2), stride=1)
-            self.conv2d5 = nn.Conv2d(
-                in_channels=64,
-                out_channels=64,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu5 = nn.PReLU(init=0.0)
-            self.conv2d6 = nn.Conv2d(
-                in_channels=64,
-                out_channels=48,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu6 = nn.PReLU(init=0.0)
-            self.conv2d7 = nn.Conv2d(
-                in_channels=48,
-                out_channels=64,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu7 = nn.PReLU(init=0.0)
-            self.conv2d8 = nn.Conv2d(
-                in_channels=240,
-                out_channels=64,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.conv2d9 = nn.Conv2d(
-                in_channels=240,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.conv2d10 = nn.Conv2d(
-                in_channels=240,
-                out_channels=64,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu8 = nn.PReLU(init=0.0)
-            self.conv2d11 = nn.Conv2d(
-                in_channels=64,
-                out_channels=92,
-                kernel_size=(5, 5),
-                padding=2,
-                bias=True,
-            )
-            self.prelu9 = nn.PReLU(init=0.0)
-            self.prelu10 = nn.PReLU(init=0.0)
-            self.averagepooling2d3 = nn.AvgPool2d((2, 2), stride=1, padding=0)
-            self.conv2d12 = nn.Conv2d(
-                in_channels=240,
-                out_channels=64,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu11 = nn.PReLU(init=0.0)
-            self.conv2d13 = nn.Conv2d(
-                in_channels=64,
-                out_channels=92,
-                kernel_size=(3, 3),
-                padding=1,
-                bias=True,
-            )
-            self.prelu12 = nn.PReLU(init=0.0)
-            self.prelu13 = nn.PReLU(init=0.0)
-            self.averagepooling2d4 = nn.AvgPool2d((2, 2), stride=2, padding=0)
-            self.conv2d14 = nn.Conv2d(
-                in_channels=340,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu14 = nn.PReLU(init=0.0)
-            self.conv2d15 = nn.Conv2d(
-                in_channels=92,
-                out_channels=128,
-                kernel_size=(5, 5),
-                padding=2,
-                bias=True,
-            )
-            self.prelu15 = nn.PReLU(init=0.0)
-            self.conv2d16 = nn.Conv2d(
-                in_channels=340,
-                out_channels=128,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu16 = nn.PReLU(init=0.0)
-            self.conv2d17 = nn.Conv2d(
-                in_channels=340,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu17 = nn.PReLU(init=0.0)
-            self.averagepooling2d5 = nn.AvgPool2d((2, 2), stride=1, padding=0)
-            self.conv2d18 = nn.Conv2d(
-                in_channels=340,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu18 = nn.PReLU(init=0.0)
-            self.conv2d19 = nn.Conv2d(
-                in_channels=92,
-                out_channels=128,
-                kernel_size=(3, 3),
-                padding=1,
-                bias=True,
-            )
-            self.prelu19 = nn.PReLU(init=0.0)
-            self.conv2d20 = nn.Conv2d(
-                in_channels=476,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu20 = nn.PReLU(init=0.0)
-            self.conv2d21 = nn.Conv2d(
-                in_channels=92,
-                out_channels=128,
-                kernel_size=(3, 3),
-                padding=1,
-                bias=True,
-            )
-            self.prelu21 = nn.PReLU(init=0.0)
-            self.conv2d22 = nn.Conv2d(
-                in_channels=476,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu22 = nn.PReLU(init=0.0)
-            self.averagepooling2d6 = nn.AvgPool2d((2, 2), stride=1, padding=0)
-            self.conv2d23 = nn.Conv2d(
-                in_channels=476,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu23 = nn.PReLU(init=0.0)
-            self.conv2d24 = nn.Conv2d(
-                in_channels=92,
-                out_channels=128,
-                kernel_size=(5, 5),
-                padding=2,
-                bias=True,
-            )
-            self.prelu24 = nn.PReLU(init=0.0)
-            self.conv2d25 = nn.Conv2d(
-                in_channels=476,
-                out_channels=128,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu25 = nn.PReLU(init=0.0)
-            self.averagepooling2d7 = nn.AvgPool2d((2, 2), stride=2, padding=0)
-            self.conv2d26 = nn.Conv2d(
-                in_channels=476,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu26 = nn.PReLU(init=0.0)
-            self.averagepooling2d8 = nn.AvgPool2d((2, 2), stride=1, padding=0)
-            self.conv2d27 = nn.Conv2d(
-                in_channels=476,
-                out_channels=92,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu27 = nn.PReLU(init=0.0)
-            self.conv2d28 = nn.Conv2d(
-                in_channels=92,
-                out_channels=128,
-                kernel_size=(3, 3),
-                padding=1,
-                bias=True,
-            )
-            self.prelu28 = nn.PReLU(init=0.0)
-            self.conv2d29 = nn.Conv2d(
-                in_channels=476,
-                out_channels=128,
-                kernel_size=(1, 1),
-                padding=0,
-                bias=True,
-            )
-            self.prelu29 = nn.PReLU(init=0.0)
-            self.dense = nn.Linear(22273, 1096, bias=True)
-            self.prelu30 = nn.PReLU(init=0.0)
-            self.dense2 = nn.Linear(1096, 1096, bias=True)
-            self.prelu31 = nn.PReLU(init=0.0)
-            self.dense3 = nn.Linear(1096, 180, bias=True)
-
-        def forward(self, galaxy_images_output, ebv_output):
-            conv2d_output = self.conv2d(galaxy_images_output)
-            prelu_output = self.prelu(conv2d_output)
-            averagepooling2d_output = self.averagepooling2d(prelu_output)
-            conv2d_output2 = self.conv2d2(averagepooling2d_output)
-            prelu_output2 = self.prelu2(conv2d_output2)
-            conv2d_output3 = self.conv2d3(prelu_output2)
-            prelu_output3 = self.prelu3(conv2d_output3)
-            conv2d_output4 = self.conv2d4(averagepooling2d_output)
-            prelu_output4 = self.prelu4(conv2d_output4)
-            prelu_output4 = self.asymmetric_pad(prelu_output4)
-            averagepooling2d_output2 = self.averagepooling2d2(prelu_output4)
-            conv2d_output5 = self.conv2d5(averagepooling2d_output)
-            prelu_output5 = self.prelu5(conv2d_output5)
-            conv2d_output6 = self.conv2d6(averagepooling2d_output)
-            prelu_output6 = self.prelu6(conv2d_output6)
-            conv2d_output7 = self.conv2d7(prelu_output6)
-            prelu_output7 = self.prelu7(conv2d_output7)
-            concatenate_output = torch.cat(
-                (prelu_output5, prelu_output3, prelu_output7, averagepooling2d_output2),
-                dim=1,
-            )
-            conv2d_output8 = self.conv2d8(concatenate_output)
-            conv2d_output9 = self.conv2d9(concatenate_output)
-            conv2d_output10 = self.conv2d10(concatenate_output)
-            prelu_output8 = self.prelu8(conv2d_output10)
-            conv2d_output11 = self.conv2d11(prelu_output8)
-            prelu_output9 = self.prelu9(conv2d_output11)
-            prelu_output10 = self.prelu10(conv2d_output8)
-            prelu_output10 = self.asymmetric_pad(prelu_output10)
-            averagepooling2d_output3 = self.averagepooling2d3(prelu_output10)
-            conv2d_output12 = self.conv2d12(concatenate_output)
-            prelu_output11 = self.prelu11(conv2d_output12)
-            conv2d_output13 = self.conv2d13(prelu_output11)
-            prelu_output12 = self.prelu12(conv2d_output13)
-            prelu_output13 = self.prelu13(conv2d_output9)
-            concatenate_output2 = torch.cat(
-                (
-                    prelu_output13,
-                    prelu_output12,
-                    prelu_output9,
-                    averagepooling2d_output3,
-                ),
-                dim=1,
-            )
-            averagepooling2d_output4 = self.averagepooling2d4(concatenate_output2)
-            conv2d_output14 = self.conv2d14(averagepooling2d_output4)
-            prelu_output14 = self.prelu14(conv2d_output14)
-            conv2d_output15 = self.conv2d15(prelu_output14)
-            prelu_output15 = self.prelu15(conv2d_output15)
-            conv2d_output16 = self.conv2d16(averagepooling2d_output4)
-            prelu_output16 = self.prelu16(conv2d_output16)
-            conv2d_output17 = self.conv2d17(averagepooling2d_output4)
-            prelu_output17 = self.prelu17(conv2d_output17)
-            prelu_output17 = self.asymmetric_pad(prelu_output17)
-            averagepooling2d_output5 = self.averagepooling2d5(prelu_output17)
-            conv2d_output18 = self.conv2d18(averagepooling2d_output4)
-            prelu_output18 = self.prelu18(conv2d_output18)
-            conv2d_output19 = self.conv2d19(prelu_output18)
-            prelu_output19 = self.prelu19(conv2d_output19)
-            concatenate_output3 = torch.cat(
-                (
-                    prelu_output16,
-                    prelu_output19,
-                    prelu_output15,
-                    averagepooling2d_output5,
-                ),
-                dim=1,
-            )
-            conv2d_output20 = self.conv2d20(concatenate_output3)
-            prelu_output20 = self.prelu20(conv2d_output20)
-            conv2d_output21 = self.conv2d21(prelu_output20)
-            prelu_output21 = self.prelu21(conv2d_output21)
-            conv2d_output22 = self.conv2d22(concatenate_output3)
-            prelu_output22 = self.prelu22(conv2d_output22)
-            prelu_output22 = self.asymmetric_pad(prelu_output22)
-            averagepooling2d_output6 = self.averagepooling2d6(prelu_output22)
-            conv2d_output23 = self.conv2d23(concatenate_output3)
-            prelu_output23 = self.prelu23(conv2d_output23)
-            conv2d_output24 = self.conv2d24(prelu_output23)
-            prelu_output24 = self.prelu24(conv2d_output24)
-            conv2d_output25 = self.conv2d25(concatenate_output3)
-            prelu_output25 = self.prelu25(conv2d_output25)
-            concatenate_output4 = torch.cat(
-                (
-                    prelu_output25,
-                    prelu_output21,
-                    prelu_output24,
-                    averagepooling2d_output6,
-                ),
-                dim=1,
-            )
-            averagepooling2d_output7 = self.averagepooling2d7(concatenate_output4)
-            conv2d_output26 = self.conv2d26(averagepooling2d_output7)
-            prelu_output26 = self.prelu26(conv2d_output26)
-            prelu_output26 = self.asymmetric_pad(prelu_output26)
-            averagepooling2d_output8 = self.averagepooling2d8(prelu_output26)
-            conv2d_output27 = self.conv2d27(averagepooling2d_output7)
-            prelu_output27 = self.prelu27(conv2d_output27)
-            conv2d_output28 = self.conv2d28(prelu_output27)
-            prelu_output28 = self.prelu28(conv2d_output28)
-            conv2d_output29 = self.conv2d29(averagepooling2d_output7)
-            prelu_output29 = self.prelu29(conv2d_output29)
-            concatenate_output5 = torch.cat(
-                (prelu_output29, prelu_output28, averagepooling2d_output8), dim=1
-            )
-            flatten_output = torch.flatten(concatenate_output5)
-            concatenate_output6 = torch.cat((flatten_output, ebv_output), dim=0)
-            dense_output = self.dense(concatenate_output6)
-            prelu_output30 = self.prelu30(dense_output)
-            dense_output2 = self.dense2(prelu_output30)
-            prelu_output31 = self.prelu31(dense_output2)
-            dense_output3 = self.dense3(prelu_output31)
-
-            return dense_output3
-
-    torch.manual_seed(0)
-
-    galaxy_images_output = torch.zeros((1, 5, 64, 64))
-    ebv_output = torch.zeros((1,))
-
-    model = InceptionBlocks()
-
-    output = model(galaxy_images_output, ebv_output)
-
-    model.eval()
-
-    mdf_model, params_dict = torchscript_to_mdf(
-        model=model,
-        args=(galaxy_images_output, ebv_output),
-        example_outputs=output,
-        trace=True,
-    )
-    print(mdf_model.to_yaml())
-
-    mdf_graph = mdf_model.graphs[0]
-
-    params_dict["input_1"] = galaxy_images_output
-    params_dict["_1"] = ebv_output.numpy()
-
-    eg = EvaluableGraphWithConditions(graph=mdf_graph, verbose=False)
-    eg.evaluate(initializer=params_dict)
-
-    assert np.allclose(
-        output.detach().numpy(),
-        eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
+    mdf_model, param_dict = torchscript_to_mdf(
+        simple,
+        args=(torch.tensor(1.0), torch.tensor(2.0)),
+        example_outputs=torch.tensor(0.0),
     )

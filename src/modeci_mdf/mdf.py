@@ -123,12 +123,13 @@ class Graph(BaseWithId):
         """
 
         # Get all input ports
-        all_ips = [(node, ip) for node in self.nodes for ip in self.input_ports]
+        all_ips = [(node.id, ip.id) for node in self.nodes for ip in node.input_ports]
 
-        # Get all sender ports
-        all_sender_ports = {(e.sender, e.sender_port) for e in self.edges}
+        # Get all receiver ports
+        all_receiver_ports = {(e.receiver, e.receiver_port) for e in self.edges}
 
-        return list(filter(lambda x: x not in all_sender_ports, all_ips))
+        # Find any input ports that aren't receiving values from an edge
+        return list(filter(lambda x: x not in all_receiver_ports, all_ips))
 
 
 class Node(BaseWithId):
