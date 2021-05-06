@@ -5,6 +5,11 @@ abc_conditions:
         abc_conditions_example:
             conditions:
                 node_specific:
+                    input0:
+                        type: BeforeNCalls
+                        args:
+                            dependency: input0
+                            n: 1
                     A:
                         type: Always
                         args: {}
@@ -12,7 +17,7 @@ abc_conditions:
                         type: EveryNCalls
                         args:
                             dependency: A
-                            n: 1
+                            n: 2
                     C:
                         type: EveryNCalls
                         args:

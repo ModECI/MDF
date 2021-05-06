@@ -69,8 +69,9 @@ def main():
     )
     c = create_simple_node(mod_graph, "C", f_c, p_c, a)
 
+    cond_i = Condition(type="BeforeNCalls", dependency=input_node.id, n=1)
     cond_a = Condition(type="Always")
-    cond_b = Condition(type="EveryNCalls", dependency=a.id, n=1)
+    cond_b = Condition(type="EveryNCalls", dependency=a.id, n=2)
     cond_c = Condition(type="EveryNCalls", dependency=a.id, n=3)
     cond_term = Condition(
         type="And",
@@ -81,7 +82,7 @@ def main():
     )
 
     mod_graph.conditions = ConditionSet(
-        node_specific={a.id: cond_a, b.id: cond_b, c.id: cond_c},
+        node_specific={input_node.id: cond_i, a.id: cond_a, b.id: cond_b, c.id: cond_c},
         termination={"environment_state_update": cond_term},
     )
 
