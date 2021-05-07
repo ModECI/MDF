@@ -1,4 +1,3 @@
-#%%
 from modeci_mdf.export.torchscript.converter import torchscript_to_mdf
 
 import time
@@ -14,7 +13,6 @@ else:
     dev = "cpu"
 
 
-@torch.jit.script
 def ddm(
     starting_value: torch.Tensor,
     drift_rate: torch.Tensor,
@@ -56,43 +54,33 @@ def ddm(
     return rt, decision
 
 
-ddm_params = dict(
-    starting_value=0.0,
-    drift_rate=0.3,
-    non_decision_time=0.15,
-    threshold=0.6,
-    noise=1.0,
-    time_step_size=0.001,
-)
+def main():
 
-# Move params to device
-for key, val in ddm_params.items():
-    ddm_params[key] = torch.tensor(val).to(dev)
+    ddm_params = dict(
+        starting_value=0.0,
+        drift_rate=0.3,
+        non_decision_time=0.15,
+        threshold=0.6,
+        noise=1.0,
+        time_step_size=0.001,
+    )
 
-# Run a single ddm
-rt, decision = ddm(**ddm_params)
+    # Move params to device
+    for key, val in ddm_params.items():
+        ddm_params[key] = torch.tensor(val).to(dev)
 
-mdf_model = torchscript_to_mdf(
-    model=ddm,
-    args=tuple(ddm_params.values()),
-    example_outputs=(rt, decision),
-    use_onnx_ops=False,
-)
+    # Run a single ddm
+    rt, decision = ddm(**ddm_params)
 
-print(mdf_model.to_yaml())
+    mdf_model, param_dict = torchscript_to_mdf(
+        model=ddm,
+        args=tuple(ddm_params.values()),
+        example_outputs=(rt, decision),
+        use_onnx_ops=True,
+    )
 
-#%%
-# with open('ddm.onnx', 'wb') as file:
-#     torch.onnx.export(model=torch.jit.script(ddm),
-#                       args=tuple(ddm_params.values()),
-#                       example_outputs=(rt, decision),
-#                       f=file,
-#                       verbose=True,
-#                       opset_version=12,
-#                       operator_export_type=torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK)
+    print(mdf_model.to_yaml())
 
-#%%
-# import seaborn as sns
-# sns.kdeplot(rts)
 
-#%%
+if __name__ == "__main__":
+    main()

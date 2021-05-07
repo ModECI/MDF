@@ -5,7 +5,9 @@ import torch.nn as nn
 from modeci_mdf.export.torchscript.converter import torchscript_to_mdf
 
 
-class Model(nn.Module):
+class InceptionBlocks(nn.Module):
+    """An Inception-like model provided as a test case by the WebGME folks"""
+
     def __init__(self):
         super().__init__()
 
@@ -244,25 +246,51 @@ class Model(nn.Module):
 
 def main():
 
-    torch.manual_seed(0)
+    from modeci_mdf.scheduler import EvaluableGraph
 
+    # Create some test inputs for the model
     galaxy_images_output = torch.zeros((1, 5, 64, 64))
     ebv_output = torch.zeros((1,))
 
-    model = Model()
+    # Seed the random number generator to get deterministic behavior for weight initialization
+    torch.manual_seed(0)
 
-    output = model(galaxy_images_output, ebv_output)
+    model = InceptionBlocks()
 
+    # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
     model.eval()
 
-    mdf_model, param_dict = torchscript_to_mdf(
+    # Run the model once to get some ground truth outpot (from PyTorch)
+    output = model(galaxy_images_output, ebv_output).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = torchscript_to_mdf(
         model=model,
         args=(galaxy_images_output, ebv_output),
         example_outputs=output,
         trace=True,
     )
 
-    mdf_model.to_json_file("examples/inception.json")
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+
+    # Add inputs to the parameters dict so we can feed this to the EvaluableGraph for initialization of all
+    # graph inputs.
+    params_dict["input1"] = galaxy_images_output.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    # Evaluate the model via the MDF scheduler
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+    eg.evaluate(initializer=params_dict)
+
+    # Make sure the results are the same betweeen PyTorch and MDF
+    assert np.allclose(
+        output,
+        eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
+    )
+
+    # Output the model to JSON
+    mdf_model.to_json_file("inception.json")
 
 
 if __name__ == "__main__":

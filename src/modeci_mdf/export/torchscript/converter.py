@@ -293,7 +293,11 @@ def torchnode_to_mdfnode(
 
     # Get the argument names and parameter names and values for this Node's operation
     if "onnx::" in op:
-        arguments, parameters = process_onnx_schema(node, port_mapper)
+
+        if op == "onnx::Loop":
+            pass
+        else:
+            arguments, parameters = process_onnx_schema(node, port_mapper)
     else:
         arguments, parameters = process_torch_schema(node, consts, port_mapper)
 

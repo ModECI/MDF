@@ -22,5 +22,3 @@ lca = pnl.LCAMechanism(
 )
 
 comp = pnl.Composition(pathways=[input_mech, lca])
-
-comp.show_graph(show_projection_labels=True)

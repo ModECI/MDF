@@ -1,49 +1,47 @@
+"""
+Runs and tests everything in the examples folder.
+"""
+
 import pytest
+import glob
+import runpy
 import os
 import sys
 
+example_scripts = glob.glob("examples/**/*.py", recursive=True)
 
-def test_examples():
+
+@pytest.fixture(autouse=True)
+def chdir_back_to_root():
     """
-    Run the examples and make sure they don't crash.
+    This fixture sets up and tears down state before each example is run. Certain examples
+    require that they are run from the local directory in which they reside. This changes
+    directory and adds the local directory to sys.path. It reverses this after the test
+    finishes.
     """
 
-    # The examples import some modules in the local examples directory. Easiest
-    # thing is to just chdir and add current to the path.
-    os.chdir("examples/MDF")
+    # Get the current directory before running the test
+    cwd = os.getcwd()
     sys.path.append(".")
 
-    import simple
+    yield
 
-    simple.main()
-    print("Tested simple model")
-
-    import abcd
-
-    abcd.main()
-    print("Tested ABCD model")
-
-    import arrays
-
-    arrays.main()
-    print("Tested Arrays model")
-
-    import scaling
-
-    scaling.main()
-    print("Tested Scaling model")
-
-    import states
-
-    states.main()
-    print("Tested States model")
-
-    import abc_conditions
-
-    abc_conditions.main()
-    print("Tested Conditions model")
-
-    # Cleanup, not sure I need this but just to be safe cause this is weird.
-    os.chdir("../..")
+    # We need chdir back to root of the repo
+    os.chdir(cwd)
     sys.path.pop()
-    print("Done example tests")
+
+
+@pytest.mark.parametrize("script", example_scripts)
+def test_example(script):
+    """
+    Run the examples/MDF
+    """
+    # Get the full path for the script
+    script = os.path.abspath(script)
+
+    # Some of the scripts in examples/MDF import from the local directory. So lets run from the scripts
+    # local directory.
+    dir_path = os.path.dirname(os.path.realpath(script))
+    os.chdir(dir_path)
+
+    runpy.run_path(script, run_name="__main__")

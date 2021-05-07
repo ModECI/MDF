@@ -17,8 +17,10 @@ in_size = 1
 out_size = 1
 
 A = nn.Linear(in_size, out_size)
-A.weight[0][0] = abcd.A_slope
-A.bias[0] = abcd.A_intercept
+
+with torch.no_grad():
+    A.weight[0][0] = abcd.A_slope
+    A.bias[0] = abcd.A_intercept
 
 B = nn.Sigmoid()
 
