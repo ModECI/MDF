@@ -69,7 +69,7 @@ def make_model_graph_name(
 
 
 def process_torch_schema(
-    node: torch.Node, consts: Dict
+    node: torch.Node, consts: Dict, port_mapper: "PortMapper"
 ) -> Tuple[List[str], Dict[str, Any]]:
     """
     Parse a TorchScript node schema into argument names and constant attributes (parameters in MDF)
@@ -134,10 +134,7 @@ def process_onnx_schema(
             schema_args = {}
             if len(schema.inputs) > 0:
                 # If the first argument is variadic. Represent this as a list of input port names
-                if (
-                    schema.inputs[0].option
-                    == onnx.defs.OpSchema.FormalParameterOption.Variadic
-                ):
+                if schema.inputs[0].option.name == "Variadic":
                     schema_args = {
                         schema.inputs[0].name: str(
                             [
@@ -288,16 +285,24 @@ def torchnode_to_mdfnode(
     if op == "prim::Constant":
         return None
 
+    # If we are dealing with a loop node, we need to recursively create a sub-graph for the loop body
+    if op == "onnx::Loop":
+        sub_mdf_graph = Graph(id=f"LoopSubgraph{make_node_id(node)}")
+        block_graph = list(node.blocks())[0]
+        _translate_graph(
+            graph=block_graph,
+            mdf_graph=sub_mdf_graph,
+            consts=consts,
+            port_mapper=port_mapper,
+        )
+        return sub_mdf_graph
+
     outputs = [o.unique() for o in node.outputs()]
     inputs = [i.unique() for i in node.inputs()]
 
     # Get the argument names and parameter names and values for this Node's operation
     if "onnx::" in op:
-
-        if op == "onnx::Loop":
-            pass
-        else:
-            arguments, parameters = process_onnx_schema(node, port_mapper)
+        arguments, parameters = process_onnx_schema(node, port_mapper)
     else:
         arguments, parameters = process_torch_schema(node, consts, port_mapper)
 
@@ -332,13 +337,65 @@ def torchnode_to_mdfnode(
     return mdf_node
 
 
+def _translate_graph(
+    graph: Union[torch.Graph, torch.Block],
+    mdf_graph: Graph,
+    consts: Dict[str, Any],
+    port_mapper: "PortMapper",
+):
+
+    # For every node, cache its input edges. This will let us look this up quickly for
+    # any node in the loop below.
+    node_to_in_edge = {
+        node: [i.unique() for i in node.inputs()] for node in graph.nodes()
+    }
+
+    for node in graph.nodes():
+
+        mdf_node = torchnode_to_mdfnode(
+            node=node, graph=graph, consts=consts, port_mapper=port_mapper
+        )
+
+        # If we are excluding this node from the MDF graph, skip it.
+        if mdf_node is None:
+            continue
+
+        mdf_graph.nodes.append(mdf_node)
+
+        if type(mdf_node) == Graph:
+            continue
+
+        # Now we need to examine all outgoing edges from this node and add them to the MDF graph. We do this by looping
+        # over all nodes in the graph and seeing if they have an input from the node we just constructed. This is
+        # O(n^2) in terms of the number of the nodes!
+        outputs = [o.unique() for o in node.outputs()]
+        for to in graph.nodes():
+
+            # Lookup this nodes input edges
+            to_inputs = node_to_in_edge[to]
+
+            edges = set(outputs) & set(to_inputs)
+            for edge in edges:
+                from_id = make_node_id(node)
+                from_port = mdf_node.output_ports[outputs.index(edge)].id
+                to_id = make_node_id(to)
+                to_port = mdf_node.output_ports[outputs.index(edge)].id
+                mdf_edge = Edge(
+                    id=f"{from_id}_{to_id}",
+                    sender=from_id,
+                    sender_port=f"{from_port}",
+                    receiver=to_id,
+                    receiver_port=f"{to_port}",
+                )
+                mdf_graph.edges.append(mdf_edge)
+
+
 def torchscript_to_mdf(
     model: Union[Callable, torch.nn.Module, torch.ScriptFunction, torch.ScriptModule],
     args: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
     example_outputs: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
     trace: bool = False,
     use_onnx_ops: bool = True,
-    mdf_graph: Graph = None,
 ) -> Union[Model, Graph]:
     r"""
     Convert a TorchScript model to an MDF model. By default, this function will invoke `torch.jit.script` on the
@@ -354,8 +411,6 @@ def torchscript_to_mdf(
         trace: Force the use of tracing to compile the model. The default is to use torch.jit.script
         use_onnx_ops: Use ONNX ops when possible, fallback to ATEN ops when not available. Default is True. If False,
             use only ATEN ops.
-        mdf_graph: If the graph that is constructed should be added to an existing mdf model, pass it here. By default,
-            this is None which means a new MDF Model instance will be constructed and returned.
 
     Returns:
         The translated MDF model
@@ -405,16 +460,12 @@ def torchscript_to_mdf(
     )
     _set_opset_version(previous_opset_version)
 
-    # If mdf_graph is None we are probably at the top level of the possibly recursive construction process of a
-    # TorchScript -> MDF conversion. In this case, we will construct a MDF Model and graph to for the top level.
-    if mdf_graph is None:
-        model_name, graph_name = make_model_graph_name(model)
+    model_name, graph_name = make_model_graph_name(model)
 
-        mdf_model = Model(id=model_name)
-        mdf_graph = Graph(id=graph_name)
-        mdf_model.graphs.append(mdf_graph)
-    else:
-        mdf_model = None
+    # Setup the MDF model and graph
+    mdf_model = Model(id=model_name)
+    mdf_graph = Graph(id=graph_name)
+    mdf_model.graphs.append(mdf_graph)
 
     # Get all constant nodes in the graph
     consts = get_graph_constants(graph)
@@ -424,61 +475,19 @@ def torchscript_to_mdf(
     # makes all parameters to the model inputs.
     port_mapper = PortMapper(graph=graph, args=args)
 
-    # For every node, cache its input edges. This will let us look this up quickly for
-    # any node.
-    node_to_in_edge = {
-        node: [i.unique() for i in node.inputs()] for node in graph.nodes()
-    }
-
-    for node in graph.nodes():
-
-        mdf_node = torchnode_to_mdfnode(
-            node=node, graph=graph, consts=consts, port_mapper=port_mapper
-        )
-
-        # If we are excluding this node from the MDF graph, skip it.
-        if mdf_node is None:
-            continue
-
-        mdf_graph.nodes.append(mdf_node)
-
-        # Now we need to examine all outgoing edges from this node and add them to the MDF graph. We do this by looping
-        # over all nodes in the graph and seeing if they have an input from the node we just constructed. This is
-        # O(n^2) in terms of the number of the nodes!
-        outputs = [o.unique() for o in node.outputs()]
-        for to in graph.nodes():
-
-            # Lookup this nodes input edges
-            to_inputs = node_to_in_edge[to]
-
-            edges = set(outputs) & set(to_inputs)
-            for edge in edges:
-                from_id = make_node_id(node)
-                from_port = mdf_node.output_ports[outputs.index(edge)].id
-                to_id = make_node_id(to)
-                to_port = mdf_node.output_ports[outputs.index(edge)].id
-                mdf_edge = Edge(
-                    id=f"{from_id}_{to_id}",
-                    sender=from_id,
-                    sender_port=f"{from_port}",
-                    receiver=to_id,
-                    receiver_port=f"{to_port}",
-                )
-                mdf_graph.edges.append(mdf_edge)
+    # Translate the TorchScript graph to and MDF graph object. This could be a recursive call
+    _translate_graph(
+        graph=graph, mdf_graph=mdf_graph, consts=consts, port_mapper=port_mapper
+    )
 
     # Replace in "." for "_" in parameter names. We have done this elsewhere when creating the input ports for these
     # parameters.
     params_dict = {port_mapper.id_to_port(k): v for k, v in params_dict.items()}
 
-    # If we haven't wrapped this graph in a model class
-    if mdf_model is None:
-        return mdf_graph, params_dict
-    else:
+    # Set the ONNX opset version
+    mdf_model.onnx_opset_version = _export_onnx_opset_version
 
-        # Set the ONNX opset version
-        mdf_model.onnx_opset_version = _export_onnx_opset_version
-
-        return mdf_model, params_dict
+    return mdf_model, params_dict
 
 
 if __name__ == "__main__":
