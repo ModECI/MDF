@@ -24,7 +24,4 @@ print([
     for time_step in comp.scheduler.execution_list[comp.default_execution_id]
 ])
 
-with open(__file__.replace('.py', '.json'), 'w') as f:
-    f.write(comp.json_summary)
-
 # comp.show_graph()

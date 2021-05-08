@@ -21,14 +21,6 @@ print(comp.results)
 for node in comp.nodes:
     print(f'{node} {node.name}: {node.parameters.value.get(comp)}')
 
-base_fname = __file__.replace('.py', '')
-with open(f'{base_fname}.json', 'w') as outfi:
-    outfi.write(comp.json_summary)
-
-with open(f'{base_fname}.converted.py', 'w') as outfi:
-    outfi.write(pnl.generate_script_from_json(comp.json_summary))
-    outfi.write('\ncomp.show_graph()')
-
 # comp.show_graph()
 
 try:
