@@ -10,6 +10,7 @@ from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
 from collections import OrderedDict
 
+import modeci_mdf.onnx_functions as onnx_ops
 
 try:
     import psyneulink.core.scheduling as scheduling
@@ -76,10 +77,39 @@ class EvaluableFunction:
                 array_format=array_format,
             )
             if self.verbose:
-                print("      Arg: {} became: {}".format(arg, _val_info(func_params[arg])))
-        self.curr_value = evaluate_expr(
-            expr, func_params, verbose=self.verbose, array_format=array_format
-        )
+                print(
+                    "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+                )
+
+        # If this is an ONNX operation, evaluate it without neuromlite.
+        if "onnx_ops." in expr:
+            # Get the ONNX function
+            onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
+
+            # ONNX functions expect input args or kwargs first, followed by parameters (called attributes in ONNX) as
+            # kwargs. Lets construct this.
+            kwargs_for_onnx = {}
+            for kw, arg_expr in self.function.args.items():
+
+                # If this arg is a list of args, we are dealing with a variadic argument. Expand these
+                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = eval(arg_expr)
+                    kwargs_for_onnx.update({a: func_params[a] for a in arg_expr_list})
+                else:
+                    kwargs_for_onnx[kw] = func_params[kw]
+
+            # Now add anything in parameters that isn't already specified as an input argument
+            for kw, arg in parameters.items():
+                if kw not in self.function.args.values():
+                    kwargs_for_onnx[kw] = arg
+
+            self.curr_value = onnx_function(**kwargs_for_onnx)
+        else:
+            self.curr_value = evaluate_expr(
+                expr, func_params, verbose=self.verbose, array_format=array_format
+            )
+
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
@@ -96,7 +126,11 @@ class EvaluableState:
 
     def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
         if self.verbose:
-            print("    Evaluating %s with %s " % (self.state, _params_info(parameters)))
+            print(
+                "    Evaluating {} with {} ".format(
+                    self.state, _params_info(parameters)
+                )
+            )
 
         if self.state.value:
 
@@ -107,7 +141,7 @@ class EvaluableState:
                 array_format=array_format,
             )
         else:
-            if time_increment==None:
+            if time_increment == None:
 
                 self.curr_value = evaluate_expr(
                     self.state.default_initial_value,
@@ -150,7 +184,11 @@ class EvaluableOutput:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.output_port, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.output_port,
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
         return self.curr_value
 
@@ -170,7 +208,11 @@ class EvaluableInput:
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
-                % (self.input_port, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.input_port,
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
         return self.curr_value
 
@@ -211,8 +253,18 @@ class EvaluableNode:
                 )
             all_req_vars = []
             for arg in f.args:
-                func_expr = sympy.simplify(f.args[arg])
-                all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+                arg_expr = f.args[arg]
+
+                # If we are dealing with a list of symbols, each must treated separately
+                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = eval(arg_expr)
+                else:
+                    arg_expr_list = [arg_expr]
+
+                for e in arg_expr_list:
+                    func_expr = sympy.simplify(e)
+                    all_req_vars.extend([str(s) for s in func_expr.free_symbols])
 
             all_present = [v in all_known_vars for v in all_req_vars]
 
@@ -226,9 +278,11 @@ class EvaluableNode:
                 self.evaluable_functions[f.id] = rf
                 all_known_vars.append(f.id)
             else:
-                if len(all_funcs)==0:
-                    raise Exception("Error! Could not evaluate function: %s with args %s using known vars %s"
-                    % (f.id, f.args, all_known_vars))
+                if len(all_funcs) == 0:
+                    raise Exception(
+                        "Error! Could not evaluate function: %s with args %s using known vars %s"
+                        % (f.id, f.args, all_known_vars)
+                    )
                 else:
                     all_funcs.append(f)  # Add back to end of list...
 
@@ -268,8 +322,7 @@ class EvaluableNode:
         # Now evaluate and set params to new state values for use in output...
         for es in self.evaluable_states:
             curr_params[es] = self.evaluable_states[es].evaluate(
-                curr_params, time_increment=time_increment,
-                array_format=array_format
+                curr_params, time_increment=time_increment, array_format=array_format
             )
 
         for eop in self.evaluable_outputs:
@@ -297,7 +350,9 @@ class EvaluableGraph:
             self.root_nodes.append(node.id)
 
         for edge in graph.edges:
-            if edge.receiver in self.root_nodes:  # It could have been already removed...
+            if (
+                edge.receiver in self.root_nodes
+            ):  # It could have been already removed...
                 self.root_nodes.remove(edge.receiver)
 
         self.ordered_edges = []
@@ -307,7 +362,7 @@ class EvaluableGraph:
 
         edges_to_eval = [edge for edge in self.graph.edges]
 
-        while len(edges_to_eval)>0:
+        while len(edges_to_eval) > 0:
             edge = edges_to_eval.pop(0)
             if edge.sender not in evaluated_nodes:
                 edges_to_eval.append(edge)  # Add back to end of list...
@@ -337,20 +392,29 @@ class EvaluableGraph:
             termination_conds=termination_conds,
         )
 
-    def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
+    def evaluate(
+        self, time_increment=None, array_format=FORMAT_DEFAULT, initializer=None
+    ):
+        # Any values that are set via the passed in initalizer, set their values. This lets us avoid creating
+        # dummy input nodes with parameters for evaluating the graph
+        for en_id, en in self.enodes.items():
+            for inp_name, inp in en.evaluable_inputs.items():
+                if initializer and inp_name in initializer:
+                    inp.set_input_value(initializer[inp_name])
+
         print(
-            "\nEvaluating graph: %s, root nodes: %s, with array format %s,"
+            "\nEvaluating graph: %s, root nodes: %s, with array format %s"
             % (self.graph.id, self.root_nodes, array_format)
         )
         str_conds_nb = "\n  ".join(
             [
-                "%s: %s" % (node.id, cond)
+                f"{node.id}: {cond}"
                 for node, cond in self.scheduler.conditions.conditions.items()
             ]
         )
         str_conds_term = "\n  ".join(
             [
-                "%s: %s" % (scale, cond)
+                f"{scale}: {cond}"
                 for scale, cond in self.scheduler.termination_conds.items()
             ]
         )
@@ -462,7 +526,7 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         example_file = sys.argv[1]
 
-    if '-v' in sys.argv:
+    if "-v" in sys.argv:
         verbose = True
     else:
         verbose = False

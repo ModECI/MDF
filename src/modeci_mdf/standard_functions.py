@@ -82,6 +82,11 @@ if len(mdf_functions) == 0:
         expression_string="maximum(A,0)",
     )
 
+    # Enumerate all available ONNX operators and add them as MDF functions.
+    from modeci_mdf.onnx_functions import get_onnx_ops
+
+    for mdf_func_spec in get_onnx_ops():
+        _add_mdf_function(**mdf_func_spec)
 
 if __name__ == "__main__":
 
