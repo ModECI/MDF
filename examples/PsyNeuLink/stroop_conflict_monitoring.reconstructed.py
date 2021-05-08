@@ -45,9 +45,7 @@ DECISION = pnl.DDM(
     function=pnl.DriftDiffusionAnalytical(default_variable=[[0.0]]),
     input_ports=[
         {
-            pnl.FUNCTION: pnl.Reduce(
-                default_variable=[[0.0, 0.0]], weights=[1, -1]
-            ),
+            pnl.FUNCTION: pnl.Reduce(default_variable=[[0.0, 0.0]], weights=[1, -1]),
             pnl.NAME: pnl.ARRAY,
             pnl.VARIABLE: [[0.0, 0.0]],
         }
@@ -171,8 +169,7 @@ Stroop_model.add_controller(CONTROL)
 
 Stroop_model.scheduler.add_condition(DECISION, pnl.EveryNCalls(OUTPUT, 1))
 Stroop_model.scheduler.add_condition(
-    OUTPUT,
-    pnl.All(pnl.EveryNCalls(color_hidden, 1), pnl.EveryNCalls(word_hidden, 1)),
+    OUTPUT, pnl.All(pnl.EveryNCalls(color_hidden, 1), pnl.EveryNCalls(word_hidden, 1))
 )
 Stroop_model.scheduler.add_condition(color_hidden, pnl.EveryNCalls(TASK, 10))
 Stroop_model.scheduler.add_condition(word_hidden, pnl.EveryNCalls(TASK, 10))
