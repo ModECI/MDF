@@ -79,7 +79,8 @@ def main():
         use_onnx_ops=True,
     )
 
-    print(mdf_model.to_yaml())
+    # Output the model to JSON
+    mdf_model.to_json_file("ddm.json")
 
 
 if __name__ == "__main__":
