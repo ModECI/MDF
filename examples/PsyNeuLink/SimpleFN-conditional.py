@@ -99,4 +99,4 @@ for i in [0, 1]:
 
 axes.set_xlabel('Time (s)')
 axes.legend()
-plt.show()
+# plt.show()

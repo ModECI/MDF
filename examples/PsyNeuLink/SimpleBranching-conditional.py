@@ -27,4 +27,4 @@ print([
 with open(__file__.replace('.py', '.json'), 'w') as f:
     f.write(comp.json_summary)
 
-comp.show_graph()
+# comp.show_graph()

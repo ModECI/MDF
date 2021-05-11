@@ -29,7 +29,7 @@ with open(f'{base_fname}.converted.py', 'w') as outfi:
     outfi.write(pnl.generate_script_from_json(comp.json_summary))
     outfi.write('\ncomp.show_graph()')
 
-comp.show_graph()
+# comp.show_graph()
 
 try:
     import matplotlib.pyplot as plt
@@ -54,6 +54,6 @@ try:
 
     axes.set_xlabel('Trial')
     axes.legend()
-    plt.show()
+    # plt.show()
 except ImportError:
     pass
