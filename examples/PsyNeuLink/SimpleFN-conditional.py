@@ -55,11 +55,11 @@ for node in comp.nodes:
     print(f'=== {node} {node.name}: {node.parameters.value.get(comp)}')
 
 
-def generate_time_array(node, context='comp', param='value'):
+def generate_time_array(node, context=comp.default_execution_id, param='value'):
     return [entry.time.pass_ for entry in getattr(node.parameters, param).log[context]]
 
 
-def generate_value_array(node, index, context='comp', param='value'):
+def generate_value_array(node, index, context=comp.default_execution_id, param='value'):
     print(node, index, param, context)
     return [float(entry.value[index]) for entry in getattr(node.parameters, param).log[context]]
 

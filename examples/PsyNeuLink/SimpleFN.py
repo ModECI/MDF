@@ -42,10 +42,10 @@ for node in comp.nodes:
 
 import matplotlib.pyplot as plt
 
-def generate_time_array(node, context='comp', param='value'):
+def generate_time_array(node, context=comp.default_execution_id, param='value'):
     return [entry.time.trial for entry in getattr(node.parameters, param).log[context]]
 
-def generate_value_array(node, index, context='comp', param='value'):
+def generate_value_array(node, index, context=comp.default_execution_id, param='value'):
     return [float(entry.value[index]) for entry in getattr(node.parameters, param).log[context]]
 '''
 for node in comp.nodes:
