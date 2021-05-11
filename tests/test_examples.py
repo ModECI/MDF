@@ -6,11 +6,34 @@ import pytest
 import glob
 import runpy
 import os
+import psyneulink
 import sys
 
 from distutils.dir_util import copy_tree
 
+
 example_scripts = glob.glob("examples/**/*.py", recursive=True)
+example_exclusion_strings = [".converted.py", "generate_json_and_scripts.py"]
+
+# NOTE: xfail mark can be removed if/when a full TimeInterval or
+# placeholder class reaches main psyneulink branch. This is only a
+# concern for local/non-github-actions installations.
+example_scripts = [
+    pytest.param(
+        script,
+        marks=pytest.mark.xfail(
+            reason="psyneulink currently must be installed on its 'mdf' branch to work with MDF examples",
+            strict=False,
+        ),
+    )
+    if (
+        "PsyNeuLink" in os.path.dirname(os.path.realpath(script))
+        and not hasattr(psyneulink, "TimeInterval")
+    )
+    else script
+    for script in example_scripts
+    if all(e not in script for e in example_exclusion_strings)
+]
 
 
 @pytest.fixture(autouse=True)
