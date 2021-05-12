@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from modeci_mdf.export.torchscript.converter import torchscript_to_mdf
+from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
 
 class InceptionBlocks(nn.Module):
@@ -264,7 +264,7 @@ def main():
     output = model(galaxy_images_output, ebv_output).detach().numpy()
 
     # Convert to MDF
-    mdf_model, params_dict = torchscript_to_mdf(
+    mdf_model, params_dict = pytorch_to_mdf(
         model=model,
         args=(galaxy_images_output, ebv_output),
         example_outputs=output,

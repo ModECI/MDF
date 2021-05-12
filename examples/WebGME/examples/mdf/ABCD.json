@@ -1,0 +1,156 @@
+{
+    "ABCD": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.2",
+        "graphs": {
+            "abcd_example": {
+                "nodes": {
+                    "input0": {
+                        "parameters": {
+                            "input_level": 0.0
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        }
+                    },
+                    "A": {
+                        "parameters": {
+                            "slope": 2.1,
+                            "intercept": 2.2
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "linear_func": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "slope": "slope",
+                                    "intercept": "intercept"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_func"
+                            }
+                        }
+                    },
+                    "B": {
+                        "parameters": {
+                            "gain": 1.0,
+                            "bias": 0.0,
+                            "offset": 0.0
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "logistic_func": {
+                                "function": "logistic",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "gain": "gain",
+                                    "bias": "bias",
+                                    "offset": "offset"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "logistic_func"
+                            }
+                        }
+                    },
+                    "C": {
+                        "parameters": {
+                            "scale": 1.0,
+                            "rate": 1.0,
+                            "bias": 0.0,
+                            "offset": 0.0
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "exponential_func": {
+                                "function": "exponential",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "scale": "scale",
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "offset": "offset"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        }
+                    },
+                    "D": {
+                        "parameters": {
+                            "scale": 1.0
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "sin_func": {
+                                "function": "sin",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "scale": "scale"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "sin_func"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_input0_A": {
+                        "sender": "input0",
+                        "receiver": "A",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_A_B": {
+                        "sender": "A",
+                        "receiver": "B",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_B_C": {
+                        "sender": "B",
+                        "receiver": "C",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_C_D": {
+                        "sender": "C",
+                        "receiver": "D",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    }
+                }
+            }
+        }
+    }
+}

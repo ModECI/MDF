@@ -1,0 +1,588 @@
+{
+  "attributes": {
+    "name": "ABCD",
+    "id": "ABCD",
+    "format": "ModECI MDF v0.1",
+    "generating_application": "Python modeci-mdf v0.1.2",
+    "notes": ""
+  },
+  "pointers": {
+    "base": "@meta:Model"
+  },
+  "children": [
+    {
+      "attributes": {
+        "id": "abcd_example",
+        "name": "abcd_example",
+        "notes": ""
+      },
+      "pointers": {
+        "base": "@meta:Graph"
+      },
+      "children": [
+        {
+          "id": "@id:input0",
+          "attributes": {
+            "name": "input0",
+            "id": "input0"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:input0_input_level"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:input0_input_level",
+              "attributes": {
+                "name": "input_level",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:input0_out_port",
+              "attributes": {
+                "name": "out_port",
+                "id": "out_port",
+                "value": "input_level"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            }
+          ]
+        },
+        {
+          "id": "@id:A",
+          "attributes": {
+            "name": "A",
+            "id": "A"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:A_slope",
+              "@id:A_intercept"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:A_slope",
+              "attributes": {
+                "name": "slope",
+                "value": 2.1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:A_intercept",
+              "attributes": {
+                "name": "intercept",
+                "value": 2.2
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:A_input_port1",
+              "attributes": {
+                "name": "input_port1",
+                "id": "input_port1",
+                "shape": "(1,)"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:A_output_1",
+              "attributes": {
+                "name": "output_1",
+                "id": "output_1",
+                "value": "linear_func"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "linear_func",
+                "id": "linear_func",
+                "function": "linear",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:linear_func_variable0",
+                  "@id:linear_func_slope",
+                  "@id:linear_func_intercept"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:linear_func_variable0",
+                  "attributes": {
+                    "name": "variable0",
+                    "value": "input_port1"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:linear_func_slope",
+                  "attributes": {
+                    "name": "slope",
+                    "value": "slope"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:linear_func_intercept",
+                  "attributes": {
+                    "name": "intercept",
+                    "value": "intercept"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:B",
+          "attributes": {
+            "name": "B",
+            "id": "B"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:B_gain",
+              "@id:B_bias",
+              "@id:B_offset"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:B_gain",
+              "attributes": {
+                "name": "gain",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:B_bias",
+              "attributes": {
+                "name": "bias",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:B_offset",
+              "attributes": {
+                "name": "offset",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:B_input_port1",
+              "attributes": {
+                "name": "input_port1",
+                "id": "input_port1",
+                "shape": "(1,)"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:B_output_1",
+              "attributes": {
+                "name": "output_1",
+                "id": "output_1",
+                "value": "logistic_func"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "logistic_func",
+                "id": "logistic_func",
+                "function": "logistic",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:logistic_func_variable0",
+                  "@id:logistic_func_gain",
+                  "@id:logistic_func_bias",
+                  "@id:logistic_func_offset"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:logistic_func_variable0",
+                  "attributes": {
+                    "name": "variable0",
+                    "value": "input_port1"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:logistic_func_gain",
+                  "attributes": {
+                    "name": "gain",
+                    "value": "gain"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:logistic_func_bias",
+                  "attributes": {
+                    "name": "bias",
+                    "value": "bias"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:logistic_func_offset",
+                  "attributes": {
+                    "name": "offset",
+                    "value": "offset"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:C",
+          "attributes": {
+            "name": "C",
+            "id": "C"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:C_scale",
+              "@id:C_rate",
+              "@id:C_bias",
+              "@id:C_offset"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:C_scale",
+              "attributes": {
+                "name": "scale",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:C_rate",
+              "attributes": {
+                "name": "rate",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:C_bias",
+              "attributes": {
+                "name": "bias",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:C_offset",
+              "attributes": {
+                "name": "offset",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:C_input_port1",
+              "attributes": {
+                "name": "input_port1",
+                "id": "input_port1",
+                "shape": "(1,)"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:C_output_1",
+              "attributes": {
+                "name": "output_1",
+                "id": "output_1",
+                "value": "exponential_func"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "exponential_func",
+                "id": "exponential_func",
+                "function": "exponential",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:exponential_func_variable0",
+                  "@id:exponential_func_scale",
+                  "@id:exponential_func_rate",
+                  "@id:exponential_func_bias",
+                  "@id:exponential_func_offset"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:exponential_func_variable0",
+                  "attributes": {
+                    "name": "variable0",
+                    "value": "input_port1"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:exponential_func_scale",
+                  "attributes": {
+                    "name": "scale",
+                    "value": "scale"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:exponential_func_rate",
+                  "attributes": {
+                    "name": "rate",
+                    "value": "rate"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:exponential_func_bias",
+                  "attributes": {
+                    "name": "bias",
+                    "value": "bias"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:exponential_func_offset",
+                  "attributes": {
+                    "name": "offset",
+                    "value": "offset"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:D",
+          "attributes": {
+            "name": "D",
+            "id": "D"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:D_scale"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:D_scale",
+              "attributes": {
+                "name": "scale",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:D_input_port1",
+              "attributes": {
+                "name": "input_port1",
+                "id": "input_port1",
+                "shape": "(1,)"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:D_output_1",
+              "attributes": {
+                "name": "output_1",
+                "id": "output_1",
+                "value": "sin_func"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "sin_func",
+                "id": "sin_func",
+                "function": "sin",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:sin_func_variable0",
+                  "@id:sin_func_scale"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:sin_func_variable0",
+                  "attributes": {
+                    "name": "variable0",
+                    "value": "input_port1"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:sin_func_scale",
+                  "attributes": {
+                    "name": "scale",
+                    "value": "scale"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "name": "edge_input0_A"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:input0_out_port",
+            "dst": "@id:A_input_port1"
+          }
+        },
+        {
+          "attributes": {
+            "name": "edge_A_B"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:A_output_1",
+            "dst": "@id:B_input_port1"
+          }
+        },
+        {
+          "attributes": {
+            "name": "edge_B_C"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:B_output_1",
+            "dst": "@id:C_input_port1"
+          }
+        },
+        {
+          "attributes": {
+            "name": "edge_C_D"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:C_output_1",
+            "dst": "@id:D_input_port1"
+          }
+        }
+      ]
+    }
+  ]
+}

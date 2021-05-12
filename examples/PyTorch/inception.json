@@ -85,7 +85,7 @@
                                 "type": "Tensor"
                             },
                             "_98": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -112,7 +112,7 @@
                                 "type": "Tensor"
                             },
                             "_99": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -166,7 +166,7 @@
                                 "type": "Tensor"
                             },
                             "_101": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -205,7 +205,7 @@
                         },
                         "input_ports": {
                             "_102": {
-                                "shape": "[1, 64, 64, 64]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -302,7 +302,7 @@
                                 "type": "Tensor"
                             },
                             "_105": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -329,7 +329,7 @@
                                 "type": "Tensor"
                             },
                             "_106": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -427,7 +427,7 @@
                                 "type": "Tensor"
                             },
                             "_109": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -454,7 +454,7 @@
                                 "type": "Tensor"
                             },
                             "_110": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -552,7 +552,7 @@
                                 "type": "Tensor"
                             },
                             "_113": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -579,7 +579,7 @@
                                 "type": "Tensor"
                             },
                             "_114": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -641,8 +641,8 @@
                         "parameters": {},
                         "input_ports": {
                             "_116": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -665,11 +665,11 @@
                         },
                         "input_ports": {
                             "_118": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_117": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -755,7 +755,7 @@
                                 "type": "Tensor"
                             },
                             "_119": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -780,8 +780,8 @@
                         },
                         "input_ports": {
                             "_116": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -806,7 +806,7 @@
                         },
                         "input_ports": {
                             "_123": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -830,7 +830,7 @@
                         },
                         "input_ports": {
                             "_124": {
-                                "shape": "[4]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_125": {
@@ -879,7 +879,7 @@
                                 "type": "Tensor"
                             },
                             "_127": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -978,19 +978,19 @@
                                 "type": "Tensor"
                             },
                             "_130": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_131": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_129": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_132": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1065,7 +1065,7 @@
                                 "type": "Tensor"
                             },
                             "_135": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1189,11 +1189,11 @@
                         },
                         "input_ports": {
                             "_139": {
-                                "shape": "(?)",
+                                "shape": "[1, 48, 33, 33]",
                                 "type": "Tensor"
                             },
                             "_140": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1329,7 +1329,7 @@
                                 "type": "Tensor"
                             },
                             "_144": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1356,7 +1356,7 @@
                                 "type": "Tensor"
                             },
                             "_145": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1454,7 +1454,7 @@
                                 "type": "Tensor"
                             },
                             "_148": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1481,7 +1481,7 @@
                                 "type": "Tensor"
                             },
                             "_149": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1579,7 +1579,7 @@
                                 "type": "Tensor"
                             },
                             "_152": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1606,7 +1606,7 @@
                                 "type": "Tensor"
                             },
                             "_153": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1643,7 +1643,7 @@
                                 "type": "Tensor"
                             },
                             "_142": {
-                                "shape": "(?)",
+                                "shape": "[1, 48, 32, 32]",
                                 "type": "Tensor"
                             }
                         },
@@ -1685,7 +1685,7 @@
                         },
                         "input_ports": {
                             "_155": {
-                                "shape": "(?)",
+                                "shape": "[1, 240, 32, 32]",
                                 "type": "Tensor"
                             },
                             "conv2d8_weight": {
@@ -1737,7 +1737,7 @@
                         },
                         "input_ports": {
                             "_155": {
-                                "shape": "(?)",
+                                "shape": "[1, 240, 32, 32]",
                                 "type": "Tensor"
                             },
                             "conv2d9_weight": {
@@ -1789,7 +1789,7 @@
                         },
                         "input_ports": {
                             "_155": {
-                                "shape": "(?)",
+                                "shape": "[1, 240, 32, 32]",
                                 "type": "Tensor"
                             },
                             "conv2d10_weight": {
@@ -1844,7 +1844,7 @@
                                 "type": "Tensor"
                             },
                             "_159": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1871,7 +1871,7 @@
                                 "type": "Tensor"
                             },
                             "_160": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1969,7 +1969,7 @@
                                 "type": "Tensor"
                             },
                             "_163": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -1996,7 +1996,7 @@
                                 "type": "Tensor"
                             },
                             "_164": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2042,7 +2042,7 @@
                                 "type": "Tensor"
                             },
                             "_166": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2069,7 +2069,7 @@
                                 "type": "Tensor"
                             },
                             "_167": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2131,8 +2131,8 @@
                         "parameters": {},
                         "input_ports": {
                             "_169": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -2155,11 +2155,11 @@
                         },
                         "input_ports": {
                             "_171": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_170": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2245,7 +2245,7 @@
                                 "type": "Tensor"
                             },
                             "_172": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2270,8 +2270,8 @@
                         },
                         "input_ports": {
                             "_169": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -2296,7 +2296,7 @@
                         },
                         "input_ports": {
                             "_176": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2320,7 +2320,7 @@
                         },
                         "input_ports": {
                             "_177": {
-                                "shape": "[4]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_178": {
@@ -2369,7 +2369,7 @@
                                 "type": "Tensor"
                             },
                             "_180": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2468,19 +2468,19 @@
                                 "type": "Tensor"
                             },
                             "_183": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_184": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_182": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_185": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2555,7 +2555,7 @@
                                 "type": "Tensor"
                             },
                             "_188": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2679,11 +2679,11 @@
                         },
                         "input_ports": {
                             "_192": {
-                                "shape": "(?)",
+                                "shape": "[1, 64, 33, 33]",
                                 "type": "Tensor"
                             },
                             "_193": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2764,7 +2764,7 @@
                         },
                         "input_ports": {
                             "_155": {
-                                "shape": "(?)",
+                                "shape": "[1, 240, 32, 32]",
                                 "type": "Tensor"
                             },
                             "conv2d12_weight": {
@@ -2819,7 +2819,7 @@
                                 "type": "Tensor"
                             },
                             "_197": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2846,7 +2846,7 @@
                                 "type": "Tensor"
                             },
                             "_198": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2944,7 +2944,7 @@
                                 "type": "Tensor"
                             },
                             "_201": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -2971,7 +2971,7 @@
                                 "type": "Tensor"
                             },
                             "_202": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3017,7 +3017,7 @@
                                 "type": "Tensor"
                             },
                             "_204": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3044,7 +3044,7 @@
                                 "type": "Tensor"
                             },
                             "_205": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3081,7 +3081,7 @@
                                 "type": "Tensor"
                             },
                             "_195": {
-                                "shape": "(?)",
+                                "shape": "[1, 64, 32, 32]",
                                 "type": "Tensor"
                             }
                         },
@@ -3130,11 +3130,11 @@
                         },
                         "input_ports": {
                             "_207": {
-                                "shape": "(?)",
+                                "shape": "[1, 340, 32, 32]",
                                 "type": "Tensor"
                             },
                             "_208": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3215,7 +3215,7 @@
                         },
                         "input_ports": {
                             "_210": {
-                                "shape": "(?)",
+                                "shape": "[1, 340, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d14_weight": {
@@ -3270,7 +3270,7 @@
                                 "type": "Tensor"
                             },
                             "_212": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3297,7 +3297,7 @@
                                 "type": "Tensor"
                             },
                             "_213": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3395,7 +3395,7 @@
                                 "type": "Tensor"
                             },
                             "_216": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3422,7 +3422,7 @@
                                 "type": "Tensor"
                             },
                             "_217": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3465,7 +3465,7 @@
                         },
                         "input_ports": {
                             "_210": {
-                                "shape": "(?)",
+                                "shape": "[1, 340, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d16_weight": {
@@ -3520,7 +3520,7 @@
                                 "type": "Tensor"
                             },
                             "_220": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3547,7 +3547,7 @@
                                 "type": "Tensor"
                             },
                             "_221": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3590,7 +3590,7 @@
                         },
                         "input_ports": {
                             "_210": {
-                                "shape": "(?)",
+                                "shape": "[1, 340, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d17_weight": {
@@ -3645,7 +3645,7 @@
                                 "type": "Tensor"
                             },
                             "_224": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3672,7 +3672,7 @@
                                 "type": "Tensor"
                             },
                             "_225": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3734,8 +3734,8 @@
                         "parameters": {},
                         "input_ports": {
                             "_227": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -3758,11 +3758,11 @@
                         },
                         "input_ports": {
                             "_229": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_228": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3848,7 +3848,7 @@
                                 "type": "Tensor"
                             },
                             "_230": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3873,8 +3873,8 @@
                         },
                         "input_ports": {
                             "_227": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -3899,7 +3899,7 @@
                         },
                         "input_ports": {
                             "_234": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -3923,7 +3923,7 @@
                         },
                         "input_ports": {
                             "_235": {
-                                "shape": "[4]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_236": {
@@ -3972,7 +3972,7 @@
                                 "type": "Tensor"
                             },
                             "_238": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4071,19 +4071,19 @@
                                 "type": "Tensor"
                             },
                             "_241": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_242": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_240": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_243": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4158,7 +4158,7 @@
                                 "type": "Tensor"
                             },
                             "_246": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4282,11 +4282,11 @@
                         },
                         "input_ports": {
                             "_250": {
-                                "shape": "(?)",
+                                "shape": "[1, 92, 17, 17]",
                                 "type": "Tensor"
                             },
                             "_251": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4367,7 +4367,7 @@
                         },
                         "input_ports": {
                             "_210": {
-                                "shape": "(?)",
+                                "shape": "[1, 340, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d18_weight": {
@@ -4422,7 +4422,7 @@
                                 "type": "Tensor"
                             },
                             "_255": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4449,7 +4449,7 @@
                                 "type": "Tensor"
                             },
                             "_256": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4547,7 +4547,7 @@
                                 "type": "Tensor"
                             },
                             "_259": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4574,7 +4574,7 @@
                                 "type": "Tensor"
                             },
                             "_260": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4611,7 +4611,7 @@
                                 "type": "Tensor"
                             },
                             "_253": {
-                                "shape": "(?)",
+                                "shape": "[1, 92, 16, 16]",
                                 "type": "Tensor"
                             }
                         },
@@ -4653,7 +4653,7 @@
                         },
                         "input_ports": {
                             "_262": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d20_weight": {
@@ -4708,7 +4708,7 @@
                                 "type": "Tensor"
                             },
                             "_264": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4735,7 +4735,7 @@
                                 "type": "Tensor"
                             },
                             "_265": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4833,7 +4833,7 @@
                                 "type": "Tensor"
                             },
                             "_268": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4860,7 +4860,7 @@
                                 "type": "Tensor"
                             },
                             "_269": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4903,7 +4903,7 @@
                         },
                         "input_ports": {
                             "_262": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d22_weight": {
@@ -4958,7 +4958,7 @@
                                 "type": "Tensor"
                             },
                             "_272": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -4985,7 +4985,7 @@
                                 "type": "Tensor"
                             },
                             "_273": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5047,8 +5047,8 @@
                         "parameters": {},
                         "input_ports": {
                             "_275": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -5071,11 +5071,11 @@
                         },
                         "input_ports": {
                             "_277": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_276": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5161,7 +5161,7 @@
                                 "type": "Tensor"
                             },
                             "_278": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5186,8 +5186,8 @@
                         },
                         "input_ports": {
                             "_275": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -5212,7 +5212,7 @@
                         },
                         "input_ports": {
                             "_282": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5236,7 +5236,7 @@
                         },
                         "input_ports": {
                             "_283": {
-                                "shape": "[4]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_284": {
@@ -5285,7 +5285,7 @@
                                 "type": "Tensor"
                             },
                             "_286": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5384,19 +5384,19 @@
                                 "type": "Tensor"
                             },
                             "_289": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_290": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_288": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_291": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5471,7 +5471,7 @@
                                 "type": "Tensor"
                             },
                             "_294": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5595,11 +5595,11 @@
                         },
                         "input_ports": {
                             "_298": {
-                                "shape": "(?)",
+                                "shape": "[1, 92, 17, 17]",
                                 "type": "Tensor"
                             },
                             "_299": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5680,7 +5680,7 @@
                         },
                         "input_ports": {
                             "_262": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d23_weight": {
@@ -5735,7 +5735,7 @@
                                 "type": "Tensor"
                             },
                             "_303": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5762,7 +5762,7 @@
                                 "type": "Tensor"
                             },
                             "_304": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5860,7 +5860,7 @@
                                 "type": "Tensor"
                             },
                             "_307": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5887,7 +5887,7 @@
                                 "type": "Tensor"
                             },
                             "_308": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -5930,7 +5930,7 @@
                         },
                         "input_ports": {
                             "_262": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 16, 16]",
                                 "type": "Tensor"
                             },
                             "conv2d25_weight": {
@@ -5985,7 +5985,7 @@
                                 "type": "Tensor"
                             },
                             "_311": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6012,7 +6012,7 @@
                                 "type": "Tensor"
                             },
                             "_312": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6049,7 +6049,7 @@
                                 "type": "Tensor"
                             },
                             "_301": {
-                                "shape": "(?)",
+                                "shape": "[1, 92, 16, 16]",
                                 "type": "Tensor"
                             }
                         },
@@ -6098,11 +6098,11 @@
                         },
                         "input_ports": {
                             "_314": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 16, 16]",
                                 "type": "Tensor"
                             },
                             "_315": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6183,7 +6183,7 @@
                         },
                         "input_ports": {
                             "_317": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 8, 8]",
                                 "type": "Tensor"
                             },
                             "conv2d26_weight": {
@@ -6238,7 +6238,7 @@
                                 "type": "Tensor"
                             },
                             "_319": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6265,7 +6265,7 @@
                                 "type": "Tensor"
                             },
                             "_320": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6327,8 +6327,8 @@
                         "parameters": {},
                         "input_ports": {
                             "_322": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -6351,11 +6351,11 @@
                         },
                         "input_ports": {
                             "_324": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_323": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6441,7 +6441,7 @@
                                 "type": "Tensor"
                             },
                             "_325": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6466,8 +6466,8 @@
                         },
                         "input_ports": {
                             "_322": {
-                                "shape": "[4]",
-                                "type": "Tensor"
+                                "shape": "(?)",
+                                "type": "List[int]"
                             }
                         },
                         "functions": {
@@ -6492,7 +6492,7 @@
                         },
                         "input_ports": {
                             "_329": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6516,7 +6516,7 @@
                         },
                         "input_ports": {
                             "_330": {
-                                "shape": "[4]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_331": {
@@ -6565,7 +6565,7 @@
                                 "type": "Tensor"
                             },
                             "_333": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6664,19 +6664,19 @@
                                 "type": "Tensor"
                             },
                             "_336": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_337": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_335": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_338": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6751,7 +6751,7 @@
                                 "type": "Tensor"
                             },
                             "_341": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6875,11 +6875,11 @@
                         },
                         "input_ports": {
                             "_345": {
-                                "shape": "(?)",
+                                "shape": "[1, 92, 9, 9]",
                                 "type": "Tensor"
                             },
                             "_346": {
-                                "shape": "[8]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -6960,7 +6960,7 @@
                         },
                         "input_ports": {
                             "_317": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 8, 8]",
                                 "type": "Tensor"
                             },
                             "conv2d27_weight": {
@@ -7015,7 +7015,7 @@
                                 "type": "Tensor"
                             },
                             "_350": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7042,7 +7042,7 @@
                                 "type": "Tensor"
                             },
                             "_351": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7140,7 +7140,7 @@
                                 "type": "Tensor"
                             },
                             "_354": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7167,7 +7167,7 @@
                                 "type": "Tensor"
                             },
                             "_355": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7210,7 +7210,7 @@
                         },
                         "input_ports": {
                             "_317": {
-                                "shape": "(?)",
+                                "shape": "[1, 476, 8, 8]",
                                 "type": "Tensor"
                             },
                             "conv2d29_weight": {
@@ -7265,7 +7265,7 @@
                                 "type": "Tensor"
                             },
                             "_358": {
-                                "shape": "[2]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7292,7 +7292,7 @@
                                 "type": "Tensor"
                             },
                             "_359": {
-                                "shape": "[1, 1, 1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7325,7 +7325,7 @@
                                 "type": "Tensor"
                             },
                             "_348": {
-                                "shape": "(?)",
+                                "shape": "[1, 92, 8, 8]",
                                 "type": "Tensor"
                             }
                         },
@@ -7347,7 +7347,7 @@
                         "parameters": {},
                         "input_ports": {
                             "_361": {
-                                "shape": "(?)",
+                                "shape": "[1, 348, 8, 8]",
                                 "type": "Tensor"
                             }
                         },
@@ -7423,19 +7423,19 @@
                         "parameters": {},
                         "input_ports": {
                             "_362": {
-                                "shape": "[4]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_364": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_365": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_363": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7480,11 +7480,11 @@
                         },
                         "input_ports": {
                             "_366": {
-                                "shape": "[0]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             },
                             "_367": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },
@@ -7506,11 +7506,11 @@
                         "parameters": {},
                         "input_ports": {
                             "_361": {
-                                "shape": "(?)",
+                                "shape": "[1, 348, 8, 8]",
                                 "type": "Tensor"
                             },
                             "_368": {
-                                "shape": "[1]",
+                                "shape": "(?)",
                                 "type": "Tensor"
                             }
                         },

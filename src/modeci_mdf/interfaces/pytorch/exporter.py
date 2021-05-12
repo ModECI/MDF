@@ -5,12 +5,8 @@ This code was originally inspired by the following blog post:
 
     Mike He, "From Models to Computation Graphs (Part I)", https://ad1024.space/articles/22
 """
-import re
 import inspect
 import logging
-import os
-import itertools
-import numpy as np
 
 from typing import Union, Dict, Any, Tuple, List, Callable
 import onnx.defs
@@ -19,7 +15,6 @@ import onnx.defs
 import torch
 
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Function
-from modeci_mdf.export.onnx import get_onnx_attribute
 from modeci_mdf.onnx_functions import onnx_opset_version as modeci_onnx_opset_version
 
 
@@ -390,7 +385,7 @@ def _translate_graph(
                 mdf_graph.edges.append(mdf_edge)
 
 
-def torchscript_to_mdf(
+def pytorch_to_mdf(
     model: Union[Callable, torch.nn.Module, torch.ScriptFunction, torch.ScriptModule],
     args: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
     example_outputs: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
@@ -398,7 +393,7 @@ def torchscript_to_mdf(
     use_onnx_ops: bool = True,
 ) -> Union[Model, Graph]:
     r"""
-    Convert a TorchScript model to an MDF model. By default, this function will invoke `torch.jit.script` on the
+    Convert a PyTorch model to an MDF model. By default, this function will invoke `torch.jit.script` on the
     model to compile it down to TorchScript IR and simplify the graph before exporting the MDF. The default is
     to use ONNX operations when possible and fallback to ATEN\Torch ops when ONNX support is not available
     (`torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK` mode). To use allATEN\Torch ops, set use_onnx_ops to False.
@@ -495,7 +490,7 @@ if __name__ == "__main__":
     def simple(x, y):
         return x + y
 
-    mdf_model, param_dict = torchscript_to_mdf(
+    mdf_model, param_dict = pytorch_to_mdf(
         simple,
         args=(torch.tensor(1.0), torch.tensor(2.0)),
         example_outputs=torch.tensor(0.0),

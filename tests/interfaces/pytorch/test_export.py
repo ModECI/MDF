@@ -5,7 +5,7 @@ import numpy as np
 torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
 
-from modeci_mdf.export.torchscript.converter import torchscript_to_mdf
+from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 from modeci_mdf.scheduler import EvaluableGraph
 
 
@@ -26,7 +26,7 @@ def test_simple_module():
         def forward(self, x, y):
             return x + y
 
-    mdf_model, param_dict = torchscript_to_mdf(
+    mdf_model, param_dict = pytorch_to_mdf(
         model=Simple(),
         args=(torch.tensor(0.0), torch.tensor(0.0)),
         example_outputs=(torch.tensor(0.0)),
@@ -42,7 +42,7 @@ def test_simple_function():
     def simple(x, y):
         return x + y
 
-    mdf_model, param_dict = torchscript_to_mdf(
+    mdf_model, param_dict = pytorch_to_mdf(
         model=simple,
         args=(torch.tensor(0.0), torch.tensor(0.0)),
         example_outputs=(torch.tensor(0.0)),
@@ -62,7 +62,7 @@ def test_inception(inception_model_pytorch):
     output = inception_model_pytorch(galaxy_images_output, ebv_output).detach().numpy()
 
     # Convert to MDF
-    mdf_model, params_dict = torchscript_to_mdf(
+    mdf_model, params_dict = pytorch_to_mdf(
         model=inception_model_pytorch,
         args=(galaxy_images_output, ebv_output),
         example_outputs=output,

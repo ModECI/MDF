@@ -1,4 +1,4 @@
-from modeci_mdf.export.torchscript.converter import torchscript_to_mdf
+from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
 import time
 import re
@@ -72,14 +72,15 @@ def main():
     # Run a single ddm
     rt, decision = ddm(**ddm_params)
 
-    mdf_model, param_dict = torchscript_to_mdf(
+    mdf_model, param_dict = pytorch_to_mdf(
         model=ddm,
         args=tuple(ddm_params.values()),
         example_outputs=(rt, decision),
         use_onnx_ops=True,
     )
 
-    print(mdf_model.to_yaml())
+    # Output the model to JSON
+    mdf_model.to_json_file("ddm.json")
 
 
 if __name__ == "__main__":

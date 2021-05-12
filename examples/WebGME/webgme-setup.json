@@ -1,0 +1,28 @@
+{
+  "components": {
+    "plugins": {
+      "ExportToMDFPython": {
+        "src": "src/plugins/ExportToMDFPython",
+        "test": "test/plugins/ExportToMDFPython"
+      }
+    },
+    "seeds": {
+      "MDF": {
+        "src": "src/seeds/MDF"
+      }
+    }
+  },
+  "dependencies": {
+    "plugins": {
+      "ExportToJSON": {
+        "project": "webgme-json-importer",
+        "path": "node_modules/webgme-json-importer/src/plugins/ExportToJSON"
+      },
+      "SetStateFromJSON": {
+        "project": "webgme-json-importer",
+        "path": "node_modules/webgme-json-importer/src/plugins/SetStateFromJSON"
+      }
+    },
+    "seeds": {}
+  }
+}
