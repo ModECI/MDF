@@ -1,6 +1,6 @@
 from neuromllite.utils import _parse_element
 from modeci_mdf.mdf import Model
-from modeci_mdf.simple_scheduler import EvaluableGraph
+from modeci_mdf.scheduler import EvaluableGraph
 import json
 
 data = json.loads(
