@@ -1,0 +1,256 @@
+{
+  "attributes": {
+    "name": "Simple",
+    "id": "Simple",
+    "format": "ModECI MDF v0.1",
+    "generating_application": "Python modeci-mdf v0.1.2",
+    "notes": ""
+  },
+  "pointers": {
+    "base": "@meta:Model"
+  },
+  "children": [
+    {
+      "attributes": {
+        "id": "simple_example",
+        "name": "simple_example",
+        "notes": ""
+      },
+      "pointers": {
+        "base": "@meta:Graph"
+      },
+      "children": [
+        {
+          "id": "@id:input_node",
+          "attributes": {
+            "name": "input_node",
+            "id": "input_node"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:input_node_input_level"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:input_node_input_level",
+              "attributes": {
+                "name": "input_level",
+                "value": 0.5
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:input_node_out_port",
+              "attributes": {
+                "name": "out_port",
+                "id": "out_port",
+                "value": "input_level"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            }
+          ]
+        },
+        {
+          "id": "@id:processing_node",
+          "attributes": {
+            "name": "processing_node",
+            "id": "processing_node"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:processing_node_logistic_gain",
+              "@id:processing_node_slope",
+              "@id:processing_node_intercept"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:processing_node_logistic_gain",
+              "attributes": {
+                "name": "logistic_gain",
+                "value": 3
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:processing_node_slope",
+              "attributes": {
+                "name": "slope",
+                "value": 0.5
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:processing_node_intercept",
+              "attributes": {
+                "name": "intercept",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:processing_node_input_port1",
+              "attributes": {
+                "name": "input_port1",
+                "id": "input_port1",
+                "shape": "(1,)"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:processing_node_output_1",
+              "attributes": {
+                "name": "output_1",
+                "id": "output_1",
+                "value": "logistic_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "linear_1",
+                "id": "linear_1",
+                "function": "linear",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:linear_1_variable0",
+                  "@id:linear_1_slope",
+                  "@id:linear_1_intercept"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:linear_1_variable0",
+                  "attributes": {
+                    "name": "variable0",
+                    "value": "input_port1"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:linear_1_slope",
+                  "attributes": {
+                    "name": "slope",
+                    "value": "slope"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:linear_1_intercept",
+                  "attributes": {
+                    "name": "intercept",
+                    "value": "intercept"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            },
+            {
+              "attributes": {
+                "name": "logistic_1",
+                "id": "logistic_1",
+                "function": "logistic",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:logistic_1_variable0",
+                  "@id:logistic_1_gain",
+                  "@id:logistic_1_bias",
+                  "@id:logistic_1_offset"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:logistic_1_variable0",
+                  "attributes": {
+                    "name": "variable0",
+                    "value": "linear_1"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:logistic_1_gain",
+                  "attributes": {
+                    "name": "gain",
+                    "value": "logistic_gain"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:logistic_1_bias",
+                  "attributes": {
+                    "name": "bias",
+                    "value": 0
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:logistic_1_offset",
+                  "attributes": {
+                    "name": "offset",
+                    "value": 0
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "name": "input_edge"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:input_node_out_port",
+            "dst": "@id:processing_node_input_port1"
+          }
+        }
+      ]
+    }
+  ]
+}

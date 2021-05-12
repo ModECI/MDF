@@ -1,0 +1,247 @@
+{
+  "attributes": {
+    "name": "Language",
+    "version": "ModECI MDF v0.1"
+  },
+  "children": [
+    {
+      "id": "@meta:Model",
+      "attributes": {
+        "name": "Model",
+        "definition": "The top level Model containing a number of _Graph_s of _Node_s connected via _Edge_s."
+      },
+      "attribute_meta": {
+        "format": {
+          "type": "string"
+        },
+        "generating_application": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "children_meta": {
+        "min": -1,
+        "max": -1,
+        "@meta:Graph": {
+          "min": -1,
+          "max": -1
+        }
+      }
+    },
+    {
+      "id": "@meta:Graph",
+      "attributes": {
+        "name": "Graph",
+        "definition": "A directed graph of _Node_s connected via _Edge_s."
+      },
+      "children_meta": {
+        "min": -1,
+        "max": -1,
+        "@meta:DictionaryEntry": {
+          "min": -1,
+          "max": -1
+        },
+        "@meta:Node": {
+          "min": -1,
+          "max": -1
+        },
+        "@meta:Edge": {
+          "min": -1,
+          "max": -1
+        }
+      },
+      "pointer_meta": {
+        "parameters": {
+          "@meta:DictionaryEntry": {
+            "min": -1,
+            "max": -1
+          },
+          "min": -1,
+          "max": -1
+        }
+      },
+      "attribute_meta": {
+        "id": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "id": "@meta:Node",
+      "attributes": {
+        "name": "Node",
+        "definition": "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s"
+      },
+      "children_meta": {
+        "min": -1,
+        "max": -1,
+        "@meta:DictionaryEntry": {
+          "min": -1,
+          "max": -1
+        },
+        "@meta:InputPort": {
+          "min": -1,
+          "max": -1
+        },
+        "@meta:Function": {
+          "min": -1,
+          "max": -1
+        },
+        "@meta:OutputPort": {
+          "min": -1,
+          "max": -1
+        }
+      },
+      "pointer_meta": {
+        "parameters": {
+          "@meta:DictionaryEntry": {
+            "min": -1,
+            "max": -1
+          },
+          "min": -1,
+          "max": -1
+        }
+      },
+      "attribute_meta": {
+        "id": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "id": "@meta:InputPort",
+      "attributes": {
+        "name": "InputPort"
+      },
+      "registry": {
+        "isPort": true
+      },
+      "attribute_meta": {
+        "shape": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "id": "@meta:Function",
+      "attributes": {
+        "name": "Function",
+        "definition": "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
+      },
+      "attribute_meta": {
+        "function": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "children_meta": {
+        "min": -1,
+        "max": -1,
+        "@meta:DictionaryEntry": {
+          "min": -1,
+          "max": -1
+        }
+      },
+      "pointer_meta": {
+        "args": {
+          "@meta:DictionaryEntry": {
+            "min": -1,
+            "max": -1
+          },
+          "min": -1,
+          "max": -1
+        }
+      }
+    },
+    {
+      "id": "@meta:OutputPort",
+      "attributes": {
+        "name": "OutputPort"
+      },
+      "registry": {
+        "isPort": true
+      },
+      "attribute_meta": {
+        "value": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "id": "@meta:Edge",
+      "attributes": {
+        "name": "Edge"
+      },
+      "pointer_meta": {
+        "src": {
+          "min": -1,
+          "max": 1,
+          "@meta:Node": {
+            "min": -1,
+            "max": 1
+          },
+          "@meta:OutputPort": {
+            "min": -1,
+            "max": 1
+          }
+        },
+        "dst": {
+          "min": -1,
+          "max": 1,
+          "@meta:Node": {
+            "min": -1,
+            "max": 1
+          },
+          "@meta:InputPort": {
+            "min": -1,
+            "max": 1
+          }
+        }
+      },
+      "attribute_meta": {
+        "id": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    {
+      "id": "@meta:DictionaryEntry",
+      "attribute_meta": {
+        "value": {
+          "type": "string"
+        }
+      }
+    }
+  ]
+}
