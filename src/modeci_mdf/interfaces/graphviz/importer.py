@@ -65,7 +65,7 @@ def format_func(s):
 
 
 def format_state(s):
-    return '<font color="%s">%s</font>' % (COLOR_STATE, s)
+    return f'<font color="{COLOR_STATE}">{s}</font>'
 
 
 def format_standard_func(s):
@@ -73,7 +73,7 @@ def format_standard_func(s):
 
 
 def format_standard_func_long(s):
-    return '<i>%s</i>' % (s)
+    return "<i>%s</i>" % (s)
 
 
 def format_output(s):
@@ -180,17 +180,21 @@ def mdf_to_graphviz(
                         )
                         # info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
 
-
             if node.states and len(node.states) > 0:
                 for st in node.states:
-                    v = ''
-                    if st.value: v+='<i>value:</i> %s'%match_in_expr(st.value, node)
-                    if st.default_initial_value: v+='<i>def init value:</i> %s'%match_in_expr(st.default_initial_value, node)
-                    if st.time_derivative: v+=', <i>d/dt:</i> %s'%match_in_expr(st.time_derivative, node)
-                    info += "<tr><td>%s%s: %s</td></tr>" % (
-                        format_label("STATE"),
-                        format_state(st.id),
-                        v
+                    v = ""
+                    if st.value:
+                        v += "<i>value:</i> %s" % match_in_expr(st.value, node)
+                    if st.default_initial_value:
+                        v += "<i>def init value:</i> %s" % match_in_expr(
+                            st.default_initial_value, node
+                        )
+                    if st.time_derivative:
+                        v += ", <i>d/dt:</i> %s" % match_in_expr(
+                            st.time_derivative, node
+                        )
+                    info += "<tr><td>{}{}: {}</td></tr>".format(
+                        format_label("STATE"), format_state(st.id), v
                     )
 
             if node.output_ports and len(node.output_ports) > 0:
