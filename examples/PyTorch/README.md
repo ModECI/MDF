@@ -8,7 +8,7 @@ several working examples of this functionality.
 
 ### Inception Blocks Model
 
-![Inception](inception.svg)
+![Inception](inception.svg?raw=1)
 
 To run an example of converting a PyTorch InceptionV3 like model written in PyTorch
 to its MDF representation simply run:
