@@ -2,7 +2,7 @@
     This module defines the base implementation of ACT-R in MDF and a function 
     for exporting ACT-R models to MDF.
 """
-import modeci_mdf.export.graphviz
+import modeci_mdf.interfaces.graphviz
 from modeci_mdf.mdf import *
 
 def build_model():
@@ -16,7 +16,7 @@ def build_model():
     retrieval_f = Function(
         id="retrieve_chunk", 
         function="retrieve_chunk",
-        args={"chunk": {}}
+        args={"pattern": {}, "dm_chunks": "chunks"}
     )
     dm_node.functions.append(retrieval_f)
     retrieval_state = State(id="retrieval_state", default_initial_value={}, value=retrieval_f.id)
@@ -178,7 +178,7 @@ def build_model():
 
     # Conditions
     cond_dm = Condition(type="Always")
-    cond_retrieval = Condition(type="JustRan", dependency=dm_node.id, n=1)
+    cond_retrieval = Condition(type="JustRan", dependency=dm_node.id)
     cond_goal = Condition(type="Always")
     cond_pm = Condition(type="Always")
     cond_pattern = Condition(
@@ -289,4 +289,4 @@ def actr_to_mdf(file_name):
         mod.graphs[0].get_node("goal_buffer").parameters["goal"] = goal
         mod.to_json_file("%s.json" % mod.id)
         mod.to_yaml_file("%s.yaml" % mod.id)
-        modeci_mdf.export.graphviz.mdf_to_graphviz(mod.graphs[0], view_on_render=False, level=1)
+        modeci_mdf.interfaces.graphviz.mdf_to_graphviz(mod.graphs[0], view_on_render=False, level=1)

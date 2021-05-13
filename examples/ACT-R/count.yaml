@@ -12,7 +12,6 @@
                         type: JustRan
                         args:
                             dependency: declarative_memory
-                            n: 1
                     goal_buffer:
                         type: Always
                         args: {}
@@ -84,7 +83,8 @@
                         retrieve_chunk:
                             function: retrieve_chunk
                             args:
-                                chunk: {}
+                                pattern: {}
+                                dm_chunks: chunks
                     states:
                         retrieval_state:
                             default_initial_value: '{}'

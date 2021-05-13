@@ -13,8 +13,7 @@
                         "retrieval_buffer": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "declarative_memory",
-                                "n": 1
+                                "dependency": "declarative_memory"
                             }
                         },
                         "goal_buffer": {
@@ -128,7 +127,8 @@
                             "retrieve_chunk": {
                                 "function": "retrieve_chunk",
                                 "args": {
-                                    "chunk": {}
+                                    "pattern": {},
+                                    "dm_chunks": "chunks"
                                 }
                             }
                         },
