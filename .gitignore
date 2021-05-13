@@ -199,3 +199,6 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/simple_example_lems_definitions.xml
 /examples/MDF/state_example_lems_definitions.xml
 /examples/MDF/abcd_example_lems_definitions.xml
+/src/modeci_mdf/interfaces/neuroml/Simsimple_example.json
+/src/modeci_mdf/interfaces/neuroml/simple_example_lems_definitions.xml
+/examples/NeuroML/*.dat

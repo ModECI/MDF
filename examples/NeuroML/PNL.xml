@@ -1,0 +1,234 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.7.4"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.neuroml.org/lems/0.7.4 https://raw.githubusercontent.com/LEMS/LEMS/master/Schemas/LEMS/LEMS_v0.7.4.xsd" >
+
+
+
+    <ComponentType name="pnlMechanism"
+                   extends="baseCellMembPotDL"
+                   description="Base type for PNL based Mechanism">
+
+        <Exposure name="OUTPUT" dimension="none"/>
+        <Exposure name="INPUT" dimension="none"/>
+
+    </ComponentType>
+
+
+    <ComponentType name="pnlTransferMechanism"
+                   extends="pnlMechanism"
+                   description="Base type for PNL based TransferMechanism">
+
+    </ComponentType>
+
+
+    <ComponentType name="pnlIntegratorMechanism"
+                   extends="pnlMechanism"
+                   description="Base type for PNL based IntegratorMechanism">
+
+    </ComponentType>
+
+
+    <ComponentType  name="pnlSimpleIntegratorMechanism"
+                    extends="pnlIntegratorMechanism"
+                    description="...">
+
+        <Parameter name="rate" dimension="none"/>
+        <Parameter name="time_step_size" dimension="time"/>
+
+        <Attachments name="synapses" type="basePointCurrentDL"/>  <!-- Inputs are dimensionless "currents", through "synapses" - to fit into NML framework -->
+
+        <Dynamics>
+
+            <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add" />
+
+            <!-- Set V to zero for now - note some NML pipelines will require some kind of "voltage"... -->
+            <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+
+            <StateVariable name="OUTPUT" dimension="none" exposure="OUTPUT"/>
+
+            <TimeDerivative variable="OUTPUT" value="(rate * INPUT) / time_step_size"/>
+
+            <!-- On condition is not need on the model but NeuroML requires its definition -->
+            <OnCondition test="OUTPUT .lt. 0">
+                <EventOut port="spike"/>
+            </OnCondition>
+
+        </Dynamics>
+
+    </ComponentType>
+
+
+    <ComponentType  name="inputNode"
+                    extends="pnlMechanism"
+                    description="...">
+
+        <Parameter name="variable" dimension="none"/>
+
+        <Attachments name="synapses" type="basePointCurrentDL"/>  <!-- Inputs are dimensionless "currents", through "synapses" - to fit into NML framework -->
+
+        <Dynamics>
+
+            <!--<DerivedVariable name="INPUT" dimension="none" exposure="INPUT" value="variable"/>-->
+
+            <!-- Set V to zero for now - note some NML pipelines will require some kind of "voltage"... -->
+            <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+
+            <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="variable"/>
+
+            <!-- On condition is not need on the model but NeuroML requires its definition -->
+            <OnCondition test="OUTPUT .lt. 0">
+                <EventOut port="spike"/>
+            </OnCondition>
+
+        </Dynamics>
+
+    </ComponentType>
+
+
+    <ComponentType  name="pnlLinearFunctionTM"
+                    extends="pnlTransferMechanism"
+                    description="...">
+
+        <Parameter name="slope" dimension="none"/>
+        <Parameter name="intercept" dimension="none"/>
+
+        <Attachments name="synapses" type="basePointCurrentDL"/>  <!-- Inputs are dimensionless "currents", through "synapses" - to fit into NML framework -->
+
+        <Dynamics>
+
+            <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add" />
+
+            <!-- Set V to zero for now - note some NML pipelines will require some kind of "voltage"... -->
+            <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+
+            <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="INPUT*slope + intercept"/>
+
+            <!-- On condition is not need on the model but NeuroML requires its definition -->
+            <OnCondition test="OUTPUT .lt. 0">
+                <EventOut port="spike"/>
+            </OnCondition>
+
+        </Dynamics>
+
+    </ComponentType>
+
+
+    <ComponentType  name="pnlLogisticFunctionTM"
+                    extends="pnlTransferMechanism"
+                    description="...">
+
+        <Parameter name="gain" dimension="none"/>
+        <Parameter name="bias" dimension="none"/>
+        <Parameter name="x_0" dimension="none"/>
+        <Parameter name="offset" dimension="none"/>
+
+        <Attachments name="synapses" type="basePointCurrentDL"/>  <!-- Inputs are dimensionless "currents", through "synapses" - to fit into NML framework -->
+
+        <Dynamics>
+
+            <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add" />
+
+            <!-- Set V to zero for now... -->
+            <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+
+            <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="1/(1+exp(-1*gain*(INPUT + bias - x_0)+offset))"/>
+
+            <!-- On condition is not need on the model but NeuroML requires its definition -->
+            <OnCondition test="OUTPUT .lt. 0">
+                <EventOut port="spike"/>
+            </OnCondition>
+
+        </Dynamics>
+
+    </ComponentType>
+
+
+    <ComponentType  name="pnlExponentialFunctionTM"
+                    extends="pnlTransferMechanism"
+                    description="...">
+
+        <Parameter name="scale" dimension="none"/>
+        <Parameter name="rate" dimension="none"/>
+        <Parameter name="bias" dimension="none"/>
+        <Parameter name="offset" dimension="none"/>
+
+        <Attachments name="synapses" type="basePointCurrentDL"/>  <!-- Inputs are dimensionless "currents", through "synapses" - to fit into NML framework -->
+
+        <Dynamics>
+
+            <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add" />
+
+            <!-- Set V to zero for now... -->
+            <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+
+            <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="scale * exp((rate * INPUT) + bias) + offset"/>
+
+            <!-- On condition is not need on the model but NeuroML requires its definition -->
+            <OnCondition test="OUTPUT .lt. 0">
+                <EventOut port="spike"/>
+            </OnCondition>
+
+        </Dynamics>
+
+    </ComponentType>
+
+
+    <ComponentType name="baseGradedSynapseDL"
+                   extends="baseSynapseDL"
+                   description="Base type for dimensionless graded synapses">
+    </ComponentType>
+
+
+    <ComponentType name="silentSynapseDL"
+                   extends="baseGradedSynapseDL"
+                   description="Dummy synapse which emits no current. Used as presynaptic endpoint for analog synaptic connection.">
+
+        <Property name="weight" dimension="none" defaultValue="1"/> <!-- Not used...-->
+
+        <Exposure name="I" dimension="none"/>
+
+        <InstanceRequirement name="peer" type="baseGradedSynapse"/>
+
+        <Dynamics>
+            <DerivedVariable name="I" exposure="I" dimension="none" value="0"/>
+        </Dynamics>
+
+    </ComponentType>
+
+
+    <ComponentType name="synapseDL"
+                   extends="baseGradedSynapseDL"
+                   description="...">
+
+        <Property name="weight" dimension="none" defaultValue="1"/>
+
+        <Constant name="SEC" dimension="time" value="1s"/>
+
+        <Exposure name="I" dimension="none"/>
+
+        <Requirement name="OUTPUT" dimension="none"/>
+
+        <InstanceRequirement name="peer" type="synapseDL"/>
+
+        <Dynamics>
+            <DerivedVariable name="rpeer" dimension="none" select="peer/OUTPUT"/>
+            <DerivedVariable name="I" exposure="I" dimension="none" value="weight * SEC * rpeer"/>
+        </Dynamics>
+
+    </ComponentType>
+
+    <synapseDL id="rsDL" />
+    <silentSynapseDL id="silentDL"/>
+    <silentSynapseDL id="silentSyn_proj_input"/>
+    <silentSynapseDL id="silentSyn_proj0"/>
+    <silentSynapseDL id="silentSyn_proj1"/>
+    <silentSynapseDL id="silentSyn_proj2"/>
+    <silentSynapseDL id="silentSyn_proj3"/>
+
+    <inputNode id="a_input" variable="2"/>
+    <pnlLinearFunctionTM id="a" slope="2" intercept="2"/>
+    <pnlLogisticFunctionTM id="b" gain="1.0" bias="0.0" x_0="0.0" offset="0.0"/>
+    <pnlExponentialFunctionTM id="c" rate="1.0" bias="0.0" scale="1.0" offset="0.0"/>
+    <pnlSimpleIntegratorMechanism id="d" rate="0.05" time_step_size="0.1s"/>
+
+</Lems>

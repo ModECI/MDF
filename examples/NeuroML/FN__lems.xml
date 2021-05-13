@@ -1,0 +1,60 @@
+<?xml version="1.0" ?>
+<Lems xmlns="http://www.neuroml.org/lems/0.7.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/lems/0.7.3 https://raw.githubusercontent.com/LEMS/LEMS/development/Schemas/LEMS/LEMS_v0.7.3.xsd">
+  <ComponentType description="The Fitzhugh Nagumo model..." extends="baseCellMembPotDL" name="fnCell">
+    <Parameter dimension="none" name="a_v"/>
+    <Parameter dimension="none" name="b_v"/>
+    <Parameter dimension="none" name="c_v"/>
+    <Parameter dimension="none" name="d_v"/>
+    <Parameter dimension="none" name="e_v"/>
+    <Parameter dimension="none" name="f_v"/>
+    <Parameter dimension="none" name="time_constant_v"/>
+    <Parameter dimension="none" name="a_w"/>
+    <Parameter dimension="none" name="b_w"/>
+    <Parameter dimension="none" name="c_w"/>
+    <Parameter dimension="none" name="time_constant_w"/>
+    <Parameter dimension="none" name="threshold"/>
+    <Parameter dimension="none" name="mode"/>
+    <Parameter dimension="none" name="uncorrelated_activity"/>
+    <Parameter dimension="none" name="initial_v"/>
+    <Parameter dimension="none" name="initial_w"/>
+    <Parameter dimension="none" name="Iext"/>
+    <Constant dimension="time" name="MSEC" value="1ms"/>
+    <Attachments name="synapses" type="basePointCurrentDL"/>
+    <EventPort description="Spike event" direction="out" name="spike"/>
+    <Exposure dimension="none" name="W"/>
+    <Exposure dimension="none" name="OUTPUT"/>
+    <Exposure dimension="none" name="INPUT"/>
+    <Dynamics>
+      <StateVariable dimension="none" exposure="V" name="V"/>
+      <StateVariable dimension="none" exposure="W" name="W"/>
+      <DerivedVariable dimension="none" exposure="INPUT" name="INPUT" reduce="add" select="synapses[*]/I"/>
+      <DerivedVariable dimension="none" exposure="OUTPUT" name="OUTPUT" value="V"/>
+      <TimeDerivative value="(a_v * V * V * V + (1 + threshold) * b_v * V * V + (-1 * threshold) * c_v * V + d_v + e_v * W + f_v*Iext + INPUT) / (time_constant_v * MSEC)" variable="V"/>
+      <TimeDerivative value="(mode * a_w * V + b_w * W + c_w + (1 - mode) * uncorrelated_activity) / (time_constant_w * MSEC)" variable="W"/>
+      <OnStart>
+        <StateAssignment value="initial_v" variable="V"/>
+        <StateAssignment value="initial_w" variable="W"/>
+      </OnStart>
+    </Dynamics>
+  </ComponentType>
+  <ComponentType description="Ohmic synapse model whose conductance rises instantaneously by (_gbase * _weight) on receiving an event, and which decays exponentially to zero with time course _tauDecay" extends="baseSynapseDL" name="simpleExponentialSynapse">
+    <Parameter description="Time course of decay" dimension="time" name="tauDecay"/>
+    <Parameter description="Baseline conductance, generally the maximum conductance following a single spike" dimension="none" name="Gbase"/>
+    <Parameter description="Reversal potential of the synapse" dimension="none" name="erev"/>
+    <EventPort direction="in" name="in"/>
+    <Exposure dimension="none" name="G"/>
+    <Requirement description="The current may vary with the voltage exposed by the ComponentType on which this is placed" dimension="none" name="V"/>
+    <Dynamics>
+      <StateVariable dimension="none" exposure="G" name="G"/>
+      <DerivedVariable dimension="none" exposure="I" name="I" value="G * (erev - V)"/>
+      <TimeDerivative value="-G / tauDecay" variable="G"/>
+      <OnStart>
+        <StateAssignment value="0" variable="G"/>
+      </OnStart>
+      <OnEvent port="in">
+        <StateAssignment value="G + Gbase" variable="G"/>
+      </OnEvent>
+    </Dynamics>
+  </ComponentType>
+  <Component Iext="0.2" a_v="-0.3333333333333333" a_w="1" b_v="0" b_w="-0.8" c_v="1" c_w="0.7" d_v="1" e_v="-1" f_v="1" id="fn" initial_v="1" initial_w="0" mode="1" threshold="-1" time_constant_v="1" time_constant_w="12.5" type="fnCell" uncorrelated_activity="0"/>
+</Lems>
