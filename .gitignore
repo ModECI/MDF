@@ -1,3 +1,6 @@
+examples/ONNX/data
+examples/ONNX/*.onnx
+
 /__pycache__
 /build
 /dist
