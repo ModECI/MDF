@@ -5,6 +5,7 @@
 import modeci_mdf.interfaces.graphviz
 from modeci_mdf.mdf import *
 
+
 def build_model():
     """Builds the base model of ACT-R."""
     mod = Model(id="ACT-R Base")
@@ -13,29 +14,34 @@ def build_model():
 
     # Declarative memory
     dm_node = Node(id="declarative_memory", parameters={"chunks": []})
+    dm_ip = InputPort(id="dm_input")
+    dm_node.input_ports.append(dm_ip)
     retrieval_f = Function(
-        id="retrieve_chunk", 
+        id="retrieve_chunk",
         function="retrieve_chunk",
-        args={"pattern": {}, "dm_chunks": "chunks"}
+        args={"pattern": dm_ip.id, "dm_chunks": "chunks"}
     )
     dm_node.functions.append(retrieval_f)
-    retrieval_state = State(id="retrieval_state", default_initial_value={}, value=retrieval_f.id)
-    dm_node.states.append(retrieval_state)
-    dm_op = OutputPort(id="dm_output", value=retrieval_state.id)
+    dm_op = OutputPort(id="dm_output", value=retrieval_f.id)
     dm_node.output_ports.append(dm_op)
     mod_graph.nodes.append(dm_node)
 
     # Retrieval buffer
     retrieval_node = Node(id="retrieval_buffer")
-    retrieval_ip = InputPort(id="retrieval_input_from_dm")
+    retrieval_ip = InputPort(id="retrieval_input")
     retrieval_node.input_ports.append(retrieval_ip)
     retrieval_op = OutputPort(id="retrieval_output", value=retrieval_ip.id)
     retrieval_node.output_ports.append(retrieval_op)
     mod_graph.nodes.append(retrieval_node)
 
     # Goal buffer with state
-    goal_node = Node(id="goal_buffer", parameters={"goal": {}})
-    goal_state = State(id="goal_state", default_initial_value="goal", value="goal")
+    goal_node = Node(id="goal_buffer", parameters={"first_goal": {}})
+    goal_ip = InputPort(id="goal_input")
+    goal_node.input_ports.append(goal_ip)
+    goal_state = State(
+        id="goal_state", 
+        default_initial_value="first_goal", 
+        value="first_goal if %s == {} else %s" % (goal_ip.id, goal_ip.id))
     goal_node.states.append(goal_state)
     goal_op = OutputPort(id="goal_output", value=goal_state.id)
     goal_node.output_ports.append(goal_op)
@@ -282,11 +288,14 @@ def actr_to_mdf(file_name):
                         curr_pattern[tokens[0]] = tokens[1]
 
         # Generate MDF files
-        mod.id = file_name[:-5]
-        mod.graphs[0].id = file_name[:-5]
+        mod.id = (
+            file_name[file_name.rindex("/")+1:-5]
+            if "/" in file_name 
+            else file_name[:-5]
+        )
+        mod.graphs[0].id = mod.id + "_graph"
         mod.graphs[0].get_node("declarative_memory").parameters["chunks"] = dm
         mod.graphs[0].get_node("procedural_memory").parameters["productions"] = pm
-        mod.graphs[0].get_node("goal_buffer").parameters["goal"] = goal
-        mod.to_json_file("%s.json" % mod.id)
-        mod.to_yaml_file("%s.yaml" % mod.id)
-        modeci_mdf.interfaces.graphviz.mdf_to_graphviz(mod.graphs[0], view_on_render=False, level=1)
+        mod.graphs[0].get_node("goal_buffer").parameters["first_goal"] = goal
+        mod.to_json_file("%s.json" % file_name[:-5])
+        mod.to_yaml_file("%s.yaml" % file_name[:-5])

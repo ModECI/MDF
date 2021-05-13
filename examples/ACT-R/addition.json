@@ -1,9 +1,9 @@
 {
-    "/Users/jeremyl/Documents/MDF Project/MDF/examples/ACT-R/addition": {
+    "addition": {
         "format": "ModECI MDF v0.1",
         "generating_application": "Python modeci-mdf v0.1.3",
         "graphs": {
-            "/Users/jeremyl/Documents/MDF Project/MDF/examples/ACT-R/addition": {
+            "addition_graph": {
                 "conditions": {
                     "node_specific": {
                         "declarative_memory": {
@@ -159,50 +159,50 @@
                                 }
                             ]
                         },
+                        "input_ports": {
+                            "dm_input": {}
+                        },
                         "functions": {
                             "retrieve_chunk": {
                                 "function": "retrieve_chunk",
                                 "args": {
-                                    "pattern": {},
+                                    "pattern": "dm_input",
                                     "dm_chunks": "chunks"
                                 }
                             }
                         },
-                        "states": {
-                            "retrieval_state": {
-                                "default_initial_value": "{}",
-                                "value": "retrieve_chunk"
-                            }
-                        },
                         "output_ports": {
                             "dm_output": {
-                                "value": "retrieval_state"
+                                "value": "retrieve_chunk"
                             }
                         }
                     },
                     "retrieval_buffer": {
                         "input_ports": {
-                            "retrieval_input_from_dm": {}
+                            "retrieval_input": {}
                         },
                         "output_ports": {
                             "retrieval_output": {
-                                "value": "retrieval_input_from_dm"
+                                "value": "retrieval_input"
                             }
                         }
                     },
                     "goal_buffer": {
                         "parameters": {
-                            "goal": {
+                            "first_goal": {
                                 "name": "second-goal",
                                 "ISA": "add",
                                 "arg1": "five",
                                 "arg2": "two"
                             }
                         },
+                        "input_ports": {
+                            "goal_input": {}
+                        },
                         "states": {
                             "goal_state": {
-                                "default_initial_value": "goal",
-                                "value": "goal"
+                                "default_initial_value": "first_goal",
+                                "value": "first_goal if goal_input == {} else goal_input"
                             }
                         },
                         "output_ports": {
@@ -425,7 +425,7 @@
                         "sender": "declarative_memory",
                         "receiver": "retrieval_buffer",
                         "sender_port": "dm_output",
-                        "receiver_port": "retrieval_input_from_dm"
+                        "receiver_port": "retrieval_input"
                     },
                     "retrieval_to_pattern_edge": {
                         "sender": "retrieval_buffer",
