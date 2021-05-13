@@ -32,3 +32,10 @@ python pytorch_ddm.python
 ```
 
 This will generate the MDF representation in [ddm.json](ddm.json)
+
+### Multi-Layer Perceptron MDF to PyTorch Conversion
+To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification is translated to a PyTorch model and executed using sample digit-recognition data, run:
+
+```bash
+python mlp.py
+```
