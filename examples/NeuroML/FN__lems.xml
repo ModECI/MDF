@@ -56,5 +56,5 @@
       </OnEvent>
     </Dynamics>
   </ComponentType>
-  <Component Iext="0" a_v="-0.3333333333333333" a_w="1" b_v="0" b_w="-0.8" c_v="1" c_w="0.7" d_v="1" e_v="-1" f_v="1" id="fn" initial_v="-1" initial_w="0" mode="1" threshold="-1" time_constant_v="1" time_constant_w="12.5" type="fnCell" uncorrelated_activity="0"/>
+  <Component Iext="0.2" a_v="-0.3333333333333333" a_w="1" b_v="0" b_w="-0.8" c_v="1" c_w="0.7" d_v="1" e_v="-1" f_v="1" id="fn" initial_v="1" initial_w="0" mode="1" threshold="-1" time_constant_v="1" time_constant_w="12.5" type="fnCell" uncorrelated_activity="0"/>
 </Lems>

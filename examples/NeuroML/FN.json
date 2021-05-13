@@ -3,7 +3,7 @@
         "version": "NeuroMLlite v0.3.2",
         "parameters": {
             "initial_w": 0.0,
-            "initial_v": -1,
+            "initial_v": 1,
             "a_v": -0.3333333333333333,
             "b_v": 0.0,
             "c_v": 1.0,
@@ -18,7 +18,7 @@
             "threshold": -1.0,
             "mode": 1.0,
             "uncorrelated_activity": 0.0,
-            "Iext": 0
+            "Iext": 0.2
         },
         "notes": "FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS",
         "cells": {

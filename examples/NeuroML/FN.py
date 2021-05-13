@@ -8,8 +8,8 @@ import sys
 
 def generate():
 
-    dt = 0.05
-    simtime = 1
+    dt = 0.005
+    simtime = 100
 
     ################################################################################
     ###   Build new network
@@ -18,7 +18,7 @@ def generate():
     net.notes = 'FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS'
 
     net.parameters = { 'initial_w': 0.0,
-                       'initial_v': -1,
+                       'initial_v': 1,
                        'a_v': -0.3333333333333333,
                        'b_v': 0.0,
                        'c_v': 1.0,
@@ -33,7 +33,7 @@ def generate():
                        'threshold': -1.0,
                        'mode': 1.0,
                        'uncorrelated_activity': 0.0,
-                       'Iext': 0 }
+                       'Iext': .2 }
 
     cellInput = Cell(id='fn',
                      lems_source_file='FN_Definitions.xml',

@@ -2,8 +2,8 @@
     "SimFN": {
         "version": "NeuroMLlite v0.3.2",
         "network": "FN.json",
-        "duration": 1.0,
-        "dt": 0.05,
+        "duration": 100.0,
+        "dt": 0.005,
         "seed": 123,
         "recordVariables": {
             "V": {
