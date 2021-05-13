@@ -15,7 +15,7 @@ python FN.py -jnml      # Generate the LEMS file from the NeuroMLlite descriptio
 pynml LEMS_SimFN.xml    # Run the LEMS file using pyNeuroML
 ```
 
-![LEMSFNrun.png](LEMSFNrun.png)
+![LemsFNrun.png](LemsFNrun.png)
 
 
 ### NeuroML to MDF
