@@ -1,0 +1,257 @@
+{
+    "graphs": [
+        {
+            "name": "ABCD",
+            "notes": "Example of a simplified network",
+            "controller": null,
+            "nodes": {
+                "A_input_0": {
+                    "type": {
+                        "PNL": "TransferMechanism",
+                        "generic": null
+                    },
+                    "name": "A_input_0",
+                    "parameters": {
+                        "PNL": {}
+                    },
+                    "functions": [
+                        {
+                            "type": {
+                                "generic": "Linear"
+                            },
+                            "name": "Function_Linear",
+                            "args": {
+                                "variable": {
+                                    "type": "float",
+                                    "source": "A_input_0.input_ports.variable",
+                                    "value": 0.1
+                                }
+                            }
+                        }
+                    ]
+                },
+                "A_0": {
+                    "type": {
+                        "PNL": "TransferMechanism",
+                        "generic": null
+                    },
+                    "name": "A_0",
+                    "parameters": {
+                        "PNL": {}
+                    },
+                    "functions": [
+                        {
+                            "type": {
+                                "generic": "Linear"
+                            },
+                            "name": "Function_Linear",
+                            "args": {
+                                "slope": {
+                                    "type": "float",
+                                    "source": "A_0.input_ports.slope",
+                                    "value": 2
+                                },
+                                "intercept": {
+                                    "type": "float",
+                                    "source": "A_0.input_ports.intercept",
+                                    "value": 2
+                                }
+                            }
+                        }
+                    ]
+                },
+                "B_0": {
+                    "type": {
+                        "PNL": "TransferMechanism",
+                        "generic": null
+                    },
+                    "name": "B_0",
+                    "parameters": {
+                        "PNL": {}
+                    },
+                    "functions": [
+                        {
+                            "type": {
+                                "generic": "Logistic"
+                            },
+                            "name": "Function_Logistic",
+                            "args": {
+                                "gain": {
+                                    "type": "float",
+                                    "source": "B_0.input_ports.gain",
+                                    "value": 1
+                                },
+                                "bias": {
+                                    "type": "float",
+                                    "source": "B_0.input_ports.bias",
+                                    "value": 0
+                                },
+                                "x_0": {
+                                    "type": "float",
+                                    "source": "B_0.input_ports.x_0",
+                                    "value": 0
+                                },
+                                "offset": {
+                                    "type": "float",
+                                    "source": "B_0.input_ports.offset",
+                                    "value": 0
+                                }
+                            }
+                        }
+                    ]
+                },
+                "C_0": {
+                    "type": {
+                        "PNL": "TransferMechanism",
+                        "generic": null
+                    },
+                    "name": "C_0",
+                    "parameters": {
+                        "PNL": {}
+                    },
+                    "functions": [
+                        {
+                            "type": {
+                                "generic": "Exponential"
+                            },
+                            "name": "Function_Exponential",
+                            "args": {
+                                "rate": {
+                                    "type": "float",
+                                    "source": "C_0.input_ports.rate",
+                                    "value": 1
+                                },
+                                "bias": {
+                                    "type": "float",
+                                    "source": "C_0.input_ports.bias",
+                                    "value": 0
+                                },
+                                "scale": {
+                                    "type": "float",
+                                    "source": "C_0.input_ports.scale",
+                                    "value": 1
+                                },
+                                "offset": {
+                                    "type": "float",
+                                    "source": "C_0.input_ports.offset",
+                                    "value": 0
+                                }
+                            }
+                        }
+                    ]
+                },
+                "D_0": {
+                    "type": {
+                        "PNL": "IntegratorMechanism",
+                        "generic": null
+                    },
+                    "name": "D_0",
+                    "parameters": {
+                        "PNL": {}
+                    },
+                    "functions": [
+                        {
+                            "type": {
+                                "generic": "SimpleIntegrator"
+                            },
+                            "name": "Function_SimpleIntegrator",
+                            "args": {
+                                "rate": {
+                                    "type": "float",
+                                    "source": "D_0.input_ports.rate",
+                                    "value": 0.05
+                                },
+                                "time_step_size": {
+                                    "type": "float",
+                                    "source": "D_0.input_ports.time_step_size",
+                                    "value": "0.1s"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            "edges": {
+                "Edge A_0 to B_0": {
+                    "name": "Edge A_0 to B_0",
+                    "type": {
+                        "PNL": "MappingProjection",
+                        "generic": null
+                    },
+                    "parameters": {},
+                    "functions": {},
+                    "sender_port": "OutputPort",
+                    "receiver_port": "InputPort",
+                    "sender": "A_0",
+                    "receiver": "B_0",
+                    "weight": 1
+                },
+                "Edge A_input_0 to A_0": {
+                    "name": "Edge A_input_0 to A_0",
+                    "type": {
+                        "PNL": "MappingProjection",
+                        "generic": null
+                    },
+                    "parameters": {},
+                    "functions": {},
+                    "sender_port": "OutputPort",
+                    "receiver_port": "InputPort",
+                    "sender": "A_input_0",
+                    "receiver": "A_0",
+                    "weight": 1
+                },
+                "Edge A_0 to C_0": {
+                    "name": "Edge A_0 to C_0",
+                    "type": {
+                        "PNL": "MappingProjection",
+                        "generic": null
+                    },
+                    "parameters": {},
+                    "functions": {},
+                    "sender_port": "OutputPort",
+                    "receiver_port": "InputPort",
+                    "sender": "A_0",
+                    "receiver": "C_0",
+                    "weight": 1
+                },
+                "Edge B_0 to D_0": {
+                    "name": "Edge B_0 to D_0",
+                    "type": {
+                        "PNL": "MappingProjection",
+                        "generic": null
+                    },
+                    "parameters": {},
+                    "functions": {},
+                    "sender_port": "OutputPort",
+                    "receiver_port": "InputPort",
+                    "sender": "B_0",
+                    "receiver": "D_0",
+                    "weight": 1
+                },
+                "Edge C_0 to D_0": {
+                    "name": "Edge C_0 to D_0",
+                    "type": {
+                        "PNL": "MappingProjection",
+                        "generic": null
+                    },
+                    "parameters": {},
+                    "functions": {},
+                    "sender_port": "OutputPort",
+                    "receiver_port": "InputPort",
+                    "sender": "C_0",
+                    "receiver": "D_0",
+                    "weight": 1
+                }
+            },
+            "parameters": {
+                "PNL": {
+                    "required_node_roles": []
+                }
+            },
+            "type": {
+                "PNL": "Composition",
+                "generic": "graph"
+            }
+        }
+    ]
+}
