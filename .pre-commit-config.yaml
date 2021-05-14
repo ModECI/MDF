@@ -9,6 +9,7 @@ repos:
   rev: v3.4.0
   hooks:
   - id: check-added-large-files
+    args: ['--maxkb=800']
   - id: check-case-conflict
   - id: check-merge-conflict
   - id: check-symlinks

@@ -1,0 +1,2 @@
+# Install all the dependencies
+-e .[docs]

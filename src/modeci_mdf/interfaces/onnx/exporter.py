@@ -15,6 +15,19 @@ from onnx.defs import get_schema
 from modeci_mdf.mdf import *
 
 
+def id_to_port(id: str):
+    """Turn unique ONNX output and input value names into valid MDF input and outport names"""
+
+    new_name = str(id).replace(".", "_")
+
+    # If the first character is a digit, precede with an underscore so this can never be interpreted
+    # as number down the line.
+    if new_name[0].isdigit():
+        new_name = "_" + new_name
+
+    return new_name
+
+
 def get_shape_params(shape: onnx.TensorShapeProto) -> typing.Tuple:
     """
     Small helper function to extract a tuple from the TensorShapeProto. These objects
@@ -85,20 +98,23 @@ def onnx_node_to_mdf(
         # If we have we have value constants that feed into this node. Make them parameters
         # instead of input ports
         non_constant_inputs = []
+        func_args = {}
         for inp_i, inp in enumerate(node.input):
+
+            # Get the name of the formal argument that corresponds to this input.
+            # We need to go to the schema for this.
+            # FIXME: We need to make sure we are going the correct schema here ... yuck!
+            try:
+                arg_name = get_schema(node.op_type).inputs[inp_i].name
+            except IndexError:
+                arg_name = f"arg_{inp}"
+
             if inp in onnx_initializer and "value" in onnx_initializer[inp]:
-
-                # Get the name of the formal argument that corresponds to this input.
-                # We need to go to the schema for this.
-                # FIXME: We need to make sure we are going the correct schema here ... yuck!
-                try:
-                    arg_name = get_schema(node.op_type).inputs[inp_i].name
-                except IndexError:
-                    arg_name = f"param_{inp}"
-
                 params_dict[arg_name] = onnx_initializer[inp]["value"]
+                func_args[arg_name] = arg_name
             else:
                 non_constant_inputs.append(inp)
+                func_args[arg_name] = id_to_port(inp)
 
         # FIXME: parameters must be set or we get JSON serialization error later
         mdf_node = (
@@ -109,18 +125,18 @@ def onnx_node_to_mdf(
 
         # Add the function
         # FIXME: There is probably more stuff we need to preserve for ONNX Ops
-        func = Function(id=node.name, function=node.op_type)
+        func = Function(id=node.name, function=f"onnx::{node.op_type}", args=func_args)
         mdf_node.functions.append(func)
 
         # Recreate inputs and outputs of ONNX node as InputPorts and OutputPorts
         for inp in non_constant_inputs:
             param_info = onnx_initializer.get(inp, None)
             shape = param_info["shape"] if param_info else ""
-            ip = InputPort(id=inp, shape=shape)
+            ip = InputPort(id=id_to_port(inp), shape=shape)
             mdf_node.input_ports.append(ip)
 
         for out in node.output:
-            op = OutputPort(id=out, value=func.get_id())
+            op = OutputPort(id=id_to_port(out), value=func.get_id())
             mdf_node.output_ports.append(op)
 
     elif type(node) == onnx.ValueInfoProto:
@@ -193,7 +209,13 @@ def onnx_to_mdf(
         # And the input and intermediate node shapes as well
         for vinfo in list(graph.input) + list(graph.value_info):
             vshape = get_shape_params(vinfo.type.tensor_type.shape)
-            vtype = onnx.helper.printable_type(vinfo.type)
+
+            try:
+                vtype = onnx.helper.printable_type(vinfo.type)
+            except AssertionError:
+                # Couldn't extract type
+                vtype = None
+
             onnx_initializer_t[vinfo.name] = {"shape": vshape, "type": vtype}
 
         onnx_initializer = {**onnx_initializer, **onnx_initializer_t}
@@ -217,7 +239,7 @@ def onnx_to_mdf(
     # Add constants to the initializer dict
     onnx_initializer = {**onnx_initializer, **constants}
 
-    mod_graph = ModelGraph(id=graph.name)
+    mod_graph = Graph(id=graph.name)
 
     # Construct the equivalent nodes in MDF
     mdf_nodes = [
@@ -323,14 +345,14 @@ def convert_file(input_file: str):
         import json
         import yaml
 
-        with open(f"{out_filename}.yml", "w") as file:
+        with open(f"{out_filename}.yaml", "w") as file:
             yaml.dump(
                 json.loads(mdf_model.to_json()),
                 file,
                 default_flow_style=None,
                 width=120,
             )
-        print(f"YAML version written to {out_filename}.yml")
+        print(f"YAML version written to {out_filename}.yaml")
     except ImportError as ex:
         print("Couldn't load pyaml, skipping YAML output.")
 
