@@ -79,6 +79,15 @@ count:
                             ISA: count-from
                             start: two
                             end: four
+                            count: nil
+                        chunk_types:
+                            number:
+                            - number
+                            - next
+                            count-from:
+                            - start
+                            - end
+                            - count
                     input_ports:
                         dm_input: {}
                     functions:
@@ -87,6 +96,7 @@ count:
                             args:
                                 pattern: dm_input
                                 dm_chunks: chunks
+                                types: chunk_types
                     output_ports:
                         dm_output:
                             value: retrieve_chunk
@@ -103,12 +113,19 @@ count:
                             ISA: count-from
                             start: two
                             end: four
+                            count: nil
                     input_ports:
                         goal_input: {}
+                    functions:
+                        change_goal:
+                            function: change_goal
+                            args:
+                                pattern: goal_input
+                                curr_goal: goal_state
                     states:
                         goal_state:
                             default_initial_value: first_goal
-                            value: first_goal if goal_input == {} else goal_input
+                            value: first_goal if goal_input == {} else change_goal
                     output_ports:
                         goal_output:
                             value: goal_state
@@ -120,6 +137,7 @@ count:
                             -   buffer: goal
                                 ISA: count-from
                                 start: =num1
+                                end: =end
                                 count: nil
                             rhs:
                             -   buffer: goal
@@ -132,8 +150,9 @@ count:
                             lhs:
                             -   buffer: goal
                                 ISA: count-from
-                                count: =num1
+                                start: =start
                                 end: -=num1
+                                count: =num1
                             -   buffer: retrieval
                                 ISA: number
                                 number: =num1
@@ -145,19 +164,19 @@ count:
                             -   buffer: retrieval
                                 ISA: number
                                 number: =num2
-                                '!output!': (=num1)
                         -   name: stop
                             lhs:
                             -   buffer: goal
                                 ISA: count-from
-                                count: =num
+                                start: =start
                                 end: =num
+                                count: =num
                             -   buffer: retrieval
                                 ISA: number
                                 number: =num
+                                next: =next
                             rhs:
                             -   buffer: goal
-                                '!output!': (=num)
                     output_ports:
                         pm_output:
                             value: productions

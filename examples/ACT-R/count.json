@@ -119,9 +119,21 @@
                                     "name": "first-goal",
                                     "ISA": "count-from",
                                     "start": "two",
-                                    "end": "four"
+                                    "end": "four",
+                                    "count": "nil"
                                 }
-                            ]
+                            ],
+                            "chunk_types": {
+                                "number": [
+                                    "number",
+                                    "next"
+                                ],
+                                "count-from": [
+                                    "start",
+                                    "end",
+                                    "count"
+                                ]
+                            }
                         },
                         "input_ports": {
                             "dm_input": {}
@@ -131,7 +143,8 @@
                                 "function": "retrieve_chunk",
                                 "args": {
                                     "pattern": "dm_input",
-                                    "dm_chunks": "chunks"
+                                    "dm_chunks": "chunks",
+                                    "types": "chunk_types"
                                 }
                             }
                         },
@@ -157,16 +170,26 @@
                                 "name": "first-goal",
                                 "ISA": "count-from",
                                 "start": "two",
-                                "end": "four"
+                                "end": "four",
+                                "count": "nil"
                             }
                         },
                         "input_ports": {
                             "goal_input": {}
                         },
+                        "functions": {
+                            "change_goal": {
+                                "function": "change_goal",
+                                "args": {
+                                    "pattern": "goal_input",
+                                    "curr_goal": "goal_state"
+                                }
+                            }
+                        },
                         "states": {
                             "goal_state": {
                                 "default_initial_value": "first_goal",
-                                "value": "first_goal if goal_input == {} else goal_input"
+                                "value": "first_goal if goal_input == {} else change_goal"
                             }
                         },
                         "output_ports": {
@@ -185,6 +208,7 @@
                                             "buffer": "goal",
                                             "ISA": "count-from",
                                             "start": "=num1",
+                                            "end": "=end",
                                             "count": "nil"
                                         }
                                     ],
@@ -207,8 +231,9 @@
                                         {
                                             "buffer": "goal",
                                             "ISA": "count-from",
-                                            "count": "=num1",
-                                            "end": "-=num1"
+                                            "start": "=start",
+                                            "end": "-=num1",
+                                            "count": "=num1"
                                         },
                                         {
                                             "buffer": "retrieval",
@@ -226,8 +251,7 @@
                                         {
                                             "buffer": "retrieval",
                                             "ISA": "number",
-                                            "number": "=num2",
-                                            "!output!": "(=num1)"
+                                            "number": "=num2"
                                         }
                                     ]
                                 },
@@ -237,19 +261,20 @@
                                         {
                                             "buffer": "goal",
                                             "ISA": "count-from",
-                                            "count": "=num",
-                                            "end": "=num"
+                                            "start": "=start",
+                                            "end": "=num",
+                                            "count": "=num"
                                         },
                                         {
                                             "buffer": "retrieval",
                                             "ISA": "number",
-                                            "number": "=num"
+                                            "number": "=num",
+                                            "next": "=next"
                                         }
                                     ],
                                     "rhs": [
                                         {
-                                            "buffer": "goal",
-                                            "!output!": "(=num)"
+                                            "buffer": "goal"
                                         }
                                     ]
                                 }

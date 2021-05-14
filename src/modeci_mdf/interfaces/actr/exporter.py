@@ -13,13 +13,13 @@ def build_model():
     mod.graphs.append(mod_graph)
 
     # Declarative memory
-    dm_node = Node(id="declarative_memory", parameters={"chunks": []})
+    dm_node = Node(id="declarative_memory", parameters={"chunks": [], "chunk_types": []})
     dm_ip = InputPort(id="dm_input")
     dm_node.input_ports.append(dm_ip)
     retrieval_f = Function(
         id="retrieve_chunk",
         function="retrieve_chunk",
-        args={"pattern": dm_ip.id, "dm_chunks": "chunks"}
+        args={"pattern": dm_ip.id, "dm_chunks": "chunks", "types": "chunk_types"}
     )
     dm_node.functions.append(retrieval_f)
     dm_op = OutputPort(id="dm_output", value=retrieval_f.id)
@@ -38,10 +38,16 @@ def build_model():
     goal_node = Node(id="goal_buffer", parameters={"first_goal": {}})
     goal_ip = InputPort(id="goal_input")
     goal_node.input_ports.append(goal_ip)
+    goal_f = Function(
+        id="change_goal",
+        function="change_goal",
+        args={"pattern": goal_ip.id, "curr_goal": "goal_state"}
+    )
+    goal_node.functions.append(goal_f)
     goal_state = State(
         id="goal_state", 
         default_initial_value="first_goal", 
-        value="first_goal if %s == {} else %s" % (goal_ip.id, goal_ip.id))
+        value="first_goal if %s == {} else %s" % (goal_ip.id, goal_f.id))
     goal_node.states.append(goal_state)
     goal_op = OutputPort(id="goal_output", value=goal_state.id)
     goal_node.output_ports.append(goal_op)
@@ -227,6 +233,7 @@ def actr_to_mdf(file_name):
         add_dm = False
         add_lhs = False
         add_rhs = False
+        chunk_types = {}
         dm = []
         pm = []
         goal = None
@@ -234,8 +241,12 @@ def actr_to_mdf(file_name):
         curr_pattern = None
         for l in actr_file:
             line = l.strip()
+            # Add the chunk types
+            if line.startswith("(chunk-type"):
+                tokens = line.replace("(", "").replace(")", "").split(" ")
+                chunk_types[tokens[1]] = tokens[2:]
             # Add the chunks to declarative memory
-            if line.startswith("(add-dm"):
+            elif line.startswith("(add-dm"):
                 add_dm = True
             elif add_dm:
                 if line == "":
@@ -254,6 +265,9 @@ def actr_to_mdf(file_name):
                     if chunk["name"] == goal_name:
                         goal = chunk
                         break
+                for k in chunk_types[goal["ISA"]]:
+                    if k not in goal.keys():
+                        goal[k] = "nil"
             # Add the productions to procedural memory
             elif line.startswith(("(P", "(p")):
                 curr_prod = {"name": line[3:], "lhs": [], "rhs": []}
@@ -275,7 +289,7 @@ def actr_to_mdf(file_name):
                         curr_pattern[tokens[0]] = tokens[1]
             # Right hand side of production
             elif add_rhs:
-                if line == "" or line == ")":
+                if line == "" or line == ")" or "!output!" in line:
                     add_rhs = False
                 elif line.endswith(">"):
                     curr_pattern = {"buffer": line[1:-1]}
@@ -287,6 +301,20 @@ def actr_to_mdf(file_name):
                     else:
                         curr_pattern[tokens[0]] = tokens[1]
 
+        # Update production patterns
+        for prod in pm:
+            lhs = []
+            for pattern in prod["lhs"]:
+                isa = pattern["ISA"]
+                final_pattern = {"buffer": pattern["buffer"], "ISA": isa}
+                for k in chunk_types[isa]:
+                    if k in pattern.keys():
+                        final_pattern[k] = pattern[k]
+                    else:
+                        final_pattern[k] = "=" + k
+                lhs.append(final_pattern)
+            prod["lhs"] = lhs
+
         # Generate MDF files
         mod.id = (
             file_name[file_name.rindex("/")+1:-5]
@@ -295,6 +323,7 @@ def actr_to_mdf(file_name):
         )
         mod.graphs[0].id = mod.id + "_graph"
         mod.graphs[0].get_node("declarative_memory").parameters["chunks"] = dm
+        mod.graphs[0].get_node("declarative_memory").parameters["chunk_types"] = chunk_types
         mod.graphs[0].get_node("procedural_memory").parameters["productions"] = pm
         mod.graphs[0].get_node("goal_buffer").parameters["first_goal"] = goal
         mod.to_json_file("%s.json" % file_name[:-5])

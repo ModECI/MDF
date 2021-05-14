@@ -7,17 +7,29 @@ from ccm.lib.actr import *
 
 
 def chunk_to_string(chunk):
-    """Comvers a chunk dict to a string format."""
-    return " ".join(list(chunk.values())[1:])
+    """Converts a chunk dict to a string format."""
+    chunk_copy = chunk.copy()
+    if "name" in chunk_copy.keys():
+        del chunk_copy["name"]
+    return " ".join(list(chunk_copy.values()))
 
 
 def pattern_to_string(pattern):
-    """Comvers a pattern dict to a string format."""
-    pattern_list = [p for p in list(pattern.values())[1:] if p != "nil"]
-    return " ".join(pattern_list).replace("-=", "!?").replace("=", "?")
+    """Converts a pattern dict to a string format."""
+    return " ".join(list(pattern.values())[1:]).replace("-=", "!?").replace("=", "?")
 
 
-def retrieve_chunk(pattern, dm_chunks):
+def change_goal(pattern, curr_goal):
+    """Modifies the goal buffer using the given pattern."""
+    if curr_goal == 0:
+        return {}
+    curr_goal.update(pattern)
+    if "buffer" in curr_goal.keys():
+        del curr_goal["buffer"]
+    return curr_goal
+
+
+def retrieve_chunk(pattern, dm_chunks, types):
     """Retrieve a chunk from declarative memory given a pattern."""
     if pattern == {}:
         return {}
@@ -26,12 +38,14 @@ def retrieve_chunk(pattern, dm_chunks):
     for chunk in dm_chunks:
         memory.add(chunk_to_string(chunk))
     memory.sch = ccm.scheduler.Scheduler()
-    match = memory.find_matching_chunks(pattern_to_string(pattern))[0]
-    if match == []:
+    matches = memory.find_matching_chunks(pattern_to_string(pattern))
+    if matches == []:
         return {}
-    retrieved = {}
-    for i in range(len(match)):
-        retrieved[list(pattern.keys())[i + 1]] = match[i]
+    match = matches[0]
+    isa = match[0]
+    retrieved = {"ISA": isa}
+    for i in range(1, len(match.values())):
+        retrieved[types[isa][i-1]] = match[i]
     return retrieved
 
 
@@ -62,7 +76,7 @@ def conflict_resolution_function(productions):
     """ACT-R conflict resolution function. Currently selects a production at
     random from the already matched productions, since utility values and learning
     are not implemented yet."""
-    if productions == []:
+    if len(productions) == 0:
         return {}
     else:
         return random.choice(productions)
@@ -70,10 +84,12 @@ def conflict_resolution_function(productions):
 
 def update_buffer(production, buffer):
     """Returns a pattern to update the given buffer with."""
+    if len(production) == 0:
+        return {}
     pattern = {}
     for p in production["rhs"]:
         if p["buffer"] == buffer:
-            pattern = p
+            pattern = p.copy()
     for k, v in pattern.items():
         v_name = v.replace("=", "")
         if v_name in production["bindings"].keys():
@@ -101,10 +117,18 @@ def get_actr_functions():
     actr_funcs = []
     actr_funcs.append(
         dict(
+            name="change_goal",
+            description="ACT-R change goal buffer function",
+            arguments=["pattern", "curr_goal"],
+            expression_string="actr_functions.change_goal(pattern, curr_goal)"
+        )
+    )
+    actr_funcs.append(
+        dict(
             name="retrieve_chunk",
             description="ACT-R retrieve chunk function",
-            arguments=["pattern", "dm_chunks"],
-            expression_string="actr_functions.retrieve_chunk(pattern, dm_chunks)"
+            arguments=["pattern", "dm_chunks", "types"],
+            expression_string="actr_functions.retrieve_chunk(pattern, dm_chunks, types)"
         )
     )
     actr_funcs.append(

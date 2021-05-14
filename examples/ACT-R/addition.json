@@ -155,9 +155,23 @@
                                     "name": "second-goal",
                                     "ISA": "add",
                                     "arg1": "five",
-                                    "arg2": "two"
+                                    "arg2": "two",
+                                    "sum": "nil",
+                                    "count": "nil"
                                 }
-                            ]
+                            ],
+                            "chunk_types": {
+                                "number": [
+                                    "number",
+                                    "next"
+                                ],
+                                "add": [
+                                    "arg1",
+                                    "arg2",
+                                    "sum",
+                                    "count"
+                                ]
+                            }
                         },
                         "input_ports": {
                             "dm_input": {}
@@ -167,7 +181,8 @@
                                 "function": "retrieve_chunk",
                                 "args": {
                                     "pattern": "dm_input",
-                                    "dm_chunks": "chunks"
+                                    "dm_chunks": "chunks",
+                                    "types": "chunk_types"
                                 }
                             }
                         },
@@ -193,16 +208,27 @@
                                 "name": "second-goal",
                                 "ISA": "add",
                                 "arg1": "five",
-                                "arg2": "two"
+                                "arg2": "two",
+                                "sum": "nil",
+                                "count": "nil"
                             }
                         },
                         "input_ports": {
                             "goal_input": {}
                         },
+                        "functions": {
+                            "change_goal": {
+                                "function": "change_goal",
+                                "args": {
+                                    "pattern": "goal_input",
+                                    "curr_goal": "goal_state"
+                                }
+                            }
+                        },
                         "states": {
                             "goal_state": {
                                 "default_initial_value": "first_goal",
-                                "value": "first_goal if goal_input == {} else goal_input"
+                                "value": "first_goal if goal_input == {} else change_goal"
                             }
                         },
                         "output_ports": {
@@ -222,7 +248,8 @@
                                             "ISA": "add",
                                             "arg1": "=num1",
                                             "arg2": "=num2",
-                                            "sum": "nil"
+                                            "sum": "nil",
+                                            "count": "=count"
                                         }
                                     ],
                                     "rhs": [
@@ -245,22 +272,23 @@
                                         {
                                             "buffer": "goal",
                                             "ISA": "add",
-                                            "count": "=num",
+                                            "arg1": "=arg1",
                                             "arg2": "=num",
-                                            "sum": "=answer"
+                                            "sum": "=answer",
+                                            "count": "=num"
                                         },
                                         {
                                             "buffer": "retrieval",
                                             "ISA": "number",
-                                            "number": "=answer"
+                                            "number": "=answer",
+                                            "next": "=next"
                                         }
                                     ],
                                     "rhs": [
                                         {
                                             "buffer": "goal",
                                             "ISA": "add",
-                                            "count": "nil",
-                                            "!output!": "=answer"
+                                            "count": "nil"
                                         }
                                     ]
                                 },
@@ -270,6 +298,8 @@
                                         {
                                             "buffer": "goal",
                                             "ISA": "add",
+                                            "arg1": "=arg1",
+                                            "arg2": "=arg2",
                                             "sum": "=sum",
                                             "count": "=count"
                                         },
@@ -299,9 +329,10 @@
                                         {
                                             "buffer": "goal",
                                             "ISA": "add",
+                                            "arg1": "=arg1",
+                                            "arg2": "-=count",
                                             "sum": "=sum",
-                                            "count": "=count",
-                                            "arg2": "-=count"
+                                            "count": "=count"
                                         },
                                         {
                                             "buffer": "retrieval",
