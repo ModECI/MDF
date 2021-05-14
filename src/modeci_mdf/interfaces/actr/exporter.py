@@ -2,12 +2,15 @@
     This module defines the base implementation of ACT-R in MDF and a function 
     for exporting ACT-R models to MDF.
 """
-import modeci_mdf.interfaces.graphviz
 from modeci_mdf.mdf import *
 
 
 def build_model():
-    """Builds the base model of ACT-R."""
+    """Builds the base model of ACT-R.
+    
+    Returns:
+        An MDF model object representing the core of ACT-R.
+    """
     mod = Model(id="ACT-R Base")
     mod_graph = Graph(id="actr_base")
     mod.graphs.append(mod_graph)
@@ -226,8 +229,11 @@ def build_model():
     
 
 def actr_to_mdf(file_name):
-    """Parses an ACT-R .lisp model file and outputs MDF .json, .yaml, and 
-    graphviz .gv.png files."""
+    """Parses an ACT-R .lisp model file and outputs MDF .json and .yaml files.
+    
+    Args:
+        file_name: The name of the ACT-R model file ending in .lisp.
+    """
     with open(file_name, "r") as actr_file:
         mod = build_model()
         add_dm = False

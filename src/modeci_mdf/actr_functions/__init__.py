@@ -1,13 +1,19 @@
 """This module contains implementations of ACT-R functions using the ccm library."""
 import random
-import ccm.scheduler
-import ccm.pattern
-ccm.pattern.basestring = str
-from ccm.lib.actr import *
-
+from .ccm.pattern import Pattern
+from .ccm.scheduler import Scheduler
+from .ccm.dm import Memory
+from .ccm.buffer import Chunk, Buffer
 
 def chunk_to_string(chunk):
-    """Converts a chunk dict to a string format."""
+    """Converts a chunk dict to a string format.
+    
+    Args: 
+        chunk: A dict representing a chunk.
+
+    Returns:
+        A string representation of the chunk.
+    """
     chunk_copy = chunk.copy()
     if "name" in chunk_copy.keys():
         del chunk_copy["name"]
@@ -15,12 +21,27 @@ def chunk_to_string(chunk):
 
 
 def pattern_to_string(pattern):
-    """Converts a pattern dict to a string format."""
+    """Converts a pattern dict to a string format.
+    
+    Args: 
+        chunk: A dict representing a pattern.
+
+    Returns:
+        A string representation of the pattern.
+    """
     return " ".join(list(pattern.values())[1:]).replace("-=", "!?").replace("=", "?")
 
 
 def change_goal(pattern, curr_goal):
-    """Modifies the goal buffer using the given pattern."""
+    """Modifies the goal buffer using the given pattern.
+    
+    Args:
+        pattern: A dict representing a pattern.
+        curr_goal: A dict representing the current goal.
+
+    Returns:
+        The current goal updated with the data in pattern. 
+    """
     if curr_goal == 0:
         return {}
     curr_goal.update(pattern)
@@ -30,14 +51,23 @@ def change_goal(pattern, curr_goal):
 
 
 def retrieve_chunk(pattern, dm_chunks, types):
-    """Retrieve a chunk from declarative memory given a pattern."""
+    """Retrieve a chunk from declarative memory given a pattern.
+    
+    Args:
+        pattern: A dict representing the pattern to match.
+        dm_chunks: A list of chunks in declarative memory.
+        types: A list of possible chunk types.
+
+    Returns:
+        The chunk in declarative memory that matches the pattern.
+    """
     if pattern == {}:
         return {}
     retrieve = Buffer()
     memory = Memory(retrieve)
     for chunk in dm_chunks:
         memory.add(chunk_to_string(chunk))
-    memory.sch = ccm.scheduler.Scheduler()
+    memory.sch = Scheduler()
     matches = memory.find_matching_chunks(pattern_to_string(pattern))
     if matches == []:
         return {}
@@ -51,11 +81,19 @@ def retrieve_chunk(pattern, dm_chunks, types):
 
 def match_production(production, context):
     """Returns True if the production lhs matches the given context and adds
-    the matching bindings to the production."""
+    the matching bindings to the production.
+    
+    Args:
+        production: A dict representing a production.
+        context: A dict with the contents of the goal and retrieval buffers.
+
+    Returns:
+        True if the production's lhs matches the context.
+    """
     patterns = {}
     for p in production["lhs"]:
         patterns[p["buffer"]] = pattern_to_string(p)
-    patt = ccm.pattern.Pattern(patterns)
+    patt = Pattern(patterns)
     match_bindings = patt.match(context)
     if match_bindings is None:
         return False
@@ -64,7 +102,16 @@ def match_production(production, context):
 
 
 def pattern_matching_function(productions, goal, retrieval):
-    """Returns the productions that match the given goal and retrieval buffers."""
+    """Returns the productions that match the given goal and retrieval buffers.
+    
+    Args:
+        productions: A list of all productions.
+        goal: The current value of the goal buffer as a dict.
+        retrieval: The chunk dict retrieved from declarative memory.
+
+    Returns:
+        A list of productions that match the buffers.
+    """
     context = {
         "goal": Chunk(chunk_to_string(goal)), 
         "retrieval": Chunk(chunk_to_string(retrieval)) if retrieval != {} else None
@@ -75,7 +122,14 @@ def pattern_matching_function(productions, goal, retrieval):
 def conflict_resolution_function(productions):
     """ACT-R conflict resolution function. Currently selects a production at
     random from the already matched productions, since utility values and learning
-    are not implemented yet."""
+    are not implemented yet.
+    
+    Args:
+        productions: A list of productions.
+
+    Returns:
+        The selected production from the list.
+    """
     if len(productions) == 0:
         return {}
     else:
@@ -83,7 +137,15 @@ def conflict_resolution_function(productions):
 
 
 def update_buffer(production, buffer):
-    """Returns a pattern to update the given buffer with."""
+    """Returns a pattern to update the given buffer with.
+    
+    Args:
+        production: The production dict to update the buffer with.
+        buffer: The name of the buffer to update.
+
+    Returns:
+        A pattern that the buffer will be updated with.
+    """
     if len(production) == 0:
         return {}
     pattern = {}
@@ -98,22 +160,47 @@ def update_buffer(production, buffer):
 
 
 def update_goal(production):
-    """Returns a pattern to update the goal buffer with."""
+    """Returns a pattern to update the goal buffer with.
+
+    Args:
+        production: The production dict to update the goal buffer with.
+
+    Returns:
+        A pattern that the goal buffer will be updated with.
+    """
     return update_buffer(production, "goal")
 
 
 def update_retrieval(production):
-    """Returns a pattern to update the retrieval buffer with."""
+    """Returns a pattern to update the retrieval buffer with.
+
+    Args:
+        production: The production dict to update the retrieval buffer with.
+    
+    Returns:
+        A pattern that the retrieval buffer will be updated with.
+    """
     return update_buffer(production, "retrieval")
 
 
 def check_termination(production):
-    """Function used to check if no production was selected."""
+    """Function used to check if no production was selected.
+    
+    Args:
+        production: A production that was selected.
+
+    Returns:
+        True if the production was empty.
+    """
     return production == {}
 
 
 def get_actr_functions():
-    """Returns a list of all the ACT-R functions as MDF specifications."""
+    """Creates a list of all the ACT-R functions as MDF specifications.
+    
+    Returns:
+        A list of MDF function specifications.
+    """
     actr_funcs = []
     actr_funcs.append(
         dict(
