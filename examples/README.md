@@ -1,33 +1,15 @@
 # Examples of MDF files and conversions to target environments
 
-## MDF files
+- [MDF files](MDF): A number of Python scripts using the MDF Python API, as well as the JSON and YAML files.
+- [NeuroML](NeuroML): Examples of interactions between NeuroML and MDF.
+- [ONNX](ONNX): Examples of interactions between MDF and ONNX.
+- [PyTorch](PyTorch): Examples of interactions between PyTorch and MDF.
+- [PsyNeuLink](PsyNeuLink): Examples of interactions between PsyNeuLink and MDF.
+- [WebGME](WebGME): Examples of interactions between WebGME and MDF.
+- [ACT-R](ACT-R): Examples of interactions between ACT-R and MDF.
+- [Quantum](Quantum): Examples of interactions between MDF and Quantum computing technologies.
 
-A number of Python scripts using the MDF Python API, as well as the JSON and YAML files for serialization of the models can be found [here](MDF).
+# Examples of cross-environment conversions using MDF
 
-## NeuroML
-
-Examples of interactions between NeuroML and MDF can be found [here](NeuroML).
-
-## ONNX
-
-Examples of interactions between MDF and ONNX can be found [here](ONNX).
-
-## PyTorch
-
-Examples of interactions between PyTorch and MDF can be found [here](PyTorch).
-
-## PsyNeuLink
-
-Examples of interactions between PsyNeuLink and MDF can be found [here](PsyNeuLink).
-
-## WebGME
-
-Examples of interactions between WebGME and MDF can be found [here](WebGME).
-
-## ACT-R
-
-Examples of interactions between ACT-R and MDF can be found [here](ACT-R).
-
-## Quantum
-
-Examples of interactions between MDF and Quantum computing technologies can be found [here](Quantum).
+- [PyTorch to WebGME](WebGME/examples): Conversion of a PyTorch Inception model to WebGME using MDF.
+- [NeuroML to PsyNeuLink](): Conversion of NeuroML models to PsyNeuLink models using MDF.

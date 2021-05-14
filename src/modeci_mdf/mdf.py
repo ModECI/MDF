@@ -5,7 +5,7 @@
 import collections
 import onnx.defs
 
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Optional, Set
 
 # Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
 #  Try: pip install neuromllite
@@ -15,10 +15,29 @@ from neuromllite import EvaluableExpression
 
 
 class Model(BaseWithId):
+    _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
 
-    _definition = "The top level Model containing a number of _Graph_s of _Node_s connected via _Edge_s."
+    def __init__(
+        self,
+        id: Optional[str] = None,
+        format: Optional[str] = None,
+        generating_application: Optional[str] = None,
+    ):
+        """The top level construct in MDF is Model which consists of Graph's and model attributed
 
-    def __init__(self, **kwargs):
+        Args:
+            id: A unique identifier for this Model.
+            format: Information on the version of MDF used in this file
+            generating_application: Information on what application generated/saved this file
+        """
+
+        kwargs = {}
+        if id is not None:
+            kwargs["id"] = id
+        if format is not None:
+            kwargs["format"] = format
+        if generating_application is not None:
+            kwargs["generating_application"] = generating_application
 
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
@@ -34,16 +53,21 @@ class Model(BaseWithId):
                     "generating_application",
                     ("Information on what application generated/saved this file", str),
                 ),
-                (
-                    "onnx_opset_version",
-                    ("Any ONNX ops must conform to this version.", int),
-                ),
             ]
         )
 
+        # Inheriting the init method from superclass BaseWithId
         super().__init__(**kwargs)
 
+    @property
+    def graphs(self) -> List["Graph"]:
+        """
+        The graphs this model contains.
+        """
+        return self.__getattr__("graphs")
+
     def _include_metadata(self):
+        """ Information on the version of ModECI_MDF """
 
         from modeci_mdf import MODECI_MDF_VERSION
         from modeci_mdf import __version__
@@ -52,15 +76,37 @@ class Model(BaseWithId):
         self.generating_application = "Python modeci-mdf v%s" % __version__
 
     # Overrides BaseWithId.to_json_file
-    def to_json_file(self, filename, include_metadata=True):
+    def to_json_file(self, filename, include_metadata=True) -> str:
+        """Convert MDF object to json file
+
+        Args:
+            filename: file in MDF format (.mdf extension)
+            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
+                              benchmark results, and environments in which the specified model was originally implemented
+
+        Returns:
+            The name of the JSON file generated.
+        """
 
         if include_metadata:
             self._include_metadata()
 
         new_file = super().to_json_file(filename)
 
+        return new_file
+
     # Overrides BaseWithId.to_yaml_file
     def to_yaml_file(self, filename, include_metadata=True):
+        """Convert MDF object to yaml format
+
+        Args:
+            filename: file in MDF format (Filename extension: .mdf )
+            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
+                              benchmark results, and environments in which the specified model was originally implemented
+
+        Returns:
+            file in yaml format
+        """
 
         if include_metadata:
             self._include_metadata()
@@ -69,10 +115,17 @@ class Model(BaseWithId):
 
 
 class Graph(BaseWithId):
-
-    _definition = "A directed graph of _Node_s connected via _Edge_s."
+    _definition = "A directed graph consisting of _Node_s connected via _Edge_s."
 
     def __init__(self, **kwargs):
+        """A directed graph consisting of _Node_s connected via _Edge_s
+
+        Args:
+            nodes: Dictionary of Node objects in the Graph
+            edges: Dictionary of Edge objects in the Graph
+            parameters: Dictionary of global parameters for the Graph
+            conditions: The _ConditionSet_ stored as dictionary for scheduling of the Graph
+        """
 
         self.allowed_children = collections.OrderedDict(
             [
@@ -94,12 +147,26 @@ class Graph(BaseWithId):
         super().__init__(**kwargs)
 
     def get_node(self, id):
+        """Retrieve Node object corresponding to the given id
+
+        Args:
+            id: Unique identifier of Node object
+
+        Returns:
+            Node object if the entered id matches with the id of node present in the graph
+        """
         for node in self.nodes:
             if id == node.id:
                 return node
 
     @property
-    def dependency_dict(self):
+    def dependency_dict(self) -> Dict["Node", Set["Node"]]:
+        """Returns the dependency among nodes as dictionary
+        Key: receiver, Value: set of senders imparting information to the receiver
+
+        Returns:
+
+        """
         # assumes no cycles, need to develop a way to prune if cyclic
         # graphs are to be supported
         dependencies = {n: set() for n in self.nodes}
@@ -114,9 +181,7 @@ class Graph(BaseWithId):
 
     @property
     def inputs(self: "Graph") -> List[Tuple["Node", "InputPort"]]:
-        """
-        Enumerate all Node, InputPort pairs that specify no incoming edge. These are input ports
-        for the graph itself and must be provided values to evaluate.
+        """Enumerate all Node, InputPort pairs that specify no incoming edge. These are input ports for the graph itself and must be provided values to evaluate
 
         Returns:
             A list of Node, InputPort tuples
@@ -133,13 +198,24 @@ class Graph(BaseWithId):
 
 
 class Node(BaseWithId):
-
     _definition = (
-        "A self contained unit of evaluation recieving input from other Nodes on _InputPort_s. "
-        + "The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s"
+        "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. "
+        + "The values from these are processed via a number of _Function_s and one or more final values "
+        "are calculated on the _OutputPort_s "
     )
 
     def __init__(self, **kwargs):
+        """A self contained unit of evaluation receiving input from other Nodes on _InputPort_s.
+        The values from these are processed via a number of _Function_s and one or more final values
+        are calculated on the _OutputPort_
+
+        Args:
+            input_ports (obj): Dictionary of the InputPort objects in the Node
+            functions (obj): The _Function_s for computation the Node
+            states (obj): The _State_s of the Node
+            output_ports (obj): The _OutputPort_s containing evaluated quantities from the Node
+            parameters : Dictionary of parameters for the Node
+        """
 
         self.allowed_children = collections.OrderedDict(
             [
@@ -164,10 +240,18 @@ class Node(BaseWithId):
 
 
 class Function(BaseWithId):
-
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
 
     def __init__(self, **kwargs):
+        """A single value which is evaluated as a function of values on _InputPort_s and other Functions
+
+        Args:
+            function (str): Which of the in-build MDF functions (linear etc.) this uses
+            args : Dictionary of values for each of the arguments for the Function, e.g. if the in-build function
+                  is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
+            id (str): The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s
+                for its value
+        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -198,6 +282,12 @@ class Function(BaseWithId):
 
 class InputPort(BaseWithId):
     def __init__(self, **kwargs):
+        """The InputPort is an attribute of a Node which imports information to the Node object
+
+        Args:
+            shape (str): The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
+            type (str): The data type of the input received at a port or the output sent by a port
+        """
         self.allowed_fields = collections.OrderedDict(
             [
                 (
@@ -222,6 +312,11 @@ class InputPort(BaseWithId):
 
 class OutputPort(BaseWithId):
     def __init__(self, **kwargs):
+        """The OutputPort is an attribute of a Node which exports information to the dependent Node object
+
+        Args:
+            value (str): The value of the OutputPort in terms of the _InputPort_ and _Function_ values
+        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -239,10 +334,16 @@ class OutputPort(BaseWithId):
 
 
 class State(BaseWithId):
-
     _definition = "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
 
     def __init__(self, **kwargs):
+        """A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_
+
+        Args:
+            default_initial_value (str): The initial value of the state variable
+            value (str): The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values
+            time_derivative (str): How the state varies with time, i.e. ds/dt. Unit of time is second
+        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -272,6 +373,15 @@ class State(BaseWithId):
 
 class Edge(BaseWithId):
     def __init__(self, **kwargs):
+        """Edge is an attribute of Graph object that transmits computational results from sender_port to receiver port
+
+        Args:
+            parameters: Dictionary of parameters for the Edge
+            sender (str): The id of the _Node_ which is the source of the Edge
+            receiver (str): The id of the _Node_ which is the target of the Edge
+            sender_port (str): The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port
+            receiver_port (str): The id of the _InputPort_ on the receiver _Node_
+        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -293,7 +403,7 @@ class Edge(BaseWithId):
                 ),
                 (
                     "receiver_port",
-                    ("The id of the _InputPort_ on the sender _Node_", str),
+                    ("The id of the _InputPort_ on the receiver _Node_", str),
                 ),
             ]
         )
@@ -303,6 +413,12 @@ class Edge(BaseWithId):
 
 class ConditionSet(Base):
     def __init__(self, **kwargs):
+        """Specify the non-default pattern of execution
+
+        Args:
+            node_specific: A dictionary mapping nodes to any non-default run conditions
+            termination: A dictionary mapping time scales of model execution to conditions indicating when they end
+        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -322,6 +438,12 @@ class ConditionSet(Base):
 
 class Condition(Base):
     def __init__(self, type=None, **kwargs):
+        """A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements
+
+        Args:
+            type (str): The type of _Condition_ from the library
+            args: The dictionary of arguments needed to evaluate the _Condition_
+        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -340,7 +462,6 @@ class Condition(Base):
 
 
 if __name__ == "__main__":
-
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
 
     node = Node(id="N0", parameters={"rate": 5})

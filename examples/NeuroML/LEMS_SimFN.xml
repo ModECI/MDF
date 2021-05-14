@@ -1,0 +1,41 @@
+<Lems>
+    
+    <!-- 
+
+        This LEMS file has been automatically generated using PyNeuroML v0.5.13 (libNeuroML v0.2.56)
+
+     -->
+    
+    <!-- Specify which component to run -->
+    <Target component="SimFN" reportFile="report.SimFN.txt"/>
+
+    <!-- Include core NeuroML2 ComponentType definitions -->
+    <Include file="Cells.xml"/>
+    <Include file="Networks.xml"/>
+    <Include file="Simulation.xml"/>
+    
+    <Include file="PyNN.xml"/>
+    <Include file="FN.net.nml"/>
+    <Include file="FN__lems.xml"/>
+   
+    <Simulation id="SimFN" length="100.0ms" step="0.005ms" target="FN" seed="123">  <!-- Note seed: ensures same random numbers used every run -->
+        
+        <Display id="FNpop_0_V" title="Plots of FNpop_0_V" timeScale="1ms" xmin="-10.0" xmax="110.00000000000001" ymin="-1" ymax="1">
+            <Line id="FNpop_0_fn_V" quantity="FNpop/0/fn/V" scale="1" color="#d54f33" timeScale="1ms"/>
+        </Display>
+        
+        <Display id="FNpop_0_W" title="Plots of FNpop_0_W" timeScale="1ms" xmin="-10.0" xmax="110.00000000000001" ymin="-1" ymax="1">
+            <Line id="FNpop_0_fn_W" quantity="FNpop/0/fn/W" scale="1" color="#0534e4" timeScale="1ms"/>
+        </Display>
+        
+        <OutputFile id="FNpop_0_V_dat" fileName="FNpop_0.V.dat">
+            <OutputColumn id="FNpop_0_fn_V" quantity="FNpop/0/fn/V"/> 
+        </OutputFile>
+        
+        <OutputFile id="FNpop_0_W_dat" fileName="FNpop_0.W.dat">
+            <OutputColumn id="FNpop_0_fn_W" quantity="FNpop/0/fn/W"/> 
+        </OutputFile>
+        
+    </Simulation>
+
+</Lems>

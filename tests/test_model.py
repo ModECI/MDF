@@ -1,6 +1,14 @@
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function
 
 
+def test_model_init_kwargs():
+    m = Model(
+        id="Test", format="test_format", generating_application="test_application"
+    )
+    assert m.format == "test_format"
+    assert m.generating_application == "test_application"
+
+
 def test_model_graph_to_json():
     """
     Check if dumping a model to a simple JSON string works.

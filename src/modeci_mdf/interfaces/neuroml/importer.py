@@ -218,7 +218,7 @@ if __name__ == "__main__":
 
     from modeci_mdf.utils import load_mdf, print_summary
 
-    example = "../../../examples/Simple.json"
+    example = "../../../../examples/MDF/Simple.json"
     verbose = True
     run = False
     if "-run" in sys.argv:
