@@ -400,5 +400,5 @@ pattern of execution.
     run at least twice and `A` has run in the last `time step`.
 
 
-[actions-badge]:            https://github.com/ModECI/MDF/workflows/actions/ci.yml/badge.svg
+[actions-badge]:            https://github.com/ModECI/MDF/actions/workflows/ci.yml/badge.svg
 [actions-link]:             https://github.com/ModECI/MDF/actions
