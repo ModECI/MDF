@@ -5,6 +5,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
+import sys
 
 # Docs require Python 3.6+ to generate
 from pathlib import Path
