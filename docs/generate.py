@@ -3,6 +3,7 @@ from modeci_mdf.mdf import *
 from modeci_mdf import MODECI_MDF_VERSION
 from modeci_mdf import __version__
 import json
+import types
 import yaml
 
 mod = Model(id="Simple")
@@ -35,11 +36,19 @@ print("Written main documentation")
 
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
+mdf_dumpable = {
+    name: {
+        k: v
+        for k, v in mdf_functions[name].items()
+        if not isinstance(v, types.FunctionType)
+    }
+    for name in mdf_functions
+}
 
 with open("MDF_function_specifications.json", "w") as d:
-    d.write(json.dumps(mdf_functions, indent=4))
+    d.write(json.dumps(mdf_dumpable, indent=4))
 with open("MDF_function_specifications.yaml", "w") as d:
-    d.write(yaml.dump(mdf_functions, indent=4, sort_keys=False))
+    d.write(yaml.dump(mdf_dumpable, indent=4, sort_keys=False))
 
 
 func_doc = ""
