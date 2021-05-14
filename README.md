@@ -1,4 +1,6 @@
-<img alt="mdf logo" width="402" src="https://raw.githubusercontent.com/ModECI/MDF/main/docs/sphinx/images/logo_light_bg.png"/>
+<p align="center">
+  <img alt="mdf logo" width="402" src="https://raw.githubusercontent.com/ModECI/MDF/main/docs/sphinx/images/logo_light_bg.png"/>
+</p>
 
 [![Actions Status][actions-badge]][actions-link]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
