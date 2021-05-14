@@ -1,4 +1,9 @@
+<img alt="mdf logo" width="402" src="https://raw.githubusercontent.com/ModECI/MDF/main/docs/sphinx/images/logo_light_bg.png"/>
+
+[![Actions Status][actions-badge]][actions-link]
+<!---
 [![Build Status](https://travis-ci.com/ModECI/MDF.svg?branch=main)](https://travis-ci.com/ModECI/MDF)
+-->
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # ModECI Model Description Format (MDF)
@@ -396,3 +401,7 @@ pattern of execution.
     satisfied. This `And` is comprised of an `AfterNCalls` and a
     `JustRan`, creating a condition that is only true after both `C` has
     run at least twice and `A` has run in the last `time step`.
+
+
+[actions-badge]:            https://github.com/ModECI/MDF/workflows/ci/badge.svg
+[actions-link]:             https://github.com/ModECI/MDF/actions
