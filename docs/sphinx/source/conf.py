@@ -10,7 +10,7 @@ import sys
 # Docs require Python 3.6+ to generate
 from pathlib import Path
 
-DIR = Path(__file__).parent.resolve()
+DIR = Path(__file__).parent.parent.parent.resolve()
 BASEDIR = DIR.parent
 
 sys.path.append(str(BASEDIR / "src"))
