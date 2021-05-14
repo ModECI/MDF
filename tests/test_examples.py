@@ -37,7 +37,7 @@ example_scripts = [
 
 
 @pytest.fixture(autouse=True)
-def chdir_back_to_root():
+def chdir_back_to_root(mocker):
     """
     This fixture sets up and tears down state before each example is run. Certain examples
     require that they are run from the local directory in which they reside. This changes
@@ -48,6 +48,10 @@ def chdir_back_to_root():
     # Get the current directory before running the test
     cwd = os.getcwd()
     sys.path.append(".")
+
+    # Some of the scripts do plots. Lets patch matplotlib plot so tests don't hang
+    mocker.patch("matplotlib.pyplot.show")
+    mocker.patch("matplotlib.pyplot.figure")
 
     yield
 
