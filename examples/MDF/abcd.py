@@ -6,16 +6,7 @@ from modeci_mdf.mdf import *
 
 from modeci_mdf.utils import simple_connect, print_summary
 
-try:
-    import abcd_python as abcd
-except ModuleNotFoundError as ex:
-    import sys
-    import os
-
-    print(sys.path)
-    print(os.getcwd())
-    print(os.listdir(os.getcwd()))
-    raise ex
+import abcd_python as abcd
 
 
 def main():
