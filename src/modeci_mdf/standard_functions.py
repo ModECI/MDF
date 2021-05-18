@@ -112,6 +112,13 @@ if len(mdf_functions) == 0:
     for mdf_func_spec in get_onnx_ops():
         _add_mdf_function(**mdf_func_spec)
 
+    # Add the ACT-R functions.
+    from modeci_mdf.actr_functions import get_actr_functions
+
+    for mdf_func_spec in get_actr_functions():
+        _add_mdf_function(**mdf_func_spec)
+
+
 if __name__ == "__main__":
 
     import pprint
