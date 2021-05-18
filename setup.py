@@ -8,14 +8,15 @@ extras = {
     "test": [
         "pytest",
         "pytest-benchmark",
+        "pytest-mock",
         "typing_extensions; python_version<'3.8'",
     ],
     "docs": [
         "Sphinx~=3.0",
         "recommonmark>=0.5.0",
-        "sphinx_book_theme==0.38.0",
         "nbsphinx",
         "sphinx_copybutton",
+        "sphinx-rtd-theme",
     ],
     "dev": [],
 }
