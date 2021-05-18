@@ -2,18 +2,23 @@ import os
 import torch
 import numpy as np
 import torch.nn
+import sys
 from modeci_mdf.interfaces.pytorch import importer
 
 
 # Load Model
-path = os.path.abspath("mlp_classifier.json")
-models = mdf_to_pytorch(path, eval_models=True)
+file_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "mlp_classifier.json")
+models = importer.mdf_to_pytorch(file_path, eval_models=True)
 model = models["mlp_classifier"]
 model.eval()
 
 # Iterate on training data, feed forward and log accuracy
-imgs = np.load("example_data/imgs.npy")
-labels = np.load("example_data/labels.npy")
+
+imgs_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "example_data/imgs.npy")
+labels_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "example_data/labels.npy")
+
+imgs = np.load(imgs_path)
+labels = np.load(labels_path)
 
 matches = 0
 for i in range(len(imgs)):
@@ -25,4 +30,3 @@ for i in range(len(imgs)):
     print('Image %i: target: %s, prediction: %s, match: %s'%(i, target, prediction, match))
 
 print('Matches: %i/%i, accuracy: %s%%'%(matches,len(imgs), (100.*matches)/len(imgs)))
-

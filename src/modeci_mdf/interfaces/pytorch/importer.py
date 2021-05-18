@@ -295,12 +295,17 @@ def _script_to_model(script):
 	Convert script to pytorch object.
 	Should find a cleaner way to do this but did not want to use exec
 	"""
-	with open("module.py", mode="w") as f:
+
+	# For testing, need to add prefix if calling from out of examples directory
+	module_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "module.py")
+
+	with open(module_path, mode="w") as f:
 		f.write(script)
+
 	import module
 	importlib.reload(module)
 	my_model = module.model
-	os.remove("module.py")
+	os.remove(module_path)
 	return my_model
 
 def mdf_to_pytorch(model_input, eval_models=True):
