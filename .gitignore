@@ -19,6 +19,7 @@ report.*txt
 /src/modeci_mdf/interfaces/clean.sh
 /src/modeci_mdf/interfaces/*gv*
 /src/modeci_mdf/interfaces/Sim*.json
+.DS_Store
 
 # SCM Versioning
 src/modeci_mdf/version.py
