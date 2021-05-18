@@ -2,7 +2,7 @@ import os
 import torch
 import numpy as np
 import torch.nn
-from modeci_mdf.interfaces.pytorch import mdf_to_pytorch
+from modeci_mdf.interfaces.pytorch import importer
 
 
 # Load Model
