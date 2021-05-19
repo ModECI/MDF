@@ -3,7 +3,7 @@
         "version": "NeuroMLlite v0.3.2",
         "network": "FN.json",
         "duration": 100.0,
-        "dt": 0.005,
+        "dt": 0.05,
         "seed": 123,
         "recordVariables": {
             "V": {
