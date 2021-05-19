@@ -135,10 +135,11 @@ def mdf_to_graphviz(
                 info += "<tr><td>%s" % format_label("PARAMS")
                 for p in node.parameters:
                     nn = format_num(node.parameters[p])
+                    breaker = "<br/>"
                     info += "{} = {}{}".format(
                         format_param(p),
                         nn,
-                        "<br/>" if len(nn) > 40 else ";    ",
+                        breaker if len(info.split(breaker)[-1]) > 300 else ";    ",
                     )
                 info = info[:-5]
                 info += "</td></tr>"
