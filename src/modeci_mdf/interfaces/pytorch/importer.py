@@ -291,22 +291,24 @@ def _generate_scripts_from_json(model_input):
 	return scripts
 
 def _script_to_model(script):
-	"""
-	Convert script to pytorch object.
-	Should find a cleaner way to do this but did not want to use exec
-	"""
 
-	# For testing, need to add prefix if calling from out of examples directory
+	import importlib.util
+
+	#For testing, need to add prefix if calling from out of examples directory
 	module_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "module.py")
 
 	with open(module_path, mode="w") as f:
 		f.write(script)
 
-	import module
-	importlib.reload(module)
-	my_model = module.model
+	torch_spec = importlib.util.spec_from_file_location("module", module_path)
+	torch_module = importlib.util.module_from_spec(torch_spec)
+	torch_spec.loader.exec_module(torch_module)
+
+	model = torch_module.model
+
 	os.remove(module_path)
-	return my_model
+
+	return model
 
 def mdf_to_pytorch(model_input, eval_models=True):
 	"""
