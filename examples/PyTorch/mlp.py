@@ -7,15 +7,19 @@ from modeci_mdf.interfaces.pytorch import importer
 
 
 # Load Model
-file_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "mlp_classifier.json")
+script_dir = os.path.dirname(sys.argv[0])
+mdf_name = "mlp_classifier.json"
+
+file_path = os.path.join(os.getcwd(), script_dir, mdf_name)
+
 models = importer.mdf_to_pytorch(file_path, eval_models=True)
 model = models["mlp_classifier"]
 model.eval()
 
 # Iterate on training data, feed forward and log accuracy
 
-imgs_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "example_data/imgs.npy")
-labels_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "example_data/labels.npy")
+imgs_path = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "example_data", "imgs.npy")
+labels_path = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "example_data","labels.npy")
 
 imgs = np.load(imgs_path)
 labels = np.load(labels_path)

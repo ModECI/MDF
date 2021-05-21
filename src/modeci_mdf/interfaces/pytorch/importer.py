@@ -241,13 +241,11 @@ def build_script(nodes, execution_order, conditions=None):
 	return script
 
 
-
 def _generate_scripts_from_json(model_input):
 	"""
-	Parse elements from MDF and use text_tools module to make script
+	Parse elements from MDF and make script
 	"""
-	file_name = model_input.split("/")[-1].split(".")[0]
-	file_dir = "/".join(model_input.split("/")[:-1])
+	file_dir = os.path.dirname(model_input)
 
 	model = load_mdf(model_input)
 	scripts = {}
@@ -290,12 +288,13 @@ def _generate_scripts_from_json(model_input):
 
 	return scripts
 
+
 def _script_to_model(script):
 
 	import importlib.util
 
-	#For testing, need to add prefix if calling from out of examples directory
-	module_path = os.path.join(os.getcwd(), *sys.argv[0].split("/")[:-1], "module.py")
+	# For testing, need to add prefix if calling from out of examples directory
+	module_path = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "module.py")
 
 	with open(module_path, mode="w") as f:
 		f.write(script)
