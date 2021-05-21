@@ -3,7 +3,7 @@
     Generated network: FN
     Generation seed: 1234
     NeuroMLlite parameters: 
-        Iext = 0.2
+        Iext = 0
         a_v = -0.3333333333333333
         a_w = 1.0
         b_v = 0.0
@@ -13,7 +13,7 @@
         d_v = 1
         e_v = -1.0
         f_v = 1.0
-        initial_v = 1
+        initial_v = -1
         initial_w = 0.0
         mode = 1.0
         threshold = -1.0
@@ -23,7 +23,7 @@
     <include href="FN__lems.xml"/>
     <network id="FN">
         <notes>FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS</notes>
-        <property tag="recommended_dt_ms" value="0.005"/>
+        <property tag="recommended_dt_ms" value="0.05"/>
         <property tag="recommended_duration_ms" value="100.0"/>
         <population id="FNpop" component="fn" size="1" type="populationList">
             <property tag="color" value="0.2 0.2 0.2"/>
