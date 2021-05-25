@@ -47,13 +47,12 @@ FN:
                     states:
                         V:
                             default_initial_value: initial_v
-                            time_derivative: (a_v * V * V * V + (1 + threshold) *
-                                b_v * V * V + (-1 * threshold) * c_v * V + d_v + e_v
-                                * W + f_v*Iext + INPUT) / (time_constant_v * MSEC)
+                            time_derivative: (a_v*V*V*V + (1+threshold)*b_v*V*V +
+                                (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT)
+                                / (time_constant_v*MSEC)
                         W:
                             default_initial_value: initial_w
-                            time_derivative: (mode * a_w * V + b_w * W + c_w + (1
-                                - mode) * uncorrelated_activity) / (time_constant_w
-                                * MSEC)
+                            time_derivative: (mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity)
+                                / (time_constant_w*MSEC)
             edges: {}
             parameters: {}

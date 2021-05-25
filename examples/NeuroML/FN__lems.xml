@@ -29,8 +29,8 @@
       <StateVariable dimension="none" exposure="W" name="W"/>
       <DerivedVariable dimension="none" exposure="INPUT" name="INPUT" reduce="add" select="synapses[*]/I"/>
       <DerivedVariable dimension="none" exposure="OUTPUT" name="OUTPUT" value="V"/>
-      <TimeDerivative value="(a_v * V * V * V + (1 + threshold) * b_v * V * V + (-1 * threshold) * c_v * V + d_v + e_v * W + f_v*Iext + INPUT) / (time_constant_v * MSEC)" variable="V"/>
-      <TimeDerivative value="(mode * a_w * V + b_w * W + c_w + (1 - mode) * uncorrelated_activity) / (time_constant_w * MSEC)" variable="W"/>
+      <TimeDerivative value="(a_v*V*V*V + (1+threshold)*b_v*V*V + (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT) / (time_constant_v*MSEC)" variable="V"/>
+      <TimeDerivative value="(mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity) / (time_constant_w*MSEC)" variable="W"/>
       <OnStart>
         <StateAssignment value="initial_v" variable="V"/>
         <StateAssignment value="initial_w" variable="W"/>
