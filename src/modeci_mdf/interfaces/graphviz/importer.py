@@ -106,7 +106,7 @@ def match_in_expr(s, node):
 
 
 def mdf_to_graphviz(
-    mdf_graph, engine="dot", output_format="png", view_on_render=False, level=LEVEL_2
+    mdf_graph, engine="dot", output_format="png", view_on_render=False, level=LEVEL_2, filename_root=None
 ):
 
     DEFAULT_POP_SHAPE = "ellipse"
@@ -116,7 +116,7 @@ def mdf_to_graphviz(
 
     graph = graphviz.Digraph(
         mdf_graph.id,
-        filename="%s.gv" % mdf_graph.id,
+        filename="%s.gv" % mdf_graph.id if not filename_root else filename_root,
         engine=engine,
         format=output_format,
     )
@@ -238,7 +238,8 @@ def mdf_to_graphviz(
     if view_on_render:
         graph.view()
     else:
-        graph.render()
+        name = graph.render()
+        print('Written graph image to: %s'%name)
 
 
 if __name__ == "__main__":

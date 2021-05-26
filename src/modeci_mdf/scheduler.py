@@ -525,7 +525,7 @@ def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
 if __name__ == "__main__":
 
     example_file = os.path.join(
-        os.path.dirname(__file__), "..", "..", "examples/Simple.json"
+        os.path.dirname(__file__), "..", "..", "examples/MDF/Simple.json"
     )
     verbose = True
     if len(sys.argv) >= 2:
@@ -536,6 +536,10 @@ if __name__ == "__main__":
     else:
         verbose = False
 
+    from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
+    format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
+
     print("Executing MDF file %s with scheduler" % example_file)
 
-    main(example_file, verbose=verbose)
+    main(example_file, array_format=format, verbose=verbose)

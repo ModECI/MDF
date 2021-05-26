@@ -113,6 +113,15 @@ class Model(BaseWithId):
 
         new_file = super().to_yaml_file(filename)
 
+    def to_graph_image(self,
+                       engine="dot",
+                       output_format="png",
+                       view_on_render=False,
+                       level=2,
+                       filename_root=None):
+        from modeci_mdf.interfaces.graphviz.importer import mdf_to_graphviz
+        mdf_to_graphviz(self.graphs[0], engine=engine, output_format=output_format, view_on_render=view_on_render, level=level,filename_root=filename_root)
+
 
 class Graph(BaseWithId):
     _definition = "A directed graph consisting of _Node_s connected via _Edge_s."

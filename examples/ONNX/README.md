@@ -55,7 +55,7 @@ class ABC(torch.nn.Module):
 This implements a PyTorch model with three modules. The modules process the input sequentially, and the
 inner `B` module has a loop construct.
 
-![ABC](examples/abc.png)
+![ABC](abc.png)
 
 
 It is exported to ONNX via a combination of tracing and scripting. The resulting ONNX model looks something
