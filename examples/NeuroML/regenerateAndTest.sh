@@ -13,7 +13,7 @@ python ABCD.py -jnml
 pynml LEMS_SimABCD.xml -nogui
 
 ####  Generate PsyNeuLink version of the network from NeuroMLlite definition
-python ABCD.py -pnl
+#python ABCD.py -pnl  # Generated MDF no longer valid...
 ####  Load in PsyNeuLink version & run
 
 
@@ -43,7 +43,7 @@ fi
 ####  Generate and run jNeuroML version of the network from NeuroMLlite definition
 python FN.py -jnml
 ####  Generate PsyNeuLink version of the network from NeuroMLlite definition
-python FN.py -pnl
+#python FN.py -pnl  # Generated MDF no longer valid...
 
 ####  Generate a graph depicting the structure of the network from the LEMS description
 pynml LEMS_SimFN.xml -lems-graph

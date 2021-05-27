@@ -6,6 +6,7 @@ This file does three things:
 """
 import torch
 import onnx
+import sys
 
 
 from modeci_mdf.interfaces.onnx import onnx_to_mdf
@@ -42,6 +43,11 @@ def main():
 
     model = AB()
     dummy_input = torch.zeros(2, 3)
+
+    output = model(dummy_input)
+
+    print("PyTorch model: %s created. Evaluates %s as %s"%(model,dummy_input,output))
+
     torch.onnx.export(
         model,
         (dummy_input),
@@ -55,6 +61,13 @@ def main():
     onnx_model = onnx.load("ab.onnx")
     onnx.checker.check_model(onnx_model)
 
+    import onnxruntime as rt
+
+    sess = rt.InferenceSession("ab.onnx")
+
+    res = sess.run([sess.get_outputs()[0].name], {sess.get_inputs()[0].name: dummy_input.numpy()})
+    print(f"Output calculated by onnxruntime (input: {dummy_input}):  {res}")
+
     mdf_model = onnx_to_mdf(onnx_model)
     mdf_model.to_json_file("ab.json")
     mdf_model.to_yaml_file("ab.yaml")
@@ -67,6 +80,22 @@ def main():
         filename_root="ab",
         only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
     )
+    if "-run" in sys.argv:
+        verbose = True
+        #verbose = False
+
+        from modeci_mdf.scheduler import EvaluableGraph
+
+        eg = EvaluableGraph(mdf_model.graphs[0],
+                            verbose=verbose)
+
+        print('Evaluating graph...')
+        test_values = [0,1,[1,2],dummy_input.numpy()]
+        test_values = [0,1,[1,2]]
+
+        for t in test_values:
+            print("===================\nEvaluating MDF model with input: %s"%t)
+            eg.evaluate(initializer={"input":t})
 
 
 if __name__ == "__main__":
