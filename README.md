@@ -7,400 +7,50 @@
 
 # ModECI Model Description Format (MDF)
 
-**Work in progress!!! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](https://modeci.github.io/Website/About.html) to get in contact regarding MDF.**
+**Note: MDF is still in development! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](http://modeci.org/#aboutPage) to get in contact regarding MDF.**
 
 *The MDF format was first proposed following a meeting organised at Princeton in July 2019 by Russ Poldrack of the Center for Reproducible Neuroscience (CRN) at Stanford and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative. For more on the previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF).*
 
 
-Overview
---------
-
-The purpose of the MDF is to provide a standard, JSON-based format (though other serializations like YAML, HDF5 are envisioned)
-for describing computational models of brain and/or mental function.  The goal is to provide a common exchange format that allows models created in one
-environment that supports the standard to be expressed in a form - and in sufficient detail - that it can be
-imported into another modeling environment that supports the standard, and then executed in that environment with
-identical results (within a certain tolerance), and/or integrated with other models in that environment.
-
-The format assumes that models can be expressed as graphs, in which each **node** is a computational component, and **edges**
-specify connections between them that (at least partially) determine the flow of computation.  In this respect,
-they are similar to more generic forms of computational graphs.  However, the standard supports the expression of
-more specific elements within nodes and edges that are central to models of brain function (e.g., the inclusion of
-**ports** in nodes that are dedicated to processing the input and/or output of a node; and the **weight** and/or **function**
-of an edge that allows it to do more than simply relay information unmodified from one node to another.  Finally, the
-standard allows elements that are specific to a particular modeling environment to be expressed in a circumscribed
-form, so that the format can be used to "serialize" models from that environment, and makes them accessible to other
-environments that specifically support those constructs from the origin environment.  This latter capability provides
-a way not only for extending the standard to accommodate the specific needs of individual environments, but also as a
-path toward extending the standard: recurring extensions that serve similar purposes help identify targets for the
-definition of new components of the core standard itself.
-
-The format is currently under development, and should be considered a prototype for a more complete standard.
-Among the targets for extension are standards for specifying process control flow.  At present, to execute a model
-specified in the format, the environment must either assume that process control flow is determined by the structure
-of the graph (i.e., edges are directed, the graph is acyclic, and nodes execute in the order of dependencies), or
-that process control flow is specified in environment-specific entries.  A goal of further development is to provide
-standard ways of expressing both time-based and condition-based specifications for execution timing and order. Progress on this topic is outlined under [Conditions](#conditions) and [Graphs](#graphs) below.
-
-Basic Constructs
-----------------
-
-MDF assumes that a model can be expressed as a **graph** made up of the following four basic types of
-objects:
-
-* **nodes** - the basic computational elements of a model;
-
-* **edges** - directed connections between **nodes** that help determine the flow of computations;
-
-* **ports** - specifically **input_ports** and **output_ports**: components that belong to a **node** and mediate its **functions** and its incoming and outgoing
-              **edge(s)**;
-
-* **functions** - can belong to any of the other components, and specify the particular computation(s) carried
-                  out by that component.
-
-In addition, the standard allows the specification of **parameters** for **nodes**, **edges** and **ports**,
-**arguments** for **functions**, and run **conditions**.  The format for specifying these components is described below.
-
-Overall structure
------------------
-
-MDF is a hierarchically organized format using JSON-compliant syntax, that can be used to describe one or
-more models in a single text file. Equivalent (lossless) serializations of the format in YAML and other
-format will be supported, but the language elements are described below using JSON for clarity.
-
-The outermost level of the specification is a dictionary with a single entry named
-``graphs``, the value of which is a list of  **graph** objects.  Each **graph** object is a dictionary that
-defines a single model.  Each **graph** dictionary must have at least two entries, named ``nodes`` and ``edges``,
-each of which is a dictionary with entries describing the **nodes** and **edges** of the graph, respectively.
-Each entry in the **node** and **edge** dictionaries must be another dictionary that contains object-specific
-entries.   The ``nodes`` dictionary, in addition to entries describing nodes, can also contain entries that are
-themselves graphs, which can be used to describe hierarchically-structured models.  In addition to the ``nodes``
-and ``edges`` entries, a ``graph`` object can have additional entries, some of which are generic (such as the ``names``
-entry in the example below;  see ``Entries common to all objects`` for a full listing);  it can also include a
-``parameters`` entry, that contains specifications required by specific environments.  The following provides an
-example of the overall scheme of a MDF specification:
-
-[//]: # "Should we add schedulers as a standard/generic parameter type to deal with aspects of computational flow
-that are not determined by the structure of the graph itself??;  controller is another example of this (that we have
- added below to show how it would be done... but should probably be discussed further"
-
-    {
-        "graphs": [
-            {
-                "name": {                                   # Optional generic entry
-                    "Example Model"
-                }
-                "nodes": {                                  # Required
-                    ... dictionaries for node objects
-                }
-                "edges": {                                  # Required
-                    ... dictionaries for edge objects
-                }
-                "parameters": {                             # Optional (for parameters of the graph)
-                    ... dictionaries for graph parameters
-
-                }
-                "conditions": {                             # Optional
-                    ... dictionaries for run conditions
-                }
-             }
-            {
-                "name": {
-                    "Another Model"
-                }
-                "nodes": {
-                    ... dictionaries for node objects
-                }
-                "edges": {
-                    ... dictionaries for edge objects
-                }
-                "parameters": {
-                    ... dictionaries for graph parameters
-                }
-                "conditions": {
-                    ... dictionaries for run conditions
-                }
-             }
-         ]
-     }
-
-In addition to these standard entries, a modeling environment that requires objects or other information to be
-specified that is not (yet) supported by the standard, can include entries for such information using a name of the
-environment as the key.  In the examples below, PsyNeuLink (PNL) is used to demonstrate such environment-specific
-entries.
-
-Entries common to all objects
------------------------------
-
-The following entries can be used in any MDF object (using the strings shown below as their keys):
-
-* ``name`` : a label for the object
-
-* ``type`` : a dictionary used to describe the type of object specified by the entry.  The ``generic`` entry
-  contains types supported by the standard (e.g., certain common types of functions;  see XXX);  in addition, the
-  type can include environment-specific entries.  For example, the following specifies a graph that has two **nodes**,
-  one of which is a nested **graph**, as specified by its ``type`` entry:
-
-      "graphs": [
-          {
-              "nodes": {
-                  "Processing Unit": {
-                      ... node specifications
-                  }
-                  "A Nested Graph": {
-                      "type": {
-                          "generic": "graph"
-                          "PNL": "Composition"
-                      }
-                  }
-              }
-
-  Here, the ``generic`` entry of ``type`` is used to specify that it is a graph (recognized by the MDF standard),
-  while the ``PNL`` entry is used to specify the PNL-specific designation of a graph ("Composition").
-
-
-[//]: # "JDC: ??IS THERE ANY REASON TO DISTINGUISH THESE, OR SHOULD THESE BE COMBINED TO MAKE IT SIMPLER"
-
-[//]: # "KDM: No, there's no reason on my part, that was just how the original spec listed it, so I implemented it that way.
-I think it would be better to choose one name"
-
-* ``parameters`` (for non-**function** entries) or ``args`` (for **functions** entries) : this is used to specificy
-  attributes of the object.  For all objects other than **functions**, these are called ``parameters``, and for
-  **functions** they are called ``args``.  For example, the following contains an entry for a **node** ("Processing
-  Unit"), that has specifications for one of its standard **parameters** (``initializer``), as well as a ``functions``
-  entry that specifies the list of functions for the node well as the **type** and **args** for each function.  For
-  example, the node for **Processing Unit** in the example below has a single parameter specified, and a single
-  function that is specified as follows:
-
-    [//]: # "JDC: Are there any standard-defined parameters for graphs, nodes?  Here, we assume that ``initializer`` is such
-    parameter and included it in the example as such.  However, I'm not sure we ever discussed or agreed to any such
-    standard node parameters.  If so, we should list them somehwher.  If are not any, then ``parameters`` should be
-    removed from this example, and ``initializer`` (if retained) should be moved to the ``PNL`` entry in the next
-    example)"
-
-        "nodes": {
-            "Processing Unit": {
-                "parameters": {
-                    "initializer": [[0]]
-                }
-                "functions": [
-                    {
-                        "type": "Linear"
-                        "args": {
-                            "bounds": null,
-                            "intercept": 0.0,
-                            "slope": 1.0
-                        }
-                    }
-                ]
-            }
-        }
-
-    [//]: # "JDC: Are there any standard-defined parameters for graphs, nodes?  Here, we assume that ``initializer`` is such
-    parameter and included it in the example as such.  However, I'm not sure we ever discussed or agreed to any such
-    standard node parameters.  If so, we should list them somehwher.  If are not any, then ``parameters`` should be
-    removed from this example, and ``initializer`` (if retained) should be moved to the ``PNL`` entry in the next
-    example)"
-
-    [//]: # "JDC: The example below is predicated on the assumption that ``controller`` should be a standard parameter for a
-    graph;  if not, can delete the following text and example, but might want to include another one that shows how
-    a node can be referenced by another entry"
-
-    The following example specifies a standard **parameter** for a graph -- ``controller`` -- by referencing the
-    **node** that serves as the controller for the model:
-
-       "graphs": [{
-            {
-                "parameters": {
-                    "controller":"My controller"
-                }
-                nodes:{
-                    "My Contoller": {
-                        ... node ``functions`` and ``parameters`` entries here
-                    }
-                }
-            }]
-        }
-
-
-
-
-
-The ``parameters`` entry of a **node** (or ``args`` entry of a *function**) can also include a subdictionary of
-environment-specific parameter-value (or arg-value) pairs.  For example, the ``parameters`` entry below adds entries
-for two parameters -- ``execution_count`` and ``has_initializers`` -- that are specific to the PsyNeuLink (PNL)
-environment:
-
-      "parameters": {
-            "initializer": [[0]]
-            "PNL": {                      # This is a subdictionary of PNL-specific parameters and their values
-                "execution_count": 0,
-                "has_initializers": false,
-            }
-        }
-
-Object-specific entries
------------------------
-
-#### *Nodes, edges, and ports*
-
-These objects can all include a ``functions`` entry, that specifies one or more **functions** that belong to the object:
-
-* ``functions`` : a list of **function** objects. As noted above, each of these can have an ``args`` entry that,
-  in turn, can contain entries that are either simple parameter-value pairs (as in the example above), or a dictionary
-  that provides more detailed information about an argument, including its **type** and **value** as in the example
-  below:
-
-        "functions": [
-            {
-                "name": "Linear Function-1",
-                "type": {
-                    "generic": "Linear"
-                "args": {
-                    "intercept": {
-                        "source": "A.input_ports.intercept",
-                        "type": "float",
-                        "value": 2.0
-                    },
-                    "slope": {
-                        "source": "A.input_ports.slope",
-                        "type": "float",
-                        "value": 5.0
-                    }
-                },
-                }
-            }
-        ]
-
-    Note that the ``source`` entry can reference a ``port`` used to determine the value of the argument when the
-    model is executed (see [ports](#ports)] below);  the reference must use dot-delimited notation, beginning with the
-    name of the **node** to which the **port** belongs (``A`` in the example above), followed by ``input_ports
-    `` entry, and then name of the input_port from which the argument should receive its value.
-
-    [//]: # "??PNL ALLOWS THE NAME OF THE NODE (MECHANISM) TO BE USED IN PLACE OF THE INPUTPORT.  THIS IS SEEMS TO BE
-    SUPPORTED FOR EDGES (SEE BELOW).  SHOULD WE DO THE SAME FOR SOURCE SPECIFICATIONS?"
-
-    [//]: # "KDM: maybe, but I'd wait and see what others say. Suppose there might be a use for a 'combined' input port with a
-     name that isn't the same as the arg name"
-
-    [//]: # "JDC: Not sure I follow;  should discuss"
-
-#### Non-**graph** **nodes**
-
-These can have one or both of the following entries that specify the **node**'s **ports**
-
-* ``input_ports`` : a list of **port** objects that can be referenced by the ``source`` entry of an ``args`` dictionary
-  (see [parameters and args](#paramters-or-args) above), or the ``sender_port`` entry of an ``edges`` dictionary (see
-   [edges](#edges) below).
-
-* ``output_ports`` : a list of **port** objects that can be referenced by the ``receiver_port`` entry of an ``edges
-`` dictionary (see [edges](#edges) below).
-
-#### **Ports**
-
-These are used to specify entries in the ``input_ports`` and/or ``output_ports`` entry of a **node**, and can
-be referenced, respectively, by the ``sender_port`` and ``receiver_port`` entries of an **edge**, and by ``source``
-in the ``args`` entry of a **function**.
-
-* ``dtype`` : the type of the input received by a **port** listed in the ``input_ports`` entry of a **node**,
-  or of the output sent by a **port** listed in the ``output_ports`` entry of a **node**;  this uses the same
-  syntax as [numpy.dtype](https://docs.scipy.org/doc/numpy/reference/generated/numpy.dtype.html).
-
-* ``shape`` : the shape of the input or output of a **port**. This uses the same syntax as numpy ndarray shapes
-  (e.g., `numpy.zeros(<shape>)` would produce an array with the correct shape).
-
-#### **Edges**
-
-These must contain the following entries that specify edge's sender and receiver. This can include the **port** to
-which the edge connects on a **node**; if either of the **port** specifications is omitted for an **edge**, then
-the environment must not use ports, or it must be able to assign a suitable default for the referenced ``sender``
-or ``receiver`` **node**.
-
-* ``sender`` : the name of its source **node**.
-
-* ``sender_port`` : the name of the **port** on the ``sender`` **node** to which it connects.
-
-* ``receiver`` : the name of its destination **node**.
-
-* ``receiver_port`` : the name of the **port** on the ``receiver`` **node** to which it connects.
-
-#### **Conditions**
-
-These must include a **type**, among options of an accepted library of
-conditions (TBD), as well as any **args** necessary to
-determine satisfaction of the relevant condition.
-
-* ``type`` : the name of the condition
-* ``args`` : named arguments used to evaluate the condition
-
-#### **Graphs**
-
-These objects may include **condition**s to specify a non-default
-pattern of execution.
-
-* ``conditions`` : a dictionary with entries
-  * ``node_specific`` : a dictionary mapping **node**s to any non-default run **condition**s
-  * ``termination`` : a dictionary mapping time scales of model execution to **condition**s indicating when they end
-
-  Each node or time scale may have exactly one condition, however binary
-  conditions like `And`, `Or`, and `Not`, may combine multiple
-  conditions into one in an unambiguous way. This is sufficient to
-  describe a wide variety of execution patterns that go beyond an
-  implied ordering based on the structure of the graph, as in the
-  example below:
-
-        "conditions": {
-            "node_specific": {
-                "A": {
-                    "type": "Always",
-                    "args": {}
-                },
-                "B": {
-                    "type": "EveryNCalls",
-                    "args": {
-                        "dependency": "A",
-                        "n": 1
-                    }
-                },
-                "C": {
-                    "type": "EveryNCalls",
-                    "args": {
-                        "dependency": "A",
-                        "n": 3
-                    }
-                }
-            },
-            "termination": {
-                "trial": {
-                    "type": "And",
-                    "args": {
-                        "dependencies": [
-                            {
-                                "type": "AfterNCalls",
-                                "args": {
-                                    "dependency": "C",
-                                    "n": 2
-                                }
-                            },
-                            {
-                                "type": "JustRan",
-                                "args": {
-                                    "dependency": "A"
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        },
-
-    In this example, node `C` runs only while its condition
-    `EveryNCalls` with `dependency` `A` and `n = 3` is true. This
-    results in `C` executing only every third time `A` executes. The
-    `trial` finishes when the trial termination condition - `And` - is
-    satisfied. This `And` is comprised of an `AfterNCalls` and a
-    `JustRan`, creating a condition that is only true after both `C` has
-    run at least twice and `A` has run in the last `time step`.
+## Overview
 
+MDF is intended to be an open source, community-supported standard and associated library of tools for expressing computational models in a form that allows them to be exchanged between diverse programming languages and execution environments. It consists of a specification for expressing models in a serialized format (currently a JSON representation, though others such as YAML and HDF5 are planned) and a set of Python tools for implementing a model described using MDF. The serialized format can be used when importing a model into a supported target environment to execute it; and, conversely, when exporting a model built in a supported environment so that it can be re-used in other environments.  
+
+The MDF Python API can be used to create or load an MDF model for inspection and validation. It also includes a basic scheduler for simulating models in the format. However, this is not intended as a general purpose simulation environment, nor is MDF intended as a programming language.  Rather, the primary purpose of the Python API is  to facilitate and validate the exchange of models between existing environments that serve different communities.  Accordingly, these Python tools include bi-directional support for importing to and exporting from widely-used programming environments in a range of disciplines, and for easily extending these to other environments.
+
+## Development
+
+The implementation and dissemination of the MDF language and associated tools is being carried out by the [Model Exchange and Convergence Initiative (ModECI)](http://modeci.org/), with support from the [NSF Convergence Accelerator Program](https://www.nsf.gov/od/oia/convergence-accelerator/) (Track D: AI-Driven Innovation via Data and Model Sharing), as a publicly accessible open source project. The initial design has been informed by a series of workshops involving developers of key software environments and other stakeholders in machine learning, cognitive science and neuroscience. Future workshops will address broadening of support to other domains in basic and applied science and technology development (e.g., population biology, medical informatics, structural and environmental monitoring, and complex systems control).  Environments for which support is currently being developed include [PyTorch](https://pytorch.org), [ONNX](http://onnx.ai), [WebGME](https://webgme.org), [NeuroML](https://neuroml.org), [PsyNeuLink](http://www.psyneuln.deptcpanel.princeton.edu), and [ACT-R](http://act-r.psy.cmu.edu).
+
+
+Successful interfacing of MDF to existing disciplinary standards (such as [ONNX](http://onnx.ai) in machine learning, and [NeuroML](https://neuroml.org) in neuroscience) as well as general purpose simulation environments (such as [WebGME](https://webgme.org)) will permit bridging between these environments, and translation to the broader set of environments supported by those standards (such as [Tensorflow](https://www.tensorflow.org) & [Keras](https://keras.io) in the case of ONNX, and [The Virtual Brain](https://www.thevirtualbrain.org) and [SONATA](https://github.com/AllenInstitute/sonata) in the case of NeuroML).  Efforts are also underway, in collaboration with projects in the NSF Accelerator Track C (Quantum Technology), to use MDF for facilitating the implementation of computational models on [quantum hardware](https://github.com/ModECI/MDF/blob/readme_update/examples/Quantum).  
+
+
+### The core elements of the MDF standard
+
+**[Models](https://github.com/ModECI/MDF/blob/main/docs/README.md#model)**  The highest level construct in MDF is a model that consists of one or more graphs and model attributes.  The former describe the operational features of the model (its structure and execution), while the latter provide additional information useful for executing and evaluating it (e.g., test data and benchmark results).
+
+**[Graphs](https://github.com/ModECI/MDF/blob/main/docs/README.md#graph)** A graph specifies the structure and process flow of a model. The most fundamental element of a graph is a node, which specifies some unit of computation as one or more functions. Functions reference executable implementations in a standardized ontology (with bindings to well-established existing ontologies, such as ONNX, where available). Nodes are connected to other nodes via directed edges, which, in the absence of additional conditions, define the computational flow of the model.
+
+**[Nodes](https://github.com/ModECI/MDF/blob/main/docs/README.md#node)** These define the core elements of computation in a graph, that receive and transmit information via their input ports and output ports.  The latter are the points of contact between a node and the edges that connect it to other nodes.  Nodes can also recursively specify sub-graphs, provided the subgraphs are also valid MDF graphs.
+
+**[Edges](https://github.com/ModECI/MDF/blob/main/docs/README.md#edge)**  These transmit information from the output port of one node to the input port of another, collectively defining a graph’s topography. Edges may contain weights that can operate on the information they carry.
+
+**[Conditions](https://github.com/ModECI/MDF/blob/main/docs/README.md#condition)** These are a core and distinctive element of the MDF specification, that complement other computational graph-based formats by providing a high-level set of descriptors for specifying conditional execution of nodes. This allows models with relatively complex execution requirements (e.g., containing cycles, branches, and/or temporal dependencies) to be expressed as graphs in a sufficiently abstract form that facilities exchange among high-level modeling environments without requiring that they be “lowered” to and then recovered from more elaborated procedural descriptions.
+
+**[Parameters and Arguments](https://github.com/ModECI/MDF/blob/main/docs/README.md#node)**  Attributes that determine the configuration and operation of nodes and edges, such as function parameters and weight matrices, can be defined in the MDF using parameters. In the case of parameters specifying large data structures (e.g., weight-matrices), arrays in widely used formats (e.g. numpy arrays) can be used, and serialisation in portable binary formats (e.g. HDF5) will be supported.. Functions can have dynamically-set attributes in the form of arguments, often sourced from an input port on the node containing that function.  Conditions may use arguments which are both static and dynamic. For example, a threshold condition may compare a dynamically-changing value, passed as an argument, against a static threshold parameter.  
+
+**[States](https://github.com/ModECI/MDF/blob/main/docs/README.md#state)**  For information that must persist between executions of a node (such as integrator functions), MDF nodes support states, which can be modified and accessed on a given execution, and will persist and be available in subsequent executions.
+
+**[Model Attributes](https://github.com/ModECI/MDF/blob/main/docs/README.md#model)**  These provide for the definition of model “meta-data,” including contact information, citations, acknowledgements, pointers to sample data and benchmark results, and environments in which the specified model was originally implemented and any that have been validated to support its execution.
+
+<p align="center"><img src="docs/images/MDFgraph1.png" width="700px"><br/><sup><i><b>Fig 1:</b> A simple graph with 3 nodes and 2 edges expressed in MDF.</i></sup></p>
+
+<p align="center"><img src="docs/images/MDFgraph2.png" width="700px"><br/><sup><i><b>Fig 2:</b> This graph illustrates the ability to specify behavior that extends beyond the directed flow through the graph. Here, Node 1 generates a random number and transmits that number to Node 2. Node 2 will only run if the number it receives from Node 1 is greater than 10.</i></sup></p>
+
+## Examples
+
+Multiple examples of serialized MDF files, the Python scripts used to generate them, as well as mappings to target environments can be found [here](https://github.com/ModECI/MDF/blob/main/examples/README.md).
 
 [actions-badge]:            https://github.com/ModECI/MDF/actions/workflows/ci.yml/badge.svg
 [actions-link]:             https://github.com/ModECI/MDF/actions
