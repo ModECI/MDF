@@ -145,11 +145,10 @@ class Model(BaseWithId):
                 level=level,
                 filename_root=filename_root,
             )
-            m.l
 
         except Exception as e:
             if only_warn_on_fail:
-                print("Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system")
+                print("Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"%e)
             else:
                 raise(e)
 

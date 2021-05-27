@@ -15,7 +15,17 @@ $ onnx-to-mdf examples/convnet.onnx
 
 You can see the converted MDF models in [JSON](examples/convnet-mdf.json) and [YAML](examples/convnet-mdf.yml):
 
+### AB Sequential Model - 2 node_specific
+
+[Python source](simple_ab.py) | [JSON](ab.json) | [YAML](ab.yaml)
+
+This is an example of a PyTorch model with 2 nodes.
+
+![AB](ab.png)
+
 ### ABC Sequential Model with Loop
+
+[Python source](simple_abc.py) | [JSON](abc.json) | [YAML](abc.yaml)
 
 This is an example of a PyTorch model that is implemented in `onnx_mdf/examples/simple_abc.py`. The model code
 is very simple:
@@ -72,6 +82,8 @@ $ simple-abc-example
 You can see the converted MDF models in [JSON](examples/abc-mdf.json) and [YAML](examples/abc-mdf.yml):
 
 ### ABCD Branching Conditional Model
+
+[Python source](simple_abcd.py) | [JSON](abcd.json) | [YAML](abcd.yaml)
 
 This is an example of a PyTorch model that have four components (A, B, C, D). We loop over the whole
 model 10 iterations. A is executed only on the first iteration, B is executed every iteration, C is

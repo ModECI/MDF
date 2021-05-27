@@ -112,7 +112,7 @@ def mdf_to_graphviz(
     DEFAULT_POP_SHAPE = "ellipse"
     DEFAULT_ARROW_SHAPE = "empty"
 
-    print("Converting MDF graph: %s to graphviz" % (mdf_graph.id))
+    print("Converting MDF graph: %s to graphviz (level: %s, format: %s)" % (mdf_graph.id, level, output_format))
 
     graph = graphviz.Digraph(
         mdf_graph.id,

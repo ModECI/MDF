@@ -208,3 +208,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/*.dat
 /examples/ONNX/ab
 /examples/ONNX/abc
+/examples/ONNX/abcd
