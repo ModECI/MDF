@@ -207,3 +207,4 @@ Thumbs.db #thumbnail cache on Windows
 /src/modeci_mdf/interfaces/neuroml/simple_example_lems_definitions.xml
 /examples/NeuroML/*.dat
 /examples/ONNX/ab
+/examples/ONNX/abc

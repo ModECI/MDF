@@ -113,14 +113,45 @@ class Model(BaseWithId):
 
         new_file = super().to_yaml_file(filename)
 
-    def to_graph_image(self,
-                       engine="dot",
-                       output_format="png",
-                       view_on_render=False,
-                       level=2,
-                       filename_root=None):
+
+    def to_graph_image(
+        self,
+        engine="dot",
+        output_format="png",
+        view_on_render=False,
+        level=2,
+        filename_root=None,
+        only_warn_on_fail=False
+    ):
+        """Convert MDF graph to an image (png or svg) using the Graphviz export
+
+        Args:
+            engine: dot or other Graphviz formats
+            output_format: e.g. png (default) or svg
+            view_on_render: if True, will open generated image in system viewer
+            level: 1,2,3, depending on how much detail to include
+            filename_root: will change name of file generated to filename_root.png, etc.
+            only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing erros in automated tests
+
+        """
         from modeci_mdf.interfaces.graphviz.importer import mdf_to_graphviz
-        mdf_to_graphviz(self.graphs[0], engine=engine, output_format=output_format, view_on_render=view_on_render, level=level,filename_root=filename_root)
+
+        try:
+            mdf_to_graphviz(
+                self.graphs[0],
+                engine=engine,
+                output_format=output_format,
+                view_on_render=view_on_render,
+                level=level,
+                filename_root=filename_root,
+            )
+            m.l
+
+        except Exception as e:
+            if only_warn_on_fail:
+                print("Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system")
+            else:
+                raise(e)
 
 
 class Graph(BaseWithId):
@@ -471,7 +502,9 @@ class Condition(Base):
 
 
 if __name__ == "__main__":
+    model = Model(id='MyModel')
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
+    model.graphs.append(mod_graph0)
 
     node = Node(id="N0", parameters={"rate": 5})
 
@@ -481,3 +514,11 @@ if __name__ == "__main__":
     print("------------------")
     print(mod_graph0.to_json())
     print("==================")
+    model.to_graph_image(
+        engine="dot",
+        output_format="png",
+        view_on_render=False,
+        level=3,
+        filename_root="test",
+        only_warn_on_fail=True
+    )
