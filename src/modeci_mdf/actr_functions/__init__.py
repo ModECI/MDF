@@ -4,9 +4,10 @@ from .ccm.pattern import Pattern
 from .ccm.scheduler import Scheduler
 from .ccm.dm import Memory
 from .ccm.buffer import Chunk, Buffer
+from typing import Union, Dict, Any, Tuple, List, Callable
 
-def chunk_to_string(chunk):
-    """Converts a chunk dict to a string format.
+def chunk_to_string(chunk: Dict[str, str]) -> str:
+    """Converts a chunk dictionary to a string format.
     
     Args: 
         chunk: A dict representing a chunk.
@@ -20,8 +21,8 @@ def chunk_to_string(chunk):
     return " ".join(list(chunk_copy.values()))
 
 
-def pattern_to_string(pattern):
-    """Converts a pattern dict to a string format.
+def pattern_to_string(pattern: Dict[str, str]) -> str:
+    """Converts a pattern dictionary to a string format.
     
     Args: 
         chunk: A dict representing a pattern.
@@ -32,12 +33,12 @@ def pattern_to_string(pattern):
     return " ".join(list(pattern.values())[1:]).replace("-=", "!?").replace("=", "?")
 
 
-def change_goal(pattern, curr_goal):
-    """Modifies the goal buffer using the given pattern.
+def change_goal(pattern: Dict[str, str], curr_goal: Dict[str, str]):
+    """Modifies the current goal buffer using the given pattern.
     
     Args:
         pattern: A dict representing a pattern.
-        curr_goal: A dict representing the current goal.
+        curr_goal: A dict representing the current goal pattern.
 
     Returns:
         The current goal updated with the data in pattern. 
@@ -50,13 +51,16 @@ def change_goal(pattern, curr_goal):
     return curr_goal
 
 
-def retrieve_chunk(pattern, dm_chunks, types):
+def retrieve_chunk(
+    pattern: Dict[str, str], 
+    dm_chunks: List[Dict[str, str]], 
+    types: Dict[str, List[str]]) -> Dict[str, str]:
     """Retrieve a chunk from declarative memory given a pattern.
     
     Args:
         pattern: A dict representing the pattern to match.
-        dm_chunks: A list of chunks in declarative memory.
-        types: A list of possible chunk types.
+        dm_chunks: A list of dicts, each representing a chunk in declarative memory.
+        types: A dict containing each possible chunk type.
 
     Returns:
         The chunk in declarative memory that matches the pattern.
@@ -79,16 +83,18 @@ def retrieve_chunk(pattern, dm_chunks, types):
     return retrieved
 
 
-def match_production(production, context):
-    """Returns True if the production lhs matches the given context and adds
-    the matching bindings to the production.
+def match_production(
+    production: Dict[str, Any], 
+    context: Dict[str, Dict[str, str]]) -> bool:
+    """Returns True if the production's left hand side matches the given context 
+    and adds the matching bindings to the production.
     
     Args:
         production: A dict representing a production.
         context: A dict with the contents of the goal and retrieval buffers.
 
     Returns:
-        True if the production's lhs matches the context.
+        True if the production's left hand side matches the context.
     """
     patterns = {}
     for p in production["lhs"]:
@@ -101,11 +107,14 @@ def match_production(production, context):
     return True
 
 
-def pattern_matching_function(productions, goal, retrieval):
+def pattern_matching_function(
+    productions: List[Dict[str, Any]], 
+    goal: Dict[str, str], 
+    retrieval: Dict[str, str]) -> List[Dict[str, Any]]:
     """Returns the productions that match the given goal and retrieval buffers.
     
     Args:
-        productions: A list of all productions.
+        productions: A list of all productions as dicts.
         goal: The current value of the goal buffer as a dict.
         retrieval: The chunk dict retrieved from declarative memory.
 
@@ -119,13 +128,13 @@ def pattern_matching_function(productions, goal, retrieval):
     return [p for p in productions if match_production(p, context)]
     
 
-def conflict_resolution_function(productions):
+def conflict_resolution_function(productions: List[Dict[str, Any]]) -> Dict[str, Any]:
     """ACT-R conflict resolution function. Currently selects a production at
     random from the already matched productions, since utility values and learning
     are not implemented yet.
     
     Args:
-        productions: A list of productions.
+        productions: A list of productions as dicts.
 
     Returns:
         The selected production from the list.
@@ -136,11 +145,11 @@ def conflict_resolution_function(productions):
         return random.choice(productions)
 
 
-def update_buffer(production, buffer):
+def update_buffer(production: Dict[str, Any], buffer: str) -> Dict[str, str]:
     """Returns a pattern to update the given buffer with.
     
     Args:
-        production: The production dict to update the buffer with.
+        production: The production dict that specifies the buffer update.
         buffer: The name of the buffer to update.
 
     Returns:
@@ -159,11 +168,11 @@ def update_buffer(production, buffer):
     return pattern
 
 
-def update_goal(production):
+def update_goal(production: Dict[str, Any]) -> Dict[str, str]:
     """Returns a pattern to update the goal buffer with.
 
     Args:
-        production: The production dict to update the goal buffer with.
+        production: The production dict that specifies the goal buffer update.
 
     Returns:
         A pattern that the goal buffer will be updated with.
@@ -171,11 +180,11 @@ def update_goal(production):
     return update_buffer(production, "goal")
 
 
-def update_retrieval(production):
+def update_retrieval(production: Dict[str, Any]) -> Dict[str, str]:
     """Returns a pattern to update the retrieval buffer with.
 
     Args:
-        production: The production dict to update the retrieval buffer with.
+        production: The production dict that specifies the retrieval buffer update.
     
     Returns:
         A pattern that the retrieval buffer will be updated with.
@@ -183,19 +192,19 @@ def update_retrieval(production):
     return update_buffer(production, "retrieval")
 
 
-def check_termination(production):
+def check_termination(production: Dict[str, Any]):
     """Function used to check if no production was selected.
     
     Args:
-        production: A production that was selected.
+        production: A production dict that was selected.
 
     Returns:
-        True if the production was empty.
+        True if the production is empty.
     """
     return production == {}
 
 
-def get_actr_functions():
+def get_actr_functions() -> List[Dict[str, Any]]:
     """Creates a list of all the ACT-R functions as MDF specifications.
     
     Returns:
