@@ -1,7 +1,7 @@
 # Specification of ModECI v0.1
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**
 ## Model
-The top level Model containing a number of <a href="#graph">Graph</a>s of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
+The top level Model containing <a href="#graph">Graph</a>s consisting of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
 #### Allowed parameters
 <table><tr><td><b>format</b></td><td>str</td><td><i>Information on the version of MDF used in this file</i></td></tr>
 
@@ -21,7 +21,7 @@ The top level Model containing a number of <a href="#graph">Graph</a>s of <a hre
 </table>
 
 ## Graph
-A directed graph of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
+A directed graph consisting of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
 #### Allowed parameters
 <table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of global parameters for the Graph</i></td></tr>
 
@@ -43,7 +43,7 @@ A directed graph of <a href="#node">Node</a>s connected via <a href="#edge">Edge
 </table>
 
 ## Node
-A self contained unit of evaluation recieving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of <a href="#function">Function</a>s and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s
+A self contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of <a href="#function">Function</a>s and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s 
 #### Allowed parameters
 <table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of parameters for the Node</i></td></tr>
 
@@ -130,7 +130,7 @@ A state variable of a <a href="#node">Node</a>, i.e. has a value that persists b
 
 <tr><td><b>sender_port</b></td><td>str</td><td><i>The id of the <a href="#outputport">OutputPort</a> on the sender <a href="#node">Node</a>, whose value should be sent to the receiver<a href="#port">port</a></i></td></tr>
 
-<tr><td><b>receiver_port</b></td><td>str</td><td><i>The id of the <a href="#inputport">InputPort</a> on the sender <a href="#node">Node</a></i></td></tr>
+<tr><td><b>receiver_port</b></td><td>str</td><td><i>The id of the <a href="#inputport">InputPort</a> on the receiver <a href="#node">Node</a></i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 

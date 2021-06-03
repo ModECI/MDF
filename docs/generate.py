@@ -63,8 +63,11 @@ with open("MDF_function_specifications.md", "w") as d:
     )
 
     d.write("## All functions:\n | ")
-    for f in mdf_functions:
-        d.write(f'<a href="#{f.lower()}">{f}</a> | ')
+    all_f = sorted(mdf_functions.keys())
+    for f in all_f:
+        c=':'
+        n=''
+        d.write(f'<a href="#{f.lower().replace(c,n)}">{f}</a> | ')
 
     for f in mdf_functions:
 

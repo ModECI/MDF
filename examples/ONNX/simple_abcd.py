@@ -113,6 +113,8 @@ def main():
     mdf_model = onnx_to_mdf(onnx_model)
 
     mdf_model.to_json_file("abcd.json")
+    mdf_model.to_yaml_file("abcd.yaml")
+
 
 
 if __name__ == "__main__":
