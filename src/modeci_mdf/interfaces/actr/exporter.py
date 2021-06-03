@@ -5,11 +5,12 @@
 from modeci_mdf.mdf import *
 
 
-def build_model():
-    """Builds the base model of ACT-R.
+def build_model() -> Model:
+    """Builds the base model of the ACT-R production system without any chunks,
+    goals, or productions specified.
     
     Returns:
-        An MDF model object representing the core of ACT-R.
+        An MDF model object representing the core ACT-R production system.
     """
     mod = Model(id="ACT-R Base")
     mod_graph = Graph(id="actr_base")
@@ -228,7 +229,7 @@ def build_model():
     return mod
     
 
-def actr_to_mdf(file_name):
+def actr_to_mdf(file_name: str):
     """Parses an ACT-R .lisp model file and outputs MDF .json and .yaml files.
     
     Args:
