@@ -16,6 +16,9 @@ extras = {
         "nbsphinx",
         "sphinx_copybutton",
         "sphinx-rtd-theme",
+        "myst_parser",
+        "sphinx_markdown_tables",
+        "sphinx-autoapi",
     ],
     "dev": [],
 }

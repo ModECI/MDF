@@ -14,6 +14,23 @@ modeci\_mdf.scheduler
    :undoc-members:
    :show-inheritance:
 
+modeci\_mdf.standard_functions
+==============================
+
+.. automodule:: modeci_mdf.standard_functions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+modeci\_mdf.onnx_functions
+==========================================
+.. automodule:: modeci_mdf.onnx_functions.__init__
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 modeci\_mdf.interfaces.pytorch.exporter
 =======================================
 

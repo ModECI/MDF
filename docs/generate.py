@@ -43,7 +43,7 @@ with open("MDF_function_specifications.yaml", "w") as d:
 
 
 func_doc = ""
-with open("MDF_function_specifications.md", "w") as d:
+with open("sphinx/source/api/MDF_function_specifications.md", "w") as d:
     d.write(
         "# Specification of standard functions in ModECI v%s\n" % MODECI_MDF_VERSION
     )

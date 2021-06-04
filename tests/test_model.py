@@ -1,4 +1,15 @@
-from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function
+from modeci_mdf.mdf import (
+    Model,
+    Graph,
+    Node,
+    Function,
+    InputPort,
+    OutputPort,
+    Edge,
+    State,
+    ConditionSet,
+    Condition,
+)
 
 
 def test_model_init_kwargs():
@@ -7,6 +18,83 @@ def test_model_init_kwargs():
     )
     assert m.format == "test_format"
     assert m.generating_application == "test_application"
+
+
+def test_graph_init_kwargs():
+    g = Graph(
+        id="Test_Graph", parameters="test_parameters", conditions="test_Condition"
+    )
+    assert g.parameters == "test_parameters"
+    # assert g.condition == "test_Condition"
+
+
+def test_Node_init_kwargs():
+    n = Node(id="Test_Node", parameters="test_parameters")
+    assert n.parameters == "test_parameters"
+
+
+def test_Function_init_kwargs():
+    f = Function(id="Test_Function", function="Test_function", args="Test_args")
+    assert f.function == "Test_function"
+    assert f.args == "Test_args"
+
+
+def test_InputPort_init_kwargs():
+    ip = InputPort(id="Test_InputPort", shape="Test_shape", type="Test_type")
+    assert ip.shape == "Test_shape"
+    assert ip.type == "Test_type"
+
+
+def test_OutputPort_init_kwargs():
+    op = OutputPort(id="test_OutputPort", value="test_value")
+    assert op.value == "test_value"
+
+
+def test_State_init_kwargs():
+    st = State(
+        id="test_State",
+        default_initial_value="test_default_initial_value",
+        value="test_value",
+        time_derivative="test_time_derivative",
+    )
+    assert st.default_initial_value == "test_default_initial_value"
+    assert st.value == "test_value"
+    assert st.time_derivative == "test_time_derivative"
+
+
+def test_Edge_init_kwargs():
+    e = Edge(
+        id="test_Edge",
+        parameters="test_parameters",
+        sender="test_sender",
+        receiver="test_receiver",
+        sender_port="test_sender_port",
+        receiver_port="test_receiver_port",
+    )
+    assert e.parameters == "test_parameters"
+    assert e.sender == "test_sender"
+    assert e.receiver == "test_receiver"
+    assert e.sender_port == "test_sender_port"
+    assert e.receiver_port == "test_receiver_port"
+
+
+def test_ConditionSet_init_kwargs():
+    CS = ConditionSet(
+        node_specific="test_node_specific", termination="test_termination"
+    )
+    assert CS.node_specific == "test_node_specific"
+    assert CS.termination == "test_termination"
+
+
+def test_Condition_init_kwargs():
+    C = Condition(
+        type="test_type",
+        args="test_args",
+        dependency="test_dependency",
+        n="test_n",
+        dependencies="test_dependencies",
+    )
+    assert C.type == "test_type"
 
 
 def test_model_graph_to_json():
