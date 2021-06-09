@@ -18,10 +18,9 @@ install:
   - cd ..
   - if [[ ${TRAVIS_PYTHON_VERSION} == "3.9" ]]; then python -m pip install git+https://github.com/SheffieldML/GPy.git@devel; fi
   - python -m pip install git+https://github.com/PrincetonUniversity/PsyNeuLink.git@mdf
-  - pip install .
+  - pip install .[dev]
 
 script:
   ###       Run main tests
-  - pip install pytest-benchmark
   - ./test_all.sh
   - pip freeze  # List currently installed Python packages

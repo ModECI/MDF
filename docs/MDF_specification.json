@@ -3,7 +3,7 @@
     "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**",
     "specification": {
         "Model": {
-            "definition": "The top level Model containing a number of _Graph_s of _Node_s connected via _Edge_s.",
+            "definition": "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s.",
             "allowed_parameters": {
                 "format": {
                     "type": "str",
@@ -30,7 +30,7 @@
             }
         },
         "Graph": {
-            "definition": "A directed graph of _Node_s connected via _Edge_s.",
+            "definition": "A directed graph consisting of _Node_s connected via _Edge_s.",
             "allowed_parameters": {
                 "parameters": {
                     "type": "dict",
@@ -61,7 +61,7 @@
             }
         },
         "Node": {
-            "definition": "A self contained unit of evaluation recieving input from other Nodes on _InputPort_s. The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s",
+            "definition": "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s ",
             "allowed_parameters": {
                 "parameters": {
                     "type": "dict",
@@ -197,7 +197,7 @@
                 },
                 "receiver_port": {
                     "type": "str",
-                    "description": "The id of the _InputPort_ on the sender _Node_"
+                    "description": "The id of the _InputPort_ on the receiver _Node_"
                 },
                 "id": {
                     "type": "str",
