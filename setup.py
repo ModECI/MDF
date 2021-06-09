@@ -8,6 +8,7 @@ extras = {
     "test": [
         "pytest",
         "pytest-benchmark",
+        "pytest-mock",
         "typing_extensions; python_version<'3.8'",
     ],
     "docs": [

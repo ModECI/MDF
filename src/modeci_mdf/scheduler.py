@@ -11,13 +11,9 @@ from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 from collections import OrderedDict
 
 import modeci_mdf.onnx_functions as onnx_ops
+import modeci_mdf.actr_functions as actr_funcs
 
-try:
-    import psyneulink.core.scheduling as scheduling
-except ImportError as e:
-    raise ImportError(
-        "Conditional scheduling currently requires psyneulink (pip install psyneulink)"
-    ) from e
+import psyneulink.core.scheduling as scheduling
 
 
 FORMAT_DEFAULT = FORMAT_NUMPY
@@ -105,6 +101,11 @@ class EvaluableFunction:
                     kwargs_for_onnx[kw] = arg
 
             self.curr_value = onnx_function(**kwargs_for_onnx)
+        elif "actr_functions." in expr:
+            actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
+            self.curr_value = actr_function(
+                *[func_params[arg] for arg in self.function.args]
+            )
         else:
             self.curr_value = evaluate_expr(
                 expr, func_params, verbose=self.verbose, array_format=array_format
@@ -464,7 +465,8 @@ class EvaluableGraph:
                     _val_info(weight),
                 )
             )
-        post_node.evaluable_inputs[edge.receiver_port].set_input_value(value * weight)
+        input_value = value if weight == 1 else value * weight
+        post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
     def parse_condition(self, condition):
         try:
@@ -520,7 +522,7 @@ def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
 if __name__ == "__main__":
 
     example_file = os.path.join(
-        os.path.dirname(__file__), "..", "..", "examples/Simple.json"
+        os.path.dirname(__file__), "..", "..", "examples/MDF/Simple.json"
     )
     verbose = True
     if len(sys.argv) >= 2:
@@ -531,6 +533,10 @@ if __name__ == "__main__":
     else:
         verbose = False
 
+    from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
+    format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
+
     print("Executing MDF file %s with scheduler" % example_file)
 
-    main(example_file, verbose=verbose)
+    main(example_file, array_format=format, verbose=verbose)

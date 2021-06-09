@@ -5,16 +5,15 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-import os
 import sys
 
-sys.path.insert(0, os.path.abspath("."))
+# Docs require Python 3.6+ to generate
+from pathlib import Path
 
+DIR = Path(__file__).parent.parent.parent.resolve()
+BASEDIR = DIR.parent
+
+sys.path.append(str(BASEDIR / "src"))
 
 # -- Project information -----------------------------------------------------
 
@@ -35,19 +34,18 @@ extensions = [
     "sphinx.ext.mathjax",
     "sphinx_copybutton",
     "sphinx_rtd_theme",
-    "myst_parser",
     "sphinx_markdown_tables",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx.ext.autosummary",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.todo",
+    "myst_parser",
 ]
 
 autodoc_member_order = "bysource"
 autosummary_generate = True
 master_doc = "index"
-
 
 # Source Suffix
 source_suffix = {
@@ -55,6 +53,8 @@ source_suffix = {
     ".txt": "restructuredtext",
     ".md": "markdown",
 }
+
+source_parsers = {".md": "recommonmark.parser.CommonMarkParser"}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

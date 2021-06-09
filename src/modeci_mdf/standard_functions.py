@@ -1,3 +1,9 @@
+import math
+
+import numpy
+
+import modeci_mdf.onnx_functions as onnx_ops
+
 mdf_functions = {}
 
 
@@ -8,6 +14,13 @@ def _add_mdf_function(name, description, arguments, expression_string):
     mdf_functions[name]["description"] = description
     mdf_functions[name]["arguments"] = arguments
     mdf_functions[name]["expression_string"] = expression_string
+    try:
+        mdf_functions[name]["function"] = create_python_function(
+            name, expression_string, arguments
+        )
+    except SyntaxError:
+        # invalid syntax in some onnx functions (e.g. onnx_ops.or)
+        mdf_functions[name]["function"] = None
 
 
 def create_python_expression(expression_string):
@@ -24,6 +37,17 @@ def substitute_args(expression_string, args):
     for arg in args:
         expression_string = expression_string.replace(arg, str(args[arg]))
     return expression_string
+
+
+def create_python_function(name, expression_string, arguments):
+    # assumes expression is one line
+    name = name.replace(":", "_")
+    expr = create_python_expression(expression_string)
+    func_str = f"def {name}({','.join(arguments)}):\n\treturn {expr}"
+
+    res = {}
+    exec(func_str, globals(), res)
+    return res[name]
 
 
 # Populate the list of known functions
@@ -87,6 +111,13 @@ if len(mdf_functions) == 0:
 
     for mdf_func_spec in get_onnx_ops():
         _add_mdf_function(**mdf_func_spec)
+
+    # Add the ACT-R functions.
+    from modeci_mdf.actr_functions import get_actr_functions
+
+    for mdf_func_spec in get_actr_functions():
+        _add_mdf_function(**mdf_func_spec)
+
 
 if __name__ == "__main__":
 
