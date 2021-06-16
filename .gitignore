@@ -209,3 +209,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/ONNX/ab
 /examples/ONNX/abc
 /examples/ONNX/abcd
+/examples/PsyNeuLink/*.dat
