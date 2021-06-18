@@ -18,25 +18,32 @@ print('Running simple model of FitzHugh Nagumo cell for %sms: %s' % (simtime, fh
 fn = pnl.IntegratorMechanism(name='fn', function=fhn)
 
 comp = pnl.Composition(name='comp')
-comp.add_linear_processing_pathway([fn])
 
-# Left commented because TimeInterval is still to be implemented in PNL
-# im = pnl.IntegratorMechanism(name='im')  # only used to demonstrate conditions
-# comp.add_linear_processing_pathway([fn, im])
-# comp.scheduler.add_condition_set({
-#     fn: pnl.TimeInterval(interval=.05, unit='ms')
-#     im: pnl.TimeInterval(start=80, interval=1, unit='ms')
-# })
+im = pnl.IntegratorMechanism(name='im')  # only used to demonstrate conditions
+comp.add_linear_processing_pathway([fn, im])
+comp.scheduler.add_condition_set({
+    fn: pnl.TimeInterval(repeat=.05, unit='ms'),
+    im: pnl.TimeInterval(start=80, repeat=1, unit='ms')
+})
 
 comp.termination_processing = {
     pnl.TimeScale.RUN: pnl.Never(),  # default, "Never" for early termination - ends when all trials finished
-    pnl.TimeScale.TRIAL: pnl.AfterNCalls(fn, int(simtime / dt))  # replicates time condition
-    # pnl.TimeScale.TRIAL: pnl.TimeInterval(end=100, unit='ms')
+    pnl.TimeScale.TRIAL: pnl.TimeTermination(100, unit='ms')
 }
 
 print('Running the SimpleFN model...')
 
-comp.run(inputs={fn: 0}, log=True)
+comp.run(inputs={fn: 0}, log=True, scheduling_mode=pnl.SchedulingMode.EXACT_TIME)
+
+
+print('\n'.join([
+    '{0:~}: {1}'.format(
+        comp.scheduler.execution_timestamps[comp.default_execution_id][i].absolute,
+        {node.name for node in time_step}
+    )
+    for i, time_step in enumerate(comp.scheduler.execution_list[comp.default_execution_id])
+    if len(time_step) > 0
+]))
 
 
 print('Finished running the SimpleFN model')
@@ -63,21 +70,23 @@ for node in comp.nodes:
 
 fig, axes = plt.subplots()
 for i in [0, 1]:
-    x_values = {node: generate_time_array(node) for node in comp.nodes}
-    y_values = {node: generate_value_array(node, i) for node in comp.nodes}
+    plot_nodes = [node for node in comp.nodes if len(node.defaults.value) > i]
+
+    x_values = {node: generate_time_array(node) for node in plot_nodes}
+    y_values = {node: generate_value_array(node, i) for node in plot_nodes}
 
     fout = open('SimpleFN-timing_%i.dat' % i, 'w')
-    for index in range(len(x_values[node])):
+    for index in range(len(x_values[fn])):
         # 1000 to convert ms to s
         fout.write(
             f'{0}\t{1}\n'.format(
-                x_values[node][index] * time_step_size / 1000.0,
-                y_values[node][index]
+                x_values[fn][index] * time_step_size / 1000.0,
+                y_values[fn][index]
             )
         )
     fout.close()
 
-    for node in comp.nodes:
+    for node in plot_nodes:
         axes.plot(
             [t * time_step_size / 1000.0 for t in x_values[node]],
             y_values[node],
