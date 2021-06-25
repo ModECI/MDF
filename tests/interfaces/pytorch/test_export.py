@@ -7,16 +7,17 @@ torch.backends.cudnn.deterministic = True
 
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 from modeci_mdf.scheduler import EvaluableGraph
+from modeci_mdf.utils import load_mdf_json
 
 
 def _check_model(mdf_model):
     """A helper function to JIT compile a function or torch.nn.Module into Torchscript and convert to MDF and check it"""
 
     # Generate JSON
-    json_str = mdf_model.to_json()
+    mdf_model.to_json_file("test.json")
 
     # Load the JSON
-    # load_mdf_json()
+    load_mdf_json("test.json")
 
 
 def test_simple_module():

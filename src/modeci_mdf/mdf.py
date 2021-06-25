@@ -56,7 +56,9 @@ class Model(BaseWithId):
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -104,7 +106,7 @@ class Model(BaseWithId):
         """Convert file in MDF format to yaml format
 
         Args:
-            filename: file in MDF format (Filename extension: .mdf )
+            filename: File in MDF format (Filename extension: .mdf )
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
                               benchmark results, and environments in which the specified model was originally implemented
 
@@ -200,7 +202,9 @@ class Graph(BaseWithId):
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -310,7 +314,9 @@ class Node(BaseWithId):
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -402,7 +408,9 @@ class Function(BaseWithId):
         kwargs = {}
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -448,7 +456,9 @@ class InputPort(BaseWithId):
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -480,7 +490,9 @@ class OutputPort(BaseWithId):
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -592,7 +604,9 @@ class Edge(BaseWithId):
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -630,7 +644,9 @@ class ConditionSet(Base):
         kwargs = {}
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
@@ -649,10 +665,10 @@ class Condition(Base):
     def __init__(
         self,
         type: Optional[str] = None,
-        args: Optional[dict["Condition", "arguments"]] = None,
+        args: Optional[Dict["Condition", "arguments"]] = None,
         dependency: Optional[str] = None,
         n: Optional[int] = None,
-        dependencies: Optional[list["Condition"]] = None,
+        dependencies: Optional[List["Condition"]] = None,
     ):
 
         self.allowed_fields = collections.OrderedDict(
@@ -674,7 +690,9 @@ class Condition(Base):
         kwargs["dependencies"] = dependencies
         for f in self.allowed_fields:
             try:
-                kwargs[f] = locals()[f]
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
             except KeyError:
                 pass
 
