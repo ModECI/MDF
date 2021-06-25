@@ -23,12 +23,7 @@ from modeci_mdf.mdf import (
 import modeci_mdf.onnx_functions as onnx_ops
 import modeci_mdf.actr_functions as actr_funcs
 
-try:
-    import psyneulink.core.scheduling as scheduling
-except ImportError as e:
-    raise ImportError(
-        "Conditional scheduling currently requires psyneulink (pip install psyneulink)"
-    ) from e
+import psyneulink.core.scheduling as scheduling
 
 
 FORMAT_DEFAULT = FORMAT_NUMPY
