@@ -41,6 +41,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.todo",
     "myst_parser",
+    "sphinx.ext.githubpages",
 ]
 
 autodoc_member_order = "bysource"

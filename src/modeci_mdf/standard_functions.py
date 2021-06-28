@@ -10,10 +10,10 @@ mdf_functions = {}
 
 
 def _add_mdf_function(
-    name: [str] = None,
-    description: Optional[str] = None,
-    arguments: Optional[List[str]] = None,
-    expression_string: Optional[str] = None,
+    name: str = None,
+    description: str = None,
+    arguments: List[str] = None,
+    expression_string: str = None,
 ):
 
     """To include a new function in mdf_functions
@@ -43,7 +43,7 @@ def _add_mdf_function(
         mdf_functions[name]["function"] = None
 
 
-def create_python_expression(expression_string: Optional[str] = None) -> str:
+def create_python_expression(expression_string: str = None) -> str:
     """Converts the mathematical representation of function into function expression in python
 
     Args:
@@ -61,9 +61,7 @@ def create_python_expression(expression_string: Optional[str] = None) -> str:
     return expression_string
 
 
-def substitute_args(
-    expression_string: Optional[str] = None, args: Optional[Dict[str, str]] = None
-) -> str:
+def substitute_args(expression_string: str = None, args: Dict[str, str] = None) -> str:
 
     """Substitute arg with the value in args dict
 
@@ -81,10 +79,10 @@ def substitute_args(
 
 
 def create_python_function(
-    name: Optional[str] = None,
-    expression_string: Optional[str] = None,
-    arguments: Optional[List[str]] = None,
-) -> object:
+    name: str = None,
+    expression_string: str = None,
+    arguments: List[str] = None,
+) -> "types.FunctionType":
 
     """create a python function e.g. linear, exponential, sin, cos, ReLu
 
