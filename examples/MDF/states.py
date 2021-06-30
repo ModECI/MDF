@@ -12,7 +12,7 @@ def main():
     mod.graphs.append(mod_graph)
 
     ## Counter node
-    counter_node = Node(id="counter_node", parameters={"increment": 1})
+    counter_node = Node(id="counter_node", parameters={"increment": 0.01})
 
     s1 = State(id="count", value="count + increment")
     counter_node.states.append(s1)
@@ -27,7 +27,6 @@ def main():
 
     s1 = State(id="level", default_initial_value=0, time_derivative='6.283185 * rate / period')
     sine_node.states.append(s1)
-
     s2 = State(id="rate", default_initial_value=1, time_derivative='-1 * 6.283185 * level / period')
     sine_node.states.append(s2)
 
@@ -36,12 +35,26 @@ def main():
 
     mod_graph.nodes.append(sine_node)
 
+    ## Sine node explicit integration...
+
+    sine_node_ei = Node(id="sine_node_explicit", parameters={"amp": 3, "period": 0.4, "dt":0.01})
+
+    s1 = State(id="level", default_initial_value=0, value='level + dt * (6.283185 * rate / period)')
+    sine_node_ei.states.append(s1)
+    s2 = State(id="rate", default_initial_value=1, value='rate + dt * (-1 * 6.283185 * level / period)')
+    sine_node_ei.states.append(s2)
+
+    op1 = OutputPort(id="out_port", value="amp * level")
+    sine_node_ei.output_ports.append(op1)
+
+    mod_graph.nodes.append(sine_node_ei)
+
     new_file = mod.to_json_file("%s.json" % mod.id)
     new_file = mod.to_yaml_file("%s.yaml" % mod.id)
 
     if "-run" in sys.argv:
         verbose = True
-        verbose = False
+        #verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
         from modeci_mdf.scheduler import EvaluableGraph
@@ -53,7 +66,9 @@ def main():
         t = 0
         recorded = {}
         times = []
+        c = []
         s = []
+        s2 = []
         while t<=duration:
             times.append(t)
             print("======   Evaluating at t = %s  ======"%(t))
@@ -62,11 +77,16 @@ def main():
             else:
                 eg.evaluate(time_increment=dt)
 
-            s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
+            c.append(eg.enodes['counter_node'].evaluable_outputs['out_port'].curr_value)
+            s.append(eg.enodes[sine_node.id].evaluable_outputs['out_port'].curr_value)
+            s2.append(eg.enodes[sine_node_ei.id].evaluable_outputs['out_port'].curr_value)
             t+=dt
 
         import matplotlib.pyplot as plt
-        plt.plot(times,s)
+        plt.plot(times, c, label='counter')
+        plt.plot(times, s, label='sine_node')
+        plt.plot(times, s2, label='sine_node_explicit')
+        plt.legend()
         plt.show()
     return mod_graph
 

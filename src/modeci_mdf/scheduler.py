@@ -126,7 +126,7 @@ class EvaluableState:
     def __init__(self, state, verbose=False):
         self.verbose = verbose
         self.state = state
-        self.curr_value = 0
+        self.curr_value = None
 
     def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
         if self.verbose:
@@ -138,12 +138,25 @@ class EvaluableState:
 
         if self.state.value:
 
-            self.curr_value = evaluate_expr(
-                self.state.value,
-                parameters,
-                verbose=False,
-                array_format=array_format,
-            )
+            if self.state.default_initial_value !=None and self.curr_value == None:
+
+                self.curr_value = evaluate_expr(
+                    self.state.default_initial_value,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+            else:
+                # Check if it's not been initialised already
+                if parameters[self.state.id] == None:
+                    parameters[self.state.id] = 0
+
+                self.curr_value = evaluate_expr(
+                    self.state.value,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
         else:
             if time_increment == None:
 

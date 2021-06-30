@@ -6,7 +6,7 @@ States:
             nodes:
                 counter_node:
                     parameters:
-                        increment: 1
+                        increment: 0.01
                     states:
                         count:
                             value: count + increment
@@ -24,6 +24,21 @@ States:
                         rate:
                             default_initial_value: '1'
                             time_derivative: -1 * 6.283185 * level / period
+                    output_ports:
+                        out_port:
+                            value: amp * level
+                sine_node_explicit:
+                    parameters:
+                        amp: 3
+                        period: 0.4
+                        dt: 0.01
+                    states:
+                        level:
+                            default_initial_value: '0'
+                            value: level + dt * (6.283185 * rate / period)
+                        rate:
+                            default_initial_value: '1'
+                            value: rate + dt * (-1 * 6.283185 * level / period)
                     output_ports:
                         out_port:
                             value: amp * level
