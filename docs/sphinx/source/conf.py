@@ -47,6 +47,7 @@ extensions = [
 autodoc_member_order = "bysource"
 autosummary_generate = True
 master_doc = "index"
+napoleon_use_ivar = True
 
 # Source Suffix
 source_suffix = {
@@ -64,6 +65,9 @@ templates_path = ["_templates"]
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
+
+# The name of the Pygments (syntax highlighting) style to use.
+# pygments_style = "sphinx"
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -85,4 +89,7 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
-intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
+intersphinx_mapping = {
+    "python": ("https://docs.python.org/3", None),
+    "numpy": ("https://numpy.org/doc/stable", None),
+}
