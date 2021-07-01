@@ -170,11 +170,43 @@ class EvaluableState:
         return self.curr_value
 
 
+
+class EvaluableStateful_Parameters:
+    def __init__(self, stateful_parameter, verbose=False):
+        self.verbose = verbose
+        self.stateful_parameter = stateful_parameter
+        self.curr_value = stateful_parameter.default_initial_value
+
+    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
+        if self.verbose:
+            print(
+                "    Evaluating {} with {} ".format(
+                    self.stateful_parameter, _params_info(parameters)
+                )
+            )
+
+     
+
+        self.curr_value = evaluate_expr(
+            self.stateful_parameter.value,
+            parameters,
+            verbose=False,
+            array_format=array_format,
+        )
+        
+        if self.verbose:
+            print(
+                "    Evaluated %s with %s \n       =\t%s"
+                % (self.stateful_parameter, _params_info(parameters), _val_info(self.curr_value))
+            )
+        return self.curr_value
+
+
 class EvaluableOutput:
-    def __init__(self, output_port, verbose=False):
+    def __init__(self, output_port,verbose=False):
         self.verbose = verbose
         self.output_port = output_port
-
+        
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print(
@@ -228,10 +260,14 @@ class EvaluableNode:
         self.evaluable_inputs = {}
         self.evaluable_functions = OrderedDict()
         self.evaluable_states = OrderedDict()
+        self.evaluable_stateful_parameters = OrderedDict()
+        
         self.evaluable_outputs = {}
 
         all_known_vars = []
+        # params_init={}
         if node.parameters:
+            # params_init.update(node.parameters)
             for p in node.parameters:
                 all_known_vars.append(p)
 
@@ -239,11 +275,22 @@ class EvaluableNode:
             rip = EvaluableInput(ip, self.verbose)
             self.evaluable_inputs[ip.id] = rip
             all_known_vars.append(ip.id)
+            # params_init[ip] = ip.curr_value
+
+
+        for s in node.stateful_parameters:
+            es = EvaluableStateful_Parameters(s, self.verbose)
+            self.evaluable_stateful_parameters[s.id] = es
+            all_known_vars.append(s.id)
+            # params_init[s] = s.curr_value
+        
+
 
         for s in node.states:
             es = EvaluableState(s, self.verbose)
             self.evaluable_states[s.id] = es
             all_known_vars.append(s.id)
+            # params_init[s] = s.curr_value
 
         all_funcs = [f for f in node.functions]
 
@@ -281,6 +328,9 @@ class EvaluableNode:
                 rf = EvaluableFunction(f, self.verbose)
                 self.evaluable_functions[f.id] = rf
                 all_known_vars.append(f.id)
+            #     params_init[f] = self.evaluable_functions[f.id].evaluate(
+            #     params_init, array_format=FORMAT_DEFAULT
+            # )
             else:
                 if len(all_funcs) == 0:
                     raise Exception(
@@ -291,7 +341,7 @@ class EvaluableNode:
                     all_funcs.append(f)  # Add back to end of list...
 
         for op in node.output_ports:
-            rop = EvaluableOutput(op, self.verbose)
+            rop = EvaluableOutput(op,self.verbose)
             self.evaluable_outputs[op.id] = rop
 
     def initialize(self):
@@ -318,6 +368,11 @@ class EvaluableNode:
         for es in self.evaluable_states:
             curr_params[es] = self.evaluable_states[es].curr_value
 
+
+        for es in self.evaluable_stateful_parameters:
+            curr_params[es] = self.evaluable_stateful_parameters[es].curr_value
+
+
         for ef in self.evaluable_functions:
             curr_params[ef] = self.evaluable_functions[ef].evaluate(
                 curr_params, array_format=array_format
@@ -328,6 +383,12 @@ class EvaluableNode:
             curr_params[es] = self.evaluable_states[es].evaluate(
                 curr_params, time_increment=time_increment, array_format=array_format
             )
+
+        for es in self.evaluable_stateful_parameters:
+            curr_params[es] = self.evaluable_stateful_parameters[es].evaluate(
+                curr_params, array_format=array_format
+            )
+
 
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)

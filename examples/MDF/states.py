@@ -7,7 +7,7 @@ import sys
 
 
 def main():
-    mod = Model(id="States")
+    mod = Model(id="New_States")
     mod_graph = Graph(id="state_example")
     mod.graphs.append(mod_graph)
 
@@ -47,8 +47,8 @@ def main():
         from modeci_mdf.scheduler import EvaluableGraph
 
         eg = EvaluableGraph(mod_graph, verbose)
-        dt = 0.01
-        duration= 0.1
+        dt = 0.1
+    
         duration= 2
         t = 0
         recorded = {}
@@ -68,6 +68,7 @@ def main():
         import matplotlib.pyplot as plt
         plt.plot(times,s)
         plt.show()
+        plt.savefig('sine_plot.jpg')
     return mod_graph
 
 
