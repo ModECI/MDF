@@ -15,7 +15,7 @@ def execute(multi=False):
     if not multi:
 
         fn_node = mod_graph.nodes[0]
-        fn_node.parameters['initial_v']=[1.]
+        fn_node.parameters['initial_v']=[-1.]
         fn_node.parameters['initial_w']=[0.]
 
     else:
