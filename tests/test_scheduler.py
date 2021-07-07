@@ -66,6 +66,6 @@ def test_condition_scheduler_main(fi, expected_output):
     import modeci_mdf.execution_engine
 
     eg = modeci_mdf.execution_engine.main(fi)
-    output = [set([n.id for n in nodes]) for nodes in eg.execution_engine.execution_list[None]]
+    output = [set([n.id for n in nodes]) for nodes in eg.scheduler.execution_list[None]]
 
     assert output == expected_output
