@@ -3,7 +3,7 @@ import pytest
 
 def test_simple_scheduler_main(tmpdir):
 
-    import modeci_mdf.scheduler
+    import modeci_mdf.execution_engine
     from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
     import numpy as np
 
@@ -63,7 +63,7 @@ _abc_conditions_expected_output = [
 )
 def test_condition_scheduler_main(fi, expected_output):
 
-    import modeci_mdf.scheduler
+    import modeci_mdf.execution_engine
 
     eg = modeci_mdf.scheduler.main(fi)
     output = [set([n.id for n in nodes]) for nodes in eg.scheduler.execution_list[None]]
