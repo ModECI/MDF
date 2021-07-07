@@ -3,7 +3,7 @@
 from modeci_mdf.utils import load_mdf, print_summary
 from modeci_mdf.mdf import Node, Edge, OutputPort
 
-from modeci_mdf.scheduler import EvaluableGraph
+from modeci_mdf.execution_engine import EvaluableGraph
 
 verbose = True
 verbose = False
