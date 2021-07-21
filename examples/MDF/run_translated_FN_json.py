@@ -14,22 +14,23 @@ import sys
 
 def main():
 
-    parser = argparse.ArgumentParser(description=' Running the translator to stateful parameters')
-    parser.add_argument('--dt', default=5e-05, type=float,  help='time increment')
-    parser.add_argument('--run', default=False, type=bool,  help='Run the graph')
+    # parser = argparse.ArgumentParser(description=' Running the translator to stateful parameters')
+    # parser.add_argument('--dt', default=5e-05, type=float,  help='time increment')
+    # parser.add_argument('--run', default=False, type=bool,  help='Run the graph')
 
 
 
-    args = parser.parse_args()
-    print(args)
+    # args = parser.parse_args()
+    # print(args)
+    dt = 5e-05
     file_path = 'FN.mdf.json'
-    data = convert_states_to_stateful_parameters(file_path, args.dt)
+    data = convert_states_to_stateful_parameters(file_path, dt)
     # print(data)
     with open('Translated_'+ file_path, 'w') as fp:
         json.dump(data, fp,  indent=4)
 
 
-    if args.run:
+    if "-run" in sys.argv:
 
         f = open(file_path)
         data = json.load(f)
@@ -151,7 +152,7 @@ def main():
         vv_old = []
         ww_old = []
         
-        while t<=duration + args.dt:
+        while t<=duration + dt:
             print("======   Evaluating at t = %s  ======"%(t))
             
 
@@ -172,7 +173,7 @@ def main():
             if t == 0:
                 eg_old.evaluate() # replace with initialize?
             else:
-                eg_old.evaluate(time_increment=args.dt)
+                eg_old.evaluate(time_increment=dt)
 
             vv_old.append(float(eg_old.enodes['FNpop_0'].evaluable_states['V'].curr_value))
             ww_old.append(float(eg_old.enodes['FNpop_0'].evaluable_states['W'].curr_value))
