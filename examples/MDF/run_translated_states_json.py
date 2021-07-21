@@ -14,26 +14,27 @@ import sys
 
 def main():
 
-    parser = argparse.ArgumentParser(description=' Running the translator to stateful parameters')
-    parser.add_argument('--dt', default=5e-05, type=float,  help='time increment')
-    parser.add_argument('--run', default=False, type=bool,  help='Run the graph')
+    # parser = argparse.ArgumentParser(description=' Running the translator to stateful parameters')
+    # parser.add_argument('--dt', default=5e-05, type=float,  help='time increment')
+    # parser.add_argument('--run', default=False, type=bool,  help='Run the graph')
 
 
 
-    args = parser.parse_args()
-    print(args)
+    # args = parser.parse_args()
+    # print(args)
+    dt = 0.01
     file_path = 'States.json'
-    data = convert_states_to_stateful_parameters(file_path, args.dt)
+    data = convert_states_to_stateful_parameters(file_path, dt)
     # print(data)
     with open('Translated_'+ file_path, 'w') as fp:
         json.dump(data, fp,  indent=4)
 
 
-    if args.run:
+    if "-run" in sys.argv:
 
         f = open(file_path)
         data = json.load(f)
-        filtered_list = ['parameters','functions', 'states','output_ports','input_ports']
+        filtered_list = ['parameters','functions', 'states','output_ports','input_ports', 'notes']
         all_nodes = []
         def nodeExtractor(nested_dictionary: Dict[str, Any] = None):
             """Extracts all the node objects in the graph
@@ -64,7 +65,7 @@ def main():
             for k, v in nested_dictionary.items():
                 if isinstance(v, dict) and k in list(nodes_dict.keys()):
                     for kk, vv in v.items():
-                        if isinstance(vv, dict) and kk in filtered_list:
+                        if (isinstance(vv, dict) and kk in filtered_list) or (isinstance(vv, str) and kk in filtered_list):
                             nodes_dict[k][kk] = vv
                 if isinstance(v, dict):
                     parameterExtractor(v)
@@ -154,7 +155,7 @@ def main():
             if t == 0:
                 eg_old.evaluate() # replace with initialize?
             else:
-                eg_old.evaluate(time_increment=args.dt)
+                eg_old.evaluate(time_increment=dt)
 
             # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value) 
             # t+=args.dt
