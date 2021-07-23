@@ -40,6 +40,10 @@ mv state_example.gv.png states.png
 python -m modeci_mdf.interfaces.graphviz.importer abc_conditions.yaml 3 -noview
 mv abc_conditions_example.gv.png abc_conditions.png
 
+## Test regenerating NeuroML
+
+cd ../../examples/NeuroML
+./regenerateAndTest.sh
 
 ## Generate the docs
 

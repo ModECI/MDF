@@ -57,4 +57,7 @@ python -m modeci_mdf.interfaces.graphviz.importer FN.mdf.yaml 3 -noview
 ####  Test evaluating MDF version
 python -m modeci_mdf.scheduler FN.mdf.json
 
+####  Test running MDF version & save result
+python FNrun.py -nogui
+
 echo "Successfully ran all tests"
