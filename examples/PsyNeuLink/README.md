@@ -8,6 +8,8 @@
 
 An example with four [Nodes](../../docs/README.md#node), as in other environments.
 
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_ABCD_level_1/model_ABCD_level_1-1.png" alt="simple"/></p>
+
 ### SimpleLinear
 
 #### SimpleLinear-conditional
@@ -16,11 +18,15 @@ An example with four [Nodes](../../docs/README.md#node), as in other environment
 
 A three-[Node](../../docs/README.md#node) example with [Conditions](../../docs/README.md#condition).
 
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+
 #### SimpleLinear-timing
 
 [Python source](SimpleLinear-timing.py) | [JSON](SimpleLinear-timing.json) | [Reconstructed source](SimpleLinear-timing.reconstructed.py)
 
 The same model as in [SimpleLinear-conditional](#SimpleLinear-conditional) with [Conditions](../../docs/README.md#condition) for timeline scheduling. Note: these conditions are still not fully implemented by the scheduler.
+
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
 
 ## Nested
 
@@ -30,11 +36,15 @@ The same model as in [SimpleLinear-conditional](#SimpleLinear-conditional) with 
 
 A model with several [Nodes](../../docs/README.md#node) in two [Graphs](../../docs/README.md#graphs), one of which contains the other.
 
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+
 ### Nested with scheduling
 
 [Python source](model_nested_comp_with_scheduler.py) | [JSON](model_nested_comp_with_scheduler.json) | [Reconstructed source](model_nested_comp_with_scheduler.reconstructed.py)
 
 A similar model as in [Nested without scheduling](#Nested-without-scheduling) with [Conditions](../../docs/README.md#condition).
+
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
 
 ## SimpleFN
 
@@ -42,21 +52,27 @@ A similar model as in [Nested without scheduling](#Nested-without-scheduling) wi
 
 An example with a single [Node](../../docs/README.md#node) using the PsyNeuLink implementation of the [FitzHugh–Nagumo model](https://wikipedia.org/wiki/FitzHugh–Nagumo_model).
 
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+
 ### SimpleFN-timing
 
 [Python source](SimpleFN-timing.py) | [JSON](SimpleFN-timing.json) | [Reconstructed source](SimpleFN-timing.reconstructed.py)
 
 The same model as in [SimpleFN](#SimpleFN) with [Conditions](../../docs/README.md#condition) for timeline scheduling.
 Note: these conditions are still not fully implemented by the scheduler.
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
 
 ### SimpleFN-conditional
 
 [Python source](SimpleFN-conditional.py) | [JSON](SimpleFN-conditional.json) | [Reconstructed source](SimpleFN-conditional.reconstructed.py)
 
 The same model in [SimpleFN](#SimpleFN) with scheduling [Conditions](../../docs/README.md#condition) that mimic the behavior in [SimpleFN-timing](#SimpleFN-timing).
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
 
 ## Stroop
 
 [Python source](stroop_conflict_monitoring.py) | [JSON](stroop_conflict_monitoring.json) | [Reconstructed source](stroop_conflict_monitoring.reconstructed.py)
 
 A model representing the [Stroop effect](https://en.wikipedia.org/wiki/Stroop_effect) with conflict monitoring that uses [Conditions](../../docs/README.md#condition).
+
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
