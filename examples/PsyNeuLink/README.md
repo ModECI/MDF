@@ -67,7 +67,7 @@ Note: these conditions are still not fully implemented by the scheduler.
 [Python source](SimpleFN-conditional.py) | [JSON](SimpleFN-conditional.json) | [Reconstructed source](SimpleFN-conditional.reconstructed.py)
 
 The same model in [SimpleFN](#SimpleFN) with scheduling [Conditions](../../docs/README.md#condition) that mimic the behavior in [SimpleFN-timing](#SimpleFN-timing).
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN-conditional.png" alt="simple"/></p>
 
 ## Stroop
 
