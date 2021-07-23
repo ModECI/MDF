@@ -26,7 +26,7 @@ A three-[Node](../../docs/README.md#node) example with [Conditions](../../docs/R
 
 The same model as in [SimpleLinear-conditional](#SimpleLinear-conditional) with [Conditions](../../docs/README.md#condition) for timeline scheduling. Note: these conditions are still not fully implemented by the scheduler.
 
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_nested_comp_with_scheduler_1/model_nested_comp_with_scheduler_1-1.png" alt="simple"/></p>
+<p align="center"><img src=""/></p>
 
 ## Nested
 
@@ -36,7 +36,7 @@ The same model as in [SimpleLinear-conditional](#SimpleLinear-conditional) with 
 
 A model with several [Nodes](../../docs/README.md#node) in two [Graphs](../../docs/README.md#graphs), one of which contains the other.
 
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_with_nested_graph_1/model_with_nested_graph_1-1" alt="simple"/></p>
 
 ### Nested with scheduling
 
@@ -44,7 +44,7 @@ A model with several [Nodes](../../docs/README.md#node) in two [Graphs](../../do
 
 A similar model as in [Nested without scheduling](#Nested-without-scheduling) with [Conditions](../../docs/README.md#condition).
 
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_nested_comp_with_scheduler_1/model_nested_comp_with_scheduler_1-1.png" alt="simple" alt="simple"/></p>
 
 ## SimpleFN
 
