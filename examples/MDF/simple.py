@@ -73,8 +73,26 @@ def main():
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
-        eg = EvaluableGraph(mod_graph, verbose=True)
+        eg = EvaluableGraph(mod_graph, verbose=verbose)
         eg.evaluate(array_format=format)
+
+    if "-graph" in sys.argv:
+        mod.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=1,
+            filename_root="simple",
+            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
+        mod.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="simple_3",
+            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
 
 
 if __name__ == "__main__":

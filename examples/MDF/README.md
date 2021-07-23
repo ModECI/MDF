@@ -15,7 +15,7 @@ A simple example with 2 [Nodes](../../docs/README.md#node) connected by an [Edge
 With more detail on [Nodes](../../docs/README.md#node) (showing [Parameters](../../docs/README.md#parameter),
  [Functions](../../docs/README.md#function), [Input Ports](../../docs/README.md#inputport) and [Output Ports](../../docs/README.md#output_port)) and [Edges](../../docs/README.md#edge):
 
-<p align="center"><img src="simple_example.gv.png" alt="simple"/></p>
+<p align="center"><img src="simple_3.png" alt="simple"/></p>
 
 ## ABCD
 
