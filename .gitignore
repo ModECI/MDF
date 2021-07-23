@@ -213,3 +213,7 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PsyNeuLink/*.dat
 /examples/MDF/simple
 /examples/MDF/simple_3
+/examples/MDF/abcd
+/examples/MDF/arrays
+/examples/MDF/states
+/examples/MDF/abc_conditions

@@ -47,3 +47,5 @@ An example with [Nodes](../../docs/README.md#node) containing persistent [States
 [Python source](abc_conditions.py) | [JSON](abc_conditions.json) | [YAML](abc_conditions.yaml)
 
 A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions](../../docs/README.md#condition)
+
+<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
