@@ -23,7 +23,7 @@ With more detail on [Nodes](../../docs/README.md#node) (showing [Parameters](../
 
 Another simple example with more [Nodes](../../docs/README.md#node).
 
-<p align="center"><img src="abcd_example.gv.png" alt="simple"/></p>
+<p align="center"><img src="abcd.png" alt="abcd"/></p>
 
 ## Arrays
 
@@ -31,7 +31,7 @@ Another simple example with more [Nodes](../../docs/README.md#node).
 
 An example using arrays for [Parameters](../../docs/README.md#parameter) and weights on [Edges](../../docs/README.md#edge).
 
-<p align="center"><img src="array_example.gv.png" alt="simple"/></p>
+<p align="center"><img src="arrays.png" alt="simple"/></p>
 
 ## States
 
@@ -39,7 +39,7 @@ An example using arrays for [Parameters](../../docs/README.md#parameter) and wei
 
 An example with [Nodes](../../docs/README.md#node) containing persistent [States](../../docs/README.md#state).
 
-<p align="center"><img src="state_example.gv.png" alt="simple"/></p>
+<p align="center"><img src="states.png" alt="simple"/></p>
 
 
 ## Conditions example
