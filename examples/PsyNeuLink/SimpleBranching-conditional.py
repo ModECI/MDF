@@ -1,6 +1,6 @@
 import psyneulink as pnl
 
-comp = pnl.Composition(name='comp')
+comp = pnl.Composition(name='SimpleBranching-conditional_3')
 A = pnl.TransferMechanism(name='A')
 B = pnl.TransferMechanism(name='B')
 C = pnl.TransferMechanism(name='C')
@@ -24,4 +24,4 @@ print([
     for time_step in comp.scheduler.execution_list[comp.default_execution_id]
 ])
 
-# comp.show_graph()
+comp.show_graph(output_fmt='pdf',show_node_structure=True,show_projection_labels=True,show_learning=True)
