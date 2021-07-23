@@ -65,9 +65,10 @@ def main():
             s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
             t+=dt
 
-        import matplotlib.pyplot as plt
-        plt.plot(times,s)
-        plt.show()
+        if "-nogui" not in sys.argv:
+            import matplotlib.pyplot as plt
+            plt.plot(times,s)
+            plt.show()
 
 
     if "-graph" in sys.argv:
