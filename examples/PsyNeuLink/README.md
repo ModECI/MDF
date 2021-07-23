@@ -26,7 +26,7 @@ A three-[Node](../../docs/README.md#node) example with [Conditions](../../docs/R
 
 The same model as in [SimpleLinear-conditional](#SimpleLinear-conditional) with [Conditions](../../docs/README.md#condition) for timeline scheduling. Note: these conditions are still not fully implemented by the scheduler.
 
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_nested_comp_with_scheduler_1/model_nested_comp_with_scheduler_1-1.png" alt="simple"/></p>
 
 ## Nested
 
@@ -52,7 +52,7 @@ A similar model as in [Nested without scheduling](#Nested-without-scheduling) wi
 
 An example with a single [Node](../../docs/README.md#node) using the PsyNeuLink implementation of the [FitzHugh–Nagumo model](https://wikipedia.org/wiki/FitzHugh–Nagumo_model).
 
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN.png" alt="simple"/></p>
 
 ### SimpleFN-timing
 
