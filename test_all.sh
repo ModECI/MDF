@@ -14,16 +14,19 @@ cd examples/MDF
 python -m modeci_mdf.interfaces.neuroml.importer Simple.json -run
 python -m modeci_mdf.interfaces.neuroml.importer ABCD.json -run
 python -m modeci_mdf.interfaces.neuroml.importer States.json -run
+python -m modeci_mdf.interfaces.neuroml.importer New_Stateful_Parameters.json -run
+python -m modeci_mdf.interfaces.neuroml.importer New_Stateful_Parameters_ver2.json -run
+python -m modeci_mdf.interfaces.neuroml.importer New_Stateful_Parameters_FN.json -run
 
 
 python -m modeci_mdf.interfaces.graphviz.importer Simple.json 1 -noview
 mv simple_example.gv.png simple.png
-
-
+#
+#
 python -m modeci_mdf.interfaces.graphviz.importer Simple.json 3 -noview
 python -m modeci_mdf.interfaces.graphviz.importer ABCD.json 1 -noview
-
-python -m modeci_mdf.interfaces.graphviz.importer Arrays.json 3 -noview
+#
+python -m modeci_mdf.interfaces.graphviz.importer New_Stateful_Parameters.json 3
 python -m modeci_mdf.interfaces.graphviz.importer States.yaml 3 -noview
 
 cd ../../docs

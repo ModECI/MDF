@@ -1,6 +1,6 @@
 import psyneulink as pnl
 
-comp = pnl.Composition(name='comp')
+comp = pnl.Composition(name='SimpleLinear-timing_1')
 A = pnl.TransferMechanism(name='A')
 B = pnl.TransferMechanism(name='B')
 C = pnl.TransferMechanism(name='C')
@@ -19,6 +19,7 @@ comp.scheduler.add_condition_set({
 
 comp.run(inputs={A: 1}, scheduling_mode=pnl.SchedulingMode.EXACT_TIME)
 
+
 print('\n'.join([
     '{0:~}: {1}'.format(
         comp.scheduler.execution_timestamps[comp.default_execution_id][i].absolute,
@@ -26,6 +27,6 @@ print('\n'.join([
     )
     for i, time_step in enumerate(comp.scheduler.execution_list[comp.default_execution_id])
 ]))
-
+comp.show_graph(output_fmt='pdf')
 #  0   1   2   3   4   5   6   7   8   9   10  11  12  13
 #  A   B   B   B   B   B   C   A   B   B   B   B   B   C

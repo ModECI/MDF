@@ -15,6 +15,8 @@ comp.scheduler.add_condition_set({
 
 comp.run(inputs={A: 1})
 
+# comp.show_graph(output_fmt='pdf',show_node_structure=True,show_projection_labels=True)
+
 # A, B, B, B, B, B, C
 print([
     {node.name for node in time_step}

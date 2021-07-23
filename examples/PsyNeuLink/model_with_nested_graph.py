@@ -1,6 +1,6 @@
 import psyneulink as pnl
 
-comp = pnl.Composition(name='comp')
+comp = pnl.Composition(name='model_with_nested_graph_2')
 inner_comp = pnl.Composition(name='Inner Composition')
 A = pnl.TransferMechanism(function=pnl.Linear(slope=5.0, intercept=2.0), name='A')
 B = pnl.TransferMechanism(function=pnl.Logistic, name='B')
@@ -28,3 +28,4 @@ comp.run(inputs={A: 1}, log=True)
 print(comp.results)
 for node in comp.nodes + inner_comp.nodes:
     print(f'{node.name}: {node.parameters.value.get(comp)}')
+comp.show_graph(output_fmt='pdf',show_node_structure=True,show_projection_labels=True)

@@ -1,4 +1,5 @@
 import psyneulink as pnl
+from psyneulink import *
 
 comp = pnl.Composition(name='ABCD')
 
@@ -21,7 +22,7 @@ print(comp.results)
 for node in comp.nodes:
     print(f'{node} {node.name}: {node.parameters.value.get(comp)}')
 
-# comp.show_graph()
+# comp.show_graph(output_fmt='pdf',show_node_structure=True,show_projection_labels=True)
 
 try:
     import matplotlib.pyplot as plt
@@ -46,6 +47,6 @@ try:
 
     axes.set_xlabel('Trial')
     axes.legend()
-    # plt.show()
+    plt.savefig('model_ABCD.png')
 except ImportError:
     pass

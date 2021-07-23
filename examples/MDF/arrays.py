@@ -52,7 +52,7 @@ def main():
     if "-run" in sys.argv:
         verbose = True
         #verbose = False
-        from modeci_mdf.scheduler import EvaluableGraph
+        from modeci_mdf.execution_engine import EvaluableGraph
 
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 

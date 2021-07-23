@@ -1,6 +1,6 @@
 import psyneulink as pnl
 
-comp = pnl.Composition(name='comp')
+comp = pnl.Composition(name='model_nested_comp_with_scheduler_2')
 inner_comp = pnl.Composition(name='Inner Composition')
 A = pnl.TransferMechanism(function=pnl.Linear(slope=5.0, intercept=2.0), name='A')
 B = pnl.TransferMechanism(function=pnl.Logistic, name='B')
@@ -36,3 +36,4 @@ comp.termination_processing = {
     pnl.TimeScale.RUN: pnl.AfterNTrials(1),
     pnl.TimeScale.TRIAL: pnl.AfterNCalls(D, 4)
 }
+comp.show_graph(output_fmt='pdf',show_node_structure=True,show_projection_labels=True)

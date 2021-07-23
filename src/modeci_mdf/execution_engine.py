@@ -162,6 +162,7 @@ class EvaluableState:
                 )
                 self.curr_value += td * time_increment
 
+
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
@@ -175,7 +176,7 @@ class EvaluableStateful_Parameters:
     def __init__(self, stateful_parameter, verbose=False):
         self.verbose = verbose
         self.stateful_parameter = stateful_parameter
-        self.curr_value = stateful_parameter.default_initial_value
+        self.curr_value = float(stateful_parameter.default_initial_value)
 
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
@@ -566,7 +567,7 @@ class EvaluableGraph:
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
 
-def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
+def main(example_file, array_format=FORMAT_NUMPY, verbose=True):
 
     from modeci_mdf.utils import load_mdf, print_summary
 

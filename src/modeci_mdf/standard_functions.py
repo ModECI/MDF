@@ -123,6 +123,16 @@ if len(mdf_functions) == 0:
         % (STANDARD_ARG_0, STANDARD_ARG_1),
     )
 
+    _add_mdf_function("evaluate_sine_node_level_next_value",
+                      description="computing the next value of stateful parameter {}",
+                      arguments=["amp", "period", "dt", "level", "rate"],
+                      expression_string="(dt*6.283185 * rate / period)+level",)
+
+    _add_mdf_function("evaluate_sine_node_rate_next_value",
+                      description="computing the next value of stateful parameter {}",
+                      arguments=["amp", "period", "dt", "level", "rate"],
+                      expression_string="(dt*-1 * 6.283185 * level / period)+rate", )
+
 
     # Enumerate all available ONNX operators and add them as MDF functions.
     from modeci_mdf.onnx_functions import get_onnx_ops

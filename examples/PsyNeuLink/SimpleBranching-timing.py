@@ -1,4 +1,5 @@
 import psyneulink as pnl
+from psyneulink import *
 
 comp = pnl.Composition(name='comp')
 A = pnl.TransferMechanism(name='A')
@@ -22,7 +23,7 @@ comp.scheduler.add_condition_set({
 })
 
 comp.run(inputs={A: 1}, scheduling_mode=pnl.SchedulingMode.EXACT_TIME)
-
+comp.show_graph()
 print('\n'.join([
     '{0:~}: {1}'.format(
         comp.scheduler.execution_timestamps[comp.default_execution_id][i].absolute,

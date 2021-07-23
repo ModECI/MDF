@@ -44,7 +44,7 @@ def main():
         verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
-        from modeci_mdf.scheduler import EvaluableGraph
+        from modeci_mdf.execution_engine import EvaluableGraph
 
         eg = EvaluableGraph(mod_graph, verbose)
         dt = 0.1

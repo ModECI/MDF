@@ -61,7 +61,7 @@ control = pnl.ControlMechanism(
 )
 
 # Construct the Composition:
-Stroop_model = pnl.Composition(name="Stroop_model")
+Stroop_model = pnl.Composition(name="Stroop_model_2")
 Stroop_model.add_linear_processing_pathway(color_pathway)
 Stroop_model.add_linear_processing_pathway(word_pathway)
 Stroop_model.add_linear_processing_pathway(task_color_pathway)
@@ -82,3 +82,5 @@ Stroop_model.scheduler.add_condition(
     pnl.All(pnl.EveryNCalls(color_hidden, 1), pnl.EveryNCalls(word_hidden, 1)),
 )
 Stroop_model.scheduler.add_condition(decision, pnl.EveryNCalls(output, 1))
+
+Stroop_model.show_graph(output_fmt='pdf',show_node_structure=True,show_projection_labels=True)

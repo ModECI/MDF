@@ -18,7 +18,7 @@ print('Running simple model of FitzHugh Nagumo cell for %sms: %s'%(simtime, fhn)
 
 fn = pnl.IntegratorMechanism(name='fn', function=fhn)
 
-comp = pnl.Composition(name='comp')
+comp = pnl.Composition(name='SimpleFN')
 comp.add_linear_processing_pathway([fn])
 
 print('Running the SimpleFN model...')
@@ -68,4 +68,5 @@ for i in [0,1]:
 
 axes.set_xlabel('Time (s)')
 axes.legend()
-# plt.show()
+plt.savefig('SimpleFN.png')
+comp.show_graph(output_fmt='pdf',show_node_structure=True,show_projection_labels=True)

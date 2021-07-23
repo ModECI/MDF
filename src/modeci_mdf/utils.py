@@ -78,6 +78,7 @@ def load_mdf_json(filename):
 
     data = load_json(filename)
 
+
     print(f"Loaded a graph from {filename}, Root(s): {data.keys()}")
     if data.keys() == "graphs":
         data = {"UNSPECIFIED": data}

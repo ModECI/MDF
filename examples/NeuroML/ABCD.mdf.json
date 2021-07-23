@@ -81,7 +81,7 @@
                     "D_0": {
                         "parameters": {
                             "rate": 0.05,
-                            "time_step_size": "0.1s"
+                            "time_step_size": 0.1
                         },
                         "input_ports": {
                             "INPUT": {}
@@ -94,6 +94,7 @@
                         "notes": "Cell: [Cell (d), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n",
                         "states": {
                             "OUTPUT": {
+                                "default_initial_value": 0,
                                 "time_derivative": "(rate * INPUT) / time_step_size"
                             }
                         }

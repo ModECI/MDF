@@ -34,6 +34,7 @@
                             "level": {
                                 "default_initial_value": "0",
                                 "value": "update_level"
+
                             },
                             "rate": {
                                 "default_initial_value": "1",
