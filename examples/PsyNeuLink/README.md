@@ -75,4 +75,4 @@ The same model in [SimpleFN](#SimpleFN) with scheduling [Conditions](../../docs/
 
 A model representing the [Stroop effect](https://en.wikipedia.org/wiki/Stroop_effect) with conflict monitoring that uses [Conditions](../../docs/README.md#condition).
 
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/Stroop_model_1/Stroop_model_1-1.png" alt="simple"/></p>
