@@ -65,9 +65,22 @@ def main():
             s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
             t+=dt
 
-        import matplotlib.pyplot as plt
-        plt.plot(times,s)
-        plt.show()
+        if "-nogui" not in sys.argv:
+            import matplotlib.pyplot as plt
+            plt.plot(times,s)
+            plt.show()
+
+
+    if "-graph" in sys.argv:
+        mod.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="states",
+            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
+
     return mod_graph
 
 
