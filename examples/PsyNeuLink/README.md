@@ -52,7 +52,7 @@ A similar model as in [Nested without scheduling](#Nested-without-scheduling) wi
 
 An example with a single [Node](../../docs/README.md#node) using the PsyNeuLink implementation of the [FitzHugh–Nagumo model](https://wikipedia.org/wiki/FitzHugh–Nagumo_model).
 
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN.png" width="300" height="400" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN.png" width="400" height="400" alt="simple"/></p>
 
 ### SimpleFN-timing
 
@@ -67,7 +67,7 @@ Note: these conditions are still not fully implemented by the scheduler.
 [Python source](SimpleFN-conditional.py) | [JSON](SimpleFN-conditional.json) | [Reconstructed source](SimpleFN-conditional.reconstructed.py)
 
 The same model in [SimpleFN](#SimpleFN) with scheduling [Conditions](../../docs/README.md#condition) that mimic the behavior in [SimpleFN-timing](#SimpleFN-timing).
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN-conditional.png"  width="300" height="400" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN-conditional.png"  width="400" height="400" alt="simple"/></p>
 
 ## Stroop
 
