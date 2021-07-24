@@ -18,7 +18,7 @@ An example with four [Nodes](../../docs/README.md#node), as in other environment
 
 A three-[Node](../../docs/README.md#node) example with [Conditions](../../docs/README.md#condition).
 
-<p align="center"><img src="abc_conditions.png"  width="300" height="400" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/tree/include_graphs/examples/PsyNeuLink/show_graph/images/SimpleLinear-conditional_1"  width="300" height="400" alt="simple"/></p>
 
 #### SimpleLinear-timing
 
@@ -26,7 +26,7 @@ A three-[Node](../../docs/README.md#node) example with [Conditions](../../docs/R
 
 The same model as in [SimpleLinear-conditional](#SimpleLinear-conditional) with [Conditions](../../docs/README.md#condition) for timeline scheduling. Note: these conditions are still not fully implemented by the scheduler.
 
-<p align="center"><img src=""/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/SimpleLinear-timing_2/SimpleLinear-timing_2-1.png" width="300" height="400" /></p>
 
 ## Nested
 
