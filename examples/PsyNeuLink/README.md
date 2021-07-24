@@ -18,7 +18,7 @@ An example with four [Nodes](../../docs/README.md#node), as in other environment
 
 A three-[Node](../../docs/README.md#node) example with [Conditions](../../docs/README.md#condition).
 
-<p align="center"><img src="https://github.com/ModECI/MDF/tree/include_graphs/examples/PsyNeuLink/show_graph/images/SimpleLinear-conditional_1"  width="300" height="400" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/SimpleLinear-conditional_1/SimpleLinear-conditional_1-1.png"  width="300" height="400" alt="simple"/></p>
 
 #### SimpleLinear-timing
 
