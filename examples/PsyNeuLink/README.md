@@ -8,7 +8,7 @@
 
 An example with four [Nodes](../../docs/README.md#node), as in other environments.
 
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_ABCD_level_1/model_ABCD_level_1-1.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_ABCD_level_1/model_ABCD_level_1-1.png"  width="300" height="400"alt="simple"/></p>
 
 ### SimpleLinear
 
@@ -18,7 +18,7 @@ An example with four [Nodes](../../docs/README.md#node), as in other environment
 
 A three-[Node](../../docs/README.md#node) example with [Conditions](../../docs/README.md#condition).
 
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="abc_conditions.png"  width="300" height="400" alt="simple"/></p>
 
 #### SimpleLinear-timing
 
@@ -36,7 +36,7 @@ The same model as in [SimpleLinear-conditional](#SimpleLinear-conditional) with 
 
 A model with several [Nodes](../../docs/README.md#node) in two [Graphs](../../docs/README.md#graphs), one of which contains the other.
 
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_with_nested_graph_1/model_with_nested_graph_1-1.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_with_nested_graph_1/model_with_nested_graph_1-1.png"  width="300" height="400" alt="simple"/></p>
 
 ### Nested with scheduling
 
@@ -44,7 +44,7 @@ A model with several [Nodes](../../docs/README.md#node) in two [Graphs](../../do
 
 A similar model as in [Nested without scheduling](#Nested-without-scheduling) with [Conditions](../../docs/README.md#condition).
 
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_nested_comp_with_scheduler_1/model_nested_comp_with_scheduler_1-1.png" alt="simple" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/model_nested_comp_with_scheduler_1/model_nested_comp_with_scheduler_1-1.png" alt="simple" width="300" height="400" alt="simple"/></p>
 
 ## SimpleFN
 
@@ -52,7 +52,7 @@ A similar model as in [Nested without scheduling](#Nested-without-scheduling) wi
 
 An example with a single [Node](../../docs/README.md#node) using the PsyNeuLink implementation of the [FitzHugh–Nagumo model](https://wikipedia.org/wiki/FitzHugh–Nagumo_model).
 
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN.png" width="300" height="400" alt="simple"/></p>
 
 ### SimpleFN-timing
 
@@ -60,14 +60,14 @@ An example with a single [Node](../../docs/README.md#node) using the PsyNeuLink 
 
 The same model as in [SimpleFN](#SimpleFN) with [Conditions](../../docs/README.md#condition) for timeline scheduling.
 Note: these conditions are still not fully implemented by the scheduler.
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/SimpleFN-timing_2/SimpleFN-timing_2-1.png"  width="300" height="400" alt="simple"/></p>
 
 ### SimpleFN-conditional
 
 [Python source](SimpleFN-conditional.py) | [JSON](SimpleFN-conditional.json) | [Reconstructed source](SimpleFN-conditional.reconstructed.py)
 
 The same model in [SimpleFN](#SimpleFN) with scheduling [Conditions](../../docs/README.md#condition) that mimic the behavior in [SimpleFN-timing](#SimpleFN-timing).
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN-conditional.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/SimpleFN-conditional.png"  width="300" height="400" alt="simple"/></p>
 
 ## Stroop
 
@@ -75,4 +75,4 @@ The same model in [SimpleFN](#SimpleFN) with scheduling [Conditions](../../docs/
 
 A model representing the [Stroop effect](https://en.wikipedia.org/wiki/Stroop_effect) with conflict monitoring that uses [Conditions](../../docs/README.md#condition).
 
-<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/Stroop_model_1/Stroop_model_1-1.png" width="200" height="400" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/include_graphs/examples/PsyNeuLink/show_graph/images/Stroop_model_1/Stroop_model_1-1.png" width="300" height="400" alt="simple"/></p>
