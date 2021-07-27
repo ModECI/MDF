@@ -1,0 +1,21 @@
+{
+    "stateful_parameter_example": {
+        "version": "NeuroMLlite v0.3.2",
+        "notes": "NeuroMLlite export of ModECI MDF v0.1 graph: stateful_parameter_example",
+        "cells": {
+            "sine_node__instance": {
+                "lems_source_file": "stateful_parameter_example_lems_definitions.xml"
+            }
+        },
+        "populations": {
+            "sine_node": {
+                "size": 1,
+                "component": "sine_node__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            }
+        }
+    }
+}

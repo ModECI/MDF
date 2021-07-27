@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<Lems xmlns="http://www.neuroml.org/lems/0.7.6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/lems/0.7.6 https://raw.githubusercontent.com/LEMS/LEMS/development/Schemas/LEMS/LEMS_v0.7.6.xsd">
+  <ComponentType extends="baseCellMembPotDL" name="FNpop_0__definition">
+    <Parameter dimension="none" name="initial_w"/>
+    <Parameter dimension="none" name="initial_v"/>
+    <Parameter dimension="none" name="a_v"/>
+    <Parameter dimension="none" name="b_v"/>
+    <Parameter dimension="none" name="c_v"/>
+    <Parameter dimension="none" name="d_v"/>
+    <Parameter dimension="none" name="e_v"/>
+    <Parameter dimension="none" name="f_v"/>
+    <Parameter dimension="none" name="time_constant_v"/>
+    <Parameter dimension="none" name="a_w"/>
+    <Parameter dimension="none" name="b_w"/>
+    <Parameter dimension="none" name="c_w"/>
+    <Parameter dimension="none" name="time_constant_w"/>
+    <Parameter dimension="none" name="threshold"/>
+    <Parameter dimension="none" name="mode"/>
+    <Parameter dimension="none" name="uncorrelated_activity"/>
+    <Parameter dimension="none" name="Iext"/>
+    <Parameter dimension="none" name="MSEC"/>
+    <Parameter dimension="none" name="dt"/>
+    <Attachments name="only_input_port" type="basePointCurrentDL"/>
+    <Exposure dimension="none" name="update_V"/>
+    <Exposure dimension="none" name="update_W"/>
+    <Exposure dimension="none" name="time_derivative_V"/>
+    <Exposure dimension="none" name="time_derivative_W"/>
+    <Exposure dimension="none" name="OUTPUT"/>
+    <Exposure dimension="none" name="only_output_port"/>
+    <Dynamics>
+      <DerivedVariable dimension="none" exposure="V" name="V" value="0"/>
+      <DerivedVariable dimension="none" exposure="update_V" name="update_V" value="(time_derivative_V * dt + V)"/>
+      <DerivedVariable dimension="none" exposure="update_W" name="update_W" value="(time_derivative_W * dt + W)"/>
+      <DerivedVariable dimension="none" exposure="time_derivative_V" name="time_derivative_V" value="(a_v*V*V*V + (1+threshold)*b_v*V*V + (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext)/(time_constant_v * MSEC)"/>
+      <DerivedVariable dimension="none" exposure="time_derivative_W" name="time_derivative_W" value="(mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity )/(time_constant_w * MSEC)"/>
+      <DerivedVariable dimension="none" exposure="OUTPUT" name="OUTPUT" value="V"/>
+      <DerivedVariable dimension="none" exposure="only_output_port" name="only_output_port" value="OUTPUT"/>
+    </Dynamics>
+  </ComponentType>
+  <Component Iext="0" MSEC="0.001" a_v="-0.3333333333333333" a_w="1" b_v="0" b_w="-0.8" c_v="1" c_w="0.7" d_v="1" dt="5e-05" e_v="-1" f_v="1" id="FNpop_0__instance" initial_v="-1.0" initial_w="0.0" mode="1" threshold="-1" time_constant_v="1" time_constant_w="12.5" type="FNpop_0__definition" uncorrelated_activity="0"/>
+</Lems>
