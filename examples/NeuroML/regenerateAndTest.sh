@@ -1,4 +1,5 @@
 python alias name="#statement"#!/bin/bash
+
 set -ex
 
 run_gui_examples=true
