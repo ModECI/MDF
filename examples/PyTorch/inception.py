@@ -245,7 +245,7 @@ class InceptionBlocks(nn.Module):
 
 
 def main():
-
+    # changed import call
     from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
