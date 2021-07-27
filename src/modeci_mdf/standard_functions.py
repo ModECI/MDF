@@ -1,3 +1,9 @@
+import math
+
+import numpy
+
+import modeci_mdf.onnx_functions as onnx_ops
+
 mdf_functions = {}
 
 
@@ -8,11 +14,18 @@ def _add_mdf_function(name, description, arguments, expression_string):
     mdf_functions[name]["description"] = description
     mdf_functions[name]["arguments"] = arguments
     mdf_functions[name]["expression_string"] = expression_string
+    try:
+        mdf_functions[name]["function"] = create_python_function(
+            name, expression_string, arguments
+        )
+    except SyntaxError:
+        # invalid syntax in some onnx functions (e.g. onnx_ops.or)
+        mdf_functions[name]["function"] = None
 
 
 def create_python_expression(expression_string):
 
-    for func in ["exp", "sin"]:
+    for func in ["exp", "sin", "cos"]:
         expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
@@ -24,6 +37,17 @@ def substitute_args(expression_string, args):
     for arg in args:
         expression_string = expression_string.replace(arg, str(args[arg]))
     return expression_string
+
+
+def create_python_function(name, expression_string, arguments):
+    # assumes expression is one line
+    name = name.replace(":", "_")
+    expr = create_python_expression(expression_string)
+    func_str = f"def {name}({','.join(arguments)}):\n\treturn {expr}"
+
+    res = {}
+    exec(func_str, globals(), res)
+    return res[name]
 
 
 # Populate the list of known functions
@@ -62,6 +86,13 @@ if len(mdf_functions) == 0:
     )
 
     _add_mdf_function(
+        "cos",
+        description="Cosine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * cos(%s)" % (STANDARD_ARG_0),
+    )
+
+    _add_mdf_function(
         "MatMul",
         description="Matrix multiplication (work in progress...)",
         arguments=["A", "B"],
@@ -74,6 +105,18 @@ if len(mdf_functions) == 0:
         arguments=["A"],
         expression_string="maximum(A,0)",
     )
+
+    # Enumerate all available ONNX operators and add them as MDF functions.
+    from modeci_mdf.onnx_functions import get_onnx_ops
+
+    for mdf_func_spec in get_onnx_ops():
+        _add_mdf_function(**mdf_func_spec)
+
+    # Add the ACT-R functions.
+    from modeci_mdf.actr_functions import get_actr_functions
+
+    for mdf_func_spec in get_actr_functions():
+        _add_mdf_function(**mdf_func_spec)
 
 
 if __name__ == "__main__":

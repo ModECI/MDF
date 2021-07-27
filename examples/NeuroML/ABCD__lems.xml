@@ -1,0 +1,108 @@
+<?xml version="1.0" ?>
+<Lems xmlns="http://www.neuroml.org/lems/0.7.6" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/lems/0.7.6 https://raw.githubusercontent.com/LEMS/LEMS/development/Schemas/LEMS/LEMS_v0.7.6.xsd">
+  <ComponentType name="pnlMechanism" extends="baseCellMembPotDL" description="Base type for PNL based Mechanism">
+    <Exposure name="OUTPUT" dimension="none"/>
+    <Exposure name="INPUT" dimension="none"/>
+  </ComponentType>
+  <ComponentType name="pnlTransferMechanism" extends="pnlMechanism" description="Base type for PNL based TransferMechanism"/>
+  <ComponentType name="pnlIntegratorMechanism" extends="pnlMechanism" description="Base type for PNL based IntegratorMechanism"/>
+  <ComponentType name="pnlSimpleIntegratorMechanism" extends="pnlIntegratorMechanism" description="...">
+    <Parameter name="rate" dimension="none"/>
+    <Parameter name="time_step_size" dimension="time"/>
+    <Attachments name="synapses" type="basePointCurrentDL"/>
+    <Dynamics>
+      <StateVariable name="OUTPUT" dimension="none" exposure="OUTPUT"/>
+      <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add"/>
+      <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+      <TimeDerivative variable="OUTPUT" value="(rate * INPUT) / time_step_size"/>
+      <OnCondition test="OUTPUT .lt. 0">
+        <EventOut port="spike"/>
+      </OnCondition>
+    </Dynamics>
+  </ComponentType>
+  <ComponentType name="inputNode" extends="pnlMechanism" description="...">
+    <Parameter name="variable" dimension="none"/>
+    <Attachments name="synapses" type="basePointCurrentDL"/>
+    <Dynamics>
+      <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+      <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="variable"/>
+      <OnCondition test="OUTPUT .lt. 0">
+        <EventOut port="spike"/>
+      </OnCondition>
+    </Dynamics>
+  </ComponentType>
+  <ComponentType name="pnlLinearFunctionTM" extends="pnlTransferMechanism" description="...">
+    <Parameter name="slope" dimension="none"/>
+    <Parameter name="intercept" dimension="none"/>
+    <Attachments name="synapses" type="basePointCurrentDL"/>
+    <Dynamics>
+      <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add"/>
+      <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+      <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="INPUT*slope + intercept"/>
+      <OnCondition test="OUTPUT .lt. 0">
+        <EventOut port="spike"/>
+      </OnCondition>
+    </Dynamics>
+  </ComponentType>
+  <ComponentType name="pnlLogisticFunctionTM" extends="pnlTransferMechanism" description="...">
+    <Parameter name="gain" dimension="none"/>
+    <Parameter name="bias" dimension="none"/>
+    <Parameter name="x_0" dimension="none"/>
+    <Parameter name="offset" dimension="none"/>
+    <Attachments name="synapses" type="basePointCurrentDL"/>
+    <Dynamics>
+      <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add"/>
+      <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+      <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="1/(1+exp(-1*gain*(INPUT + bias - x_0)+offset))"/>
+      <OnCondition test="OUTPUT .lt. 0">
+        <EventOut port="spike"/>
+      </OnCondition>
+    </Dynamics>
+  </ComponentType>
+  <ComponentType name="pnlExponentialFunctionTM" extends="pnlTransferMechanism" description="...">
+    <Parameter name="scale" dimension="none"/>
+    <Parameter name="rate" dimension="none"/>
+    <Parameter name="bias" dimension="none"/>
+    <Parameter name="offset" dimension="none"/>
+    <Attachments name="synapses" type="basePointCurrentDL"/>
+    <Dynamics>
+      <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add"/>
+      <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
+      <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="scale * exp((rate * INPUT) + bias) + offset"/>
+      <OnCondition test="OUTPUT .lt. 0">
+        <EventOut port="spike"/>
+      </OnCondition>
+    </Dynamics>
+  </ComponentType>
+  <ComponentType name="baseGradedSynapseDL" extends="baseSynapseDL" description="Base type for dimensionless graded synapses"/>
+  <ComponentType name="silentSynapseDL" extends="baseGradedSynapseDL" description="Dummy synapse which emits no current. Used as presynaptic endpoint for analog synaptic connection.">
+    <Property name="weight" dimension="none" defaultValue="1"/>
+    <Exposure name="I" dimension="none"/>
+    <InstanceRequirement name="peer" type="baseGradedSynapse"/>
+    <Dynamics>
+      <DerivedVariable name="I" dimension="none" exposure="I" value="0"/>
+    </Dynamics>
+  </ComponentType>
+  <ComponentType name="synapseDL" extends="baseGradedSynapseDL" description="...">
+    <Property name="weight" dimension="none" defaultValue="1"/>
+    <Constant name="SEC" value="1s" dimension="time"/>
+    <Exposure name="I" dimension="none"/>
+    <Requirement name="OUTPUT" dimension="none"/>
+    <InstanceRequirement name="peer" type="synapseDL"/>
+    <Dynamics>
+      <DerivedVariable name="rpeer" dimension="none" select="peer/OUTPUT"/>
+      <DerivedVariable name="I" dimension="none" exposure="I" value="weight * SEC * rpeer"/>
+    </Dynamics>
+  </ComponentType>
+  <Component id="a_input" type="inputNode" variable="0.1"/>
+  <Component id="a" type="pnlLinearFunctionTM" slope="2" intercept="2"/>
+  <Component id="b" type="pnlLogisticFunctionTM" gain="1.0" bias="0.0" x_0="0.0" offset="0.0"/>
+  <Component id="c" type="pnlExponentialFunctionTM" rate="1.0" bias="0.0" scale="1.0" offset="0.0"/>
+  <Component id="d" type="pnlSimpleIntegratorMechanism" rate="0.05" time_step_size="0.1s"/>
+  <Component id="rsDL" type="synapseDL"/>
+  <Component id="silentSyn_proj_input" type="silentSynapseDL"/>
+  <Component id="silentSyn_proj0" type="silentSynapseDL"/>
+  <Component id="silentSyn_proj1" type="silentSynapseDL"/>
+  <Component id="silentSyn_proj2" type="silentSynapseDL"/>
+  <Component id="silentSyn_proj3" type="silentSynapseDL"/>
+</Lems>

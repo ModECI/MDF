@@ -1,0 +1,115 @@
+<Lems>
+
+
+    <ComponentType  name="fnCell"
+                    extends="baseCellMembPotDL"
+                    description="The Fitzhugh Nagumo model...">
+
+        <Parameter name="a_v" dimension="none"/>
+        <Parameter name="b_v" dimension="none"/>
+        <Parameter name="c_v" dimension="none"/>
+        <Parameter name="d_v" dimension="none"/>
+        <Parameter name="e_v" dimension="none"/>
+        <Parameter name="f_v" dimension="none"/>
+        <Parameter name="time_constant_v" dimension="none"/>
+        <Parameter name="a_w" dimension="none"/>
+        <Parameter name="b_w" dimension="none"/>
+        <Parameter name="c_w" dimension="none"/>
+        <Parameter name="time_constant_w" dimension="none"/>
+        <Parameter name="threshold" dimension="none"/>
+        <Parameter name="mode" dimension="none"/>
+        <Parameter name="uncorrelated_activity" dimension="none"/>
+        <!-- Initial Conditions -->
+        <Parameter name="initial_v" dimension="none"/>
+        <Parameter name="initial_w" dimension="none"/>
+
+        <Parameter name="Iext" dimension="none"/>
+
+
+        <Constant name="MSEC" dimension="time" value="1ms"/>
+
+        <Attachments name="synapses" type="basePointCurrentDL"/>
+
+        <!-- <Exposure name="V" dimension="none"/> --> <!-- Already exposed from baseCellMembPotDL -->
+        <Exposure name="W" dimension="none"/>
+        <Exposure name="OUTPUT" dimension="none"/>
+        <Exposure name="INPUT" dimension="none"/>
+
+        <EventPort name="spike" direction="out" description="Spike event"/>
+
+        <Dynamics>
+
+            <StateVariable name="V" dimension="none" exposure="V"
+                           description="V plays the role of the membrane potential"/>
+            <StateVariable name="W" dimension="none" exposure="W"
+                           description="W plays the role of a recovery variable"/>
+
+
+            <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add" />
+            <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="V"/>
+
+            <TimeDerivative variable="V" value="(a_v*V*V*V + (1+threshold)*b_v*V*V + (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT) / (time_constant_v*MSEC)"/>
+            <TimeDerivative variable="W" value="(mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity) / (time_constant_w*MSEC)"/>
+
+            <OnStart>
+                <StateAssignment variable="V" value="initial_v"/>
+                <StateAssignment variable="W" value="initial_w"/>
+            </OnStart>
+
+
+
+
+        </Dynamics>
+    </ComponentType>
+
+    <!-- No "external" input, d=0 (so silent by default...)... -->
+    <fnCell id="fn0" initial_w="-0.62" initial_v="-1.2" a_v="-0.3333333333333333" b_v="0.0"
+            c_v="1.0" d_v="0" e_v="-1.0" f_v="1.0"
+            time_constant_v="1.0" a_w="1.0" b_w="-0.8" c_w="0.7"
+            time_constant_w="12.5" threshold="-1.0"
+            mode="1.0" uncorrelated_activity="0.0"
+            Iext="0" />
+
+    <fnCell id="fn" initial_w="0.0" initial_v="-1" a_v="-0.3333333333333333" b_v="0.0"
+            c_v="1.0" d_v="1" e_v="-1.0" f_v="1.0"
+            time_constant_v="1.0" a_w="1.0" b_w="-0.8" c_w="0.7"
+            time_constant_w="12.5" threshold="-1.0"
+            mode="1.0" uncorrelated_activity="0.0"
+            Iext="0" />
+
+
+    <ComponentType name="simpleExponentialSynapse"
+                   extends="baseSynapseDL"
+                   description="Ohmic synapse model whose conductance rises instantaneously by (_gbase * _weight) on receiving an event, and which decays exponentially to zero with time course _tauDecay">
+
+        <Parameter name="tauDecay" dimension="time" description="Time course of decay"/>
+        <Parameter name="Gbase" dimension="none" description="Baseline conductance, generally the maximum conductance following a single spike"/>
+        <Parameter name="erev" dimension="none" description="Reversal potential of the synapse"/>
+
+        <Requirement name="V" dimension="none" description="The current may vary with the voltage exposed by the ComponentType on which this is placed"/>
+
+        <Exposure name="G" dimension="none"/>
+
+        <EventPort name="in" direction="in"/>
+
+        <Dynamics>
+
+            <StateVariable name="G" dimension="none" exposure="G"/>
+
+            <DerivedVariable name="I" exposure="I" dimension="none" value="G * (erev - V)" />
+
+            <TimeDerivative variable="G" value="-G / tauDecay" />
+
+            <OnStart>
+                <StateAssignment variable="G" value="0" />
+            </OnStart>
+
+            <OnEvent port="in">
+                <StateAssignment variable="G" value="G + Gbase" />
+            </OnEvent>
+
+        </Dynamics>
+    </ComponentType>
+
+
+</Lems>

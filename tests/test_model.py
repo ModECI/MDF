@@ -1,6 +1,14 @@
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function
 
 
+def test_model_init_kwargs():
+    m = Model(
+        id="Test", format="test_format", generating_application="test_application"
+    )
+    assert m.format == "test_format"
+    assert m.generating_application == "test_application"
+
+
 def test_model_graph_to_json():
     """
     Check if dumping a model to a simple JSON string works.
@@ -58,3 +66,23 @@ def test_func_args_empty_dict():
     Test whether we don't a serialization error when passing empty dicts to Function args
     """
     Function(args={}).to_json()
+
+
+def test_graph_inputs():
+    r"""
+    Test whether we can retrieve graph input node\ports via the inputs property.
+    """
+    mod = Model(id="ABCD")
+    mod_graph = Graph(id="abcd_example")
+    mod.graphs.append(mod_graph)
+
+    input_node = Node(id="input0", parameters={"input_level": 10.0})
+    op1 = OutputPort(id="out_port")
+    op1.value = "input_level"
+    input_node.output_ports.append(op1)
+    mod_graph.nodes.append(input_node)
+
+
+def test_graph_inputs_none(simple_model_mdf):
+    """Test that the simple model with no input ports used has no graph inputs"""
+    assert len(simple_model_mdf.graphs[0].inputs) == 0

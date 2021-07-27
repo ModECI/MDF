@@ -1,42 +1,52 @@
 #!/bin/bash
 set -ex
 
-python setup.py install
+pip install .
 
+# Note this:
+#    1) runs examples to regenerate yaml/json...
+#    2) tests examples with simple_scheduler
 pytest
 
-cd examples
+cd examples/MDF
 
-python simple.py
-python abcd.py
-python arrays.py
+## Test generating MDF models, saving json/yaml & running the models
 
-cd ..
+python simple.py -run
+python abcd.py -run
+python arrays.py -run
+python states.py -run -nogui
+python abc_conditions.py -run
 
-python -m modeci_mdf.mdf
-python -m modeci_mdf.simple_scheduler examples/Simple.json
-python -m modeci_mdf.simple_scheduler examples/Simple.yaml
-python -m modeci_mdf.simple_scheduler examples/ABCD.json
-python -m modeci_mdf.simple_scheduler examples/ABCD.yaml
+## Test exporting to NeuroML
 
-python -m modeci_mdf.simple_scheduler examples/Arrays.json
-python -m modeci_mdf.simple_scheduler examples/Arrays.yaml
+python -m modeci_mdf.interfaces.neuroml.importer Simple.json -run
+python -m modeci_mdf.interfaces.neuroml.importer ABCD.json -run
+python -m modeci_mdf.interfaces.neuroml.importer States.json -run
 
 
-cd examples
+## Test exporting to graphs via GraphViz
 
-python -m modeci_mdf.export.neuroml Simple.json
-python -m modeci_mdf.export.neuroml ABCD.json
-#python -m modeci_mdf.export.neuroml examples/ABCD.json -run
-
-python -m modeci_mdf.export.graphviz Simple.json 1 -noview
+python -m modeci_mdf.interfaces.graphviz.importer Simple.json 1 -noview
 mv simple_example.gv.png simple.png
+python -m modeci_mdf.interfaces.graphviz.importer Simple.json 3 -noview
+mv simple_example.gv.png simple_3.png
+python -m modeci_mdf.interfaces.graphviz.importer ABCD.json 1 -noview
+mv abcd_example.gv.png abcd.png
+python -m modeci_mdf.interfaces.graphviz.importer Arrays.json 3 -noview
+mv array_example.gv.png arrays.png
+python -m modeci_mdf.interfaces.graphviz.importer States.yaml 3 -noview
+mv state_example.gv.png states.png
+python -m modeci_mdf.interfaces.graphviz.importer abc_conditions.yaml 3 -noview
+mv abc_conditions_example.gv.png abc_conditions.png
 
-python -m modeci_mdf.export.graphviz Simple.json 3 -noview
-python -m modeci_mdf.export.graphviz ABCD.json 1 -noview
+## Test regenerating NeuroML
 
-python -m modeci_mdf.export.graphviz Arrays.json 3 -noview
+cd ../../examples/NeuroML
+./regenerateAndTest.sh
 
-cd ../docs
+## Generate the docs
+
+cd ../../docs
 python generate.py
 cd -
