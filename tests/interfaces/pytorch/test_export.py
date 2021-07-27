@@ -3,7 +3,6 @@ import torch.nn as nn
 import numpy as np
 
 torch.use_deterministic_algorithms(True)
-
 torch.backends.cudnn.deterministic = True
 
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
