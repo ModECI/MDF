@@ -65,12 +65,12 @@ def main():
             s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
             t+=dt
 
-<<<<<<< HEAD
+
         import matplotlib.pyplot as plt
         plt.plot(times,s)
         plt.show()
         plt.savefig('sine_plot.jpg')
-=======
+
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
             plt.plot(times,s)
@@ -87,7 +87,7 @@ def main():
             only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
->>>>>>> 12b8a0e4f4bdc4b55b89f9be373a73bbc1981608
+
     return mod_graph
 
 
