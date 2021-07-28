@@ -113,7 +113,6 @@ class Model(BaseWithId):
 
         new_file = super().to_yaml_file(filename)
 
-
     def to_graph_image(
         self,
         engine="dot",
@@ -121,7 +120,7 @@ class Model(BaseWithId):
         view_on_render=False,
         level=2,
         filename_root=None,
-        only_warn_on_fail=False
+        only_warn_on_fail=False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
 
@@ -148,9 +147,12 @@ class Model(BaseWithId):
 
         except Exception as e:
             if only_warn_on_fail:
-                print("Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"%e)
+                print(
+                    "Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"
+                    % e
+                )
             else:
-                raise(e)
+                raise (e)
 
 
 class Graph(BaseWithId):
@@ -279,7 +281,7 @@ class Node(BaseWithId):
 
 
 class Function(BaseWithId):
-    _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
+    _definition = "A single value or tuple of values which is evaluated as a function of values on _InputPort_s and other Functions"
 
     def __init__(self, **kwargs):
         """A single value which is evaluated as a function of values on _InputPort_s and other Functions
@@ -306,6 +308,14 @@ class Function(BaseWithId):
                     (
                         'Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
                         dict,
+                    ),
+                ),
+                (
+                    "return_values",
+                    (
+                        "A list of strings specifying the return values to assign for this function. This field is optional "
+                        "and only useful in the case when a function outputs multiple values. ",
+                        list,
                     ),
                 ),
             ]
@@ -501,7 +511,7 @@ class Condition(Base):
 
 
 if __name__ == "__main__":
-    model = Model(id='MyModel')
+    model = Model(id="MyModel")
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
     model.graphs.append(mod_graph0)
 
@@ -519,5 +529,5 @@ if __name__ == "__main__":
         view_on_render=False,
         level=3,
         filename_root="test",
-        only_warn_on_fail=True
+        only_warn_on_fail=True,
     )

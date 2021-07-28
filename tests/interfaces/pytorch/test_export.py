@@ -85,3 +85,20 @@ def test_inception(inception_model_pytorch):
         output,
         eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
     )
+
+
+def test_maxpool():
+    m = nn.MaxPool1d(3, stride=2, return_indices=True)
+    input = torch.zeros(20, 16, 50)
+    input[2, 2, 2] = 1.0
+
+    out1, out2 = m(input)
+
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=m,
+        args=(input,),
+        example_outputs=(out1, out2),
+        trace=True,
+    )
+
+    a = 1

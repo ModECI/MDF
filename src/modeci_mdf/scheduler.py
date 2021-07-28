@@ -108,7 +108,9 @@ class EvaluableFunction:
             self.curr_value = onnx_function(**kwargs_for_onnx)
         elif "actr_functions." in expr:
             actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
-            self.curr_value = actr_function(*[func_params[arg] for arg in self.function.args])
+            self.curr_value = actr_function(
+                *[func_params[arg] for arg in self.function.args]
+            )
         else:
             self.curr_value = evaluate_expr(
                 expr, func_params, verbose=self.verbose, array_format=array_format
@@ -119,6 +121,28 @@ class EvaluableFunction:
                 "    Evaluated %s with %s =\t%s"
                 % (self.function, _params_info(func_params), _val_info(self.curr_value))
             )
+
+        # If the Function has named multiple return values, the set the curr_value to a dict where the keys are the
+        # return value names and the values are the function return values.
+        if self.function.return_values is not None:
+
+            # Check to see if the function returned a properly sized Tuple, it must have the same length as
+            # return_values
+            if type(self.curr_value) is not tuple or len(self.curr_value) != len(
+                self.function.return_values
+            ):
+                raise ValueError(
+                    f"Error evaluating function ({self.function}), the actual return values from evaluation "
+                    f"are not a tuple or are not the appropriate length to be assigned to return_values list.\n"
+                    f"function.return_values = {self.function.return_values}"
+                    f"function evaluation = {self.curr_value}"
+                )
+
+            self.curr_value = {
+                val_name: val
+                for val_name, val in zip(self.function.return_values, self.curr_value)
+            }
+
         return self.curr_value
 
 
@@ -319,9 +343,20 @@ class EvaluableNode:
             curr_params[es] = self.evaluable_states[es].curr_value
 
         for ef in self.evaluable_functions:
-            curr_params[ef] = self.evaluable_functions[ef].evaluate(
-                curr_params, array_format=array_format
-            )
+
+            # If the return_values list is not specified, this function returns one
+            # value and we should assign it to the function id.
+            if self.evaluable_functions[ef].function.return_values is None:
+                curr_params[ef] = self.evaluable_functions[ef].evaluate(
+                    curr_params, array_format=array_format
+                )
+            else:
+                # If not, evaluate will return a dictionary of values where the key
+                # is the name and the value is the return value.
+                ret_vals = self.evaluable_functions[ef].evaluate(
+                    curr_params, array_format=array_format
+                )
+                curr_params.update(ret_vals)
 
         # Now evaluate and set params to new state values for use in output...
         for es in self.evaluable_states:

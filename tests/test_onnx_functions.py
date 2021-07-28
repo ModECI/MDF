@@ -98,3 +98,8 @@ def test_concat():
     input = (np.ones(3), np.ones(3), np.ones(3))
     out = onnx_ops.concat(*input, axis=0)
     assert np.allclose(out, np.concatenate(input, axis=0))
+
+
+def test_maxpool():
+    """Test the MaxPool Op. This has an optional second return value."""
+    pass

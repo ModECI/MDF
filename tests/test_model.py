@@ -1,4 +1,5 @@
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function
+from modeci_mdf.scheduler import EvaluableFunction
 
 
 def test_model_init_kwargs():
@@ -86,3 +87,8 @@ def test_graph_inputs():
 def test_graph_inputs_none(simple_model_mdf):
     """Test that the simple model with no input ports used has no graph inputs"""
     assert len(simple_model_mdf.graphs[0].inputs) == 0
+
+
+def test_multi_return():
+    f = Function(id="test_func", args={}, return_values=["ret_val1", "ret_val2"])
+    rf = EvaluableFunction(f, verbose=False)

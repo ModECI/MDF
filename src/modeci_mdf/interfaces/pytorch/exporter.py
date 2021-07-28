@@ -120,6 +120,7 @@ def process_onnx_schema(
 
     # Get the input node names
     inputs = [i.unique() for i in node.inputs()]
+    outputs = [o.unique() for o in node.outputs()]
 
     # If this is an ONNX op, we need to get the schema from ONNX
     if "onnx::" in node.kind():
@@ -144,6 +145,11 @@ def process_onnx_schema(
                         for i, inp in enumerate(inputs)
                     }
 
+            output_args = {
+                schema.outputs[o].name: port_mapper.id_to_port(out)
+                for o, out in enumerate(outputs)
+            }
+
         except onnx.onnx_cpp2py_export.defs.SchemaError:
             logger.warning(
                 f"Could not find ONNX OpSchema for op {node.kind()}, using placeholder names for arguments."
@@ -159,7 +165,7 @@ def process_onnx_schema(
         aname: convert_to_serializable(node[aname]) for aname in node.attributeNames()
     }
 
-    return schema_args, parameters
+    return schema_args, parameters, output_args
 
 
 def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
@@ -297,9 +303,11 @@ def torchnode_to_mdfnode(
 
     # Get the argument names and parameter names and values for this Node's operation
     if "onnx::" in op:
-        arguments, parameters = process_onnx_schema(node, port_mapper)
+        arguments, parameters, output_args = process_onnx_schema(node, port_mapper)
     else:
-        arguments, parameters = process_torch_schema(node, consts, port_mapper)
+        arguments, parameters, output_args = process_torch_schema(
+            node, consts, port_mapper
+        )
 
     mdf_node = Node(id=make_node_id(node), parameters=parameters)
 
