@@ -8,7 +8,7 @@ ABCD:
                     parameters:
                         input_level: 0.0
                     metadata:
-                        color: .8 0 0
+                        color: .8 .8 .8
                     output_ports:
                         out_port:
                             value: input_level
@@ -16,6 +16,8 @@ ABCD:
                     parameters:
                         slope: 2.1
                         intercept: 2.2
+                    metadata:
+                        color: .8 0 0
                     input_ports:
                         input_port1:
                             shape: (1,)
@@ -34,6 +36,8 @@ ABCD:
                         gain: 1.0
                         bias: 0.0
                         offset: 0.0
+                    metadata:
+                        color: 0 .8 0
                     input_ports:
                         input_port1:
                             shape: (1,)
@@ -54,6 +58,8 @@ ABCD:
                         rate: 1.0
                         bias: 0.0
                         offset: 0.0
+                    metadata:
+                        color: 0 0 .8
                     input_ports:
                         input_port1:
                             shape: (1,)
@@ -72,6 +78,8 @@ ABCD:
                 D:
                     parameters:
                         scale: 1.0
+                    metadata:
+                        color: .8 0 .8
                     input_ports:
                         input_port1:
                             shape: (1,)
