@@ -14,7 +14,8 @@ def main():
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0", parameters={"input_level": 0.0})
+    input_node = Node(id="input0", parameters={"input_level": 0.0}, metadata = {'color':'.8 0 0'})
+
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)

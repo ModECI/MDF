@@ -9,6 +9,9 @@
                         "parameters": {
                             "input_level": 0.0
                         },
+                        "metadata": {
+                            "color": ".8 0 0"
+                        },
                         "output_ports": {
                             "out_port": {
                                 "value": "input_level"

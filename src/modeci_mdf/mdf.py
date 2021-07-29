@@ -272,7 +272,8 @@ class Node(BaseWithId):
         )
 
         self.allowed_fields = collections.OrderedDict(
-            [("parameters", ("Dict of parameters for the Node", dict))]
+            [("parameters", ("Dict of parameters for the Node", dict)),
+            ("metadata", ("Dict of metadata for the Node", dict))]
         )
 
         super().__init__(**kwargs)
