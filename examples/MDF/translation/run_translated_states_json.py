@@ -24,7 +24,7 @@ def main():
     # print(args)
     dt = 0.01
     file_path = 'States.json'
-    data = convert_states_to_stateful_parameters(file_path, dt)
+    data = convert_states_to_stateful_parameters('../'+file_path, dt)
     # print(data)
     with open('Translated_'+ file_path, 'w') as fp:
         json.dump(data, fp,  indent=4)
@@ -32,7 +32,7 @@ def main():
 
     if "-run" in sys.argv:
 
-        f = open(file_path)
+        f = open('../'+file_path)
         data = json.load(f)
         filtered_list = ['parameters','functions', 'states','output_ports','input_ports', 'notes']
         all_nodes = []
@@ -50,7 +50,7 @@ def main():
                     nodeExtractor(v)
         nodeExtractor(data)
         nodes_dict = dict.fromkeys(all_nodes[0])
-        
+
 
         for key in list(nodes_dict.keys()):
             nodes_dict[key] = {}
@@ -132,14 +132,14 @@ def main():
                         node, state))
 
         verbose = True
-                
-            
+
+
         mod_graph = load_mdf('Translated_%s'% file_path).graphs[0]
         eg = EvaluableGraph(mod_graph, verbose)
-        
+
         mod_graph_old = load_mdf(file_path).graphs[0]
         eg_old = EvaluableGraph(mod_graph_old, verbose)
-        
+
 
         duration= 2
         t = 0
@@ -149,33 +149,33 @@ def main():
         s_old=[]
         while t<=duration:
 
-           
+
             print("======   Evaluating at t = %s  ======"%(t))
-            
+
             if t == 0:
                 eg_old.evaluate() # replace with initialize?
             else:
                 eg_old.evaluate(time_increment=dt)
 
-            # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value) 
+            # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value)
             # t+=args.dt
-        
+
             eg.evaluate()
-            
+
             # print("time first>>>",type(t))
             t = eg.enodes['sine_node'].evaluable_stateful_parameters['time'].curr_value
             times.append(eg.enodes['sine_node'].evaluable_stateful_parameters['time'].curr_value)
 
-            # times.append(t)            
+            # times.append(t)
             s_old.append(eg_old.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
-            
+
             s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
-            
-            
+
+
         print(s_old[:10], s[:10])
         import matplotlib.pyplot as plt
         plt.plot(times,s)
-        
+
 
         plt.show()
         plt.savefig('translated_levelrate_sineplot.jpg')
@@ -184,4 +184,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

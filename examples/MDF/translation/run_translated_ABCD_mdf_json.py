@@ -24,14 +24,14 @@ def main():
     # print(args)
     dt = 1
     file_path = 'ABCD.mdf.json'
-    data = convert_states_to_stateful_parameters(file_path, dt)
+    data = convert_states_to_stateful_parameters('../'+file_path, dt)
     # print(data)
     with open('Translated_'+ file_path, 'w') as fp:
         json.dump(data, fp,  indent=4)
 
 
     if "-run" in sys.argv:
-        f = open(file_path)
+        f = open('../'+file_path)
         data = json.load(f)
         filtered_list = ['parameters','functions', 'states','output_ports','input_ports','notes']
         all_nodes = []
@@ -49,7 +49,7 @@ def main():
                     nodeExtractor(v)
         nodeExtractor(data)
         nodes_dict = dict.fromkeys(all_nodes[0])
-        
+
 
         for key in list(nodes_dict.keys()):
             nodes_dict[key] = {}
@@ -132,63 +132,62 @@ def main():
                         node, state))
 
         verbose = True
-                
-            
+
+
         mod_graph = load_mdf('Translated_%s'% file_path).graphs[0]
         eg = EvaluableGraph(mod_graph, verbose)
-        
+
 
         mod_graph_old = load_mdf(file_path).graphs[0]
         eg_old = EvaluableGraph(mod_graph_old, verbose)
-        
 
-        
-    
+
+
+
         format = FORMAT_NUMPY
-        
+
         output=[]
         output_old=[]
         times=[]
         duration =2
         t=0
         while t<=duration:
-            
+
 
             output.append(float(eg.enodes['D_0'].evaluable_stateful_parameters['OUTPUT'].curr_value))
-            
-            
-            
-            # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value) 
 
-           
-            
+
+
+            # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value)
+
+
+
             # print("time first>>>",type(t))
             t = eg.enodes['D_0'].evaluable_stateful_parameters['time'].curr_value
             times.append(t)
-             
+
             if t == 0:
                 eg_old.evaluate(array_format=format) # replace with initialize?
             else:
-                eg_old.evaluate(time_increment=dt, array_format=format)  
-            
+                eg_old.evaluate(time_increment=dt, array_format=format)
+
             # print(t,eg_old.enodes['D_0'].evaluable_states['OUTPUT'].curr_value,eg.enodes['D_0'].evaluable_stateful_parameters['OUTPUT'].curr_value)
             output_old.append(float(eg_old.enodes['D_0'].evaluable_states['OUTPUT'].curr_value))
-            
-            
+
+
             eg.evaluate(array_format=format)
 
-        
+
         print(output_old[:10],output[:10])
         import matplotlib.pyplot as plt
         plt.plot(times,output)
-        
+
         plt.show()
         plt.savefig('translated_abcd_mdf_plot.jpg')
 
-       
+
 
 
 
 if __name__ == "__main__":
     main()
-

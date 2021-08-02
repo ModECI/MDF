@@ -23,7 +23,7 @@ def main():
     # args = parser.parse_args()
     # print(args)
     file_path = 'ABCD.json'
-    data = convert_states_to_stateful_parameters(file_path, dt)
+    data = convert_states_to_stateful_parameters('../'+file_path, dt)
     # print(data)
     with open('Translated_'+ file_path, 'w') as fp:
         json.dump(data, fp,  indent=4)
@@ -31,7 +31,7 @@ def main():
 
     if "-run" in sys.argv:
 
-        f = open(file_path)
+        f = open('../'+file_path)
         data = json.load(f)
         filtered_list = ['parameters','functions', 'states','output_ports','input_ports','notes']
         all_nodes = []
@@ -49,7 +49,7 @@ def main():
                     nodeExtractor(v)
         nodeExtractor(data)
         nodes_dict = dict.fromkeys(all_nodes[0])
-        
+
 
         for key in list(nodes_dict.keys()):
             nodes_dict[key] = {}
@@ -131,26 +131,25 @@ def main():
                         node, state))
 
         verbose = True
-                
-            
+
+
         mod_graph = load_mdf('Translated_%s'% file_path).graphs[0]
         eg = EvaluableGraph(mod_graph, verbose)
-        
 
-        
-    
+
+
+
         format = FORMAT_NUMPY
-        
-           
+
+
         eg.evaluate(array_format=format)
 
-        
-      
 
-       
+
+
+
 
 
 
 if __name__ == "__main__":
     main()
-
