@@ -217,3 +217,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/arrays
 /examples/MDF/states
 /examples/MDF/abc_conditions
+/examples/PsyNeuLink/import/*.dat

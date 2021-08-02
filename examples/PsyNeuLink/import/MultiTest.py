@@ -20,13 +20,13 @@ s_i = pnl.SimpleIntegrator(
     offset=2.2,
 )
 t_i = TestIntegrator(
-        rate=3.3,
-        offset=4.4,
+        rate=1.1,
+        offset=3.3,
 )
 
 print('Running simple models for %sms: %s'%(simtime, fn_i))
-print('Running simple models for %sms: %s'%(simtime, s_i))
-print('Running simple models for %sms: %s'%(simtime, t_i))
+print('Running simple models for %sms: %s, %s'%(simtime, s_i, ['%s=%s'%(p.name,p.values) for p in s_i.parameters]))
+print('Running simple models for %sms: %s, %s'%(simtime, t_i, ['%s=%s'%(p.name,p.values) for p in t_i.parameters]))
 
 fn_m = pnl.IntegratorMechanism(name='fitz', function=fn_i)
 s_m = pnl.IntegratorMechanism(name='simple', function=s_i)
@@ -46,7 +46,8 @@ print('Finished running the model')
 
 for node in comp.nodes:
     print(f'>=== {node}: {node.name}: {node.parameters.value.get(comp)}')
-
+#comp.show_graph(show_node_structure=True, show_cim=True)
+#exit()
 import matplotlib.pyplot as plt
 
 def generate_time_array(node, context=comp.default_execution_id, param='value'):
