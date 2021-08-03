@@ -274,7 +274,7 @@ class Graph(BaseWithId):
 
 class Node(BaseWithId):
     r"""A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
-    The values from these are processed via a number of _Function_s and one or more final values
+    The values from these are processed via a number of Functions and one or more final values
     are calculated on the OutputPort
 
     Args:
@@ -282,7 +282,7 @@ class Node(BaseWithId):
     """
     _definition = (
         "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. "
-        + "The values from these are processed via a number of _Function_s and one or more final values "
+        + "The values from these are processed via a number of Functions and one or more final values "
         "are calculated on the _OutputPort_s "
     )
 

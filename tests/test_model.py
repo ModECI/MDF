@@ -98,9 +98,7 @@ def test_Condition_init_kwargs():
 
 
 def test_model_graph_to_json():
-    """
-    Check if dumping a model to a simple JSON string works.
-    """
+    """Check if dumping a model to a simple JSON string works."""
 
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
 
@@ -115,9 +113,7 @@ def test_model_graph_to_json():
 
 
 def test_no_input_ports_to_json(tmpdir):
-    """
-    Test the edge case of exporting a model to JSON when it has a node with no input ports
-    """
+    """Test the edge case of exporting a model to JSON when it has a node with no input ports"""
 
     mod = Model(id="ABCD")
     mod_graph = Graph(id="abcd_example")
@@ -143,23 +139,17 @@ def test_no_input_ports_to_json(tmpdir):
 
 
 def test_node_params_empty_dict():
-    """
-    Test whether we don't a serialization error when passing empty dicts to Node parameters
-    """
+    """Test whether we don't a serialization error when passing empty dicts to Node parameters"""
     Node(parameters={}).to_json()
 
 
 def test_func_args_empty_dict():
-    """
-    Test whether we don't a serialization error when passing empty dicts to Function args
-    """
+    """Test whether we don't a serialization error when passing empty dicts to Function args"""
     Function(args={}).to_json()
 
 
 def test_graph_inputs():
-    r"""
-    Test whether we can retrieve graph input node\ports via the inputs property.
-    """
+    r"""Test whether we can retrieve graph input node\ports via the inputs property."""
     mod = Model(id="ABCD")
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)

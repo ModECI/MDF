@@ -1,8 +1,6 @@
 """
 Simple export of MDF to GraphViz for generating graphics
-
 Work in progress...
-
 """
 
 import sys
@@ -106,13 +104,20 @@ def match_in_expr(s, node):
 
 
 def mdf_to_graphviz(
-    mdf_graph, engine="dot", output_format="png", view_on_render=False, level=LEVEL_2, filename_root=None
+    mdf_graph,
+    engine="dot",
+    output_format="png",
+    view_on_render=False,
+    level=LEVEL_2,
+    filename_root=None,
 ):
 
     DEFAULT_POP_SHAPE = "ellipse"
     DEFAULT_ARROW_SHAPE = "empty"
 
-    print("Converting MDF graph: %s to graphviz (level: %s, format: %s)" % (mdf_graph.id, level, output_format))
+    print(
+        f"Converting MDF graph: {mdf_graph.id} to graphviz (level: {level}, format: {output_format})"
+    )
 
     graph = graphviz.Digraph(
         mdf_graph.id,
@@ -239,7 +244,7 @@ def mdf_to_graphviz(
         graph.view()
     else:
         name = graph.render()
-        print('Written graph image to: %s'%name)
+        print("Written graph image to: %s" % name)
 
 
 if __name__ == "__main__":
@@ -269,6 +274,4 @@ if __name__ == "__main__":
 
     print("------------------")
     # nmllite_file = example.replace('.json','.nmllite.json')
-    mdf_to_graphviz(
-        mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2])
-    )
+    mdf_to_graphviz(mod_graph, engine=engines["d"], view_on_render=view, level=2)

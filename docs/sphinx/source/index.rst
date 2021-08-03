@@ -7,15 +7,12 @@
 
 
 
-:tocdepth: 5
-
-.. |logo| image:: _static/logo_light_bg.png
-    :width: 10%
+.. |logo| image:: ../../sphinx/images/logo_dark_bg.png
+    :width: 15%
     :target: http://modeci.org
 
-
-|logo| Documentation
-----------------------
+|logo| ModECI_MDF
+====================
 
 MDF is intended to be an open source, community-supported standard and associated library
 of tools for expressing computational models in a form that allows them to be exchanged

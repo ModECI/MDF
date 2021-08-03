@@ -616,6 +616,13 @@ class EvaluableGraph:
         time_increment: Union[int, float] = None,
         array_format: str = FORMAT_DEFAULT,
     ):
+        """Evaluates edges in graph
+
+        Args:
+            time_increment: Time step for next execution
+            array_format: A n-dimensional array
+
+        """
         pre_node = self.enodes[edge.sender]
         post_node = self.enodes[edge.receiver]
         value = pre_node.evaluable_outputs[edge.sender_port].curr_value
@@ -640,6 +647,15 @@ class EvaluableGraph:
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
     def parse_condition(self, condition: Condition) -> scheduling.Condition:
+        """Convert the condition in a specific format
+
+        Args:
+            condition: Specify the condition under which a Component should be allowed to execute
+
+        Returns:
+            Condition in specific format
+
+        """
         try:
             typ = getattr(scheduling.condition, condition["type"])
         except AttributeError as e:

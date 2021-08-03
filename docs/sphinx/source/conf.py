@@ -30,7 +30,6 @@ author = "Padraig Gleeson; ..."
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
-    "nbsphinx",
     "sphinx.ext.mathjax",
     "sphinx_copybutton",
     "sphinx_rtd_theme",
@@ -48,6 +47,9 @@ autodoc_member_order = "bysource"
 autosummary_generate = True
 master_doc = "index"
 napoleon_use_ivar = True
+autosectionlabel_prefix_document = True
+
+html_logo = "../../sphinx/images/logo_dark_bg.png"
 
 # Source Suffix
 source_suffix = {
@@ -80,16 +82,31 @@ html_theme = "sphinx_rtd_theme"
 html_theme_options = {
     "collapse_navigation": False,
     "display_version": True,
-    "logo_only": True,
-    "navigation_depth": 2,
+    "logo_only": False,
+    "navigation_depth": -1,
+    "includehidden": True,
 }
+
+# Output file base name for HTML help builder.
+htmlhelp_basename = "ModECI_MDFdoc"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 
+# Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/3", None),
+    "python": ("https://docs.python.org/", None),
     "numpy": ("https://numpy.org/doc/stable", None),
+    "pytest": ("https://docs.pytest.org/en/stable", None),
 }
+
+from sphinx.ext.autodoc import ClassLevelDocumenter, InstanceAttributeDocumenter
+
+
+def add_directive_header(self, sig):
+    ClassLevelDocumenter.add_directive_header(self, sig)
+
+
+InstanceAttributeDocumenter.add_directive_header = add_directive_header
