@@ -8,7 +8,7 @@ from modeci_mdf.utils import load_mdf, print_summary
 from modeci_mdf.mdf import *
 from modeci_mdf.full_translator import *
 from modeci_mdf.execution_engine import EvaluableGraph
-
+from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 import argparse
 import sys
 
@@ -22,19 +22,18 @@ def main():
 
     # args = parser.parse_args()
     # print(args)
-    dt = 0.01
-    file_path = 'States.json'
-    data = convert_states_to_stateful_parameters(file_path, dt)
+    dt = 1
+    file_path = 'ABCD.mdf.json'
+    data = convert_states_to_stateful_parameters('../'+file_path, dt)
     # print(data)
     with open('Translated_'+ file_path, 'w') as fp:
         json.dump(data, fp,  indent=4)
 
 
     if "-run" in sys.argv:
-
-        f = open(file_path)
+        f = open('../'+file_path)
         data = json.load(f)
-        filtered_list = ['parameters','functions', 'states','output_ports','input_ports', 'notes']
+        filtered_list = ['parameters','functions', 'states','output_ports','input_ports','notes']
         all_nodes = []
         def nodeExtractor(nested_dictionary: Dict[str, Any] = None):
             """Extracts all the node objects in the graph
@@ -50,7 +49,7 @@ def main():
                     nodeExtractor(v)
         nodeExtractor(data)
         nodes_dict = dict.fromkeys(all_nodes[0])
-        
+
 
         for key in list(nodes_dict.keys()):
             nodes_dict[key] = {}
@@ -65,7 +64,7 @@ def main():
             for k, v in nested_dictionary.items():
                 if isinstance(v, dict) and k in list(nodes_dict.keys()):
                     for kk, vv in v.items():
-                        if (isinstance(vv, dict) and kk in filtered_list) or (isinstance(vv, str) and kk in filtered_list):
+                        if isinstance(vv, dict) and kk in filtered_list:
                             nodes_dict[k][kk] = vv
                 if isinstance(v, dict):
                     parameterExtractor(v)
@@ -124,64 +123,71 @@ def main():
                 if time_derivative_dict[node][state] is not None:
                     _add_mdf_function("evaluate_{}_{}_next_value".format(node, state),
                                       description="computing the next value of stateful parameter {}".format(state),
-                                      arguments=arg_dict[node], expression_string=str(state) + "+" "(dt*" + str(
-                            time_derivative_dict[node][state]) + ")", )
+                                      arguments=arg_dict[node], expression_string=str(state) + "+" "(dt*" + str(time_derivative_dict[node][state]) + ")")
+                    print('Expression string****************************************',str(state) + "+" "(dt*" + str(
+                            time_derivative_dict[node][state]) + ")")
                 else:
                     print(
                         'No need to create MDF function for node %s, state %s since there is no expression for time derivative!' % (
                         node, state))
 
         verbose = True
-                
-            
+
+
         mod_graph = load_mdf('Translated_%s'% file_path).graphs[0]
         eg = EvaluableGraph(mod_graph, verbose)
-        
+
+
         mod_graph_old = load_mdf(file_path).graphs[0]
         eg_old = EvaluableGraph(mod_graph_old, verbose)
-        
 
-        duration= 2
-        t = 0
-        recorded = {}
-        times = []
-        s = []
-        s_old=[]
+
+
+
+        format = FORMAT_NUMPY
+
+        output=[]
+        output_old=[]
+        times=[]
+        duration =2
+        t=0
         while t<=duration:
 
-           
-            print("======   Evaluating at t = %s  ======"%(t))
-            
-            if t == 0:
-                eg_old.evaluate() # replace with initialize?
-            else:
-                eg_old.evaluate(time_increment=dt)
 
-            # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value) 
-            # t+=args.dt
-        
-            eg.evaluate()
-            
+            output.append(float(eg.enodes['D_0'].evaluable_stateful_parameters['OUTPUT'].curr_value))
+
+
+
+            # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value)
+
+
+
             # print("time first>>>",type(t))
-            t = eg.enodes['sine_node'].evaluable_stateful_parameters['time'].curr_value
-            times.append(eg.enodes['sine_node'].evaluable_stateful_parameters['time'].curr_value)
+            t = eg.enodes['D_0'].evaluable_stateful_parameters['time'].curr_value
+            times.append(t)
 
-            # times.append(t)            
-            s_old.append(eg_old.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
-            
-            s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
-            
-            
-        print(s_old[:10], s[:10])
+            if t == 0:
+                eg_old.evaluate(array_format=format) # replace with initialize?
+            else:
+                eg_old.evaluate(time_increment=dt, array_format=format)
+
+            # print(t,eg_old.enodes['D_0'].evaluable_states['OUTPUT'].curr_value,eg.enodes['D_0'].evaluable_stateful_parameters['OUTPUT'].curr_value)
+            output_old.append(float(eg_old.enodes['D_0'].evaluable_states['OUTPUT'].curr_value))
+
+
+            eg.evaluate(array_format=format)
+
+
+        print(output_old[:10],output[:10])
         import matplotlib.pyplot as plt
-        plt.plot(times,s)
-        
+        plt.plot(times,output)
 
         plt.show()
-        plt.savefig('translated_levelrate_sineplot.jpg')
+        plt.savefig('translated_abcd_mdf_plot.jpg')
+
+
 
 
 
 if __name__ == "__main__":
     main()
-

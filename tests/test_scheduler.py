@@ -25,7 +25,7 @@ def test_simple_scheduler_main(tmpdir):
 
             eg = modeci_mdf.execution_engine.main("examples/MDF/ABCD.%s"%mdf_format, array_format=array_format)
             output = eg.enodes['D'].evaluable_outputs['output_1'].curr_value
-            assert output==0.6298621883736628
+            assert (-1.7737500239216304-output<1e-9)
 
             eg = modeci_mdf.execution_engine.main("examples/MDF/Arrays.%s"%mdf_format, array_format=array_format)
             output = eg.enodes['middle_node'].evaluable_outputs['output_1'].curr_value

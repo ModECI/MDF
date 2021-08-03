@@ -7,7 +7,7 @@
                 "nodes": {
                     "input0": {
                         "parameters": {
-                            "input_level": 5.0
+                            "input_level": 0.0
                         },
                         "output_ports": {
                             "out_port": {
@@ -17,8 +17,8 @@
                     },
                     "A": {
                         "parameters": {
-                            "slope": 2.1,
-                            "intercept": 2.2
+                            "slope": 1.1,
+                            "intercept": 1.2
                         },
                         "input_ports": {
                             "input_port1": {
@@ -43,9 +43,9 @@
                     },
                     "B": {
                         "parameters": {
-                            "gain": 1.0,
-                            "bias": 0.0,
-                            "offset": 0.0
+                            "gain": 2.1,
+                            "bias": 2.2,
+                            "offset": 2.3
                         },
                         "input_ports": {
                             "input_port1": {
@@ -71,10 +71,10 @@
                     },
                     "C": {
                         "parameters": {
-                            "scale": 1.0,
-                            "rate": 1.0,
-                            "bias": 0.0,
-                            "offset": 0.0
+                            "scale": 3.1,
+                            "rate": 3.2,
+                            "bias": 3.3,
+                            "offset": 3.4
                         },
                         "input_ports": {
                             "input_port1": {
@@ -101,7 +101,7 @@
                     },
                     "D": {
                         "parameters": {
-                            "scale": 1.0
+                            "scale": 4.0
                         },
                         "input_ports": {
                             "input_port1": {
