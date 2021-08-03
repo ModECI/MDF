@@ -44,8 +44,8 @@ abc_conditions:
                             value: input_level
                 A:
                     parameters:
-                        slope: 2.1
-                        intercept: 2.2
+                        slope: 1.1
+                        intercept: 1.2
                     input_ports:
                         input_port1:
                             shape: (1,)
@@ -61,9 +61,9 @@ abc_conditions:
                             value: linear_func
                 B:
                     parameters:
-                        gain: 1.0
-                        bias: 0.0
-                        offset: 0.0
+                        gain: 2.1
+                        bias: 2.2
+                        offset: 2.3
                     input_ports:
                         input_port1:
                             shape: (1,)
@@ -80,10 +80,10 @@ abc_conditions:
                             value: logistic_func
                 C:
                     parameters:
-                        scale: 1.0
-                        rate: 1.0
-                        bias: 0.0
-                        offset: 0.0
+                        scale: 3.1
+                        rate: 3.2
+                        bias: 3.3
+                        offset: 3.4
                     input_ports:
                         input_port1:
                             shape: (1,)
