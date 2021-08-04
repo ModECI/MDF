@@ -7,6 +7,7 @@ from modeci_mdf.utils import load_mdf, print_summary
 from modeci_mdf.execution_engine import EvaluableGraph
 
 import glom
+expression_items = ['+', '*', '-', '/', '%', '(', ')']
 def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 
 	"""Translates json file if with states to json file with stateful_parameters, otherwise unchanged
@@ -98,13 +99,13 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			arg_dict[key] = vi
 	get_arguments(nodes_dict)
 
-	time_derivative_dict = {}
-	def get_time_derivative(d: Dict[str, Any] = None):
-		"""get time_derivative expression for each state variable
+	expression_dict = {}
+	def get_expression(d: Dict[str, Any] = None):
+		"""get any expression (including time derivative) for each state or output port variable
 		Args:
 			d: Node level dictionary with filtered keys
 		Returns:
-			store time_derivative expression for each state variable
+			store expression for each state or output port variable
 		"""
 		for key in d.keys():
 			vi = []
@@ -112,16 +113,30 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			temp_dic = {}
 			if 'states' in d[key].keys():
 				for state in d[key]['states'].keys():
-					li.append(state)
+					
 					if 'time_derivative' in d[key]['states'][state].keys():
+						li.append(state+"#state#time#derivative")
 						vi.append(d[key]['states'][state]['time_derivative'])
+					elif any(x in d[key]['states'][state]['value'] for x in expression_items):
+						li.append(state+"#state#expression")
+						vi.append(d[key]['states'][state]['value'])
 					else:
+						li.append(state+"#state")
+						vi.append(None)
+			if 'output_ports' in d[key].keys():
+				for output_port in d[key]['output_ports'].keys():
+					
+					if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
+						li.append(output_port+"#output#expression")
+						vi.append(d[key]['output_ports'][output_port]['value'])
+					else:
+						li.append(output_port+"#output")
 						vi.append(None)
 			for i in range(len(vi)):
 				temp_dic[li[i]] = vi[i]
-			time_derivative_dict[key] = temp_dic
-	get_time_derivative(nodes_dict)
-
+			expression_dict[key] = temp_dic
+	get_expression(nodes_dict)
+	# print("expression_dict>>>", expression_dict)
 	
 	def createFunctions(d: Dict[str, Any] = None):
 		"""create functions for time_derivative expression for each state variable
@@ -131,12 +146,16 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			functions replacing time derivative for each state variable
 		"""
 		for key in d.keys():
+		
+			if 'functions' not in d[key].keys():
+				d[key]['functions'] = {}
 
 			if 'states' in d[key].keys():
 				statelist=[]
-				d[key]['functions']={}
+				
+				
 				for idx,state in enumerate(list(d[key]['states'].keys())):
-					if 'time_derivative' in d[key]['states'][state].keys():
+					if 'time_derivative' in d[key]['states'][state].keys() or any(x in d[key]['states'][state]['value'] for x in expression_items):
 						d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]={}
 						d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['function']={}
 						d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['function']= "evaluate_{}_{}_next_value".format(key, state)
@@ -151,6 +170,18 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 						for prev_state in statelist[:-1]:
 
 							d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['args'][prev_state] = "evaluated_{}_{}_next_value".format(key, prev_state)
+
+
+			if 'output_ports' in d[key].keys():
+				
+				for idx,output_port in enumerate(list(d[key]['output_ports'].keys())):
+					if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
+						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]={}
+						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']={}
+						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']= "evaluate_{}_{}_value".format(key, output_port)
+						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args']=  {}
+						for param in arg_dict[key]:
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args'][param] = param
 
 
 	createFunctions(nodes_dict)
@@ -176,9 +207,33 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 
 						d[key]['states'][state].pop('time_derivative')
 						d[key]['states'][state]['value']="evaluated_{}_{}_next_value".format(key, state)
-						d[key]['states']['time'] = {'default_initial_value': 0, 'value': 'time + dt'}
-					elif 'default_initial_value' not in d[key]['states'][state].keys() :
-						d[key]['states'][state]['default_initial_value'] = 0
+						d[key]['states']['time'] = {'default_initial_value': 0, 'value': 'evaluated_time_next_value'}
+
+						d[key]['functions']["evaluated_time_next_value"]={}
+						d[key]['functions']["evaluated_time_next_value"]['function']={}
+						d[key]['functions']["evaluated_time_next_value"]['function']= "linear"
+						d[key]['functions']["evaluated_time_next_value"]['args']=  {"variable0":"time" , "slope": 1, "intercept": "dt"}
+						
+					
+
+			
+    
+					elif any(x in d[key]['states'][state]['value'] for x in expression_items):
+						if 'default_initial_value' in d[key]['states'][state].keys():
+							if d[key]['states'][state]['default_initial_value'] in d[key]['parameters']:
+								d[key]['states'][state]['default_initial_value'] = d[key]['parameters'][d[key]['states'][state]['default_initial_value']]
+						else:
+							d[key]['states'][state]['default_initial_value'] = 0
+
+						d[key]['states'][state]['value']="evaluated_{}_{}_next_value".format(key, state)
+
+				
+
+			if 'output_ports' in d[key].keys():
+				for output_port in list(d[key]['output_ports'].keys()):
+					if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
+
+						d[key]['output_ports'][output_port]['value']="evaluated_{}_{}_value".format(key, output_port)
 
 		for key in d.keys():
 			if 'states' in d[key].keys():
