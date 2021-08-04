@@ -125,13 +125,13 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 						vi.append(None)
 			if 'output_ports' in d[key].keys():
 				for output_port in d[key]['output_ports'].keys():
-					
-					if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
-						li.append(output_port+"#output#expression")
-						vi.append(d[key]['output_ports'][output_port]['value'])
-					else:
-						li.append(output_port+"#output")
-						vi.append(None)
+					if isinstance(d[key]['output_ports'][output_port]['value'], str): 					
+						if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
+							li.append(output_port+"#output#expression")
+							vi.append(d[key]['output_ports'][output_port]['value'])
+						else:
+							li.append(output_port+"#output")
+							vi.append(None)
 			for i in range(len(vi)):
 				temp_dic[li[i]] = vi[i]
 			expression_dict[key] = temp_dic
@@ -175,13 +175,14 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			if 'output_ports' in d[key].keys():
 				
 				for idx,output_port in enumerate(list(d[key]['output_ports'].keys())):
-					if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
-						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]={}
-						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']={}
-						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']= "evaluate_{}_{}_value".format(key, output_port)
-						d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args']=  {}
-						for param in arg_dict[key]:
-							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args'][param] = param
+					if isinstance(d[key]['output_ports'][output_port]['value'], str):
+						if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]={}
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']={}
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']= "evaluate_{}_{}_value".format(key, output_port)
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args']=  {}
+							for param in arg_dict[key]:
+								d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args'][param] = param
 
 
 	createFunctions(nodes_dict)
@@ -231,9 +232,10 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 
 			if 'output_ports' in d[key].keys():
 				for output_port in list(d[key]['output_ports'].keys()):
-					if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
+					if isinstance(d[key]['output_ports'][output_port]['value'], str):
+						if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
 
-						d[key]['output_ports'][output_port]['value']="evaluated_{}_{}_value".format(key, output_port)
+							d[key]['output_ports'][output_port]['value']="evaluated_{}_{}_value".format(key, output_port)
 
 		for key in d.keys():
 			if 'states' in d[key].keys():
