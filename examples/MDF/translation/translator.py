@@ -1,6 +1,6 @@
 import json
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression,_add_mdf_function
-f = open('States.json')
+f = open('../States.json')
 data = json.load(f)
 
 
@@ -9,26 +9,26 @@ all_nodes=[]
 
 def parameterExtractor(nested_dictionary):
   for k,v in nested_dictionary.items():
-  
+
     if isinstance(v,dict) and k in 'nodes':
-    
+
       all_nodes.append(v.keys())
 
       # dic[v.keys()]={}
     elif isinstance(v, dict):
       # print('inside this>>>',k,v)
       parameterExtractor(v)
-  
+
 parameterExtractor(data)
 dic =dict.fromkeys(all_nodes[0])
 for key in list(dic.keys()):
-  
+
   dic[key] = {}
 
 
 def parameterExtractor(nested_dictionary,nodes=None):
   for k,v in nested_dictionary.items():
-    
+
     if isinstance(v,dict) and k in list(dic.keys()):
       for kk,vv in v.items():
         if isinstance(vv,dict) and kk in filtered_list:
@@ -36,7 +36,7 @@ def parameterExtractor(nested_dictionary,nodes=None):
           dic[k][kk]=vv
 
     # if isinstance(v,dict) and k in filtered_list:
-      
+
     #   dic[k]=v
     if isinstance(v, dict):
       # print('inside this>>>',k,v)
@@ -48,15 +48,15 @@ f.close()
 arg_dict={}
 
 def get_arguments(d):
-  
-  
+
+
   for key in d.keys():
     vi=[]
- 
+
     flag=0
-    
-    
-      
+
+
+
     vi+=list(d[key]['parameters'].keys())
     vi+=list(d[key]['states'].keys())
 
@@ -77,14 +77,14 @@ print("This arg_dict contains input to update mdf function", arg_dict)
 # #second step 2 -  enumertate the states and extract the time derivatives and stored it is a dict
 time_derivative_dict={}
 def get_time_derivative(d):
-  
+
   for key in d.keys():
     vi = []
     li = []
     temp_dic={}
     for state in d[key]['states'].keys():
       li.append(state)
-    
+
       if 'time_derivative' in d[key]['states'][state].keys():
 
         vi.append(d[key]['states'][state]['time_derivative'])
@@ -110,7 +110,7 @@ for node,states in time_derivative_dict.items():
     else:
       print('No need to create MDF function for node %s, state %s since there is no expression for time derivative!'%(node, state))
 
-print(mdf_functions) 
+print(mdf_functions)
   # print(state,derivative)
 #
 # def check_Cond(self,**kwargs):
@@ -137,4 +137,3 @@ print(mdf_functions)
 #
 #     args_dict[stateful_parameter] = args_dict[stateful_parameter] + eval(expression) * args_dict['dt'] # dl/dt
 #
-

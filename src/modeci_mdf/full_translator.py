@@ -5,9 +5,9 @@ from typing import List, Tuple, Dict, Optional, Set, Any, Union
 from modeci_mdf.utils import load_mdf, print_summary
 
 from modeci_mdf.execution_engine import EvaluableGraph
-
 import glom
 expression_items = ['+', '*', '-', '/', '%', '(', ')']
+
 def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 
 	"""Translates json file if with states to json file with stateful_parameters, otherwise unchanged
