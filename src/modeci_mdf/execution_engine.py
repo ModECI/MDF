@@ -171,43 +171,61 @@ class EvaluableState:
         return self.curr_value
 
 
-
-class EvaluableStateful_Parameters:
-    def __init__(self, stateful_parameter, verbose=False):
+class EvaluableParameter:
+    def __init__(self, parameter, verbose=False):
         self.verbose = verbose
-        self.stateful_parameter = stateful_parameter
-        self.curr_value = stateful_parameter.default_initial_value
+        self.parameter = parameter
+        self.curr_value = 0
 
-    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
+    def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print(
                 "    Evaluating {} with {} ".format(
-                    self.stateful_parameter, _params_info(parameters)
+                    self.parameter, _params_info(parameters)
                 )
             )
 
-     
+        if self.parameter.value:
 
-        self.curr_value = evaluate_expr(
-            self.stateful_parameter.value,
-            parameters,
-            verbose=False,
-            array_format=array_format,
-        )
-        
+            self.curr_value = evaluate_expr(
+                self.parameter.value,
+                parameters,
+                verbose=False,
+                array_format=array_format,
+            )
+        else:
+            if time_increment == None:
+
+                self.curr_value = evaluate_expr(
+                    self.parameter.default_initial_value,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+            else:
+                td = evaluate_expr(
+                    self.parameter.time_derivative,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+                self.curr_value += td * time_increment
+
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.stateful_parameter, _params_info(parameters), _val_info(self.curr_value))
+                % (self.parameter, _params_info(parameters), _val_info(self.curr_value))
             )
         return self.curr_value
+
+
 
 
 class EvaluableOutput:
     def __init__(self, output_port,verbose=False):
         self.verbose = verbose
         self.output_port = output_port
-        
+
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print(
@@ -259,10 +277,10 @@ class EvaluableNode:
         self.verbose = verbose
         self.node = node
         self.evaluable_inputs = {}
+        self.evaluable_parameters = OrderedDict()
         self.evaluable_functions = OrderedDict()
         self.evaluable_states = OrderedDict()
-        self.evaluable_stateful_parameters = OrderedDict()
-        
+
         self.evaluable_outputs = {}
 
         all_known_vars = []
@@ -278,14 +296,11 @@ class EvaluableNode:
             all_known_vars.append(ip.id)
             # params_init[ip] = ip.curr_value
 
-
-        for s in node.stateful_parameters:
-            es = EvaluableStateful_Parameters(s, self.verbose)
-            self.evaluable_stateful_parameters[s.id] = es
-            all_known_vars.append(s.id)
+        for p in node.parameters:
+            ep = EvaluableParameter(p, self.verbose)
+            self.evaluable_parameters[p.id] = ep
+            all_known_vars.append(p.id)
             # params_init[s] = s.curr_value
-        
-
 
         for s in node.states:
             es = EvaluableState(s, self.verbose)
@@ -356,8 +371,6 @@ class EvaluableNode:
                 % (self.node.id, _params_info(self.node.parameters))
             )
         curr_params = {}
-        if self.node.parameters:
-            curr_params.update(self.node.parameters)
 
         for eip in self.evaluable_inputs:
             i = self.evaluable_inputs[eip].evaluate(
@@ -369,9 +382,9 @@ class EvaluableNode:
         for es in self.evaluable_states:
             curr_params[es] = self.evaluable_states[es].curr_value
 
-
-        for es in self.evaluable_stateful_parameters:
-            curr_params[es] = self.evaluable_stateful_parameters[es].curr_value
+        # First set params to previous parameter values for use in funcs and states...
+        for ep in self.evaluable_parameters:
+            curr_params[ep] = self.evaluable_parameters[ep].curr_value
 
 
         for ef in self.evaluable_functions:
@@ -385,9 +398,10 @@ class EvaluableNode:
                 curr_params, time_increment=time_increment, array_format=array_format
             )
 
-        for es in self.evaluable_stateful_parameters:
-            curr_params[es] = self.evaluable_stateful_parameters[es].evaluate(
-                curr_params, array_format=array_format
+        # Now evaluate and set params to new parameter values for use in output...
+        for ep in self.evaluable_parameters:
+            curr_params[ep] = self.evaluable_parameters[ep].evaluate(
+                curr_params, time_increment=time_increment, array_format=array_format
             )
 
 

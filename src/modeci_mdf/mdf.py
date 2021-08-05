@@ -261,6 +261,7 @@ class Node(BaseWithId):
                 ("input_ports", ("The _InputPort_s into the Node", InputPort)),
                 ("functions", ("The _Function_s for the Node", Function)),
                 ("states", ("The _State_s of the Node", State)),
+                ("parameters", ("The _Parameter_s of the Node", Parameter)),
                 ("stateful_parameters",("The Stateful Parameter s of the Node",Stateful_Parameter)),
                 (
                     "output_ports",
@@ -272,9 +273,6 @@ class Node(BaseWithId):
             ]
         )
 
-        self.allowed_fields = collections.OrderedDict(
-            [("parameters", ("Dict of parameters for the Node", dict))]
-        )
 
         super().__init__(**kwargs)
 
@@ -410,6 +408,43 @@ class State(BaseWithId):
 
         super().__init__(**kwargs)
 
+class Parameter(BaseWithId):
+    _definition = "A xxx variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
+
+    def __init__(self, **kwargs):
+        """A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_
+
+        Args:
+            default_initial_value (str): The initial value of the state variable
+            value (str): The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values
+            time_derivative (str): How the state varies with time, i.e. ds/dt. Unit of time is second
+        """
+
+        self.allowed_fields = collections.OrderedDict(
+            [
+                (
+                    "default_initial_value",
+                    ("The initial value of the state variable", str),
+                ),
+                (
+                    "value",
+                    (
+                        "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values",
+                        str,
+                    ),
+                ),
+                (
+                    "time_derivative",
+                    (
+                        "How the state varies with time, i.e. ds/dt. Units of time are seconds.",
+                        str,
+                    ),
+                ),
+            ]
+        )
+
+        super().__init__(**kwargs)
+
 
 class Stateful_Parameter(BaseWithId):
     _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
@@ -420,7 +455,7 @@ class Stateful_Parameter(BaseWithId):
         Args:
             default_initial_value (str): The initial value of the stateful parameter
             value (str): The next value of the stateful parameter, in terms of the inputs, functions
-            
+
         """
 
         self.allowed_fields = collections.OrderedDict(
@@ -436,7 +471,7 @@ class Stateful_Parameter(BaseWithId):
                         str,
                     ),
                 ),
-                
+
             ]
         )
 

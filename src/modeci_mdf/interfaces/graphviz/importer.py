@@ -82,10 +82,9 @@ def format_output(s):
 
 def match_in_expr(s, node):
 
-    if node.parameters:
-        for p in node.parameters:
-            if p in s:
-                s = s.replace(p, format_param(p))
+    for p in node.parameters:
+        if p.id in s:
+            s = s.replace(p.id, format_param(p.id))
 
     for ip in node.input_ports:
         if ip.id in s:
@@ -132,17 +131,21 @@ def mdf_to_graphviz(
         if level >= LEVEL_2:
             if node.parameters and len(node.parameters) > 0:
 
-                info += "<tr><td>%s" % format_label("PARAMS")
                 for p in node.parameters:
-                    nn = format_num(node.parameters[p])
-                    breaker = "<br/>"
-                    info += "{} = {}{}".format(
-                        format_param(p),
-                        nn,
-                        breaker if len(info.split(breaker)[-1]) > 300 else ";    ",
+                    v = ""
+                    if p.value:
+                        v += "<i>value:</i> %s" % match_in_expr(p.value, node)
+                    if p.default_initial_value:
+                        v += "<i>def init value:</i> %s" % match_in_expr(
+                            p.default_initial_value, node
+                        )
+                    if p.time_derivative:
+                        v += ", <i>d/dt:</i> %s" % match_in_expr(
+                            p.time_derivative, node
+                        )
+                    info += "<tr><td>{}{}: {}</td></tr>".format(
+                        format_label("PARAMETER"), format_state(p.id), v
                     )
-                info = info[:-5]
-                info += "</td></tr>"
 
             if node.input_ports and len(node.input_ports) > 0:
                 for ip in node.input_ports:
