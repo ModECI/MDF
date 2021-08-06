@@ -37,18 +37,19 @@ def main():
     ip1 = InputPort(id="input_port1")
     processing_node.input_ports.append(ip1)
 
-    f1 = Function(
+    f1 = Parameter(
         id="linear_1",
         function="linear",
         args={"variable0": ip1.id, "slope": "lin_slope", "intercept": "lin_intercept"},
     )
-    f2 = Function(
+    f2 = Parameter(
         id="logistic_1",
         function="logistic",
         args={"variable0": f1.id, "gain": "log_gain", "bias": 0, "offset": 0},
     )
-    processing_node.functions.append(f1)
-    processing_node.functions.append(f2)
+    processing_node.parameters.append(f1)
+    processing_node.parameters.append(f2)
+    
     processing_node.output_ports.append(OutputPort(id="output_1", value="logistic_1"))
 
     e1 = Edge(

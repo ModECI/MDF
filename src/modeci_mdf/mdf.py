@@ -440,6 +440,20 @@ class Parameter(BaseWithId):
                         str,
                     ),
                 ),
+                (
+                    "function",
+                    (
+                        "Which of the in-build MDF functions (linear etc.) this uses",
+                        str,
+                    ),
+                ),
+                (
+                    "args",
+                    (
+                        'Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
+                        dict,
+                    ),
+                ),
             ]
         )
 

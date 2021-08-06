@@ -21,7 +21,16 @@
                         "input_ports": {
                             "input_port1": {}
                         },
-                        "functions": {
+                        "parameters": {
+                            "lin_slope": {
+                                "value": "0.5"
+                            },
+                            "lin_intercept": {
+                                "value": "0"
+                            },
+                            "log_gain": {
+                                "value": "3"
+                            },
                             "linear_1": {
                                 "function": "linear",
                                 "args": {
@@ -38,17 +47,6 @@
                                     "bias": 0,
                                     "offset": 0
                                 }
-                            }
-                        },
-                        "parameters": {
-                            "lin_slope": {
-                                "value": "0.5"
-                            },
-                            "lin_intercept": {
-                                "value": "0"
-                            },
-                            "log_gain": {
-                                "value": "3"
                             }
                         },
                         "output_ports": {
