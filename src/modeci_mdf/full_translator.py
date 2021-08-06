@@ -255,7 +255,7 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 		dr = dr.replace('state_example', 'stateful_parameters_example')
 		return eval(dr)
 	data= repl(data)
-	return data
+	return data, expression_dict, arg_dict
 	
 
 

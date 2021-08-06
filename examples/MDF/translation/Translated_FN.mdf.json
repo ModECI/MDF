@@ -88,6 +88,14 @@
                                     "W": "W",
                                     "dt": "dt"
                                 }
+                            },
+                            "evaluated_time_next_value": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "time",
+                                    "slope": 1,
+                                    "intercept": "dt"
+                                }
                             }
                         },
                         "stateful_parameters": {
@@ -101,7 +109,7 @@
                             },
                             "time": {
                                 "default_initial_value": 0,
-                                "value": "time + dt"
+                                "value": "evaluated_time_next_value"
                             }
                         }
                     }

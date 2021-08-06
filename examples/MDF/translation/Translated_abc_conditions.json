@@ -64,7 +64,8 @@
                             "out_port": {
                                 "value": "input_level"
                             }
-                        }
+                        },
+                        "functions": {}
                     },
                     "A": {
                         "parameters": {

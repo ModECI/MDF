@@ -26,9 +26,12 @@ def _add_mdf_function(name, description, arguments, expression_string):
 def create_python_expression(expression_string):
 
     for func in ["exp", "sin", "cos"]:
-        expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
+        if "math."+func not in expression_string:
+      
+            expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
+    
     return expression_string
 
 
