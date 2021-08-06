@@ -175,7 +175,20 @@ class EvaluableParameter:
     def __init__(self, parameter, verbose=False):
         self.verbose = verbose
         self.parameter = parameter
-        self.curr_value = 0
+        self.curr_value = None
+
+    def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
+        if self.curr_value == None:
+            if self.parameter.value:
+
+                self.curr_value = evaluate_expr(
+                    self.parameter.value,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+        return self.curr_value
+
 
     def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
         if self.verbose:
@@ -367,8 +380,8 @@ class EvaluableNode:
 
         if self.verbose:
             print(
-                "  Evaluating Node: %s with %s"
-                % (self.node.id, _params_info(self.node.parameters))
+                "\n  ---------------\n  Evaluating Node: %s with %s"
+                % (self.node.id, [p.id for p in self.node.parameters])
             )
         curr_params = {}
 
@@ -384,7 +397,7 @@ class EvaluableNode:
 
         # First set params to previous parameter values for use in funcs and states...
         for ep in self.evaluable_parameters:
-            curr_params[ep] = self.evaluable_parameters[ep].curr_value
+            curr_params[ep] = self.evaluable_parameters[ep].get_current_value(curr_params, array_format=array_format)
 
 
         for ef in self.evaluable_functions:
@@ -508,7 +521,7 @@ class EvaluableGraph:
         for ts in self.scheduler.run():
             if self.verbose:
                 print(
-                    " Evaluating time step: %s"
+                    "> Evaluating time step: %s"
                     % self.scheduler.get_clock(None).simple_time
                 )
             for node in ts:

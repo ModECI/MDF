@@ -14,7 +14,8 @@ def main():
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0", parameters={"input_level": 0.0})
+    input_node = Node(id="input0")
+    input_node.parameters.append(Parameter(id="input_level", value=0.0))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
@@ -26,8 +27,8 @@ def main():
     # a = create_example_node('A', mod_graph)
     a = Node(id="A")
     mod_graph.nodes.append(a)
-
-    a.parameters = {"slope": abcd.A_slope, "intercept": abcd.A_intercept}
+    a.parameters.append(Parameter(id="slope", value=abcd.A_slope))
+    a.parameters.append(Parameter(id="intercept", value=abcd.A_intercept))
     ip1 = InputPort(id="input_port1", shape="(1,)")
     a.input_ports.append(ip1)
 
@@ -44,7 +45,9 @@ def main():
     b = Node(id="B")
     mod_graph.nodes.append(b)
 
-    b.parameters = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
+    b.parameters.append(Parameter(id="gain", value=abcd.B_gain))
+    b.parameters.append(Parameter(id="bias", value=abcd.B_bias))
+    b.parameters.append(Parameter(id="offset", value=abcd.B_offset))
     ip1 = InputPort(id="input_port1", shape="(1,)")
     b.input_ports.append(ip1)
 
@@ -61,12 +64,10 @@ def main():
     c = Node(id="C")
     mod_graph.nodes.append(c)
 
-    c.parameters = {
-        "scale": abcd.C_scale,
-        "rate": abcd.C_rate,
-        "bias": abcd.C_bias,
-        "offset": abcd.C_offset,
-    }
+    c.parameters.append(Parameter(id="scale", value=abcd.C_scale))
+    c.parameters.append(Parameter(id="rate", value=abcd.C_rate))
+    c.parameters.append(Parameter(id="bias", value=abcd.C_bias))
+    c.parameters.append(Parameter(id="offset", value=abcd.C_offset))
     ip1 = InputPort(id="input_port1", shape="(1,)")
     c.input_ports.append(ip1)
 
@@ -89,7 +90,7 @@ def main():
     d = Node(id="D")
     mod_graph.nodes.append(d)
 
-    d.parameters = {"scale": abcd.D_scale}
+    d.parameters.append(Parameter(id="scale", value=abcd.D_scale))
     ip1 = InputPort(id="input_port1", shape="(1,)")
     d.input_ports.append(ip1)
 

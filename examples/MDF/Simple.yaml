@@ -6,15 +6,12 @@ Simple:
             nodes:
                 input_node:
                     parameters:
-                        input_level: 0.5
+                        input_level:
+                            value: '0.5'
                     output_ports:
                         out_port:
                             value: input_level
                 processing_node:
-                    parameters:
-                        lin_slope: 0.5
-                        lin_intercept: 0
-                        log_gain: 3
                     input_ports:
                         input_port1: {}
                     functions:
@@ -31,6 +28,13 @@ Simple:
                                 gain: log_gain
                                 bias: 0
                                 offset: 0
+                    parameters:
+                        lin_slope:
+                            value: '0.5'
+                        lin_intercept:
+                            value: '0'
+                        log_gain:
+                            value: '3'
                     output_ports:
                         output_1:
                             value: logistic_1
