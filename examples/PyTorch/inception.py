@@ -245,8 +245,8 @@ class InceptionBlocks(nn.Module):
 
 
 def main():
-
-    from modeci_mdf.scheduler import EvaluableGraph
+    # changed import call
+    from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
     galaxy_images_output = torch.zeros((1, 5, 64, 64))

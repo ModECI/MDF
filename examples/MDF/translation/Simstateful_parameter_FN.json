@@ -1,0 +1,26 @@
+{
+    "Simstateful_parameter_FN": {
+        "version": "NeuroMLlite v0.3.2",
+        "network": "New_Stateful_Parameters_FN.nmllite.json",
+        "duration": 2000.0,
+        "dt": 0.1,
+        "seed": 123,
+        "recordVariables": {
+            "update_V": {
+                "FNpop_0": 0
+            },
+            "update_W": {
+                "FNpop_0": 0
+            },
+            "time_derivative_V": {
+                "FNpop_0": 0
+            },
+            "time_derivative_W": {
+                "FNpop_0": 0
+            },
+            "OUTPUT": {
+                "FNpop_0": 0
+            }
+        }
+    }
+}

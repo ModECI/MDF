@@ -26,9 +26,12 @@ def _add_mdf_function(name, description, arguments, expression_string):
 def create_python_expression(expression_string):
 
     for func in ["exp", "sin", "cos"]:
-        expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
+        if "math."+func not in expression_string:
+      
+            expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
+    
     return expression_string
 
 
@@ -55,6 +58,7 @@ def create_python_function(name, expression_string, arguments):
 if len(mdf_functions) == 0:
 
     STANDARD_ARG_0 = "variable0"
+    STANDARD_ARG_1 = "variable1"
 
     _add_mdf_function(
         "linear",
@@ -105,6 +109,23 @@ if len(mdf_functions) == 0:
         arguments=["A"],
         expression_string="maximum(A,0)",
     )
+
+    _add_mdf_function(
+        "time_derivative_FN_V",
+        description="time_derivative fitzhugh nagumo parameter V",
+        arguments=[STANDARD_ARG_0,STANDARD_ARG_1, "a_v", "threshold", "b_v", "c_v", "d_v", "e_v", "f_v","Iext", "time_constant_v", "MSEC"],
+        expression_string="(a_v*%s*%s*%s + (1+threshold)*b_v*%s*%s + (-1*threshold)*c_v*%s + d_v + e_v*%s + f_v*Iext)/(time_constant_v * MSEC)"
+        % (STANDARD_ARG_0, STANDARD_ARG_0, STANDARD_ARG_0, STANDARD_ARG_0, STANDARD_ARG_0, STANDARD_ARG_0, STANDARD_ARG_1),
+    )
+
+    _add_mdf_function(
+        "time_derivative_FN_W",
+        description="time_derivative fitzhugh nagumo parameter W",
+        arguments=[STANDARD_ARG_0,STANDARD_ARG_1, "a_w", "b_w", "c_w", "mode","uncorrelated_activity", "time_constant_w", "MSEC"],
+        expression_string="(mode*a_w*%s + b_w*%s + c_w + (1-mode)*uncorrelated_activity )/(time_constant_w * MSEC)"
+        % (STANDARD_ARG_0, STANDARD_ARG_1),
+    )
+
 
     # Enumerate all available ONNX operators and add them as MDF functions.
     from modeci_mdf.onnx_functions import get_onnx_ops

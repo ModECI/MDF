@@ -1,7 +1,8 @@
 """Create the MDF files for the addition example and run using the scheduler."""
+
 import os
 from modeci_mdf.interfaces.actr import actr_to_mdf
-from modeci_mdf.scheduler import EvaluableGraph
+from modeci_mdf.execution_engine import EvaluableGraph
 from modeci_mdf.utils import load_mdf
 
 

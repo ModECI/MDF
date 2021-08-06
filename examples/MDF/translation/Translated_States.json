@@ -1,0 +1,103 @@
+{
+    "Stateful_Parameters": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.3",
+        "graphs": {
+            "stateful_parameters_example": {
+                "nodes": {
+                    "counter_node": {
+                        "parameters": {
+                            "increment": 1
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "count"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_counter_node_count_next_value": {
+                                "function": "evaluate_counter_node_count_next_value",
+                                "args": {
+                                    "increment": "increment",
+                                    "count": "count"
+                                }
+                            }
+                        },
+                        "stateful_parameters": {
+                            "count": {
+                                "value": "evaluated_counter_node_count_next_value",
+                                "default_initial_value": 0
+                            }
+                        }
+                    },
+                    "sine_node": {
+                        "parameters": {
+                            "amp": 3,
+                            "period": 0.4,
+                            "dt": 0.01
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "evaluated_sine_node_out_port_value"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_sine_node_level_next_value": {
+                                "function": "evaluate_sine_node_level_next_value",
+                                "args": {
+                                    "amp": "amp",
+                                    "period": "period",
+                                    "level": "level",
+                                    "rate": "rate",
+                                    "dt": "dt"
+                                }
+                            },
+                            "evaluated_sine_node_rate_next_value": {
+                                "function": "evaluate_sine_node_rate_next_value",
+                                "args": {
+                                    "amp": "amp",
+                                    "period": "period",
+                                    "level": "evaluated_sine_node_level_next_value",
+                                    "rate": "rate",
+                                    "dt": "dt"
+                                }
+                            },
+                            "evaluated_sine_node_out_port_value": {
+                                "function": "evaluate_sine_node_out_port_value",
+                                "args": {
+                                    "amp": "amp",
+                                    "period": "period",
+                                    "level": "level",
+                                    "rate": "rate",
+                                    "dt": "dt"
+                                }
+                            },
+                            "evaluated_time_next_value": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "time",
+                                    "slope": 1,
+                                    "intercept": "dt"
+                                }
+                            }
+                        },
+                        "stateful_parameters": {
+                            "level": {
+                                "default_initial_value": "0",
+                                "value": "evaluated_sine_node_level_next_value"
+                            },
+                            "rate": {
+                                "default_initial_value": "1",
+                                "value": "evaluated_sine_node_rate_next_value"
+                            },
+                            "time": {
+                                "default_initial_value": 0,
+                                "value": "evaluated_time_next_value"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

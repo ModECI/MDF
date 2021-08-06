@@ -6,7 +6,7 @@ torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
 
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
-from modeci_mdf.scheduler import EvaluableGraph
+from modeci_mdf.execution_engine import EvaluableGraph
 
 
 def _check_model(mdf_model):

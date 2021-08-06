@@ -7,7 +7,7 @@ import sys
 
 
 def main():
-    mod = Model(id="States")
+    mod = Model(id="New_States")
     mod_graph = Graph(id="state_example")
     mod.graphs.append(mod_graph)
 
@@ -47,8 +47,8 @@ def main():
         from modeci_mdf.scheduler import EvaluableGraph
 
         eg = EvaluableGraph(mod_graph, verbose)
-        dt = 0.01
-        duration= 0.1
+        dt = 0.1
+    
         duration= 2
         t = 0
         recorded = {}
@@ -65,6 +65,12 @@ def main():
             s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
             t+=dt
 
+
+        import matplotlib.pyplot as plt
+        plt.plot(times,s)
+        plt.show()
+        plt.savefig('sine_plot.jpg')
+
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
             plt.plot(times,s)
@@ -80,6 +86,7 @@ def main():
             filename_root="states",
             only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
+
 
     return mod_graph
 

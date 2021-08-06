@@ -3,7 +3,7 @@ import pytest
 
 def test_simple_scheduler_main(tmpdir):
 
-    import modeci_mdf.scheduler
+    import modeci_mdf.execution_engine
     from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
     import numpy as np
 
@@ -19,20 +19,20 @@ def test_simple_scheduler_main(tmpdir):
     for mdf_format in mdf_formats:
         for array_format in array_formats:
 
-            eg = modeci_mdf.scheduler.main("examples/MDF/Simple.%s"%mdf_format, array_format=array_format)
+            eg = modeci_mdf.execution_engine.main("examples/MDF/Simple.%s"%mdf_format, array_format=array_format)
             output = eg.enodes['processing_node'].evaluable_outputs['output_1'].curr_value
             assert output==0.6016871801828567
 
-            eg = modeci_mdf.scheduler.main("examples/MDF/ABCD.%s"%mdf_format, array_format=array_format)
+            eg = modeci_mdf.execution_engine.main("examples/MDF/ABCD.%s"%mdf_format, array_format=array_format)
             output = eg.enodes['D'].evaluable_outputs['output_1'].curr_value
             assert (-1.7737500239216304-output<1e-9)
 
-            eg = modeci_mdf.scheduler.main("examples/MDF/Arrays.%s"%mdf_format, array_format=array_format)
+            eg = modeci_mdf.execution_engine.main("examples/MDF/Arrays.%s"%mdf_format, array_format=array_format)
             output = eg.enodes['middle_node'].evaluable_outputs['output_1'].curr_value
             assert output[0,0]==0.5
             assert output[1,1]==4
 
-            eg = modeci_mdf.scheduler.main("examples/MDF/States.%s"%mdf_format, array_format=array_format)
+            eg = modeci_mdf.execution_engine.main("examples/MDF/States.%s"%mdf_format, array_format=array_format)
             output = eg.enodes['counter_node'].evaluable_outputs['out_port'].curr_value
             assert output==1
             output = eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value
@@ -63,9 +63,9 @@ _abc_conditions_expected_output = [
 )
 def test_condition_scheduler_main(fi, expected_output):
 
-    import modeci_mdf.scheduler
+    import modeci_mdf.execution_engine
 
-    eg = modeci_mdf.scheduler.main(fi)
+    eg = modeci_mdf.execution_engine.main(fi)
     output = [set([n.id for n in nodes]) for nodes in eg.scheduler.execution_list[None]]
 
     assert output == expected_output
