@@ -172,6 +172,9 @@ class EvaluableState:
 
 
 class EvaluableParameter:
+
+    DEFAULT_INIT_VALUE = 0 # Temporary!
+
     def __init__(self, parameter, verbose=False):
         self.verbose = verbose
         self.parameter = parameter
@@ -180,13 +183,22 @@ class EvaluableParameter:
     def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
         if self.curr_value == None:
             if self.parameter.value:
-
+                ips = {}
+                ips.update(parameters)
+                ips[self.parameter.id]=self.DEFAULT_INIT_VALUE
                 self.curr_value = evaluate_expr(
                     self.parameter.value,
-                    parameters,
+                    ips,
                     verbose=False,
                     array_format=array_format,
                 )
+                if self.verbose:
+                    print(
+                        "    Initial eval of <{}> = {} ".format(
+                            self.parameter, self.curr_value
+                        )
+                    )
+
         return self.curr_value
 
 
@@ -297,11 +309,6 @@ class EvaluableNode:
         self.evaluable_outputs = {}
 
         all_known_vars = []
-        # params_init={}
-        if node.parameters:
-            # params_init.update(node.parameters)
-            for p in node.parameters:
-                all_known_vars.append(p)
 
         for ip in node.input_ports:
             rip = EvaluableInput(ip, self.verbose)
@@ -309,11 +316,12 @@ class EvaluableNode:
             all_known_vars.append(ip.id)
             # params_init[ip] = ip.curr_value
 
+        '''
         for p in node.parameters:
             ep = EvaluableParameter(p, self.verbose)
             self.evaluable_parameters[p.id] = ep
             all_known_vars.append(p.id)
-            # params_init[s] = s.curr_value
+            # params_init[s] = s.curr_value'''
 
         for s in node.states:
             es = EvaluableState(s, self.verbose)
@@ -321,53 +329,59 @@ class EvaluableNode:
             all_known_vars.append(s.id)
             # params_init[s] = s.curr_value
 
-        all_funcs = [f for f in node.functions]
+        all_params_to_check = [p for p in node.parameters]
+        print('all_params_to_check: %s'%all_params_to_check)
 
-        # Order the functions into the correct sequence
-        while len(all_funcs) > 0:
-            f = all_funcs.pop(0)  # pop first off list
+        # Order the parameters into the correct sequence
+        while len(all_params_to_check) > 0:
+            p = all_params_to_check.pop(0)  # pop first off list
+
             if verbose:
                 print(
-                    "    Checking whether function: %s with args %s is sufficiently determined by known vars %s"
-                    % (f.id, f.args, all_known_vars)
+                    "    Checking whether parameter: %s with args: %s, value: %s is sufficiently determined by known vars %s"
+                    % (p.id, p.args, p.value, all_known_vars)
                 )
             all_req_vars = []
-            for arg in f.args:
-                arg_expr = f.args[arg]
+            if p.value is not None:
+                param_expr = sympy.simplify(p.value)
+                all_req_vars.extend([str(s) for s in param_expr.free_symbols])
 
-                # If we are dealing with a list of symbols, each must treated separately
-                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
-                    # Use the Python interpreter to parse this into a List[str]
-                    arg_expr_list = eval(arg_expr)
-                else:
-                    arg_expr_list = [arg_expr]
+            if p.args is not None:
+                for arg in p.args:
+                    arg_expr = p.args[arg]
 
-                for e in arg_expr_list:
-                    func_expr = sympy.simplify(e)
-                    all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+                    # If we are dealing with a list of symbols, each must treated separately
+                    if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                        # Use the Python interpreter to parse this into a List[str]
+                        arg_expr_list = eval(arg_expr)
+                    else:
+                        arg_expr_list = [arg_expr]
 
-            all_present = [v in all_known_vars for v in all_req_vars]
+                    for e in arg_expr_list:
+                        param_expr = sympy.simplify(e)
+                        all_req_vars.extend([str(s) for s in param_expr.free_symbols])
+
+            all_known_vars_plus_this = all_known_vars+[p.id]
+            all_present = [v in all_known_vars_plus_this for v in all_req_vars]
 
             if verbose:
                 print(
-                    "    Are all of %s in %s? %s"
-                    % (all_req_vars, all_known_vars, all_present)
+                    "    Are all of %s in %s? %s, i.e. %s"
+                    % (all_req_vars, all_known_vars_plus_this, all_present, all(all_present))
                 )
             if all(all_present):
-                rf = EvaluableFunction(f, self.verbose)
-                self.evaluable_functions[f.id] = rf
-                all_known_vars.append(f.id)
-            #     params_init[f] = self.evaluable_functions[f.id].evaluate(
-            #     params_init, array_format=FORMAT_DEFAULT
-            # )
+                ep = EvaluableParameter(p, self.verbose)
+                self.evaluable_parameters[p.id] = ep
+                all_known_vars.append(p.id)
+
             else:
-                if len(all_funcs) == 0:
+                if len(all_params_to_check) == 0:
                     raise Exception(
-                        "Error! Could not evaluate function: %s with args %s using known vars %s"
-                        % (f.id, f.args, all_known_vars)
+                        "Error! Could not evaluate parameter: %s with args %s using known vars %s"
+                        % (p.id, p.args, all_known_vars_plus_this)
                     )
                 else:
-                    all_funcs.append(f)  # Add back to end of list...
+                    all_params_to_check.append(p)  # Add back to end of list...
 
         for op in node.output_ports:
             rop = EvaluableOutput(op,self.verbose)

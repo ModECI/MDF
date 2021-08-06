@@ -47,7 +47,7 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
-        verbose = False
+        #verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
         from modeci_mdf.execution_engine import EvaluableGraph
