@@ -6,6 +6,7 @@ from modeci_mdf.mdf import (
     Model,
     Graph,
     Node,
+    Parameter,
     Function,
     InputPort,
     OutputPort,
@@ -19,7 +20,8 @@ def main():
     mod_graph = Graph(id="simple_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input_node", parameters={"input_level": 0.5})
+    input_node = Node(id="input_node")
+    input_node.parameters.append(Parameter(id="input_level", value=0.5))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
@@ -29,6 +31,9 @@ def main():
     mod_graph.nodes.append(processing_node)
 
     processing_node.parameters = {"lin_slope": 0.5, "lin_intercept": 0, "log_gain": 3}
+    processing_node.parameters.append(Parameter(id="lin_slope", value=0.5))
+    processing_node.parameters.append(Parameter(id="lin_intercept", value=0))
+    processing_node.parameters.append(Parameter(id="log_gain", value=3))
     ip1 = InputPort(id="input_port1")
     processing_node.input_ports.append(ip1)
 
