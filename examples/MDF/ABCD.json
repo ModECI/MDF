@@ -28,7 +28,8 @@
                         },
                         "input_ports": {
                             "input_port1": {
-                                "shape": "(1,)"
+                                "shape": "(1,)",
+                                "type":"info"
                             }
                         },
                         "functions": {
@@ -59,7 +60,9 @@
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
+
                             }
+
                         },
                         "functions": {
                             "logistic_func": {
@@ -70,12 +73,16 @@
                                     "bias": "bias",
                                     "offset": "offset"
                                 }
+
                             }
                         },
                         "output_ports": {
                             "output_1": {
                                 "value": "logistic_func"
+
+
                             }
+
                         }
                     },
                     "C": {
@@ -92,6 +99,7 @@
                             "input_port1": {
                                 "shape": "(1,)"
                             }
+
                         },
                         "functions": {
                             "exponential_func": {
@@ -107,7 +115,8 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "exponential_func"
+                                "value": "exponential_func",
+                                "metadata": {"info": "Value at OuputPort"}
                             }
                         }
                     },
@@ -131,6 +140,7 @@
                                     "scale": "scale"
                                 }
                             }
+
                         },
                         "output_ports": {
                             "output_1": {
@@ -144,26 +154,33 @@
                         "sender": "input0",
                         "receiver": "A",
                         "sender_port": "out_port",
-                        "receiver_port": "input_port1"
+                        "receiver_port": "input_port1",
+                        "metadata": {"info": "Value at Edge"}
                     },
+
                     "edge_A_B": {
                         "sender": "A",
                         "receiver": "B",
                         "sender_port": "output_1",
                         "receiver_port": "input_port1"
                     },
+
                     "edge_B_C": {
                         "sender": "B",
                         "receiver": "C",
                         "sender_port": "output_1",
-                        "receiver_port": "input_port1"
+                        "receiver_port": "input_port1",
+                        "metadata": {"info": "edge_data"}
+
                     },
+
                     "edge_C_D": {
                         "sender": "C",
                         "receiver": "D",
                         "sender_port": "output_1",
                         "receiver_port": "input_port1"
                     }
+
                 }
             }
         }
