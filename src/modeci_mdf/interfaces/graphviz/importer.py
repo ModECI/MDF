@@ -168,8 +168,8 @@ def mdf_to_graphviz(
                             )
                     else:
                         v = ""
-                        if p.value:
-                            v += "<i>value:</i> %s" % match_in_expr(p.value, node)
+                        if p.value is not None:
+                            v += "= %s" % match_in_expr(str(p.value), node)
                         if p.default_initial_value:
                             v += "<i>def init value:</i> %s" % match_in_expr(
                                 p.default_initial_value, node
@@ -212,7 +212,7 @@ def mdf_to_graphviz(
             if node.states and len(node.states) > 0:
                 for st in node.states:
                     v = ""
-                    if st.value:
+                    if st.value is not None:
                         v += "<i>value:</i> %s" % match_in_expr(st.value, node)
                     if st.default_initial_value:
                         v += "<i>def init value:</i> %s" % match_in_expr(
@@ -232,7 +232,7 @@ def mdf_to_graphviz(
                         format_label("OUT"),
                         format_output(op.id),
                         match_in_expr(op.value, node),
-                        "(shape: %s)" % op.shape
+                        "(shape: %s)" % op.shape if op.shape is not None else ''
                         if level >= LEVEL_2 and op.shape is not None
                         else "",
                     )

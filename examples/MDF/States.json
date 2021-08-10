@@ -8,7 +8,7 @@
                     "counter_node": {
                         "parameters": {
                             "increment": {
-                                "value": "1"
+                                "value": 1
                             },
                             "count": {
                                 "value": "count + increment"
@@ -23,10 +23,10 @@
                     "sine_node": {
                         "parameters": {
                             "amp": {
-                                "value": "3"
+                                "value": 3
                             },
                             "period": {
-                                "value": "0.4"
+                                "value": 0.4
                             },
                             "level": {
                                 "default_initial_value": "0",

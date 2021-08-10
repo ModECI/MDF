@@ -137,7 +137,7 @@ class EvaluableState:
                 )
             )
 
-        if self.state.value:
+        if self.state.value is not None:
 
             self.curr_value = evaluate_expr(
                 self.state.value,
@@ -182,7 +182,7 @@ class EvaluableParameter:
 
     def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
         if self.curr_value == None:
-            if self.parameter.value:
+            if self.parameter.value is not None:
                 ips = {}
                 ips.update(parameters)
                 ips[self.parameter.id]=self.DEFAULT_INIT_VALUE
@@ -210,7 +210,7 @@ class EvaluableParameter:
                 )
             )
 
-        if self.parameter.value:
+        if self.parameter.value is not None:
 
             self.curr_value = evaluate_expr(
                 self.parameter.value,
@@ -403,7 +403,8 @@ class EvaluableNode:
                     % (p.id, p.args, p.value, all_known_vars)
                 )
             all_req_vars = []
-            if p.value is not None:
+
+            if p.value is not None and type(p.value)==str:
                 param_expr = sympy.simplify(p.value)
                 all_req_vars.extend([str(s) for s in param_expr.free_symbols])
 

@@ -7,7 +7,7 @@ ABCD:
                 input0:
                     parameters:
                         input_level:
-                            value: '0.0'
+                            value: 0.0
                     output_ports:
                         out_port:
                             value: input_level
@@ -16,9 +16,9 @@ ABCD:
                         input_port1: {}
                     parameters:
                         slope:
-                            value: '1.1'
+                            value: 1.1
                         intercept:
-                            value: '1.2'
+                            value: 1.2
                         linear_func:
                             function: linear
                             args:
@@ -33,11 +33,11 @@ ABCD:
                         input_port1: {}
                     parameters:
                         gain:
-                            value: '2.1'
+                            value: 2.1
                         bias:
-                            value: '2.2'
+                            value: 2.2
                         offset:
-                            value: '2.3'
+                            value: 2.3
                         logistic_func:
                             function: logistic
                             args:
@@ -54,13 +54,13 @@ ABCD:
                             shape: (1,)
                     parameters:
                         scale:
-                            value: '3.1'
+                            value: 3.1
                         rate:
-                            value: '3.2'
+                            value: 3.2
                         bias:
-                            value: '3.3'
+                            value: 3.3
                         offset:
-                            value: '3.4'
+                            value: 3.4
                         exponential_func:
                             function: exponential
                             args:
@@ -78,7 +78,7 @@ ABCD:
                             shape: (1,)
                     parameters:
                         scale:
-                            value: '4.0'
+                            value: 4.0
                         sin_func:
                             function: sin
                             args:

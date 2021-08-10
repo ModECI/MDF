@@ -409,34 +409,32 @@ class State(BaseWithId):
         super().__init__(**kwargs)
 
 class Parameter(BaseWithId):
-    _definition = "A xxx variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
+    _definition = "???"
 
     def __init__(self, **kwargs):
-        """A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_
+        """???
 
         Args:
-            default_initial_value (str): The initial value of the state variable
-            value (str): The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values
-            time_derivative (str): How the state varies with time, i.e. ds/dt. Unit of time is second
+            ???
         """
 
         self.allowed_fields = collections.OrderedDict(
             [
                 (
                     "default_initial_value",
-                    ("The initial value of the state variable", str),
+                    ("The initial value of the parameter", str),
                 ),
                 (
                     "value",
                     (
-                        "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values",
-                        str,
+                        "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values",
+                        EvaluableExpression,
                     ),
                 ),
                 (
                     "time_derivative",
                     (
-                        "How the state varies with time, i.e. ds/dt. Units of time are seconds.",
+                        "How the parameter with time, i.e. ds/dt. Units of time are seconds.",
                         str,
                     ),
                 ),
@@ -450,7 +448,7 @@ class Parameter(BaseWithId):
                 (
                     "args",
                     (
-                        'Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
+                        'Dictionary of values for each of the arguments for the function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
                         dict,
                     ),
                 ),

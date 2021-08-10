@@ -8,7 +8,7 @@
                     "input_node": {
                         "parameters": {
                             "input_level": {
-                                "value": "0.5"
+                                "value": 0.5
                             }
                         },
                         "output_ports": {
@@ -23,13 +23,13 @@
                         },
                         "parameters": {
                             "lin_slope": {
-                                "value": "0.5"
+                                "value": 0.5
                             },
                             "lin_intercept": {
-                                "value": "0"
+                                "value": 0
                             },
                             "log_gain": {
-                                "value": "3"
+                                "value": 3
                             },
                             "linear_1": {
                                 "function": "linear",
