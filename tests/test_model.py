@@ -1,4 +1,4 @@
-from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function
+from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Parameter
 
 
 def test_model_init_kwargs():
@@ -16,7 +16,8 @@ def test_model_graph_to_json():
 
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
 
-    node = Node(id="N0", parameters={"rate": 5})
+    node = Node(id="N0")
+    node.parameters.append(Parameter(id="rate", value=5))
 
     mod_graph0.nodes.append(node)
 
@@ -35,14 +36,15 @@ def test_no_input_ports_to_json(tmpdir):
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0", parameters={"input_level": 10.0})
+    input_node = Node(id="input0")
+    input_node.parameters.append(Parameter(id="input_level", value=10.0))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
     mod_graph.nodes.append(input_node)
 
     tmpfile = f"{tmpdir}/test.json"
-    mod_graph.to_json_file(tmpfile)
+    mod.to_json_file(tmpfile)
 
     # FIXME: Doesn't seem like we have any methods for deserialization. Just do some quick and dirty checks
     # This should really be something like assert mod_graph == deserialized_mod_graph
@@ -50,22 +52,30 @@ def test_no_input_ports_to_json(tmpdir):
 
     with open(tmpfile) as f:
         data = json.load(f)
+    print(data)
 
-    assert data["abcd_example"]["nodes"]["input0"]["parameters"]["input_level"] == 10.0
+    assert data["ABCD"]["graphs"]["abcd_example"]["nodes"]["input0"]["parameters"]["input_level"]["value"] == 10.0
+
+    from modeci_mdf.utils import load_mdf
+    mod_graph2 = load_mdf(tmpfile)
+
+    print(mod_graph2)
+    assert mod_graph2.graphs[0].nodes[0].parameters[0].value == 10.0
+
 
 
 def test_node_params_empty_dict():
     """
-    Test whether we don't a serialization error when passing empty dicts to Node parameters
+    Test whether we don't a serialization error with an empty Node parameters
     """
-    Node(parameters={}).to_json()
+    Node().to_json()
 
 
-def test_func_args_empty_dict():
+def test_param_args_empty_dict():
     """
     Test whether we don't a serialization error when passing empty dicts to Function args
     """
-    Function(args={}).to_json()
+    Parameter(args={}).to_json()
 
 
 def test_graph_inputs():
@@ -76,7 +86,8 @@ def test_graph_inputs():
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0", parameters={"input_level": 10.0})
+    input_node = Node(id="input0")
+    input_node.parameters.append(Parameter(id="input_level", value=10.0))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)

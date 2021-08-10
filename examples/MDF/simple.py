@@ -30,7 +30,6 @@ def main():
     processing_node = Node(id="processing_node")
     mod_graph.nodes.append(processing_node)
 
-    processing_node.parameters = {"lin_slope": 0.5, "lin_intercept": 0, "log_gain": 3}
     processing_node.parameters.append(Parameter(id="lin_slope", value=0.5))
     processing_node.parameters.append(Parameter(id="lin_intercept", value=0))
     processing_node.parameters.append(Parameter(id="log_gain", value=3))
@@ -49,7 +48,7 @@ def main():
     )
     processing_node.parameters.append(f1)
     processing_node.parameters.append(f2)
-    
+
     processing_node.output_ports.append(OutputPort(id="output_1", value="logistic_1"))
 
     e1 = Edge(

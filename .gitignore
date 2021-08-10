@@ -221,3 +221,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/Simple.nmllite.json
 /examples/MDF/abcd_3
 /src/modeci_mdf/interfaces/graphviz/*gv.png
+/src/modeci_mdf/*.png

@@ -4,6 +4,7 @@
 
 import collections
 import onnx.defs
+import sympy
 
 from typing import List, Tuple, Dict, Optional, Set
 
@@ -457,6 +458,16 @@ class Parameter(BaseWithId):
 
         super().__init__(**kwargs)
 
+    def is_stateful(self):
+        if self.time_derivative is not None:
+            return true
+        if self.value is not None and type(self.value)==str:
+            param_expr = sympy.simplify(self.value)
+            sf = self.id in [str(s) for s in param_expr.free_symbols]
+            print('Checking whether %s is stateful, %s: %s'%(self,param_expr.free_symbols,sf))
+            return sf
+        return False
+
 
 class Stateful_Parameter(BaseWithId):
     _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
@@ -586,7 +597,8 @@ if __name__ == "__main__":
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
     model.graphs.append(mod_graph0)
 
-    node = Node(id="N0", parameters={"rate": 5})
+    node = Node(id="N0")
+    node.parameters.append(Parameter(id="rate", value=5))
 
     mod_graph0.nodes.append(node)
 

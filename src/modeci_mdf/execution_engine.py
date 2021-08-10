@@ -180,24 +180,32 @@ class EvaluableParameter:
         self.parameter = parameter
         self.curr_value = None
 
+
+
     def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
         if self.curr_value == None:
             if self.parameter.value is not None:
-                ips = {}
-                ips.update(parameters)
-                ips[self.parameter.id]=self.DEFAULT_INIT_VALUE
-                self.curr_value = evaluate_expr(
-                    self.parameter.value,
-                    ips,
-                    verbose=False,
-                    array_format=array_format,
-                )
-                if self.verbose:
-                    print(
-                        "    Initial eval of <{}> = {} ".format(
-                            self.parameter, self.curr_value
-                        )
+                if self.parameter.is_stateful():
+                    if self.parameter.default_initial_value is not None:
+                        return self.parameter.default_initial_value
+                    else:
+                        return self.DEFAULT_INIT_VALUE
+                else:
+                    ips = {}
+                    ips.update(parameters)
+                    ips[self.parameter.id]=self.DEFAULT_INIT_VALUE
+                    self.curr_value = evaluate_expr(
+                        self.parameter.value,
+                        ips,
+                        verbose=False,
+                        array_format=array_format,
                     )
+                    if self.verbose:
+                        print(
+                            "    Initial eval of <{}> = {} ".format(
+                                self.parameter, self.curr_value
+                            )
+                        )
 
         return self.curr_value
 
