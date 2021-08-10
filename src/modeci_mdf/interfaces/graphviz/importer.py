@@ -31,10 +31,10 @@ LEVEL_3 = 3
 COLOR_MAIN = "#444444"
 COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
-COLOR_PARAM = "#999944"
+COLOR_PARAM = "#1666ff"
 COLOR_INPUT = "#188855"
 COLOR_FUNC = "#111199"
-COLOR_STATE = "#1666ff"
+COLOR_STATE = "#999944"
 COLOR_OUTPUT = "#cc3355"
 
 
@@ -131,31 +131,57 @@ def mdf_to_graphviz(
         if level >= LEVEL_2:
             if node.parameters and len(node.parameters) > 0:
 
-                for p in node.parameters:
-                    v = ""
-                    if p.value:
-                        v += "<i>value:</i> %s" % match_in_expr(p.value, node)
-                    if p.default_initial_value:
-                        v += "<i>def init value:</i> %s" % match_in_expr(
-                            p.default_initial_value, node
+                if node.input_ports and len(node.input_ports) > 0:
+                    for ip in node.input_ports:
+                        info += "<tr><td>{}{} {}</td></tr>".format(
+                            format_label("IN"),
+                            format_input(ip.id),
+                            "(shape: %s)" % ip.shape
+                            if level >= LEVEL_2 and ip.shape is not None
+                            else "",
                         )
-                    if p.time_derivative:
-                        v += ", <i>d/dt:</i> %s" % match_in_expr(
-                            p.time_derivative, node
-                        )
-                    info += "<tr><td>{}{}: {}</td></tr>".format(
-                        format_label("PARAMETER"), format_state(p.id), v
-                    )
 
-            if node.input_ports and len(node.input_ports) > 0:
-                for ip in node.input_ports:
-                    info += "<tr><td>{}{} {}</td></tr>".format(
-                        format_label("IN"),
-                        format_input(ip.id),
-                        "(shape: %s)" % ip.shape
-                        if level >= LEVEL_2 and ip.shape is not None
-                        else "",
-                    )
+                for p in node.parameters:
+                    if p.function is not None:
+                        argstr = (
+                            ", ".join([match_in_expr(str(p.args[a]), node) for a in p.args])
+                            if p.args
+                            else "???"
+                        )
+                        info += "<tr><td>{}{} = {}({})</td></tr>".format(
+                            format_label("PARAMETER"),
+                            format_param(p.id),
+                            format_standard_func(p.function),
+                            argstr,
+                        )
+                        if level >= LEVEL_3:
+                            func_info = mdf_functions[p.function]
+                            info += '<tr><td colspan="2">%s</td></tr>' % (
+                                format_standard_func_long(
+                                    "%s(%s) = %s"
+                                    % (
+                                        p.function,
+                                        ", ".join([a for a in p.args]),
+                                        func_info["expression_string"],
+                                    )
+                                )
+                            )
+                    else:
+                        v = ""
+                        if p.value:
+                            v += "<i>value:</i> %s" % match_in_expr(p.value, node)
+                        if p.default_initial_value:
+                            v += "<i>def init value:</i> %s" % match_in_expr(
+                                p.default_initial_value, node
+                            )
+                        if p.time_derivative:
+                            v += ", <i>d/dt:</i> %s" % match_in_expr(
+                                p.time_derivative, node
+                            )
+                        info += "<tr><td>{}{}: {}</td></tr>".format(
+                            format_label("PARAMETER"), format_param(p.id), v
+                        )
+
 
             if node.functions and len(node.functions) > 0:
                 for f in node.functions:
@@ -182,7 +208,6 @@ def mdf_to_graphviz(
                                 )
                             )
                         )
-                        # info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
 
             if node.states and len(node.states) > 0:
                 for st in node.states:

@@ -1,6 +1,6 @@
 ABCD:
-    format: ModECI MDF v0.1
-    generating_application: Python modeci-mdf v0.1.3
+    format: ModECI MDF v0.2
+    generating_application: Python modeci-mdf v0.2.1
     graphs:
         abcd_example:
             nodes:
@@ -13,35 +13,24 @@ ABCD:
                             value: input_level
                 A:
                     input_ports:
-                        input_port1:
-                            shape: (1,)
-                    functions:
+                        input_port1: {}
+                    parameters:
+                        slope:
+                            value: '1.1'
+                        intercept:
+                            value: '1.2'
                         linear_func:
                             function: linear
                             args:
                                 variable0: input_port1
                                 slope: slope
                                 intercept: intercept
-                    parameters:
-                        slope:
-                            value: '1.1'
-                        intercept:
-                            value: '1.2'
                     output_ports:
                         output_1:
                             value: linear_func
                 B:
                     input_ports:
-                        input_port1:
-                            shape: (1,)
-                    functions:
-                        logistic_func:
-                            function: logistic
-                            args:
-                                variable0: input_port1
-                                gain: gain
-                                bias: bias
-                                offset: offset
+                        input_port1: {}
                     parameters:
                         gain:
                             value: '2.1'
@@ -49,6 +38,13 @@ ABCD:
                             value: '2.2'
                         offset:
                             value: '2.3'
+                        logistic_func:
+                            function: logistic
+                            args:
+                                variable0: input_port1
+                                gain: gain
+                                bias: bias
+                                offset: offset
                     output_ports:
                         output_1:
                             value: logistic_func
@@ -56,15 +52,6 @@ ABCD:
                     input_ports:
                         input_port1:
                             shape: (1,)
-                    functions:
-                        exponential_func:
-                            function: exponential
-                            args:
-                                variable0: input_port1
-                                scale: scale
-                                rate: rate
-                                bias: bias
-                                offset: offset
                     parameters:
                         scale:
                             value: '3.1'
@@ -74,6 +61,14 @@ ABCD:
                             value: '3.3'
                         offset:
                             value: '3.4'
+                        exponential_func:
+                            function: exponential
+                            args:
+                                variable0: input_port1
+                                scale: scale
+                                rate: rate
+                                bias: bias
+                                offset: offset
                     output_ports:
                         output_1:
                             value: exponential_func
@@ -81,15 +76,14 @@ ABCD:
                     input_ports:
                         input_port1:
                             shape: (1,)
-                    functions:
+                    parameters:
+                        scale:
+                            value: '4.0'
                         sin_func:
                             function: sin
                             args:
                                 variable0: input_port1
                                 scale: scale
-                    parameters:
-                        scale:
-                            value: '4.0'
                     output_ports:
                         output_1:
                             value: sin_func

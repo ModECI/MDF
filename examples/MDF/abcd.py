@@ -27,51 +27,52 @@ def main():
     # a = create_example_node('A', mod_graph)
     a = Node(id="A")
     mod_graph.nodes.append(a)
-    a.parameters.append(Parameter(id="slope", value=abcd.A_slope))
-    a.parameters.append(Parameter(id="intercept", value=abcd.A_intercept))
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    ip1 = InputPort(id="input_port1")
     a.input_ports.append(ip1)
 
-    f1 = Function(
+    a.parameters.append(Parameter(id="slope", value=abcd.A_slope))
+    a.parameters.append(Parameter(id="intercept", value=abcd.A_intercept))
+
+    f1 = Parameter(
         id="linear_func",
         function="linear",
         args={"variable0": ip1.id, "slope": "slope", "intercept": "intercept"},
     )
-    a.functions.append(f1)
+    a.parameters.append(f1)
     a.output_ports.append(OutputPort(id="output_1", value="linear_func"))
 
     e1 = simple_connect(input_node, a, mod_graph)
 
     b = Node(id="B")
     mod_graph.nodes.append(b)
+    ip1 = InputPort(id="input_port1")
+    b.input_ports.append(ip1)
 
     b.parameters.append(Parameter(id="gain", value=abcd.B_gain))
     b.parameters.append(Parameter(id="bias", value=abcd.B_bias))
     b.parameters.append(Parameter(id="offset", value=abcd.B_offset))
-    ip1 = InputPort(id="input_port1", shape="(1,)")
-    b.input_ports.append(ip1)
 
-    f1 = Function(
+    f1 = Parameter(
         id="logistic_func",
         function="logistic",
         args={"variable0": ip1.id, "gain": "gain", "bias": "bias", "offset": "offset"},
     )
-    b.functions.append(f1)
+    b.parameters.append(f1)
     b.output_ports.append(OutputPort(id="output_1", value="logistic_func"))
 
     simple_connect(a, b, mod_graph)
 
     c = Node(id="C")
     mod_graph.nodes.append(c)
+    ip1 = InputPort(id="input_port1", shape="(1,)")
+    c.input_ports.append(ip1)
 
     c.parameters.append(Parameter(id="scale", value=abcd.C_scale))
     c.parameters.append(Parameter(id="rate", value=abcd.C_rate))
     c.parameters.append(Parameter(id="bias", value=abcd.C_bias))
     c.parameters.append(Parameter(id="offset", value=abcd.C_offset))
-    ip1 = InputPort(id="input_port1", shape="(1,)")
-    c.input_ports.append(ip1)
 
-    f1 = Function(
+    f1 = Parameter(
         id="exponential_func",
         function="exponential",
         args={
@@ -82,7 +83,7 @@ def main():
             "offset": "offset",
         },
     )
-    c.functions.append(f1)
+    c.parameters.append(f1)
     c.output_ports.append(OutputPort(id="output_1", value="exponential_func"))
 
     simple_connect(b, c, mod_graph)
@@ -90,14 +91,14 @@ def main():
     d = Node(id="D")
     mod_graph.nodes.append(d)
 
-    d.parameters.append(Parameter(id="scale", value=abcd.D_scale))
     ip1 = InputPort(id="input_port1", shape="(1,)")
     d.input_ports.append(ip1)
+    d.parameters.append(Parameter(id="scale", value=abcd.D_scale))
 
-    f1 = Function(
+    f1 = Parameter(
         id="sin_func", function="sin", args={"variable0": ip1.id, "scale": "scale"}
     )
-    d.functions.append(f1)
+    d.parameters.append(f1)
     d.output_ports.append(OutputPort(id="output_1", value="sin_func"))
 
     simple_connect(c, d, mod_graph)
