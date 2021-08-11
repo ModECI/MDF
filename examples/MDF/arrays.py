@@ -52,7 +52,7 @@ def main():
     if "-run" in sys.argv:
         verbose = True
         #verbose = False
-        from modeci_mdf.scheduler import EvaluableGraph
+        from modeci_mdf.execution_engine import EvaluableGraph
 
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
@@ -60,6 +60,15 @@ def main():
         eg = EvaluableGraph(mod_graph, verbose=True)
         eg.evaluate(array_format=format)
 
+    if "-graph" in sys.argv:
+        mod.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="arrays",
+            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
 
 if __name__ == "__main__":
     main()

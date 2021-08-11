@@ -9,25 +9,25 @@ import math
 
 # A - Linear
 
-A_slope = 2.1
-A_intercept = 2.2
+A_slope = 1.1
+A_intercept = 1.2
 
 # B - Logistic
 
-B_gain = 1.0
-B_bias = 0.0
-B_offset = 0.0
+B_gain = 2.1
+B_bias = 2.2
+B_offset = 2.3
 
 # C - Exponential
 
-C_scale = 1.0
-C_rate = 1.0
-C_bias = 0.0
-C_offset = 0.0
+C_scale = 3.1
+C_rate = 3.2
+C_bias = 3.3
+C_offset = 3.4
 
 # D - Sine
 
-D_scale = 1.0
+D_scale = 4.0
 
 test_values = [-1.0, 0.0, 1.0, 5.0]
 

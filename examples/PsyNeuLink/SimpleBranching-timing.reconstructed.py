@@ -61,17 +61,72 @@ comp.add_projection(
     receiver=D,
 )
 
-comp.scheduler.add_condition(A, pnl.TimeInterval(interval=7, unit="ms"))
+comp.scheduler.add_condition(
+    A,
+    pnl.TimeInterval(
+        end=None,
+        end_inclusive=True,
+        repeat="7 ms",
+        start=None,
+        start_inclusive=True,
+        unit="ms",
+    ),
+)
 comp.scheduler.add_condition(
     B,
     pnl.All(
-        pnl.TimeInterval(interval=1, start=1, unit="ms"),
-        pnl.Not(pnl.TimeInterval(interval=7, start=6, unit="ms")),
-        pnl.Not(pnl.TimeInterval(interval=7, start=7, unit="ms")),
+        pnl.TimeInterval(
+            end=None,
+            end_inclusive=True,
+            repeat="1 ms",
+            start="1 ms",
+            start_inclusive=True,
+            unit="ms",
+        ),
+        pnl.Not(
+            pnl.TimeInterval(
+                end=None,
+                end_inclusive=True,
+                repeat="7 ms",
+                start="6 ms",
+                start_inclusive=True,
+                unit="ms",
+            )
+        ),
+        pnl.Not(
+            pnl.TimeInterval(
+                end=None,
+                end_inclusive=True,
+                repeat="7 ms",
+                start="7 ms",
+                start_inclusive=True,
+                unit="ms",
+            )
+        ),
     ),
 )
-comp.scheduler.add_condition(C, pnl.TimeInterval(interval=7, start=6, unit="ms"))
-comp.scheduler.add_condition(D, pnl.TimeInterval(interval=7, start=13, unit="ms"))
+comp.scheduler.add_condition(
+    C,
+    pnl.TimeInterval(
+        end=None,
+        end_inclusive=True,
+        repeat="7 ms",
+        start="6 ms",
+        start_inclusive=True,
+        unit="ms",
+    ),
+)
+comp.scheduler.add_condition(
+    D,
+    pnl.TimeInterval(
+        end=None,
+        end_inclusive=True,
+        repeat="7 ms",
+        start="13 ms",
+        start_inclusive=True,
+        unit="ms",
+    ),
+)
 
 comp.scheduler.termination_conds = {
     pnl.TimeScale.RUN: pnl.Never(),

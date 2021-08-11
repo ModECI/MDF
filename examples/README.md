@@ -1,3 +1,5 @@
+<p><img width="800" src="ModECI_MDF.svg"/></p>
+
 # Examples of MDF files and conversions to target environments
 
 - [MDF files](MDF): A number of Python scripts using the MDF Python API, as well as the JSON and YAML files.

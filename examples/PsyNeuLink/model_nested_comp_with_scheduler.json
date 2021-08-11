@@ -1,7 +1,7 @@
 {
     "comp": {
         "format": "ModECI MDF v0.1",
-        "generating_application": "psyneulink v0.8.8.1+44.gb5f487b74f",
+        "generating_application": "psyneulink v0.8.8.1+159.g08bab54342",
         "graphs": {
             "comp": {
                 "conditions": {
@@ -83,10 +83,11 @@
                                         ]
                                     },
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "LinearMatrix Function-0",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "LinearMatrix",
                                     "generic": null
@@ -110,7 +111,7 @@
                                 ]
                             ],
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "weight": null
                         },
@@ -118,6 +119,7 @@
                         "receiver_port": "InputPort-0",
                         "sender": "C",
                         "sender_port": "RESULT",
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "AutoAssociativeProjection",
                             "generic": null
@@ -149,10 +151,11 @@
                                         ]
                                     },
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "LinearMatrix Function-5",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "LinearMatrix",
                                     "generic": null
@@ -170,7 +173,7 @@
                             "is_finished_flag": true,
                             "matrix": "AutoAssignMatrix",
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "weight": null
                         },
@@ -178,6 +181,7 @@
                         "receiver_port": "InputPort-0",
                         "sender": "A",
                         "sender_port": "RESULT",
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "MappingProjection",
                             "generic": null
@@ -209,10 +213,11 @@
                                         ]
                                     },
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "LinearMatrix Function-6",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "LinearMatrix",
                                     "generic": null
@@ -230,7 +235,7 @@
                             "is_finished_flag": true,
                             "matrix": "AutoAssignMatrix",
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "weight": null
                         },
@@ -238,6 +243,7 @@
                         "receiver_port": "InputPort-0",
                         "sender": "A",
                         "sender_port": "RESULT",
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "MappingProjection",
                             "generic": null
@@ -269,10 +275,11 @@
                                         ]
                                     },
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "LinearMatrix Function-7",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "LinearMatrix",
                                     "generic": null
@@ -290,7 +297,7 @@
                             "is_finished_flag": true,
                             "matrix": "AutoAssignMatrix",
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "weight": null
                         },
@@ -298,6 +305,7 @@
                         "receiver_port": "InputPort-0",
                         "sender": "B",
                         "sender_port": "RESULT",
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "MappingProjection",
                             "generic": null
@@ -329,10 +337,11 @@
                                         ]
                                     },
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "LinearMatrix Function-8",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "LinearMatrix",
                                     "generic": null
@@ -350,7 +359,7 @@
                             "is_finished_flag": true,
                             "matrix": "AutoAssignMatrix",
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "weight": null
                         },
@@ -358,6 +367,7 @@
                         "receiver_port": "InputPort-0",
                         "sender": "C",
                         "sender_port": "RESULT",
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "MappingProjection",
                             "generic": null
@@ -389,10 +399,11 @@
                                         ]
                                     },
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "LinearMatrix Function-9",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "LinearMatrix",
                                     "generic": null
@@ -410,7 +421,7 @@
                             "is_finished_flag": true,
                             "matrix": "AutoAssignMatrix",
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "weight": null
                         },
@@ -418,6 +429,7 @@
                         "receiver_port": "INPUT_CIM_E_InputPort-0",
                         "sender": "C",
                         "sender_port": "RESULT",
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "MappingProjection",
                             "generic": null
@@ -450,7 +462,7 @@
                                     },
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "slope": {
                                         "source": "A.input_ports.slope",
@@ -459,6 +471,7 @@
                                     }
                                 },
                                 "name": "Linear Function-12",
+                                "stateful_parameters": {},
                                 "type": {
                                     "generic": "Linear"
                                 }
@@ -483,7 +496,7 @@
                                             "exponents": null,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "offset": 0.0,
                                             "operation": "sum",
@@ -491,6 +504,7 @@
                                             "weights": null
                                         },
                                         "name": "LinearCombination Function-0-20",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "PNL": "LinearCombination",
                                             "generic": null
@@ -514,12 +528,13 @@
                                     "exponent": null,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null,
                                     "weight": null
                                 },
                                 "shape": "(1,)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "InputPort",
                                     "generic": null
@@ -552,11 +567,12 @@
                                             "intercept": 0.0,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "slope": 1.0
                                         },
                                         "name": "Linear Function-22",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "generic": "Linear"
                                         }
@@ -575,11 +591,12 @@
                                     "execute_until_finished": true,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null
                                 },
                                 "shape": "(1,)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "OutputPort",
                                     "generic": null
@@ -614,7 +631,7 @@
                             "is_finished_flag": true,
                             "max_executions_before_finished": 1000,
                             "noise": 0.0,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "on_resume_integrator_mode": "current_value",
                             "output_ports": [
@@ -646,10 +663,11 @@
                                     "max_executions_before_finished": 1000,
                                     "metric": "max_abs_diff",
                                     "normalize": false,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "Distance Function-2",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "Distance",
                                     "generic": null
@@ -658,6 +676,7 @@
                             "termination_measure_value": 0.0,
                             "termination_threshold": null
                         },
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "TransferMechanism",
                             "generic": null
@@ -695,7 +714,7 @@
                                     },
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "offset": 0.0,
                                     "scale": {
@@ -710,6 +729,7 @@
                                     }
                                 },
                                 "name": "Logistic Function-0",
+                                "stateful_parameters": {},
                                 "type": {
                                     "generic": "Logistic"
                                 }
@@ -734,7 +754,7 @@
                                             "exponents": null,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "offset": 0.0,
                                             "operation": "sum",
@@ -742,6 +762,7 @@
                                             "weights": null
                                         },
                                         "name": "LinearCombination Function-0-23",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "PNL": "LinearCombination",
                                             "generic": null
@@ -765,12 +786,13 @@
                                     "exponent": null,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null,
                                     "weight": null
                                 },
                                 "shape": "(1,)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "InputPort",
                                     "generic": null
@@ -806,11 +828,12 @@
                                             "intercept": 0.0,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "slope": 1.0
                                         },
                                         "name": "Linear Function-33",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "generic": "Linear"
                                         }
@@ -829,11 +852,12 @@
                                     "execute_until_finished": true,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null
                                 },
                                 "shape": "(1,)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "OutputPort",
                                     "generic": null
@@ -868,7 +892,7 @@
                             "is_finished_flag": true,
                             "max_executions_before_finished": 1000,
                             "noise": 0.0,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "on_resume_integrator_mode": "current_value",
                             "output_ports": [
@@ -900,10 +924,11 @@
                                     "max_executions_before_finished": 1000,
                                     "metric": "max_abs_diff",
                                     "normalize": false,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "Distance Function-2-2",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "Distance",
                                     "generic": null
@@ -912,6 +937,7 @@
                             "termination_measure_value": 0.0,
                             "termination_threshold": null
                         },
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "TransferMechanism",
                             "generic": null
@@ -941,7 +967,7 @@
                                     },
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "slope": {
                                         "source": "C.input_ports.slope",
@@ -950,6 +976,7 @@
                                     }
                                 },
                                 "name": "Linear Function-44",
+                                "stateful_parameters": {},
                                 "type": {
                                     "generic": "Linear"
                                 }
@@ -979,7 +1006,7 @@
                                             "exponents": null,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "offset": 0.0,
                                             "operation": "sum",
@@ -987,6 +1014,7 @@
                                             "weights": null
                                         },
                                         "name": "LinearCombination Function-5",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "PNL": "LinearCombination",
                                             "generic": null
@@ -1015,12 +1043,13 @@
                                     "exponent": null,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null,
                                     "weight": null
                                 },
                                 "shape": "(2, 1)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "InputPort",
                                     "generic": null
@@ -1058,11 +1087,12 @@
                                             "intercept": 0.0,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "slope": 1.0
                                         },
                                         "name": "Linear Function-47",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "generic": "Linear"
                                         }
@@ -1081,11 +1111,12 @@
                                     "execute_until_finished": true,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null
                                 },
                                 "shape": "(1,)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "OutputPort",
                                     "generic": null
@@ -1133,7 +1164,7 @@
                             "matrix": "HollowMatrix",
                             "max_executions_before_finished": 1000,
                             "noise": 0.0,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "on_resume_integrator_mode": "current_value",
                             "output_ports": [
@@ -1166,10 +1197,11 @@
                                     "max_executions_before_finished": 1000,
                                     "metric": "max_abs_diff",
                                     "normalize": false,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0
                                 },
                                 "name": "Distance Function-2-4",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "Distance",
                                     "generic": null
@@ -1178,6 +1210,7 @@
                             "termination_measure_value": 0.0,
                             "termination_threshold": null
                         },
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "RecurrentTransferMechanism",
                             "generic": null
@@ -1216,7 +1249,7 @@
                                         "type": "float",
                                         "value": 0.0
                                     },
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "offset": {
                                         "source": "D.input_ports.offset",
@@ -1230,6 +1263,7 @@
                                     }
                                 },
                                 "name": "SimpleIntegrator Function-0",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "SimpleIntegrator",
                                     "generic": null
@@ -1260,7 +1294,7 @@
                                             "exponents": null,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "offset": 0.0,
                                             "operation": "sum",
@@ -1268,6 +1302,7 @@
                                             "weights": null
                                         },
                                         "name": "LinearCombination Function-8",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "PNL": "LinearCombination",
                                             "generic": null
@@ -1296,12 +1331,13 @@
                                     "exponent": null,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null,
                                     "weight": null
                                 },
                                 "shape": "(2, 1)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "InputPort",
                                     "generic": null
@@ -1332,11 +1368,12 @@
                                             "intercept": 0.0,
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "slope": 1.0
                                         },
                                         "name": "Linear Function-53",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "generic": "Linear"
                                         }
@@ -1355,11 +1392,12 @@
                                     "execute_until_finished": true,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "projections": null
                                 },
                                 "shape": "(1,)",
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "OutputPort",
                                     "generic": null
@@ -1383,10 +1421,11 @@
                             "input_ports": null,
                             "is_finished_flag": true,
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                             "num_executions_before_finished": 0,
                             "output_ports": null
                         },
+                        "stateful_parameters": {},
                         "type": {
                             "PNL": "IntegratorMechanism",
                             "generic": null
@@ -1440,10 +1479,11 @@
                                                         ]
                                                     },
                                                     "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0
                                                 },
                                                 "name": "LinearMatrix Function-10",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "PNL": "LinearMatrix",
                                                     "generic": null
@@ -1461,7 +1501,7 @@
                                             "is_finished_flag": true,
                                             "matrix": "AutoAssignMatrix",
                                             "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "weight": null
                                         },
@@ -1469,6 +1509,7 @@
                                         "receiver_port": "InputPort-0",
                                         "sender": "E",
                                         "sender_port": "RESULT",
+                                        "stateful_parameters": {},
                                         "type": {
                                             "PNL": "MappingProjection",
                                             "generic": null
@@ -1501,7 +1542,7 @@
                                                     },
                                                     "is_finished_flag": true,
                                                     "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0,
                                                     "slope": {
                                                         "source": "E.input_ports.slope",
@@ -1510,6 +1551,7 @@
                                                     }
                                                 },
                                                 "name": "Linear Function-59",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "generic": "Linear"
                                                 }
@@ -1534,7 +1576,7 @@
                                                             "exponents": null,
                                                             "is_finished_flag": true,
                                                             "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                             "num_executions_before_finished": 0,
                                                             "offset": 0.0,
                                                             "operation": "sum",
@@ -1542,6 +1584,7 @@
                                                             "weights": null
                                                         },
                                                         "name": "LinearCombination Function-11",
+                                                        "stateful_parameters": {},
                                                         "type": {
                                                             "PNL": "LinearCombination",
                                                             "generic": null
@@ -1565,12 +1608,13 @@
                                                     "exponent": null,
                                                     "is_finished_flag": true,
                                                     "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0,
                                                     "projections": null,
                                                     "weight": null
                                                 },
                                                 "shape": "(1,)",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "PNL": "InputPort",
                                                     "generic": null
@@ -1603,11 +1647,12 @@
                                                             "intercept": 0.0,
                                                             "is_finished_flag": true,
                                                             "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                             "num_executions_before_finished": 0,
                                                             "slope": 1.0
                                                         },
                                                         "name": "Linear Function-62",
+                                                        "stateful_parameters": {},
                                                         "type": {
                                                             "generic": "Linear"
                                                         }
@@ -1626,11 +1671,12 @@
                                                     "execute_until_finished": true,
                                                     "is_finished_flag": true,
                                                     "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0,
                                                     "projections": null
                                                 },
                                                 "shape": "(1,)",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "PNL": "OutputPort",
                                                     "generic": null
@@ -1665,7 +1711,7 @@
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
                                             "noise": 0.0,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "on_resume_integrator_mode": "current_value",
                                             "output_ports": [
@@ -1697,10 +1743,11 @@
                                                     "max_executions_before_finished": 1000,
                                                     "metric": "max_abs_diff",
                                                     "normalize": false,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0
                                                 },
                                                 "name": "Distance Function-2-6",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "PNL": "Distance",
                                                     "generic": null
@@ -1709,6 +1756,7 @@
                                             "termination_measure_value": 0.0,
                                             "termination_threshold": null
                                         },
+                                        "stateful_parameters": {},
                                         "type": {
                                             "PNL": "TransferMechanism",
                                             "generic": null
@@ -1738,7 +1786,7 @@
                                                     },
                                                     "is_finished_flag": true,
                                                     "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0,
                                                     "slope": {
                                                         "source": "F.input_ports.slope",
@@ -1747,6 +1795,7 @@
                                                     }
                                                 },
                                                 "name": "Linear Function-68",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "generic": "Linear"
                                                 }
@@ -1776,7 +1825,7 @@
                                                             "exponents": null,
                                                             "is_finished_flag": true,
                                                             "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                             "num_executions_before_finished": 0,
                                                             "offset": 0.0,
                                                             "operation": "sum",
@@ -1784,6 +1833,7 @@
                                                             "weights": null
                                                         },
                                                         "name": "LinearCombination Function-14",
+                                                        "stateful_parameters": {},
                                                         "type": {
                                                             "PNL": "LinearCombination",
                                                             "generic": null
@@ -1812,12 +1862,13 @@
                                                     "exponent": null,
                                                     "is_finished_flag": true,
                                                     "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0,
                                                     "projections": null,
                                                     "weight": null
                                                 },
                                                 "shape": "(2, 1)",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "PNL": "InputPort",
                                                     "generic": null
@@ -1850,11 +1901,12 @@
                                                             "intercept": 0.0,
                                                             "is_finished_flag": true,
                                                             "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                             "num_executions_before_finished": 0,
                                                             "slope": 1.0
                                                         },
                                                         "name": "Linear Function-71",
+                                                        "stateful_parameters": {},
                                                         "type": {
                                                             "generic": "Linear"
                                                         }
@@ -1873,11 +1925,12 @@
                                                     "execute_until_finished": true,
                                                     "is_finished_flag": true,
                                                     "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0,
                                                     "projections": null
                                                 },
                                                 "shape": "(1,)",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "PNL": "OutputPort",
                                                     "generic": null
@@ -1912,7 +1965,7 @@
                                             "is_finished_flag": true,
                                             "max_executions_before_finished": 1000,
                                             "noise": 0.0,
-                                            "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                             "num_executions_before_finished": 0,
                                             "on_resume_integrator_mode": "current_value",
                                             "output_ports": [
@@ -1944,10 +1997,11 @@
                                                     "max_executions_before_finished": 1000,
                                                     "metric": "max_abs_diff",
                                                     "normalize": false,
-                                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                                     "num_executions_before_finished": 0
                                                 },
                                                 "name": "Distance Function-2-8",
+                                                "stateful_parameters": {},
                                                 "type": {
                                                     "PNL": "Distance",
                                                     "generic": null
@@ -1956,6 +2010,7 @@
                                             "termination_measure_value": 0.0,
                                             "termination_threshold": null
                                         },
+                                        "stateful_parameters": {},
                                         "type": {
                                             "PNL": "TransferMechanism",
                                             "generic": null
@@ -1981,10 +2036,11 @@
                                     "execute_until_finished": true,
                                     "is_finished_flag": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                                     "num_executions_before_finished": 0,
                                     "retain_old_simulation_data": false
                                 },
+                                "stateful_parameters": {},
                                 "type": {
                                     "PNL": "Composition",
                                     "generic": "graph"
@@ -2015,10 +2071,11 @@
                     "execute_until_finished": true,
                     "is_finished_flag": true,
                     "max_executions_before_finished": 1000,
-                    "num_executions": "Time(life=0, pass_=0, run=0, time_step=0, trial=0)",
+                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
                     "num_executions_before_finished": 0,
                     "retain_old_simulation_data": false
                 },
+                "stateful_parameters": {},
                 "type": {
                     "PNL": "Composition",
                     "generic": "graph"

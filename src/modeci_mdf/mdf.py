@@ -296,6 +296,10 @@ class Node(BaseWithId):
                 ("functions", ("The _Function_s for the Node", Function)),
                 ("states", ("The _State_s of the Node", State)),
                 (
+                    "stateful_parameters",
+                    ("The Stateful Parameter s of the Node", Stateful_Parameter),
+                ),
+                (
                     "output_ports",
                     (
                         "The _OutputPort_s containing evaluated quantities from the Node",
@@ -549,6 +553,37 @@ class State(BaseWithId):
             kwargs["value"] = value
         if time_derivative is not None:
             kwargs["time_derivative"] = time_derivative
+
+        super().__init__(**kwargs)
+
+
+class Stateful_Parameter(BaseWithId):
+    _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
+
+    def __init__(self, **kwargs):
+        """A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_
+
+        Args:
+            default_initial_value (str): The initial value of the stateful parameter
+            value (str): The next value of the stateful parameter, in terms of the inputs, functions
+
+        """
+
+        self.allowed_fields = collections.OrderedDict(
+            [
+                (
+                    "default_initial_value",
+                    ("The initial value of the stateful parameter", str),
+                ),
+                (
+                    "value",
+                    (
+                        "The next value of the stateful parameter, in terms of the inputs, functions",
+                        str,
+                    ),
+                ),
+            ]
+        )
 
         super().__init__(**kwargs)
 
