@@ -39,6 +39,7 @@ COLOR_INPUT = "#188855"
 COLOR_FUNC = "#111199"
 COLOR_STATE = "#1666ff"
 COLOR_OUTPUT = "#cc3355"
+COLOR_COND = "#ffa1d"
 
 
 def format_label(s):
@@ -82,6 +83,9 @@ def format_standard_func_long(s):
 def format_output(s):
     return f'<font color="{COLOR_OUTPUT}">{s}</font>'
 
+def format_condition(s):
+    return f'<font color="{COLOR_COND}">{s}</font>'
+
 
 def match_in_expr(s, node):
 
@@ -105,6 +109,7 @@ def match_in_expr(s, node):
     for op in node.output_ports:
         if op.id in s:
             s = s.replace(op.id, format_output(op.id))
+
     return s
 
 
@@ -144,7 +149,7 @@ def mdf_to_graphviz(
             penwidth=penwidth
         )
         info = '<table border="0" cellborder="0">'
-        info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
+        info += '<tr><td colspan="3"><b>%s</b></td></tr>' % (node.id)
 
         if node.metadata is not None and level >= LEVEL_3:
 
@@ -223,6 +228,24 @@ def mdf_to_graphviz(
                     info += "<tr><td>{}{}: {}</td></tr>".format(
                         format_label("STATE"), format_state(st.id), v
                     )
+            if mdf_graph.conditions['node_specific']:
+                info += "<tr><td>{}{}={} ".format(
+                        format_label("COND"),
+                        format_output('type'),
+                        mdf_graph.conditions['node_specific'][node.id]['type']
+                    )
+                if mdf_graph.conditions['node_specific'][node.id]['args']:
+                    for con in mdf_graph.conditions['node_specific'][node.id]['args']:
+                        nn = format_num(mdf_graph.conditions['node_specific'][node.id]['args'][con])
+                        breaker = "<br/>"
+                        info += "{} = {}{}".format(
+                        format_condition(con),
+                        nn,
+                        breaker if len(info.split(breaker)[-1]) > 500 else ";    ",
+                    )
+                    info = info[:-5]
+
+                info += "</td></tr>"
 
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
@@ -236,7 +259,6 @@ def mdf_to_graphviz(
                     )
 
         info += "</table>"
-
         graph.node(node.id, label="<%s>" % info)
 
     for edge in mdf_graph.edges:
