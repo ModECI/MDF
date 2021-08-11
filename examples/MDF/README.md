@@ -48,4 +48,4 @@ An example with [Nodes](../../docs/README.md#node) containing persistent [States
 
 A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions](../../docs/README.md#condition)
 
-<p align="center"><img src="abc_conditions.png" alt="simple"/></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/blob/feature/graphviz_conditions/src/modeci_mdf/abc_conditions_example.gv.png" alt="simple"/></p>
