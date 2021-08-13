@@ -20,8 +20,8 @@
                     },
                     "A": {
                         "parameters": {
-                            "slope": 2.1,
-                            "intercept": 2.2
+                            "slope": 1.1,
+                            "intercept": 1.2
                         },
                         "metadata": {
                             "color": ".8 0 0"
@@ -49,9 +49,9 @@
                     },
                     "B": {
                         "parameters": {
-                            "gain": 1.0,
-                            "bias": 0.0,
-                            "offset": 0.0
+                            "gain": 2.1,
+                            "bias": 2.2,
+                            "offset": 2.3
                         },
                         "metadata": {
                             "color": "0 .8 0"
@@ -80,10 +80,10 @@
                     },
                     "C": {
                         "parameters": {
-                            "scale": 1.0,
-                            "rate": 1.0,
-                            "bias": 0.0,
-                            "offset": 0.0
+                            "scale": 3.1,
+                            "rate": 3.2,
+                            "bias": 3.3,
+                            "offset": 3.4
                         },
                         "metadata": {
                             "color": "0 0 .8"
@@ -113,7 +113,7 @@
                     },
                     "D": {
                         "parameters": {
-                            "scale": 1.0
+                            "scale": 4.0
                         },
                         "metadata": {
                             "color": ".8 0 .8"

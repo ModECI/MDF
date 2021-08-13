@@ -13,8 +13,7 @@ import torch.nn as nn
 from modeci_mdf.interfaces.pytorch import mod_torch_builtins as torch_builtins
 
 from modeci_mdf.utils import load_mdf
-from modeci_mdf.scheduler import EvaluableGraph
-
+from modeci_mdf.execution_engine import EvaluableGraph
 
 def generate_initializer_call(func_class, params, idx=False):
 	"""
