@@ -44,11 +44,11 @@ def main():
         verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
-        from modeci_mdf.scheduler import EvaluableGraph
+        from modeci_mdf.execution_engine import EvaluableGraph
 
         eg = EvaluableGraph(mod_graph, verbose)
-        dt = 0.01
-        duration= 0.1
+        dt = 0.1
+
         duration= 2
         t = 0
         recorded = {}
@@ -65,6 +65,7 @@ def main():
             s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
             t+=dt
 
+
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
             plt.plot(times,s)
@@ -80,6 +81,7 @@ def main():
             filename_root="states",
             only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
+
 
     return mod_graph
 

@@ -1,0 +1,77 @@
+New_Stateful_Parameters_FN:
+    format: ModECI MDF v0.1
+    generating_application: Python modeci-mdf v0.1.3
+    graphs:
+        stateful_parameter_FN:
+            nodes:
+                FNpop_0:
+                    parameters:
+                        initial_w: 0.0
+                        initial_v: -1.0
+                        a_v: -0.3333333333333333
+                        b_v: 0
+                        c_v: 1
+                        d_v: 1
+                        e_v: -1
+                        f_v: 1
+                        time_constant_v: 1
+                        a_w: 1
+                        b_w: -0.8
+                        c_w: 0.7
+                        time_constant_w: 12.5
+                        threshold: -1
+                        mode: 1
+                        uncorrelated_activity: 0
+                        Iext: 0
+                        MSEC: 0.001
+                        dt: 5.0e-05
+                    functions:
+                        update_V:
+                            function: linear
+                            args:
+                                variable0: time_derivative_V
+                                slope: dt
+                                intercept: V
+                        update_W:
+                            function: linear
+                            args:
+                                variable0: time_derivative_W
+                                slope: dt
+                                intercept: W
+                        time_derivative_V:
+                            function: time_derivative_FN_V
+                            args:
+                                variable0: V
+                                variable1: W
+                                a_v: a_v
+                                threshold: threshold
+                                b_v: b_v
+                                c_v: c_v
+                                d_v: d_v
+                                e_v: e_v
+                                f_v: f_v
+                                Iext: Iext
+                                time_constant_v: time_constant_v
+                                MSEC: MSEC
+                        time_derivative_W:
+                            function: time_derivative_FN_W
+                            args:
+                                variable0: V
+                                variable1: W
+                                a_w: a_w
+                                b_w: b_w
+                                c_w: c_w
+                                mode: mode
+                                uncorrelated_activity: uncorrelated_activity
+                                time_constant_w: time_constant_w
+                                MSEC: MSEC
+                    stateful_parameters:
+                        V:
+                            default_initial_value: '-1.0'
+                            value: update_V
+                        W:
+                            default_initial_value: '0.0'
+                            value: update_W
+                    output_ports:
+                        OUTPUT:
+                            value: V
