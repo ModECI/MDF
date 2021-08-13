@@ -4,6 +4,8 @@ import sympy
 import numpy as np
 
 
+import graph_scheduler
+
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
@@ -27,24 +29,7 @@ import modeci_mdf.onnx_functions as onnx_ops
 import modeci_mdf.actr_functions as actr_funcs
 
 
-try:
-    import psyneulink.core.scheduling as scheduling
-except ImportError as e:
-    raise ImportError(
-        "Conditional scheduling currently requires psyneulink (pip install psyneulink)"
-    ) from e
-
-
 FORMAT_DEFAULT = FORMAT_NUMPY
-
-# generic mappings for time
-_time_scales = {
-    "CONSIDERATION_SET_EXECUTION": scheduling.time.TimeScale.TIME_STEP,
-    "ENVIRONMENT_STATE_UPDATE": scheduling.time.TimeScale.TRIAL,
-    "ENVIRONMENT_SEQUENCE": scheduling.time.TimeScale.RUN,
-}
-for new, orig in _time_scales.items():
-    setattr(scheduling.time.TimeScale, new, orig)
 
 
 def evaluate_expr(
@@ -599,7 +584,7 @@ class EvaluableGraph:
         except (TypeError, KeyError):
             termination_conds = {}
 
-        self.scheduler = scheduling.Scheduler(
+        self.scheduler = graph_scheduler.Scheduler(
             graph=self.graph.dependency_dict,
             conditions=conditions,
             termination_conds=termination_conds,
@@ -703,7 +688,7 @@ class EvaluableGraph:
         input_value = value if weight == 1 else value * weight
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
-    def parse_condition(self, condition: Condition) -> scheduling.Condition:
+    def parse_condition(self, condition: Condition) -> graph_scheduler.Condition:
         """Convert the condition in a specific format
 
         Args:
@@ -714,7 +699,7 @@ class EvaluableGraph:
 
         """
         try:
-            typ = getattr(scheduling.condition, condition["type"])
+            typ = getattr(graph_scheduler.condition, condition["type"])
         except AttributeError as e:
             raise ValueError(
                 "Unsupported condition type: %s" % condition["type"]
