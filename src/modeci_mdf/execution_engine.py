@@ -2,6 +2,8 @@ import os
 import sys
 import sympy
 
+import graph_scheduler
+
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
@@ -14,24 +16,7 @@ import modeci_mdf.onnx_functions as onnx_ops
 import modeci_mdf.actr_functions as actr_funcs
 
 
-try:
-    import psyneulink.core.scheduling as scheduling
-except ImportError as e:
-    raise ImportError(
-        "Conditional scheduling currently requires psyneulink (pip install psyneulink)"
-    ) from e
-
-
 FORMAT_DEFAULT = FORMAT_NUMPY
-
-# generic mappings for time
-_time_scales = {
-    "CONSIDERATION_SET_EXECUTION": scheduling.time.TimeScale.TIME_STEP,
-    "ENVIRONMENT_STATE_UPDATE": scheduling.time.TimeScale.TRIAL,
-    "ENVIRONMENT_SEQUENCE": scheduling.time.TimeScale.RUN,
-}
-for new, orig in _time_scales.items():
-    setattr(scheduling.time.TimeScale, new, orig)
 
 
 def evaluate_expr(expr, func_params, array_format, verbose=False):
@@ -186,7 +171,7 @@ class EvaluableStateful_Parameters:
                 )
             )
 
-     
+
 
         self.curr_value = evaluate_expr(
             self.stateful_parameter.value,
@@ -194,7 +179,7 @@ class EvaluableStateful_Parameters:
             verbose=False,
             array_format=array_format,
         )
-        
+
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
@@ -207,7 +192,7 @@ class EvaluableOutput:
     def __init__(self, output_port,verbose=False):
         self.verbose = verbose
         self.output_port = output_port
-        
+
     def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
         if self.verbose:
             print(
@@ -262,7 +247,7 @@ class EvaluableNode:
         self.evaluable_functions = OrderedDict()
         self.evaluable_states = OrderedDict()
         self.evaluable_stateful_parameters = OrderedDict()
-        
+
         self.evaluable_outputs = {}
 
         all_known_vars = []
@@ -284,7 +269,7 @@ class EvaluableNode:
             self.evaluable_stateful_parameters[s.id] = es
             all_known_vars.append(s.id)
             # params_init[s] = s.curr_value
-        
+
 
 
         for s in node.states:
@@ -452,7 +437,7 @@ class EvaluableGraph:
         except (TypeError, KeyError):
             termination_conds = {}
 
-        self.scheduler = scheduling.Scheduler(
+        self.scheduler = graph_scheduler.Scheduler(
             graph=self.graph.dependency_dict,
             conditions=conditions,
             termination_conds=termination_conds,
@@ -535,7 +520,7 @@ class EvaluableGraph:
 
     def parse_condition(self, condition):
         try:
-            typ = getattr(scheduling.condition, condition["type"])
+            typ = getattr(graph_scheduler.condition, condition["type"])
         except AttributeError as e:
             raise ValueError(
                 "Unsupported condition type: %s" % condition["type"]
