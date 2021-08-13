@@ -11,9 +11,7 @@
                             "args": {
                                 "dependency": "input0",
                                 "n": 1
-                            },
-                            "metadata": {"env_name": "description"}
-
+                            }
                         },
                         "A": {
                             "type": "Always",
