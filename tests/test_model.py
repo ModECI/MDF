@@ -1,3 +1,4 @@
+import pytest
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition,ConditionSet
 
 
@@ -16,7 +17,6 @@ def test_model_graph_to_json():
     Check if dumping a model to a simple JSON string works.
     """
 
-
     mod_graph0 = Graph(id="Test", parameters={"speed": 4},metadata={'info':"mdf_model"})
 
     node = Node(id="N0", parameters={"rate": 5},metadata={'info':"mdf_Node"})
@@ -30,11 +30,11 @@ def test_model_graph_to_json():
 
     mod_graph0.nodes.append(node)
     mod_graph0.nodes.append(node1)
-
     # Export to JSON and see if we can load back in
     import json
 
     d = json.loads(mod_graph0.to_json())
+test_model_graph_to_json()
 
 
 def test_no_input_ports_to_json(tmpdir):
@@ -111,7 +111,7 @@ def test_metadata_dict():
     """
     Test whether we get a serialization error when passing anything else from a dictionary
     """
-    Graph(metadata='info').to_json()
+    Graph(metadata={'pnl':1}).to_json()
 
 
 def test_func_args_empty_dict():

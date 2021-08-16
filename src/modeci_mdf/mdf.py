@@ -17,11 +17,15 @@ class MdfBaseWithId(BaseWithId):
     def __init__(self, **kwargs):
         self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
         super().__init__(**kwargs)
+        if self.metadata!=None and type(self.metadata)!=dict:
+            raise TypeError('metadata must be dict')
 
 class MdfBase(Base):
     def __init__(self, **kwargs):
         self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
         super().__init__(**kwargs)
+        if self.metadata!=None and type(self.metadata)!=dict:
+            raise TypeError('metadata must be dict')
 
 
 class Model(MdfBaseWithId):
@@ -50,6 +54,7 @@ class Model(MdfBaseWithId):
             kwargs["generating_application"] = generating_application
         if metadata is not None:
             kwargs["metadata"] = metadata
+
 
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
