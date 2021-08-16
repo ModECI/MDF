@@ -274,4 +274,4 @@ if __name__ == "__main__":
 
     print("------------------")
     # nmllite_file = example.replace('.json','.nmllite.json')
-    mdf_to_graphviz(mod_graph, engine=engines["d"], view_on_render=view, level=2)
+    mdf_to_graphviz(mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2]))
