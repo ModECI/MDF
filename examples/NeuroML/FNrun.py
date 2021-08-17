@@ -21,8 +21,8 @@ def execute(multi=False):
     if not multi:
 
         fn_node = mod_graph.nodes[0]
-        fn_node.parameters['initial_v']=[-1.]
-        fn_node.parameters['initial_w']=[0.]
+        fn_node.get_parameter('initial_v').value=[-1.]
+        fn_node.get_parameter('initial_w').value=[0.]
         input = np.array([0])
 
     else:
@@ -37,8 +37,8 @@ def execute(multi=False):
         mod_graph.nodes.append(input_node)
 
         fn_node = mod_graph.nodes[0]
-        fn_node.parameters['initial_v']=np.array([1.]*len(input))
-        fn_node.parameters['initial_w']=np.array([0.]*len(input))
+        fn_node.get_parameter('initial_v').value=np.array([1.]*len(input))
+        fn_node.get_parameter('initial_w').value=np.array([0.]*len(input))
 
         print(fn_node)
 
@@ -81,12 +81,12 @@ def execute(multi=False):
         else:
             eg.evaluate(array_format=format, time_increment=dt)
 
-        for i in range(len(eg.enodes['FNpop_0'].evaluable_states['V'].curr_value)):
+        for i in range(len(eg.enodes['FNpop_0'].evaluable_parameters['V'].curr_value)):
             if not i in vv:
                 vv[i]=[]
                 ww[i]=[]
-            v = eg.enodes['FNpop_0'].evaluable_states['V'].curr_value[i]
-            w = eg.enodes['FNpop_0'].evaluable_states['W'].curr_value[i]
+            v = eg.enodes['FNpop_0'].evaluable_parameters['V'].curr_value[i]
+            w = eg.enodes['FNpop_0'].evaluable_parameters['W'].curr_value[i]
             vv[i].append(v)
             ww[i].append(w)
             if i==0:

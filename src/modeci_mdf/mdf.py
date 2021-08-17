@@ -277,6 +277,11 @@ class Node(BaseWithId):
 
         super().__init__(**kwargs)
 
+    def get_parameter(self, id):
+        for p in self.parameters:
+            if p.id==id: return p
+        return None
+
 
 class Function(BaseWithId):
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
