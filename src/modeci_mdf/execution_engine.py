@@ -261,10 +261,11 @@ class EvaluableParameter:
 
                 # Now add anything in parameters that isn't already specified as an input argument
                 for kw, arg in parameters.items():
-                    if kw not in self.parameter.args.values():
+                    if kw not in self.parameter.args.values() and kw != self.parameter.id:
                         kwargs_for_onnx[kw] = arg
-
+                print("%s is evaluating ONNX function %s with %s"%(self.parameter.id, expr, kwargs_for_onnx))
                 self.curr_value = onnx_function(**kwargs_for_onnx)
+
             elif "actr_functions." in expr:
                 actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
                 self.curr_value = actr_function(*[func_params[arg] for arg in self.parameter.args])

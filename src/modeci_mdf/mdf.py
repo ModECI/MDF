@@ -459,6 +459,8 @@ class Parameter(BaseWithId):
         super().__init__(**kwargs)
 
     def is_stateful(self):
+        if self.default_initial_value is not None:
+            return true
         if self.time_derivative is not None:
             return true
         if self.value is not None and type(self.value)==str:

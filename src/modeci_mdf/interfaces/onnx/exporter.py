@@ -117,16 +117,15 @@ def onnx_node_to_mdf(
                 func_args[arg_name] = id_to_port(inp)
 
         # FIXME: parameters must be set or we get JSON serialization error later
-        mdf_node = (
-            Node(id=node.name, parameters=params_dict)
-            if bool(params_dict)
-            else Node(id=node.name)
-        )
+        mdf_node = Node(id=node.name)
+
+        for p in params_dict:
+            mdf_node.parameters.append(Parameter(id=p, value=params_dict[p]))
 
         # Add the function
         # FIXME: There is probably more stuff we need to preserve for ONNX Ops
-        func = Function(id=node.name, function=f"onnx::{node.op_type}", args=func_args)
-        mdf_node.functions.append(func)
+        func = Parameter(id=node.name, function=f"onnx::{node.op_type}", args=func_args)
+        mdf_node.parameters.append(func)
 
         # Recreate inputs and outputs of ONNX node as InputPorts and OutputPorts
         for inp in non_constant_inputs:
