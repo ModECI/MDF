@@ -674,7 +674,7 @@ class EvaluableGraph:
         input_value = value if weight == 1 else value * weight
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
-    def parse_condition(self, condition: Condition) -> scheduling.Condition:
+    def parse_condition(self, condition: Condition) -> Condition:
         """Convert the condition in a specific format
 
         Args:
