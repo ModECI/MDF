@@ -84,7 +84,7 @@ def main():
         verbose = True
         #verbose = False
 
-        from modeci_mdf.scheduler import EvaluableGraph
+        from modeci_mdf.execution_engine import EvaluableGraph
 
         eg = EvaluableGraph(mdf_model.graphs[0],
                             verbose=verbose)
