@@ -18,13 +18,14 @@ import modeci_mdf.actr_functions as actr_funcs
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
+KNOWN_PARAMETERS = ['constant']
 
 def evaluate_expr(expr, func_params, array_format, verbose=False):
 
     e = evaluate_params_nmllite(
         expr, func_params, array_format=array_format, verbose=verbose
     )
-    if type(e) == str:
+    if type(e) == str and e not in KNOWN_PARAMETERS:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
             % (expr, _params_info(func_params), e, type(e))
@@ -261,7 +262,7 @@ class EvaluableParameter:
 
                 # Now add anything in parameters that isn't already specified as an input argument
                 for kw, arg in parameters.items():
-                    if kw not in self.parameter.args.values() and kw != self.parameter.id:
+                    if kw not in self.parameter.args.values() and kw != self.parameter.id and kw != '__builtins__':
                         kwargs_for_onnx[kw] = arg
                 print("%s is evaluating ONNX function %s with %s"%(self.parameter.id, expr, kwargs_for_onnx))
                 self.curr_value = onnx_function(**kwargs_for_onnx)
@@ -364,6 +365,7 @@ class EvaluableNode:
         self.evaluable_outputs = {}
 
         all_known_vars = []
+        all_known_vars += KNOWN_PARAMETERS
 
         for ip in node.input_ports:
             rip = EvaluableInput(ip, self.verbose)
@@ -385,7 +387,7 @@ class EvaluableNode:
             # params_init[s] = s.curr_value
 
         all_params_to_check = [p for p in node.parameters]
-        print('all_params_to_check: %s'%all_params_to_check)
+        #print('all_params_to_check: %s'%all_params_to_check)
 
         # Order the parameters into the correct sequence
         while len(all_params_to_check) > 0:

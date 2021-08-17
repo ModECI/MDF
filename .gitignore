@@ -222,3 +222,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/abcd_3
 /src/modeci_mdf/interfaces/graphviz/*gv.png
 /src/modeci_mdf/*.png
+/examples/PyTorch/inception
