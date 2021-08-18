@@ -1,5 +1,6 @@
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Parameter
 
+from modeci_mdf.utils import load_mdf
 
 def test_model_init_kwargs():
     m = Model(
@@ -56,7 +57,6 @@ def test_no_input_ports_to_json(tmpdir):
 
     assert data["ABCD"]["graphs"]["abcd_example"]["nodes"]["input0"]["parameters"]["input_level"]["value"] == 10.0
 
-    from modeci_mdf.utils import load_mdf
     mod_graph2 = load_mdf(tmpfile)
 
     print(mod_graph2)
@@ -97,3 +97,31 @@ def test_graph_inputs():
 def test_graph_inputs_none(simple_model_mdf):
     """Test that the simple model with no input ports used has no graph inputs"""
     assert len(simple_model_mdf.graphs[0].inputs) == 0
+
+
+def test_graph_types(tmpdir):
+    r"""
+    Test whether types saved in parameters are the same after reloading
+    """
+    mod = Model(id="Test0")
+    mod_graph = Graph(id="test_example")
+    mod.graphs.append(mod_graph)
+    node0 = Node(id="node0")
+    mod_graph.nodes.append(node0)
+
+    p_int = 2
+    node0.parameters.append(Parameter(id="p_int", value=p_int))
+    p_float = 2.0
+    node0.parameters.append(Parameter(id="p_float", value=p_float))
+
+
+    tmpfile = f"{tmpdir}/test.json"
+    mod.to_json_file(tmpfile)
+
+    mod_graph2 = load_mdf(tmpfile)
+    print('Saved to %s: %s'%(tmpfile,mod_graph2))
+    new_node0 = mod_graph2.graphs[0].nodes[0]
+
+
+    assert new_node0.get_parameter('p_int').value == p_int
+    assert new_node0.get_parameter('p_float').value == p_float
