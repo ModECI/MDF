@@ -7,7 +7,13 @@
                 "nodes": {
                     "counter_node": {
                         "parameters": {
-                            "increment": 1
+                            "increment": {
+                                "value": 1
+                            },
+                            "count": {
+                                "value": "evaluated_counter_node_count_next_value",
+                                "default_initial_value": 0
+                            }
                         },
                         "output_ports": {
                             "out_port": {
@@ -16,25 +22,37 @@
                         },
                         "functions": {
                             "evaluated_counter_node_count_next_value": {
-                                "function": "evaluate_counter_node_count_next_value",
+                                "function": "count + increment",
                                 "args": {
                                     "increment": "increment",
                                     "count": "count"
                                 }
                             }
-                        },
-                        "stateful_parameters": {
-                            "count": {
-                                "value": "evaluated_counter_node_count_next_value",
-                                "default_initial_value": 0
-                            }
                         }
                     },
                     "sine_node": {
                         "parameters": {
-                            "amp": 3,
-                            "period": 0.4,
-                            "dt": 0.01
+                            "amp": {
+                                "value": 3
+                            },
+                            "period": {
+                                "value": 0.4
+                            },
+                            "level": {
+                                "default_initial_value": "0",
+                                "value": "evaluated_sine_node_level_next_value"
+                            },
+                            "rate": {
+                                "default_initial_value": "1",
+                                "value": "evaluated_sine_node_rate_next_value"
+                            },
+                            "dt": {
+                                "value": 0.01
+                            },
+                            "time": {
+                                "default_initial_value": 0,
+                                "value": "evaluated_time_next_value"
+                            }
                         },
                         "output_ports": {
                             "out_port": {
@@ -43,7 +61,7 @@
                         },
                         "functions": {
                             "evaluated_sine_node_level_next_value": {
-                                "function": "evaluate_sine_node_level_next_value",
+                                "function": "level+(dt*6.283185 * rate / period)",
                                 "args": {
                                     "amp": "amp",
                                     "period": "period",
@@ -53,7 +71,7 @@
                                 }
                             },
                             "evaluated_sine_node_rate_next_value": {
-                                "function": "evaluate_sine_node_rate_next_value",
+                                "function": "rate+(dt*-1 * 6.283185 * level / period)",
                                 "args": {
                                     "amp": "amp",
                                     "period": "period",
@@ -63,7 +81,7 @@
                                 }
                             },
                             "evaluated_sine_node_out_port_value": {
-                                "function": "evaluate_sine_node_out_port_value",
+                                "function": "amp * level",
                                 "args": {
                                     "amp": "amp",
                                     "period": "period",
@@ -79,20 +97,6 @@
                                     "slope": 1,
                                     "intercept": "dt"
                                 }
-                            }
-                        },
-                        "stateful_parameters": {
-                            "level": {
-                                "default_initial_value": "0",
-                                "value": "evaluated_sine_node_level_next_value"
-                            },
-                            "rate": {
-                                "default_initial_value": "1",
-                                "value": "evaluated_sine_node_rate_next_value"
-                            },
-                            "time": {
-                                "default_initial_value": 0,
-                                "value": "evaluated_time_next_value"
                             }
                         }
                     }
