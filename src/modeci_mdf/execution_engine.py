@@ -18,6 +18,7 @@ import modeci_mdf.actr_functions as actr_funcs
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
+
 KNOWN_PARAMETERS = ['constant']
 
 def evaluate_expr(expr, func_params, array_format, verbose=False):
@@ -45,10 +46,11 @@ class EvaluableFunction:
             if self.function.function == f:
                 expr = create_python_expression(mdf_functions[f]["expression_string"])
         if not expr:
-            raise "Unknown function: {}. Known functions: {}".format(
-                self.function.function,
-                mdf_functions.keys,
-            )
+            expr  = self.function.function
+            #raise "Unknown function: {}. Known functions: {}".format(
+            #    self.function.function,
+            #    mdf_functions.keys,
+            #)
 
         func_params = {}
         func_params.update(parameters)
@@ -164,7 +166,16 @@ class EvaluableParameter:
     def __init__(self, parameter, verbose=False):
         self.verbose = verbose
         self.parameter = parameter
-        self.curr_value = None
+
+        
+
+        if self.parameter.default_initial_value is not None:
+           
+            self.curr_value = self.parameter.default_initial_value
+         
+        else:
+            self.curr_value = None
+
 
 
 
@@ -172,6 +183,7 @@ class EvaluableParameter:
         if self.curr_value is None:
             if self.parameter.value is not None:
                 if self.parameter.is_stateful():
+
                     if self.parameter.default_initial_value is not None:
                         return self.parameter.default_initial_value
                     else:
@@ -218,10 +230,13 @@ class EvaluableParameter:
                 if self.parameter.function == f:
                     expr = create_python_expression(mdf_functions[f]["expression_string"])
             if not expr:
-                raise "Unknown function: {}. Known functions: {}".format(
-                    self.parameter.function,
-                    mdf_functions.keys,
-                )
+
+                expr = self.parameter.function
+                #raise "Unknown function: {}. Known functions: {}".format(
+                #    self.parameter.function,
+                #    mdf_functions.keys,
+                #)
+
 
             func_params = {}
             func_params.update(parameters)
@@ -262,11 +277,14 @@ class EvaluableParameter:
 
                 # Now add anything in parameters that isn't already specified as an input argument
                 for kw, arg in parameters.items():
+
                     if kw not in self.parameter.args.values() and kw != self.parameter.id and kw != '__builtins__':
                         kwargs_for_onnx[kw] = arg
                 print("%s is evaluating ONNX function %s with %s"%(self.parameter.id, expr, kwargs_for_onnx))
                 self.curr_value = onnx_function(**kwargs_for_onnx)
 
+
+                    
             elif "actr_functions." in expr:
                 actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
                 self.curr_value = actr_function(*[func_params[arg] for arg in self.parameter.args])
@@ -283,6 +301,7 @@ class EvaluableParameter:
                     verbose=False,
                     array_format=array_format,
                 )
+
             else:
                 td = evaluate_expr(
                     self.parameter.time_derivative,
@@ -290,6 +309,7 @@ class EvaluableParameter:
                     verbose=False,
                     array_format=array_format,
                 )
+
                 self.curr_value += td * time_increment
 
         if self.verbose:
@@ -365,13 +385,19 @@ class EvaluableNode:
         self.evaluable_outputs = {}
 
         all_known_vars = []
+
         all_known_vars += KNOWN_PARAMETERS
+
 
         for ip in node.input_ports:
             rip = EvaluableInput(ip, self.verbose)
             self.evaluable_inputs[ip.id] = rip
             all_known_vars.append(ip.id)
             # params_init[ip] = ip.curr_value
+
+
+        for p in node.parameters:
+            all_known_vars.append(p.id)
 
         '''
         for p in node.parameters:
@@ -385,9 +411,55 @@ class EvaluableNode:
             self.evaluable_states[s.id] = es
             all_known_vars.append(s.id)
             # params_init[s] = s.curr_value
+        all_funcs = [f for f in node.functions]
 
+        # Order the functions into the correct sequence
+        while len(all_funcs) > 0:
+            f = all_funcs.pop(0)  # pop first off list
+            if verbose:
+                print(
+                    "    Checking whether function: %s with args %s is sufficiently determined by known vars %s"
+                    % (f.id, f.args, all_known_vars)
+                )
+            all_req_vars = []
+            for arg in f.args:
+                arg_expr = f.args[arg]
+
+                # If we are dealing with a list of symbols, each must treated separately
+                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = eval(arg_expr)
+                else:
+                    arg_expr_list = [arg_expr]
+
+                for e in arg_expr_list:
+                    func_expr = sympy.simplify(e)
+                    all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+
+            all_present = [v in all_known_vars for v in all_req_vars]
+
+            if verbose:
+                print(
+                    "    Are all of %s in %s? %s"
+                    % (all_req_vars, all_known_vars, all_present)
+                )
+            if all(all_present):
+                rf = EvaluableFunction(f, self.verbose)
+                self.evaluable_functions[f.id] = rf
+                all_known_vars.append(f.id)
+            #     params_init[f] = self.evaluable_functions[f.id].evaluate(
+            #     params_init, array_format=FORMAT_DEFAULT
+            # )
+            else:
+                if len(all_funcs) == 0:
+                    raise Exception(
+                        "Error! Could not evaluate function: %s with args %s using known vars %s"
+                        % (f.id, f.args, all_known_vars)
+                    )
+                else:
+                    all_funcs.append(f) 
         all_params_to_check = [p for p in node.parameters]
-        #print('all_params_to_check: %s'%all_params_to_check)
+        print('all_params_to_check: %s'%all_params_to_check)
 
         # Order the parameters into the correct sequence
         while len(all_params_to_check) > 0:
@@ -469,7 +541,9 @@ class EvaluableNode:
 
         # First set params to previous parameter values for use in funcs and states...
         for ep in self.evaluable_parameters:
+
             curr_params[ep] = self.evaluable_parameters[ep].get_current_value(curr_params, array_format=array_format)
+
 
 
         for ef in self.evaluable_functions:
