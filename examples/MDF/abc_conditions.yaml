@@ -8,7 +8,7 @@ abc_conditions:
                     input0:
                         type: BeforeNCalls
                         args:
-                            dependency: input0
+                            dependencies: input0
                             n: 1
                     A:
                         type: Always
@@ -16,12 +16,12 @@ abc_conditions:
                     B:
                         type: EveryNCalls
                         args:
-                            dependency: A
+                            dependencies: A
                             n: 2
                     C:
                         type: EveryNCalls
                         args:
-                            dependency: A
+                            dependencies: A
                             n: 3
                 termination:
                     environment_state_update:
@@ -30,11 +30,11 @@ abc_conditions:
                             dependencies:
                             -   type: AfterNCalls
                                 args:
-                                    dependency: C
+                                    dependencies: C
                                     n: 2
                             -   type: JustRan
                                 args:
-                                    dependency: A
+                                    dependencies: A
             nodes:
                 input0:
                     parameters:
