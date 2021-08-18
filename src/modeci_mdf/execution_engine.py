@@ -284,11 +284,7 @@ class EvaluableParameter:
                 self.curr_value = onnx_function(**kwargs_for_onnx)
 
 
-                    if kw not in self.parameter.args.values():
-                        kwargs_for_onnx[kw] = arg
-
-                self.curr_value = onnx_function(**kwargs_for_onnx)
-
+                    
             elif "actr_functions." in expr:
                 actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
                 self.curr_value = actr_function(*[func_params[arg] for arg in self.parameter.args])
