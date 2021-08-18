@@ -464,10 +464,14 @@ class Parameter(BaseWithId):
         super().__init__(**kwargs)
 
     def is_stateful(self):
-        if self.default_initial_value is not None:
-            return true
+
+
         if self.time_derivative is not None:
-            return true
+            return True
+        if self.default_initial_value is not None:
+            return True
+
+
         if self.value is not None and type(self.value)==str:
             param_expr = sympy.simplify(self.value)
             sf = self.id in [str(s) for s in param_expr.free_symbols]
