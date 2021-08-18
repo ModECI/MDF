@@ -10,8 +10,8 @@ def main():
     """Takes addition.lisp, converts to MDF, and runs using the scheduler."""
     file_name = os.path.dirname(os.path.realpath(__file__)) + "/addition.lisp"
     print(file_name)
-    actr_to_mdf(file_name)
-    mdf_graph = load_mdf(file_name[:-5] + ".json").graphs[0]
+    mod = actr_to_mdf(file_name)
+    mdf_graph = mod.graphs[0] # load_mdf(file_name[:-5] + ".json").graphs[0]
     eg = EvaluableGraph(graph=mdf_graph, verbose=True)
     term = False
     goal = {}
