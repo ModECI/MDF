@@ -169,7 +169,7 @@ class EvaluableParameter:
 
 
     def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
-        if self.curr_value == None:
+        if self.curr_value is None:
             if self.parameter.value is not None:
                 if self.parameter.is_stateful():
                     if self.parameter.default_initial_value is not None:
