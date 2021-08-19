@@ -6,7 +6,7 @@ pip install .
 # Note this:
 #    1) runs examples to regenerate yaml/json...
 #    2) tests examples with simple_scheduler
-pytest
+pytest -v
 
 cd examples/MDF
 
@@ -52,7 +52,7 @@ cd ../../examples/NeuroML
 cd ../../examples/ONNX
 python simple_ab.py -run
 python simple_abc.py
-python simple_abcd.py 
+python simple_abcd.py
 
 ## Generate the docs
 

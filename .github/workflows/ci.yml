@@ -53,7 +53,7 @@ jobs:
       run: python -m pip install .[test]
 
     - name: Test package
-      run: python -m pytest -ra
+      run: python -m pytest -ra -v
 
 
   dist:
