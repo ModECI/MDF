@@ -6,7 +6,8 @@ pip install .
 # Note this:
 #    1) runs examples to regenerate yaml/json...
 #    2) tests examples with simple_scheduler
-pytest -v
+pytest -v -ra tests/interfaces/pytorch/*py
+pytest -v -ra tests/*py
 
 cd examples/MDF
 
