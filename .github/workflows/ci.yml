@@ -54,8 +54,13 @@ jobs:
 
     - name: Test package
       run:  |
-         python -m pytest -ra -v tests/interfaces/pytorch/*py
-         python -m pytest -ra -v tests/*py
+         if [ "$RUNNER_OS" == "Windows" ]; then
+           python -m pytest -ra -v tests\interfaces\pytorch\*py
+           python -m pytest -ra -v tests\*py
+         else
+           python -m pytest -ra -v tests/interfaces/pytorch/*py
+           python -m pytest -ra -v tests/*py
+         fi
 
 
   dist:
