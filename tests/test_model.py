@@ -73,9 +73,9 @@ def test_node_params_empty_dict():
 
 def test_param_args_empty_dict():
     """
-    Test whether we don't a serialization error when passing empty dicts to Function args
+    Test whether we don't a serialization error when passing empty dicts to Parameter args
     """
-    Parameter(args={}).to_json()
+    Parameter(id='noargs',args={}).to_json()
 
 
 def test_graph_inputs():
@@ -121,9 +121,9 @@ def test_graph_types(tmpdir):
     node0.parameters.append(Parameter(id="p_str2", value=p_str2))
     p_list = ['2',2,'two']
     node0.parameters.append(Parameter(id="p_list", value=p_list))
-    '''
-    p_dict = {'a':3,'w':{'b':3,'x':True}}
-    node0.parameters.append(Parameter(id="p_dict", value=p_dict))'''
+
+    p_dict = {'a':3,'w':{'b':3,'x':True,'y':[2,2,2,2]}}
+    node0.parameters.append(Parameter(id="p_dict", value=p_dict))
 
     print(mod)
     tmpfile = f"{tmpdir}/test.json"
@@ -133,6 +133,7 @@ def test_graph_types(tmpdir):
     new_node0 = mod_graph2.graphs[0].nodes[0]
 
     for p in [p.id for p in node0.parameters]:
+        print('Testing %s, is %s = %s?'%(p,new_node0.get_parameter(p).value,eval(p)))
         assert new_node0.get_parameter(p).value == eval(p)
         assert type(new_node0.get_parameter(p).value) == type(eval(p))
 
