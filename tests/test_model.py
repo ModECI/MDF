@@ -113,15 +113,28 @@ def test_graph_types(tmpdir):
     node0.parameters.append(Parameter(id="p_int", value=p_int))
     p_float = 2.0
     node0.parameters.append(Parameter(id="p_float", value=p_float))
+    p_bool = False
+    node0.parameters.append(Parameter(id="p_bool", value=p_bool))
+    p_str = 'p_int + p_float'
+    node0.parameters.append(Parameter(id="p_str", value=p_str))
+    p_str2 = '2'
+    node0.parameters.append(Parameter(id="p_str2", value=p_str2))
+    p_list = ['2',2,'two']
+    node0.parameters.append(Parameter(id="p_list", value=p_list))
+    '''
+    p_dict = {'a':3,'w':{'b':3,'x':True}}
+    node0.parameters.append(Parameter(id="p_dict", value=p_dict))'''
 
-
+    print(mod)
     tmpfile = f"{tmpdir}/test.json"
     mod.to_json_file(tmpfile)
-
     mod_graph2 = load_mdf(tmpfile)
     print('Saved to %s: %s'%(tmpfile,mod_graph2))
     new_node0 = mod_graph2.graphs[0].nodes[0]
 
+    for p in [p.id for p in node0.parameters]:
+        assert new_node0.get_parameter(p).value == eval(p)
+        assert type(new_node0.get_parameter(p).value) == type(eval(p))
 
-    assert new_node0.get_parameter('p_int').value == p_int
-    assert new_node0.get_parameter('p_float').value == p_float
+if __name__ == '__main__':
+    test_graph_types('/tmp')
