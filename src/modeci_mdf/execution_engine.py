@@ -167,12 +167,12 @@ class EvaluableParameter:
         self.verbose = verbose
         self.parameter = parameter
 
-        
+
 
         if self.parameter.default_initial_value is not None:
-           
+
             self.curr_value = self.parameter.default_initial_value
-         
+
         else:
             self.curr_value = None
 
@@ -284,7 +284,7 @@ class EvaluableParameter:
                 self.curr_value = onnx_function(**kwargs_for_onnx)
 
 
-                    
+
             elif "actr_functions." in expr:
                 actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
                 self.curr_value = actr_function(*[func_params[arg] for arg in self.parameter.args])
@@ -457,7 +457,7 @@ class EvaluableNode:
                         % (f.id, f.args, all_known_vars)
                     )
                 else:
-                    all_funcs.append(f) 
+                    all_funcs.append(f)
         all_params_to_check = [p for p in node.parameters]
         print('all_params_to_check: %s'%all_params_to_check)
 
@@ -467,8 +467,8 @@ class EvaluableNode:
 
             if verbose:
                 print(
-                    "    Checking whether parameter: %s with args: %s, value: %s is sufficiently determined by known vars %s"
-                    % (p.id, p.args, p.value, all_known_vars)
+                    "    Checking whether parameter: %s with args: %s, value: %s (%s) is sufficiently determined by known vars %s"
+                    % (p.id, p.args, p.value, type(p.value), all_known_vars)
                 )
             all_req_vars = []
 

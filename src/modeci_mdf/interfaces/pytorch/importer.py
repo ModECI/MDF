@@ -208,9 +208,11 @@ def generate_main_forward(nodes, execution_order, constructor_calls):
 		node = node_dict[node_name]
 		non_standard_args = []
 		if node.parameters:
-			for param_key in list(node.parameters.keys()):
+			for param in node.parameters:
+				np.set_printoptions(threshold=sys.maxsize)
+				str_commas = np.array2string(param.value, separator=", ")
 				# TODO: Resolve ordering
-				pre_expression = "\n\t\tnsvar_{} = torch.Tensor({})".format(nstd_var_idx, node.parameters[param_key])
+				pre_expression = "\n\t\tnsvar_{} = torch.Tensor({})".format(nstd_var_idx, str_commas)
 				main_forward += pre_expression
 				non_standard_args.append("nsvar_{}".format(nstd_var_idx))
 				nstd_var_idx+=1
@@ -307,14 +309,16 @@ def _generate_scripts_from_json(model_input):
 			# Hack to fix problem with HDF5 parameters
 			for node in graph.nodes:
 				if node.parameters:
-					for param_key, param_val in node.parameters.items():
+					for param in node.parameters:
+						param_key = param.id
+						param_val = param.value
 						if param_key in ["weight", "bias"] and type(param_val)==str:
 							# Load and reassign
 							array = weight_dict[param_val][:]
-							np.set_printoptions(threshold=sys.maxsize)
-							node.parameters[param_key] = np.array2string(array, separator=", ")
+							#np.set_printoptions(threshold=sys.maxsize)
+							param.value = array
 
-		evaluable_graph = EvaluableGraph(graph, False)
+		evaluable_graph = EvaluableGraph(graph, verbose=False)
 		enodes = evaluable_graph.enodes
 		edges = evaluable_graph.ordered_edges
 		try:

@@ -263,7 +263,6 @@ class Node(BaseWithId):
                 ("functions", ("The _Function_s for the Node", Function)),
                 ("states", ("The _State_s of the Node", State)),
                 ("parameters", ("The _Parameter_s of the Node", Parameter)),
-                ("stateful_parameters",("The Stateful Parameter s of the Node",Stateful_Parameter)),
                 (
                     "output_ports",
                     (
@@ -465,13 +464,10 @@ class Parameter(BaseWithId):
 
     def is_stateful(self):
 
-
         if self.time_derivative is not None:
             return True
         if self.default_initial_value is not None:
             return True
-
-
         if self.value is not None and type(self.value)==str:
             param_expr = sympy.simplify(self.value)
             sf = self.id in [str(s) for s in param_expr.free_symbols]
