@@ -220,3 +220,9 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/ABCD.nmllite.json
 /examples/MDF/Simple.nmllite.json
 /examples/MDF/abcd_3
+/src/modeci_mdf/interfaces/graphviz/*gv.png
+/src/modeci_mdf/*.png
+/examples/PyTorch/inception
+/examples/PyTorch/ddm
+/examples/MDF/abcd.png
+/examples/MDF/abcd_3.png

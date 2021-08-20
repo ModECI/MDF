@@ -1,4 +1,4 @@
-python alias name="#statement"#!/bin/bash
+#!/bin/bash
 
 set -ex
 

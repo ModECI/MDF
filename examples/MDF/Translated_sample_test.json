@@ -1,0 +1,210 @@
+{
+    "sample_test": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.3",
+        "graphs": {
+            "sample_test_example": {
+                "nodes": {
+                    "input0": {
+                        "parameters": {
+                            "input_level": 0.0
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        },
+                        "functions": {}
+                    },
+                    "A": {
+                        "parameters": {
+                            "slope": 2.1,
+                            "intercept": 2.2
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "linear_func": {
+                                "function": "linear",
+                                "args": {
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_func"
+                            }
+                        }
+                    },
+                    "C": {
+                        "parameters": {
+                            "scale": 1.0,
+                            "rate": 1.0,
+                            "bias": 0.0,
+                            "offset": 0.0
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "exponential_func": {
+                                "function": "exponential",
+                                "args": {
+                                    "scale": "scale",
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        }
+                    },
+                    "counter_node": {
+                        "parameters": {
+                            "increment": 1,
+                            "scale": 1.0,
+                            "rate": 1.0,
+                            "bias": 0.0,
+                            "offset": 0.0
+                        },
+                        "functions": {
+                            "exponential_func2": {
+                                "function": "exponential",
+                                "args": {
+                                    "scale": "scale",
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "variable0": "count"
+                                }
+                            },
+                            "evaluated_counter_node_count_next_value": {
+                                "function": "evaluate_counter_node_count_next_value",
+                                "args": {
+                                    "increment": "increment",
+                                    "scale": "scale",
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "count": "count"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "out_port1": {
+                                "value": "count"
+                            },
+                            "out_port2": {
+                                "value": "exponential_func2"
+                            }
+                        },
+                        "stateful_parameters": {
+                            "count": {
+                                "value": "evaluated_counter_node_count_next_value",
+                                "default_initial_value": 0
+                            }
+                        }
+                    },
+                    "sine_node": {
+                        "parameters": {
+                            "amp": 3,
+                            "period": 0.4,
+                            "slope": 2.1,
+                            "intercept": 2.2,
+                            "dt": 0.01
+                        },
+                        "functions": {
+                            "linear_func2": {
+                                "function": "linear",
+                                "args": {
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "variable0": "level"
+                                }
+                            },
+                            "evaluated_sine_node_level_next_value": {
+                                "function": "evaluate_sine_node_level_next_value",
+                                "args": {
+                                    "amp": "amp",
+                                    "period": "period",
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "level": "level",
+                                    "rate": "rate",
+                                    "dt": "dt"
+                                }
+                            },
+                            "evaluated_sine_node_rate_next_value": {
+                                "function": "evaluate_sine_node_rate_next_value",
+                                "args": {
+                                    "amp": "amp",
+                                    "period": "period",
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "level": "evaluated_sine_node_level_next_value",
+                                    "rate": "rate",
+                                    "dt": "dt"
+                                }
+                            },
+                            "evaluated_sine_node_out_port1_value": {
+                                "function": "evaluate_sine_node_out_port1_value",
+                                "args": {
+                                    "amp": "amp",
+                                    "period": "period",
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "level": "level",
+                                    "rate": "rate",
+                                    "dt": "dt"
+                                }
+                            },
+                            "evaluated_time_next_value": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "time",
+                                    "slope": 1,
+                                    "intercept": "dt"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "out_port1": {
+                                "value": "evaluated_sine_node_out_port1_value"
+                            },
+                            "out_port2": {
+                                "value": "linear_func2"
+                            }
+                        },
+                        "stateful_parameters": {
+                            "level": {
+                                "default_initial_value": "0",
+                                "value": "evaluated_sine_node_level_next_value"
+                            },
+                            "rate": {
+                                "default_initial_value": "1",
+                                "value": "evaluated_sine_node_rate_next_value"
+                            },
+                            "time": {
+                                "default_initial_value": 0,
+                                "value": "evaluated_time_next_value"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ import abcd_python as abcd
 from modeci_mdf.mdf import (
     Condition,
     ConditionSet,
-    Function,
+    Parameter,
     Graph,
     InputPort,
     Model,
@@ -24,7 +24,8 @@ def main():
     mod_graph = Graph(id="abc_conditions_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0", parameters={"input_level": 0.0})
+    input_node = Node(id="input0")
+    input_node.parameters.append(Parameter(id="input_level", value=0.0))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
@@ -34,12 +35,14 @@ def main():
         n = Node(id=id_)
         graph.nodes.append(n)
 
-        n.parameters = parameters
+        for p in parameters:
+            n.parameters.append(Parameter(id=p, value=parameters[p]))
+
         ip1 = InputPort(id="input_port1", shape="(1,)")
         n.input_ports.append(ip1)
 
         function.args["variable0"] = ip1.id
-        n.functions.append(function)
+        n.parameters.append(function)
 
         n.output_ports.append(OutputPort(id="output_1", value=function.id))
 
@@ -49,11 +52,11 @@ def main():
         return n
 
     p_a = {"slope": abcd.A_slope, "intercept": abcd.A_intercept}
-    f_a = Function(id="linear_func", function="linear", args={k: k for k in p_a.keys()})
+    f_a = Parameter(id="linear_func", function="linear", args={k: k for k in p_a.keys()})
     a = create_simple_node(mod_graph, "A", f_a, p_a, input_node)
 
     p_b = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
-    f_b = Function(
+    f_b = Parameter(
         id="logistic_func", function="logistic", args={k: k for k in p_b.keys()}
     )
     b = create_simple_node(mod_graph, "B", f_b, p_b, a)
@@ -64,20 +67,20 @@ def main():
         "bias": abcd.C_bias,
         "offset": abcd.C_offset,
     }
-    f_c = Function(
+    f_c = Parameter(
         id="exponential_func", function="exponential", args={k: k for k in p_c.keys()}
     )
     c = create_simple_node(mod_graph, "C", f_c, p_c, a)
 
-    cond_i = Condition(type="BeforeNCalls", dependency=input_node.id, n=1)
+    cond_i = Condition(type="BeforeNCalls", dependencies=input_node.id, n=1)
     cond_a = Condition(type="Always")
-    cond_b = Condition(type="EveryNCalls", dependency=a.id, n=2)
-    cond_c = Condition(type="EveryNCalls", dependency=a.id, n=3)
+    cond_b = Condition(type="EveryNCalls", dependencies=a.id, n=2)
+    cond_c = Condition(type="EveryNCalls", dependencies=a.id, n=3)
     cond_term = Condition(
         type="And",
         dependencies=[
-            Condition(type="AfterNCalls", dependency=c.id, n=2),
-            Condition(type="JustRan", dependency=a.id),
+            Condition(type="AfterNCalls", dependencies=c.id, n=2),
+            Condition(type="JustRan", dependencies=a.id),
         ],
     )
 

@@ -82,7 +82,7 @@ def main():
     )
     if "-run" in sys.argv:
         verbose = True
-        #verbose = False
+        verbose = False
 
         from modeci_mdf.execution_engine import EvaluableGraph
 
@@ -96,6 +96,7 @@ def main():
         for t in test_values:
             print("===================\nEvaluating MDF model with input: %s"%t)
             eg.evaluate(initializer={"input":t})
+            print("Output: %s"%eg.enodes['Mul_3'].evaluable_outputs['_4'].curr_value)
 
 
 if __name__ == "__main__":

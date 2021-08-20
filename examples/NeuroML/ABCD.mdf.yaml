@@ -1,12 +1,13 @@
 ABCD:
-    format: ModECI MDF v0.1
+    format: ModECI MDF v0.2
     graphs:
         ABCD:
             notes: Example of a simplified network
             nodes:
                 A_input_0:
                     parameters:
-                        variable: 2
+                        variable:
+                            value: 2.0
                     input_ports: {}
                     output_ports:
                         V:
@@ -19,8 +20,10 @@ ABCD:
                         \   parameters: {'variable': '2'}\n   parent: None\n"
                 A_0:
                     parameters:
-                        slope: 2
-                        intercept: 2
+                        slope:
+                            value: 2.0
+                        intercept:
+                            value: 2.0
                     input_ports:
                         INPUT: {}
                     output_ports:
@@ -35,10 +38,14 @@ ABCD:
                         \ None\n"
                 B_0:
                     parameters:
-                        gain: 1
-                        bias: 0
-                        x_0: 0
-                        offset: 0
+                        gain:
+                            value: 1.0
+                        bias:
+                            value: 0.0
+                        x_0:
+                            value: 0.0
+                        offset:
+                            value: 0.0
                     input_ports:
                         INPUT: {}
                     output_ports:
@@ -53,10 +60,14 @@ ABCD:
                         \ 'offset': '0.0'}\n   parent: None\n"
                 C_0:
                     parameters:
-                        rate: 1
-                        bias: 0
-                        scale: 1
-                        offset: 0
+                        rate:
+                            value: 1.0
+                        bias:
+                            value: 0.0
+                        scale:
+                            value: 1.0
+                        offset:
+                            value: 0.0
                     input_ports:
                         INPUT: {}
                     output_ports:
@@ -71,8 +82,12 @@ ABCD:
                         \ 'offset': '0.0'}\n   parent: None\n"
                 D_0:
                     parameters:
-                        rate: 0.05
-                        time_step_size: 0.1s
+                        rate:
+                            value: 0.05
+                        time_step_size:
+                            value: 0.1
+                        OUTPUT:
+                            time_derivative: (rate * INPUT) / time_step_size
                     input_ports:
                         INPUT: {}
                     output_ports:
@@ -83,9 +98,6 @@ ABCD:
                         \ Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n\
                         \   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n\
                         \   parent: None\n"
-                    states:
-                        OUTPUT:
-                            time_derivative: (rate * INPUT) / time_step_size
             edges:
                 Edge A_0 to B_0:
                     name: Edge A_0 to B_0
@@ -122,4 +134,3 @@ ABCD:
                     sender: C_0
                     receiver: D_0
                     weight: 1
-            parameters: {}
