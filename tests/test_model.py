@@ -1,11 +1,12 @@
-from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter
+from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter, Edge, State, Stateful_Parameter, InputPort
 
 from modeci_mdf.utils import load_mdf
 
 def test_model_init_kwargs():
     m = Model(
-        id="Test", format="test_format", generating_application="test_application",metadata={"info":'test_metadata'}
+        id="Test", format="test_format", generating_application="test_application"
     )
+    m.metadata={"info":'test_metadata'}
     print(m)
     assert m.format == "test_format"
     assert m.generating_application == "test_application"
