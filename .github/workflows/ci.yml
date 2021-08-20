@@ -61,6 +61,7 @@ jobs:
            python -m pytest -ra -v tests/interfaces/pytorch/*py
            python -m pytest -ra -v tests/*py
          fi
+      shell: bash
 
 
   dist:
