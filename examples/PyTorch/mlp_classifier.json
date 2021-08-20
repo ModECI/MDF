@@ -6,7 +6,9 @@
 
           "mlp_input_matmul": {
             "parameters": {
-              "weight": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_input_layer.parameters.weight"
+              "weight": {
+                  "value": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_input_layer.parameters.weight"
+                }
             },
             "functions":{
                 "Linear_1": {
@@ -31,7 +33,9 @@
           },
           "mlp_input_add": {
             "parameters": {
-              "bias": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_input_layer.parameters.bias"
+              "bias": {
+                  "value":  "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_input_layer.parameters.bias"
+                }
             },
             "functions":{
                 "Bias_Add_1": {
@@ -78,7 +82,9 @@
 
           "mlp_hidden_matmul": {
             "parameters": {
-              "weight": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_hidden_layer_with_relu.parameters.weight"
+              "weight": {
+                  "value": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_hidden_layer_with_relu.parameters.weight"
+                }
             },
             "functions":{
                 "Linear_2": {
@@ -103,7 +109,9 @@
           },
           "mlp_hidden_add": {
             "parameters": {
-              "bias": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_hidden_layer_with_relu.parameters.bias"
+              "bias":  {
+                  "value": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_hidden_layer_with_relu.parameters.bias"
+                }
             },
             "functions":{
                 "Bias_Add_2": {
@@ -150,7 +158,9 @@
 
           "mlp_output_matmul": {
             "parameters": {
-              "weight": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_output_layer.parameters.weight"
+              "weight":  {
+                  "value": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_output_layer.parameters.weight"
+                }
             },
             "functions":{
                 "Linear_3": {
@@ -175,7 +185,9 @@
           },
           "mlp_output_add": {
             "parameters": {
-              "bias": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_output_layer.parameters.bias"
+              "bias":  {
+                  "value": "weights.mlp_classifier.graphs.mlp_classifier.nodes.mlp_output_layer.parameters.bias"
+                }
             },
             "functions":{
                 "Bias_Add_3": {

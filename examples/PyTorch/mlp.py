@@ -33,4 +33,6 @@ for i in range(len(imgs)):
     if match: matches+=1
     print('Image %i: target: %s, prediction: %s, match: %s'%(i, target, prediction, match))
 
-print('Matches: %i/%i, accuracy: %s%%'%(matches,len(imgs), (100.*matches)/len(imgs)))
+accuracy = (100.*matches)/len(imgs)
+print('Matches: %i/%i, accuracy: %s%%'%(matches,len(imgs), accuracy))
+assert accuracy>97

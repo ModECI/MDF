@@ -4,6 +4,7 @@
 
 import collections
 import onnx.defs
+import sympy
 
 from typing import List, Tuple, Dict, Optional, Set
 
@@ -262,7 +263,7 @@ class Node(MdfBaseWithId):
                 ("input_ports", ("The _InputPort_s into the Node", InputPort)),
                 ("functions", ("The _Function_s for the Node", Function)),
                 ("states", ("The _State_s of the Node", State)),
-                ("stateful_parameters",("The Stateful Parameter s of the Node",Stateful_Parameter)),
+                ("parameters", ("The _Parameter_s of the Node", Parameter)),
                 (
                     "output_ports",
                     (
@@ -273,13 +274,13 @@ class Node(MdfBaseWithId):
             ]
         )
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                ("parameters", ("Dict of parameters for the Node", dict))
-            ]
-        )
 
         super().__init__(**kwargs)
+
+    def get_parameter(self, id):
+        for p in self.parameters:
+            if p.id==id: return p
+        return None
 
 
 class Function(MdfBaseWithId):
@@ -410,6 +411,68 @@ class State(MdfBaseWithId):
 
         super().__init__(**kwargs)
 
+class Parameter(BaseWithId):
+    _definition = "???"
+
+    def __init__(self, **kwargs):
+        """???
+
+        Args:
+            ???
+        """
+
+        self.allowed_fields = collections.OrderedDict(
+            [
+                (
+                    "default_initial_value",
+                    ("The initial value of the parameter", str),
+                ),
+                (
+                    "value",
+                    (
+                        "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values",
+                        EvaluableExpression,
+                    ),
+                ),
+                (
+                    "time_derivative",
+                    (
+                        "How the parameter with time, i.e. ds/dt. Units of time are seconds.",
+                        str,
+                    ),
+                ),
+                (
+                    "function",
+                    (
+                        "Which of the in-build MDF functions (linear etc.) this uses",
+                        str,
+                    ),
+                ),
+                (
+                    "args",
+                    (
+                        'Dictionary of values for each of the arguments for the function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
+                        dict,
+                    ),
+                ),
+            ]
+        )
+
+        super().__init__(**kwargs)
+
+    def is_stateful(self):
+
+        if self.time_derivative is not None:
+            return True
+        if self.default_initial_value is not None:
+            return True
+        if self.value is not None and type(self.value)==str:
+            param_expr = sympy.simplify(self.value)
+            sf = self.id in [str(s) for s in param_expr.free_symbols]
+            print('Checking whether %s is stateful, %s: %s'%(self,param_expr.free_symbols,sf))
+            return sf
+        return False
+
 
 class Stateful_Parameter(BaseWithId):
     _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
@@ -536,7 +599,8 @@ if __name__ == "__main__":
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
     model.graphs.append(mod_graph0)
 
-    node = Node(id="N0", parameters={"rate": 5})
+    node = Node(id="N0")
+    node.parameters.append(Parameter(id="rate", value=5))
 
     mod_graph0.nodes.append(node)
 

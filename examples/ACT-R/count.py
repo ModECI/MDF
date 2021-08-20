@@ -9,9 +9,9 @@ def main():
     """Takes count.lisp, converts to MDF, and runs using the scheduler."""
     file_name = os.path.dirname(os.path.realpath(__file__)) + "/count.lisp"
     print(file_name)
-    actr_to_mdf(file_name)
+    mod = actr_to_mdf(file_name)
     mdf_graph = load_mdf(file_name[:-5] + ".json").graphs[0]
-    eg = EvaluableGraph(graph=mdf_graph, verbose=True)
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
     term = False
     goal = {}
     retrieval = {}

@@ -1,6 +1,6 @@
 addition:
-    format: ModECI MDF v0.1
-    generating_application: Python modeci-mdf v0.1.3
+    format: ModECI MDF v0.2
+    generating_application: Python modeci-mdf v0.2.1
     graphs:
         addition_graph:
             conditions:
@@ -54,69 +54,70 @@ addition:
                             - check_termination
             nodes:
                 declarative_memory:
-                    parameters:
-                        chunks:
-                        -   name: zero
-                            isa: number
-                            number: zero
-                            next: one
-                        -   name: one
-                            isa: number
-                            number: one
-                            next: two
-                        -   name: two
-                            isa: number
-                            number: two
-                            next: three
-                        -   name: three
-                            isa: number
-                            number: three
-                            next: four
-                        -   name: four
-                            isa: number
-                            number: four
-                            next: five
-                        -   name: five
-                            isa: number
-                            number: five
-                            next: six
-                        -   name: six
-                            isa: number
-                            number: six
-                            next: seven
-                        -   name: seven
-                            isa: number
-                            number: seven
-                            next: eight
-                        -   name: eight
-                            isa: number
-                            number: eight
-                            next: nine
-                        -   name: nine
-                            isa: number
-                            number: nine
-                            next: ten
-                        -   name: ten
-                            isa: number
-                            number: ten
-                        -   name: second-goal
-                            ISA: add
-                            arg1: five
-                            arg2: two
-                            sum: nil
-                            count: nil
-                        chunk_types:
-                            number:
-                            - number
-                            - next
-                            add:
-                            - arg1
-                            - arg2
-                            - sum
-                            - count
                     input_ports:
                         dm_input: {}
-                    functions:
+                    parameters:
+                        chunks:
+                            value:
+                            -   name: zero
+                                isa: number
+                                number: zero
+                                next: one
+                            -   name: one
+                                isa: number
+                                number: one
+                                next: two
+                            -   name: two
+                                isa: number
+                                number: two
+                                next: three
+                            -   name: three
+                                isa: number
+                                number: three
+                                next: four
+                            -   name: four
+                                isa: number
+                                number: four
+                                next: five
+                            -   name: five
+                                isa: number
+                                number: five
+                                next: six
+                            -   name: six
+                                isa: number
+                                number: six
+                                next: seven
+                            -   name: seven
+                                isa: number
+                                number: seven
+                                next: eight
+                            -   name: eight
+                                isa: number
+                                number: eight
+                                next: nine
+                            -   name: nine
+                                isa: number
+                                number: nine
+                                next: ten
+                            -   name: ten
+                                isa: number
+                                number: ten
+                            -   name: second-goal
+                                ISA: add
+                                arg1: five
+                                arg2: two
+                                sum: nil
+                                count: nil
+                        chunk_types:
+                            value:
+                                number:
+                                - number
+                                - next
+                                add:
+                                - arg1
+                                - arg2
+                                - sum
+                                - count
                         retrieve_chunk:
                             function: retrieve_chunk
                             args:
@@ -133,102 +134,103 @@ addition:
                         retrieval_output:
                             value: retrieval_input
                 goal_buffer:
-                    parameters:
-                        first_goal:
-                            name: second-goal
-                            ISA: add
-                            arg1: five
-                            arg2: two
-                            sum: nil
-                            count: nil
                     input_ports:
                         goal_input: {}
-                    functions:
+                    states:
+                        goal_state:
+                            default_initial_value: first_goal
+                            value: first_goal if goal_input == {} else change_goal
+                    parameters:
+                        first_goal:
+                            value:
+                                name: second-goal
+                                ISA: add
+                                arg1: five
+                                arg2: two
+                                sum: nil
+                                count: nil
                         change_goal:
                             function: change_goal
                             args:
                                 pattern: goal_input
                                 curr_goal: goal_state
-                    states:
-                        goal_state:
-                            default_initial_value: first_goal
-                            value: first_goal if goal_input == {} else change_goal
                     output_ports:
                         goal_output:
                             value: goal_state
                 procedural_memory:
                     parameters:
                         productions:
-                        -   name: initialize-addition
-                            lhs:
-                            -   buffer: goal
-                                ISA: add
-                                arg1: =num1
-                                arg2: =num2
-                                sum: nil
-                                count: =count
-                            rhs:
-                            -   buffer: goal
-                                ISA: add
-                                sum: =num1
-                                count: zero
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =num1
-                        -   name: terminate-addition
-                            lhs:
-                            -   buffer: goal
-                                ISA: add
-                                arg1: =arg1
-                                arg2: =num
-                                sum: =answer
-                                count: =num
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =answer
-                                next: =next
-                            rhs:
-                            -   buffer: goal
-                                ISA: add
-                                count: nil
-                        -   name: increment-count
-                            lhs:
-                            -   buffer: goal
-                                ISA: add
-                                arg1: =arg1
-                                arg2: =arg2
-                                sum: =sum
-                                count: =count
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =count
-                                next: =newcount
-                            rhs:
-                            -   buffer: goal
-                                ISA: add
-                                count: =newcount
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =sum
-                        -   name: increment-sum
-                            lhs:
-                            -   buffer: goal
-                                ISA: add
-                                arg1: =arg1
-                                arg2: -=count
-                                sum: =sum
-                                count: =count
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =sum
-                                next: =newsum
-                            rhs:
-                            -   buffer: goal
-                                ISA: add
-                                sum: =newsum
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =count
+                            value:
+                            -   name: initialize-addition
+                                lhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    arg1: =num1
+                                    arg2: =num2
+                                    sum: nil
+                                    count: =count
+                                rhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    sum: =num1
+                                    count: zero
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num1
+                            -   name: terminate-addition
+                                lhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    arg1: =arg1
+                                    arg2: =num
+                                    sum: =answer
+                                    count: =num
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =answer
+                                    next: =next
+                                rhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    count: nil
+                            -   name: increment-count
+                                lhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    arg1: =arg1
+                                    arg2: =arg2
+                                    sum: =sum
+                                    count: =count
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =count
+                                    next: =newcount
+                                rhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    count: =newcount
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =sum
+                            -   name: increment-sum
+                                lhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    arg1: =arg1
+                                    arg2: -=count
+                                    sum: =sum
+                                    count: =count
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =sum
+                                    next: =newsum
+                                rhs:
+                                -   buffer: goal
+                                    ISA: add
+                                    sum: =newsum
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =count
                     output_ports:
                         pm_output:
                             value: productions
@@ -237,7 +239,7 @@ addition:
                         pattern_input_from_pm: {}
                         pattern_input_from_goal: {}
                         pattern_input_from_retrieval: {}
-                    functions:
+                    parameters:
                         pattern_matching_function:
                             function: pattern_matching_function
                             args:
@@ -250,7 +252,7 @@ addition:
                 conflict_resolution:
                     input_ports:
                         conflict_input: {}
-                    functions:
+                    parameters:
                         conflict_resolution_function:
                             function: conflict_resolution_function
                             args:
@@ -263,7 +265,7 @@ addition:
                 fire_production:
                     input_ports:
                         fire_prod_input: {}
-                    functions:
+                    parameters:
                         update_goal:
                             function: update_goal
                             args:
@@ -280,7 +282,7 @@ addition:
                 check_termination:
                     input_ports:
                         check_input: {}
-                    functions:
+                    parameters:
                         check_termination:
                             function: check_termination
                             args:
