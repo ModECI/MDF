@@ -9,6 +9,9 @@
                         "parameters": {
                             "input_level": 0.0
                         },
+                        "metadata": {
+                            "color": ".8 .8 .8"
+                        },
                         "output_ports": {
                             "out_port": {
                                 "value": "input_level"
@@ -19,6 +22,9 @@
                         "parameters": {
                             "slope": 1.1,
                             "intercept": 1.2
+                        },
+                        "metadata": {
+                            "color": ".8 0 0"
                         },
                         "input_ports": {
                             "input_port1": {
@@ -46,6 +52,9 @@
                             "gain": 2.1,
                             "bias": 2.2,
                             "offset": 2.3
+                        },
+                        "metadata": {
+                            "color": "0 .8 0"
                         },
                         "input_ports": {
                             "input_port1": {
@@ -76,6 +85,9 @@
                             "bias": 3.3,
                             "offset": 3.4
                         },
+                        "metadata": {
+                            "color": "0 0 .8"
+                        },
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
@@ -102,6 +114,9 @@
                     "D": {
                         "parameters": {
                             "scale": 4.0
+                        },
+                        "metadata": {
+                            "color": ".8 0 .8"
                         },
                         "input_ports": {
                             "input_port1": {
