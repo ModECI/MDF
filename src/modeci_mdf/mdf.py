@@ -37,20 +37,15 @@ class Model(MdfBaseWithId):
     """
     _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
 
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        format: Optional[str] = None,
-        generating_application: Optional[str] = None,
-        metadata: Optional[dict] = None
-    ):
+
+    def __init__(self, **kwargs):
         """The top level construct in MDF is Model which consists of Graph's and model attributed
         Args:
             id: A unique identifier for this Model.
             format: Information on the version of MDF used in this file
             generating_application: Information on what application generated/saved this file
         """
-
+        '''
         kwargs = {}
         if id is not None:
             kwargs["id"] = id
@@ -59,7 +54,7 @@ class Model(MdfBaseWithId):
         if generating_application is not None:
             kwargs["generating_application"] = generating_application
         if metadata is not None:
-            kwargs["metadata"] = metadata
+            kwargs["metadata"] = metadata'''
 
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
@@ -77,7 +72,7 @@ class Model(MdfBaseWithId):
                 ),
             ]
         )
-
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -87,7 +82,7 @@ class Model(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass
+                pass'''
 
         super().__init__(**kwargs)
 
@@ -196,12 +191,7 @@ class Graph(MdfBaseWithId):
     """
     _definition = "A directed graph consisting of _Node_s connected via _Edge_s."
 
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        parameters: Optional[Dict[str, Any]] = None,
-        conditions: Optional[Dict[str, "conditions"]] = None,
-    ):
+    def __init__(self, **kwargs):
 
         self.allowed_children = collections.OrderedDict(
             [
@@ -219,17 +209,17 @@ class Graph(MdfBaseWithId):
                 ),
             ]
         )
-
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
-        kwargs["id"] = id
+        #kwargs["id"] = id
         for f in self.allowed_fields:
             try:
                 val = locals()[f]
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass
+                pass'''
 
         super().__init__(**kwargs)
 
@@ -336,7 +326,7 @@ class Node(MdfBaseWithId):
             ]
         )
 
-
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -346,7 +336,7 @@ class Node(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass
+                pass'''
 
         super().__init__(**kwargs)
 
@@ -405,12 +395,8 @@ class Function(BaseWithId):
     """
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
 
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        function: Optional[str] = None,
-        args: Optional[Dict[str, Any]] = None,
-    ):
+
+    def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -437,7 +423,7 @@ class Function(BaseWithId):
                 ),
             ]
         )
-
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         for f in self.allowed_fields:
@@ -446,7 +432,7 @@ class Function(BaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass
+                pass'''
 
         super().__init__(**kwargs)
 
@@ -506,7 +492,7 @@ class OutputPort(MdfBaseWithId):
         value: The value of the OutputPort in terms of the InputPort and Function values
     """
 
-    def __init__(self, id: Optional[str] = None, value: Optional[str] = None):
+    def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -520,7 +506,7 @@ class OutputPort(MdfBaseWithId):
 
             ]
         )
-
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -530,7 +516,7 @@ class OutputPort(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass
+                pass'''
 
         super().__init__(**kwargs)
 
@@ -545,13 +531,8 @@ class State(MdfBaseWithId):
     """
     _definition = "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
 
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        default_initial_value: Optional[str] = None,
-        value: Optional[str] = None,
-        time_derivative: Optional[str] = None,
-    ):
+
+    def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -575,6 +556,7 @@ class State(MdfBaseWithId):
                 ),
             ]
         )
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         if id is not None:
@@ -584,7 +566,7 @@ class State(MdfBaseWithId):
         if value is not None:
             kwargs["value"] = value
         if time_derivative is not None:
-            kwargs["time_derivative"] = time_derivative
+            kwargs["time_derivative"] = time_derivative'''
 
         super().__init__(**kwargs)
 
@@ -663,12 +645,8 @@ class Stateful_Parameter(MdfBaseWithId):
 
     _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
 
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        default_initial_value: Optional[str] = None,
-        value: Optional[str] = None,
-    ):
+
+    def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -685,6 +663,7 @@ class Stateful_Parameter(MdfBaseWithId):
                 ),
             ]
         )
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         if id is not None:
@@ -692,7 +671,7 @@ class Stateful_Parameter(MdfBaseWithId):
         if default_initial_value is not None:
             kwargs["default_initial_value"] = default_initial_value
         if value is not None:
-            kwargs["value"] = value
+            kwargs["value"] = value'''
 
         super().__init__(**kwargs)
 
@@ -708,15 +687,8 @@ class Edge(MdfBaseWithId):
         receiver_port: The id of the InputPort on the receiver Node
     """
 
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        parameters: Optional[Dict[str, Any]] = None,
-        sender: Optional[str] = None,
-        receiver: Optional[str] = None,
-        sender_port: Optional[str] = None,
-        receiver_port: Optional[str] = None,
-    ):
+
+    def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -742,7 +714,7 @@ class Edge(MdfBaseWithId):
                 ),
             ]
         )
-
+        '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -752,10 +724,9 @@ class Edge(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass
+                pass'''
 
         super().__init__(**kwargs)
-        print(kwargs)
 
 
 class ConditionSet(MdfBase):
@@ -784,7 +755,7 @@ class ConditionSet(MdfBase):
                 ),
             ]
         )
-
+        
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         for f in self.allowed_fields:
