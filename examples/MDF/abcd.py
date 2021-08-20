@@ -14,7 +14,10 @@ def main():
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0", parameters={"input_level": 0.0})
+    input_node = Node(
+        id="input0", parameters={"input_level": 0.0}, metadata={"color": ".8 .8 .8"}
+    )
+
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
@@ -24,7 +27,7 @@ def main():
     print(input_node.output_ports)
 
     # a = create_example_node('A', mod_graph)
-    a = Node(id="A")
+    a = Node(id="A", metadata={"color": ".8 0 0"})
     mod_graph.nodes.append(a)
 
     a.parameters = {"slope": abcd.A_slope, "intercept": abcd.A_intercept}
@@ -41,7 +44,7 @@ def main():
 
     e1 = simple_connect(input_node, a, mod_graph)
 
-    b = Node(id="B")
+    b = Node(id="B", metadata={"color": "0 .8 0"})
     mod_graph.nodes.append(b)
 
     b.parameters = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
@@ -58,7 +61,7 @@ def main():
 
     simple_connect(a, b, mod_graph)
 
-    c = Node(id="C")
+    c = Node(id="C", metadata={"color": "0 0 .8"})
     mod_graph.nodes.append(c)
 
     c.parameters = {
@@ -86,7 +89,7 @@ def main():
 
     simple_connect(b, c, mod_graph)
 
-    d = Node(id="D")
+    d = Node(id="D", metadata={"color": ".8 0 .8"})
     mod_graph.nodes.append(d)
 
     d.parameters = {"scale": abcd.D_scale}
@@ -111,11 +114,13 @@ def main():
     print_summary(mod_graph)
 
     import sys
+
     if "-run" in sys.argv:
         verbose = True
         #verbose = False
         from modeci_mdf.execution_engine import EvaluableGraph
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
         eg.evaluate(array_format=format)
@@ -127,7 +132,7 @@ def main():
             view_on_render=False,
             level=1,
             filename_root="abcd",
-            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
         mod.to_graph_image(
             engine="dot",
@@ -137,8 +142,6 @@ def main():
             filename_root="abcd_3",
             only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
-
-
 
 
 if __name__ == "__main__":

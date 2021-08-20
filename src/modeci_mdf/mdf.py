@@ -13,8 +13,17 @@ from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
 
+class MdfBaseWithId(BaseWithId):
+    def __init__(self, **kwargs):
+        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        super().__init__(**kwargs)
 
-class Model(BaseWithId):
+class MdfBase(Base):
+    def __init__(self, **kwargs):
+        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        super().__init__(**kwargs)
+
+class Model(MdfBaseWithId):
     r"""The top level construct in MDF is Model which consists of Graph(s) and model attribute(s)
 
     .. warning::
@@ -32,7 +41,24 @@ class Model(BaseWithId):
         id: Optional[str] = None,
         format: Optional[str] = None,
         generating_application: Optional[str] = None,
+        metadata: Optional[dict] = None
     ):
+        """The top level construct in MDF is Model which consists of Graph's and model attributed
+        Args:
+            id: A unique identifier for this Model.
+            format: Information on the version of MDF used in this file
+            generating_application: Information on what application generated/saved this file
+        """
+
+        kwargs = {}
+        if id is not None:
+            kwargs["id"] = id
+        if format is not None:
+            kwargs["format"] = format
+        if generating_application is not None:
+            kwargs["generating_application"] = generating_application
+        if metadata is not None:
+            kwargs["metadata"] = metadata
 
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
@@ -89,7 +115,6 @@ class Model(BaseWithId):
             filename: file in MDF format (.mdf extension)
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
                               benchmark results, and environments in which the specified model was originally implemented
-
         Returns:
             The name of the generated JSON file
         """
@@ -109,7 +134,6 @@ class Model(BaseWithId):
             filename: File in MDF format (Filename extension: .mdf )
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
                               benchmark results, and environments in which the specified model was originally implemented
-
         Returns:
             The name of the generated yaml file
         """
@@ -131,7 +155,6 @@ class Model(BaseWithId):
         only_warn_on_fail=False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
-
         Args:
             engine: dot or other Graphviz formats
             output_format: e.g. png (default) or svg
@@ -139,7 +162,6 @@ class Model(BaseWithId):
             level: 1,2,3, depending on how much detail to include
             filename_root: will change name of file generated to filename_root.png, etc.
             only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing erros in automated tests
-
         """
         from modeci_mdf.interfaces.graphviz.importer import mdf_to_graphviz
 
@@ -163,7 +185,7 @@ class Model(BaseWithId):
                 raise (e)
 
 
-class Graph(BaseWithId):
+class Graph(MdfBaseWithId):
     r"""A directed graph consisting of Node(s) connected via Edge(s)
 
     Args:
@@ -222,10 +244,8 @@ class Graph(BaseWithId):
 
     def get_node(self, id):
         """Retrieve Node object corresponding to the given id
-
         Args:
             id: Unique identifier of Node object
-
         Returns:
             Node object if the entered id matches with the id of Node present in the Graph
         """
@@ -272,7 +292,7 @@ class Graph(BaseWithId):
         return list(filter(lambda x: x not in all_receiver_ports, all_ips))
 
 
-class Node(BaseWithId):
+class Node(MdfBaseWithId):
     r"""A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
     The values from these are processed via a number of Functions and one or more final values
     are calculated on the OutputPort
@@ -287,9 +307,17 @@ class Node(BaseWithId):
         "are calculated on the _OutputPort_s "
     )
 
-    def __init__(
-        self, id: Optional[str] = None, parameters: Optional[Dict[str, Any]] = None
-    ):
+    def __init__(self, **kwargs):
+        """A self contained unit of evaluation receiving input from other Nodes on _InputPort_s.
+        The values from these are processed via a number of _Function_s and one or more final values
+        are calculated on the _OutputPort_
+        Args:
+            input_ports (obj): Dictionary of the InputPort objects in the Node
+            functions (obj): The _Function_s for computation the Node
+            states (obj): The _State_s of the Node
+            output_ports (obj): The _OutputPort_s containing evaluated quantities from the Node
+            parameters : Dictionary of parameters for the Node
+        """
 
         self.allowed_children = collections.OrderedDict(
             [
@@ -311,7 +339,9 @@ class Node(BaseWithId):
         )
 
         self.allowed_fields = collections.OrderedDict(
-            [("parameters", ("Dict of parameters for the Node", dict))]
+            [
+                ("parameters", ("Dict of parameters for the Node", dict))
+            ]
         )
 
         # FIXME: Reconstruct kwargs as neuromlite expects them
@@ -422,7 +452,7 @@ class Function(BaseWithId):
         super().__init__(**kwargs)
 
 
-class InputPort(BaseWithId):
+class InputPort(MdfBaseWithId):
     r"""The InputPort is an attribute of a Node which imports information to the Node
 
     Args:
@@ -452,41 +482,6 @@ class InputPort(BaseWithId):
                         "The type of the variable (note: there is limited support for this so far ",
                         str,
                     ),
-                ),
-            ]
-        )
-
-        # FIXME: Reconstruct kwargs as neuromlite expects them
-        kwargs = {}
-        kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass
-
-        super().__init__(**kwargs)
-
-
-class OutputPort(BaseWithId):
-    r"""The OutputPort is an attribute of a Node which exports information to the dependent Node object
-    Args:
-        id: Unique Indenty of the element
-        value: The value of the OutputPort in terms of the InputPort and Function values
-    """
-
-    def __init__(self, id: Optional[str] = None, value: Optional[str] = None):
-
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "value",
-                    (
-                        "The value of the OutputPort in terms of the _InputPort_ and _Function_ values",
-                        str,
-                    ),
                 )
             ]
         )
@@ -505,7 +500,43 @@ class OutputPort(BaseWithId):
         super().__init__(**kwargs)
 
 
-class State(BaseWithId):
+class OutputPort(MdfBaseWithId):
+    r"""The OutputPort is an attribute of a Node which exports information to the dependent Node object
+    Args:
+        id: Unique Indenty of the element
+        value: The value of the OutputPort in terms of the InputPort and Function values
+    """
+
+    def __init__(self, id: Optional[str] = None, value: Optional[str] = None):
+
+        self.allowed_fields = collections.OrderedDict(
+            [
+                (
+                    "value",
+                    (
+                        "The value of the OutputPort in terms of the _InputPort_ and _Function_ values",
+                        str,
+                    ),
+                ),
+
+            ]
+        )
+
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass
+
+        super().__init__(**kwargs)
+
+
+class State(MdfBaseWithId):
     r"""A state variable of a Node, i.e. has a value that persists between evaluations of the Node
 
     Args:
@@ -605,7 +636,7 @@ class Stateful_Parameter(BaseWithId):
         super().__init__(**kwargs)
 
 
-class Edge(BaseWithId):
+class Edge(MdfBaseWithId):
     r"""Edge is an attribute of Graph that transmits computational results from sender port to receiver port
 
     Args:
@@ -666,7 +697,7 @@ class Edge(BaseWithId):
         print(kwargs)
 
 
-class ConditionSet(Base):
+class ConditionSet(MdfBase):
     r"""Specify the non-default pattern of execution
 
     Args:
@@ -706,7 +737,7 @@ class ConditionSet(Base):
         super().__init__(**kwargs)
 
 
-class Condition(Base):
+class Condition(MdfBase):
     r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements
     Args:
         type: The type of Condition from the library
