@@ -7,14 +7,14 @@ from modeci_mdf.mdf import *
 from modeci_mdf.utils import simple_connect, print_summary
 
 import abcd_python as abcd
-
+ 
 
 def main():
     mod = Model(id="ABCD")
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0")
+    input_node = Node(id="input0", metadata={"color": ".8 .8 .8"})
     input_node.parameters.append(Parameter(id="input_level", value=0.0))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
@@ -25,7 +25,7 @@ def main():
     print(input_node.output_ports)
 
     # a = create_example_node('A', mod_graph)
-    a = Node(id="A")
+    a = Node(id="A", metadata={"color": ".8 0 0"})
     mod_graph.nodes.append(a)
     ip1 = InputPort(id="input_port1")
     a.input_ports.append(ip1)
@@ -43,7 +43,7 @@ def main():
 
     e1 = simple_connect(input_node, a, mod_graph)
 
-    b = Node(id="B")
+    b = Node(id="B", metadata={"color": "0 .8 0"})
     mod_graph.nodes.append(b)
     ip1 = InputPort(id="input_port1")
     b.input_ports.append(ip1)
@@ -62,7 +62,7 @@ def main():
 
     simple_connect(a, b, mod_graph)
 
-    c = Node(id="C")
+    c = Node(id="C", metadata={"color": "0 0 .8"})
     mod_graph.nodes.append(c)
     ip1 = InputPort(id="input_port1", shape="(1,)")
     c.input_ports.append(ip1)
@@ -88,7 +88,7 @@ def main():
 
     simple_connect(b, c, mod_graph)
 
-    d = Node(id="D")
+    d = Node(id="D", metadata={"color": ".8 0 .8"})
     mod_graph.nodes.append(d)
 
     ip1 = InputPort(id="input_port1", shape="(1,)")
@@ -113,11 +113,13 @@ def main():
     print_summary(mod_graph)
 
     import sys
+
     if "-run" in sys.argv:
         verbose = True
         #verbose = False
         from modeci_mdf.execution_engine import EvaluableGraph
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
         eg.evaluate(array_format=format)
@@ -129,7 +131,7 @@ def main():
             view_on_render=False,
             level=1,
             filename_root="abcd",
-            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
         mod.to_graph_image(
             engine="dot",
@@ -139,8 +141,6 @@ def main():
             filename_root="abcd_3",
             only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
-
-
 
 
 if __name__ == "__main__":

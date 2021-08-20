@@ -12,6 +12,8 @@ import numpy as np
 
 from modeci_mdf.standard_functions import mdf_functions
 
+from modeci_mdf.utils import color_rgb_to_hex
+
 engines = {
     "d": "dot",
     "c": "circo",
@@ -29,6 +31,7 @@ LEVEL_2 = 2
 LEVEL_3 = 3
 
 COLOR_MAIN = "#444444"
+#COLOR_BG_MAIN = "#999911"
 COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
 COLOR_PARAM = "#1666ff"
@@ -122,11 +125,34 @@ def mdf_to_graphviz(
 
     for node in mdf_graph.nodes:
         print("    Node: %s" % node.id)
+        color = COLOR_MAIN
+        penwidth = '1'
+        #bg_color = COLOR_BG_MAIN
+
+        if node.metadata is not None:
+            if 'color' in node.metadata:
+                color = color_rgb_to_hex(node.metadata['color'])
+                penwidth = '2'
+
         graph.attr(
-            "node", color=COLOR_MAIN, style="rounded", shape="box", fontcolor=COLOR_MAIN
+            "node",
+            color=color,
+            style="rounded",
+            shape="box",
+            fontcolor=COLOR_MAIN,
+            penwidth=penwidth
         )
         info = '<table border="0" cellborder="0">'
         info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
+
+        if node.metadata is not None and level >= LEVEL_3:
+
+            info += "<tr><td>%s" % format_label("METADATA")
+
+            for m in node.metadata:
+                info += format_standard_func_long('%s = %s'%(m,node.metadata[m]))
+
+            info += '</td></tr>'
 
         if level >= LEVEL_2:
             if node.parameters and len(node.parameters) > 0:

@@ -1,13 +1,15 @@
-from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Parameter
+from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter
 
 from modeci_mdf.utils import load_mdf
 
 def test_model_init_kwargs():
     m = Model(
-        id="Test", format="test_format", generating_application="test_application"
+        id="Test", format="test_format", generating_application="test_application",metadata={"info":'test_metadata'}
     )
     assert m.format == "test_format"
     assert m.generating_application == "test_application"
+    assert m.metadata== {"info":'test_metadata'}
+    assert m.id == 'Test'
 
 
 def test_model_graph_to_json():
@@ -15,12 +17,22 @@ def test_model_graph_to_json():
     Check if dumping a model to a simple JSON string works.
     """
 
-    mod_graph0 = Graph(id="Test", parameters={"speed": 4})
 
-    node = Node(id="N0")
+    mod_graph0 = Graph(id="Test", parameters={"speed": 4},metadata={'info':"mdf_model"})
+
+    node = Node(id="N0",metadata={'info':"mdf_Node"})
     node.parameters.append(Parameter(id="rate", value=5))
 
+    node1=Node(id='test_node', metadata={'info':"mdf_Node2"})
+    node1.parameters.append(Parameter(id="level", value=3))
+
+    condition=Condition(type='Always',metadata={'info':"mdf_condition"})
+
+    mod_graph0.conditions = ConditionSet(node_specific={node1.id: condition})
+
+
     mod_graph0.nodes.append(node)
+    mod_graph0.nodes.append(node1)
 
     # Export to JSON and see if we can load back in
     import json
@@ -63,12 +75,55 @@ def test_no_input_ports_to_json(tmpdir):
     assert mod_graph2.graphs[0].nodes[0].parameters[0].value == 10.0
 
 
+def test_include_metadata_to_json(tmpdir):
+    """
+    Test for serialization
+    """
+
+    mod = Model(id="ABCD",metadata={"info":"model_test"})
+    mod_graph = Graph(id="abcd_example",metadata={"info":{"graph_test":{"environment_x":"xyz"}}})
+    mod.graphs.append(mod_graph)
+
+    input_node = Node(id="input0", metadata={"color":".8 0 .8"})
+    input_node.parameters.append(Parameter(id="input_level", value=10.0))
+    op1 = OutputPort(id="out_port",metadata={"info":"value at OutputPort"})
+    op1.value = "input_level"
+    input_node.output_ports.append(op1)
+    mod_graph.nodes.append(input_node)
+
+    tmpfile = f"{tmpdir}/test.json"
+    mod_graph.to_json_file(tmpfile)
+
+    # FIXME: Doesn't seem like we have any methods for deserialization. Just do some quick and dirty checks
+    # This should really be something like assert mod_graph == deserialized_mod_graph
+    import json
+
+    with open(tmpfile) as f:
+        data = json.load(f)
+
+    assert data["abcd_example"]["metadata"] == {"info":{"graph_test":{"environment_x":"xyz"}}}
+    assert data["abcd_example"]["nodes"]["input0"]["metadata"] == {"color":".8 0 .8"}
+    assert data["abcd_example"]["nodes"]["input0"]["output_ports"]["out_port"]["metadata"]=={"info":"value at OutputPort"}
+
+
 
 def test_node_params_empty_dict():
     """
-    Test whether we don't a serialization error with an empty Node parameters
+    Test whether we get a serialization error when passing empty dicts to Node parameters
     """
     Node().to_json()
+
+def test_node_metadata_empty_dict():
+    """
+    Check for serialization error when passing empty dicts to Node metadata
+    """
+    Node(metadata={}).to_json()
+
+def test_metadata_dict():
+    """
+    Test whether we get a serialization error when passing anything else from a dictionary
+    """
+    Graph(metadata='info').to_json()
 
 
 def test_param_args_empty_dict():
@@ -92,6 +147,8 @@ def test_graph_inputs():
     op1.value = "input_level"
     input_node.output_ports.append(op1)
     mod_graph.nodes.append(input_node)
+
+
 
 
 def test_graph_inputs_none(simple_model_mdf):

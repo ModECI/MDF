@@ -5,6 +5,8 @@ ABCD:
         abcd_example:
             nodes:
                 input0:
+                    metadata:
+                        color: .8 .8 .8
                     parameters:
                         input_level:
                             value: 0.0
@@ -12,6 +14,8 @@ ABCD:
                         out_port:
                             value: input_level
                 A:
+                    metadata:
+                        color: .8 0 0
                     input_ports:
                         input_port1: {}
                     parameters:
@@ -29,6 +33,8 @@ ABCD:
                         output_1:
                             value: linear_func
                 B:
+                    metadata:
+                        color: 0 .8 0
                     input_ports:
                         input_port1: {}
                     parameters:
@@ -49,6 +55,8 @@ ABCD:
                         output_1:
                             value: logistic_func
                 C:
+                    metadata:
+                        color: 0 0 .8
                     input_ports:
                         input_port1:
                             shape: (1,)
@@ -73,6 +81,8 @@ ABCD:
                         output_1:
                             value: exponential_func
                 D:
+                    metadata:
+                        color: .8 0 .8
                     input_ports:
                         input_port1:
                             shape: (1,)

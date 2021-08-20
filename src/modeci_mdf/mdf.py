@@ -14,8 +14,18 @@ from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
 
+class MdfBaseWithId(BaseWithId):
+    def __init__(self, **kwargs):
+        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        super().__init__(**kwargs)
 
-class Model(BaseWithId):
+class MdfBase(Base):
+    def __init__(self, **kwargs):
+        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        super().__init__(**kwargs)
+
+
+class Model(MdfBaseWithId):
     _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
 
     def __init__(
@@ -23,9 +33,9 @@ class Model(BaseWithId):
         id: Optional[str] = None,
         format: Optional[str] = None,
         generating_application: Optional[str] = None,
+        metadata: Optional[dict] = None
     ):
         """The top level construct in MDF is Model which consists of Graph's and model attributed
-
         Args:
             id: A unique identifier for this Model.
             format: Information on the version of MDF used in this file
@@ -39,6 +49,8 @@ class Model(BaseWithId):
             kwargs["format"] = format
         if generating_application is not None:
             kwargs["generating_application"] = generating_application
+        if metadata is not None:
+            kwargs["metadata"] = metadata
 
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
@@ -68,7 +80,7 @@ class Model(BaseWithId):
         return self.__getattr__("graphs")
 
     def _include_metadata(self):
-        """ Information on the version of ModECI_MDF """
+        """Information on the version of ModECI_MDF"""
 
         from modeci_mdf import MODECI_MDF_VERSION
         from modeci_mdf import __version__
@@ -79,12 +91,10 @@ class Model(BaseWithId):
     # Overrides BaseWithId.to_json_file
     def to_json_file(self, filename, include_metadata=True) -> str:
         """Convert MDF object to json file
-
         Args:
             filename: file in MDF format (.mdf extension)
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
                               benchmark results, and environments in which the specified model was originally implemented
-
         Returns:
             The name of the JSON file generated.
         """
@@ -99,12 +109,10 @@ class Model(BaseWithId):
     # Overrides BaseWithId.to_yaml_file
     def to_yaml_file(self, filename, include_metadata=True):
         """Convert MDF object to yaml format
-
         Args:
             filename: file in MDF format (Filename extension: .mdf )
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
                               benchmark results, and environments in which the specified model was originally implemented
-
         Returns:
             file in yaml format
         """
@@ -114,7 +122,6 @@ class Model(BaseWithId):
 
         new_file = super().to_yaml_file(filename)
 
-
     def to_graph_image(
         self,
         engine="dot",
@@ -122,10 +129,9 @@ class Model(BaseWithId):
         view_on_render=False,
         level=2,
         filename_root=None,
-        only_warn_on_fail=False
+        only_warn_on_fail=False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
-
         Args:
             engine: dot or other Graphviz formats
             output_format: e.g. png (default) or svg
@@ -133,7 +139,6 @@ class Model(BaseWithId):
             level: 1,2,3, depending on how much detail to include
             filename_root: will change name of file generated to filename_root.png, etc.
             only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing erros in automated tests
-
         """
         from modeci_mdf.interfaces.graphviz.importer import mdf_to_graphviz
 
@@ -149,17 +154,19 @@ class Model(BaseWithId):
 
         except Exception as e:
             if only_warn_on_fail:
-                print("Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"%e)
+                print(
+                    "Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"
+                    % e
+                )
             else:
-                raise(e)
+                raise (e)
 
 
-class Graph(BaseWithId):
+class Graph(MdfBaseWithId):
     _definition = "A directed graph consisting of _Node_s connected via _Edge_s."
 
     def __init__(self, **kwargs):
         """A directed graph consisting of _Node_s connected via _Edge_s
-
         Args:
             nodes: Dictionary of Node objects in the Graph
             edges: Dictionary of Edge objects in the Graph
@@ -188,10 +195,8 @@ class Graph(BaseWithId):
 
     def get_node(self, id):
         """Retrieve Node object corresponding to the given id
-
         Args:
             id: Unique identifier of Node object
-
         Returns:
             Node object if the entered id matches with the id of node present in the graph
         """
@@ -203,9 +208,7 @@ class Graph(BaseWithId):
     def dependency_dict(self) -> Dict["Node", Set["Node"]]:
         """Returns the dependency among nodes as dictionary
         Key: receiver, Value: set of senders imparting information to the receiver
-
         Returns:
-
         """
         # assumes no cycles, need to develop a way to prune if cyclic
         # graphs are to be supported
@@ -222,7 +225,6 @@ class Graph(BaseWithId):
     @property
     def inputs(self: "Graph") -> List[Tuple["Node", "InputPort"]]:
         """Enumerate all Node, InputPort pairs that specify no incoming edge. These are input ports for the graph itself and must be provided values to evaluate
-
         Returns:
             A list of Node, InputPort tuples
         """
@@ -237,7 +239,7 @@ class Graph(BaseWithId):
         return list(filter(lambda x: x not in all_receiver_ports, all_ips))
 
 
-class Node(BaseWithId):
+class Node(MdfBaseWithId):
     _definition = (
         "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. "
         + "The values from these are processed via a number of _Function_s and one or more final values "
@@ -248,7 +250,6 @@ class Node(BaseWithId):
         """A self contained unit of evaluation receiving input from other Nodes on _InputPort_s.
         The values from these are processed via a number of _Function_s and one or more final values
         are calculated on the _OutputPort_
-
         Args:
             input_ports (obj): Dictionary of the InputPort objects in the Node
             functions (obj): The _Function_s for computation the Node
@@ -282,12 +283,11 @@ class Node(BaseWithId):
         return None
 
 
-class Function(BaseWithId):
+class Function(MdfBaseWithId):
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
 
     def __init__(self, **kwargs):
         """A single value which is evaluated as a function of values on _InputPort_s and other Functions
-
         Args:
             function (str): Which of the in-build MDF functions (linear etc.) this uses
             args : Dictionary of values for each of the arguments for the Function, e.g. if the in-build function
@@ -323,10 +323,9 @@ class Function(BaseWithId):
         )
 
 
-class InputPort(BaseWithId):
+class InputPort(MdfBaseWithId):
     def __init__(self, **kwargs):
         """The InputPort is an attribute of a Node which imports information to the Node object
-
         Args:
             shape (str): The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
             type (str): The data type of the input received at a port or the output sent by a port
@@ -346,17 +345,16 @@ class InputPort(BaseWithId):
                         "The type of the variable (note: there is limited support for this so far ",
                         str,
                     ),
-                ),
+                )
             ]
         )
 
         super().__init__(**kwargs)
 
 
-class OutputPort(BaseWithId):
+class OutputPort(MdfBaseWithId):
     def __init__(self, **kwargs):
         """The OutputPort is an attribute of a Node which exports information to the dependent Node object
-
         Args:
             value (str): The value of the OutputPort in terms of the _InputPort_ and _Function_ values
         """
@@ -369,19 +367,19 @@ class OutputPort(BaseWithId):
                         "The value of the OutputPort in terms of the _InputPort_ and _Function_ values",
                         str,
                     ),
-                )
+                ),
+
             ]
         )
 
         super().__init__(**kwargs)
 
 
-class State(BaseWithId):
+class State(MdfBaseWithId):
     _definition = "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
 
     def __init__(self, **kwargs):
         """A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_
-
         Args:
             default_initial_value (str): The initial value of the state variable
             value (str): The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values
@@ -509,10 +507,9 @@ class Stateful_Parameter(BaseWithId):
 
 
 
-class Edge(BaseWithId):
+class Edge(MdfBaseWithId):
     def __init__(self, **kwargs):
         """Edge is an attribute of Graph object that transmits computational results from sender_port to receiver port
-
         Args:
             parameters: Dictionary of parameters for the Edge
             sender (str): The id of the _Node_ which is the source of the Edge
@@ -549,10 +546,9 @@ class Edge(BaseWithId):
         super().__init__(**kwargs)
 
 
-class ConditionSet(Base):
+class ConditionSet(MdfBase):
     def __init__(self, **kwargs):
         """Specify the non-default pattern of execution
-
         Args:
             node_specific: A dictionary mapping nodes to any non-default run conditions
             termination: A dictionary mapping time scales of model execution to conditions indicating when they end
@@ -574,10 +570,9 @@ class ConditionSet(Base):
         super().__init__(**kwargs)
 
 
-class Condition(Base):
+class Condition(MdfBase):
     def __init__(self, type=None, **kwargs):
         """A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements
-
         Args:
             type (str): The type of _Condition_ from the library
             args: The dictionary of arguments needed to evaluate the _Condition_
@@ -600,7 +595,7 @@ class Condition(Base):
 
 
 if __name__ == "__main__":
-    model = Model(id='MyModel')
+    model = Model(id="MyModel")
     mod_graph0 = Graph(id="Test", parameters={"speed": 4})
     model.graphs.append(mod_graph0)
 
@@ -619,5 +614,5 @@ if __name__ == "__main__":
         view_on_render=False,
         level=3,
         filename_root="test",
-        only_warn_on_fail=True
+        only_warn_on_fail=True,
     )

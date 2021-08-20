@@ -224,3 +224,5 @@ Thumbs.db #thumbnail cache on Windows
 /src/modeci_mdf/*.png
 /examples/PyTorch/inception
 /examples/PyTorch/ddm
+/examples/MDF/abcd.png
+/examples/MDF/abcd_3.png

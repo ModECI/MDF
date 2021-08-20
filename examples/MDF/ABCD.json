@@ -6,6 +6,9 @@
             "abcd_example": {
                 "nodes": {
                     "input0": {
+                        "metadata": {
+                            "color": ".8 .8 .8"
+                        },
                         "parameters": {
                             "input_level": {
                                 "value": 0.0
@@ -18,6 +21,9 @@
                         }
                     },
                     "A": {
+                        "metadata": {
+                            "color": ".8 0 0"
+                        },
                         "input_ports": {
                             "input_port1": {}
                         },
@@ -44,6 +50,9 @@
                         }
                     },
                     "B": {
+                        "metadata": {
+                            "color": "0 .8 0"
+                        },
                         "input_ports": {
                             "input_port1": {}
                         },
@@ -74,6 +83,9 @@
                         }
                     },
                     "C": {
+                        "metadata": {
+                            "color": "0 0 .8"
+                        },
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
@@ -110,6 +122,9 @@
                         }
                     },
                     "D": {
+                        "metadata": {
+                            "color": ".8 0 .8"
+                        },
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
