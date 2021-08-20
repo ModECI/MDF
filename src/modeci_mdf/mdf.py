@@ -278,6 +278,7 @@ class Node(BaseWithId):
     are calculated on the OutputPort
 
     Args:
+        id: Unique Identity of the element
         parameters: Dictionary of parameters required at the Node for computation
     """
     _definition = (
@@ -472,6 +473,7 @@ class InputPort(BaseWithId):
 class OutputPort(BaseWithId):
     r"""The OutputPort is an attribute of a Node which exports information to the dependent Node object
     Args:
+        id: Unique Indenty of the element
         value: The value of the OutputPort in terms of the InputPort and Function values
     """
 
@@ -558,16 +560,23 @@ class State(BaseWithId):
 
 
 class Stateful_Parameter(BaseWithId):
+    """A stateful parameter of a Node, stores value updated by functions between evaluations of the Node
+
+    Args:
+        id: Unique indentity of the element
+        default_initial_value:"The initial value of the stateful parameter
+        value: The next value of the stateful parameter, in terms of the inputs
+
+    """
+
     _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
 
-    def __init__(self, **kwargs):
-        """A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_
-
-        Args:
-            default_initial_value (str): The initial value of the stateful parameter
-            value (str): The next value of the stateful parameter, in terms of the inputs, functions
-
-        """
+    def __init__(
+        self,
+        id: Optional[str] = None,
+        default_initial_value: Optional[str] = None,
+        value: Optional[str] = None,
+    ):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -584,12 +593,20 @@ class Stateful_Parameter(BaseWithId):
                 ),
             ]
         )
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        if id is not None:
+            kwargs["id"] = id
+        if default_initial_value is not None:
+            kwargs["default_initial_value"] = default_initial_value
+        if value is not None:
+            kwargs["value"] = value
 
         super().__init__(**kwargs)
 
 
 class Edge(BaseWithId):
-    r"""Edge is an attribute of Graph that transmits computational results from sender_port to receiver_port
+    r"""Edge is an attribute of Graph that transmits computational results from sender port to receiver port
 
     Args:
         parameters: Dictionary of parameters for the Edge
@@ -646,6 +663,7 @@ class Edge(BaseWithId):
                 pass
 
         super().__init__(**kwargs)
+        print(kwargs)
 
 
 class ConditionSet(Base):
@@ -690,17 +708,17 @@ class ConditionSet(Base):
 
 class Condition(Base):
     r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements
-
     Args:
         type: The type of Condition from the library
         args: The dictionary of arguments needed to evaluate the Condition
         n: The number of executions of component after which the Condition is satisfied
+        dependency: Node id on which
     """
 
     def __init__(
         self,
         type: Optional[str] = None,
-        args: Optional[Dict["Condition", "arguments"]] = None,
+        args: Optional[Dict[str, Any]] = None,
         dependency: Optional[str] = None,
         n: Optional[int] = None,
         dependencies: Optional[List["Condition"]] = None,
@@ -718,18 +736,14 @@ class Condition(Base):
                 ),
             ]
         )
-
         kwargs = {}
-        kwargs["dependency"] = dependency
-        kwargs["n"] = n
-        kwargs["dependencies"] = dependencies
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass
+
+        if n is not None:
+            kwargs["n"] = n
+        if dependency is not None:
+            kwargs["dependency"] = dependency
+        if dependencies is not None:
+            kwargs["dependencies"] = dependencies
 
         super().__init__(type=type, args=kwargs)
 

@@ -9,6 +9,7 @@ from modeci_mdf.mdf import (
     State,
     ConditionSet,
     Condition,
+    Stateful_Parameter,
 )
 
 
@@ -25,11 +26,13 @@ def test_graph_init_kwargs():
         id="Test_Graph", parameters="test_parameters", conditions="test_Condition"
     )
     assert g.parameters == "test_parameters"
-    # assert g.condition == "test_Condition"
+    assert g.conditions == "test_Condition"
 
 
 def test_Node_init_kwargs():
-    n = Node(id="Test_Node", parameters="test_parameters")
+    n = Node(id="test_node", parameters="test_parameters")
+
+    assert n.id == "test_node"
     assert n.parameters == "test_parameters"
 
 
@@ -62,6 +65,12 @@ def test_State_init_kwargs():
     assert st.time_derivative == "test_time_derivative"
 
 
+def test_Stateful_Parameter_init_kwargs():
+    sp = Stateful_Parameter(id="test_stateful", default_initial_value="0", value="6")
+    assert sp.id == "test_stateful"
+    assert sp.default_initial_value == "0"
+
+
 def test_Edge_init_kwargs():
     e = Edge(
         id="test_Edge",
@@ -76,6 +85,7 @@ def test_Edge_init_kwargs():
     assert e.receiver == "test_receiver"
     assert e.sender_port == "test_sender_port"
     assert e.receiver_port == "test_receiver_port"
+    assert e.id == "test_Edge"
 
 
 def test_ConditionSet_init_kwargs():
@@ -87,14 +97,16 @@ def test_ConditionSet_init_kwargs():
 
 
 def test_Condition_init_kwargs():
-    C = Condition(
-        type="test_type",
-        args="test_args",
-        dependency="test_dependency",
-        n="test_n",
-        dependencies="test_dependencies",
-    )
+    """ Check the working of Condition"""
+    C = Condition(type="test_type", n="test_n", dependency="test_dependency")
     assert C.type == "test_type"
+    assert C.args == {"n": "test_n", "dependency": "test_dependency"}
+
+
+def test_Condition_init_kwargs():
+    C = Condition(type="test_type", n="test_n", dependencies="test_dependencies")
+    assert C.type == "test_type"
+    assert C.args == {"n": "test_n", "dependencies": "test_dependencies"}
 
 
 def test_model_graph_to_json():
