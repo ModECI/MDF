@@ -24,16 +24,16 @@ count:
                             dependencies:
                             -   type: EveryNCalls
                                 args:
+                                    n: 1
                                     dependency: retrieval_buffer
-                                    n: 1
                             -   type: EveryNCalls
                                 args:
+                                    n: 1
                                     dependency: goal_buffer
-                                    n: 1
                             -   type: EveryNCalls
                                 args:
-                                    dependency: declarative_memory
                                     n: 1
+                                    dependency: declarative_memory
                     conflict_resolution:
                         type: JustRan
                         args:

@@ -23,10 +23,10 @@ def test_graph_init_kwargs():
 
 
 def test_Node_init_kwargs():
-    n = Node(id="test_node", parameters="test_parameters")
-
+    n = Node(id="test_node")
+    print(n)
+    print(n.id)
     assert n.id == "test_node"
-    assert n.parameters == "test_parameters"
 
 
 def test_Function_init_kwargs():
@@ -114,7 +114,8 @@ def test_model_graph_to_json():
     node1=Node(id='test_node', metadata={'info':"mdf_Node2"})
     node1.parameters.append(Parameter(id="level", value=3))
 
-    condition=Condition(type='Always',metadata={'info':"mdf_condition"})
+    condition=Condition(type='Always')
+    condition.metadata={'info':"mdf_condition"}
 
     mod_graph0.conditions = ConditionSet(node_specific={node1.id: condition})
 

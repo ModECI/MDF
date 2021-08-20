@@ -31,22 +31,22 @@
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "dependency": "retrieval_buffer",
-                                            "n": 1
+                                            "n": 1,
+                                            "dependency": "retrieval_buffer"
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "dependency": "goal_buffer",
-                                            "n": 1
+                                            "n": 1,
+                                            "dependency": "goal_buffer"
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "dependency": "declarative_memory",
-                                            "n": 1
+                                            "n": 1,
+                                            "dependency": "declarative_memory"
                                         }
                                     }
                                 ]

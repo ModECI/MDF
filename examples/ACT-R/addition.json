@@ -8,113 +8,66 @@
                     "node_specific": {
                         "declarative_memory": {
                             "type": "Always",
-                            "args": {
-                                "dependency": null,
-                                "n": null,
-                                "dependencies": null,
-                                "type": "Always",
-                                "args": null
-                            }
+                            "args": {}
                         },
                         "retrieval_buffer": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "declarative_memory",
-                                "n": null,
-                                "dependencies": null,
-                                "type": "JustRan",
-                                "args": null
+                                "dependency": "declarative_memory"
                             }
                         },
                         "goal_buffer": {
                             "type": "Always",
-                            "args": {
-                                "dependency": null,
-                                "n": null,
-                                "dependencies": null,
-                                "type": "Always",
-                                "args": null
-                            }
+                            "args": {}
                         },
                         "procedural_memory": {
                             "type": "Always",
-                            "args": {
-                                "dependency": null,
-                                "n": null,
-                                "dependencies": null,
-                                "type": "Always",
-                                "args": null
-                            }
+                            "args": {}
                         },
                         "pattern_matching": {
                             "type": "And",
                             "args": {
-                                "dependency": null,
-                                "n": null,
                                 "dependencies": [
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "dependency": "retrieval_buffer",
                                             "n": 1,
-                                            "dependencies": null,
-                                            "type": "EveryNCalls",
-                                            "args": null
+                                            "dependency": "retrieval_buffer"
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "dependency": "goal_buffer",
                                             "n": 1,
-                                            "dependencies": null,
-                                            "type": "EveryNCalls",
-                                            "args": null
+                                            "dependency": "goal_buffer"
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "dependency": "declarative_memory",
                                             "n": 1,
-                                            "dependencies": null,
-                                            "type": "EveryNCalls",
-                                            "args": null
+                                            "dependency": "declarative_memory"
                                         }
                                     }
-                                ],
-                                "type": "And",
-                                "args": null
+                                ]
                             }
                         },
                         "conflict_resolution": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "pattern_matching",
-                                "n": null,
-                                "dependencies": null,
-                                "type": "JustRan",
-                                "args": null
+                                "dependency": "pattern_matching"
                             }
                         },
                         "fire_production": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "conflict_resolution",
-                                "n": null,
-                                "dependencies": null,
-                                "type": "JustRan",
-                                "args": null
+                                "dependency": "conflict_resolution"
                             }
                         },
                         "check_termination": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "conflict_resolution",
-                                "n": null,
-                                "dependencies": null,
-                                "type": "JustRan",
-                                "args": null
+                                "dependency": "conflict_resolution"
                             }
                         }
                     },
@@ -122,13 +75,9 @@
                         "check_term_true": {
                             "type": "While",
                             "args": {
-                                "dependency": null,
-                                "n": null,
                                 "dependencies": [
                                     "check_termination"
-                                ],
-                                "type": "While",
-                                "args": null
+                                ]
                             }
                         }
                     }
@@ -136,10 +85,7 @@
                 "nodes": {
                     "declarative_memory": {
                         "input_ports": {
-                            "dm_input": {
-                                "shape": "None",
-                                "type": "None"
-                            }
+                            "dm_input": {}
                         },
                         "parameters": {
                             "chunks": {
@@ -250,10 +196,7 @@
                     },
                     "retrieval_buffer": {
                         "input_ports": {
-                            "retrieval_input": {
-                                "shape": "None",
-                                "type": "None"
-                            }
+                            "retrieval_input": {}
                         },
                         "output_ports": {
                             "retrieval_output": {
@@ -263,10 +206,7 @@
                     },
                     "goal_buffer": {
                         "input_ports": {
-                            "goal_input": {
-                                "shape": "None",
-                                "type": "None"
-                            }
+                            "goal_input": {}
                         },
                         "states": {
                             "goal_state": {
@@ -428,18 +368,9 @@
                     },
                     "pattern_matching": {
                         "input_ports": {
-                            "pattern_input_from_pm": {
-                                "shape": "None",
-                                "type": "None"
-                            },
-                            "pattern_input_from_goal": {
-                                "shape": "None",
-                                "type": "None"
-                            },
-                            "pattern_input_from_retrieval": {
-                                "shape": "None",
-                                "type": "None"
-                            }
+                            "pattern_input_from_pm": {},
+                            "pattern_input_from_goal": {},
+                            "pattern_input_from_retrieval": {}
                         },
                         "parameters": {
                             "pattern_matching_function": {
@@ -459,10 +390,7 @@
                     },
                     "conflict_resolution": {
                         "input_ports": {
-                            "conflict_input": {
-                                "shape": "None",
-                                "type": "None"
-                            }
+                            "conflict_input": {}
                         },
                         "parameters": {
                             "conflict_resolution_function": {
@@ -483,10 +411,7 @@
                     },
                     "fire_production": {
                         "input_ports": {
-                            "fire_prod_input": {
-                                "shape": "None",
-                                "type": "None"
-                            }
+                            "fire_prod_input": {}
                         },
                         "parameters": {
                             "update_goal": {
@@ -513,10 +438,7 @@
                     },
                     "check_termination": {
                         "input_ports": {
-                            "check_input": {
-                                "shape": "None",
-                                "type": "None"
-                            }
+                            "check_input": {}
                         },
                         "parameters": {
                             "check_termination": {
@@ -535,49 +457,42 @@
                 },
                 "edges": {
                     "dm_to_pattern_edge": {
-                        "parameters": null,
                         "sender": "declarative_memory",
                         "receiver": "retrieval_buffer",
                         "sender_port": "dm_output",
                         "receiver_port": "retrieval_input"
                     },
                     "retrieval_to_pattern_edge": {
-                        "parameters": null,
                         "sender": "retrieval_buffer",
                         "receiver": "pattern_matching",
                         "sender_port": "retrieval_output",
                         "receiver_port": "pattern_input_from_retrieval"
                     },
                     "goal_to_pattern_edge": {
-                        "parameters": null,
                         "sender": "goal_buffer",
                         "receiver": "pattern_matching",
                         "sender_port": "goal_output",
                         "receiver_port": "pattern_input_from_goal"
                     },
                     "pm_to_pattern_edge": {
-                        "parameters": null,
                         "sender": "procedural_memory",
                         "receiver": "pattern_matching",
                         "sender_port": "pm_output",
                         "receiver_port": "pattern_input_from_pm"
                     },
                     "pattern_to_conflict_edge": {
-                        "parameters": null,
                         "sender": "pattern_matching",
                         "receiver": "conflict_resolution",
                         "sender_port": "pattern_output",
                         "receiver_port": "conflict_input"
                     },
                     "conflict_to_fire_prod_edge": {
-                        "parameters": null,
                         "sender": "conflict_resolution",
                         "receiver": "fire_production",
                         "sender_port": "conflict_output_to_fire_prod",
                         "receiver_port": "fire_prod_input"
                     },
                     "conflict_to_check_edge": {
-                        "parameters": null,
                         "sender": "conflict_resolution",
                         "receiver": "check_termination",
                         "sender_port": "conflict_output_to_fire_prod",
