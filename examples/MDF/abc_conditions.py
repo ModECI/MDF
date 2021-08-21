@@ -69,15 +69,15 @@ def main():
     )
     c = create_simple_node(mod_graph, "C", f_c, p_c, a)
 
-    cond_i = Condition(type="BeforeNCalls", dependency=input_node.id, n=1)
+    cond_i = Condition(type="BeforeNCalls", dependencies=input_node.id, n=1)
     cond_a = Condition(type="Always")
-    cond_b = Condition(type="EveryNCalls", dependency=a.id, n=2)
-    cond_c = Condition(type="EveryNCalls", dependency=a.id, n=3)
+    cond_b = Condition(type="EveryNCalls", dependencies=a.id, n=2)
+    cond_c = Condition(type="EveryNCalls", dependencies=a.id, n=3)
     cond_term = Condition(
         type="And",
         dependencies=[
-            Condition(type="AfterNCalls", dependency=c.id, n=2),
-            Condition(type="JustRan", dependency=a.id),
+            Condition(type="AfterNCalls", dependencies=c.id, n=2),
+            Condition(type="JustRan", dependencies=a.id),
         ],
     )
 
