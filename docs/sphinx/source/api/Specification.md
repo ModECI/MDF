@@ -47,7 +47,7 @@ A directed graph consisting of <a href="#node">Node</a>s connected via <a href="
 </table>
 
 ## Node
-A self contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of Functions and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s 
+A self contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of Functions and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s
 #### Allowed parameters
 <table><tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
 
@@ -174,4 +174,3 @@ A state variable of a <a href="#node">Node</a>, i.e. has a value that persists b
 
 
 </table>
-

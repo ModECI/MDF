@@ -27,9 +27,6 @@ class MdfBase(Base):
 class Model(MdfBaseWithId):
     r"""The top level construct in MDF is Model which consists of Graph(s) and model attribute(s)
 
-    .. warning::
-        To be displayed....!
-
     Args:
         id: A unique identifier for this Model
         format: Information on the version of MDF used in this file
@@ -72,6 +69,8 @@ class Model(MdfBaseWithId):
                 ),
             ]
         )
+
+        # Removed for now...
         '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
@@ -755,7 +754,7 @@ class ConditionSet(MdfBase):
                 ),
             ]
         )
-        
+
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         for f in self.allowed_fields:

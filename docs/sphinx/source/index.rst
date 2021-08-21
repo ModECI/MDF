@@ -17,9 +17,9 @@
 MDF is intended to be an open source, community-supported standard and associated library
 of tools for expressing computational models in a form that allows them to be exchanged
 between diverse programming languages and execution environments. It consists of a
-specification for expressing models in a serialized format (currently a JSON
-representation, though others such as YAML and HDF5 are planned) and a set of Python
-tools for implementing a model described using MDF. The serialized format can be used
+specification for expressing models in serialized form (currently JSON or YAML
+representations, though others such as HDF5 are planned) and a set of Python
+tools for implementing a model described using MDF. The serialized formats can be used
 when importing a model into a supported target environment to execute it; and,
 conversely, when exporting a model built in a supported environment so that it can be
 re-used in other environments.
@@ -34,7 +34,13 @@ re-used in other environments.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Function:
+   :caption: Specification:
+
+   api/Specification
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Functions:
 
    api/MDF_function_specifications
 

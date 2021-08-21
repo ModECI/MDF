@@ -1,5 +1,5 @@
 {
-    "version": "ModECI MDF v0.1",
+    "version": "ModECI MDF v0.2",
     "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**",
     "specification": {
         "Model": {
@@ -12,6 +12,10 @@
                 "generating_application": {
                     "type": "str",
                     "description": "Information on what application generated/saved this file"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
                 },
                 "id": {
                     "type": "str",
@@ -40,6 +44,10 @@
                     "type": "dict",
                     "description": "The _ConditionSet_ for scheduling of the Graph"
                 },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
+                },
                 "id": {
                     "type": "str",
                     "description": "Unique ID of element"
@@ -61,11 +69,11 @@
             }
         },
         "Node": {
-            "definition": "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s ",
+            "definition": "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. The values from these are processed via a number of Functions and one or more final values are calculated on the _OutputPort_s ",
             "allowed_parameters": {
-                "parameters": {
+                "metadata": {
                     "type": "dict",
-                    "description": "Dict of parameters for the Node"
+                    "description": "Dict of metadata for the Node"
                 },
                 "id": {
                     "type": "str",
@@ -89,6 +97,10 @@
                     "type": "State",
                     "description": "The _State_s of the Node"
                 },
+                "parameters": {
+                    "type": "Parameter",
+                    "description": "The _Parameter_s of the Node"
+                },
                 "output_ports": {
                     "type": "OutputPort",
                     "description": "The _OutputPort_s containing evaluated quantities from the Node"
@@ -104,6 +116,10 @@
                 "type": {
                     "type": "str",
                     "description": "The type of the variable (note: there is limited support for this so far "
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
                 },
                 "id": {
                     "type": "str",
@@ -128,7 +144,7 @@
                 },
                 "id": {
                     "type": "str",
-                    "description": "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value"
+                    "description": "Unique ID of element"
                 },
                 "notes": {
                     "type": "str",
@@ -151,6 +167,47 @@
                     "type": "str",
                     "description": "How the state varies with time, i.e. ds/dt. Units of time are seconds."
                 },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
+                },
+                "id": {
+                    "type": "str",
+                    "description": "Unique ID of element"
+                },
+                "notes": {
+                    "type": "str",
+                    "description": "Human readable notes"
+                }
+            }
+        },
+        "Parameter": {
+            "definition": "???",
+            "allowed_parameters": {
+                "default_initial_value": {
+                    "type": "str",
+                    "description": "The initial value of the parameter"
+                },
+                "value": {
+                    "type": "EvaluableExpression",
+                    "description": "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values"
+                },
+                "time_derivative": {
+                    "type": "str",
+                    "description": "How the parameter with time, i.e. ds/dt. Units of time are seconds."
+                },
+                "function": {
+                    "type": "str",
+                    "description": "Which of the in-build MDF functions (linear etc.) this uses"
+                },
+                "args": {
+                    "type": "dict",
+                    "description": "Dictionary of values for each of the arguments for the function, e.g. if the in-build function is linear(slope), the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
+                },
                 "id": {
                     "type": "str",
                     "description": "Unique ID of element"
@@ -166,6 +223,10 @@
                 "value": {
                     "type": "str",
                     "description": "The value of the OutputPort in terms of the _InputPort_ and _Function_ values"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
                 },
                 "id": {
                     "type": "str",
@@ -198,6 +259,10 @@
                 "receiver_port": {
                     "type": "str",
                     "description": "The id of the _InputPort_ on the receiver _Node_"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
                 },
                 "id": {
                     "type": "str",

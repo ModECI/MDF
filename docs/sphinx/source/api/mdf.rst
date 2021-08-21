@@ -8,10 +8,10 @@ modeci\_mdf.mdf
    :undoc-members:
    :show-inheritance:
 
-modeci\_mdf.scheduler
-=====================
+modeci\_mdf.execution_engine
+============================
 
-.. automodule:: modeci_mdf.scheduler
+.. automodule:: modeci_mdf.execution_engine
    :members:
    :undoc-members:
    :show-inheritance:
