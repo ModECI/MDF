@@ -1,6 +1,6 @@
 {
     "FN": {
-        "version": "NeuroMLlite v0.3.2",
+        "version": "NeuroMLlite v0.3.3",
         "parameters": {
             "initial_w": 0.0,
             "initial_v": -1,
