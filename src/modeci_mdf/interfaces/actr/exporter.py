@@ -51,11 +51,11 @@ def build_model() -> Model:
         args={"pattern": goal_ip.id, "curr_goal": "goal_state"}
     )
     goal_node.parameters.append(goal_f)
-    goal_state = State(
+    goal_state = Parameter(
         id="goal_state",
         default_initial_value="first_goal",
         value="first_goal if %s == {} else %s" % (goal_ip.id, goal_f.id))
-    goal_node.states.append(goal_state)
+    goal_node.parameters.append(goal_state)
     goal_op = OutputPort(id="goal_output", value=goal_state.id)
     goal_node.output_ports.append(goal_op)
     mod_graph.nodes.append(goal_node)

@@ -18,7 +18,6 @@ from modeci_mdf.mdf import (
     Function,
     Graph,
     Condition,
-    State,
     Edge,
     OutputPort,
     InputPort,
@@ -159,79 +158,6 @@ class EvaluableFunction:
             print(
                 "    Evaluated %s with %s =\t%s"
                 % (self.function, _params_info(func_params), _val_info(self.curr_value))
-            )
-        return self.curr_value
-
-
-class EvaluableState:
-    """Evaluate the value of State Variables at a given time
-    Args:
-        state: A state variable of a Node, i.e. has a value that persists between evaluations of the Node
-        verbose: If set to True provides in-depth information else verbose message is not displayed
-
-    """
-
-    def __init__(self, state: State, verbose: bool = False):
-        self.verbose = verbose
-        self.state = state
-        self.curr_value = 0
-
-    def evaluate(
-        self,
-        parameters: Dict[str, Any] = None,
-        time_increment: Union[int, float] = None,
-        array_format: str = FORMAT_DEFAULT,
-    ) -> Union[int, np.ndarray]:
-
-        r"""Evaluate state variables
-
-        Args:
-            parameters: A dictionary of  parameters{'gain': 2,"bias": 3,"offset": 1}
-            time_increment: Time step for next execution at the node
-            array_format: It can be a n-dimensional array or a tensor
-
-        Returns:
-            value of state variables
-
-        """
-
-        if self.verbose:
-            print(
-                "    Evaluating {} with {} ".format(
-                    self.state, _params_info(parameters)
-                )
-            )
-
-        if self.state.value is not None:
-
-            self.curr_value = evaluate_expr(
-                self.state.value,
-                parameters,
-                verbose=False,
-                array_format=array_format,
-            )
-        else:
-            if time_increment == None:
-
-                self.curr_value = evaluate_expr(
-                    self.state.default_initial_value,
-                    parameters,
-                    verbose=False,
-                    array_format=array_format,
-                )
-            else:
-                td = evaluate_expr(
-                    self.state.time_derivative,
-                    parameters,
-                    verbose=False,
-                    array_format=array_format,
-                )
-                self.curr_value += td * time_increment
-
-        if self.verbose:
-            print(
-                "    Evaluated %s with %s \n       =\t%s"
-                % (self.state, _params_info(parameters), _val_info(self.curr_value))
             )
         return self.curr_value
 
@@ -509,7 +435,6 @@ class EvaluableNode:
         self.evaluable_inputs = {}
         self.evaluable_parameters = OrderedDict()
         self.evaluable_functions = OrderedDict()
-        self.evaluable_states = OrderedDict()
 
         self.evaluable_outputs = {}
 
@@ -535,11 +460,7 @@ class EvaluableNode:
             all_known_vars.append(p.id)
             # params_init[s] = s.curr_value'''
 
-        for s in node.states:
-            es = EvaluableState(s, self.verbose)
-            self.evaluable_states[s.id] = es
-            all_known_vars.append(s.id)
-            # params_init[s] = s.curr_value
+
         all_funcs = [f for f in node.functions]
 
         # Order the functions into the correct sequence
@@ -668,9 +589,6 @@ class EvaluableNode:
             )
             curr_params[eip] = i
 
-        # First set params to previous state values for use in funcs and states...
-        for es in self.evaluable_states:
-            curr_params[es] = self.evaluable_states[es].curr_value
 
         # First set params to previous parameter values for use in funcs and states...
         for ep in self.evaluable_parameters:
@@ -683,11 +601,6 @@ class EvaluableNode:
                 curr_params, array_format=array_format
             )
 
-        # Now evaluate and set params to new state values for use in output...
-        for es in self.evaluable_states:
-            curr_params[es] = self.evaluable_states[es].evaluate(
-                curr_params, time_increment=time_increment, array_format=array_format
-            )
 
         # Now evaluate and set params to new parameter values for use in output...
         for ep in self.evaluable_parameters:

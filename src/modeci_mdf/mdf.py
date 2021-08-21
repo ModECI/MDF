@@ -69,6 +69,7 @@ class Model(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
 
         # Removed for now...
         '''
@@ -208,6 +209,7 @@ class Graph(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
         '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
@@ -303,17 +305,15 @@ class Node(MdfBaseWithId):
         are calculated on the _OutputPort_
         Args:
             input_ports (obj): Dictionary of the InputPort objects in the Node
-            functions (obj): The _Function_s for computation the Node
-            states (obj): The _State_s of the Node
-            output_ports (obj): The _OutputPort_s containing evaluated quantities from the Node
             parameters : Dictionary of parameters for the Node
+            functions (obj): The _Function_s for computation the Node
+            output_ports (obj): The _OutputPort_s containing evaluated quantities from the Node
         """
 
         self.allowed_children = collections.OrderedDict(
             [
                 ("input_ports", ("The _InputPort_s into the Node", InputPort)),
                 ("functions", ("The _Function_s for the Node", Function)),
-                ("states", ("The _State_s of the Node", State)),
                 ("parameters", ("The _Parameter_s of the Node", Parameter)),
                 (
                     "output_ports",
@@ -324,6 +324,7 @@ class Node(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
 
         '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
@@ -363,14 +364,6 @@ class Node(MdfBaseWithId):
         """
         return self.__getattr__("functions")
 
-    @property
-    def states(self) -> List["State"]:
-        """The State(s) at the Node
-
-        Returns:
-            A list of State(s) at the given Node
-        """
-        return self.__getattr__("states")
 
     @property
     def output_ports(self) -> List["OutputPort"]:
@@ -422,6 +415,8 @@ class Function(BaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
+
         '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
@@ -505,6 +500,8 @@ class OutputPort(MdfBaseWithId):
 
             ]
         )
+        """The allowed fields for this type"""
+
         '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
@@ -520,64 +517,21 @@ class OutputPort(MdfBaseWithId):
         super().__init__(**kwargs)
 
 
-class State(MdfBaseWithId):
-    r"""A state variable of a Node, i.e. has a value that persists between evaluations of the Node
-
-    Args:
-        default_initial_value: The initial value of the state variable
-        value: The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values
-        time_derivative: How the state varies with time, i.e. ds/dt. Unit of time is second
-    """
-    _definition = "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
-
-
-    def __init__(self, **kwargs):
-
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "default_initial_value",
-                    ("The initial value of the state variable", str),
-                ),
-                (
-                    "value",
-                    (
-                        "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values",
-                        str,
-                    ),
-                ),
-                (
-                    "time_derivative",
-                    (
-                        "How the state varies with time, i.e. ds/dt. Units of time are seconds.",
-                        str,
-                    ),
-                ),
-            ]
-        )
-        '''
-        # FIXME: Reconstruct kwargs as neuromlite expects them
-        kwargs = {}
-        if id is not None:
-            kwargs["id"] = id
-        if default_initial_value is not None:
-            kwargs["default_initial_value"] = default_initial_value
-        if value is not None:
-            kwargs["value"] = value
-        if time_derivative is not None:
-            kwargs["time_derivative"] = time_derivative'''
-
-        super().__init__(**kwargs)
 
 class Parameter(MdfBaseWithId):
-    _definition = "???"
+    r"""A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative
+
+    Args:
+        default_initial_value: The initial value of the parameter
+        value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
+        time_derivative: How the parameter with time, i.e. ds/dt. Units of time are seconds.
+        function: Which of the in-build MDF functions (linear etc.) this uses
+        args: Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
+        """
+    _definition = "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative"
 
     def __init__(self, **kwargs):
-        """???
 
-        Args:
-            ???
-        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -609,7 +563,7 @@ class Parameter(MdfBaseWithId):
                 (
                     "args",
                     (
-                        'Dictionary of values for each of the arguments for the function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
+                        'Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
                         dict,
                     ),
                 ),
@@ -630,49 +584,6 @@ class Parameter(MdfBaseWithId):
             print('Checking whether %s is stateful, %s: %s'%(self,param_expr.free_symbols,sf))
             return sf
         return False
-
-
-class Stateful_Parameter(MdfBaseWithId):
-    """A stateful parameter of a Node, stores value updated by functions between evaluations of the Node
-
-    Args:
-        id: Unique indentity of the element
-        default_initial_value:"The initial value of the stateful parameter
-        value: The next value of the stateful parameter, in terms of the inputs
-
-    """
-
-    _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
-
-
-    def __init__(self, **kwargs):
-
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "default_initial_value",
-                    ("The initial value of the stateful parameter", str),
-                ),
-                (
-                    "value",
-                    (
-                        "The next value of the stateful parameter, in terms of the inputs, functions",
-                        str,
-                    ),
-                ),
-            ]
-        )
-        '''
-        # FIXME: Reconstruct kwargs as neuromlite expects them
-        kwargs = {}
-        if id is not None:
-            kwargs["id"] = id
-        if default_initial_value is not None:
-            kwargs["default_initial_value"] = default_initial_value
-        if value is not None:
-            kwargs["value"] = value'''
-
-        super().__init__(**kwargs)
 
 
 class Edge(MdfBaseWithId):
@@ -713,6 +624,8 @@ class Edge(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
+
         '''
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
@@ -754,6 +667,7 @@ class ConditionSet(MdfBase):
                 ),
             ]
         )
+        """The allowed fields for this type"""
 
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}

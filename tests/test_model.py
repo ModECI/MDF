@@ -1,4 +1,4 @@
-from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter, Edge, State, Stateful_Parameter, InputPort
+from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter, Edge, InputPort
 
 from modeci_mdf.utils import load_mdf
 
@@ -46,22 +46,6 @@ def test_OutputPort_init_kwargs():
     assert op.value == "test_value"
 
 
-def test_State_init_kwargs():
-    st = State(
-        id="test_State",
-        default_initial_value="test_default_initial_value",
-        value="test_value",
-        time_derivative="test_time_derivative",
-    )
-    assert st.default_initial_value == "test_default_initial_value"
-    assert st.value == "test_value"
-    assert st.time_derivative == "test_time_derivative"
-
-
-def test_Stateful_Parameter_init_kwargs():
-    sp = Stateful_Parameter(id="test_stateful", default_initial_value="0", value="6")
-    assert sp.id == "test_stateful"
-    assert sp.default_initial_value == "0"
 
 
 def test_Edge_init_kwargs():

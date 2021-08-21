@@ -93,10 +93,6 @@
                     "type": "Function",
                     "description": "The _Function_s for the Node"
                 },
-                "states": {
-                    "type": "State",
-                    "description": "The _State_s of the Node"
-                },
                 "parameters": {
                     "type": "Parameter",
                     "description": "The _Parameter_s of the Node"
@@ -152,37 +148,8 @@
                 }
             }
         },
-        "State": {
-            "definition": "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_.",
-            "allowed_parameters": {
-                "default_initial_value": {
-                    "type": "str",
-                    "description": "The initial value of the state variable"
-                },
-                "value": {
-                    "type": "str",
-                    "description": "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values"
-                },
-                "time_derivative": {
-                    "type": "str",
-                    "description": "How the state varies with time, i.e. ds/dt. Units of time are seconds."
-                },
-                "metadata": {
-                    "type": "dict",
-                    "description": "Dict of metadata for the Node"
-                },
-                "id": {
-                    "type": "str",
-                    "description": "Unique ID of element"
-                },
-                "notes": {
-                    "type": "str",
-                    "description": "Human readable notes"
-                }
-            }
-        },
         "Parameter": {
-            "definition": "???",
+            "definition": "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative",
             "allowed_parameters": {
                 "default_initial_value": {
                     "type": "str",
@@ -202,7 +169,7 @@
                 },
                 "args": {
                     "type": "dict",
-                    "description": "Dictionary of values for each of the arguments for the function, e.g. if the in-build function is linear(slope), the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"
+                    "description": "Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"
                 },
                 "metadata": {
                     "type": "dict",

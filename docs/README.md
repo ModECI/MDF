@@ -63,8 +63,6 @@ A self contained unit of evaluation receiving input from other Nodes on <a href=
 
 <tr><td><b>functions</b></td><td><a href="#function">Function</a></td><td><i>The <a href="#function">Function</a>s for the Node</i></td></tr>
 
-<tr><td><b>states</b></td><td><a href="#state">State</a></td><td><i>The <a href="#state">State</a>s of the Node</i></td></tr>
-
 <tr><td><b>parameters</b></td><td><a href="#parameter">Parameter</a></td><td><i>The <a href="#parameter">Parameter</a>s of the Node</i></td></tr>
 
 <tr><td><b>output_ports</b></td><td><a href="#outputport">OutputPort</a></td><td><i>The <a href="#outputport">OutputPort</a>s containing evaluated quantities from the Node</i></td></tr>
@@ -101,26 +99,8 @@ A single value which is evaluated as a function of values on <a href="#inputport
 
 </table>
 
-## State
-A state variable of a <a href="#node">Node</a>, i.e. has a value that persists between evaluations of the <a href="#node">Node</a>.
-#### Allowed parameters
-<table><tr><td><b>default_initial_value</b></td><td>str</td><td><i>The initial value of the state variable</i></td></tr>
-
-<tr><td><b>value</b></td><td>str</td><td><i>The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values</i></td></tr>
-
-<tr><td><b>time_derivative</b></td><td>str</td><td><i>How the state varies with time, i.e. ds/dt. Units of time are seconds.</i></td></tr>
-
-<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
-
-<tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
-
-<tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>
-
-
-</table>
-
 ## Parameter
-???
+A Parameter of the <a href="#node">Node</a>, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default<a href="#initial">initial</a>value with a time<a href="#derivative">derivative</a>
 #### Allowed parameters
 <table><tr><td><b>default_initial_value</b></td><td>str</td><td><i>The initial value of the parameter</i></td></tr>
 
@@ -130,7 +110,7 @@ A state variable of a <a href="#node">Node</a>, i.e. has a value that persists b
 
 <tr><td><b>function</b></td><td>str</td><td><i>Which of the in-build MDF functions (linear etc.) this uses</i></td></tr>
 
-<tr><td><b>args</b></td><td>dict</td><td><i>Dictionary of values for each of the arguments for the function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}</i></td></tr>
+<tr><td><b>args</b></td><td>dict</td><td><i>Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}</i></td></tr>
 
 <tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
 
