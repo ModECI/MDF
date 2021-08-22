@@ -24,16 +24,16 @@ addition:
                             dependencies:
                             -   type: EveryNCalls
                                 args:
+                                    n: 1
                                     dependency: retrieval_buffer
-                                    n: 1
                             -   type: EveryNCalls
                                 args:
+                                    n: 1
                                     dependency: goal_buffer
-                                    n: 1
                             -   type: EveryNCalls
                                 args:
-                                    dependency: declarative_memory
                                     n: 1
+                                    dependency: declarative_memory
                     conflict_resolution:
                         type: JustRan
                         args:
@@ -136,10 +136,6 @@ addition:
                 goal_buffer:
                     input_ports:
                         goal_input: {}
-                    states:
-                        goal_state:
-                            default_initial_value: first_goal
-                            value: first_goal if goal_input == {} else change_goal
                     parameters:
                         first_goal:
                             value:
@@ -154,6 +150,9 @@ addition:
                             args:
                                 pattern: goal_input
                                 curr_goal: goal_state
+                        goal_state:
+                            default_initial_value: first_goal
+                            value: first_goal if goal_input == {} else change_goal
                     output_ports:
                         goal_output:
                             value: goal_state

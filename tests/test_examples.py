@@ -10,6 +10,7 @@ import psyneulink
 import sys
 import copy
 
+
 from distutils.dir_util import copy_tree
 from pathlib import Path
 
@@ -94,8 +95,8 @@ def test_example(script, tmpdir):
         copy_tree(dir_path, tmpdir.strpath)
         os.chdir(tmpdir)
     else:
-        copy_tree("%s/.."%dir_path, tmpdir.strpath)
-        os.chdir("%s/translation"%tmpdir)
+        copy_tree("%s/.." % dir_path, tmpdir.strpath)
+        os.chdir("%s/translation" % tmpdir)
 
-    print("Running script %s in working dir %s"%(full_script_path, os.getcwd()))
+    print(f"Running script {full_script_path} in working dir {os.getcwd()}")
     runpy.run_path(os.path.basename(full_script_path), run_name="__main__")

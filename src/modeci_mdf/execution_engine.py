@@ -1,6 +1,8 @@
 import os
 import sys
 import sympy
+import numpy as np
+
 
 import graph_scheduler
 
@@ -11,6 +13,16 @@ from neuromllite.utils import _params_info, _val_info
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
 from collections import OrderedDict
+from typing import Union, List, Dict, Optional, Any
+from modeci_mdf.mdf import (
+    Function,
+    Graph,
+    Condition,
+    Edge,
+    OutputPort,
+    InputPort,
+    Node,
+)
 
 import modeci_mdf.onnx_functions as onnx_ops
 import modeci_mdf.actr_functions as actr_funcs
@@ -18,10 +30,26 @@ import modeci_mdf.actr_functions as actr_funcs
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
-
 KNOWN_PARAMETERS = ['constant']
+def evaluate_expr(
+    expr: Union[str, List[str], np.ndarray, "tf.tensor"] = None,
+    func_params: Dict[str, Any] = None,
+    array_format: str = FORMAT_DEFAULT,
+    verbose: Optional[bool] = False,
+) -> np.ndarray:
 
-def evaluate_expr(expr, func_params, array_format, verbose=False):
+    """Evaluates an expression given in string format using func_parameters
+
+    Args:
+        expr: Expression or list of expressions to be evaluated
+        func_params: A dict of parameters (e.g. {'weight':2})
+        array_format: It can be a n-dimensional array or a tensor
+        verbose: If set to True provides in-depth information else verbose message is not displayed
+
+    Returns:
+        n-dimensional array
+
+    """
 
     e = evaluate_params_nmllite(
         expr, func_params, array_format=array_format, verbose=verbose
@@ -35,11 +63,32 @@ def evaluate_expr(expr, func_params, array_format, verbose=False):
 
 
 class EvaluableFunction:
-    def __init__(self, function, verbose=False):
+    """Evaluates the function
+    Args:
+        function: Function to be evaluated e.g. mdf standard function
+        verbose: If set to True Provides in-depth information else verbose message is not displayed
+    """
+
+    def __init__(self, function: Function = False, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.function = function
 
-    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
+    def evaluate(
+        self,
+        parameters: Dict[str, Any] = None,
+        array_format: str = FORMAT_DEFAULT,
+    ) -> Dict[str, Any]:
+
+        r"""Performs evaluation on the basis of given parameters and array_format
+
+        Args:
+            parameters: A dictionary of function parameters,e.g.logistic, parameters={'gain': 2,"bias": 3,"offset": 1}
+            array_format: It can be a n-dimensional array or a tensor
+
+        Returns:
+             value of function after evaluation in Dictionary
+
+        """
 
         expr = None
         for f in mdf_functions:
@@ -97,7 +146,9 @@ class EvaluableFunction:
             self.curr_value = onnx_function(**kwargs_for_onnx)
         elif "actr_functions." in expr:
             actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
-            self.curr_value = actr_function(*[func_params[arg] for arg in self.function.args])
+            self.curr_value = actr_function(
+                *[func_params[arg] for arg in self.function.args]
+            )
         else:
             self.curr_value = evaluate_expr(
                 expr, func_params, verbose=self.verbose, array_format=array_format
@@ -107,54 +158,6 @@ class EvaluableFunction:
             print(
                 "    Evaluated %s with %s =\t%s"
                 % (self.function, _params_info(func_params), _val_info(self.curr_value))
-            )
-        return self.curr_value
-
-
-class EvaluableState:
-    def __init__(self, state, verbose=False):
-        self.verbose = verbose
-        self.state = state
-        self.curr_value = 0
-
-    def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
-        if self.verbose:
-            print(
-                "    Evaluating {} with {} ".format(
-                    self.state, _params_info(parameters)
-                )
-            )
-
-        if self.state.value is not None:
-
-            self.curr_value = evaluate_expr(
-                self.state.value,
-                parameters,
-                verbose=False,
-                array_format=array_format,
-            )
-        else:
-            if time_increment == None:
-
-                self.curr_value = evaluate_expr(
-                    self.state.default_initial_value,
-                    parameters,
-                    verbose=False,
-                    array_format=array_format,
-                )
-            else:
-                td = evaluate_expr(
-                    self.state.time_derivative,
-                    parameters,
-                    verbose=False,
-                    array_format=array_format,
-                )
-                self.curr_value += td * time_increment
-
-        if self.verbose:
-            print(
-                "    Evaluated %s with %s \n       =\t%s"
-                % (self.state, _params_info(parameters), _val_info(self.curr_value))
             )
         return self.curr_value
 
@@ -323,11 +326,32 @@ class EvaluableParameter:
 
 
 class EvaluableOutput:
-    def __init__(self, output_port,verbose=False):
+    """Evaluate the value at Output Port
+
+    Args:
+        output_port: Attribute of a Node which exports information to the dependent Node object
+        verbose: If set to True Provides in-depth information else verbose message is not displayed
+    """
+
+    def __init__(self, output_port: OutputPort, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.output_port = output_port
 
-    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
+    def evaluate(
+        self,
+        parameters: Dict[str, Any] = None,
+        array_format: str = FORMAT_DEFAULT,
+    ) -> Union[int, np.ndarray]:
+
+        """Evaluate the value at the output port on the basis of parameters and array_format
+
+        Args:
+            parameters: Dictionary of global parameters of the Output Port
+            array_format: It is a n-dimensional array
+
+        Returns:
+            value at output port
+        """
         if self.verbose:
             print(
                 "    Evaluating %s with %s "
@@ -350,17 +374,41 @@ class EvaluableOutput:
 
 
 class EvaluableInput:
-    def __init__(self, input_port, verbose=False):
+    """Evaluates Input value at Input_port of the node
+
+    Args:
+        input_port: The InputPort is an attribute of a Node which imports information to the Node
+        verbose: If set to True Provides in-depth information else verbose message is not displayed
+    """
+
+    def __init__(self, input_port: InputPort, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.input_port = input_port
         self.curr_value = 0
 
-    def set_input_value(self, value):
+    def set_input_value(self, value: Union[str, int, np.ndarray]):
+        """Set a new value at input port
+
+        Args:
+            value: Value to be set at Input Port
+        """
         if self.verbose:
             print(f"    Input value in {self.input_port.id} set to {_val_info(value)}")
         self.curr_value = value
 
-    def evaluate(self, parameters, array_format=FORMAT_DEFAULT):
+    def evaluate(
+        self, parameters: Dict[str, Any] = None, array_format: str = FORMAT_DEFAULT
+    ) -> Union[int, np.ndarray]:
+
+        """Evaluates value at Input port based on parameters and array_format
+
+        Args:
+            parameters: Dictionary of  parameters
+            array_format: It is a n-dimensional array
+
+        Returns:
+            value at Input port
+        """
         if self.verbose:
             print(
                 "    Evaluated %s with %s =\t%s"
@@ -374,13 +422,19 @@ class EvaluableInput:
 
 
 class EvaluableNode:
-    def __init__(self, node, verbose=False):
+    """Evaluates Node
+
+    Args:
+        node: A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
+        verbose: If set to True Provides in-depth information else verbose message is not displayed
+    """
+
+    def __init__(self, node: Node, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.node = node
         self.evaluable_inputs = {}
         self.evaluable_parameters = OrderedDict()
         self.evaluable_functions = OrderedDict()
-        self.evaluable_states = OrderedDict()
 
         self.evaluable_outputs = {}
 
@@ -406,11 +460,7 @@ class EvaluableNode:
             all_known_vars.append(p.id)
             # params_init[s] = s.curr_value'''
 
-        for s in node.states:
-            es = EvaluableState(s, self.verbose)
-            self.evaluable_states[s.id] = es
-            all_known_vars.append(s.id)
-            # params_init[s] = s.curr_value
+
         all_funcs = [f for f in node.functions]
 
         # Order the functions into the correct sequence
@@ -514,13 +564,17 @@ class EvaluableNode:
                     all_params_to_check.append(p)  # Add back to end of list...
 
         for op in node.output_ports:
-            rop = EvaluableOutput(op,self.verbose)
+            rop = EvaluableOutput(op, self.verbose)
             self.evaluable_outputs[op.id] = rop
 
     def initialize(self):
         pass
 
-    def evaluate(self, time_increment=None, array_format=FORMAT_DEFAULT):
+    def evaluate(
+        self,
+        time_increment: Union[int, float] = None,
+        array_format: str = FORMAT_DEFAULT,
+    ):
 
         if self.verbose:
             print(
@@ -535,9 +589,6 @@ class EvaluableNode:
             )
             curr_params[eip] = i
 
-        # First set params to previous state values for use in funcs and states...
-        for es in self.evaluable_states:
-            curr_params[es] = self.evaluable_states[es].curr_value
 
         # First set params to previous parameter values for use in funcs and states...
         for ep in self.evaluable_parameters:
@@ -545,17 +596,11 @@ class EvaluableNode:
             curr_params[ep] = self.evaluable_parameters[ep].get_current_value(curr_params, array_format=array_format)
 
 
-
         for ef in self.evaluable_functions:
             curr_params[ef] = self.evaluable_functions[ef].evaluate(
                 curr_params, array_format=array_format
             )
 
-        # Now evaluate and set params to new state values for use in output...
-        for es in self.evaluable_states:
-            curr_params[es] = self.evaluable_states[es].evaluate(
-                curr_params, time_increment=time_increment, array_format=array_format
-            )
 
         # Now evaluate and set params to new parameter values for use in output...
         for ep in self.evaluable_parameters:
@@ -563,18 +608,34 @@ class EvaluableNode:
                 curr_params, time_increment=time_increment, array_format=array_format
             )
 
-
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
 
-    def get_output(self, id):
+    def get_output(self, id: str) -> Union[int, np.ndarray]:
+        """Get value at output port for given output port's id
+
+        Args:
+            id: Unique identifier of the output port
+
+        Returns:
+            value at the output port
+
+        """
         for rop in self.evaluable_outputs:
             if rop == id:
                 return self.evaluable_outputs[rop].curr_value
 
 
 class EvaluableGraph:
-    def __init__(self, graph, verbose=False):
+    """Evaluates graph
+
+    Args:
+        graph: A directed graph consisting of Node(s) connected via Edge(s)
+        verbose: If set to True Provides in-depth information else verbose message is not displayed
+
+    """
+
+    def __init__(self, graph: Graph, verbose: Optional[bool] = False):
         self.verbose = verbose
         print("\nInit graph: %s" % graph.id)
         self.graph = graph
@@ -632,8 +693,19 @@ class EvaluableGraph:
         )
 
     def evaluate(
-        self, time_increment=None, array_format=FORMAT_DEFAULT, initializer=None
+        self,
+        time_increment: Union[int, float] = None,
+        array_format: str = FORMAT_DEFAULT,
+        initializer: Optional[Dict[str, Any]] = None,
     ):
+        """Evaluates the graph
+
+        Args:
+            time_increment: Time step for next execution
+            array_format: A n-dimensional array
+            initializer: sets the initial value of parameters of the node
+
+        """
         # Any values that are set via the passed in initalizer, set their values. This lets us avoid creating
         # dummy input nodes with parameters for evaluating the graph
         for en_id, en in self.enodes.items():
@@ -682,7 +754,19 @@ class EvaluableGraph:
         if self.verbose:
             print("Trial terminated")
 
-    def evaluate_edge(self, edge, time_increment=None, array_format=FORMAT_DEFAULT):
+    def evaluate_edge(
+        self,
+        edge: Edge,
+        time_increment: Union[int, float] = None,
+        array_format: str = FORMAT_DEFAULT,
+    ):
+        """Evaluates edges in graph
+
+        Args:
+            time_increment: Time step for next execution
+            array_format: A n-dimensional array
+
+        """
         pre_node = self.enodes[edge.sender]
         post_node = self.enodes[edge.receiver]
         value = pre_node.evaluable_outputs[edge.sender_port].curr_value
@@ -706,7 +790,16 @@ class EvaluableGraph:
         input_value = value if weight == 1 else value * weight
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
-    def parse_condition(self, condition):
+    def parse_condition(self, condition: Condition) -> graph_scheduler.Condition:
+        """Convert the condition in a specific format
+
+        Args:
+            condition: Specify the condition under which a Component should be allowed to execute
+
+        Returns:
+            Condition in specific format
+
+        """
         try:
             typ = getattr(graph_scheduler.condition, condition["type"])
         except AttributeError as e:
