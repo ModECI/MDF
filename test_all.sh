@@ -55,6 +55,12 @@ python simple_ab.py -run
 python simple_abc.py
 python simple_abcd.py
 
+## Test ACT-R examples
+
+cd ../../examples/ACT-R
+python count.py
+python addition.py
+
 ## Generate the docs
 
 cd ../../docs

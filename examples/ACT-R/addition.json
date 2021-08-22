@@ -13,7 +13,7 @@
                         "retrieval_buffer": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "declarative_memory"
+                                "dependencies": "declarative_memory"
                             }
                         },
                         "goal_buffer": {
@@ -32,21 +32,21 @@
                                         "type": "EveryNCalls",
                                         "args": {
                                             "n": 1,
-                                            "dependency": "retrieval_buffer"
+                                            "dependencies": "retrieval_buffer"
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
                                             "n": 1,
-                                            "dependency": "goal_buffer"
+                                            "dependencies": "goal_buffer"
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
                                             "n": 1,
-                                            "dependency": "declarative_memory"
+                                            "dependencies": "declarative_memory"
                                         }
                                     }
                                 ]
@@ -55,19 +55,19 @@
                         "conflict_resolution": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "pattern_matching"
+                                "dependencies": "pattern_matching"
                             }
                         },
                         "fire_production": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "conflict_resolution"
+                                "dependencies": "conflict_resolution"
                             }
                         },
                         "check_termination": {
                             "type": "JustRan",
                             "args": {
-                                "dependency": "conflict_resolution"
+                                "dependencies": "conflict_resolution"
                             }
                         }
                     },
