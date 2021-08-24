@@ -6,6 +6,9 @@
             "abcd_example": {
                 "nodes": {
                     "input0": {
+                        "metadata": {
+                            "color": ".8 .8 .8"
+                        },
                         "parameters": {
                             "input_level": {
                                 "value": 0.0
@@ -19,6 +22,9 @@
                         "functions": {}
                     },
                     "A": {
+                        "metadata": {
+                            "color": ".8 0 0"
+                        },
                         "input_ports": {
                             "input_port1": {}
                         },
@@ -28,14 +34,6 @@
                             },
                             "intercept": {
                                 "value": 1.2
-                            },
-                            "linear_func": {
-                                "function": "linear",
-                                "args": {
-                                    "variable0": "input_port1",
-                                    "slope": "slope",
-                                    "intercept": "intercept"
-                                }
                             }
                         },
                         "output_ports": {
@@ -43,9 +41,21 @@
                                 "value": "linear_func"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "linear_func": {
+                                "return_value": "linear",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "slope": "slope",
+                                    "intercept": "intercept"
+                                }
+                            }
+                        }
                     },
                     "B": {
+                        "metadata": {
+                            "color": "0 .8 0"
+                        },
                         "input_ports": {
                             "input_port1": {}
                         },
@@ -58,15 +68,6 @@
                             },
                             "offset": {
                                 "value": 2.3
-                            },
-                            "logistic_func": {
-                                "function": "logistic",
-                                "args": {
-                                    "variable0": "input_port1",
-                                    "gain": "gain",
-                                    "bias": "bias",
-                                    "offset": "offset"
-                                }
                             }
                         },
                         "output_ports": {
@@ -74,9 +75,22 @@
                                 "value": "logistic_func"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "logistic_func": {
+                                "return_value": "logistic",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "gain": "gain",
+                                    "bias": "bias",
+                                    "offset": "offset"
+                                }
+                            }
+                        }
                     },
                     "C": {
+                        "metadata": {
+                            "color": "0 0 .8"
+                        },
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
@@ -94,9 +108,16 @@
                             },
                             "offset": {
                                 "value": 3.4
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        },
+                        "functions": {
                             "exponential_func": {
-                                "function": "exponential",
+                                "return_value": "exponential",
                                 "args": {
                                     "variable0": "input_port1",
                                     "scale": "scale",
@@ -105,15 +126,12 @@
                                     "offset": "offset"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "exponential_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     },
                     "D": {
+                        "metadata": {
+                            "color": ".8 0 .8"
+                        },
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
@@ -122,13 +140,6 @@
                         "parameters": {
                             "scale": {
                                 "value": 4.0
-                            },
-                            "sin_func": {
-                                "function": "sin",
-                                "args": {
-                                    "variable0": "input_port1",
-                                    "scale": "scale"
-                                }
                             }
                         },
                         "output_ports": {
@@ -136,7 +147,15 @@
                                 "value": "sin_func"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "sin_func": {
+                                "return_value": "sin",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "scale": "scale"
+                                }
+                            }
+                        }
                     }
                 },
                 "edges": {

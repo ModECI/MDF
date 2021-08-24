@@ -9,7 +9,7 @@
                         "input0": {
                             "type": "BeforeNCalls",
                             "args": {
-                                "dependency": "input0",
+                                "dependencies": "input0",
                                 "n": 1
                             }
                         },
@@ -20,14 +20,14 @@
                         "B": {
                             "type": "EveryNCalls",
                             "args": {
-                                "dependency": "A",
+                                "dependencies": "A",
                                 "n": 2
                             }
                         },
                         "C": {
                             "type": "EveryNCalls",
                             "args": {
-                                "dependency": "A",
+                                "dependencies": "A",
                                 "n": 3
                             }
                         }
@@ -40,14 +40,14 @@
                                     {
                                         "type": "AfterNCalls",
                                         "args": {
-                                            "dependency": "C",
+                                            "dependencies": "C",
                                             "n": 2
                                         }
                                     },
                                     {
                                         "type": "JustRan",
                                         "args": {
-                                            "dependency": "A"
+                                            "dependencies": "A"
                                         }
                                     }
                                 ]
@@ -81,14 +81,6 @@
                             },
                             "intercept": {
                                 "value": 1.2
-                            },
-                            "linear_func": {
-                                "function": "linear",
-                                "args": {
-                                    "slope": "slope",
-                                    "intercept": "intercept",
-                                    "variable0": "input_port1"
-                                }
                             }
                         },
                         "output_ports": {
@@ -96,7 +88,16 @@
                                 "value": "linear_func"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "linear_func": {
+                                "return_value": "linear",
+                                "args": {
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        }
                     },
                     "B": {
                         "input_ports": {
@@ -113,15 +114,6 @@
                             },
                             "offset": {
                                 "value": 2.3
-                            },
-                            "logistic_func": {
-                                "function": "logistic",
-                                "args": {
-                                    "gain": "gain",
-                                    "bias": "bias",
-                                    "offset": "offset",
-                                    "variable0": "input_port1"
-                                }
                             }
                         },
                         "output_ports": {
@@ -129,7 +121,17 @@
                                 "value": "logistic_func"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "logistic_func": {
+                                "return_value": "logistic",
+                                "args": {
+                                    "gain": "gain",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        }
                     },
                     "C": {
                         "input_ports": {
@@ -149,9 +151,16 @@
                             },
                             "offset": {
                                 "value": 3.4
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        },
+                        "functions": {
                             "exponential_func": {
-                                "function": "exponential",
+                                "return_value": "exponential",
                                 "args": {
                                     "scale": "scale",
                                     "rate": "rate",
@@ -160,13 +169,7 @@
                                     "variable0": "input_port1"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "exponential_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     }
                 },
                 "edges": {
