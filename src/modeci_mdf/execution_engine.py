@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 import sympy
 import numpy as np
@@ -858,7 +859,14 @@ class EvaluableGraph:
                     # arg is another condition
                     new_v = self.parse_condition(v)
             except (TypeError, ValueError):
-                pass
+                try:
+                    # value may be a string representing a TimeScale
+                    condition["args"][k] = getattr(
+                        graph_scheduler.TimeScale,
+                        re.match(r'TimeScale\.(.*)', v).groups()[0]
+                    )
+                except (AttributeError, IndexError, TypeError):
+                    pass
             else:
                 condition["args"][k] = new_v
 
