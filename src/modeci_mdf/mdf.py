@@ -299,7 +299,7 @@ class Function(MdfBaseWithId):
         self.allowed_fields = collections.OrderedDict(
             [
                 (
-                    "function",
+                    "return_value",
                     (
                         "Which of the in-build MDF functions (linear etc.) this uses",
                         str,

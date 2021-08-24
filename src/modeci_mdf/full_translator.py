@@ -19,7 +19,7 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 	f = open(file_path)
 	data = json.load(f)
 	
-	filtered_list = ['parameters','functions', 'states','output_ports','input_ports','notes']
+	filtered_list = ['parameters','metadata','functions', 'states','output_ports','input_ports','notes']
 	all_nodes = []
 	all_keys = []
 	def keysExtractor(nested_dictionary):
@@ -176,10 +176,10 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 
 
 						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]={}
-						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['function']={}
+						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['return_value']={}
 						
 
-						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['function']=str(param) + "+" "(dt*" + str(expression_dict[key][param]) + ")" 
+						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['return_value']=str(param) + "+" "(dt*" + str(expression_dict[key][param]) + ")" 
 					
 							
 						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args']=  {}
@@ -192,15 +192,25 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 
 							if any(x in d[key]['parameters'][param]['value'] for x in expression_items):
 								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]={}
-								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['function']={}
+								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['return_value']={}
 						
-								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['function']= expression_dict[key][param]
+								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['return_value']= expression_dict[key][param]
 								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args']=  {}
 								for pp in arg_dict[key]:
 									d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args'][pp] = pp
 								parameterlist.append(param)
 					
-					
+					elif 'function' in d[key]['parameters'][param].keys():
+
+						d[key]['functions'][param]={}
+						d[key]['functions'][param]['return_value']={}
+						
+						d[key]['functions'][param]['return_value']= d[key]['parameters'][param]['function']
+						d[key]['functions'][param]['args']=  {}
+						d[key]['functions'][param]['args']=  d[key]['parameters'][param]['args']
+							
+
+
 					if idx>0:
 						for prev_param in parameterlist[:-1]:
 
@@ -213,8 +223,8 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 					if isinstance(d[key]['output_ports'][output_port]['value'], str):
 						if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
 							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]={}
-							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']={}
-							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']= expression_dict[key][output_port]
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['return_value']={}
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['return_value']= expression_dict[key][output_port]
 							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args']=  {}
 							for param in arg_dict[key]:
 								d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args'][param] = param
@@ -247,8 +257,8 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 						d[key]['parameters']['time'] = {'default_initial_value': 0, 'value': 'evaluated_time_next_value'}
 
 						d[key]['functions']["evaluated_time_next_value"]={}
-						d[key]['functions']["evaluated_time_next_value"]['function']={}
-						d[key]['functions']["evaluated_time_next_value"]['function']= "linear"
+						d[key]['functions']["evaluated_time_next_value"]['return_value']={}
+						d[key]['functions']["evaluated_time_next_value"]['return_value']= "linear"
 						d[key]['functions']["evaluated_time_next_value"]['args']=  {"variable0":"time" , "slope": 1, "intercept": "dt"}
 						
 					
@@ -265,6 +275,8 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 
 								d[key]['parameters'][param]['value']="evaluated_{}_{}_next_value".format(key, param)
 
+					elif 'function' in d[key]['parameters'][param].keys():
+						d[key]['parameters'].pop(param)
 				
 
 			if 'output_ports' in d[key].keys():

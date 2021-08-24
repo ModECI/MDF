@@ -43,15 +43,16 @@ class EvaluableFunction:
 
         expr = None
         for f in mdf_functions:
-            if self.function.function == f:
+            if self.function.return_value == f:
                 expr = create_python_expression(mdf_functions[f]["expression_string"])
         if not expr:
-            expr  = self.function.function
+            expr  = self.function.return_value
             #raise "Unknown function: {}. Known functions: {}".format(
             #    self.function.function,
             #    mdf_functions.keys,
             #)
 
+      
         func_params = {}
         func_params.update(parameters)
         if self.verbose:
