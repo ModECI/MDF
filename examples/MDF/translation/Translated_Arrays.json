@@ -46,14 +46,6 @@
                                         2.0
                                     ]
                                 ]
-                            },
-                            "linear_1": {
-                                "function": "linear",
-                                "args": {
-                                    "variable0": "input_port1",
-                                    "slope": "slope",
-                                    "intercept": "intercept"
-                                }
                             }
                         },
                         "output_ports": {
@@ -61,7 +53,16 @@
                                 "value": "linear_1"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "linear_1": {
+                                "return_value": "linear",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "slope": "slope",
+                                    "intercept": "intercept"
+                                }
+                            }
+                        }
                     }
                 },
                 "edges": {
