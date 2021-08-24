@@ -1,3 +1,4 @@
+import inspect
 import os
 import re
 import sys
@@ -870,7 +871,37 @@ class EvaluableGraph:
             else:
                 condition["args"][k] = new_v
 
-        return typ(**condition["args"])
+        try:
+            return typ(**condition["args"])
+        except TypeError as e:
+            sig = inspect.signature(typ)
+
+            try:
+                var_positional_arg = [
+                    name
+                    for name, param in sig.parameters.items()
+                    if param.kind is inspect.Parameter.VAR_POSITIONAL
+                ][0]
+            except IndexError:
+                # other unhandled situation
+                raise e
+            else:
+                try:
+                    condition["args"][var_positional_arg]
+                except KeyError:
+                    # error is due to missing required parameter,
+                    # not named variable positional argument
+                    raise TypeError(f"Condition '{typ.__name__}': {e}")
+                else:
+                    return typ(
+                        *condition["args"][var_positional_arg],
+                        **{
+                            k: v
+                            for k, v in condition["args"].items()
+                            if k != var_positional_arg
+                        }
+                    )
+
 
 
 from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
