@@ -51,11 +51,11 @@ def build_model() -> Model:
         args={"pattern": goal_ip.id, "curr_goal": "goal_state"}
     )
     goal_node.parameters.append(goal_f)
-    goal_state = State(
+    goal_state = Parameter(
         id="goal_state",
         default_initial_value="first_goal",
         value="first_goal if %s == {} else %s" % (goal_ip.id, goal_f.id))
-    goal_node.states.append(goal_state)
+    goal_node.parameters.append(goal_state)
     goal_op = OutputPort(id="goal_output", value=goal_state.id)
     goal_node.output_ports.append(goal_op)
     mod_graph.nodes.append(goal_node)
@@ -198,20 +198,20 @@ def build_model() -> Model:
 
     # Conditions
     cond_dm = Condition(type="Always")
-    cond_retrieval = Condition(type="JustRan", dependency=dm_node.id)
+    cond_retrieval = Condition(type="JustRan", dependencies=dm_node.id)
     cond_goal = Condition(type="Always")
     cond_pm = Condition(type="Always")
     cond_pattern = Condition(
         type="And",
         dependencies=[
-            Condition(type="EveryNCalls", dependency=retrieval_node.id, n=1),
-            Condition(type="EveryNCalls", dependency=goal_node.id, n=1),
-            Condition(type="EveryNCalls", dependency=dm_node.id, n=1)
+            Condition(type="EveryNCalls", dependencies=retrieval_node.id, n=1),
+            Condition(type="EveryNCalls", dependencies=goal_node.id, n=1),
+            Condition(type="EveryNCalls", dependencies=dm_node.id, n=1)
         ]
     )
-    cond_conflict = Condition(type="JustRan", dependency=pattern_node.id)
-    cond_fire_prod = Condition(type="JustRan", dependency=conflict_node.id)
-    cond_check = Condition(type="JustRan", dependency=conflict_node.id)
+    cond_conflict = Condition(type="JustRan", dependencies=pattern_node.id)
+    cond_fire_prod = Condition(type="JustRan", dependencies=conflict_node.id)
+    cond_check = Condition(type="JustRan", dependencies=conflict_node.id)
     cond_term = Condition(
         type="While",
         dependencies=[check_node.id]

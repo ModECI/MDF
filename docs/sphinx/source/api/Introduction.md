@@ -1,6 +1,4 @@
-<p align="center">
-  <img alt="mdf logo" width="402" src="https://raw.githubusercontent.com/ModECI/MDF/main/docs/sphinx/images/logo_light_bg.png"/>
-</p>
+[Github](https://github.com/ModECI/MDF)
 
 [![Actions Status][actions-badge]][actions-link]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -20,9 +18,6 @@ The MDF Python API can be used to create or load an MDF model for inspection and
 
 The implementation and dissemination of the MDF language and associated tools is being carried out by the [Model Exchange and Convergence Initiative (ModECI)](http://modeci.org/), with support from the [NSF Convergence Accelerator Program](https://www.nsf.gov/od/oia/convergence-accelerator/) (Track D: AI-Driven Innovation via Data and Model Sharing), as a publicly accessible open source project. The initial design has been informed by a series of workshops involving developers of key software environments and other stakeholders in machine learning, cognitive science and neuroscience. Future workshops will address broadening of support to other domains in basic and applied science and technology development (e.g., population biology, medical informatics, structural and environmental monitoring, and complex systems control).  Environments for which support is currently being developed include [PyTorch](https://pytorch.org), [ONNX](http://onnx.ai), [WebGME](https://webgme.org), [NeuroML](https://neuroml.org), [PsyNeuLink](http://www.psyneuln.deptcpanel.princeton.edu), and [ACT-R](http://act-r.psy.cmu.edu).
 
-<p align="center">
-  <a href="examples/README.md"><img alt="mdf interacts" width="400" src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/ModECI_MDF.svg"/></a>
-<br/><sup><i><b>Fig 1:</b> Some of the current and planned formats which MDF will interact with. Click on the image for more information.</i></sup></p>
 
 Successful interfacing of MDF to existing disciplinary standards (such as [ONNX](http://onnx.ai) in machine learning, and [NeuroML](https://neuroml.org) in neuroscience) as well as general purpose simulation environments (such as [WebGME](https://webgme.org)) will permit bridging between these environments, and translation to the broader set of environments supported by those standards (such as [Tensorflow](https://www.tensorflow.org) & [Keras](https://keras.io) in the case of ONNX, and [The Virtual Brain](https://www.thevirtualbrain.org) and [SONATA](https://github.com/AllenInstitute/sonata) in the case of NeuroML).  Efforts are also underway, in collaboration with projects in the NSF Accelerator Track C (Quantum Technology), to use MDF for facilitating the implementation of computational models on [quantum hardware](https://github.com/ModECI/MDF/blob/readme_update/examples/Quantum).
 
@@ -45,9 +40,9 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 **[Model Attributes](https://github.com/ModECI/MDF/blob/main/docs/README.md#model)**  These provide for the definition of model “meta-data,” including contact information, citations, acknowledgements, pointers to sample data and benchmark results, and environments in which the specified model was originally implemented and any that have been validated to support its execution.
 
-<p align="center"><img src="docs/images/MDFgraph1.png" width="700px"><br/><sup><i><b>Fig 2:</b> A simple graph with 3 nodes and 2 edges expressed in MDF.</i></sup></p>
+<p align="center"><img src="https://raw.githubusercontent.com/ModECI/MDF/main/docs/images/MDFgraph1.png"><br/><sup><i><b>Fig 1:</b>A simple graph with 3 nodes and 2 edges expressed in MDF.</i></sup></p>
 
-<p align="center"><img src="docs/images/MDFgraph2.png" width="700px"><br/><sup><i><b>Fig 3:</b> This graph illustrates the ability to specify behavior that extends beyond the directed flow through the graph. Here, Node 1 generates a random number and transmits that number to Node 2. Node 2 will only run if the number it receives from Node 1 is greater than 10.</i></sup></p>
+<p align="center"><img src="https://raw.githubusercontent.com/ModECI/MDF/main/docs/images/MDFgraph2.png" width="700px"><br/><sup><i><b>Fig 2:</b>This graph illustrates the ability to specify behavior that extends beyond the directed flow through the graph. Here, Node 1 generates a random number and transmits that number to Node 2. Node 2 will only run if the number it receives from Node 1 is greater than 10.</i></sup></p>
 
 ## Examples
 

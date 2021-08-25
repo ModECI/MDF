@@ -1,21 +1,93 @@
-from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter
+from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter, Edge, InputPort
 
 from modeci_mdf.utils import load_mdf
 
 def test_model_init_kwargs():
     m = Model(
-        id="Test", format="test_format", generating_application="test_application",metadata={"info":'test_metadata'}
+        id="Test", format="test_format", generating_application="test_application"
     )
+    m.metadata={"info":'test_metadata'}
+    print(m)
     assert m.format == "test_format"
     assert m.generating_application == "test_application"
     assert m.metadata== {"info":'test_metadata'}
     assert m.id == 'Test'
 
 
+def test_graph_init_kwargs():
+    g = Graph(
+        id="Test_Graph", parameters="test_parameters", conditions="test_Condition"
+    )
+    assert g.parameters == "test_parameters"
+    assert g.conditions == "test_Condition"
+
+
+def test_Node_init_kwargs():
+    n = Node(id="test_node")
+    print(n)
+    print(n.id)
+    assert n.id == "test_node"
+
+
+def test_Function_init_kwargs():
+    f = Function(id="Test_Function", function="Test_function", args="Test_args")
+    assert f.function == "Test_function"
+    assert f.args == "Test_args"
+
+
+def test_InputPort_init_kwargs():
+    ip = InputPort(id="Test_InputPort", shape="Test_shape", type="Test_type")
+    assert ip.shape == "Test_shape"
+    assert ip.type == "Test_type"
+
+
+def test_OutputPort_init_kwargs():
+    op = OutputPort(id="test_OutputPort", value="test_value")
+    assert op.value == "test_value"
+
+
+
+
+def test_Edge_init_kwargs():
+    e = Edge(
+        id="test_Edge",
+        parameters="test_parameters",
+        sender="test_sender",
+        receiver="test_receiver",
+        sender_port="test_sender_port",
+        receiver_port="test_receiver_port",
+    )
+    assert e.parameters == "test_parameters"
+    assert e.sender == "test_sender"
+    assert e.receiver == "test_receiver"
+    assert e.sender_port == "test_sender_port"
+    assert e.receiver_port == "test_receiver_port"
+    assert e.id == "test_Edge"
+
+
+def test_ConditionSet_init_kwargs():
+    CS = ConditionSet(
+        node_specific="test_node_specific", termination="test_termination"
+    )
+    assert CS.node_specific == "test_node_specific"
+    assert CS.termination == "test_termination"
+
+
+def test_Condition_init_kwargs():
+    """ Check the working of Condition"""
+    C = Condition(type="test_type", n="test_n", dependency="test_dependency")
+    assert C.type == "test_type"
+    assert C.args == {"n": "test_n", "dependency": "test_dependency"}
+
+
+def test_Condition_init_kwargs():
+    C = Condition(type="test_type", n="test_n", dependencies="test_dependencies")
+    assert C.type == "test_type"
+    assert C.args == {"n": "test_n", "dependencies": "test_dependencies"}
+
+
 def test_model_graph_to_json():
-    """
-    Check if dumping a model to a simple JSON string works.
-    """
+    """Check if dumping a model to a simple JSON string works."""
 
 
     mod_graph0 = Graph(id="Test", parameters={"speed": 4},metadata={'info':"mdf_model"})
@@ -26,7 +98,8 @@ def test_model_graph_to_json():
     node1=Node(id='test_node', metadata={'info':"mdf_Node2"})
     node1.parameters.append(Parameter(id="level", value=3))
 
-    condition=Condition(type='Always',metadata={'info':"mdf_condition"})
+    condition=Condition(type='Always')
+    condition.metadata={'info':"mdf_condition"}
 
     mod_graph0.conditions = ConditionSet(node_specific={node1.id: condition})
 
@@ -41,9 +114,7 @@ def test_model_graph_to_json():
 
 
 def test_no_input_ports_to_json(tmpdir):
-    """
-    Test the edge case of exporting a model to JSON when it has a node with no input ports
-    """
+    """Test the edge case of exporting a model to JSON when it has a node with no input ports"""
 
     mod = Model(id="ABCD")
     mod_graph = Graph(id="abcd_example")
@@ -134,9 +205,7 @@ def test_param_args_empty_dict():
 
 
 def test_graph_inputs():
-    r"""
-    Test whether we can retrieve graph input node\ports via the inputs property.
-    """
+    r"""Test whether we can retrieve graph input node\ports via the inputs property."""
     mod = Model(id="ABCD")
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)

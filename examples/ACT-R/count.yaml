@@ -11,7 +11,7 @@ count:
                     retrieval_buffer:
                         type: JustRan
                         args:
-                            dependency: declarative_memory
+                            dependencies: declarative_memory
                     goal_buffer:
                         type: Always
                         args: {}
@@ -24,28 +24,28 @@ count:
                             dependencies:
                             -   type: EveryNCalls
                                 args:
-                                    dependency: retrieval_buffer
                                     n: 1
+                                    dependencies: retrieval_buffer
                             -   type: EveryNCalls
                                 args:
-                                    dependency: goal_buffer
                                     n: 1
+                                    dependencies: goal_buffer
                             -   type: EveryNCalls
                                 args:
-                                    dependency: declarative_memory
                                     n: 1
+                                    dependencies: declarative_memory
                     conflict_resolution:
                         type: JustRan
                         args:
-                            dependency: pattern_matching
+                            dependencies: pattern_matching
                     fire_production:
                         type: JustRan
                         args:
-                            dependency: conflict_resolution
+                            dependencies: conflict_resolution
                     check_termination:
                         type: JustRan
                         args:
-                            dependency: conflict_resolution
+                            dependencies: conflict_resolution
                 termination:
                     check_term_true:
                         type: While
@@ -110,10 +110,6 @@ count:
                 goal_buffer:
                     input_ports:
                         goal_input: {}
-                    states:
-                        goal_state:
-                            default_initial_value: first_goal
-                            value: first_goal if goal_input == {} else change_goal
                     parameters:
                         first_goal:
                             value:
@@ -127,6 +123,9 @@ count:
                             args:
                                 pattern: goal_input
                                 curr_goal: goal_state
+                        goal_state:
+                            default_initial_value: first_goal
+                            value: first_goal if goal_input == {} else change_goal
                     output_ports:
                         goal_output:
                             value: goal_state

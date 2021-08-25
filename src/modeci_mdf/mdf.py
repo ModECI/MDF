@@ -6,7 +6,7 @@ import collections
 import onnx.defs
 import sympy
 
-from typing import List, Tuple, Dict, Optional, Set
+from typing import List, Tuple, Dict, Optional, Set, Any, Union
 
 # Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
 #  Try: pip install neuromllite
@@ -24,24 +24,25 @@ class MdfBase(Base):
         self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
         super().__init__(**kwargs)
 
-
 class Model(MdfBaseWithId):
+    r"""The top level construct in MDF is Model which consists of Graph(s) and model attribute(s)
+
+    Args:
+        id: A unique identifier for this Model
+        format: Information on the version of MDF used in this file
+        generating_application: Information on what application generated/saved this file
+    """
     _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
 
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        format: Optional[str] = None,
-        generating_application: Optional[str] = None,
-        metadata: Optional[dict] = None
-    ):
+
+    def __init__(self, **kwargs):
         """The top level construct in MDF is Model which consists of Graph's and model attributed
         Args:
             id: A unique identifier for this Model.
             format: Information on the version of MDF used in this file
             generating_application: Information on what application generated/saved this file
         """
-
+        '''
         kwargs = {}
         if id is not None:
             kwargs["id"] = id
@@ -50,7 +51,7 @@ class Model(MdfBaseWithId):
         if generating_application is not None:
             kwargs["generating_application"] = generating_application
         if metadata is not None:
-            kwargs["metadata"] = metadata
+            kwargs["metadata"] = metadata'''
 
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
@@ -68,15 +69,26 @@ class Model(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
 
-        # Inheriting the init method from superclass BaseWithId
+        # Removed for now...
+        '''
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass'''
+
         super().__init__(**kwargs)
 
     @property
     def graphs(self) -> List["Graph"]:
-        """
-        The graphs this model contains.
-        """
+        """The graphs present in the model"""
         return self.__getattr__("graphs")
 
     def _include_metadata(self):
@@ -90,13 +102,17 @@ class Model(MdfBaseWithId):
 
     # Overrides BaseWithId.to_json_file
     def to_json_file(self, filename, include_metadata=True) -> str:
-        """Convert MDF object to json file
+        """Convert the file in MDF format to JSON format
+
+         .. note::
+            JSON is standard file format uses human-readable text to store and transmit data objects consisting of attribute–value pairs and arrays
+
         Args:
             filename: file in MDF format (.mdf extension)
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
                               benchmark results, and environments in which the specified model was originally implemented
         Returns:
-            The name of the JSON file generated.
+            The name of the generated JSON file
         """
 
         if include_metadata:
@@ -108,19 +124,22 @@ class Model(MdfBaseWithId):
 
     # Overrides BaseWithId.to_yaml_file
     def to_yaml_file(self, filename, include_metadata=True):
-        """Convert MDF object to yaml format
+        """Convert file in MDF format to yaml format
+
         Args:
-            filename: file in MDF format (Filename extension: .mdf )
+            filename: File in MDF format (Filename extension: .mdf )
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
                               benchmark results, and environments in which the specified model was originally implemented
         Returns:
-            file in yaml format
+            The name of the generated yaml file
         """
 
         if include_metadata:
             self._include_metadata()
 
         new_file = super().to_yaml_file(filename)
+
+        return new_file
 
     def to_graph_image(
         self,
@@ -163,16 +182,16 @@ class Model(MdfBaseWithId):
 
 
 class Graph(MdfBaseWithId):
+    r"""A directed graph consisting of Node(s) connected via Edge(s)
+
+    Args:
+        id: A unique identifier for this Graph
+        parameters: Dictionary of global parameters for the Graph
+        conditions: The ConditionSet stored as dictionary for scheduling of the Graph
+    """
     _definition = "A directed graph consisting of _Node_s connected via _Edge_s."
 
     def __init__(self, **kwargs):
-        """A directed graph consisting of _Node_s connected via _Edge_s
-        Args:
-            nodes: Dictionary of Node objects in the Graph
-            edges: Dictionary of Edge objects in the Graph
-            parameters: Dictionary of global parameters for the Graph
-            conditions: The _ConditionSet_ stored as dictionary for scheduling of the Graph
-        """
 
         self.allowed_children = collections.OrderedDict(
             [
@@ -190,15 +209,37 @@ class Graph(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
+        '''
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        #kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass'''
 
         super().__init__(**kwargs)
+
+    @property
+    def nodes(self) -> List["Node"]:
+        """Node(s) present in this graph"""
+        return self.__getattr__("nodes")
+
+    @property
+    def edges(self) -> List["Edge"]:
+        """Edge(s) present in this graph"""
+        return self.__getattr__("edges")
 
     def get_node(self, id):
         """Retrieve Node object corresponding to the given id
         Args:
             id: Unique identifier of Node object
         Returns:
-            Node object if the entered id matches with the id of node present in the graph
+            Node object if the entered id matches with the id of Node present in the Graph
         """
         for node in self.nodes:
             if id == node.id:
@@ -207,8 +248,11 @@ class Graph(MdfBaseWithId):
     @property
     def dependency_dict(self) -> Dict["Node", Set["Node"]]:
         """Returns the dependency among nodes as dictionary
-        Key: receiver, Value: set of senders imparting information to the receiver
+
+        Key: receiver, Value: Set of senders imparting information to the receiver
+
         Returns:
+            Returns the dependency dictionary
         """
         # assumes no cycles, need to develop a way to prune if cyclic
         # graphs are to be supported
@@ -224,7 +268,8 @@ class Graph(MdfBaseWithId):
 
     @property
     def inputs(self: "Graph") -> List[Tuple["Node", "InputPort"]]:
-        """Enumerate all Node, InputPort pairs that specify no incoming edge. These are input ports for the graph itself and must be provided values to evaluate
+        """Enumerate all Node-InputPort pairs that specify no incoming edge. These are input ports for the graph itself and must be provided values to evaluate
+
         Returns:
             A list of Node, InputPort tuples
         """
@@ -240,9 +285,17 @@ class Graph(MdfBaseWithId):
 
 
 class Node(MdfBaseWithId):
+    r"""A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
+    The values from these are processed via a number of Functions and one or more final values
+    are calculated on the OutputPort
+
+    Args:
+        id: Unique Identity of the element
+        parameters: Dictionary of parameters required at the Node for computation
+    """
     _definition = (
         "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. "
-        + "The values from these are processed via a number of _Function_s and one or more final values "
+        + "The values from these are processed via a number of Functions and one or more final values "
         "are calculated on the _OutputPort_s "
     )
 
@@ -252,17 +305,15 @@ class Node(MdfBaseWithId):
         are calculated on the _OutputPort_
         Args:
             input_ports (obj): Dictionary of the InputPort objects in the Node
-            functions (obj): The _Function_s for computation the Node
-            states (obj): The _State_s of the Node
-            output_ports (obj): The _OutputPort_s containing evaluated quantities from the Node
             parameters : Dictionary of parameters for the Node
+            functions (obj): The _Function_s for computation the Node
+            output_ports (obj): The _OutputPort_s containing evaluated quantities from the Node
         """
 
         self.allowed_children = collections.OrderedDict(
             [
                 ("input_ports", ("The _InputPort_s into the Node", InputPort)),
                 ("functions", ("The _Function_s for the Node", Function)),
-                ("states", ("The _State_s of the Node", State)),
                 ("parameters", ("The _Parameter_s of the Node", Parameter)),
                 (
                     "output_ports",
@@ -273,28 +324,71 @@ class Node(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
 
+        '''
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass'''
 
         super().__init__(**kwargs)
+
+    @property
+    def input_ports(self) -> List["InputPort"]:
+        """The InputPort(s) present in the Node
+
+        Returns:
+            A list of InputPort(s) at the given Node
+        """
+        return self.__getattr__("input_ports")
+
 
     def get_parameter(self, id):
         for p in self.parameters:
             if p.id==id: return p
         return None
 
+    @property
+    def functions(self) -> List["Function"]:
+        """The Functions define computation at the Node
 
-class Function(MdfBaseWithId):
+        Returns:
+            A list of Function(s) at the given Node
+        """
+        return self.__getattr__("functions")
+
+
+    @property
+    def output_ports(self) -> List["OutputPort"]:
+        """The OutputPort(s) present at the Node
+
+        Returns:
+            A list of OutputPorts at the given Node
+        """
+        return self.__getattr__("output_ports")
+
+
+class Function(BaseWithId):
+    r"""A single value which is evaluated as a function of values on InputPorts and other Functions
+
+    Args:
+        function: Which of the in-build MDF functions (linear etc.) this uses
+        args: Dictionary of values for each of the arguments for the Function, e.g. if the in-build function
+              is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
+        id: The unique (for this Node) id of the function, which will be used in other Functions and the _OutputPort_s
+            for its value
+    """
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
 
+
     def __init__(self, **kwargs):
-        """A single value which is evaluated as a function of values on _InputPort_s and other Functions
-        Args:
-            function (str): Which of the in-build MDF functions (linear etc.) this uses
-            args : Dictionary of values for each of the arguments for the Function, e.g. if the in-build function
-                  is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-            id (str): The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s
-                for its value
-        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -312,24 +406,46 @@ class Function(MdfBaseWithId):
                         dict,
                     ),
                 ),
+                (
+                    "id",
+                    (
+                        "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value",
+                        str,
+                    ),
+                ),
             ]
         )
+        """The allowed fields for this type"""
+
+        '''
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass'''
 
         super().__init__(**kwargs)
 
-        self.allowed_fields["id"] = (
-            "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value",
-            str,
-        )
-
 
 class InputPort(MdfBaseWithId):
-    def __init__(self, **kwargs):
-        """The InputPort is an attribute of a Node which imports information to the Node object
-        Args:
-            shape (str): The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
-            type (str): The data type of the input received at a port or the output sent by a port
-        """
+    r"""The InputPort is an attribute of a Node which imports information to the Node
+
+    Args:
+        shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
+        type: The data type of the input received at a port or the output sent by a port
+    """
+
+    def __init__(
+        self,
+        id: Optional[str] = None,
+        shape: Optional[str] = None,
+        type: Optional[str] = None,
+    ):
+
         self.allowed_fields = collections.OrderedDict(
             [
                 (
@@ -349,15 +465,28 @@ class InputPort(MdfBaseWithId):
             ]
         )
 
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass
+
         super().__init__(**kwargs)
 
 
 class OutputPort(MdfBaseWithId):
+    r"""The OutputPort is an attribute of a Node which exports information to the dependent Node object
+    Args:
+        id: Unique Indenty of the element
+        value: The value of the OutputPort in terms of the InputPort and Function values
+    """
+
     def __init__(self, **kwargs):
-        """The OutputPort is an attribute of a Node which exports information to the dependent Node object
-        Args:
-            value (str): The value of the OutputPort in terms of the _InputPort_ and _Function_ values
-        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -371,55 +500,38 @@ class OutputPort(MdfBaseWithId):
 
             ]
         )
+        """The allowed fields for this type"""
+
+        '''
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass'''
 
         super().__init__(**kwargs)
 
 
-class State(MdfBaseWithId):
-    _definition = "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_."
+
+class Parameter(MdfBaseWithId):
+    r"""A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative
+
+    Args:
+        default_initial_value: The initial value of the parameter
+        value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
+        time_derivative: How the parameter with time, i.e. ds/dt. Units of time are seconds.
+        function: Which of the in-build MDF functions (linear etc.) this uses
+        args: Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
+        """
+    _definition = "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative"
 
     def __init__(self, **kwargs):
-        """A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_
-        Args:
-            default_initial_value (str): The initial value of the state variable
-            value (str): The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values
-            time_derivative (str): How the state varies with time, i.e. ds/dt. Unit of time is second
-        """
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "default_initial_value",
-                    ("The initial value of the state variable", str),
-                ),
-                (
-                    "value",
-                    (
-                        "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values",
-                        str,
-                    ),
-                ),
-                (
-                    "time_derivative",
-                    (
-                        "How the state varies with time, i.e. ds/dt. Units of time are seconds.",
-                        str,
-                    ),
-                ),
-            ]
-        )
-
-        super().__init__(**kwargs)
-
-class Parameter(BaseWithId):
-    _definition = "???"
-
-    def __init__(self, **kwargs):
-        """???
-
-        Args:
-            ???
-        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -451,7 +563,7 @@ class Parameter(BaseWithId):
                 (
                     "args",
                     (
-                        'Dictionary of values for each of the arguments for the function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
+                        'Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
                         dict,
                     ),
                 ),
@@ -474,49 +586,19 @@ class Parameter(BaseWithId):
         return False
 
 
-class Stateful_Parameter(BaseWithId):
-    _definition = "A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_."
-
-    def __init__(self, **kwargs):
-        """A stateful parameter of a _Node_, i.e. has a value that updates by functions between evaluations of the _Node_
-
-        Args:
-            default_initial_value (str): The initial value of the stateful parameter
-            value (str): The next value of the stateful parameter, in terms of the inputs, functions
-
-        """
-
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "default_initial_value",
-                    ("The initial value of the stateful parameter", str),
-                ),
-                (
-                    "value",
-                    (
-                        "The next value of the stateful parameter, in terms of the inputs, functions",
-                        str,
-                    ),
-                ),
-
-            ]
-        )
-
-        super().__init__(**kwargs)
-
-
-
 class Edge(MdfBaseWithId):
+    r"""Edge is an attribute of Graph that transmits computational results from sender port to receiver port
+
+    Args:
+        parameters: Dictionary of parameters for the Edge
+        sender: The id of the Node which is the source of the Edge
+        receiver: The id of the Node which is the target of the Edge
+        sender_port: The id of the OutputPort on the sender Node, whose value should be sent to the receiver_port
+        receiver_port: The id of the InputPort on the receiver Node
+    """
+
+
     def __init__(self, **kwargs):
-        """Edge is an attribute of Graph object that transmits computational results from sender_port to receiver port
-        Args:
-            parameters: Dictionary of parameters for the Edge
-            sender (str): The id of the _Node_ which is the source of the Edge
-            receiver (str): The id of the _Node_ which is the target of the Edge
-            sender_port (str): The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port
-            receiver_port (str): The id of the _InputPort_ on the receiver _Node_
-        """
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -542,17 +624,36 @@ class Edge(MdfBaseWithId):
                 ),
             ]
         )
+        """The allowed fields for this type"""
+
+        '''
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass'''
 
         super().__init__(**kwargs)
 
 
 class ConditionSet(MdfBase):
-    def __init__(self, **kwargs):
-        """Specify the non-default pattern of execution
-        Args:
-            node_specific: A dictionary mapping nodes to any non-default run conditions
-            termination: A dictionary mapping time scales of model execution to conditions indicating when they end
-        """
+    r"""Specify the non-default pattern of execution
+
+    Args:
+        node_specific: A dictionary mapping nodes to any non-default run conditions
+        termination: A dictionary mapping time scales of model execution to conditions indicating when they end
+    """
+
+    def __init__(
+        self,
+        node_specific: Optional[Dict[str, "Condition"]] = None,
+        termination: Optional[Dict["str", "Condition"]] = None,
+    ):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -566,17 +667,38 @@ class ConditionSet(MdfBase):
                 ),
             ]
         )
+        """The allowed fields for this type"""
+
+        # FIXME: Reconstruct kwargs as neuromlite expects them
+        kwargs = {}
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass
 
         super().__init__(**kwargs)
 
 
 class Condition(MdfBase):
-    def __init__(self, type=None, **kwargs):
-        """A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements
-        Args:
-            type (str): The type of _Condition_ from the library
-            args: The dictionary of arguments needed to evaluate the _Condition_
-        """
+    r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements
+    Args:
+        type: The type of Condition from the library
+        args: The dictionary of arguments needed to evaluate the Condition
+        n: The number of executions of component after which the Condition is satisfied
+        dependency: Node id on which
+    """
+
+    def __init__(
+        self,
+        type: Optional[str] = None,
+        args: Optional[Dict[str, Any]] = None,
+        dependency: Optional[str] = None,
+        n: Optional[int] = None,
+        dependencies: Optional[List["Condition"]] = None,
+    ):
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -590,6 +712,14 @@ class Condition(MdfBase):
                 ),
             ]
         )
+        kwargs = {}
+
+        if n is not None:
+            kwargs["n"] = n
+        if dependency is not None:
+            kwargs["dependency"] = dependency
+        if dependencies is not None:
+            kwargs["dependencies"] = dependencies
 
         super().__init__(type=type, args=kwargs)
 
