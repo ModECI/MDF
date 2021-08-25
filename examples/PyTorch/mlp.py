@@ -5,7 +5,7 @@ import torch.nn
 import sys
 from modeci_mdf.interfaces.pytorch import importer
 
-
+ 
 # Load Model
 script_dir = os.path.dirname(sys.argv[0])
 mdf_name = "mlp_classifier.json"
