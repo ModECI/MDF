@@ -1,0 +1,68 @@
+{
+    "ONNX Model": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.3",
+        "graphs": {
+            "torch-jit-export": {
+                "nodes": {
+                    "Add_1": {
+                        "parameters": {
+                            "B": 1.0
+                        },
+                        "input_ports": {
+                            "input": {
+                                "shape": "(2, 3)"
+                            }
+                        },
+                        "functions": {
+                            "Add_1": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "input",
+                                    "B": "B"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_2": {
+                                "value": "Add_1"
+                            }
+                        }
+                    },
+                    "Mul_3": {
+                        "parameters": {
+                            "B": 5.0
+                        },
+                        "input_ports": {
+                            "_2": {
+                                "shape": "(2, 3)"
+                            }
+                        },
+                        "functions": {
+                            "Mul_3": {
+                                "function": "onnx::Mul",
+                                "args": {
+                                    "A": "_2",
+                                    "B": "B"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_4": {
+                                "value": "Mul_3"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Add_1._2_Mul_3._2": {
+                        "sender": "Add_1",
+                        "receiver": "Mul_3",
+                        "sender_port": "_2",
+                        "receiver_port": "_2"
+                    }
+                }
+            }
+        }
+    }
+}
