@@ -4,10 +4,30 @@ import numpy
 
 import modeci_mdf.onnx_functions as onnx_ops
 
+from typing import List, Dict, Union, Any, Optional
+
 mdf_functions = {}
 
 
-def _add_mdf_function(name, description, arguments, expression_string):
+def _add_mdf_function(
+    name: str = None,
+    description: str = None,
+    arguments: List[str] = None,
+    expression_string: str = None,
+):
+
+    """To include a new function in mdf_functions
+
+    Args:
+        name: name of the function e.g.'sin','cos','linear'
+        description: Information about the function
+        arguments: Inputs provided to obtain the result of function
+        expression_string: Function expression in string format
+
+    Returns:
+        Updates mdf_functions
+
+    """
 
     mdf_functions[name] = {}
 
@@ -23,23 +43,64 @@ def _add_mdf_function(name, description, arguments, expression_string):
         mdf_functions[name]["function"] = None
 
 
-def create_python_expression(expression_string):
+def create_python_expression(expression_string: str = None) -> str:
+    """Converts the mathematical representation of function into function expression in python
+
+    Args:
+        expression_string: Mathematical expression of function in string format
+
+    Returns:
+        function expression in python
+    """
 
     for func in ["exp", "sin", "cos"]:
-        expression_string = expression_string.replace("%s(" % func, "math.%s(" % func)
+        if "math." + func not in expression_string:
+
+            expression_string = expression_string.replace(
+                "%s(" % func, "math.%s(" % func
+            )
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
+
     return expression_string
 
 
-def substitute_args(expression_string, args):
+def substitute_args(expression_string: str = None, args: Dict[str, str] = None) -> str:
+
+    """Substitute arg with the value in args dict
+
+    Args:
+        expression_string: function expression
+        args: Dictionary of arguments
+    Returns:
+        modified expression string after substitution
+
+    """
     # TODO, better checks for string replacement
     for arg in args:
         expression_string = expression_string.replace(arg, str(args[arg]))
     return expression_string
 
 
-def create_python_function(name, expression_string, arguments):
+def create_python_function(
+    name: str = None,
+    expression_string: str = None,
+    arguments: List[str] = None,
+) -> "types.FunctionType":
+
+    """create a python function e.g. linear, exponential, sin, cos, ReLu
+
+    Args:
+        name: name of the function e.g.'sin','cos','linear'
+        expression_string: Function expression in string format
+        arguments: list of inputs provided to obtain result from the function
+
+
+    Returns:
+        A function object
+
+    """
+
     # assumes expression is one line
     name = name.replace(":", "_")
     expr = create_python_expression(expression_string)
@@ -55,6 +116,7 @@ def create_python_function(name, expression_string, arguments):
 if len(mdf_functions) == 0:
 
     STANDARD_ARG_0 = "variable0"
+    STANDARD_ARG_1 = "variable1"
 
     _add_mdf_function(
         "linear",

@@ -1,23 +1,26 @@
 Simple:
-    format: ModECI MDF v0.1
-    generating_application: Python modeci-mdf v0.1.3
+    format: ModECI MDF v0.2
+    generating_application: Python modeci-mdf v0.2.1
     graphs:
         simple_example:
             nodes:
                 input_node:
                     parameters:
-                        input_level: 0.5
+                        input_level:
+                            value: 0.5
                     output_ports:
                         out_port:
                             value: input_level
                 processing_node:
-                    parameters:
-                        lin_slope: 0.5
-                        lin_intercept: 0
-                        log_gain: 3
                     input_ports:
                         input_port1: {}
-                    functions:
+                    parameters:
+                        lin_slope:
+                            value: 0.5
+                        lin_intercept:
+                            value: 0
+                        log_gain:
+                            value: 3
                         linear_1:
                             function: linear
                             args:

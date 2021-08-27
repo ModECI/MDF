@@ -4,7 +4,7 @@
 """
 
 from modeci_mdf.mdf import *
-from modeci_mdf.scheduler import EvaluableGraph
+from modeci_mdf.execution_engine import EvaluableGraph
 import numpy as np
 import sys
 
@@ -25,9 +25,10 @@ def generate_test_model(
     mod.graphs.append(mod_graph)
 
     input_node = Node(
-        id="input_node",
-        parameters={"input_level": np.random.random_sample(input_shape).tolist()},
+        id="input_node"
     )
+
+    input_node.parameters.append(Parameter(id="input_level", value=np.random.random_sample(input_shape).tolist()))
 
     input_node.output_ports.append(OutputPort(id="out_port", value="input_level"))
 
@@ -38,17 +39,16 @@ def generate_test_model(
     for i in range(hidden_layers):
 
         hidden_node = Node(
-            id="hidden_node_%i" % i,
-            parameters={
-                "slope0": 0.5,
-                "intercept0": np.random.random_sample(hidden_shape).tolist(),
-            },
+            id="hidden_node_%i" % i
         )
 
         hidden_node.input_ports.append(InputPort(id="in_port"))
+        hidden_node.parameters.append(Parameter(id="slope0", value=0.5))
+        hidden_node.parameters.append(Parameter(id="intercept0", value=np.random.random_sample(hidden_shape).tolist()))
+
         mod_graph.nodes.append(hidden_node)
 
-        f1 = Function(
+        f1 = Parameter(
             id="linear_1",
             function="linear",
             args={
@@ -57,7 +57,7 @@ def generate_test_model(
                 "intercept": "intercept0",
             },
         )
-        hidden_node.functions.append(f1)
+        hidden_node.parameters.append(f1)
 
         hidden_node.output_ports.append(OutputPort(id="out_port", value="linear_1"))
 
@@ -103,7 +103,7 @@ def generate_test_model(
 def main():
     mod_graph = generate_test_model("small_test", save_to_file=True)
 
-    scale = 20
+    scale = 2
     mod_graph = generate_test_model(
         "medium_test",
         input_shape=(scale, scale),

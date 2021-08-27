@@ -1,0 +1,82 @@
+{
+    "Stateful_Parameters": {
+        "format": "ModECI MDF v0.2",
+        "generating_application": "Python modeci-mdf v0.2.1",
+        "graphs": {
+            "stateful_parameters_example": {
+                "nodes": {
+                    "counter_node": {
+                        "parameters": {
+                            "increment": {
+                                "value": 1
+                            },
+                            "count": {
+                                "value": "evaluated_counter_node_count_next_value",
+                                "default_initial_value": 0
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "count"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_counter_node_count_next_value": {
+                                "value": "count + increment"
+                            }
+                        }
+                    },
+                    "sine_node": {
+                        "parameters": {
+                            "amp": {
+                                "value": 3
+                            },
+                            "period": {
+                                "value": 0.4
+                            },
+                            "level": {
+                                "default_initial_value": "0",
+                                "value": "evaluated_sine_node_level_next_value"
+                            },
+                            "rate": {
+                                "default_initial_value": "1",
+                                "value": "evaluated_sine_node_rate_next_value"
+                            },
+                            "dt": {
+                                "value": 0.01
+                            },
+                            "time": {
+                                "default_initial_value": 0,
+                                "value": "evaluated_time_next_value"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "evaluated_sine_node_out_port_value"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_sine_node_level_next_value": {
+                                "value": "level+(dt*6.283185 * rate / period)"
+                            },
+                            "evaluated_sine_node_rate_next_value": {
+                                "value": "rate+(dt*-1 * 6.283185 * evaluated_sine_node_level_next_value / period)"
+                            },
+                            "evaluated_sine_node_out_port_value": {
+                                "value": "amp * level"
+                            },
+                            "evaluated_time_next_value": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "time",
+                                    "slope": 1,
+                                    "intercept": "dt"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

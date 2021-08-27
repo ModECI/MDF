@@ -1,7 +1,7 @@
 {
     "ONNX Model": {
-        "format": "ModECI MDF v0.1",
-        "generating_application": "Python modeci-mdf v0.1.3",
+        "format": "ModECI MDF v0.2",
+        "generating_application": "Python modeci-mdf v0.2.1",
         "graphs": {
             "torch-jit-export": {
                 "nodes": {
@@ -11,7 +11,7 @@
                                 "shape": "(1, 1)"
                             }
                         },
-                        "functions": {
+                        "parameters": {
                             "Shape_3": {
                                 "function": "onnx::Shape",
                                 "args": {
@@ -26,17 +26,17 @@
                         }
                     },
                     "ConstantOfShape_4": {
-                        "parameters": {
-                            "value": [
-                                0.0
-                            ]
-                        },
                         "input_ports": {
                             "_4": {
                                 "shape": "(2,)"
                             }
                         },
-                        "functions": {
+                        "parameters": {
+                            "value": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
                             "ConstantOfShape_4": {
                                 "function": "onnx::ConstantOfShape",
                                 "args": {
@@ -51,911 +51,6 @@
                         }
                     },
                     "Loop_5": {
-                        "parameters": {
-                            "body": {
-                                "torch-jit-export1": {
-                                    "nodes": {
-                                        "Equal_7": {
-                                            "parameters": {
-                                                "B": 0
-                                            },
-                                            "input_ports": {
-                                                "num_A_calls_11": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Equal_7": {
-                                                    "function": "onnx::Equal",
-                                                    "args": {
-                                                        "A": "num_A_calls_11",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_20": {
-                                                    "value": "Equal_7"
-                                                }
-                                            }
-                                        },
-                                        "Cast_8": {
-                                            "parameters": {
-                                                "to": 9
-                                            },
-                                            "input_ports": {
-                                                "_20": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Cast_8": {
-                                                    "function": "onnx::Cast",
-                                                    "args": {
-                                                        "input": "_20"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_21": {
-                                                    "value": "Cast_8"
-                                                }
-                                            }
-                                        },
-                                        "If_9": {
-                                            "parameters": {
-                                                "then_branch": {
-                                                    "torch-jit-export2": {
-                                                        "nodes": {
-                                                            "Mul_11": {
-                                                                "parameters": {
-                                                                    "A": [
-                                                                        [
-                                                                            2.0
-                                                                        ]
-                                                                    ]
-                                                                },
-                                                                "input_ports": {
-                                                                    "input": {
-                                                                        "shape": "(1, 1)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Mul_11": {
-                                                                        "function": "onnx::Mul",
-                                                                        "args": {
-                                                                            "A": "A",
-                                                                            "B": "input"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "_25": {
-                                                                        "value": "Mul_11"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Add_13": {
-                                                                "parameters": {
-                                                                    "B": [
-                                                                        [
-                                                                            2.0
-                                                                        ]
-                                                                    ]
-                                                                },
-                                                                "input_ports": {
-                                                                    "_25": {
-                                                                        "shape": "(1, 1)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Add_13": {
-                                                                        "function": "onnx::Add",
-                                                                        "args": {
-                                                                            "A": "_25",
-                                                                            "B": "B"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "_27": {
-                                                                        "value": "Add_13"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Add_15": {
-                                                                "parameters": {
-                                                                    "B": 1
-                                                                },
-                                                                "input_ports": {
-                                                                    "num_A_calls_11": {
-                                                                        "shape": "(1,)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Add_15": {
-                                                                        "function": "onnx::Add",
-                                                                        "args": {
-                                                                            "A": "num_A_calls_11",
-                                                                            "B": "B"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "_29": {
-                                                                        "value": "Add_15"
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        "edges": {
-                                                            "Mul_11._25_Add_13._25": {
-                                                                "sender": "Mul_11",
-                                                                "receiver": "Add_13",
-                                                                "sender_port": "_25",
-                                                                "receiver_port": "_25"
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                "else_branch": {
-                                                    "torch-jit-export3": {
-                                                        "nodes": {
-                                                            "Identity_16": {
-                                                                "input_ports": {
-                                                                    "a_10": {
-                                                                        "shape": "('c.10_dim_0', 'c.10_dim_1')"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Identity_16": {
-                                                                        "function": "onnx::Identity",
-                                                                        "args": {
-                                                                            "input": "a_10"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "a_9": {
-                                                                        "value": "Identity_16"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Identity_17": {
-                                                                "input_ports": {
-                                                                    "num_A_calls_11": {
-                                                                        "shape": "(1,)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Identity_17": {
-                                                                        "function": "onnx::Identity",
-                                                                        "args": {
-                                                                            "input": "num_A_calls_11"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "num_A_calls_10": {
-                                                                        "value": "Identity_17"
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            "input_ports": {
-                                                "_21": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "If_9": {
-                                                    "function": "onnx::If",
-                                                    "args": {
-                                                        "cond": "_21"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_22": {
-                                                    "value": "If_9"
-                                                },
-                                                "_23": {
-                                                    "value": "If_9"
-                                                }
-                                            }
-                                        },
-                                        "Mul_19": {
-                                            "parameters": {
-                                                "A": [
-                                                    [
-                                                        2.0
-                                                    ]
-                                                ]
-                                            },
-                                            "input_ports": {
-                                                "_22": {
-                                                    "shape": ""
-                                                }
-                                            },
-                                            "functions": {
-                                                "Mul_19": {
-                                                    "function": "onnx::Mul",
-                                                    "args": {
-                                                        "A": "A",
-                                                        "B": "_22"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_33": {
-                                                    "value": "Mul_19"
-                                                }
-                                            }
-                                        },
-                                        "Add_21": {
-                                            "parameters": {
-                                                "B": [
-                                                    [
-                                                        2.0
-                                                    ]
-                                                ]
-                                            },
-                                            "input_ports": {
-                                                "_33": {
-                                                    "shape": "(1, 1)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Add_21": {
-                                                    "function": "onnx::Add",
-                                                    "args": {
-                                                        "A": "_33",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_35": {
-                                                    "value": "Add_21"
-                                                }
-                                            }
-                                        },
-                                        "Add_23": {
-                                            "parameters": {
-                                                "B": 1
-                                            },
-                                            "input_ports": {
-                                                "num_B_calls_8": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Add_23": {
-                                                    "function": "onnx::Add",
-                                                    "args": {
-                                                        "A": "num_B_calls_8",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_37": {
-                                                    "value": "Add_23"
-                                                }
-                                            }
-                                        },
-                                        "Div_25": {
-                                            "parameters": {
-                                                "B": 5
-                                            },
-                                            "input_ports": {
-                                                "_37": {
-                                                    "shape": ""
-                                                }
-                                            },
-                                            "functions": {
-                                                "Div_25": {
-                                                    "function": "onnx::Div",
-                                                    "args": {
-                                                        "A": "_37",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_39": {
-                                                    "value": "Div_25"
-                                                }
-                                            }
-                                        },
-                                        "Mul_27": {
-                                            "parameters": {
-                                                "B": 5
-                                            },
-                                            "input_ports": {
-                                                "_39": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Mul_27": {
-                                                    "function": "onnx::Mul",
-                                                    "args": {
-                                                        "A": "_39",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_41": {
-                                                    "value": "Mul_27"
-                                                }
-                                            }
-                                        },
-                                        "Sub_28": {
-                                            "input_ports": {
-                                                "_37": {
-                                                    "shape": ""
-                                                },
-                                                "_41": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Sub_28": {
-                                                    "function": "onnx::Sub",
-                                                    "args": {
-                                                        "A": "_37",
-                                                        "B": "_41"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_42": {
-                                                    "value": "Sub_28"
-                                                }
-                                            }
-                                        },
-                                        "Equal_30": {
-                                            "parameters": {
-                                                "B": 0
-                                            },
-                                            "input_ports": {
-                                                "_42": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Equal_30": {
-                                                    "function": "onnx::Equal",
-                                                    "args": {
-                                                        "A": "_42",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_44": {
-                                                    "value": "Equal_30"
-                                                }
-                                            }
-                                        },
-                                        "Cast_31": {
-                                            "parameters": {
-                                                "to": 9
-                                            },
-                                            "input_ports": {
-                                                "_44": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Cast_31": {
-                                                    "function": "onnx::Cast",
-                                                    "args": {
-                                                        "input": "_44"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_45": {
-                                                    "value": "Cast_31"
-                                                }
-                                            }
-                                        },
-                                        "If_32": {
-                                            "parameters": {
-                                                "then_branch": {
-                                                    "torch-jit-export4": {
-                                                        "nodes": {
-                                                            "Mul_34": {
-                                                                "parameters": {
-                                                                    "A": [
-                                                                        [
-                                                                            2.0
-                                                                        ]
-                                                                    ]
-                                                                },
-                                                                "input_ports": {
-                                                                    "_35": {
-                                                                        "shape": "(1, 1)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Mul_34": {
-                                                                        "function": "onnx::Mul",
-                                                                        "args": {
-                                                                            "A": "A",
-                                                                            "B": "_35"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "_48": {
-                                                                        "value": "Mul_34"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Add_36": {
-                                                                "parameters": {
-                                                                    "B": [
-                                                                        [
-                                                                            2.0
-                                                                        ]
-                                                                    ]
-                                                                },
-                                                                "input_ports": {
-                                                                    "_48": {
-                                                                        "shape": "(1, 1)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Add_36": {
-                                                                        "function": "onnx::Add",
-                                                                        "args": {
-                                                                            "A": "_48",
-                                                                            "B": "B"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "_50": {
-                                                                        "value": "Add_36"
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        "edges": {
-                                                            "Mul_34._48_Add_36._48": {
-                                                                "sender": "Mul_34",
-                                                                "receiver": "Add_36",
-                                                                "sender_port": "_48",
-                                                                "receiver_port": "_48"
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                "else_branch": {
-                                                    "torch-jit-export5": {
-                                                        "nodes": {
-                                                            "Identity_37": {
-                                                                "input_ports": {
-                                                                    "c_10": {
-                                                                        "shape": "('c.10_dim_0', 'c.10_dim_1')"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Identity_37": {
-                                                                        "function": "onnx::Identity",
-                                                                        "args": {
-                                                                            "input": "c_10"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "c_9": {
-                                                                        "value": "Identity_37"
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            "input_ports": {
-                                                "_45": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "If_32": {
-                                                    "function": "onnx::If",
-                                                    "args": {
-                                                        "cond": "_45"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_46": {
-                                                    "value": "If_32"
-                                                }
-                                            }
-                                        },
-                                        "Div_39": {
-                                            "parameters": {
-                                                "B": 10
-                                            },
-                                            "input_ports": {
-                                                "_37": {
-                                                    "shape": ""
-                                                }
-                                            },
-                                            "functions": {
-                                                "Div_39": {
-                                                    "function": "onnx::Div",
-                                                    "args": {
-                                                        "A": "_37",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_53": {
-                                                    "value": "Div_39"
-                                                }
-                                            }
-                                        },
-                                        "Mul_41": {
-                                            "parameters": {
-                                                "B": 10
-                                            },
-                                            "input_ports": {
-                                                "_53": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Mul_41": {
-                                                    "function": "onnx::Mul",
-                                                    "args": {
-                                                        "A": "_53",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_55": {
-                                                    "value": "Mul_41"
-                                                }
-                                            }
-                                        },
-                                        "Sub_42": {
-                                            "input_ports": {
-                                                "_37": {
-                                                    "shape": ""
-                                                },
-                                                "_55": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Sub_42": {
-                                                    "function": "onnx::Sub",
-                                                    "args": {
-                                                        "A": "_37",
-                                                        "B": "_55"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_56": {
-                                                    "value": "Sub_42"
-                                                }
-                                            }
-                                        },
-                                        "Equal_44": {
-                                            "parameters": {
-                                                "B": 0
-                                            },
-                                            "input_ports": {
-                                                "_56": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Equal_44": {
-                                                    "function": "onnx::Equal",
-                                                    "args": {
-                                                        "A": "_56",
-                                                        "B": "B"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_58": {
-                                                    "value": "Equal_44"
-                                                }
-                                            }
-                                        },
-                                        "Cast_45": {
-                                            "parameters": {
-                                                "to": 9
-                                            },
-                                            "input_ports": {
-                                                "_58": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "Cast_45": {
-                                                    "function": "onnx::Cast",
-                                                    "args": {
-                                                        "input": "_58"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_59": {
-                                                    "value": "Cast_45"
-                                                }
-                                            }
-                                        },
-                                        "If_46": {
-                                            "parameters": {
-                                                "then_branch": {
-                                                    "torch-jit-export6": {
-                                                        "nodes": {
-                                                            "Mul_48": {
-                                                                "parameters": {
-                                                                    "A": [
-                                                                        [
-                                                                            2.0
-                                                                        ]
-                                                                    ]
-                                                                },
-                                                                "input_ports": {
-                                                                    "_35": {
-                                                                        "shape": "(1, 1)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Mul_48": {
-                                                                        "function": "onnx::Mul",
-                                                                        "args": {
-                                                                            "A": "A",
-                                                                            "B": "_35"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "_62": {
-                                                                        "value": "Mul_48"
-                                                                    }
-                                                                }
-                                                            },
-                                                            "Add_50": {
-                                                                "parameters": {
-                                                                    "B": [
-                                                                        [
-                                                                            2.0
-                                                                        ]
-                                                                    ]
-                                                                },
-                                                                "input_ports": {
-                                                                    "_62": {
-                                                                        "shape": "(1, 1)"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Add_50": {
-                                                                        "function": "onnx::Add",
-                                                                        "args": {
-                                                                            "A": "_62",
-                                                                            "B": "B"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "_64": {
-                                                                        "value": "Add_50"
-                                                                    }
-                                                                }
-                                                            }
-                                                        },
-                                                        "edges": {
-                                                            "Mul_48._62_Add_50._62": {
-                                                                "sender": "Mul_48",
-                                                                "receiver": "Add_50",
-                                                                "sender_port": "_62",
-                                                                "receiver_port": "_62"
-                                                            }
-                                                        }
-                                                    }
-                                                },
-                                                "else_branch": {
-                                                    "torch-jit-export7": {
-                                                        "nodes": {
-                                                            "Identity_51": {
-                                                                "input_ports": {
-                                                                    "d_10": {
-                                                                        "shape": "('c.10_dim_0', 'c.10_dim_1')"
-                                                                    }
-                                                                },
-                                                                "functions": {
-                                                                    "Identity_51": {
-                                                                        "function": "onnx::Identity",
-                                                                        "args": {
-                                                                            "input": "d_10"
-                                                                        }
-                                                                    }
-                                                                },
-                                                                "output_ports": {
-                                                                    "d_9": {
-                                                                        "value": "Identity_51"
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            },
-                                            "input_ports": {
-                                                "_59": {
-                                                    "shape": "(1,)"
-                                                }
-                                            },
-                                            "functions": {
-                                                "If_46": {
-                                                    "function": "onnx::If",
-                                                    "args": {
-                                                        "cond": "_59"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_60": {
-                                                    "value": "If_46"
-                                                }
-                                            }
-                                        },
-                                        "Cast_52": {
-                                            "parameters": {
-                                                "to": 9,
-                                                "input": 1
-                                            },
-                                            "functions": {
-                                                "Cast_52": {
-                                                    "function": "onnx::Cast",
-                                                    "args": {
-                                                        "input": "input"
-                                                    }
-                                                }
-                                            },
-                                            "output_ports": {
-                                                "_66": {
-                                                    "value": "Cast_52"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "edges": {
-                                        "Equal_7._20_Cast_8._20": {
-                                            "sender": "Equal_7",
-                                            "receiver": "Cast_8",
-                                            "sender_port": "_20",
-                                            "receiver_port": "_20"
-                                        },
-                                        "Cast_8._21_If_9._21": {
-                                            "sender": "Cast_8",
-                                            "receiver": "If_9",
-                                            "sender_port": "_21",
-                                            "receiver_port": "_21"
-                                        },
-                                        "If_9._22_Mul_19._22": {
-                                            "sender": "If_9",
-                                            "receiver": "Mul_19",
-                                            "sender_port": "_22",
-                                            "receiver_port": "_22"
-                                        },
-                                        "Mul_19._33_Add_21._33": {
-                                            "sender": "Mul_19",
-                                            "receiver": "Add_21",
-                                            "sender_port": "_33",
-                                            "receiver_port": "_33"
-                                        },
-                                        "Add_23._37_Div_25._37": {
-                                            "sender": "Add_23",
-                                            "receiver": "Div_25",
-                                            "sender_port": "_37",
-                                            "receiver_port": "_37"
-                                        },
-                                        "Add_23._37_Sub_28._37": {
-                                            "sender": "Add_23",
-                                            "receiver": "Sub_28",
-                                            "sender_port": "_37",
-                                            "receiver_port": "_37"
-                                        },
-                                        "Add_23._37_Div_39._37": {
-                                            "sender": "Add_23",
-                                            "receiver": "Div_39",
-                                            "sender_port": "_37",
-                                            "receiver_port": "_37"
-                                        },
-                                        "Add_23._37_Sub_42._37": {
-                                            "sender": "Add_23",
-                                            "receiver": "Sub_42",
-                                            "sender_port": "_37",
-                                            "receiver_port": "_37"
-                                        },
-                                        "Div_25._39_Mul_27._39": {
-                                            "sender": "Div_25",
-                                            "receiver": "Mul_27",
-                                            "sender_port": "_39",
-                                            "receiver_port": "_39"
-                                        },
-                                        "Mul_27._41_Sub_28._41": {
-                                            "sender": "Mul_27",
-                                            "receiver": "Sub_28",
-                                            "sender_port": "_41",
-                                            "receiver_port": "_41"
-                                        },
-                                        "Sub_28._42_Equal_30._42": {
-                                            "sender": "Sub_28",
-                                            "receiver": "Equal_30",
-                                            "sender_port": "_42",
-                                            "receiver_port": "_42"
-                                        },
-                                        "Equal_30._44_Cast_31._44": {
-                                            "sender": "Equal_30",
-                                            "receiver": "Cast_31",
-                                            "sender_port": "_44",
-                                            "receiver_port": "_44"
-                                        },
-                                        "Cast_31._45_If_32._45": {
-                                            "sender": "Cast_31",
-                                            "receiver": "If_32",
-                                            "sender_port": "_45",
-                                            "receiver_port": "_45"
-                                        },
-                                        "Div_39._53_Mul_41._53": {
-                                            "sender": "Div_39",
-                                            "receiver": "Mul_41",
-                                            "sender_port": "_53",
-                                            "receiver_port": "_53"
-                                        },
-                                        "Mul_41._55_Sub_42._55": {
-                                            "sender": "Mul_41",
-                                            "receiver": "Sub_42",
-                                            "sender_port": "_55",
-                                            "receiver_port": "_55"
-                                        },
-                                        "Sub_42._56_Equal_44._56": {
-                                            "sender": "Sub_42",
-                                            "receiver": "Equal_44",
-                                            "sender_port": "_56",
-                                            "receiver_port": "_56"
-                                        },
-                                        "Equal_44._58_Cast_45._58": {
-                                            "sender": "Equal_44",
-                                            "receiver": "Cast_45",
-                                            "sender_port": "_58",
-                                            "receiver_port": "_58"
-                                        },
-                                        "Cast_45._59_If_46._59": {
-                                            "sender": "Cast_45",
-                                            "receiver": "If_46",
-                                            "sender_port": "_59",
-                                            "receiver_port": "_59"
-                                        }
-                                    }
-                                }
-                            },
-                            "M": 10,
-                            "arg_2": 0
-                        },
                         "input_ports": {
                             "_67": {
                                 "shape": "()"
@@ -964,7 +59,924 @@
                                 "shape": "(0, 0)"
                             }
                         },
-                        "functions": {
+                        "parameters": {
+                            "body": {
+                                "value": {
+                                    "torch-jit-export1": {
+                                        "nodes": {
+                                            "Equal_7": {
+                                                "input_ports": {
+                                                    "num_A_calls_11": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 0
+                                                    },
+                                                    "Equal_7": {
+                                                        "function": "onnx::Equal",
+                                                        "args": {
+                                                            "A": "num_A_calls_11",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_20": {
+                                                        "value": "Equal_7"
+                                                    }
+                                                }
+                                            },
+                                            "Cast_8": {
+                                                "input_ports": {
+                                                    "_20": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "to": {
+                                                        "value": 9
+                                                    },
+                                                    "Cast_8": {
+                                                        "function": "onnx::Cast",
+                                                        "args": {
+                                                            "input": "_20"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_21": {
+                                                        "value": "Cast_8"
+                                                    }
+                                                }
+                                            },
+                                            "If_9": {
+                                                "input_ports": {
+                                                    "_21": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "then_branch": {
+                                                        "value": {
+                                                            "torch-jit-export2": {
+                                                                "nodes": {
+                                                                    "Mul_11": {
+                                                                        "input_ports": {
+                                                                            "input": {
+                                                                                "shape": "(1, 1)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "A": {
+                                                                                "value": [
+                                                                                    [
+                                                                                        2.0
+                                                                                    ]
+                                                                                ]
+                                                                            },
+                                                                            "Mul_11": {
+                                                                                "function": "onnx::Mul",
+                                                                                "args": {
+                                                                                    "A": "A",
+                                                                                    "B": "input"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "_25": {
+                                                                                "value": "Mul_11"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "Add_13": {
+                                                                        "input_ports": {
+                                                                            "_25": {
+                                                                                "shape": "(1, 1)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "B": {
+                                                                                "value": [
+                                                                                    [
+                                                                                        2.0
+                                                                                    ]
+                                                                                ]
+                                                                            },
+                                                                            "Add_13": {
+                                                                                "function": "onnx::Add",
+                                                                                "args": {
+                                                                                    "A": "_25",
+                                                                                    "B": "B"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "_27": {
+                                                                                "value": "Add_13"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "Add_15": {
+                                                                        "input_ports": {
+                                                                            "num_A_calls_11": {
+                                                                                "shape": "(1,)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "B": {
+                                                                                "value": 1
+                                                                            },
+                                                                            "Add_15": {
+                                                                                "function": "onnx::Add",
+                                                                                "args": {
+                                                                                    "A": "num_A_calls_11",
+                                                                                    "B": "B"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "_29": {
+                                                                                "value": "Add_15"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "edges": {
+                                                                    "Mul_11._25_Add_13._25": {
+                                                                        "sender": "Mul_11",
+                                                                        "receiver": "Add_13",
+                                                                        "sender_port": "_25",
+                                                                        "receiver_port": "_25"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "else_branch": {
+                                                        "value": {
+                                                            "torch-jit-export3": {
+                                                                "nodes": {
+                                                                    "Identity_16": {
+                                                                        "input_ports": {
+                                                                            "a_10": {
+                                                                                "shape": "('c.10_dim_0', 'c.10_dim_1')"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "Identity_16": {
+                                                                                "function": "onnx::Identity",
+                                                                                "args": {
+                                                                                    "input": "a_10"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "a_9": {
+                                                                                "value": "Identity_16"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "Identity_17": {
+                                                                        "input_ports": {
+                                                                            "num_A_calls_11": {
+                                                                                "shape": "(1,)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "Identity_17": {
+                                                                                "function": "onnx::Identity",
+                                                                                "args": {
+                                                                                    "input": "num_A_calls_11"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "num_A_calls_10": {
+                                                                                "value": "Identity_17"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "If_9": {
+                                                        "function": "onnx::If",
+                                                        "args": {
+                                                            "cond": "_21"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_22": {
+                                                        "value": "If_9"
+                                                    },
+                                                    "_23": {
+                                                        "value": "If_9"
+                                                    }
+                                                }
+                                            },
+                                            "Mul_19": {
+                                                "input_ports": {
+                                                    "_22": {
+                                                        "shape": ""
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "A": {
+                                                        "value": [
+                                                            [
+                                                                2.0
+                                                            ]
+                                                        ]
+                                                    },
+                                                    "Mul_19": {
+                                                        "function": "onnx::Mul",
+                                                        "args": {
+                                                            "A": "A",
+                                                            "B": "_22"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_33": {
+                                                        "value": "Mul_19"
+                                                    }
+                                                }
+                                            },
+                                            "Add_21": {
+                                                "input_ports": {
+                                                    "_33": {
+                                                        "shape": "(1, 1)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": [
+                                                            [
+                                                                2.0
+                                                            ]
+                                                        ]
+                                                    },
+                                                    "Add_21": {
+                                                        "function": "onnx::Add",
+                                                        "args": {
+                                                            "A": "_33",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_35": {
+                                                        "value": "Add_21"
+                                                    }
+                                                }
+                                            },
+                                            "Add_23": {
+                                                "input_ports": {
+                                                    "num_B_calls_8": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 1
+                                                    },
+                                                    "Add_23": {
+                                                        "function": "onnx::Add",
+                                                        "args": {
+                                                            "A": "num_B_calls_8",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_37": {
+                                                        "value": "Add_23"
+                                                    }
+                                                }
+                                            },
+                                            "Div_25": {
+                                                "input_ports": {
+                                                    "_37": {
+                                                        "shape": ""
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 5
+                                                    },
+                                                    "Div_25": {
+                                                        "function": "onnx::Div",
+                                                        "args": {
+                                                            "A": "_37",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_39": {
+                                                        "value": "Div_25"
+                                                    }
+                                                }
+                                            },
+                                            "Mul_27": {
+                                                "input_ports": {
+                                                    "_39": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 5
+                                                    },
+                                                    "Mul_27": {
+                                                        "function": "onnx::Mul",
+                                                        "args": {
+                                                            "A": "_39",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_41": {
+                                                        "value": "Mul_27"
+                                                    }
+                                                }
+                                            },
+                                            "Sub_28": {
+                                                "input_ports": {
+                                                    "_37": {
+                                                        "shape": ""
+                                                    },
+                                                    "_41": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "Sub_28": {
+                                                        "function": "onnx::Sub",
+                                                        "args": {
+                                                            "A": "_37",
+                                                            "B": "_41"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_42": {
+                                                        "value": "Sub_28"
+                                                    }
+                                                }
+                                            },
+                                            "Equal_30": {
+                                                "input_ports": {
+                                                    "_42": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 0
+                                                    },
+                                                    "Equal_30": {
+                                                        "function": "onnx::Equal",
+                                                        "args": {
+                                                            "A": "_42",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_44": {
+                                                        "value": "Equal_30"
+                                                    }
+                                                }
+                                            },
+                                            "Cast_31": {
+                                                "input_ports": {
+                                                    "_44": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "to": {
+                                                        "value": 9
+                                                    },
+                                                    "Cast_31": {
+                                                        "function": "onnx::Cast",
+                                                        "args": {
+                                                            "input": "_44"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_45": {
+                                                        "value": "Cast_31"
+                                                    }
+                                                }
+                                            },
+                                            "If_32": {
+                                                "input_ports": {
+                                                    "_45": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "then_branch": {
+                                                        "value": {
+                                                            "torch-jit-export4": {
+                                                                "nodes": {
+                                                                    "Mul_34": {
+                                                                        "input_ports": {
+                                                                            "_35": {
+                                                                                "shape": "(1, 1)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "A": {
+                                                                                "value": [
+                                                                                    [
+                                                                                        2.0
+                                                                                    ]
+                                                                                ]
+                                                                            },
+                                                                            "Mul_34": {
+                                                                                "function": "onnx::Mul",
+                                                                                "args": {
+                                                                                    "A": "A",
+                                                                                    "B": "_35"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "_48": {
+                                                                                "value": "Mul_34"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "Add_36": {
+                                                                        "input_ports": {
+                                                                            "_48": {
+                                                                                "shape": "(1, 1)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "B": {
+                                                                                "value": [
+                                                                                    [
+                                                                                        2.0
+                                                                                    ]
+                                                                                ]
+                                                                            },
+                                                                            "Add_36": {
+                                                                                "function": "onnx::Add",
+                                                                                "args": {
+                                                                                    "A": "_48",
+                                                                                    "B": "B"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "_50": {
+                                                                                "value": "Add_36"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "edges": {
+                                                                    "Mul_34._48_Add_36._48": {
+                                                                        "sender": "Mul_34",
+                                                                        "receiver": "Add_36",
+                                                                        "sender_port": "_48",
+                                                                        "receiver_port": "_48"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "else_branch": {
+                                                        "value": {
+                                                            "torch-jit-export5": {
+                                                                "nodes": {
+                                                                    "Identity_37": {
+                                                                        "input_ports": {
+                                                                            "c_10": {
+                                                                                "shape": "('c.10_dim_0', 'c.10_dim_1')"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "Identity_37": {
+                                                                                "function": "onnx::Identity",
+                                                                                "args": {
+                                                                                    "input": "c_10"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "c_9": {
+                                                                                "value": "Identity_37"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "If_32": {
+                                                        "function": "onnx::If",
+                                                        "args": {
+                                                            "cond": "_45"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_46": {
+                                                        "value": "If_32"
+                                                    }
+                                                }
+                                            },
+                                            "Div_39": {
+                                                "input_ports": {
+                                                    "_37": {
+                                                        "shape": ""
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 10
+                                                    },
+                                                    "Div_39": {
+                                                        "function": "onnx::Div",
+                                                        "args": {
+                                                            "A": "_37",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_53": {
+                                                        "value": "Div_39"
+                                                    }
+                                                }
+                                            },
+                                            "Mul_41": {
+                                                "input_ports": {
+                                                    "_53": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 10
+                                                    },
+                                                    "Mul_41": {
+                                                        "function": "onnx::Mul",
+                                                        "args": {
+                                                            "A": "_53",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_55": {
+                                                        "value": "Mul_41"
+                                                    }
+                                                }
+                                            },
+                                            "Sub_42": {
+                                                "input_ports": {
+                                                    "_37": {
+                                                        "shape": ""
+                                                    },
+                                                    "_55": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "Sub_42": {
+                                                        "function": "onnx::Sub",
+                                                        "args": {
+                                                            "A": "_37",
+                                                            "B": "_55"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_56": {
+                                                        "value": "Sub_42"
+                                                    }
+                                                }
+                                            },
+                                            "Equal_44": {
+                                                "input_ports": {
+                                                    "_56": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 0
+                                                    },
+                                                    "Equal_44": {
+                                                        "function": "onnx::Equal",
+                                                        "args": {
+                                                            "A": "_56",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_58": {
+                                                        "value": "Equal_44"
+                                                    }
+                                                }
+                                            },
+                                            "Cast_45": {
+                                                "input_ports": {
+                                                    "_58": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "to": {
+                                                        "value": 9
+                                                    },
+                                                    "Cast_45": {
+                                                        "function": "onnx::Cast",
+                                                        "args": {
+                                                            "input": "_58"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_59": {
+                                                        "value": "Cast_45"
+                                                    }
+                                                }
+                                            },
+                                            "If_46": {
+                                                "input_ports": {
+                                                    "_59": {
+                                                        "shape": "(1,)"
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "then_branch": {
+                                                        "value": {
+                                                            "torch-jit-export6": {
+                                                                "nodes": {
+                                                                    "Mul_48": {
+                                                                        "input_ports": {
+                                                                            "_35": {
+                                                                                "shape": "(1, 1)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "A": {
+                                                                                "value": [
+                                                                                    [
+                                                                                        2.0
+                                                                                    ]
+                                                                                ]
+                                                                            },
+                                                                            "Mul_48": {
+                                                                                "function": "onnx::Mul",
+                                                                                "args": {
+                                                                                    "A": "A",
+                                                                                    "B": "_35"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "_62": {
+                                                                                "value": "Mul_48"
+                                                                            }
+                                                                        }
+                                                                    },
+                                                                    "Add_50": {
+                                                                        "input_ports": {
+                                                                            "_62": {
+                                                                                "shape": "(1, 1)"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "B": {
+                                                                                "value": [
+                                                                                    [
+                                                                                        2.0
+                                                                                    ]
+                                                                                ]
+                                                                            },
+                                                                            "Add_50": {
+                                                                                "function": "onnx::Add",
+                                                                                "args": {
+                                                                                    "A": "_62",
+                                                                                    "B": "B"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "_64": {
+                                                                                "value": "Add_50"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "edges": {
+                                                                    "Mul_48._62_Add_50._62": {
+                                                                        "sender": "Mul_48",
+                                                                        "receiver": "Add_50",
+                                                                        "sender_port": "_62",
+                                                                        "receiver_port": "_62"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "else_branch": {
+                                                        "value": {
+                                                            "torch-jit-export7": {
+                                                                "nodes": {
+                                                                    "Identity_51": {
+                                                                        "input_ports": {
+                                                                            "d_10": {
+                                                                                "shape": "('c.10_dim_0', 'c.10_dim_1')"
+                                                                            }
+                                                                        },
+                                                                        "parameters": {
+                                                                            "Identity_51": {
+                                                                                "function": "onnx::Identity",
+                                                                                "args": {
+                                                                                    "input": "d_10"
+                                                                                }
+                                                                            }
+                                                                        },
+                                                                        "output_ports": {
+                                                                            "d_9": {
+                                                                                "value": "Identity_51"
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "If_46": {
+                                                        "function": "onnx::If",
+                                                        "args": {
+                                                            "cond": "_59"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_60": {
+                                                        "value": "If_46"
+                                                    }
+                                                }
+                                            },
+                                            "Cast_52": {
+                                                "parameters": {
+                                                    "to": {
+                                                        "value": 9
+                                                    },
+                                                    "input": {
+                                                        "value": 1
+                                                    },
+                                                    "Cast_52": {
+                                                        "function": "onnx::Cast",
+                                                        "args": {
+                                                            "input": "input"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_66": {
+                                                        "value": "Cast_52"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "edges": {
+                                            "Equal_7._20_Cast_8._20": {
+                                                "sender": "Equal_7",
+                                                "receiver": "Cast_8",
+                                                "sender_port": "_20",
+                                                "receiver_port": "_20"
+                                            },
+                                            "Cast_8._21_If_9._21": {
+                                                "sender": "Cast_8",
+                                                "receiver": "If_9",
+                                                "sender_port": "_21",
+                                                "receiver_port": "_21"
+                                            },
+                                            "If_9._22_Mul_19._22": {
+                                                "sender": "If_9",
+                                                "receiver": "Mul_19",
+                                                "sender_port": "_22",
+                                                "receiver_port": "_22"
+                                            },
+                                            "Mul_19._33_Add_21._33": {
+                                                "sender": "Mul_19",
+                                                "receiver": "Add_21",
+                                                "sender_port": "_33",
+                                                "receiver_port": "_33"
+                                            },
+                                            "Add_23._37_Div_25._37": {
+                                                "sender": "Add_23",
+                                                "receiver": "Div_25",
+                                                "sender_port": "_37",
+                                                "receiver_port": "_37"
+                                            },
+                                            "Add_23._37_Sub_28._37": {
+                                                "sender": "Add_23",
+                                                "receiver": "Sub_28",
+                                                "sender_port": "_37",
+                                                "receiver_port": "_37"
+                                            },
+                                            "Add_23._37_Div_39._37": {
+                                                "sender": "Add_23",
+                                                "receiver": "Div_39",
+                                                "sender_port": "_37",
+                                                "receiver_port": "_37"
+                                            },
+                                            "Add_23._37_Sub_42._37": {
+                                                "sender": "Add_23",
+                                                "receiver": "Sub_42",
+                                                "sender_port": "_37",
+                                                "receiver_port": "_37"
+                                            },
+                                            "Div_25._39_Mul_27._39": {
+                                                "sender": "Div_25",
+                                                "receiver": "Mul_27",
+                                                "sender_port": "_39",
+                                                "receiver_port": "_39"
+                                            },
+                                            "Mul_27._41_Sub_28._41": {
+                                                "sender": "Mul_27",
+                                                "receiver": "Sub_28",
+                                                "sender_port": "_41",
+                                                "receiver_port": "_41"
+                                            },
+                                            "Sub_28._42_Equal_30._42": {
+                                                "sender": "Sub_28",
+                                                "receiver": "Equal_30",
+                                                "sender_port": "_42",
+                                                "receiver_port": "_42"
+                                            },
+                                            "Equal_30._44_Cast_31._44": {
+                                                "sender": "Equal_30",
+                                                "receiver": "Cast_31",
+                                                "sender_port": "_44",
+                                                "receiver_port": "_44"
+                                            },
+                                            "Cast_31._45_If_32._45": {
+                                                "sender": "Cast_31",
+                                                "receiver": "If_32",
+                                                "sender_port": "_45",
+                                                "receiver_port": "_45"
+                                            },
+                                            "Div_39._53_Mul_41._53": {
+                                                "sender": "Div_39",
+                                                "receiver": "Mul_41",
+                                                "sender_port": "_53",
+                                                "receiver_port": "_53"
+                                            },
+                                            "Mul_41._55_Sub_42._55": {
+                                                "sender": "Mul_41",
+                                                "receiver": "Sub_42",
+                                                "sender_port": "_55",
+                                                "receiver_port": "_55"
+                                            },
+                                            "Sub_42._56_Equal_44._56": {
+                                                "sender": "Sub_42",
+                                                "receiver": "Equal_44",
+                                                "sender_port": "_56",
+                                                "receiver_port": "_56"
+                                            },
+                                            "Equal_44._58_Cast_45._58": {
+                                                "sender": "Equal_44",
+                                                "receiver": "Cast_45",
+                                                "sender_port": "_58",
+                                                "receiver_port": "_58"
+                                            },
+                                            "Cast_45._59_If_46._59": {
+                                                "sender": "Cast_45",
+                                                "receiver": "If_46",
+                                                "sender_port": "_59",
+                                                "receiver_port": "_59"
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "M": {
+                                "value": 10
+                            },
+                            "arg_2": {
+                                "value": 0
+                            },
                             "Loop_5": {
                                 "function": "onnx::Loop",
                                 "args": {

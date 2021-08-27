@@ -1,0 +1,50 @@
+{
+    "New_Stateful_Parameters_FN_nofunc": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.3",
+        "graphs": {
+            "stateful_parameter_FN_nofunc": {
+                "nodes": {
+                    "FNpop_0": {
+                        "parameters": {
+                            "initial_w": 0.0,
+                            "initial_v": -1.0,
+                            "a_v": -0.3333333333333333,
+                            "b_v": 0,
+                            "c_v": 1,
+                            "d_v": 1,
+                            "e_v": -1,
+                            "f_v": 1,
+                            "time_constant_v": 1,
+                            "a_w": 1,
+                            "b_w": -0.8,
+                            "c_w": 0.7,
+                            "time_constant_w": 12.5,
+                            "threshold": -1,
+                            "mode": 1,
+                            "uncorrelated_activity": 0,
+                            "Iext": 0,
+                            "MSEC": 0.001,
+                            "dt": 5e-05
+                        },
+                        "stateful_parameters": {
+                            "V": {
+                                "default_initial_value": "-1.0",
+                                "value": "V+((a_v*V*V*V + (1+threshold)*b_v*V*V + (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext)/(time_constant_v * MSEC))*dt"
+                            },
+                            "W": {
+                                "default_initial_value": "0.0",
+                                "value": "W+((mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity)/(time_constant_w * MSEC))*dt"
+                            }
+                        },
+                        "output_ports": {
+                            "OUTPUT": {
+                                "value": "V"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

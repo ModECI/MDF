@@ -12,24 +12,30 @@ def main():
     mod.graphs.append(mod_graph)
 
     ## Counter node
-    counter_node = Node(id="counter_node", parameters={"increment": 1})
+    counter_node = Node(id="counter_node")
 
-    s1 = State(id="count", value="count + increment")
-    counter_node.states.append(s1)
+    p1 = Parameter(id="increment", value=1)
+    counter_node.parameters.append(p1)
 
-    op1 = OutputPort(id="out_port", value=s1.id)
+    p2 = Parameter(id="count", value="count + increment")
+    counter_node.parameters.append(p2)
+
+    op1 = OutputPort(id="out_port", value=p2.id)
     counter_node.output_ports.append(op1)
 
     mod_graph.nodes.append(counter_node)
 
     ## Sine node...
-    sine_node = Node(id="sine_node", parameters={"amp": 3, "period": 0.4})
+    sine_node = Node(id="sine_node")
 
-    s1 = State(id="level", default_initial_value=0, time_derivative='6.283185 * rate / period')
-    sine_node.states.append(s1)
+    sine_node.parameters.append(Parameter(id="amp", value=3))
+    sine_node.parameters.append(Parameter(id="period", value=0.4))
 
-    s2 = State(id="rate", default_initial_value=1, time_derivative='-1 * 6.283185 * level / period')
-    sine_node.states.append(s2)
+    s1 = Parameter(id="level", default_initial_value=0, time_derivative='6.283185 * rate / period')
+    sine_node.parameters.append(s1)
+
+    s2 = Parameter(id="rate", default_initial_value=1, time_derivative='-1 * 6.283185 * level / period')
+    sine_node.parameters.append(s2)
 
     op1 = OutputPort(id="out_port", value="amp * level")
     sine_node.output_ports.append(op1)
@@ -41,14 +47,14 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
-        verbose = False
+        #verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
-        from modeci_mdf.scheduler import EvaluableGraph
+        from modeci_mdf.execution_engine import EvaluableGraph
 
         eg = EvaluableGraph(mod_graph, verbose)
         dt = 0.01
-        duration= 0.1
+
         duration= 2
         t = 0
         recorded = {}
@@ -65,6 +71,7 @@ def main():
             s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
             t+=dt
 
+
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
             plt.plot(times,s)
@@ -80,6 +87,7 @@ def main():
             filename_root="states",
             only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
+
 
     return mod_graph
 

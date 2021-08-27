@@ -1,0 +1,46 @@
+{
+    "New_Stateful_Parameters": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.3",
+        "graphs": {
+            "stateful_parameter_example": {
+                "nodes": {
+                    "sine_node": {
+                        "parameters": {
+                            "amp": 3,
+                            "dt": 0.1
+                        },
+                        "functions": {
+                            "update_time": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "time",
+                                    "slope": 1,
+                                    "intercept": "dt"
+                                }
+                            },
+                            "sin_function": {
+                                "function": "sin",
+                                "args": {
+                                    "variable0": "time",
+                                    "scale": "amp"
+                                }
+                            }
+                        },
+                        "stateful_parameters": {
+                            "time": {
+                                "default_initial_value": "0",
+                                "value": "update_time"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "sin_function"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

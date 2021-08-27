@@ -7,17 +7,15 @@ from modeci_mdf.mdf import *
 from modeci_mdf.utils import simple_connect, print_summary
 
 import abcd_python as abcd
-
+ 
 
 def main():
     mod = Model(id="ABCD")
     mod_graph = Graph(id="abcd_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(
-        id="input0", parameters={"input_level": 0.0}, metadata={"color": ".8 .8 .8"}
-    )
-
+    input_node = Node(id="input0", metadata={"color": ".8 .8 .8"})
+    input_node.parameters.append(Parameter(id="input_level", value=0.0))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
@@ -29,51 +27,52 @@ def main():
     # a = create_example_node('A', mod_graph)
     a = Node(id="A", metadata={"color": ".8 0 0"})
     mod_graph.nodes.append(a)
-
-    a.parameters = {"slope": abcd.A_slope, "intercept": abcd.A_intercept}
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    ip1 = InputPort(id="input_port1")
     a.input_ports.append(ip1)
 
-    f1 = Function(
+    a.parameters.append(Parameter(id="slope", value=abcd.A_slope))
+    a.parameters.append(Parameter(id="intercept", value=abcd.A_intercept))
+
+    f1 = Parameter(
         id="linear_func",
         function="linear",
         args={"variable0": ip1.id, "slope": "slope", "intercept": "intercept"},
     )
-    a.functions.append(f1)
+    a.parameters.append(f1)
     a.output_ports.append(OutputPort(id="output_1", value="linear_func"))
 
     e1 = simple_connect(input_node, a, mod_graph)
 
     b = Node(id="B", metadata={"color": "0 .8 0"})
     mod_graph.nodes.append(b)
-
-    b.parameters = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    ip1 = InputPort(id="input_port1")
     b.input_ports.append(ip1)
 
-    f1 = Function(
+    b.parameters.append(Parameter(id="gain", value=abcd.B_gain))
+    b.parameters.append(Parameter(id="bias", value=abcd.B_bias))
+    b.parameters.append(Parameter(id="offset", value=abcd.B_offset))
+
+    f1 = Parameter(
         id="logistic_func",
         function="logistic",
         args={"variable0": ip1.id, "gain": "gain", "bias": "bias", "offset": "offset"},
     )
-    b.functions.append(f1)
+    b.parameters.append(f1)
     b.output_ports.append(OutputPort(id="output_1", value="logistic_func"))
 
     simple_connect(a, b, mod_graph)
 
     c = Node(id="C", metadata={"color": "0 0 .8"})
     mod_graph.nodes.append(c)
-
-    c.parameters = {
-        "scale": abcd.C_scale,
-        "rate": abcd.C_rate,
-        "bias": abcd.C_bias,
-        "offset": abcd.C_offset,
-    }
     ip1 = InputPort(id="input_port1", shape="(1,)")
     c.input_ports.append(ip1)
 
-    f1 = Function(
+    c.parameters.append(Parameter(id="scale", value=abcd.C_scale))
+    c.parameters.append(Parameter(id="rate", value=abcd.C_rate))
+    c.parameters.append(Parameter(id="bias", value=abcd.C_bias))
+    c.parameters.append(Parameter(id="offset", value=abcd.C_offset))
+
+    f1 = Parameter(
         id="exponential_func",
         function="exponential",
         args={
@@ -84,7 +83,7 @@ def main():
             "offset": "offset",
         },
     )
-    c.functions.append(f1)
+    c.parameters.append(f1)
     c.output_ports.append(OutputPort(id="output_1", value="exponential_func"))
 
     simple_connect(b, c, mod_graph)
@@ -92,14 +91,14 @@ def main():
     d = Node(id="D", metadata={"color": ".8 0 .8"})
     mod_graph.nodes.append(d)
 
-    d.parameters = {"scale": abcd.D_scale}
     ip1 = InputPort(id="input_port1", shape="(1,)")
     d.input_ports.append(ip1)
+    d.parameters.append(Parameter(id="scale", value=abcd.D_scale))
 
-    f1 = Function(
+    f1 = Parameter(
         id="sin_func", function="sin", args={"variable0": ip1.id, "scale": "scale"}
     )
-    d.functions.append(f1)
+    d.parameters.append(f1)
     d.output_ports.append(OutputPort(id="output_1", value="sin_func"))
 
     simple_connect(c, d, mod_graph)
@@ -117,8 +116,8 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
-        # verbose = False
-        from modeci_mdf.scheduler import EvaluableGraph
+        #verbose = False
+        from modeci_mdf.execution_engine import EvaluableGraph
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
@@ -133,6 +132,14 @@ def main():
             level=1,
             filename_root="abcd",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
+        mod.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="abcd_3",
+            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

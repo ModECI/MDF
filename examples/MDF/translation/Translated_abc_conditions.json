@@ -1,0 +1,198 @@
+{
+    "abc_conditions": {
+        "format": "ModECI MDF v0.2",
+        "generating_application": "Python modeci-mdf v0.2.1",
+        "graphs": {
+            "abc_conditions_example": {
+                "conditions": {
+                    "node_specific": {
+                        "input0": {
+                            "type": "BeforeNCalls",
+                            "args": {
+                                "n": 1,
+                                "dependencies": "input0"
+                            }
+                        },
+                        "A": {
+                            "type": "Always",
+                            "args": {}
+                        },
+                        "B": {
+                            "type": "EveryNCalls",
+                            "args": {
+                                "n": 2,
+                                "dependencies": "A"
+                            }
+                        },
+                        "C": {
+                            "type": "EveryNCalls",
+                            "args": {
+                                "n": 3,
+                                "dependencies": "A"
+                            }
+                        }
+                    },
+                    "termination": {
+                        "environment_state_update": {
+                            "type": "And",
+                            "args": {
+                                "dependencies": [
+                                    {
+                                        "type": "AfterNCalls",
+                                        "args": {
+                                            "n": 2,
+                                            "dependencies": "C"
+                                        }
+                                    },
+                                    {
+                                        "type": "JustRan",
+                                        "args": {
+                                            "dependencies": "A"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "nodes": {
+                    "input0": {
+                        "parameters": {
+                            "input_level": {
+                                "value": 0.0
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        },
+                        "functions": {}
+                    },
+                    "A": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "parameters": {
+                            "slope": {
+                                "value": 1.1
+                            },
+                            "intercept": {
+                                "value": 1.2
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_func"
+                            }
+                        },
+                        "functions": {
+                            "linear_func": {
+                                "function": "linear",
+                                "args": {
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        }
+                    },
+                    "B": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "parameters": {
+                            "gain": {
+                                "value": 2.1
+                            },
+                            "bias": {
+                                "value": 2.2
+                            },
+                            "offset": {
+                                "value": 2.3
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "logistic_func"
+                            }
+                        },
+                        "functions": {
+                            "logistic_func": {
+                                "function": "logistic",
+                                "args": {
+                                    "gain": "gain",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        }
+                    },
+                    "C": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "parameters": {
+                            "scale": {
+                                "value": 3.1
+                            },
+                            "rate": {
+                                "value": 3.2
+                            },
+                            "bias": {
+                                "value": 3.3
+                            },
+                            "offset": {
+                                "value": 3.4
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        },
+                        "functions": {
+                            "exponential_func": {
+                                "function": "exponential",
+                                "args": {
+                                    "scale": "scale",
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_input0_A": {
+                        "sender": "input0",
+                        "receiver": "A",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_A_B": {
+                        "sender": "A",
+                        "receiver": "B",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_A_C": {
+                        "sender": "A",
+                        "receiver": "C",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    }
+                }
+            }
+        }
+    }
+}

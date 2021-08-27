@@ -1,0 +1,158 @@
+{
+    "sample_test": {
+        "format": "ModECI MDF v0.1",
+        "generating_application": "Python modeci-mdf v0.1.3",
+        "graphs": {
+            "sample_test_example": {
+                
+                "nodes": {
+                "input0": {
+                        "parameters": {
+                            "input_level": 0.0
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        }
+                    },
+                    "A": {
+                        "parameters": {
+                            "slope": 2.1,
+                            "intercept": 2.2
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "linear_func": {
+                                "function": "linear",
+                                "args": {
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_func"
+                            }
+                        }
+                    },
+                    
+                    "C": {
+                        "parameters": {
+                            "scale": 1.0,
+                            "rate": 1.0,
+                            "bias": 0.0,
+                            "offset": 0.0
+                        },
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "functions": {
+                            "exponential_func": {
+                                "function": "exponential",
+                                "args": {
+                                    "scale": "scale",
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "variable0": "input_port1"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        }
+                    },
+                    "counter_node": {
+                        "parameters": {
+                            "increment": 1,
+                            "scale": 1.0,
+                            "rate": 1.0,
+                            "bias": 0.0,
+                            "offset": 0.0
+                        },
+                        
+                        
+                        "states": {
+                            "count": {
+                                "value": "count + increment"
+                            }
+                        },
+                        
+                        "functions": {
+                            "exponential_func2": {
+                                "function": "exponential",
+                                "args": {
+                                    "scale": "scale",
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "offset": "offset",
+                                    "variable0": "count"
+                                }
+                            }
+                        },
+                        
+                        "output_ports": {
+                            "out_port1": {
+                                "value": "count"
+                            },
+                            "out_port2":{
+                            "value": "exponential_func2"
+                        }
+                    }
+                    }
+                    ,
+                    "sine_node": {
+                        "parameters": {
+                            "amp": 3,
+                            "period": 0.4,
+                            "slope": 2.1,
+                            "intercept": 2.2
+                        },
+                        "states": {
+                            "level": {
+                                "default_initial_value": "0",
+                                "time_derivative": "6.283185 * rate / period"
+                            },
+                            "rate": {
+                                "default_initial_value": "1",
+                                "time_derivative": "-1 * 6.283185 * level / period"
+                            }
+                        },
+                         "functions": {
+                            "linear_func2": {
+                                "function": "linear",
+                                "args": {
+                                    "slope": "slope",
+                                    "intercept": "intercept",
+                                    "variable0": "level"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "out_port1": {
+                                "value": "amp * level"
+                            },
+                            "out_port2":{
+                            "value": "linear_func2"
+                        }
+                    }
+                }
+            }
+        
+        
+               }
+    }
+}
+}
+
