@@ -45,9 +45,9 @@ def main():
 
         eg_old.evaluate(array_format=format)
 
-        print("Old file output value>>>",eg.enodes['D'].evaluable_outputs['output_1'].curr_value)
+        print("New file output value>>>",eg.enodes['D'].evaluable_outputs['output_1'].curr_value)
 
-        print("New file output value>>>",eg_old.enodes['D'].evaluable_outputs['output_1'].curr_value)
+        print("Old file output value>>>",eg_old.enodes['D'].evaluable_outputs['output_1'].curr_value)
         
       
 

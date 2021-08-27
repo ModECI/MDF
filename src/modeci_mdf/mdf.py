@@ -399,6 +399,16 @@ class Function(BaseWithId):
                         str,
                     ),
                 ),
+
+                (
+                    "value",
+                    (
+                        "evaluable expression",
+                        str,
+                    ),
+                ),
+
+
                 (
                     "args",
                     (
