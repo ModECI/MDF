@@ -906,6 +906,22 @@ class EvaluableGraph:
             Condition in specific format
 
         """
+
+        def substitute_condition_arguments(condition, condition_type):
+            # mdf format prefers the key name for all conditions that use it or
+            # its value as an __init__ argument
+            combined_condition_arguments = {"dependencies": "dependency"}
+            sig = inspect.signature(condition_type)
+
+            for preferred, actual in combined_condition_arguments.items():
+                if (
+                    preferred in condition.args
+                    and preferred not in sig.parameters
+                    and actual in sig.parameters
+                ):
+                    condition.args[actual] = condition.args[preferred]
+                    del condition.args[preferred]
+
         # if specified as dict
         try:
             args = condition["args"]
@@ -951,6 +967,8 @@ class EvaluableGraph:
                     pass
             else:
                 cond_args[k] = new_v
+
+        substitute_condition_arguments(condition, typ)
 
         try:
             return typ(**cond_args)
