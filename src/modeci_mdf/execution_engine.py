@@ -31,6 +31,14 @@ import modeci_mdf.actr_functions as actr_funcs
 FORMAT_DEFAULT = FORMAT_NUMPY
 
 KNOWN_PARAMETERS = ['constant']
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
 def evaluate_expr(
     expr: Union[str, List[str], np.ndarray, "tf.tensor"] = None,
     func_params: Dict[str, Any] = None,
@@ -89,18 +97,23 @@ class EvaluableFunction:
              value of function after evaluation in Dictionary
 
         """
-
+       
         expr = None
-        for f in mdf_functions:
-            if self.function.function == f:
-                expr = create_python_expression(mdf_functions[f]["expression_string"])
-        if not expr:
-            expr  = self.function.function
+     
+        if self.function.function:
+
+            for f in mdf_functions:
+                if self.function.function == f:
+                    expr = create_python_expression(mdf_functions[f]["expression_string"])
+        
+        else:
+            expr  = self.function.value
             #raise "Unknown function: {}. Known functions: {}".format(
             #    self.function.function,
             #    mdf_functions.keys,
             #)
 
+      
         func_params = {}
         func_params.update(parameters)
         if self.verbose:
@@ -108,19 +121,22 @@ class EvaluableFunction:
                 "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
-        for arg in self.function.args:
-            func_params[arg] = evaluate_expr(
-                self.function.args[arg],
-                func_params,
-                verbose=False,
-                array_format=array_format,
-            )
-            if self.verbose:
-                print(
-                    "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+        if self.function.args:
+
+            for arg in self.function.args:
+                func_params[arg] = evaluate_expr(
+                    self.function.args[arg],
+                    func_params,
+                    verbose=False,
+                    array_format=array_format,
                 )
+                if self.verbose:
+                    print(
+                        "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+                    )
 
         # If this is an ONNX operation, evaluate it without neuromlite.
+       
         if "onnx_ops." in expr:
             # Get the ONNX function
             onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
@@ -173,8 +189,15 @@ class EvaluableParameter:
 
 
         if self.parameter.default_initial_value is not None:
+            if is_number(self.parameter.default_initial_value):
 
-            self.curr_value = self.parameter.default_initial_value
+
+                self.curr_value = float(self.parameter.default_initial_value)
+
+          
+            else:
+
+                self.curr_value = self.parameter.default_initial_value
 
         else:
             self.curr_value = None
@@ -183,11 +206,19 @@ class EvaluableParameter:
 
 
     def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
+        
+     
         if self.curr_value is None:
+            
             if self.parameter.value is not None:
                 if self.parameter.is_stateful():
 
+
+
                     if self.parameter.default_initial_value is not None:
+
+                      
+
                         return self.parameter.default_initial_value
                     else:
                         return self.DEFAULT_INIT_VALUE
@@ -208,6 +239,9 @@ class EvaluableParameter:
                             )
                         )
 
+        
+
+       
         return self.curr_value
 
 
@@ -472,19 +506,20 @@ class EvaluableNode:
                     % (f.id, f.args, all_known_vars)
                 )
             all_req_vars = []
-            for arg in f.args:
-                arg_expr = f.args[arg]
+            if f.args:
+                for arg in f.args:
+                    arg_expr = f.args[arg]
 
-                # If we are dealing with a list of symbols, each must treated separately
-                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
-                    # Use the Python interpreter to parse this into a List[str]
-                    arg_expr_list = eval(arg_expr)
-                else:
-                    arg_expr_list = [arg_expr]
+                    # If we are dealing with a list of symbols, each must treated separately
+                    if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                        # Use the Python interpreter to parse this into a List[str]
+                        arg_expr_list = eval(arg_expr)
+                    else:
+                        arg_expr_list = [arg_expr]
 
-                for e in arg_expr_list:
-                    func_expr = sympy.simplify(e)
-                    all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+                    for e in arg_expr_list:
+                        func_expr = sympy.simplify(e)
+                        all_req_vars.extend([str(s) for s in func_expr.free_symbols])
 
             all_present = [v in all_known_vars for v in all_req_vars]
 

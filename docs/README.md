@@ -90,6 +90,8 @@ A single value which is evaluated as a function of values on <a href="#inputport
 #### Allowed parameters
 <table><tr><td><b>function</b></td><td>str</td><td><i>Which of the in-build MDF functions (linear etc.) this uses</i></td></tr>
 
+<tr><td><b>value</b></td><td>str</td><td><i>evaluable expression</i></td></tr>
+
 <tr><td><b>args</b></td><td>dict</td><td><i>Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
