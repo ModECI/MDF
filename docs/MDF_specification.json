@@ -134,6 +134,10 @@
                     "type": "str",
                     "description": "Which of the in-build MDF functions (linear etc.) this uses"
                 },
+                "value": {
+                    "type": "str",
+                    "description": "evaluable expression"
+                },
                 "args": {
                     "type": "dict",
                     "description": "Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"

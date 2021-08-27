@@ -107,6 +107,9 @@ specification:
                 type: str
                 description: Which of the in-build MDF functions (linear etc.) this
                     uses
+            value:
+                type: str
+                description: evaluable expression
             args:
                 type: dict
                 description: Dictionary of values for each of the arguments for the
