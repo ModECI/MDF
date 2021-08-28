@@ -375,7 +375,7 @@ class Node(MdfBaseWithId):
         return self.__getattr__("output_ports")
 
 
-class Function(BaseWithId):
+class Function(MdfBaseWithId):
     r"""A single value which is evaluated as a function of values on InputPorts and other Functions
 
     Args:
@@ -454,6 +454,7 @@ class InputPort(MdfBaseWithId):
         id: Optional[str] = None,
         shape: Optional[str] = None,
         type: Optional[str] = None,
+        **kwargs,
     ):
 
         self.allowed_fields = collections.OrderedDict(
@@ -476,7 +477,6 @@ class InputPort(MdfBaseWithId):
         )
 
         # FIXME: Reconstruct kwargs as neuromlite expects them
-        kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
