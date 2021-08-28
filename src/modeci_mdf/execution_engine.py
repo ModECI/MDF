@@ -512,6 +512,10 @@ class EvaluableNode:
                 for arg in f.args:
                     arg_expr = f.args[arg]
 
+                    # some non-expression/str types will crash in sympy.simplify
+                    if not isinstance(arg_expr, (sympy.Expr, str)):
+                        continue
+
                     # If we are dealing with a list of symbols, each must treated separately
                     if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
                         # Use the Python interpreter to parse this into a List[str]
