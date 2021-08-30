@@ -1,13 +1,15 @@
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter, Edge, InputPort
 
 from modeci_mdf.utils import load_mdf
+import pytest
 
 def test_model_init_kwargs():
     m = Model(
-        id="Test", format="test_format", generating_application="test_application"
+        id="Test",
+        format="test_format",
+        generating_application="test_application",
+        metadata={"info":'test_metadata'}
     )
-    m.metadata={"info":'test_metadata'}
-    print(m)
     assert m.format == "test_format"
     assert m.generating_application == "test_application"
     assert m.metadata== {"info":'test_metadata'}
@@ -16,10 +18,12 @@ def test_model_init_kwargs():
 
 def test_graph_init_kwargs():
     g = Graph(
-        id="Test_Graph", parameters="test_parameters", conditions="test_Condition"
+        id="Test_Graph",
+        parameters={"test_parameters":1},
+        conditions=ConditionSet()
     )
-    assert g.parameters == "test_parameters"
-    assert g.conditions == "test_Condition"
+    assert g.parameters == {"test_parameters":1}
+    assert str(g.conditions) == str(ConditionSet())
 
 
 def test_Node_init_kwargs():
@@ -30,9 +34,9 @@ def test_Node_init_kwargs():
 
 
 def test_Function_init_kwargs():
-    f = Function(id="Test_Function", function="Test_function", args="Test_args")
+    f = Function(id="Test_Function", function="Test_function", args={"Test_arg":1})
     assert f.function == "Test_function"
-    assert f.args == "Test_args"
+    assert f.args == {"Test_arg":1}
 
 
 def test_InputPort_init_kwargs():
@@ -51,13 +55,13 @@ def test_OutputPort_init_kwargs():
 def test_Edge_init_kwargs():
     e = Edge(
         id="test_Edge",
-        parameters="test_parameters",
+        parameters={"test_parameters":3},
         sender="test_sender",
         receiver="test_receiver",
         sender_port="test_sender_port",
         receiver_port="test_receiver_port",
     )
-    assert e.parameters == "test_parameters"
+    assert e.parameters == {"test_parameters":3}
     assert e.sender == "test_sender"
     assert e.receiver == "test_receiver"
     assert e.sender_port == "test_sender_port"
@@ -67,10 +71,10 @@ def test_Edge_init_kwargs():
 
 def test_ConditionSet_init_kwargs():
     CS = ConditionSet(
-        node_specific="test_node_specific", termination="test_termination"
+        node_specific={"test_node_specific":1}, termination={"test_termination":3}
     )
-    assert CS.node_specific == "test_node_specific"
-    assert CS.termination == "test_termination"
+    assert CS.node_specific == {"test_node_specific":1}
+    assert CS.termination == {"test_termination":3}
 
 
 def test_Condition_init_kwargs():
@@ -188,13 +192,15 @@ def test_node_metadata_empty_dict():
     """
     Check for serialization error when passing empty dicts to Node metadata
     """
-    Node(metadata={}).to_json()
+    Node(id='n0',metadata={}).to_json()
 
+@pytest.mark.xfail(reason="Should fail on non dict")
 def test_metadata_dict():
     """
     Test whether we get a serialization error when passing anything else from a dictionary
     """
-    Graph(metadata='info').to_json()
+    tr
+    Graph(id='n0',metadata='info').to_json()
 
 
 def test_param_args_empty_dict():
