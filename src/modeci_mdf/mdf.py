@@ -205,7 +205,7 @@ class Graph(MdfBaseWithId):
                 ("parameters", ("Dict of global parameters for the Graph", dict)),
                 (
                     "conditions",
-                    ("The _ConditionSet_ for scheduling of the Graph", dict),
+                    ("The _ConditionSet_ for scheduling of the Graph", ConditionSet),
                 ),
             ]
         )
