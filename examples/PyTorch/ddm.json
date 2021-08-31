@@ -153,11 +153,13 @@
                                     },
                                     "aten::ATen_1": {
                                         "function": "aten::ATen",
-                                        "args": [
-                                            "arg0",
-                                            "arg1",
-                                            "arg2"
-                                        ]
+                                        "args": {
+                                            "arguments": [
+                                                "arg0",
+                                                "arg1",
+                                                "arg2"
+                                            ]
+                                        }
                                     }
                                 },
                                 "output_ports": {
