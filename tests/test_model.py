@@ -13,26 +13,25 @@ def test_model_init_kwargs():
     assert m.metadata== {"info":'test_metadata'}
     assert m.id == 'Test'
 
-
 def test_graph_init_kwargs():
-    g = Graph(
-        id="Test_Graph", parameters="test_parameters", conditions="test_Condition"
-    )
-    assert g.parameters == "test_parameters"
-    assert g.conditions == "test_Condition"
+    g = Graph(id="Test_Graph", parameters={'a':1}, conditions={"con":"cond1"})
+    assert g.parameters == {'a':1}
+    assert g.conditions == {"con":"cond1"}
 
 
 def test_Node_init_kwargs():
     n = Node(id="test_node")
-    print(n)
-    print(n.id)
+    assert n.id == "test_node"
+
+def test_Node_init_kwargs():
+    n = Node(id="test_node")
     assert n.id == "test_node"
 
 
 def test_Function_init_kwargs():
-    f = Function(id="Test_Function", function="Test_function", args="Test_args")
+    f = Function(id="Test_Function", function="Test_function", args={"input":"Test_args"})
     assert f.function == "Test_function"
-    assert f.args == "Test_args"
+    assert f.args == {"input":"Test_args"}
 
 
 def test_InputPort_init_kwargs():
@@ -67,10 +66,10 @@ def test_Edge_init_kwargs():
 
 def test_ConditionSet_init_kwargs():
     CS = ConditionSet(
-        node_specific="test_node_specific", termination="test_termination"
+        node_specific={"test_node_specific":"test_node_specific"}, termination={"test_termination":"test_termination"}
     )
-    assert CS.node_specific == "test_node_specific"
-    assert CS.termination == "test_termination"
+    assert CS.node_specific == {"test_node_specific":"test_node_specific"}
+    assert CS.termination == {"test_termination":"test_termination"}
 
 
 def test_Condition_init_kwargs():
@@ -194,7 +193,7 @@ def test_metadata_dict():
     """
     Test whether we get a serialization error when passing anything else from a dictionary
     """
-    Graph(metadata='info').to_json()
+    Graph(metadata={'pnl':'info'}).to_json()
 
 
 def test_param_args_empty_dict():
@@ -229,7 +228,7 @@ def test_graph_types(tmpdir):
     r"""
     Test whether types saved in parameters are the same after reloading
     """
-    mod = Model(id="Test0")
+    mod = Model(id='Test0')
     mod_graph = Graph(id="test_example")
     mod.graphs.append(mod_graph)
     node0 = Node(id="node0")
