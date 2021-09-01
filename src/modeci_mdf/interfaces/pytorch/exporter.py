@@ -328,6 +328,8 @@ def torchnode_to_mdfnode(
             )
 
     # Add Parameter
+    if type(arguments)==list:
+        arguments = {'arguments':arguments}
     f = Parameter(id=make_func_id(node), function=op, args=arguments)
     mdf_node.parameters.append(f)
 
