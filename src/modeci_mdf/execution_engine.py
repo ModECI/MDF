@@ -706,26 +706,25 @@ class EvaluableGraph:
                 evaluated_nodes.append(edge.receiver)
 
         try:
-            if self.graph.conditions is not None:
-                conditions = {
-                    self.graph.get_node(node): self.parse_condition(cond)
-                    for node, cond in self.graph.conditions.node_specific.items()
-                }
-            else:
-                conditions = {}
-        except (TypeError, KeyError):
+            self.graph.conditions.node_specific
+        except (TypeError, KeyError, AttributeError):
             conditions = {}
+        else:
+            conditions = {
+                self.graph.get_node(node): self.parse_condition(cond)
+                for node, cond in self.graph.conditions.node_specific.items()
+            }
 
         try:
-            if self.graph.conditions is not None:
-                termination_conds = {
-                    scale: self.parse_condition(cond)
-                    for scale, cond in self.graph.conditions.termination.items()
-                }
-            else:
-                termination_conds = {}
-        except (TypeError, KeyError):
+            self.graph.conditions.termination
+        except (TypeError, KeyError, AttributeError):
             termination_conds = {}
+        else:
+            termination_conds = {
+                scale: self.parse_condition(cond)
+                for scale, cond in self.graph.conditions.termination.items()
+            }
+
 
         self.scheduler = graph_scheduler.Scheduler(
             graph=self.graph.dependency_dict,
