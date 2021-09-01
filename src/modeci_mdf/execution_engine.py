@@ -97,15 +97,15 @@ class EvaluableFunction:
              value of function after evaluation in Dictionary
 
         """
-       
+
         expr = None
-     
+
         if self.function.function:
 
             for f in mdf_functions:
                 if self.function.function == f:
                     expr = create_python_expression(mdf_functions[f]["expression_string"])
-        
+
         else:
             expr  = self.function.value
             #raise "Unknown function: {}. Known functions: {}".format(
@@ -113,7 +113,7 @@ class EvaluableFunction:
             #    mdf_functions.keys,
             #)
 
-      
+
         func_params = {}
         func_params.update(parameters)
         if self.verbose:
@@ -136,7 +136,7 @@ class EvaluableFunction:
                     )
 
         # If this is an ONNX operation, evaluate it without neuromlite.
-       
+
         if "onnx_ops." in expr:
             # Get the ONNX function
             onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
@@ -194,7 +194,7 @@ class EvaluableParameter:
 
                 self.curr_value = float(self.parameter.default_initial_value)
 
-          
+
             else:
 
                 self.curr_value = self.parameter.default_initial_value
@@ -206,10 +206,10 @@ class EvaluableParameter:
 
 
     def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
-        
-     
+
+
         if self.curr_value is None:
-            
+
             if self.parameter.value is not None:
                 if self.parameter.is_stateful():
 
@@ -217,7 +217,7 @@ class EvaluableParameter:
 
                     if self.parameter.default_initial_value is not None:
 
-                      
+
 
                         return self.parameter.default_initial_value
                     else:
@@ -239,9 +239,9 @@ class EvaluableParameter:
                             )
                         )
 
-        
 
-       
+
+
         return self.curr_value
 
 
@@ -317,7 +317,7 @@ class EvaluableParameter:
 
                     if kw not in self.parameter.args.values() and kw != self.parameter.id and kw != '__builtins__':
                         kwargs_for_onnx[kw] = arg
-                print("%s is evaluating ONNX function %s with %s"%(self.parameter.id, expr, kwargs_for_onnx))
+                if self.verbose: print("%s is evaluating ONNX function %s with %s"%(self.parameter.id, expr, kwargs_for_onnx))
                 self.curr_value = onnx_function(**kwargs_for_onnx)
 
 
@@ -544,7 +544,7 @@ class EvaluableNode:
                 else:
                     all_funcs.append(f)
         all_params_to_check = [p for p in node.parameters]
-        print('all_params_to_check: %s'%all_params_to_check)
+        if self.verbose: print('all_params_to_check: %s'%all_params_to_check)
 
         # Order the parameters into the correct sequence
         while len(all_params_to_check) > 0:
@@ -706,18 +706,24 @@ class EvaluableGraph:
                 evaluated_nodes.append(edge.receiver)
 
         try:
-            conditions = {
-                self.graph.get_node(node): self.parse_condition(cond)
-                for node, cond in self.graph.conditions["node_specific"].items()
-            }
+            if self.graph.conditions is not None:
+                conditions = {
+                    self.graph.get_node(node): self.parse_condition(cond)
+                    for node, cond in self.graph.conditions.node_specific.items()
+                }
+            else:
+                conditions = {}
         except (TypeError, KeyError):
             conditions = {}
 
         try:
-            termination_conds = {
-                scale: self.parse_condition(cond)
-                for scale, cond in self.graph.conditions["termination"].items()
-            }
+            if self.graph.conditions is not None:
+                termination_conds = {
+                    scale: self.parse_condition(cond)
+                    for scale, cond in self.graph.conditions.termination.items()
+                }
+            else:
+                termination_conds = {}
         except (TypeError, KeyError):
             termination_conds = {}
 
