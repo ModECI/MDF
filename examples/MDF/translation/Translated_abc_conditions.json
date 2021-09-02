@@ -9,8 +9,8 @@
                         "input0": {
                             "type": "BeforeNCalls",
                             "args": {
-                                "dependency": "input0",
-                                "n": 1
+                                "n": 1,
+                                "dependencies": "input0"
                             }
                         },
                         "A": {
@@ -20,15 +20,15 @@
                         "B": {
                             "type": "EveryNCalls",
                             "args": {
-                                "dependency": "A",
-                                "n": 2
+                                "n": 2,
+                                "dependencies": "A"
                             }
                         },
                         "C": {
                             "type": "EveryNCalls",
                             "args": {
-                                "dependency": "A",
-                                "n": 3
+                                "n": 3,
+                                "dependencies": "A"
                             }
                         }
                     },
@@ -40,14 +40,14 @@
                                     {
                                         "type": "AfterNCalls",
                                         "args": {
-                                            "dependency": "C",
-                                            "n": 2
+                                            "n": 2,
+                                            "dependencies": "C"
                                         }
                                     },
                                     {
                                         "type": "JustRan",
                                         "args": {
-                                            "dependency": "A"
+                                            "dependencies": "A"
                                         }
                                     }
                                 ]
@@ -81,7 +81,14 @@
                             },
                             "intercept": {
                                 "value": 1.2
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_func"
+                            }
+                        },
+                        "functions": {
                             "linear_func": {
                                 "function": "linear",
                                 "args": {
@@ -90,13 +97,7 @@
                                     "variable0": "input_port1"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "linear_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     },
                     "B": {
                         "input_ports": {
@@ -113,7 +114,14 @@
                             },
                             "offset": {
                                 "value": 2.3
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "logistic_func"
+                            }
+                        },
+                        "functions": {
                             "logistic_func": {
                                 "function": "logistic",
                                 "args": {
@@ -123,13 +131,7 @@
                                     "variable0": "input_port1"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "logistic_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     },
                     "C": {
                         "input_ports": {
@@ -149,7 +151,14 @@
                             },
                             "offset": {
                                 "value": 3.4
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        },
+                        "functions": {
                             "exponential_func": {
                                 "function": "exponential",
                                 "args": {
@@ -160,13 +169,7 @@
                                     "variable0": "input_port1"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "exponential_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     }
                 },
                 "edges": {

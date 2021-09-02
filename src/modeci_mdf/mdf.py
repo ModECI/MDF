@@ -205,7 +205,7 @@ class Graph(MdfBaseWithId):
                 ("parameters", ("Dict of global parameters for the Graph", dict)),
                 (
                     "conditions",
-                    ("The _ConditionSet_ for scheduling of the Graph", dict),
+                    ("The _ConditionSet_ for scheduling of the Graph", ConditionSet),
                 ),
             ]
         )
@@ -399,6 +399,16 @@ class Function(BaseWithId):
                         str,
                     ),
                 ),
+
+                (
+                    "value",
+                    (
+                        "evaluable expression",
+                        str,
+                    ),
+                ),
+
+
                 (
                     "args",
                     (
@@ -687,17 +697,12 @@ class Condition(MdfBase):
     Args:
         type: The type of Condition from the library
         args: The dictionary of arguments needed to evaluate the Condition
-        n: The number of executions of component after which the Condition is satisfied
-        dependency: Node id on which
     """
 
     def __init__(
         self,
         type: Optional[str] = None,
-        args: Optional[Dict[str, Any]] = None,
-        dependency: Optional[str] = None,
-        n: Optional[int] = None,
-        dependencies: Optional[List["Condition"]] = None,
+        **args: Optional[Any],
     ):
 
         self.allowed_fields = collections.OrderedDict(
@@ -712,16 +717,8 @@ class Condition(MdfBase):
                 ),
             ]
         )
-        kwargs = {}
 
-        if n is not None:
-            kwargs["n"] = n
-        if dependency is not None:
-            kwargs["dependency"] = dependency
-        if dependencies is not None:
-            kwargs["dependencies"] = dependencies
-
-        super().__init__(type=type, args=kwargs)
+        super().__init__(type=type, args=args)
 
 
 if __name__ == "__main__":

@@ -11,7 +11,7 @@ count:
                     retrieval_buffer:
                         type: JustRan
                         args:
-                            dependency: declarative_memory
+                            dependencies: declarative_memory
                     goal_buffer:
                         type: Always
                         args: {}
@@ -24,28 +24,28 @@ count:
                             dependencies:
                             -   type: EveryNCalls
                                 args:
+                                    dependencies: retrieval_buffer
                                     n: 1
-                                    dependency: retrieval_buffer
                             -   type: EveryNCalls
                                 args:
+                                    dependencies: goal_buffer
                                     n: 1
-                                    dependency: goal_buffer
                             -   type: EveryNCalls
                                 args:
+                                    dependencies: declarative_memory
                                     n: 1
-                                    dependency: declarative_memory
                     conflict_resolution:
                         type: JustRan
                         args:
-                            dependency: pattern_matching
+                            dependencies: pattern_matching
                     fire_production:
                         type: JustRan
                         args:
-                            dependency: conflict_resolution
+                            dependencies: conflict_resolution
                     check_termination:
                         type: JustRan
                         args:
-                            dependency: conflict_resolution
+                            dependencies: conflict_resolution
                 termination:
                     check_term_true:
                         type: While

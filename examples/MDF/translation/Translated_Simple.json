@@ -31,7 +31,14 @@
                             },
                             "log_gain": {
                                 "value": 3
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "logistic_1"
+                            }
+                        },
+                        "functions": {
                             "linear_1": {
                                 "function": "linear",
                                 "args": {
@@ -49,13 +56,7 @@
                                     "offset": 0
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "logistic_1"
-                            }
-                        },
-                        "functions": {}
+                        }
                     }
                 },
                 "edges": {

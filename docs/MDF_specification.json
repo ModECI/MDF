@@ -41,7 +41,7 @@
                     "description": "Dict of global parameters for the Graph"
                 },
                 "conditions": {
-                    "type": "dict",
+                    "type": "ConditionSet",
                     "description": "The _ConditionSet_ for scheduling of the Graph"
                 },
                 "metadata": {
@@ -65,6 +65,22 @@
                 "edges": {
                     "type": "Edge",
                     "description": "The _Edge_s between _Node_s in the Graph"
+                }
+            }
+        },
+        "ConditionSet": {
+            "allowed_parameters": {
+                "node_specific": {
+                    "type": "dict",
+                    "description": "The _Condition_s corresponding to each _Node_"
+                },
+                "termination": {
+                    "type": "dict",
+                    "description": "The _Condition_s that indicate when model execution ends"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the Node"
                 }
             }
         },
@@ -133,6 +149,10 @@
                 "function": {
                     "type": "str",
                     "description": "Which of the in-build MDF functions (linear etc.) this uses"
+                },
+                "value": {
+                    "type": "str",
+                    "description": "evaluable expression"
                 },
                 "args": {
                     "type": "dict",

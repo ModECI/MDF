@@ -27,7 +27,7 @@ A directed graph consisting of <a href="#node">Node</a>s connected via <a href="
 #### Allowed parameters
 <table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of global parameters for the Graph</i></td></tr>
 
-<tr><td><b>conditions</b></td><td>dict</td><td><i>The <a href="#conditionset">ConditionSet</a> for scheduling of the Graph</i></td></tr>
+<tr><td><b>conditions</b></td><td><a href="#conditionset">ConditionSet</a></td><td><i>The <a href="#conditionset">ConditionSet</a> for scheduling of the Graph</i></td></tr>
 
 <tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
 
@@ -42,6 +42,17 @@ A directed graph consisting of <a href="#node">Node</a>s connected via <a href="
 <table><tr><td><b>nodes</b></td><td><a href="#node">Node</a></td><td><i>The <a href="#node">Node</a>s present in the Graph</i></td></tr>
 
 <tr><td><b>edges</b></td><td><a href="#edge">Edge</a></td><td><i>The <a href="#edge">Edge</a>s between <a href="#node">Node</a>s in the Graph</i></td></tr>
+
+
+</table>
+
+## ConditionSet
+#### Allowed parameters
+<table><tr><td><b>node_specific</b></td><td>dict</td><td><i>The <a href="#condition">Condition</a>s corresponding to each <a href="#node">Node</a></i></td></tr>
+
+<tr><td><b>termination</b></td><td>dict</td><td><i>The <a href="#condition">Condition</a>s that indicate when model execution ends</i></td></tr>
+
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
 
 
 </table>
@@ -89,6 +100,8 @@ A self contained unit of evaluation receiving input from other Nodes on <a href=
 A single value which is evaluated as a function of values on <a href="#inputport">InputPort</a>s and other Functions
 #### Allowed parameters
 <table><tr><td><b>function</b></td><td>str</td><td><i>Which of the in-build MDF functions (linear etc.) this uses</i></td></tr>
+
+<tr><td><b>value</b></td><td>str</td><td><i>evaluable expression</i></td></tr>
 
 <tr><td><b>args</b></td><td>dict</td><td><i>Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}</i></td></tr>
 
