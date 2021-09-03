@@ -101,17 +101,16 @@ class EvaluableFunction:
         """
 
         expr = None
-<<<<<<< HEAD
+
         
         
        
         func_val  = self.function.value
         
         if isinstance(func_val, dict):
-=======
 
-        if self.function.function:
->>>>>>> 1944e0562f23417f2746ff94bc170ad0f62379c5
+
+
 
             for f in mdf_functions:
 
@@ -120,7 +119,7 @@ class EvaluableFunction:
 
            
                     expr = create_python_expression(mdf_functions[f]["expression_string"])
-<<<<<<< HEAD
+
                     break
         
         if expr is None:
@@ -131,17 +130,6 @@ class EvaluableFunction:
         #     #)
 
         
-=======
-
-        else:
-            expr  = self.function.value
-            #raise "Unknown function: {}. Known functions: {}".format(
-            #    self.function.function,
-            #    mdf_functions.keys,
-            #)
-
-
->>>>>>> 1944e0562f23417f2746ff94bc170ad0f62379c5
         func_params = {}
         func_params.update(parameters)
         if self.verbose:
@@ -170,12 +158,7 @@ class EvaluableFunction:
                             )
                     break
         # If this is an ONNX operation, evaluate it without neuromlite.
-<<<<<<< HEAD
-       
-    
-=======
 
->>>>>>> 1944e0562f23417f2746ff94bc170ad0f62379c5
         if "onnx_ops." in expr:
             # Get the ONNX function
             onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
