@@ -13,8 +13,7 @@ import argparse
 import sys
 
 def main():
-
-   
+ 
     dt = 0.01
     file_path = 'States.json'
     data  = convert_states_to_stateful_parameters('../'+file_path, dt)

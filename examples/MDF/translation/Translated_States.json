@@ -66,11 +66,12 @@
                                 "value": "amp * level"
                             },
                             "evaluated_time_next_value": {
-                                "function": "linear",
-                                "args": {
-                                    "variable0": "time",
-                                    "slope": 1,
-                                    "intercept": "dt"
+                                "value": {
+                                    "linear": {
+                                        "variable0": "time",
+                                        "slope": 1,
+                                        "intercept": "dt"
+                                    }
                                 }
                             }
                         }

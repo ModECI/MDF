@@ -7,6 +7,7 @@ import onnx.defs
 import sympy
 
 from typing import List, Tuple, Dict, Optional, Set, Any, Union
+from modeci_mdf.standard_functions import mdf_functions, create_python_expression
 
 # Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
 #  Try: pip install neuromllite
@@ -389,7 +390,8 @@ class Function(BaseWithId):
 
 
     def __init__(self, **kwargs):
-
+        
+      
         self.allowed_fields = collections.OrderedDict(
             [
                 (
@@ -404,7 +406,7 @@ class Function(BaseWithId):
                     "value",
                     (
                         "evaluable expression",
-                        str,
+                        dict
                     ),
                 ),
 
@@ -423,8 +425,10 @@ class Function(BaseWithId):
                         str,
                     ),
                 ),
-            ]
+            ] 
         )
+
+     
         """The allowed fields for this type"""
 
         '''

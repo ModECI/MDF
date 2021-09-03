@@ -90,11 +90,12 @@
                         },
                         "functions": {
                             "linear_func": {
-                                "function": "linear",
-                                "args": {
-                                    "slope": "slope",
-                                    "intercept": "intercept",
-                                    "variable0": "input_port1"
+                                "value": {
+                                    "linear": {
+                                        "slope": "slope",
+                                        "intercept": "intercept",
+                                        "variable0": "input_port1"
+                                    }
                                 }
                             }
                         }
@@ -123,12 +124,13 @@
                         },
                         "functions": {
                             "logistic_func": {
-                                "function": "logistic",
-                                "args": {
-                                    "gain": "gain",
-                                    "bias": "bias",
-                                    "offset": "offset",
-                                    "variable0": "input_port1"
+                                "value": {
+                                    "logistic": {
+                                        "gain": "gain",
+                                        "bias": "bias",
+                                        "offset": "offset",
+                                        "variable0": "input_port1"
+                                    }
                                 }
                             }
                         }
@@ -160,13 +162,14 @@
                         },
                         "functions": {
                             "exponential_func": {
-                                "function": "exponential",
-                                "args": {
-                                    "scale": "scale",
-                                    "rate": "rate",
-                                    "bias": "bias",
-                                    "offset": "offset",
-                                    "variable0": "input_port1"
+                                "value": {
+                                    "exponential": {
+                                        "scale": "scale",
+                                        "rate": "rate",
+                                        "bias": "bias",
+                                        "offset": "offset",
+                                        "variable0": "input_port1"
+                                    }
                                 }
                             }
                         }

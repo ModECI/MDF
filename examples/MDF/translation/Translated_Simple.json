@@ -40,20 +40,22 @@
                         },
                         "functions": {
                             "linear_1": {
-                                "function": "linear",
-                                "args": {
-                                    "variable0": "input_port1",
-                                    "slope": "lin_slope",
-                                    "intercept": "lin_intercept"
+                                "value": {
+                                    "linear": {
+                                        "variable0": "input_port1",
+                                        "slope": "lin_slope",
+                                        "intercept": "lin_intercept"
+                                    }
                                 }
                             },
                             "logistic_1": {
-                                "function": "logistic",
-                                "args": {
-                                    "variable0": "linear_1",
-                                    "gain": "log_gain",
-                                    "bias": 0,
-                                    "offset": 0
+                                "value": {
+                                    "logistic": {
+                                        "variable0": "linear_1",
+                                        "gain": "log_gain",
+                                        "bias": 0,
+                                        "offset": 0
+                                    }
                                 }
                             }
                         }

@@ -55,11 +55,12 @@
                         },
                         "functions": {
                             "linear_1": {
-                                "function": "linear",
-                                "args": {
-                                    "variable0": "input_port1",
-                                    "slope": "slope",
-                                    "intercept": "intercept"
+                                "value": {
+                                    "linear": {
+                                        "variable0": "input_port1",
+                                        "slope": "slope",
+                                        "intercept": "intercept"
+                                    }
                                 }
                             }
                         }
