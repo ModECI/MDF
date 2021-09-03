@@ -120,7 +120,10 @@ def onnx_node_to_mdf(
         mdf_node = Node(id=node.name)
 
         for p in params_dict:
-            mdf_node.parameters.append(Parameter(id=p, value=params_dict[p]))
+            if type(params_dict[p]) == Graph:
+                mdf_node.parameters.append(Parameter(id=p, value={'graph_%s'%params_dict[p].id:params_dict[p]}))
+            else:
+                mdf_node.parameters.append(Parameter(id=p, value=params_dict[p]))
 
         # Add the function
         # FIXME: There is probably more stuff we need to preserve for ONNX Ops
