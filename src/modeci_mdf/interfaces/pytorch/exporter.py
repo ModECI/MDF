@@ -145,10 +145,9 @@ def process_onnx_schema(
                         for i, inp in enumerate(inputs)
                     }
 
-            output_args = {
-                schema.outputs[o].name: port_mapper.id_to_port(out)
-                for o, out in enumerate(outputs)
-            }
+            # Go through each output that the schema defines and get its name, this is only used when there
+            # are multiple output arguments.
+            output_args = [o.name for o in schema.outputs]
 
         except onnx.onnx_cpp2py_export.defs.SchemaError:
             logger.warning(
@@ -334,7 +333,16 @@ def torchnode_to_mdfnode(
             )
 
     # Add function
-    f = Function(id=make_func_id(node), function=op, args=arguments)
+    if len(output_args) == 1:
+        f = Function(id=make_func_id(node), function=op, args=arguments)
+    else:
+        f = Function(
+            id=make_func_id(node),
+            function=op,
+            args=arguments,
+            return_values=output_args,
+        )
+
     mdf_node.functions.append(f)
 
     return mdf_node
