@@ -14,15 +14,18 @@ from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
 
+
 class MdfBaseWithId(BaseWithId):
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
         super().__init__(**kwargs)
+
 
 class MdfBase(Base):
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
         super().__init__(**kwargs)
+
 
 class Model(MdfBaseWithId):
     r"""The top level construct in MDF is Model which consists of Graph(s) and model attribute(s)
@@ -442,12 +445,13 @@ class Function(MdfBaseWithId):
 
 
 class InputPort(MdfBaseWithId):
-    r"""The InputPort is an attribute of a Node which imports information to the Node
+    r"""The InputPort is an attribute of a Node which allows external information to be input to the Node
 
     Args:
         shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
         type: The data type of the input received at a port or the output sent by a port
     """
+    _definition = "The InputPort is an attribute of a _Node_ which allows external information to be input to the _Node_"
 
     def __init__(
         self,
@@ -490,11 +494,12 @@ class InputPort(MdfBaseWithId):
 
 
 class OutputPort(MdfBaseWithId):
-    r"""The OutputPort is an attribute of a Node which exports information to the dependent Node object
+    r"""The OutputPort is an attribute of a Node which exports information to another Node connected by an Edge
     Args:
         id: Unique Indenty of the element
         value: The value of the OutputPort in terms of the InputPort and Function values
     """
+    _definition = "The OutputPort is an attribute of a _Node_ which exports information to another _Node_ connected by an _Edge_"
 
     def __init__(self, **kwargs):
 
@@ -597,7 +602,7 @@ class Parameter(MdfBaseWithId):
 
 
 class Edge(MdfBaseWithId):
-    r"""Edge is an attribute of Graph that transmits computational results from sender port to receiver port
+    r"""An Edge is an attribute of a Graph that transmits computational results from a sender's OutputPort to a receiver's InputPort
 
     Args:
         parameters: Dictionary of parameters for the Edge
@@ -606,6 +611,7 @@ class Edge(MdfBaseWithId):
         sender_port: The id of the OutputPort on the sender Node, whose value should be sent to the receiver_port
         receiver_port: The id of the InputPort on the receiver Node
     """
+    _definition = "An Edge is an attribute of a _Graph_ that transmits computational results from a sender's _OutputPort_ to a receiver's _InputPort_"
 
 
     def __init__(self, **kwargs):
@@ -652,12 +658,13 @@ class Edge(MdfBaseWithId):
 
 
 class ConditionSet(MdfBase):
-    r"""Specify the non-default pattern of execution
+    r"""Specifies the non-default pattern of execution of Nodes
 
     Args:
         node_specific: A dictionary mapping nodes to any non-default run conditions
         termination: A dictionary mapping time scales of model execution to conditions indicating when they end
     """
+    _definition = "Specifies the non-default pattern of execution of _Node_s"
 
     def __init__(
         self,
@@ -698,6 +705,7 @@ class Condition(MdfBase):
         type: The type of Condition from the library
         args: The dictionary of arguments needed to evaluate the Condition
     """
+    _definition = "A set of descriptors which specify conditional execution of _Node_s to meet complex execution requirements"
 
     def __init__(
         self,
