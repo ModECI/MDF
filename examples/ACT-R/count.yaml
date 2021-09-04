@@ -48,7 +48,7 @@ count:
                             dependencies: conflict_resolution
                 termination:
                     check_term_true:
-                        type: While
+                        type: JustRan
                         args:
                             dependencies:
                             - check_termination

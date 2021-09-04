@@ -257,6 +257,9 @@ def test_graph_types(tmpdir):
     p_dict = {'a':3,'w':{'b':3,'x':True,'y':[2,2,2,2]}}
     node0.parameters.append(Parameter(id="p_dict", value=p_dict))
 
+    p_dict_tuple = {'y':(4,44)} # will change to {'y': [4, 44]}
+    node0.parameters.append(Parameter(id="p_dict_tuple", value=p_dict_tuple))
+
     print(mod)
     tmpfile = f"{tmpdir}/test.json"
     mod.to_json_file(tmpfile)
@@ -266,8 +269,11 @@ def test_graph_types(tmpdir):
 
     for p in [p.id for p in node0.parameters]:
         print('Testing %s, is %s = %s?'%(p,new_node0.get_parameter(p).value,eval(p)))
-        assert new_node0.get_parameter(p).value == eval(p)
+
         assert type(new_node0.get_parameter(p).value) == type(eval(p))
+        # Type will be same for tuple containing dict, but tuple will have been converetd to dict...
+        if not p == 'p_dict_tuple':
+            assert new_node0.get_parameter(p).value == eval(p)
 
 if __name__ == '__main__':
     test_graph_types('/tmp')
