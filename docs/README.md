@@ -107,6 +107,8 @@ A single value which is evaluated as a function of values on <a href="#inputport
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+
 <tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>
 
 

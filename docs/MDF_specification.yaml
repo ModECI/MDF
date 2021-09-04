@@ -129,6 +129,9 @@ specification:
             id:
                 type: str
                 description: Unique ID of element
+            metadata:
+                type: dict
+                description: Dict of metadata for the Node
             notes:
                 type: str
                 description: Human readable notes
