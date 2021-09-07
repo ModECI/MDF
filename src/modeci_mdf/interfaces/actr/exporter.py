@@ -213,7 +213,7 @@ def build_model() -> Model:
     cond_fire_prod = Condition(type="JustRan", dependencies=conflict_node.id)
     cond_check = Condition(type="JustRan", dependencies=conflict_node.id)
     cond_term = Condition(
-        type="While",
+        type="JustRan",
         dependencies=[check_node.id]
     )
     mod_graph.conditions = ConditionSet(

@@ -7,7 +7,7 @@ The top level Model containing <a href="#graph">Graph</a>s consisting of <a href
 
 <tr><td><b>generating_application</b></td><td>str</td><td><i>Information on what application generated/saved this file</i></td></tr>
 
-<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
@@ -27,9 +27,9 @@ A directed graph consisting of <a href="#node">Node</a>s connected via <a href="
 #### Allowed parameters
 <table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of global parameters for the Graph</i></td></tr>
 
-<tr><td><b>conditions</b></td><td>dict</td><td><i>The <a href="#conditionset">ConditionSet</a> for scheduling of the Graph</i></td></tr>
+<tr><td><b>conditions</b></td><td><a href="#conditionset">ConditionSet</a></td><td><i>The <a href="#conditionset">ConditionSet</a> for scheduling of the Graph</i></td></tr>
 
-<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
@@ -46,10 +46,22 @@ A directed graph consisting of <a href="#node">Node</a>s connected via <a href="
 
 </table>
 
+## ConditionSet
+Specifies the non-default pattern of execution of <a href="#node">Node</a>s
+#### Allowed parameters
+<table><tr><td><b>node_specific</b></td><td>dict</td><td><i>The <a href="#condition">Condition</a>s corresponding to each <a href="#node">Node</a></i></td></tr>
+
+<tr><td><b>termination</b></td><td>dict</td><td><i>The <a href="#condition">Condition</a>s that indicate when model execution ends</i></td></tr>
+
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
+
+
+</table>
+
 ## Node
 A self contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of Functions and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s 
 #### Allowed parameters
-<table><tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+<table><tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
@@ -71,12 +83,13 @@ A self contained unit of evaluation receiving input from other Nodes on <a href=
 </table>
 
 ## InputPort
+The InputPort is an attribute of a <a href="#node">Node</a> which allows external information to be input to the <a href="#node">Node</a>
 #### Allowed parameters
 <table><tr><td><b>shape</b></td><td>str</td><td><i>The shape of the variable (note: there is limited support for this so far...)</i></td></tr>
 
 <tr><td><b>type</b></td><td>str</td><td><i>The type of the variable (note: there is limited support for this so far </i></td></tr>
 
-<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
@@ -96,6 +109,8 @@ A single value which is evaluated as a function of values on <a href="#inputport
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
+
 <tr><td><b>notes</b></td><td>str</td><td><i>Human readable notes</i></td></tr>
 
 
@@ -114,7 +129,7 @@ A Parameter of the <a href="#node">Node</a>, which can have a specific value (a 
 
 <tr><td><b>args</b></td><td>dict</td><td><i>Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}</i></td></tr>
 
-<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
@@ -124,10 +139,11 @@ A Parameter of the <a href="#node">Node</a>, which can have a specific value (a 
 </table>
 
 ## OutputPort
+The OutputPort is an attribute of a <a href="#node">Node</a> which exports information to another <a href="#node">Node</a> connected by an <a href="#edge">Edge</a>
 #### Allowed parameters
 <table><tr><td><b>value</b></td><td>str</td><td><i>The value of the OutputPort in terms of the <a href="#inputport">InputPort</a> and <a href="#function">Function</a> values</i></td></tr>
 
-<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 
@@ -137,6 +153,7 @@ A Parameter of the <a href="#node">Node</a>, which can have a specific value (a 
 </table>
 
 ## Edge
+An Edge is an attribute of a <a href="#graph">Graph</a> that transmits computational results from a sender's <a href="#outputport">OutputPort</a> to a receiver's <a href="#inputport">InputPort</a>
 #### Allowed parameters
 <table><tr><td><b>parameters</b></td><td>dict</td><td><i>Dict of parameters for the Edge</i></td></tr>
 
@@ -148,7 +165,7 @@ A Parameter of the <a href="#node">Node</a>, which can have a specific value (a 
 
 <tr><td><b>receiver_port</b></td><td>str</td><td><i>The id of the <a href="#inputport">InputPort</a> on the receiver <a href="#node">Node</a></i></td></tr>
 
-<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the Node</i></td></tr>
+<tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
 <tr><td><b>id</b></td><td>str</td><td><i>Unique ID of element</i></td></tr>
 

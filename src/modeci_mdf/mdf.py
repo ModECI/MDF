@@ -14,25 +14,22 @@ from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
 
+
 class MdfBaseWithId(BaseWithId):
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
         super().__init__(**kwargs)
-        if self.metadata != None and not isinstance(self.metadata, self.allowed_fields['metadata'][1]):
-            raise TypeError(f"metadata must be {self.allowed_fields['metadata'][1]}")
-        # if self.id!=None and type(self.metadata)!=self.allowed_fields['id'][1]:
-        #     raise TypeError(f"id must be {self.allowed_fields['id'][1]}")
 
 
 class MdfBase(Base):
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the Node", dict)})
+        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
         super().__init__(**kwargs)
-        if self.metadata!=None and not isinstance(self.metadata,self.allowed_fields['metadata'][1]):
-            raise TypeError(f"metadata must be {self.allowed_fields['metadata'][1]}")
+
 
 class Model(MdfBaseWithId):
     r"""The top level construct in MDF is Model which consists of Graph(s) and model attribute(s)
+
     Args:
         id: A unique identifier for this Model
         format: Information on the version of MDF used in this file
@@ -91,10 +88,6 @@ class Model(MdfBaseWithId):
                 pass'''
 
         super().__init__(**kwargs)
-        if self.format!=None and not isinstance(self.format,self.allowed_fields['format'][1]):
-            raise TypeError(f"format must be {self.allowed_fields['format'][1]}")
-        if self.generating_application!=None and not isinstance(self.generating_application,self.allowed_fields['generating_application'][1]):
-            raise TypeError(f"id must be {self.allowed_fields['generating_application'][1]}")
 
     @property
     def graphs(self) -> List["Graph"]:
@@ -113,8 +106,10 @@ class Model(MdfBaseWithId):
     # Overrides BaseWithId.to_json_file
     def to_json_file(self, filename, include_metadata=True) -> str:
         """Convert the file in MDF format to JSON format
+
          .. note::
             JSON is standard file format uses human-readable text to store and transmit data objects consisting of attribute–value pairs and arrays
+
         Args:
             filename: file in MDF format (.mdf extension)
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
@@ -133,6 +128,7 @@ class Model(MdfBaseWithId):
     # Overrides BaseWithId.to_yaml_file
     def to_yaml_file(self, filename, include_metadata=True):
         """Convert file in MDF format to yaml format
+
         Args:
             filename: File in MDF format (Filename extension: .mdf )
             include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
@@ -190,6 +186,7 @@ class Model(MdfBaseWithId):
 
 class Graph(MdfBaseWithId):
     r"""A directed graph consisting of Node(s) connected via Edge(s)
+
     Args:
         id: A unique identifier for this Graph
         parameters: Dictionary of global parameters for the Graph
@@ -211,7 +208,7 @@ class Graph(MdfBaseWithId):
                 ("parameters", ("Dict of global parameters for the Graph", dict)),
                 (
                     "conditions",
-                    ("The _ConditionSet_ for scheduling of the Graph", dict),
+                    ("The _ConditionSet_ for scheduling of the Graph", ConditionSet),
                 ),
             ]
         )
@@ -229,10 +226,6 @@ class Graph(MdfBaseWithId):
                 pass'''
 
         super().__init__(**kwargs)
-        if self.parameters!=None and not isinstance(self.parameters,self.allowed_fields['parameters'][1]):
-            raise TypeError(f"parameters must be {self.allowed_fields['parameters'][1]}")
-        if self.conditions!=None and not isinstance(self.conditions,self.allowed_fields['conditions'][1]):
-            raise TypeError(f"conditions must be {self.allowed_fields['conditions'][1]}")
 
     @property
     def nodes(self) -> List["Node"]:
@@ -258,7 +251,9 @@ class Graph(MdfBaseWithId):
     @property
     def dependency_dict(self) -> Dict["Node", Set["Node"]]:
         """Returns the dependency among nodes as dictionary
+
         Key: receiver, Value: Set of senders imparting information to the receiver
+
         Returns:
             Returns the dependency dictionary
         """
@@ -277,6 +272,7 @@ class Graph(MdfBaseWithId):
     @property
     def inputs(self: "Graph") -> List[Tuple["Node", "InputPort"]]:
         """Enumerate all Node-InputPort pairs that specify no incoming edge. These are input ports for the graph itself and must be provided values to evaluate
+
         Returns:
             A list of Node, InputPort tuples
         """
@@ -295,6 +291,7 @@ class Node(MdfBaseWithId):
     r"""A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
     The values from these are processed via a number of Functions and one or more final values
     are calculated on the OutputPort
+
     Args:
         id: Unique Identity of the element
         parameters: Dictionary of parameters required at the Node for computation
@@ -346,10 +343,10 @@ class Node(MdfBaseWithId):
 
         super().__init__(**kwargs)
 
-
     @property
     def input_ports(self) -> List["InputPort"]:
         """The InputPort(s) present in the Node
+
         Returns:
             A list of InputPort(s) at the given Node
         """
@@ -364,6 +361,7 @@ class Node(MdfBaseWithId):
     @property
     def functions(self) -> List["Function"]:
         """The Functions define computation at the Node
+
         Returns:
             A list of Function(s) at the given Node
         """
@@ -373,14 +371,16 @@ class Node(MdfBaseWithId):
     @property
     def output_ports(self) -> List["OutputPort"]:
         """The OutputPort(s) present at the Node
+
         Returns:
             A list of OutputPorts at the given Node
         """
         return self.__getattr__("output_ports")
 
 
-class Function(BaseWithId):
+class Function(MdfBaseWithId):
     r"""A single value which is evaluated as a function of values on InputPorts and other Functions
+
     Args:
         function: Which of the in-build MDF functions (linear etc.) this uses
         args: Dictionary of values for each of the arguments for the Function, e.g. if the in-build function
@@ -442,27 +442,23 @@ class Function(BaseWithId):
                 pass'''
 
         super().__init__(**kwargs)
-        if self.function != None and not isinstance(self.function,self.allowed_fields['function'][1]):
-            raise TypeError(f"function must be {self.allowed_fields['function'][1]}")
-        if self.value != None and not isinstance(self.value,self.allowed_fields['value'][1]):
-            raise TypeError(f"value must be {self.allowed_fields['value'][1]}")
-        if self.args != None and not isinstance(self.args,self.allowed_fields['args'][1]):
-            raise TypeError(f"args must be {self.allowed_fields['args'][1]}")
 
 
 class InputPort(MdfBaseWithId):
-    r"""The InputPort is an attribute of a Node which imports information to the Node
+    r"""The InputPort is an attribute of a Node which allows external information to be input to the Node
+
     Args:
         shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
         type: The data type of the input received at a port or the output sent by a port
     """
+    _definition = "The InputPort is an attribute of a _Node_ which allows external information to be input to the _Node_"
 
     def __init__(
         self,
         id: Optional[str] = None,
         shape: Optional[str] = None,
         type: Optional[str] = None,
-        metadata: Optional[dict[Any,Any]]= None
+        **kwargs,
     ):
 
         self.allowed_fields = collections.OrderedDict(
@@ -485,30 +481,25 @@ class InputPort(MdfBaseWithId):
         )
 
         # FIXME: Reconstruct kwargs as neuromlite expects them
-        kwargs = {}
-        if id is not None:
-            kwargs["id"] = id
-        if shape is not None:
-            kwargs["shape"] = shape
-        if type is not None:
-            kwargs["type"] = type
-        if metadata is not None:
-            kwargs["metadata"] = metadata
-
+        kwargs["id"] = id
+        for f in self.allowed_fields:
+            try:
+                val = locals()[f]
+                if val is not None:
+                    kwargs[f] = val
+            except KeyError:
+                pass
 
         super().__init__(**kwargs)
 
-        if self.shape != None and not isinstance(self.shape,self.allowed_fields['shape'][1]):
-            raise TypeError(f"shape must be {self.allowed_fields['shape'][1]}")
-        if self.type != None and not isinstance(self.type,self.allowed_fields['shape'][1]):
-            raise TypeError(f"type must be {self.allowed_fields['type'][1]}")
 
 class OutputPort(MdfBaseWithId):
-    r"""The OutputPort is an attribute of a Node which exports information to the dependent Node object
+    r"""The OutputPort is an attribute of a Node which exports information to another Node connected by an Edge
     Args:
         id: Unique Indenty of the element
         value: The value of the OutputPort in terms of the InputPort and Function values
     """
+    _definition = "The OutputPort is an attribute of a _Node_ which exports information to another _Node_ connected by an _Edge_"
 
     def __init__(self, **kwargs):
 
@@ -539,14 +530,12 @@ class OutputPort(MdfBaseWithId):
                 pass'''
 
         super().__init__(**kwargs)
-        if self.value != None and not isinstance(self.value,self.allowed_fields['value'][1]):
-            raise TypeError(f"value must be {self.allowed_fields['value'][1]}")
-
 
 
 
 class Parameter(MdfBaseWithId):
     r"""A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative
+
     Args:
         default_initial_value: The initial value of the parameter
         value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
@@ -597,23 +586,6 @@ class Parameter(MdfBaseWithId):
         )
 
         super().__init__(**kwargs)
-        if self.default_initial_value != None and type(self.default_initial_value) != self.allowed_fields['default_initial_value'][1]:
-            raise TypeError(f"default_initial_value must be {self.allowed_fields['default_initial_value'][1]}")
-
-        ##--needs fix-- error coming due to EvaluableExpression
-
-        if self.value != None and type(self.value) != self.allowed_fields['value'][1]:
-            raise TypeError(f"value must be {self.allowed_fields['value'][1]}")
-
-        if self.time_derivative != None and type(self.time_derivative) != self.allowed_fields['time_derivative'][1]:
-            raise TypeError(f"time_derivative must be {self.allowed_fields['time_derivative'][1]}")
-        if self.function != None and type(self.function) != self.allowed_fields['function'][1]:
-            raise TypeError(f"function must be {self.allowed_fields['function'][1]}")
-
-        #---pytorch-ddm_py error is coming due to below
-        if self.args != None and type(self.args) != self.allowed_fields['args'][1]:
-            raise TypeError(f"args must be {self.allowed_fields['args'][1]}")
-
 
     def is_stateful(self):
 
@@ -630,7 +602,8 @@ class Parameter(MdfBaseWithId):
 
 
 class Edge(MdfBaseWithId):
-    r"""Edge is an attribute of Graph that transmits computational results from sender port to receiver port
+    r"""An Edge is an attribute of a Graph that transmits computational results from a sender's OutputPort to a receiver's InputPort
+
     Args:
         parameters: Dictionary of parameters for the Edge
         sender: The id of the Node which is the source of the Edge
@@ -638,6 +611,7 @@ class Edge(MdfBaseWithId):
         sender_port: The id of the OutputPort on the sender Node, whose value should be sent to the receiver_port
         receiver_port: The id of the InputPort on the receiver Node
     """
+    _definition = "An Edge is an attribute of a _Graph_ that transmits computational results from a sender's _OutputPort_ to a receiver's _InputPort_"
 
 
     def __init__(self, **kwargs):
@@ -683,13 +657,14 @@ class Edge(MdfBaseWithId):
         super().__init__(**kwargs)
 
 
-
 class ConditionSet(MdfBase):
-    r"""Specify the non-default pattern of execution
+    r"""Specifies the non-default pattern of execution of Nodes
+
     Args:
         node_specific: A dictionary mapping nodes to any non-default run conditions
         termination: A dictionary mapping time scales of model execution to conditions indicating when they end
     """
+    _definition = "Specifies the non-default pattern of execution of _Node_s"
 
     def __init__(
         self,
@@ -722,10 +697,6 @@ class ConditionSet(MdfBase):
                 pass
 
         super().__init__(**kwargs)
-        if self.node_specific != None and not isinstance(self.node_specific,self.allowed_fields['node_specific'][1]):
-            raise TypeError(f"node_specific must be {self.allowed_fields['node_specific'][1]}")
-        if self.termination != None and not isinstance(self.termination,self.allowed_fields['termination'][1]):
-            raise TypeError(f"termination must be {self.allowed_fields['termination'][1]}")
 
 
 class Condition(MdfBase):
@@ -734,6 +705,7 @@ class Condition(MdfBase):
         type: The type of Condition from the library
         args: The dictionary of arguments needed to evaluate the Condition
     """
+    _definition = "A set of descriptors which specify conditional execution of _Node_s to meet complex execution requirements"
 
     def __init__(
         self,
@@ -755,8 +727,6 @@ class Condition(MdfBase):
         )
 
         super().__init__(type=type, args=args)
-        if self.type != None and not isinstance(self.type,self.allowed_fields['type'][1]):
-            raise TypeError(f"type must be {self.allowed_fields['type'][1]}")
 
 
 if __name__ == "__main__":

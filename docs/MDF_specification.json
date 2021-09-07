@@ -15,7 +15,7 @@
                 },
                 "metadata": {
                     "type": "dict",
-                    "description": "Dict of metadata for the Node"
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -41,12 +41,12 @@
                     "description": "Dict of global parameters for the Graph"
                 },
                 "conditions": {
-                    "type": "dict",
+                    "type": "ConditionSet",
                     "description": "The _ConditionSet_ for scheduling of the Graph"
                 },
                 "metadata": {
                     "type": "dict",
-                    "description": "Dict of metadata for the Node"
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -68,12 +68,29 @@
                 }
             }
         },
+        "ConditionSet": {
+            "definition": "Specifies the non-default pattern of execution of _Node_s",
+            "allowed_parameters": {
+                "node_specific": {
+                    "type": "dict",
+                    "description": "The _Condition_s corresponding to each _Node_"
+                },
+                "termination": {
+                    "type": "dict",
+                    "description": "The _Condition_s that indicate when model execution ends"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
+                }
+            }
+        },
         "Node": {
             "definition": "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. The values from these are processed via a number of Functions and one or more final values are calculated on the _OutputPort_s ",
             "allowed_parameters": {
                 "metadata": {
                     "type": "dict",
-                    "description": "Dict of metadata for the Node"
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -104,6 +121,7 @@
             }
         },
         "InputPort": {
+            "definition": "The InputPort is an attribute of a _Node_ which allows external information to be input to the _Node_",
             "allowed_parameters": {
                 "shape": {
                     "type": "str",
@@ -115,7 +133,7 @@
                 },
                 "metadata": {
                     "type": "dict",
-                    "description": "Dict of metadata for the Node"
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -145,6 +163,10 @@
                 "id": {
                     "type": "str",
                     "description": "Unique ID of element"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "notes": {
                     "type": "str",
@@ -177,7 +199,7 @@
                 },
                 "metadata": {
                     "type": "dict",
-                    "description": "Dict of metadata for the Node"
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -190,6 +212,7 @@
             }
         },
         "OutputPort": {
+            "definition": "The OutputPort is an attribute of a _Node_ which exports information to another _Node_ connected by an _Edge_",
             "allowed_parameters": {
                 "value": {
                     "type": "str",
@@ -197,7 +220,7 @@
                 },
                 "metadata": {
                     "type": "dict",
-                    "description": "Dict of metadata for the Node"
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -210,6 +233,7 @@
             }
         },
         "Edge": {
+            "definition": "An Edge is an attribute of a _Graph_ that transmits computational results from a sender's _OutputPort_ to a receiver's _InputPort_",
             "allowed_parameters": {
                 "parameters": {
                     "type": "dict",
@@ -233,7 +257,7 @@
                 },
                 "metadata": {
                     "type": "dict",
-                    "description": "Dict of metadata for the Node"
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",

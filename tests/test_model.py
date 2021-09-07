@@ -1,37 +1,42 @@
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter, Edge, InputPort
 
 from modeci_mdf.utils import load_mdf
+import pytest
 
 def test_model_init_kwargs():
     m = Model(
-        id="Test", format="test_format", generating_application="test_application"
+        id="Test",
+        format="test_format",
+        generating_application="test_application",
+        metadata={"info":'test_metadata'}
     )
-    m.metadata={"info":'test_metadata'}
-    print(m)
     assert m.format == "test_format"
     assert m.generating_application == "test_application"
     assert m.metadata== {"info":'test_metadata'}
     assert m.id == 'Test'
 
+
 def test_graph_init_kwargs():
-    g = Graph(id="Test_Graph", parameters={'a':1}, conditions={"con":"cond1"})
-    assert g.parameters == {'a':1}
-    assert g.conditions == {"con":"cond1"}
+    g = Graph(
+        id="Test_Graph",
+        parameters={"test_parameters":1},
+        conditions=ConditionSet()
+    )
+    assert g.parameters == {"test_parameters":1}
+    assert str(g.conditions) == str(ConditionSet())
 
 
 def test_Node_init_kwargs():
     n = Node(id="test_node")
-    assert n.id == "test_node"
-
-def test_Node_init_kwargs():
-    n = Node(id="test_node")
+    print(n)
+    print(n.id)
     assert n.id == "test_node"
 
 
 def test_Function_init_kwargs():
-    f = Function(id="Test_Function", function="Test_function", args={"input":"Test_args"})
+    f = Function(id="Test_Function", function="Test_function", args={"Test_arg":1})
     assert f.function == "Test_function"
-    assert f.args == {"input":"Test_args"}
+    assert f.args == {"Test_arg":1}
 
 
 def test_InputPort_init_kwargs():
@@ -50,13 +55,13 @@ def test_OutputPort_init_kwargs():
 def test_Edge_init_kwargs():
     e = Edge(
         id="test_Edge",
-        parameters="test_parameters",
+        parameters={"test_parameters":3},
         sender="test_sender",
         receiver="test_receiver",
         sender_port="test_sender_port",
         receiver_port="test_receiver_port",
     )
-    assert e.parameters == "test_parameters"
+    assert e.parameters == {"test_parameters":3}
     assert e.sender == "test_sender"
     assert e.receiver == "test_receiver"
     assert e.sender_port == "test_sender_port"
@@ -66,10 +71,10 @@ def test_Edge_init_kwargs():
 
 def test_ConditionSet_init_kwargs():
     CS = ConditionSet(
-        node_specific={"test_node_specific":"test_node_specific"}, termination={"test_termination":"test_termination"}
+        node_specific={"test_node_specific":1}, termination={"test_termination":3}
     )
-    assert CS.node_specific == {"test_node_specific":"test_node_specific"}
-    assert CS.termination == {"test_termination":"test_termination"}
+    assert CS.node_specific == {"test_node_specific":1}
+    assert CS.termination == {"test_termination":3}
 
 
 def test_Condition_init_kwargs():
@@ -187,13 +192,15 @@ def test_node_metadata_empty_dict():
     """
     Check for serialization error when passing empty dicts to Node metadata
     """
-    Node(metadata={}).to_json()
+    Node(id='n0',metadata={}).to_json()
 
+@pytest.mark.xfail(reason="Should fail on non dict")
 def test_metadata_dict():
     """
     Test whether we get a serialization error when passing anything else from a dictionary
     """
-    Graph(metadata={'pnl':'info'}).to_json()
+    tr
+    Graph(id='n0',metadata='info').to_json()
 
 
 def test_param_args_empty_dict():
@@ -228,7 +235,7 @@ def test_graph_types(tmpdir):
     r"""
     Test whether types saved in parameters are the same after reloading
     """
-    mod = Model(id='Test0')
+    mod = Model(id="Test0")
     mod_graph = Graph(id="test_example")
     mod.graphs.append(mod_graph)
     node0 = Node(id="node0")
@@ -250,6 +257,9 @@ def test_graph_types(tmpdir):
     p_dict = {'a':3,'w':{'b':3,'x':True,'y':[2,2,2,2]}}
     node0.parameters.append(Parameter(id="p_dict", value=p_dict))
 
+    p_dict_tuple = {'y':(4,44)} # will change to {'y': [4, 44]}
+    node0.parameters.append(Parameter(id="p_dict_tuple", value=p_dict_tuple))
+
     print(mod)
     tmpfile = f"{tmpdir}/test.json"
     mod.to_json_file(tmpfile)
@@ -259,8 +269,11 @@ def test_graph_types(tmpdir):
 
     for p in [p.id for p in node0.parameters]:
         print('Testing %s, is %s = %s?'%(p,new_node0.get_parameter(p).value,eval(p)))
-        assert new_node0.get_parameter(p).value == eval(p)
+
         assert type(new_node0.get_parameter(p).value) == type(eval(p))
+        # Type will be same for tuple containing dict, but tuple will have been converetd to dict...
+        if not p == 'p_dict_tuple':
+            assert new_node0.get_parameter(p).value == eval(p)
 
 if __name__ == '__main__':
     test_graph_types('/tmp')

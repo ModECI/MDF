@@ -31,22 +31,22 @@
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "n": 1,
-                                            "dependencies": "retrieval_buffer"
+                                            "dependencies": "retrieval_buffer",
+                                            "n": 1
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "n": 1,
-                                            "dependencies": "goal_buffer"
+                                            "dependencies": "goal_buffer",
+                                            "n": 1
                                         }
                                     },
                                     {
                                         "type": "EveryNCalls",
                                         "args": {
-                                            "n": 1,
-                                            "dependencies": "declarative_memory"
+                                            "dependencies": "declarative_memory",
+                                            "n": 1
                                         }
                                     }
                                 ]
@@ -73,7 +73,7 @@
                     },
                     "termination": {
                         "check_term_true": {
-                            "type": "While",
+                            "type": "JustRan",
                             "args": {
                                 "dependencies": [
                                     "check_termination"
