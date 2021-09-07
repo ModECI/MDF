@@ -1,650 +1,126 @@
 {
     "comp": {
         "format": "ModECI MDF v0.1",
-        "generating_application": "psyneulink v0.8.8.1+159.g08bab54342",
+        "generating_application": "psyneulink v0.9.1.0+63.g2c999bb9bb",
         "graphs": {
             "comp": {
+                "parameters": {},
                 "conditions": {
                     "node_specific": {
                         "A": {
-                            "args": [
-                                1,
-                                "TimeScale.TRIAL"
-                            ],
-                            "function": null,
-                            "kwargs": {},
-                            "type": "EveryNPasses"
+                            "type": "EveryNPasses",
+                            "args": {
+                                "n": 1,
+                                "time_scale": "TimeScale.ENVIRONMENT_STATE_UPDATE"
+                            }
                         },
                         "B": {
-                            "args": [
-                                "A",
-                                2
-                            ],
-                            "function": null,
-                            "kwargs": {},
-                            "type": "EveryNCalls"
+                            "type": "EveryNCalls",
+                            "args": {
+                                "dependencies": "A",
+                                "n": 2
+                            }
                         },
                         "C": {
-                            "args": [
-                                "B",
-                                2
-                            ],
-                            "function": null,
-                            "kwargs": {},
-                            "type": "EveryNCalls"
+                            "type": "EveryNCalls",
+                            "args": {
+                                "dependencies": "B",
+                                "n": 2
+                            }
+                        },
+                        "D": {
+                            "type": "TimeInterval",
+                            "args": {
+                                "repeat": null,
+                                "start": "1 millisecond",
+                                "end": null,
+                                "unit": "millisecond",
+                                "start_inclusive": true,
+                                "end_inclusive": true
+                            }
                         }
                     },
                     "termination": {
-                        "run": {
-                            "args": [
-                                1,
-                                "TimeScale.RUN"
-                            ],
-                            "function": null,
-                            "kwargs": {},
-                            "type": "AfterNTrials"
+                        "environment_sequence": {
+                            "type": "AfterNTrials",
+                            "args": {
+                                "n": 1,
+                                "time_scale": "TimeScale.ENVIRONMENT_SEQUENCE"
+                            }
                         },
-                        "trial": {
-                            "args": [
-                                "D",
-                                4
-                            ],
-                            "function": null,
-                            "kwargs": {},
-                            "type": "AfterNCalls"
+                        "environment_state_update": {
+                            "type": "AfterNCalls",
+                            "args": {
+                                "dependencies": "D",
+                                "n": 4,
+                                "time_scale": "TimeScale.ENVIRONMENT_STATE_UPDATE"
+                            }
                         }
                     }
                 },
-                "controller": null,
-                "edges": {
-                    "C recurrent projection": {
-                        "functions": {
-                            "LinearMatrix Function-0": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            0.0
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "matrix": {
-                                        "source": "C recurrent projection.input_ports.matrix",
-                                        "type": "numpy.array",
-                                        "value": [
-                                            [
-                                                0.0
-                                            ]
-                                        ]
-                                    },
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "LinearMatrix Function-0",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "LinearMatrix",
-                                    "generic": null
-                                }
-                            }
-                        },
-                        "name": "C recurrent projection",
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false
-                            },
-                            "auto": 1,
-                            "execute_until_finished": true,
-                            "exponent": null,
-                            "hetero": 0,
-                            "is_finished_flag": true,
-                            "matrix": [
-                                [
-                                    0.0
-                                ]
-                            ],
-                            "max_executions_before_finished": 1000,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "weight": null
-                        },
-                        "receiver": "C",
-                        "receiver_port": "InputPort-0",
-                        "sender": "C",
-                        "sender_port": "RESULT",
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "AutoAssociativeProjection",
-                            "generic": null
-                        }
-                    },
-                    "MappingProjection from A[RESULT] to B[InputPort-0]": {
-                        "functions": {
-                            "LinearMatrix Function-5": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            2.0
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "matrix": {
-                                        "source": "MappingProjection from A[RESULT] to B[InputPort-0].input_ports.matrix",
-                                        "type": "numpy.array",
-                                        "value": [
-                                            [
-                                                1.0
-                                            ]
-                                        ]
-                                    },
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "LinearMatrix Function-5",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "LinearMatrix",
-                                    "generic": null
-                                }
-                            }
-                        },
-                        "name": "MappingProjection from A[RESULT] to B[InputPort-0]",
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false
-                            },
-                            "execute_until_finished": true,
-                            "exponent": null,
-                            "is_finished_flag": true,
-                            "matrix": "AutoAssignMatrix",
-                            "max_executions_before_finished": 1000,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "weight": null
-                        },
-                        "receiver": "B",
-                        "receiver_port": "InputPort-0",
-                        "sender": "A",
-                        "sender_port": "RESULT",
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "MappingProjection",
-                            "generic": null
-                        }
-                    },
-                    "MappingProjection from A[RESULT] to C[InputPort-0]": {
-                        "functions": {
-                            "LinearMatrix Function-6": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            2.0
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "matrix": {
-                                        "source": "MappingProjection from A[RESULT] to C[InputPort-0].input_ports.matrix",
-                                        "type": "numpy.array",
-                                        "value": [
-                                            [
-                                                1.0
-                                            ]
-                                        ]
-                                    },
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "LinearMatrix Function-6",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "LinearMatrix",
-                                    "generic": null
-                                }
-                            }
-                        },
-                        "name": "MappingProjection from A[RESULT] to C[InputPort-0]",
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false
-                            },
-                            "execute_until_finished": true,
-                            "exponent": null,
-                            "is_finished_flag": true,
-                            "matrix": "AutoAssignMatrix",
-                            "max_executions_before_finished": 1000,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "weight": null
-                        },
-                        "receiver": "C",
-                        "receiver_port": "InputPort-0",
-                        "sender": "A",
-                        "sender_port": "RESULT",
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "MappingProjection",
-                            "generic": null
-                        }
-                    },
-                    "MappingProjection from B[RESULT] to D[InputPort-0]": {
-                        "functions": {
-                            "LinearMatrix Function-7": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            0.5
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "matrix": {
-                                        "source": "MappingProjection from B[RESULT] to D[InputPort-0].input_ports.matrix",
-                                        "type": "numpy.array",
-                                        "value": [
-                                            [
-                                                1.0
-                                            ]
-                                        ]
-                                    },
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "LinearMatrix Function-7",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "LinearMatrix",
-                                    "generic": null
-                                }
-                            }
-                        },
-                        "name": "MappingProjection from B[RESULT] to D[InputPort-0]",
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false
-                            },
-                            "execute_until_finished": true,
-                            "exponent": null,
-                            "is_finished_flag": true,
-                            "matrix": "AutoAssignMatrix",
-                            "max_executions_before_finished": 1000,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "weight": null
-                        },
-                        "receiver": "D",
-                        "receiver_port": "InputPort-0",
-                        "sender": "B",
-                        "sender_port": "RESULT",
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "MappingProjection",
-                            "generic": null
-                        }
-                    },
-                    "MappingProjection from C[RESULT] to D[InputPort-0]": {
-                        "functions": {
-                            "LinearMatrix Function-8": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            0.0
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "matrix": {
-                                        "source": "MappingProjection from C[RESULT] to D[InputPort-0].input_ports.matrix",
-                                        "type": "numpy.array",
-                                        "value": [
-                                            [
-                                                1.0
-                                            ]
-                                        ]
-                                    },
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "LinearMatrix Function-8",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "LinearMatrix",
-                                    "generic": null
-                                }
-                            }
-                        },
-                        "name": "MappingProjection from C[RESULT] to D[InputPort-0]",
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false
-                            },
-                            "execute_until_finished": true,
-                            "exponent": null,
-                            "is_finished_flag": true,
-                            "matrix": "AutoAssignMatrix",
-                            "max_executions_before_finished": 1000,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "weight": null
-                        },
-                        "receiver": "D",
-                        "receiver_port": "InputPort-0",
-                        "sender": "C",
-                        "sender_port": "RESULT",
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "MappingProjection",
-                            "generic": null
-                        }
-                    },
-                    "MappingProjection from C[RESULT] to Inner Composition Input_CIM[INPUT_CIM_E_InputPort-0]": {
-                        "functions": {
-                            "LinearMatrix Function-9": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            0.0
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "matrix": {
-                                        "source": "MappingProjection from C[RESULT] to Inner Composition Input_CIM[INPUT_CIM_E_InputPort-0].input_ports.matrix",
-                                        "type": "numpy.array",
-                                        "value": [
-                                            [
-                                                1.0
-                                            ]
-                                        ]
-                                    },
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "LinearMatrix Function-9",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "LinearMatrix",
-                                    "generic": null
-                                }
-                            }
-                        },
-                        "name": "MappingProjection from C[RESULT] to Inner Composition Input_CIM[INPUT_CIM_E_InputPort-0]",
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false
-                            },
-                            "execute_until_finished": true,
-                            "exponent": null,
-                            "is_finished_flag": true,
-                            "matrix": "AutoAssignMatrix",
-                            "max_executions_before_finished": 1000,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "weight": null
-                        },
-                        "receiver": "Inner Composition",
-                        "receiver_port": "INPUT_CIM_E_InputPort-0",
-                        "sender": "C",
-                        "sender_port": "RESULT",
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "MappingProjection",
-                            "generic": null
-                        }
-                    }
+                "metadata": {
+                    "type": "Composition",
+                    "simulation_results": [],
+                    "input_specification": null,
+                    "execute_until_finished": true,
+                    "has_initializers": false,
+                    "max_executions_before_finished": 1000,
+                    "results": [],
+                    "retain_old_simulation_data": false,
+                    "variable": [
+                        0
+                    ],
+                    "node_ordering": [
+                        "A",
+                        "B",
+                        "C",
+                        "D",
+                        "Inner Composition"
+                    ],
+                    "required_node_roles": [],
+                    "controller": null
                 },
-                "name": "comp",
                 "nodes": {
                     "A": {
-                        "functions": {
-                            "Linear Function-12": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            [
-                                                0
-                                            ]
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "intercept": {
-                                        "source": "A.input_ports.intercept",
-                                        "type": "float",
-                                        "value": 2.0
-                                    },
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "slope": {
-                                        "source": "A.input_ports.slope",
-                                        "type": "float",
-                                        "value": 5.0
-                                    }
-                                },
-                                "name": "Linear Function-12",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "generic": "Linear"
-                                }
-                            }
-                        },
-                        "input_ports": [
-                            {
-                                "dtype": "int64",
-                                "functions": {
-                                    "LinearCombination Function-0-20": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    0
-                                                ]
-                                            },
-                                            "execute_until_finished": true,
-                                            "exponents": null,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "offset": 0.0,
-                                            "operation": "sum",
-                                            "scale": 1.0,
-                                            "weights": null
-                                        },
-                                        "name": "LinearCombination Function-0-20",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "PNL": "LinearCombination",
-                                            "generic": null
-                                        }
-                                    }
-                                },
-                                "name": "InputPort-0",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "internal_only": false,
-                                        "require_projection_in_composition": true,
-                                        "shadow_inputs": null,
-                                        "variable": [
-                                            0
-                                        ]
-                                    },
-                                    "combine": null,
-                                    "execute_until_finished": true,
-                                    "exponent": null,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null,
-                                    "weight": null
-                                },
-                                "shape": "(1,)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "InputPort",
-                                    "generic": null
-                                }
-                            },
-                            "intercept",
-                            "noise",
-                            "offset",
-                            "rate",
-                            "slope"
-                        ],
-                        "name": "A",
-                        "output_ports": [
-                            {
-                                "dtype": "float64",
-                                "functions": {
-                                    "Linear Function-22": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    2.0
-                                                ]
-                                            },
-                                            "bounds": null,
-                                            "execute_until_finished": true,
-                                            "intercept": 0.0,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "slope": 1.0
-                                        },
-                                        "name": "Linear Function-22",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "generic": "Linear"
-                                        }
-                                    }
-                                },
-                                "name": "RESULT",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "require_projection_in_composition": true,
-                                        "variable": [
-                                            2.0
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null
-                                },
-                                "shape": "(1,)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "OutputPort",
-                                    "generic": null
-                                }
-                            }
-                        ],
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false,
-                                "initial_value": null,
-                                "input_labels_dict": {},
-                                "input_port_variables": null,
-                                "output_labels_dict": {},
-                                "variable": [
-                                    [
-                                        0
-                                    ]
+                        "metadata": {
+                            "type": "TransferMechanism",
+                            "has_initializers": false,
+                            "input_labels_dict": {},
+                            "variable": [
+                                [
+                                    0
                                 ]
-                            },
-                            "clip": null,
+                            ],
+                            "initial_value": null,
+                            "output_labels_dict": {},
+                            "input_port_variables": null,
                             "execute_until_finished": true,
-                            "input_ports": null,
-                            "integration_rate": 0.5,
+                            "max_executions_before_finished": 1000,
+                            "on_resume_integrator_mode": "current_value",
                             "integrator_function": "AdaptiveIntegrator",
+                            "termination_comparison_op": "<=",
+                            "termination_threshold": null,
+                            "output_ports": [
+                                "RESULTS"
+                            ],
+                            "clip": null,
                             "integrator_function_value": [
                                 [
                                     0
                                 ]
                             ],
-                            "integrator_mode": false,
-                            "is_finished_flag": true,
-                            "max_executions_before_finished": 1000,
-                            "noise": 0.0,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "on_resume_integrator_mode": "current_value",
-                            "output_ports": [
-                                "RESULTS"
-                            ],
-                            "termination_comparison_op": "<=",
                             "termination_measure": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
+                                "Distance_Function_5": {
+                                    "function": "distance",
+                                    "args": {
+                                        "normalize": false
+                                    },
+                                    "metadata": {
+                                        "type": "Distance",
+                                        "output_type": "FunctionOutputType.DEFAULT",
+                                        "execute_until_finished": true,
                                         "has_initializers": false,
-                                        "output_type": 3,
+                                        "max_executions_before_finished": 1000,
                                         "variable": [
                                             [
                                                 [
@@ -656,529 +132,281 @@
                                                     0
                                                 ]
                                             ]
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "metric": "max_abs_diff",
-                                    "normalize": false,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "Distance Function-2",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "Distance",
-                                    "generic": null
+                                        ],
+                                        "enable_output_type_conversion": false,
+                                        "metric": "max_abs_diff"
+                                    }
                                 }
                             },
-                            "termination_measure_value": 0.0,
-                            "termination_threshold": null
+                            "input_ports": null
                         },
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "TransferMechanism",
-                            "generic": null
+                        "input_ports": {
+                            "A_InputPort_0": {
+                                "shape": "(1,)",
+                                "type": "int64",
+                                "metadata": {
+                                    "type": "InputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "shadow_inputs": null,
+                                    "require_projection_in_composition": true,
+                                    "internal_only": false,
+                                    "variable": [
+                                        0
+                                    ],
+                                    "projections": null,
+                                    "weight": null,
+                                    "exponent": null,
+                                    "combine": null
+                                }
+                            }
+                        },
+                        "functions": {
+                            "Linear_Function_13": {
+                                "function": "linear",
+                                "args": {
+                                    "intercept": 2.0,
+                                    "slope": 5.0,
+                                    "variable0": "A_InputPort_0"
+                                },
+                                "metadata": {
+                                    "type": "Linear",
+                                    "output_type": "FunctionOutputType.DEFAULT",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "variable": [
+                                        [
+                                            0
+                                        ]
+                                    ],
+                                    "enable_output_type_conversion": false,
+                                    "bounds": null
+                                }
+                            }
+                        },
+                        "parameters": {
+                            "termination_measure_value": {
+                                "value": 0.0
+                            },
+                            "integration_rate": {
+                                "value": 0.5
+                            },
+                            "noise": {
+                                "value": 0.0
+                            },
+                            "integrator_mode": {
+                                "value": false
+                            }
+                        },
+                        "output_ports": {
+                            "A_RESULT": {
+                                "value": "Linear_Function_13",
+                                "metadata": {
+                                    "type": "OutputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "require_projection_in_composition": true,
+                                    "variable": [
+                                        2.0
+                                    ],
+                                    "projections": null
+                                }
+                            }
                         }
                     },
                     "B": {
-                        "functions": {
-                            "Logistic Function-0": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
+                        "metadata": {
+                            "type": "TransferMechanism",
+                            "has_initializers": false,
+                            "input_labels_dict": {},
+                            "variable": [
+                                [
+                                    0
+                                ]
+                            ],
+                            "initial_value": null,
+                            "output_labels_dict": {},
+                            "input_port_variables": null,
+                            "execute_until_finished": true,
+                            "max_executions_before_finished": 1000,
+                            "on_resume_integrator_mode": "current_value",
+                            "integrator_function": "AdaptiveIntegrator",
+                            "termination_comparison_op": "<=",
+                            "termination_threshold": null,
+                            "output_ports": [
+                                "RESULTS"
+                            ],
+                            "clip": null,
+                            "integrator_function_value": [
+                                [
+                                    0
+                                ]
+                            ],
+                            "termination_measure": {
+                                "Distance_Function_7": {
+                                    "function": "distance",
+                                    "args": {
+                                        "normalize": false
+                                    },
+                                    "metadata": {
+                                        "type": "Distance",
+                                        "output_type": "FunctionOutputType.DEFAULT",
+                                        "execute_until_finished": true,
                                         "has_initializers": false,
-                                        "output_type": 3,
+                                        "max_executions_before_finished": 1000,
                                         "variable": [
                                             [
-                                                0
+                                                [
+                                                    0
+                                                ]
+                                            ],
+                                            [
+                                                [
+                                                    0
+                                                ]
                                             ]
+                                        ],
+                                        "enable_output_type_conversion": false,
+                                        "metric": "max_abs_diff"
+                                    }
+                                }
+                            },
+                            "input_ports": null
+                        },
+                        "input_ports": {
+                            "B_InputPort_0": {
+                                "shape": "(1,)",
+                                "type": "int64",
+                                "metadata": {
+                                    "type": "InputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "shadow_inputs": null,
+                                    "require_projection_in_composition": true,
+                                    "internal_only": false,
+                                    "variable": [
+                                        0
+                                    ],
+                                    "projections": null,
+                                    "weight": null,
+                                    "exponent": null,
+                                    "combine": null
+                                }
+                            }
+                        },
+                        "functions": {
+                            "Logistic_Function_0": {
+                                "function": "logistic",
+                                "args": {
+                                    "offset": 0.0,
+                                    "bias": 0.0,
+                                    "gain": 1.0,
+                                    "scale": 1.0,
+                                    "x_0": 0.0,
+                                    "variable0": "B_InputPort_0"
+                                },
+                                "metadata": {
+                                    "type": "Logistic",
+                                    "has_initializers": false,
+                                    "variable": [
+                                        [
+                                            0
                                         ]
-                                    },
-                                    "bias": {
-                                        "source": "B.input_ports.bias",
-                                        "type": "float",
-                                        "value": 0.0
-                                    },
+                                    ],
+                                    "enable_output_type_conversion": false,
+                                    "output_type": "FunctionOutputType.DEFAULT",
+                                    "execute_until_finished": true,
+                                    "max_executions_before_finished": 1000,
                                     "bounds": [
                                         0,
                                         1
-                                    ],
-                                    "execute_until_finished": true,
-                                    "gain": {
-                                        "source": "B.input_ports.gain",
-                                        "type": "float",
-                                        "value": 1.0
-                                    },
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "offset": 0.0,
-                                    "scale": {
-                                        "source": "B.input_ports.scale",
-                                        "type": "float",
-                                        "value": 1.0
-                                    },
-                                    "x_0": {
-                                        "source": "B.input_ports.x_0",
-                                        "type": "float",
-                                        "value": 0.0
-                                    }
-                                },
-                                "name": "Logistic Function-0",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "generic": "Logistic"
-                                }
-                            }
-                        },
-                        "input_ports": [
-                            {
-                                "dtype": "int64",
-                                "functions": {
-                                    "LinearCombination Function-0-23": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    0
-                                                ]
-                                            },
-                                            "execute_until_finished": true,
-                                            "exponents": null,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "offset": 0.0,
-                                            "operation": "sum",
-                                            "scale": 1.0,
-                                            "weights": null
-                                        },
-                                        "name": "LinearCombination Function-0-23",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "PNL": "LinearCombination",
-                                            "generic": null
-                                        }
-                                    }
-                                },
-                                "name": "InputPort-0",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "internal_only": false,
-                                        "require_projection_in_composition": true,
-                                        "shadow_inputs": null,
-                                        "variable": [
-                                            0
-                                        ]
-                                    },
-                                    "combine": null,
-                                    "execute_until_finished": true,
-                                    "exponent": null,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null,
-                                    "weight": null
-                                },
-                                "shape": "(1,)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "InputPort",
-                                    "generic": null
-                                }
-                            },
-                            "bias",
-                            "gain",
-                            "noise",
-                            "offset-function",
-                            "offset-integrator_function",
-                            "rate",
-                            "scale",
-                            "x_0"
-                        ],
-                        "name": "B",
-                        "output_ports": [
-                            {
-                                "dtype": "float64",
-                                "functions": {
-                                    "Linear Function-33": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    0.5
-                                                ]
-                                            },
-                                            "bounds": null,
-                                            "execute_until_finished": true,
-                                            "intercept": 0.0,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "slope": 1.0
-                                        },
-                                        "name": "Linear Function-33",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "generic": "Linear"
-                                        }
-                                    }
-                                },
-                                "name": "RESULT",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "require_projection_in_composition": true,
-                                        "variable": [
-                                            0.5
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null
-                                },
-                                "shape": "(1,)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "OutputPort",
-                                    "generic": null
-                                }
-                            }
-                        ],
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false,
-                                "initial_value": null,
-                                "input_labels_dict": {},
-                                "input_port_variables": null,
-                                "output_labels_dict": {},
-                                "variable": [
-                                    [
-                                        0
                                     ]
-                                ]
-                            },
-                            "clip": null,
-                            "execute_until_finished": true,
-                            "input_ports": null,
-                            "integration_rate": 0.5,
-                            "integrator_function": "AdaptiveIntegrator",
-                            "integrator_function_value": [
-                                [
-                                    0
-                                ]
-                            ],
-                            "integrator_mode": false,
-                            "is_finished_flag": true,
-                            "max_executions_before_finished": 1000,
-                            "noise": 0.0,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "on_resume_integrator_mode": "current_value",
-                            "output_ports": [
-                                "RESULTS"
-                            ],
-                            "termination_comparison_op": "<=",
-                            "termination_measure": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            [
-                                                [
-                                                    0
-                                                ]
-                                            ],
-                                            [
-                                                [
-                                                    0
-                                                ]
-                                            ]
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "metric": "max_abs_diff",
-                                    "normalize": false,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "Distance Function-2-2",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "Distance",
-                                    "generic": null
                                 }
-                            },
-                            "termination_measure_value": 0.0,
-                            "termination_threshold": null
+                            }
                         },
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "TransferMechanism",
-                            "generic": null
+                        "parameters": {
+                            "termination_measure_value": {
+                                "value": 0.0
+                            },
+                            "integration_rate": {
+                                "value": 0.5
+                            },
+                            "noise": {
+                                "value": 0.0
+                            },
+                            "integrator_mode": {
+                                "value": false
+                            }
+                        },
+                        "output_ports": {
+                            "B_RESULT": {
+                                "value": "Logistic_Function_0",
+                                "metadata": {
+                                    "type": "OutputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "require_projection_in_composition": true,
+                                    "variable": [
+                                        0.5
+                                    ],
+                                    "projections": null
+                                }
+                            }
                         }
                     },
                     "C": {
-                        "functions": {
-                            "Linear Function-44": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "output_type": 3,
-                                        "variable": [
-                                            [
-                                                0
-                                            ]
-                                        ]
-                                    },
-                                    "bounds": null,
-                                    "execute_until_finished": true,
-                                    "intercept": {
-                                        "source": "C.input_ports.intercept",
-                                        "type": "float",
-                                        "value": 0.0
-                                    },
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "slope": {
-                                        "source": "C.input_ports.slope",
-                                        "type": "float",
-                                        "value": 1.0
-                                    }
-                                },
-                                "name": "Linear Function-44",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "generic": "Linear"
-                                }
-                            }
-                        },
-                        "input_ports": [
-                            {
-                                "dtype": "float64",
-                                "functions": {
-                                    "LinearCombination Function-5": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    [
-                                                        0.0
-                                                    ],
-                                                    [
-                                                        2.0
-                                                    ]
-                                                ]
-                                            },
-                                            "execute_until_finished": true,
-                                            "exponents": null,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "offset": 0.0,
-                                            "operation": "sum",
-                                            "scale": 1.0,
-                                            "weights": null
-                                        },
-                                        "name": "LinearCombination Function-5",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "PNL": "LinearCombination",
-                                            "generic": null
-                                        }
-                                    }
-                                },
-                                "name": "InputPort-0",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "internal_only": false,
-                                        "require_projection_in_composition": true,
-                                        "shadow_inputs": null,
-                                        "variable": [
-                                            [
-                                                0.0
-                                            ],
-                                            [
-                                                2.0
-                                            ]
-                                        ]
-                                    },
-                                    "combine": null,
-                                    "execute_until_finished": true,
-                                    "exponent": null,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null,
-                                    "weight": null
-                                },
-                                "shape": "(2, 1)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "InputPort",
-                                    "generic": null
-                                }
-                            },
-                            "auto",
-                            "hetero",
-                            "intercept",
-                            "noise",
-                            "offset-combination_function",
-                            "offset-integrator_function",
-                            "rate",
-                            "scale",
-                            "slope",
-                            "smoothing_factor"
-                        ],
-                        "name": "C",
-                        "output_ports": [
-                            {
-                                "dtype": "float64",
-                                "functions": {
-                                    "Linear Function-47": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    0.0
-                                                ]
-                                            },
-                                            "bounds": null,
-                                            "execute_until_finished": true,
-                                            "intercept": 0.0,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "slope": 1.0
-                                        },
-                                        "name": "Linear Function-47",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "generic": "Linear"
-                                        }
-                                    }
-                                },
-                                "name": "RESULT",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "require_projection_in_composition": true,
-                                        "variable": [
-                                            0.0
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null
-                                },
-                                "shape": "(1,)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "OutputPort",
-                                    "generic": null
-                                }
-                            }
-                        ],
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false,
-                                "initial_value": [
-                                    [
-                                        0
-                                    ]
-                                ],
-                                "input_labels_dict": {},
-                                "input_port_variables": null,
-                                "output_labels_dict": {},
-                                "variable": [
-                                    [
-                                        0
-                                    ]
+                        "metadata": {
+                            "type": "RecurrentTransferMechanism",
+                            "has_initializers": false,
+                            "input_labels_dict": {},
+                            "variable": [
+                                [
+                                    0
                                 ]
-                            },
-                            "auto": 1,
-                            "clip": null,
-                            "combination_function": "LinearCombination",
-                            "enable_learning": false,
+                            ],
+                            "initial_value": [
+                                [
+                                    0
+                                ]
+                            ],
+                            "output_labels_dict": {},
+                            "input_port_variables": null,
                             "execute_until_finished": true,
-                            "has_recurrent_input_port": false,
-                            "hetero": 0,
-                            "input_ports": null,
-                            "integration_rate": 0.5,
+                            "max_executions_before_finished": 1000,
+                            "on_resume_integrator_mode": "current_value",
+                            "learning_condition": null,
                             "integrator_function": "AdaptiveIntegrator",
+                            "termination_comparison_op": "<=",
+                            "termination_threshold": null,
+                            "combination_function": "LinearCombination",
+                            "matrix": "HollowMatrix",
+                            "output_ports": [
+                                "RESULTS"
+                            ],
+                            "clip": null,
+                            "learning_function": "Hebbian",
                             "integrator_function_value": [
                                 [
                                     0
                                 ]
                             ],
-                            "integrator_mode": false,
-                            "is_finished_flag": true,
-                            "learning_condition": null,
-                            "learning_function": "Hebbian",
-                            "learning_rate": null,
-                            "matrix": "HollowMatrix",
-                            "max_executions_before_finished": 1000,
-                            "noise": 0.0,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
-                            "on_resume_integrator_mode": "current_value",
-                            "output_ports": [
-                                "RESULTS"
-                            ],
-                            "smoothing_factor": 0.5,
-                            "termination_comparison_op": "<=",
                             "termination_measure": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
+                                "Distance_Function_9": {
+                                    "function": "distance",
+                                    "args": {
+                                        "normalize": false
+                                    },
+                                    "metadata": {
+                                        "type": "Distance",
+                                        "output_type": "FunctionOutputType.DEFAULT",
+                                        "execute_until_finished": true,
                                         "has_initializers": false,
-                                        "output_type": 3,
+                                        "max_executions_before_finished": 1000,
                                         "variable": [
                                             [
                                                 [
@@ -1190,897 +418,664 @@
                                                     0
                                                 ]
                                             ]
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "metric": "max_abs_diff",
-                                    "normalize": false,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0
-                                },
-                                "name": "Distance Function-2-4",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "Distance",
-                                    "generic": null
+                                        ],
+                                        "enable_output_type_conversion": false,
+                                        "metric": "max_abs_diff"
+                                    }
                                 }
                             },
-                            "termination_measure_value": 0.0,
-                            "termination_threshold": null
+                            "learning_rate": null,
+                            "input_ports": null
                         },
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "RecurrentTransferMechanism",
-                            "generic": null
+                        "input_ports": {
+                            "C_InputPort_0": {
+                                "shape": "(2, 1)",
+                                "type": "float64",
+                                "metadata": {
+                                    "type": "InputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "shadow_inputs": null,
+                                    "require_projection_in_composition": true,
+                                    "internal_only": false,
+                                    "variable": [
+                                        [
+                                            0.0
+                                        ],
+                                        [
+                                            2.0
+                                        ]
+                                    ],
+                                    "projections": null,
+                                    "weight": null,
+                                    "exponent": null,
+                                    "combine": null
+                                }
+                            }
+                        },
+                        "functions": {
+                            "Linear_Function_45": {
+                                "function": "linear",
+                                "args": {
+                                    "intercept": 0.0,
+                                    "slope": 1.0,
+                                    "variable0": "C_InputPort_0"
+                                },
+                                "metadata": {
+                                    "type": "Linear",
+                                    "output_type": "FunctionOutputType.DEFAULT",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "variable": [
+                                        [
+                                            0
+                                        ]
+                                    ],
+                                    "enable_output_type_conversion": false,
+                                    "bounds": null
+                                }
+                            }
+                        },
+                        "parameters": {
+                            "auto": {
+                                "value": 1
+                            },
+                            "enable_learning": {
+                                "value": false
+                            },
+                            "hetero": {
+                                "value": 0
+                            },
+                            "termination_measure_value": {
+                                "value": 0.0
+                            },
+                            "smoothing_factor": {
+                                "value": 0.5
+                            },
+                            "integration_rate": {
+                                "value": 0.5
+                            },
+                            "noise": {
+                                "value": 0.0
+                            },
+                            "has_recurrent_input_port": {
+                                "value": false
+                            },
+                            "integrator_mode": {
+                                "value": false
+                            }
+                        },
+                        "output_ports": {
+                            "C_RESULT": {
+                                "value": "Linear_Function_45",
+                                "metadata": {
+                                    "type": "OutputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "require_projection_in_composition": true,
+                                    "variable": [
+                                        0.0
+                                    ],
+                                    "projections": null
+                                }
+                            }
                         }
                     },
                     "D": {
-                        "functions": {
-                            "SimpleIntegrator Function-0": {
-                                "args": {
-                                    "PNL": {
-                                        "enable_output_type_conversion": false,
-                                        "execution_count": 0,
-                                        "has_initializers": true,
-                                        "initializer": [
-                                            [
-                                                0
-                                            ]
-                                        ],
-                                        "output_type": 3,
-                                        "previous_value": [
-                                            [
-                                                0
-                                            ]
-                                        ],
-                                        "variable": [
-                                            [
-                                                0
-                                            ]
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "noise": {
-                                        "source": "D.input_ports.noise",
-                                        "type": "float",
-                                        "value": 0.0
-                                    },
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "offset": {
-                                        "source": "D.input_ports.offset",
-                                        "type": "float",
-                                        "value": 0.0
-                                    },
-                                    "rate": {
-                                        "source": "D.input_ports.rate",
-                                        "type": "float",
-                                        "value": 1.0
-                                    }
-                                },
-                                "name": "SimpleIntegrator Function-0",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "SimpleIntegrator",
-                                    "generic": null
-                                }
-                            }
-                        },
-                        "input_ports": [
-                            {
-                                "dtype": "float64",
-                                "functions": {
-                                    "LinearCombination Function-8": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    [
-                                                        0.0
-                                                    ],
-                                                    [
-                                                        0.0
-                                                    ]
-                                                ]
-                                            },
-                                            "execute_until_finished": true,
-                                            "exponents": null,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "offset": 0.0,
-                                            "operation": "sum",
-                                            "scale": 1.0,
-                                            "weights": null
-                                        },
-                                        "name": "LinearCombination Function-8",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "PNL": "LinearCombination",
-                                            "generic": null
-                                        }
-                                    }
-                                },
-                                "name": "InputPort-0",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "internal_only": false,
-                                        "require_projection_in_composition": true,
-                                        "shadow_inputs": null,
-                                        "variable": [
-                                            [
-                                                0.0
-                                            ],
-                                            [
-                                                0.0
-                                            ]
-                                        ]
-                                    },
-                                    "combine": null,
-                                    "execute_until_finished": true,
-                                    "exponent": null,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null,
-                                    "weight": null
-                                },
-                                "shape": "(2, 1)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "InputPort",
-                                    "generic": null
-                                }
-                            },
-                            "noise",
-                            "offset",
-                            "rate"
-                        ],
-                        "name": "D",
-                        "output_ports": [
-                            {
-                                "dtype": "float64",
-                                "functions": {
-                                    "Linear Function-53": {
-                                        "args": {
-                                            "PNL": {
-                                                "enable_output_type_conversion": false,
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "output_type": 3,
-                                                "variable": [
-                                                    0.0
-                                                ]
-                                            },
-                                            "bounds": null,
-                                            "execute_until_finished": true,
-                                            "intercept": 0.0,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "slope": 1.0
-                                        },
-                                        "name": "Linear Function-53",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "generic": "Linear"
-                                        }
-                                    }
-                                },
-                                "name": "OutputPort-0",
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "require_projection_in_composition": true,
-                                        "variable": [
-                                            0.0
-                                        ]
-                                    },
-                                    "execute_until_finished": true,
-                                    "is_finished_flag": true,
-                                    "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "projections": null
-                                },
-                                "shape": "(1,)",
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "OutputPort",
-                                    "generic": null
-                                }
-                            }
-                        ],
-                        "parameters": {
-                            "PNL": {
-                                "execution_count": 0,
-                                "has_initializers": false,
-                                "input_labels_dict": {},
-                                "input_port_variables": null,
-                                "output_labels_dict": {},
-                                "variable": [
-                                    [
-                                        0
-                                    ]
-                                ]
-                            },
+                        "metadata": {
+                            "type": "IntegratorMechanism",
                             "execute_until_finished": true,
-                            "input_ports": null,
-                            "is_finished_flag": true,
+                            "has_initializers": false,
                             "max_executions_before_finished": 1000,
-                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                            "num_executions_before_finished": 0,
+                            "input_labels_dict": {},
+                            "variable": [
+                                [
+                                    0
+                                ]
+                            ],
+                            "output_labels_dict": {},
+                            "input_port_variables": null,
+                            "input_ports": null,
                             "output_ports": null
                         },
-                        "stateful_parameters": {},
-                        "type": {
-                            "PNL": "IntegratorMechanism",
-                            "generic": null
-                        }
-                    },
-                    "Inner Composition": {
-                        "graphs": {
-                            "Inner Composition": {
-                                "conditions": {
-                                    "node_specific": {},
-                                    "termination": {
-                                        "run": {
-                                            "args": [],
-                                            "function": null,
-                                            "kwargs": {},
-                                            "type": "Never"
-                                        },
-                                        "trial": {
-                                            "args": [],
-                                            "function": null,
-                                            "kwargs": {},
-                                            "type": "AllHaveRun"
-                                        }
-                                    }
+                        "input_ports": {
+                            "D_InputPort_0": {
+                                "shape": "(2, 1)",
+                                "type": "float64",
+                                "metadata": {
+                                    "type": "InputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "shadow_inputs": null,
+                                    "require_projection_in_composition": true,
+                                    "internal_only": false,
+                                    "variable": [
+                                        [
+                                            0.0
+                                        ],
+                                        [
+                                            0.0
+                                        ]
+                                    ],
+                                    "projections": null,
+                                    "weight": null,
+                                    "exponent": null,
+                                    "combine": null
+                                }
+                            }
+                        },
+                        "functions": {
+                            "SimpleIntegrator_Function_0": {
+                                "function": "simpleintegrator",
+                                "args": {
+                                    "offset": 0.0,
+                                    "noise": 0.0,
+                                    "rate": 1.0,
+                                    "variable0": "D_InputPort_0"
                                 },
-                                "controller": null,
-                                "edges": {
-                                    "MappingProjection from E[RESULT] to F[InputPort-0]": {
-                                        "functions": {
-                                            "LinearMatrix Function-10": {
-                                                "args": {
-                                                    "PNL": {
-                                                        "enable_output_type_conversion": false,
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "output_type": 3,
-                                                        "variable": [
-                                                            0.0
-                                                        ]
-                                                    },
-                                                    "bounds": null,
-                                                    "execute_until_finished": true,
-                                                    "is_finished_flag": true,
-                                                    "matrix": {
-                                                        "source": "MappingProjection from E[RESULT] to F[InputPort-0].input_ports.matrix",
-                                                        "type": "numpy.array",
-                                                        "value": [
-                                                            [
-                                                                1.0
-                                                            ]
-                                                        ]
-                                                    },
-                                                    "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0
-                                                },
-                                                "name": "LinearMatrix Function-10",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "PNL": "LinearMatrix",
-                                                    "generic": null
-                                                }
-                                            }
-                                        },
-                                        "name": "MappingProjection from E[RESULT] to F[InputPort-0]",
-                                        "parameters": {
-                                            "PNL": {
-                                                "execution_count": 0,
-                                                "has_initializers": false
-                                            },
-                                            "execute_until_finished": true,
-                                            "exponent": null,
-                                            "is_finished_flag": true,
-                                            "matrix": "AutoAssignMatrix",
-                                            "max_executions_before_finished": 1000,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "weight": null
-                                        },
-                                        "receiver": "F",
-                                        "receiver_port": "InputPort-0",
-                                        "sender": "E",
-                                        "sender_port": "RESULT",
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "PNL": "MappingProjection",
-                                            "generic": null
-                                        }
-                                    }
-                                },
-                                "name": "Inner Composition",
-                                "nodes": {
-                                    "E": {
-                                        "functions": {
-                                            "Linear Function-59": {
-                                                "args": {
-                                                    "PNL": {
-                                                        "enable_output_type_conversion": false,
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "output_type": 3,
-                                                        "variable": [
-                                                            [
-                                                                0
-                                                            ]
-                                                        ]
-                                                    },
-                                                    "bounds": null,
-                                                    "execute_until_finished": true,
-                                                    "intercept": {
-                                                        "source": "E.input_ports.intercept",
-                                                        "type": "float",
-                                                        "value": 0.0
-                                                    },
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0,
-                                                    "slope": {
-                                                        "source": "E.input_ports.slope",
-                                                        "type": "float",
-                                                        "value": 1.0
-                                                    }
-                                                },
-                                                "name": "Linear Function-59",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "generic": "Linear"
-                                                }
-                                            }
-                                        },
-                                        "input_ports": [
-                                            {
-                                                "dtype": "int64",
-                                                "functions": {
-                                                    "LinearCombination Function-11": {
-                                                        "args": {
-                                                            "PNL": {
-                                                                "enable_output_type_conversion": false,
-                                                                "execution_count": 0,
-                                                                "has_initializers": false,
-                                                                "output_type": 3,
-                                                                "variable": [
-                                                                    0
-                                                                ]
-                                                            },
-                                                            "execute_until_finished": true,
-                                                            "exponents": null,
-                                                            "is_finished_flag": true,
-                                                            "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                            "num_executions_before_finished": 0,
-                                                            "offset": 0.0,
-                                                            "operation": "sum",
-                                                            "scale": 1.0,
-                                                            "weights": null
-                                                        },
-                                                        "name": "LinearCombination Function-11",
-                                                        "stateful_parameters": {},
-                                                        "type": {
-                                                            "PNL": "LinearCombination",
-                                                            "generic": null
-                                                        }
-                                                    }
-                                                },
-                                                "name": "InputPort-0",
-                                                "parameters": {
-                                                    "PNL": {
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "internal_only": false,
-                                                        "require_projection_in_composition": true,
-                                                        "shadow_inputs": null,
-                                                        "variable": [
-                                                            0
-                                                        ]
-                                                    },
-                                                    "combine": null,
-                                                    "execute_until_finished": true,
-                                                    "exponent": null,
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0,
-                                                    "projections": null,
-                                                    "weight": null
-                                                },
-                                                "shape": "(1,)",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "PNL": "InputPort",
-                                                    "generic": null
-                                                }
-                                            },
-                                            "intercept",
-                                            "noise",
-                                            "offset",
-                                            "rate",
-                                            "slope"
-                                        ],
-                                        "name": "E",
-                                        "output_ports": [
-                                            {
-                                                "dtype": "float64",
-                                                "functions": {
-                                                    "Linear Function-62": {
-                                                        "args": {
-                                                            "PNL": {
-                                                                "enable_output_type_conversion": false,
-                                                                "execution_count": 0,
-                                                                "has_initializers": false,
-                                                                "output_type": 3,
-                                                                "variable": [
-                                                                    0.0
-                                                                ]
-                                                            },
-                                                            "bounds": null,
-                                                            "execute_until_finished": true,
-                                                            "intercept": 0.0,
-                                                            "is_finished_flag": true,
-                                                            "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                            "num_executions_before_finished": 0,
-                                                            "slope": 1.0
-                                                        },
-                                                        "name": "Linear Function-62",
-                                                        "stateful_parameters": {},
-                                                        "type": {
-                                                            "generic": "Linear"
-                                                        }
-                                                    }
-                                                },
-                                                "name": "RESULT",
-                                                "parameters": {
-                                                    "PNL": {
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "require_projection_in_composition": true,
-                                                        "variable": [
-                                                            0.0
-                                                        ]
-                                                    },
-                                                    "execute_until_finished": true,
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0,
-                                                    "projections": null
-                                                },
-                                                "shape": "(1,)",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "PNL": "OutputPort",
-                                                    "generic": null
-                                                }
-                                            }
-                                        ],
-                                        "parameters": {
-                                            "PNL": {
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "initial_value": null,
-                                                "input_labels_dict": {},
-                                                "input_port_variables": null,
-                                                "output_labels_dict": {},
-                                                "variable": [
-                                                    [
-                                                        0
-                                                    ]
-                                                ]
-                                            },
-                                            "clip": null,
-                                            "execute_until_finished": true,
-                                            "input_ports": null,
-                                            "integration_rate": 0.5,
-                                            "integrator_function": "AdaptiveIntegrator",
-                                            "integrator_function_value": [
-                                                [
-                                                    0
-                                                ]
-                                            ],
-                                            "integrator_mode": false,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "noise": 0.0,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "on_resume_integrator_mode": "current_value",
-                                            "output_ports": [
-                                                "RESULTS"
-                                            ],
-                                            "termination_comparison_op": "<=",
-                                            "termination_measure": {
-                                                "args": {
-                                                    "PNL": {
-                                                        "enable_output_type_conversion": false,
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "output_type": 3,
-                                                        "variable": [
-                                                            [
-                                                                [
-                                                                    0
-                                                                ]
-                                                            ],
-                                                            [
-                                                                [
-                                                                    0
-                                                                ]
-                                                            ]
-                                                        ]
-                                                    },
-                                                    "execute_until_finished": true,
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "metric": "max_abs_diff",
-                                                    "normalize": false,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0
-                                                },
-                                                "name": "Distance Function-2-6",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "PNL": "Distance",
-                                                    "generic": null
-                                                }
-                                            },
-                                            "termination_measure_value": 0.0,
-                                            "termination_threshold": null
-                                        },
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "PNL": "TransferMechanism",
-                                            "generic": null
-                                        }
-                                    },
-                                    "F": {
-                                        "functions": {
-                                            "Linear Function-68": {
-                                                "args": {
-                                                    "PNL": {
-                                                        "enable_output_type_conversion": false,
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "output_type": 3,
-                                                        "variable": [
-                                                            [
-                                                                0
-                                                            ]
-                                                        ]
-                                                    },
-                                                    "bounds": null,
-                                                    "execute_until_finished": true,
-                                                    "intercept": {
-                                                        "source": "F.input_ports.intercept",
-                                                        "type": "float",
-                                                        "value": 0.0
-                                                    },
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0,
-                                                    "slope": {
-                                                        "source": "F.input_ports.slope",
-                                                        "type": "float",
-                                                        "value": 1.0
-                                                    }
-                                                },
-                                                "name": "Linear Function-68",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "generic": "Linear"
-                                                }
-                                            }
-                                        },
-                                        "input_ports": [
-                                            {
-                                                "dtype": "float64",
-                                                "functions": {
-                                                    "LinearCombination Function-14": {
-                                                        "args": {
-                                                            "PNL": {
-                                                                "enable_output_type_conversion": false,
-                                                                "execution_count": 0,
-                                                                "has_initializers": false,
-                                                                "output_type": 3,
-                                                                "variable": [
-                                                                    [
-                                                                        0.0
-                                                                    ],
-                                                                    [
-                                                                        0.0
-                                                                    ]
-                                                                ]
-                                                            },
-                                                            "execute_until_finished": true,
-                                                            "exponents": null,
-                                                            "is_finished_flag": true,
-                                                            "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                            "num_executions_before_finished": 0,
-                                                            "offset": 0.0,
-                                                            "operation": "sum",
-                                                            "scale": 1.0,
-                                                            "weights": null
-                                                        },
-                                                        "name": "LinearCombination Function-14",
-                                                        "stateful_parameters": {},
-                                                        "type": {
-                                                            "PNL": "LinearCombination",
-                                                            "generic": null
-                                                        }
-                                                    }
-                                                },
-                                                "name": "InputPort-0",
-                                                "parameters": {
-                                                    "PNL": {
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "internal_only": false,
-                                                        "require_projection_in_composition": true,
-                                                        "shadow_inputs": null,
-                                                        "variable": [
-                                                            [
-                                                                0.0
-                                                            ],
-                                                            [
-                                                                0.0
-                                                            ]
-                                                        ]
-                                                    },
-                                                    "combine": null,
-                                                    "execute_until_finished": true,
-                                                    "exponent": null,
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0,
-                                                    "projections": null,
-                                                    "weight": null
-                                                },
-                                                "shape": "(2, 1)",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "PNL": "InputPort",
-                                                    "generic": null
-                                                }
-                                            },
-                                            "intercept",
-                                            "noise",
-                                            "offset",
-                                            "rate",
-                                            "slope"
-                                        ],
-                                        "name": "F",
-                                        "output_ports": [
-                                            {
-                                                "dtype": "float64",
-                                                "functions": {
-                                                    "Linear Function-71": {
-                                                        "args": {
-                                                            "PNL": {
-                                                                "enable_output_type_conversion": false,
-                                                                "execution_count": 0,
-                                                                "has_initializers": false,
-                                                                "output_type": 3,
-                                                                "variable": [
-                                                                    0.0
-                                                                ]
-                                                            },
-                                                            "bounds": null,
-                                                            "execute_until_finished": true,
-                                                            "intercept": 0.0,
-                                                            "is_finished_flag": true,
-                                                            "max_executions_before_finished": 1000,
-                                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                            "num_executions_before_finished": 0,
-                                                            "slope": 1.0
-                                                        },
-                                                        "name": "Linear Function-71",
-                                                        "stateful_parameters": {},
-                                                        "type": {
-                                                            "generic": "Linear"
-                                                        }
-                                                    }
-                                                },
-                                                "name": "RESULT",
-                                                "parameters": {
-                                                    "PNL": {
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "require_projection_in_composition": true,
-                                                        "variable": [
-                                                            0.0
-                                                        ]
-                                                    },
-                                                    "execute_until_finished": true,
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0,
-                                                    "projections": null
-                                                },
-                                                "shape": "(1,)",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "PNL": "OutputPort",
-                                                    "generic": null
-                                                }
-                                            }
-                                        ],
-                                        "parameters": {
-                                            "PNL": {
-                                                "execution_count": 0,
-                                                "has_initializers": false,
-                                                "initial_value": null,
-                                                "input_labels_dict": {},
-                                                "input_port_variables": null,
-                                                "output_labels_dict": {},
-                                                "variable": [
-                                                    [
-                                                        0
-                                                    ]
-                                                ]
-                                            },
-                                            "clip": null,
-                                            "execute_until_finished": true,
-                                            "input_ports": null,
-                                            "integration_rate": 0.5,
-                                            "integrator_function": "AdaptiveIntegrator",
-                                            "integrator_function_value": [
-                                                [
-                                                    0
-                                                ]
-                                            ],
-                                            "integrator_mode": false,
-                                            "is_finished_flag": true,
-                                            "max_executions_before_finished": 1000,
-                                            "noise": 0.0,
-                                            "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                            "num_executions_before_finished": 0,
-                                            "on_resume_integrator_mode": "current_value",
-                                            "output_ports": [
-                                                "RESULTS"
-                                            ],
-                                            "termination_comparison_op": "<=",
-                                            "termination_measure": {
-                                                "args": {
-                                                    "PNL": {
-                                                        "enable_output_type_conversion": false,
-                                                        "execution_count": 0,
-                                                        "has_initializers": false,
-                                                        "output_type": 3,
-                                                        "variable": [
-                                                            [
-                                                                [
-                                                                    0
-                                                                ]
-                                                            ],
-                                                            [
-                                                                [
-                                                                    0
-                                                                ]
-                                                            ]
-                                                        ]
-                                                    },
-                                                    "execute_until_finished": true,
-                                                    "is_finished_flag": true,
-                                                    "max_executions_before_finished": 1000,
-                                                    "metric": "max_abs_diff",
-                                                    "normalize": false,
-                                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                                    "num_executions_before_finished": 0
-                                                },
-                                                "name": "Distance Function-2-8",
-                                                "stateful_parameters": {},
-                                                "type": {
-                                                    "PNL": "Distance",
-                                                    "generic": null
-                                                }
-                                            },
-                                            "termination_measure_value": 0.0,
-                                            "termination_threshold": null
-                                        },
-                                        "stateful_parameters": {},
-                                        "type": {
-                                            "PNL": "TransferMechanism",
-                                            "generic": null
-                                        }
-                                    }
-                                },
-                                "parameters": {
-                                    "PNL": {
-                                        "execution_count": 0,
-                                        "has_initializers": false,
-                                        "input_specification": null,
-                                        "node_ordering": [
-                                            "E",
-                                            "F"
-                                        ],
-                                        "required_node_roles": [],
-                                        "results": [],
-                                        "simulation_results": [],
-                                        "variable": [
+                                "metadata": {
+                                    "type": "SimpleIntegrator",
+                                    "variable": [
+                                        [
                                             0
                                         ]
-                                    },
+                                    ],
+                                    "output_type": "FunctionOutputType.DEFAULT",
                                     "execute_until_finished": true,
-                                    "is_finished_flag": true,
+                                    "has_initializers": true,
                                     "max_executions_before_finished": 1000,
-                                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                                    "num_executions_before_finished": 0,
-                                    "retain_old_simulation_data": false
-                                },
-                                "stateful_parameters": {},
-                                "type": {
-                                    "PNL": "Composition",
-                                    "generic": "graph"
+                                    "previous_value": [
+                                        [
+                                            0
+                                        ]
+                                    ],
+                                    "initializer": [
+                                        [
+                                            0
+                                        ]
+                                    ],
+                                    "enable_output_type_conversion": false
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "D_OutputPort_0": {
+                                "value": "SimpleIntegrator_Function_0",
+                                "metadata": {
+                                    "type": "OutputPort",
+                                    "execute_until_finished": true,
+                                    "has_initializers": false,
+                                    "max_executions_before_finished": 1000,
+                                    "require_projection_in_composition": true,
+                                    "variable": [
+                                        0.0
+                                    ],
+                                    "projections": null
                                 }
                             }
                         }
                     }
                 },
-                "parameters": {
-                    "PNL": {
-                        "execution_count": 0,
-                        "has_initializers": false,
-                        "input_specification": null,
-                        "node_ordering": [
-                            "A",
-                            "B",
-                            "C",
-                            "D",
-                            "Inner Composition"
-                        ],
-                        "required_node_roles": [],
-                        "results": [],
-                        "simulation_results": [],
-                        "variable": [
-                            0
-                        ]
+                "graphs": {
+                    "Inner_Composition": {
+                        "parameters": {},
+                        "conditions": {
+                            "node_specific": {},
+                            "termination": {
+                                "environment_sequence": {
+                                        "type": "Never",
+                                        "args": {}
+                                    },
+                                    "environment_state_update": {
+                                        "type": "AllHaveRun",
+                                        "args": {
+                                            "dependencies": []
+                                        }
+                                    }
+                                }
+                            },
+                            "metadata": {
+                                "type": "Composition",
+                                "simulation_results": [],
+                                "input_specification": null,
+                                "execute_until_finished": true,
+                                "has_initializers": false,
+                                "max_executions_before_finished": 1000,
+                                "results": [],
+                                "retain_old_simulation_data": false,
+                                "variable": [
+                                    0
+                                ],
+                                "node_ordering": [
+                                    "E",
+                                    "F"
+                                ],
+                                "required_node_roles": [],
+                                "controller": null
+                            },
+                            "nodes": {
+                                "E": {
+                                    "metadata": {
+                                        "type": "TransferMechanism",
+                                        "has_initializers": false,
+                                        "input_labels_dict": {},
+                                        "variable": [
+                                            [
+                                                0
+                                            ]
+                                        ],
+                                        "initial_value": null,
+                                        "output_labels_dict": {},
+                                        "input_port_variables": null,
+                                        "execute_until_finished": true,
+                                        "max_executions_before_finished": 1000,
+                                        "on_resume_integrator_mode": "current_value",
+                                        "integrator_function": "AdaptiveIntegrator",
+                                        "termination_comparison_op": "<=",
+                                        "termination_threshold": null,
+                                        "output_ports": [
+                                            "RESULTS"
+                                        ],
+                                        "clip": null,
+                                        "integrator_function_value": [
+                                            [
+                                                0
+                                            ]
+                                        ],
+                                        "termination_measure": {
+                                            "Distance_Function_11": {
+                                                "function": "distance",
+                                                "args": {
+                                                    "normalize": false
+                                                },
+                                                "metadata": {
+                                                    "type": "Distance",
+                                                    "output_type": "FunctionOutputType.DEFAULT",
+                                                    "execute_until_finished": true,
+                                                    "has_initializers": false,
+                                                    "max_executions_before_finished": 1000,
+                                                    "variable": [
+                                                        [
+                                                            [
+                                                                0
+                                                            ]
+                                                        ],
+                                                        [
+                                                            [
+                                                                0
+                                                            ]
+                                                        ]
+                                                    ],
+                                                    "enable_output_type_conversion": false,
+                                                    "metric": "max_abs_diff"
+                                                }
+                                            }
+                                        },
+                                        "input_ports": null
+                                    },
+                                    "input_ports": {
+                                        "E_InputPort_0": {
+                                            "shape": "(1,)",
+                                            "type": "int64",
+                                            "metadata": {
+                                                "type": "InputPort",
+                                                "execute_until_finished": true,
+                                                "has_initializers": false,
+                                                "max_executions_before_finished": 1000,
+                                                "shadow_inputs": null,
+                                                "require_projection_in_composition": true,
+                                                "internal_only": false,
+                                                "variable": [
+                                                    0
+                                                ],
+                                                "projections": null,
+                                                "weight": null,
+                                                "exponent": null,
+                                                "combine": null
+                                            }
+                                        }
+                                    },
+                                    "functions": {
+                                        "Linear_Function_60": {
+                                            "function": "linear",
+                                            "args": {
+                                                "intercept": 0.0,
+                                                "slope": 1.0,
+                                                "variable0": "E_InputPort_0"
+                                            },
+                                            "metadata": {
+                                                "type": "Linear",
+                                                "output_type": "FunctionOutputType.DEFAULT",
+                                                "execute_until_finished": true,
+                                                "has_initializers": false,
+                                                "max_executions_before_finished": 1000,
+                                                "variable": [
+                                                    [
+                                                        0
+                                                    ]
+                                                ],
+                                                "enable_output_type_conversion": false,
+                                                "bounds": null
+                                            }
+                                        }
+                                    },
+                                    "parameters": {
+                                        "termination_measure_value": {
+                                            "value": 0.0
+                                        },
+                                        "integration_rate": {
+                                            "value": 0.5
+                                        },
+                                        "noise": {
+                                            "value": 0.0
+                                        },
+                                        "integrator_mode": {
+                                            "value": false
+                                        }
+                                    },
+                                    "output_ports": {
+                                        "E_RESULT": {
+                                            "value": "Linear_Function_60",
+                                            "metadata": {
+                                                "type": "OutputPort",
+                                                "execute_until_finished": true,
+                                                "has_initializers": false,
+                                                "max_executions_before_finished": 1000,
+                                                "require_projection_in_composition": true,
+                                                "variable": [
+                                                    0.0
+                                                ],
+                                                "projections": null
+                                            }
+                                        }
+                                    }
+                                },
+                                "F": {
+                                    "metadata": {
+                                        "type": "TransferMechanism",
+                                        "has_initializers": false,
+                                        "input_labels_dict": {},
+                                        "variable": [
+                                            [
+                                                0
+                                            ]
+                                        ],
+                                        "initial_value": null,
+                                        "output_labels_dict": {},
+                                        "input_port_variables": null,
+                                        "execute_until_finished": true,
+                                        "max_executions_before_finished": 1000,
+                                        "on_resume_integrator_mode": "current_value",
+                                        "integrator_function": "AdaptiveIntegrator",
+                                        "termination_comparison_op": "<=",
+                                        "termination_threshold": null,
+                                        "output_ports": [
+                                            "RESULTS"
+                                        ],
+                                        "clip": null,
+                                        "integrator_function_value": [
+                                            [
+                                                0
+                                            ]
+                                        ],
+                                        "termination_measure": {
+                                            "Distance_Function_13": {
+                                                "function": "distance",
+                                                "args": {
+                                                    "normalize": false
+                                                },
+                                                "metadata": {
+                                                    "type": "Distance",
+                                                    "output_type": "FunctionOutputType.DEFAULT",
+                                                    "execute_until_finished": true,
+                                                    "has_initializers": false,
+                                                    "max_executions_before_finished": 1000,
+                                                    "variable": [
+                                                        [
+                                                            [
+                                                                0
+                                                            ]
+                                                        ],
+                                                        [
+                                                            [
+                                                                0
+                                                            ]
+                                                        ]
+                                                    ],
+                                                    "enable_output_type_conversion": false,
+                                                    "metric": "max_abs_diff"
+                                                }
+                                            }
+                                        },
+                                        "input_ports": null
+                                    },
+                                    "input_ports": {
+                                        "F_InputPort_0": {
+                                            "shape": "(2, 1)",
+                                            "type": "float64",
+                                            "metadata": {
+                                                "type": "InputPort",
+                                                "execute_until_finished": true,
+                                                "has_initializers": false,
+                                                "max_executions_before_finished": 1000,
+                                                "shadow_inputs": null,
+                                                "require_projection_in_composition": true,
+                                                "internal_only": false,
+                                                "variable": [
+                                                    [
+                                                        0.0
+                                                    ],
+                                                    [
+                                                        0.0
+                                                    ]
+                                                ],
+                                                "projections": null,
+                                                "weight": null,
+                                                "exponent": null,
+                                                "combine": null
+                                            }
+                                        }
+                                    },
+                                    "functions": {
+                                        "Linear_Function_69": {
+                                            "function": "linear",
+                                            "args": {
+                                                "intercept": 0.0,
+                                                "slope": 1.0,
+                                                "variable0": "F_InputPort_0"
+                                            },
+                                            "metadata": {
+                                                "type": "Linear",
+                                                "output_type": "FunctionOutputType.DEFAULT",
+                                                "execute_until_finished": true,
+                                                "has_initializers": false,
+                                                "max_executions_before_finished": 1000,
+                                                "variable": [
+                                                    [
+                                                        0
+                                                    ]
+                                                ],
+                                                "enable_output_type_conversion": false,
+                                                "bounds": null
+                                            }
+                                        }
+                                    },
+                                    "parameters": {
+                                        "termination_measure_value": {
+                                            "value": 0.0
+                                        },
+                                        "integration_rate": {
+                                            "value": 0.5
+                                        },
+                                        "noise": {
+                                            "value": 0.0
+                                        },
+                                        "integrator_mode": {
+                                            "value": false
+                                        }
+                                    },
+                                    "output_ports": {
+                                        "F_RESULT": {
+                                            "value": "Linear_Function_69",
+                                            "metadata": {
+                                                "type": "OutputPort",
+                                                "execute_until_finished": true,
+                                                "has_initializers": false,
+                                                "max_executions_before_finished": 1000,
+                                                "require_projection_in_composition": true,
+                                                "variable": [
+                                                    0.0
+                                                ],
+                                                "projections": null
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "edges": {
+                                "MappingProjection_from_E_RESULT__to_F_InputPort_0_": {
+                                    "parameters": {
+                                        "weight": 1
+                                    },
+                                    "sender": "E",
+                                    "receiver": "F",
+                                    "sender_port": "E_RESULT",
+                                    "receiver_port": "F_InputPort_0",
+                                    "metadata": {
+                                        "type": "MappingProjection",
+                                        "execute_until_finished": true,
+                                        "has_initializers": false,
+                                        "max_executions_before_finished": 1000,
+                                        "weight": null,
+                                        "exponent": null,
+                                        "matrix": "AutoAssignMatrix"
+                                    }
+                                }
+                            }
+                        }
                     },
-                    "execute_until_finished": true,
-                    "is_finished_flag": true,
-                    "max_executions_before_finished": 1000,
-                    "num_executions": "Time(run: 0, trial: 0, pass: 0, time_step: 0)",
-                    "num_executions_before_finished": 0,
-                    "retain_old_simulation_data": false
-                },
-                "stateful_parameters": {},
-                "type": {
-                    "PNL": "Composition",
-                    "generic": "graph"
+                    "edges": {
+                        "C_recurrent_projection": {
+                            "parameters": {
+                                "auto": 1,
+                                "matrix": [
+                                    [
+                                        0.0
+                                    ]
+                                ],
+                                "hetero": 0,
+                                "weight": 1
+                            },
+                            "sender": "C",
+                            "receiver": "C",
+                            "sender_port": "C_RESULT",
+                            "receiver_port": "C_InputPort_0",
+                            "metadata": {
+                                "type": "AutoAssociativeProjection",
+                                "execute_until_finished": true,
+                                "has_initializers": false,
+                                "max_executions_before_finished": 1000,
+                                "weight": null,
+                                "exponent": null
+                            }
+                        },
+                        "MappingProjection_from_A_RESULT__to_B_InputPort_0_": {
+                            "parameters": {
+                                "weight": 1
+                            },
+                            "sender": "A",
+                            "receiver": "B",
+                            "sender_port": "A_RESULT",
+                            "receiver_port": "B_InputPort_0",
+                            "metadata": {
+                                "type": "MappingProjection",
+                                "execute_until_finished": true,
+                                "has_initializers": false,
+                                "max_executions_before_finished": 1000,
+                                "weight": null,
+                                "exponent": null,
+                                "matrix": "AutoAssignMatrix"
+                            }
+                        },
+                        "MappingProjection_from_A_RESULT__to_C_InputPort_0_": {
+                            "parameters": {
+                                "weight": 1
+                            },
+                            "sender": "A",
+                            "receiver": "C",
+                            "sender_port": "A_RESULT",
+                            "receiver_port": "C_InputPort_0",
+                            "metadata": {
+                                "type": "MappingProjection",
+                                "execute_until_finished": true,
+                                "has_initializers": false,
+                                "max_executions_before_finished": 1000,
+                                "weight": null,
+                                "exponent": null,
+                                "matrix": "AutoAssignMatrix"
+                            }
+                        },
+                        "MappingProjection_from_B_RESULT__to_D_InputPort_0_": {
+                            "parameters": {
+                                "weight": 1
+                            },
+                            "sender": "B",
+                            "receiver": "D",
+                            "sender_port": "B_RESULT",
+                            "receiver_port": "D_InputPort_0",
+                            "metadata": {
+                                "type": "MappingProjection",
+                                "execute_until_finished": true,
+                                "has_initializers": false,
+                                "max_executions_before_finished": 1000,
+                                "weight": null,
+                                "exponent": null,
+                                "matrix": "AutoAssignMatrix"
+                            }
+                        },
+                        "MappingProjection_from_C_RESULT__to_D_InputPort_0_": {
+                            "parameters": {
+                                "weight": 1
+                            },
+                            "sender": "C",
+                            "receiver": "D",
+                            "sender_port": "C_RESULT",
+                            "receiver_port": "D_InputPort_0",
+                            "metadata": {
+                                "type": "MappingProjection",
+                                "execute_until_finished": true,
+                                "has_initializers": false,
+                                "max_executions_before_finished": 1000,
+                                "weight": null,
+                                "exponent": null,
+                                "matrix": "AutoAssignMatrix"
+                            }
+                        },
+                        "MappingProjection_from_C_RESULT__to_Inner_Composition_Input_CIM_INPUT_CIM_E_InputPort_0_": {
+                            "parameters": {
+                                "weight": 1
+                            },
+                            "sender": "C",
+                            "receiver": "Inner_Composition",
+                            "sender_port": "C_RESULT",
+                            "receiver_port": "Inner_Composition_INPUT_CIM_E_InputPort_0",
+                            "metadata": {
+                                "type": "MappingProjection",
+                                "execute_until_finished": true,
+                                "has_initializers": false,
+                                "max_executions_before_finished": 1000,
+                                "weight": null,
+                                "exponent": null,
+                                "matrix": "AutoAssignMatrix"
+                            }
+                        }
+                    }
                 }
             }
         }
     }
-}
+

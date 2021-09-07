@@ -1,10 +1,6 @@
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Parameter,Function, Condition,ConditionSet
-#
-#
-#
-# from neuromllite.BaseTypes import Base
-# from neuromllite.BaseTypes import BaseWithId
-from neuromllite import EvaluableExpression
+
+
 #
 #
 #
@@ -28,8 +24,19 @@ from neuromllite import EvaluableExpression
 
 # g=InputPort(id=id_to_port(inp))
 # print(g)
+from modeci_mdf.utils import load_mdf
+c1=Condition(type='Always')
+# print(c1)
+print(c1.is_absolute)
 
-p=Parameter(id=1,default_initial_value=1,value=1)
-print(p.__dict__)
-print(type(p.value))
-print(type(EvaluableExpression(1)))
+# c=load_mdf('C:/Users/mraunak/PycharmProjects/MDF2/examples/PsyNeuLink/model_nested_comp_with_scheduler.json').graphs[0]
+# g1=SubGraph(id=1,conditions={'A':2},parameters={'B':7})
+# print(SubGraph.__mro__)
+# print(g1)
+#
+# c=Graph()
+# print(c.allowed_children['subgraphs'][1])
+
+# c=load_mdf('C:/Users/mraunak/PycharmProjects/MDF2/examples/PsyNeuLink/SimpleLinear-conditional.json').graphs[0]
+
+c=load_mdf('C:/Users/mraunak/PycharmProjects/MDF2/examples/PsyNeuLink/SimpleBranching-timing.json').graphs[0]

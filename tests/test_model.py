@@ -1,6 +1,8 @@
+import os
+
 from modeci_mdf.mdf import Model, Graph, Node, OutputPort, Function, Condition, ConditionSet, Parameter, Edge, InputPort
 
-from modeci_mdf.utils import load_mdf
+from modeci_mdf.utils import load_mdf,load_mdf_json
 import pytest
 
 def test_model_init_kwargs():
@@ -199,7 +201,7 @@ def test_metadata_dict():
     """
     Test whether we get a serialization error when passing anything else from a dictionary
     """
-    tr
+
     Graph(id='n0',metadata='info').to_json()
 
 
@@ -223,6 +225,35 @@ def test_graph_inputs():
     input_node.output_ports.append(op1)
     mod_graph.nodes.append(input_node)
 
+
+def test_graph_in_graphs(tmpdir):
+    r"""Test whether we can retrieve graph input node\ports via the inputs property."""
+    mod = Model(id="ABCD")
+    mod_graph = Graph(id="abcd_example")
+    mod.graphs.append(mod_graph)
+
+    input_node = Node(id="input0")
+    input_node.parameters.append(Parameter(id="input_level", value=10.0))
+    op1 = OutputPort(id="out_port")
+    op1.value = "input_level"
+    input_node.output_ports.append(op1)
+    mod_graph.nodes.append(input_node)
+
+    mdf_graph2=Graph(id="mdf2")
+    input_node1 = Node(id="input1")
+    input_node1.parameters.append(Parameter(id="input_level1", value=10.0))
+    op12 = OutputPort(id="out_port")
+    op12.value = "input_level"
+    input_node1.output_ports.append(op12)
+    mdf_graph2.nodes.append(input_node1)
+
+    mod_graph.nodes.append(mdf_graph2)
+
+    out_filename = os.path.join(tmpdir, 'graph_in_graph.json')
+    mod.to_json_file(out_filename)
+
+    # mod_graph_loaded = load_mdf_json(out_filename)
+    # assert mod.to_json() == mod_graph_loaded.to_json()
 
 
 
