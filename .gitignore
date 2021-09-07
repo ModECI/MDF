@@ -226,3 +226,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PyTorch/ddm
 /examples/MDF/abcd.png
 /examples/MDF/abcd_3.png
+/test.json

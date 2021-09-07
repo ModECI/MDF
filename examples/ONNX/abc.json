@@ -44,81 +44,83 @@
                         "parameters": {
                             "body": {
                                 "value": {
-                                    "torch-jit-export1": {
-                                        "nodes": {
-                                            "Cast_5": {
-                                                "parameters": {
-                                                    "to": {
-                                                        "value": 1
+                                    "graph_torch-jit-export1": {
+                                        "torch-jit-export1": {
+                                            "nodes": {
+                                                "Cast_5": {
+                                                    "parameters": {
+                                                        "to": {
+                                                            "value": 1
+                                                        },
+                                                        "input": {
+                                                            "value": 10
+                                                        },
+                                                        "Cast_5": {
+                                                            "function": "onnx::Cast",
+                                                            "args": {
+                                                                "input": "input"
+                                                            }
+                                                        }
                                                     },
-                                                    "input": {
-                                                        "value": 10
-                                                    },
-                                                    "Cast_5": {
-                                                        "function": "onnx::Cast",
-                                                        "args": {
-                                                            "input": "input"
+                                                    "output_ports": {
+                                                        "_11": {
+                                                            "value": "Cast_5"
                                                         }
                                                     }
                                                 },
-                                                "output_ports": {
-                                                    "_11": {
-                                                        "value": "Cast_5"
+                                                "Div_6": {
+                                                    "input_ports": {
+                                                        "x_6": {
+                                                            "shape": "(2, 3)"
+                                                        },
+                                                        "_11": {
+                                                            "shape": "(1,)"
+                                                        }
+                                                    },
+                                                    "parameters": {
+                                                        "Div_6": {
+                                                            "function": "onnx::Div",
+                                                            "args": {
+                                                                "A": "x_6",
+                                                                "B": "_11"
+                                                            }
+                                                        }
+                                                    },
+                                                    "output_ports": {
+                                                        "_12": {
+                                                            "value": "Div_6"
+                                                        }
+                                                    }
+                                                },
+                                                "Cast_7": {
+                                                    "parameters": {
+                                                        "to": {
+                                                            "value": 9
+                                                        },
+                                                        "input": {
+                                                            "value": 1
+                                                        },
+                                                        "Cast_7": {
+                                                            "function": "onnx::Cast",
+                                                            "args": {
+                                                                "input": "input"
+                                                            }
+                                                        }
+                                                    },
+                                                    "output_ports": {
+                                                        "_13": {
+                                                            "value": "Cast_7"
+                                                        }
                                                     }
                                                 }
                                             },
-                                            "Div_6": {
-                                                "input_ports": {
-                                                    "x_6": {
-                                                        "shape": "(2, 3)"
-                                                    },
-                                                    "_11": {
-                                                        "shape": "(1,)"
-                                                    }
-                                                },
-                                                "parameters": {
-                                                    "Div_6": {
-                                                        "function": "onnx::Div",
-                                                        "args": {
-                                                            "A": "x_6",
-                                                            "B": "_11"
-                                                        }
-                                                    }
-                                                },
-                                                "output_ports": {
-                                                    "_12": {
-                                                        "value": "Div_6"
-                                                    }
+                                            "edges": {
+                                                "Cast_5._11_Div_6._11": {
+                                                    "sender": "Cast_5",
+                                                    "receiver": "Div_6",
+                                                    "sender_port": "_11",
+                                                    "receiver_port": "_11"
                                                 }
-                                            },
-                                            "Cast_7": {
-                                                "parameters": {
-                                                    "to": {
-                                                        "value": 9
-                                                    },
-                                                    "input": {
-                                                        "value": 1
-                                                    },
-                                                    "Cast_7": {
-                                                        "function": "onnx::Cast",
-                                                        "args": {
-                                                            "input": "input"
-                                                        }
-                                                    }
-                                                },
-                                                "output_ports": {
-                                                    "_13": {
-                                                        "value": "Cast_7"
-                                                    }
-                                                }
-                                            }
-                                        },
-                                        "edges": {
-                                            "Cast_5._11_Div_6._11": {
-                                                "sender": "Cast_5",
-                                                "receiver": "Div_6",
-                                                "sender_port": "_11",
-                                                "receiver_port": "_11"
                                             }
                                         }
                                     }
