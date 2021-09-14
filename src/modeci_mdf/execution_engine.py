@@ -4,8 +4,6 @@ import re
 import sys
 import sympy
 import numpy as np
-
-
 import graph_scheduler
 
 from modeci_mdf.standard_functions import mdf_functions, create_python_expression
