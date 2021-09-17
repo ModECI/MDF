@@ -1,0 +1,230 @@
+{
+    "ABCD": {
+        "format": "ModECI MDF v0.2",
+        "graphs": {
+            "ABCD": {
+                "notes": "Example of a simplified network",
+                "nodes": {
+                    "A_input_0": {
+                        "parameters": {
+                            "variable": {
+                                "value": 2.0
+                            }
+                        },
+                        "input_ports": {},
+                        "output_ports": {
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "variable"
+                            }
+                        },
+                        "notes": "Cell: [Cell (a_input), lems_source_file = PNL.xml, parameters = {'variable': 'A_initial'}] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: a_input, type: inputNode,\n   parameters: {'variable': '2'}\n   parent: None\n",
+                        "functions": {}
+                    },
+                    "A_0": {
+                        "parameters": {
+                            "slope": {
+                                "value": 2.0
+                            },
+                            "intercept": {
+                                "value": 2.0
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "evaluated_A_0_OUTPUT_value"
+                            }
+                        },
+                        "notes": "Cell: [Cell (a), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n   parameters: {'slope': '2', 'intercept': '2'}\n   parent: None\n",
+                        "functions": {
+                            "evaluated_A_0_OUTPUT_value": {
+                                "function": "INPUT*slope + intercept",
+                                "args": {
+                                    "slope": "slope",
+                                    "intercept": "intercept"
+                                }
+                            }
+                        }
+                    },
+                    "B_0": {
+                        "parameters": {
+                            "gain": {
+                                "value": 1.0
+                            },
+                            "bias": {
+                                "value": 0.0
+                            },
+                            "x_0": {
+                                "value": 0.0
+                            },
+                            "offset": {
+                                "value": 0.0
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "evaluated_B_0_OUTPUT_value"
+                            }
+                        },
+                        "notes": "Cell: [Cell (b), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0', 'offset': '0.0'}\n   parent: None\n",
+                        "functions": {
+                            "evaluated_B_0_OUTPUT_value": {
+                                "function": "1/(1+math.exp(-1*gain*(INPUT + bias - x_0)+offset))",
+                                "args": {
+                                    "gain": "gain",
+                                    "bias": "bias",
+                                    "x_0": "x_0",
+                                    "offset": "offset"
+                                }
+                            }
+                        }
+                    },
+                    "C_0": {
+                        "parameters": {
+                            "rate": {
+                                "value": 1.0
+                            },
+                            "bias": {
+                                "value": 0.0
+                            },
+                            "scale": {
+                                "value": 1.0
+                            },
+                            "offset": {
+                                "value": 0.0
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "evaluated_C_0_OUTPUT_value"
+                            }
+                        },
+                        "notes": "Cell: [Cell (c), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0', 'offset': '0.0'}\n   parent: None\n",
+                        "functions": {
+                            "evaluated_C_0_OUTPUT_value": {
+                                "function": "scale * math.exp((rate * INPUT) + bias) + offset",
+                                "args": {
+                                    "rate": "rate",
+                                    "bias": "bias",
+                                    "scale": "scale",
+                                    "offset": "offset"
+                                }
+                            }
+                        }
+                    },
+                    "D_0": {
+                        "parameters": {
+                            "rate": {
+                                "value": 0.05
+                            },
+                            "time_step_size": {
+                                "value": 0.1
+                            },
+                            "OUTPUT": {
+                                "default_initial_value": "0",
+                                "value": "evaluated_D_0_OUTPUT_next_value"
+                            },
+                            "dt": {
+                                "value": 0.1
+                            },
+                            "time": {
+                                "default_initial_value": 0,
+                                "value": "evaluated_time_next_value"
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "V": {
+                                "value": 0
+                            }
+                        },
+                        "notes": "Cell: [Cell (d), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n",
+                        "functions": {
+                            "evaluated_D_0_OUTPUT_next_value": {
+                                "function": "OUTPUT+(dt*(rate * INPUT) / time_step_size)",
+                                "args": {
+                                    "rate": "rate",
+                                    "time_step_size": "time_step_size",
+                                    "OUTPUT": "OUTPUT",
+                                    "dt": "dt"
+                                }
+                            },
+                            "evaluated_time_next_value": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "time",
+                                    "slope": 1,
+                                    "intercept": "dt"
+                                }
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Edge A_0 to B_0": {
+                        "name": "Edge A_0 to B_0",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "INPUT",
+                        "sender": "A_0",
+                        "receiver": "B_0",
+                        "weight": 1
+                    },
+                    "Edge A_input_0 to A_0": {
+                        "name": "Edge A_input_0 to A_0",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "INPUT",
+                        "sender": "A_input_0",
+                        "receiver": "A_0",
+                        "weight": 1
+                    },
+                    "Edge A_0 to C_0": {
+                        "name": "Edge A_0 to C_0",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "INPUT",
+                        "sender": "A_0",
+                        "receiver": "C_0",
+                        "weight": 1
+                    },
+                    "Edge B_0 to D_0": {
+                        "name": "Edge B_0 to D_0",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "INPUT",
+                        "sender": "B_0",
+                        "receiver": "D_0",
+                        "weight": 1
+                    },
+                    "Edge C_0 to D_0": {
+                        "name": "Edge C_0 to D_0",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "INPUT",
+                        "sender": "C_0",
+                        "receiver": "D_0",
+                        "weight": 1
+                    }
+                }
+            }
+        }
+    }
+}

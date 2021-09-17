@@ -245,8 +245,8 @@ class InceptionBlocks(nn.Module):
 
 
 def main():
-
-    from modeci_mdf.scheduler import EvaluableGraph
+    # changed import call
+    from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
     galaxy_images_output = torch.zeros((1, 5, 64, 64))
@@ -288,10 +288,21 @@ def main():
         output,
         eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
     )
+    print('Passed all comparison tests!')
 
     # Output the model to JSON
     mdf_model.to_json_file("inception.json")
 
+    import sys
+    if "-graph" in sys.argv:
+        mdf_model.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=1,
+            filename_root="inception",
+            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
 
 if __name__ == "__main__":
     main()

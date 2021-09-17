@@ -1,4 +1,5 @@
-python alias name="#statement"#!/bin/bash
+#!/bin/bash
+
 set -ex
 
 run_gui_examples=true
@@ -28,7 +29,7 @@ python ABCD.py -mdf
 python -m modeci_mdf.interfaces.graphviz.importer ABCD.mdf.yaml 1 -noview
 
 ####  Test evaluating MDF version
-python -m modeci_mdf.scheduler ABCD.mdf.json
+python -m modeci_mdf.execution_engine ABCD.mdf.json
 
 ####  Generate a graph depicting the structure & *dynamics* of the network from the LEMS description
 pynml LEMS_SimABCD.xml -lems-graph
@@ -43,7 +44,7 @@ fi
 ####  Generate and run jNeuroML version of the network from NeuroMLlite definition
 python FN.py -jnml
 ####  Generate PsyNeuLink version of the network from NeuroMLlite definition
-#python FN.py -pnl  # Generated MDF no longer valid...
+#python FN.py -pnl  # Generated BIDS-MDF/PNL no longer valid...
 
 ####  Generate a graph depicting the structure of the network from the LEMS description
 pynml LEMS_SimFN.xml -lems-graph
@@ -55,6 +56,9 @@ python FN.py -mdf
 python -m modeci_mdf.interfaces.graphviz.importer FN.mdf.yaml 3 -noview
 
 ####  Test evaluating MDF version
-python -m modeci_mdf.scheduler FN.mdf.json
+python -m modeci_mdf.execution_engine FN.mdf.json
+
+####  Test running MDF version & save result
+python FNrun.py -nogui
 
 echo "Successfully ran all tests"

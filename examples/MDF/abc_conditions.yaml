@@ -1,6 +1,6 @@
 abc_conditions:
-    format: ModECI MDF v0.1
-    generating_application: Python modeci-mdf v0.1.3
+    format: ModECI MDF v0.2
+    generating_application: Python modeci-mdf v0.2.1
     graphs:
         abc_conditions_example:
             conditions:
@@ -8,7 +8,7 @@ abc_conditions:
                     input0:
                         type: BeforeNCalls
                         args:
-                            dependency: input0
+                            dependencies: input0
                             n: 1
                     A:
                         type: Always
@@ -16,12 +16,12 @@ abc_conditions:
                     B:
                         type: EveryNCalls
                         args:
-                            dependency: A
+                            dependencies: A
                             n: 2
                     C:
                         type: EveryNCalls
                         args:
-                            dependency: A
+                            dependencies: A
                             n: 3
                 termination:
                     environment_state_update:
@@ -30,26 +30,28 @@ abc_conditions:
                             dependencies:
                             -   type: AfterNCalls
                                 args:
-                                    dependency: C
+                                    dependencies: C
                                     n: 2
                             -   type: JustRan
                                 args:
-                                    dependency: A
+                                    dependencies: A
             nodes:
                 input0:
                     parameters:
-                        input_level: 0.0
+                        input_level:
+                            value: 0.0
                     output_ports:
                         out_port:
                             value: input_level
                 A:
-                    parameters:
-                        slope: 2.1
-                        intercept: 2.2
                     input_ports:
                         input_port1:
                             shape: (1,)
-                    functions:
+                    parameters:
+                        slope:
+                            value: 1.1
+                        intercept:
+                            value: 1.2
                         linear_func:
                             function: linear
                             args:
@@ -60,14 +62,16 @@ abc_conditions:
                         output_1:
                             value: linear_func
                 B:
-                    parameters:
-                        gain: 1.0
-                        bias: 0.0
-                        offset: 0.0
                     input_ports:
                         input_port1:
                             shape: (1,)
-                    functions:
+                    parameters:
+                        gain:
+                            value: 2.1
+                        bias:
+                            value: 2.2
+                        offset:
+                            value: 2.3
                         logistic_func:
                             function: logistic
                             args:
@@ -79,15 +83,18 @@ abc_conditions:
                         output_1:
                             value: logistic_func
                 C:
-                    parameters:
-                        scale: 1.0
-                        rate: 1.0
-                        bias: 0.0
-                        offset: 0.0
                     input_ports:
                         input_port1:
                             shape: (1,)
-                    functions:
+                    parameters:
+                        scale:
+                            value: 3.1
+                        rate:
+                            value: 3.2
+                        bias:
+                            value: 3.3
+                        offset:
+                            value: 3.4
                         exponential_func:
                             function: exponential
                             args:

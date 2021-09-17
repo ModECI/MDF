@@ -1,8 +1,6 @@
 """
 Simple export of MDF to GraphViz for generating graphics
-
 Work in progress...
-
 """
 
 import sys
@@ -11,6 +9,8 @@ import graphviz
 import numpy as np
 
 from modeci_mdf.standard_functions import mdf_functions
+
+from modeci_mdf.utils import color_rgb_to_hex
 
 engines = {
     "d": "dot",
@@ -29,12 +29,12 @@ LEVEL_2 = 2
 LEVEL_3 = 3
 
 COLOR_MAIN = "#444444"
+#COLOR_BG_MAIN = "#999911"
 COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
-COLOR_PARAM = "#999944"
+COLOR_PARAM = "#1666ff"
 COLOR_INPUT = "#188855"
 COLOR_FUNC = "#111199"
-COLOR_STATE = "#1666ff"
 COLOR_OUTPUT = "#cc3355"
 
 
@@ -64,10 +64,6 @@ def format_func(s):
     return f'<font color="{COLOR_FUNC}">{s}</font>'
 
 
-def format_state(s):
-    return f'<font color="{COLOR_STATE}">{s}</font>'
-
-
 def format_standard_func(s):
     return "<i>%s</i>" % (s)
 
@@ -82,10 +78,9 @@ def format_output(s):
 
 def match_in_expr(s, node):
 
-    if node.parameters:
-        for p in node.parameters:
-            if p in s:
-                s = s.replace(p, format_param(p))
+    for p in node.parameters:
+        if p.id in s:
+            s = s.replace(p.id, format_param(p.id))
 
     for ip in node.input_ports:
         if ip.id in s:
@@ -95,10 +90,6 @@ def match_in_expr(s, node):
         if f.id in s:
             s = s.replace(f.id, format_func(f.id))
 
-    for st in node.states:
-        if st.id in s:
-            s = s.replace(st.id, format_state(st.id))
-
     for op in node.output_ports:
         if op.id in s:
             s = s.replace(op.id, format_output(op.id))
@@ -106,13 +97,20 @@ def match_in_expr(s, node):
 
 
 def mdf_to_graphviz(
-    mdf_graph, engine="dot", output_format="png", view_on_render=False, level=LEVEL_2, filename_root=None
+    mdf_graph,
+    engine="dot",
+    output_format="png",
+    view_on_render=False,
+    level=LEVEL_2,
+    filename_root=None,
 ):
 
     DEFAULT_POP_SHAPE = "ellipse"
     DEFAULT_ARROW_SHAPE = "empty"
 
-    print("Converting MDF graph: %s to graphviz (level: %s, format: %s)" % (mdf_graph.id, level, output_format))
+    print(
+        f"Converting MDF graph: {mdf_graph.id} to graphviz (level: {level}, format: {output_format})"
+    )
 
     graph = graphviz.Digraph(
         mdf_graph.id,
@@ -123,36 +121,89 @@ def mdf_to_graphviz(
 
     for node in mdf_graph.nodes:
         print("    Node: %s" % node.id)
+        color = COLOR_MAIN
+        penwidth = '1'
+        #bg_color = COLOR_BG_MAIN
+
+        if node.metadata is not None:
+            if 'color' in node.metadata:
+                color = color_rgb_to_hex(node.metadata['color'])
+                penwidth = '2'
+
         graph.attr(
-            "node", color=COLOR_MAIN, style="rounded", shape="box", fontcolor=COLOR_MAIN
+            "node",
+            color=color,
+            style="rounded",
+            shape="box",
+            fontcolor=COLOR_MAIN,
+            penwidth=penwidth
         )
         info = '<table border="0" cellborder="0">'
         info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
 
+        if node.metadata is not None and level >= LEVEL_3:
+
+            info += "<tr><td>%s" % format_label("METADATA")
+
+            for m in node.metadata:
+                info += format_standard_func_long('%s = %s'%(m,node.metadata[m]))
+
+            info += '</td></tr>'
+
         if level >= LEVEL_2:
             if node.parameters and len(node.parameters) > 0:
 
-                info += "<tr><td>%s" % format_label("PARAMS")
-                for p in node.parameters:
-                    nn = format_num(node.parameters[p])
-                    breaker = "<br/>"
-                    info += "{} = {}{}".format(
-                        format_param(p),
-                        nn,
-                        breaker if len(info.split(breaker)[-1]) > 300 else ";    ",
-                    )
-                info = info[:-5]
-                info += "</td></tr>"
+                if node.input_ports and len(node.input_ports) > 0:
+                    for ip in node.input_ports:
+                        info += "<tr><td>{}{} {}</td></tr>".format(
+                            format_label("IN"),
+                            format_input(ip.id),
+                            "(shape: %s)" % ip.shape
+                            if level >= LEVEL_2 and ip.shape is not None
+                            else "",
+                        )
 
-            if node.input_ports and len(node.input_ports) > 0:
-                for ip in node.input_ports:
-                    info += "<tr><td>{}{} {}</td></tr>".format(
-                        format_label("IN"),
-                        format_input(ip.id),
-                        "(shape: %s)" % ip.shape
-                        if level >= LEVEL_2 and ip.shape is not None
-                        else "",
-                    )
+                for p in node.parameters:
+                    if p.function is not None:
+                        argstr = (
+                            ", ".join([match_in_expr(str(p.args[a]), node) for a in p.args])
+                            if p.args
+                            else "???"
+                        )
+                        info += "<tr><td>{}{} = {}({})</td></tr>".format(
+                            format_label("PARAMETER"),
+                            format_param(p.id),
+                            format_standard_func(p.function),
+                            argstr,
+                        )
+                        if level >= LEVEL_3:
+                            func_info = mdf_functions[p.function]
+                            info += '<tr><td colspan="2">%s</td></tr>' % (
+                                format_standard_func_long(
+                                    "%s(%s) = %s"
+                                    % (
+                                        p.function,
+                                        ", ".join([a for a in p.args]),
+                                        func_info["expression_string"],
+                                    )
+                                )
+                            )
+                    else:
+                        v = ""
+                        if p.value is not None:
+                            v += "= %s" % match_in_expr(str(p.value), node)
+                        if p.default_initial_value:
+                            v += "<i>def init value:</i> %s" % match_in_expr(
+                                p.default_initial_value, node
+                            )
+                        if p.time_derivative:
+                            v += ", <i>d/dt:</i> %s" % match_in_expr(
+                                p.time_derivative, node
+                            )
+                        info += "<tr><td>{}{}: {}</td></tr>".format(
+                            format_label("PARAMETER"), format_param(p.id), v
+                        )
+
 
             if node.functions and len(node.functions) > 0:
                 for f in node.functions:
@@ -179,24 +230,7 @@ def mdf_to_graphviz(
                                 )
                             )
                         )
-                        # info += '<tr><td>%s</td></tr>'%(format_standard_func(func_info['description']))
 
-            if node.states and len(node.states) > 0:
-                for st in node.states:
-                    v = ""
-                    if st.value:
-                        v += "<i>value:</i> %s" % match_in_expr(st.value, node)
-                    if st.default_initial_value:
-                        v += "<i>def init value:</i> %s" % match_in_expr(
-                            st.default_initial_value, node
-                        )
-                    if st.time_derivative:
-                        v += ", <i>d/dt:</i> %s" % match_in_expr(
-                            st.time_derivative, node
-                        )
-                    info += "<tr><td>{}{}: {}</td></tr>".format(
-                        format_label("STATE"), format_state(st.id), v
-                    )
 
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
@@ -204,7 +238,7 @@ def mdf_to_graphviz(
                         format_label("OUT"),
                         format_output(op.id),
                         match_in_expr(op.value, node),
-                        "(shape: %s)" % op.shape
+                        "(shape: %s)" % op.shape if op.shape is not None else ''
                         if level >= LEVEL_2 and op.shape is not None
                         else "",
                     )
@@ -239,7 +273,7 @@ def mdf_to_graphviz(
         graph.view()
     else:
         name = graph.render()
-        print('Written graph image to: %s'%name)
+        print("Written graph image to: %s" % name)
 
 
 if __name__ == "__main__":
@@ -269,6 +303,4 @@ if __name__ == "__main__":
 
     print("------------------")
     # nmllite_file = example.replace('.json','.nmllite.json')
-    mdf_to_graphviz(
-        mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2])
-    )
+    mdf_to_graphviz(mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2]))

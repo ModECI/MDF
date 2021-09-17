@@ -82,6 +82,17 @@ def main():
     # Output the model to JSON
     mdf_model.to_json_file("ddm.json")
 
+    import sys
+    if "-graph" in sys.argv:
+        mdf_model.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=2,
+            filename_root="ddm",
+            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
+
 
 if __name__ == "__main__":
     main()

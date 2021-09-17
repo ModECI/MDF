@@ -1,0 +1,76 @@
+{
+    "Simple": {
+        "format": "ModECI MDF v0.2",
+        "generating_application": "Python modeci-mdf v0.2.1",
+        "graphs": {
+            "simple_example": {
+                "nodes": {
+                    "input_node": {
+                        "parameters": {
+                            "input_level": {
+                                "value": 0.5
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        },
+                        "functions": {}
+                    },
+                    "processing_node": {
+                        "input_ports": {
+                            "input_port1": {}
+                        },
+                        "parameters": {
+                            "lin_slope": {
+                                "value": 0.5
+                            },
+                            "lin_intercept": {
+                                "value": 0
+                            },
+                            "log_gain": {
+                                "value": 3
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "logistic_1"
+                            }
+                        },
+                        "functions": {
+                            "linear_1": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "slope": "lin_slope",
+                                    "intercept": "lin_intercept"
+                                }
+                            },
+                            "logistic_1": {
+                                "function": "logistic",
+                                "args": {
+                                    "variable0": "linear_1",
+                                    "gain": "log_gain",
+                                    "bias": 0,
+                                    "offset": 0
+                                }
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "input_edge": {
+                        "parameters": {
+                            "weight": 0.55
+                        },
+                        "sender": "input_node",
+                        "receiver": "processing_node",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port1"
+                    }
+                }
+            }
+        }
+    }
+}

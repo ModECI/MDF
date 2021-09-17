@@ -1,6 +1,6 @@
 count:
-    format: ModECI MDF v0.1
-    generating_application: Python modeci-mdf v0.1.3
+    format: ModECI MDF v0.2
+    generating_application: Python modeci-mdf v0.2.1
     graphs:
         count_graph:
             conditions:
@@ -11,7 +11,7 @@ count:
                     retrieval_buffer:
                         type: JustRan
                         args:
-                            dependency: declarative_memory
+                            dependencies: declarative_memory
                     goal_buffer:
                         type: Always
                         args: {}
@@ -24,73 +24,74 @@ count:
                             dependencies:
                             -   type: EveryNCalls
                                 args:
-                                    dependency: retrieval_buffer
+                                    dependencies: retrieval_buffer
                                     n: 1
                             -   type: EveryNCalls
                                 args:
-                                    dependency: goal_buffer
+                                    dependencies: goal_buffer
                                     n: 1
                             -   type: EveryNCalls
                                 args:
-                                    dependency: declarative_memory
+                                    dependencies: declarative_memory
                                     n: 1
                     conflict_resolution:
                         type: JustRan
                         args:
-                            dependency: pattern_matching
+                            dependencies: pattern_matching
                     fire_production:
                         type: JustRan
                         args:
-                            dependency: conflict_resolution
+                            dependencies: conflict_resolution
                     check_termination:
                         type: JustRan
                         args:
-                            dependency: conflict_resolution
+                            dependencies: conflict_resolution
                 termination:
                     check_term_true:
-                        type: While
+                        type: JustRan
                         args:
                             dependencies:
                             - check_termination
             nodes:
                 declarative_memory:
-                    parameters:
-                        chunks:
-                        -   name: one
-                            ISA: number
-                            number: one
-                            next: two
-                        -   name: two
-                            ISA: number
-                            number: two
-                            next: three
-                        -   name: three
-                            ISA: number
-                            number: three
-                            next: four
-                        -   name: four
-                            ISA: number
-                            number: four
-                            next: five
-                        -   name: five
-                            ISA: number
-                            number: five
-                        -   name: first-goal
-                            ISA: count-from
-                            start: two
-                            end: four
-                            count: nil
-                        chunk_types:
-                            number:
-                            - number
-                            - next
-                            count-from:
-                            - start
-                            - end
-                            - count
                     input_ports:
                         dm_input: {}
-                    functions:
+                    parameters:
+                        chunks:
+                            value:
+                            -   name: one
+                                ISA: number
+                                number: one
+                                next: two
+                            -   name: two
+                                ISA: number
+                                number: two
+                                next: three
+                            -   name: three
+                                ISA: number
+                                number: three
+                                next: four
+                            -   name: four
+                                ISA: number
+                                number: four
+                                next: five
+                            -   name: five
+                                ISA: number
+                                number: five
+                            -   name: first-goal
+                                ISA: count-from
+                                start: two
+                                end: four
+                                count: nil
+                        chunk_types:
+                            value:
+                                number:
+                                - number
+                                - next
+                                count-from:
+                                - start
+                                - end
+                                - count
                         retrieve_chunk:
                             function: retrieve_chunk
                             args:
@@ -107,22 +108,21 @@ count:
                         retrieval_output:
                             value: retrieval_input
                 goal_buffer:
-                    parameters:
-                        first_goal:
-                            name: first-goal
-                            ISA: count-from
-                            start: two
-                            end: four
-                            count: nil
                     input_ports:
                         goal_input: {}
-                    functions:
+                    parameters:
+                        first_goal:
+                            value:
+                                name: first-goal
+                                ISA: count-from
+                                start: two
+                                end: four
+                                count: nil
                         change_goal:
                             function: change_goal
                             args:
                                 pattern: goal_input
                                 curr_goal: goal_state
-                    states:
                         goal_state:
                             default_initial_value: first_goal
                             value: first_goal if goal_input == {} else change_goal
@@ -132,51 +132,52 @@ count:
                 procedural_memory:
                     parameters:
                         productions:
-                        -   name: start
-                            lhs:
-                            -   buffer: goal
-                                ISA: count-from
-                                start: =num1
-                                end: =end
-                                count: nil
-                            rhs:
-                            -   buffer: goal
-                                ISA: count-from
-                                count: =num1
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =num1
-                        -   name: increment
-                            lhs:
-                            -   buffer: goal
-                                ISA: count-from
-                                start: =start
-                                end: -=num1
-                                count: =num1
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =num1
-                                next: =num2
-                            rhs:
-                            -   buffer: goal
-                                ISA: count-from
-                                count: =num2
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =num2
-                        -   name: stop
-                            lhs:
-                            -   buffer: goal
-                                ISA: count-from
-                                start: =start
-                                end: =num
-                                count: =num
-                            -   buffer: retrieval
-                                ISA: number
-                                number: =num
-                                next: =next
-                            rhs:
-                            -   buffer: goal
+                            value:
+                            -   name: start
+                                lhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    start: =num1
+                                    end: =end
+                                    count: nil
+                                rhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    count: =num1
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num1
+                            -   name: increment
+                                lhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    start: =start
+                                    end: -=num1
+                                    count: =num1
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num1
+                                    next: =num2
+                                rhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    count: =num2
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num2
+                            -   name: stop
+                                lhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    start: =start
+                                    end: =num
+                                    count: =num
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num
+                                    next: =next
+                                rhs:
+                                -   buffer: goal
                     output_ports:
                         pm_output:
                             value: productions
@@ -185,7 +186,7 @@ count:
                         pattern_input_from_pm: {}
                         pattern_input_from_goal: {}
                         pattern_input_from_retrieval: {}
-                    functions:
+                    parameters:
                         pattern_matching_function:
                             function: pattern_matching_function
                             args:
@@ -198,7 +199,7 @@ count:
                 conflict_resolution:
                     input_ports:
                         conflict_input: {}
-                    functions:
+                    parameters:
                         conflict_resolution_function:
                             function: conflict_resolution_function
                             args:
@@ -211,7 +212,7 @@ count:
                 fire_production:
                     input_ports:
                         fire_prod_input: {}
-                    functions:
+                    parameters:
                         update_goal:
                             function: update_goal
                             args:
@@ -228,7 +229,7 @@ count:
                 check_termination:
                     input_ports:
                         check_input: {}
-                    functions:
+                    parameters:
                         check_termination:
                             function: check_termination
                             args:

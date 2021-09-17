@@ -17,6 +17,11 @@ extras = {
         "nbsphinx",
         "sphinx_copybutton",
         "sphinx-rtd-theme",
+        "myst_parser",
+        "sphinx_markdown_tables",
+        "sphinx-autoapi",
+        "pytorch-sphinx-theme==0.0.19",
+        "sphinxcontrib-versioning",
     ],
     "dev": [],
 }

@@ -252,7 +252,7 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
         for kw in kwargs:
             if kw not in schema.attributes:
                 raise ValueError(
-                    f"Passed unkown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
+                    f"Passed unknown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
                 )
 
         output_names = [out.name for out in schema.outputs]

@@ -1,0 +1,20 @@
+{
+    "Simstateful_parameter_example2": {
+        "version": "NeuroMLlite v0.3.2",
+        "network": "New_Stateful_Parameters_ver2.nmllite.json",
+        "duration": 2000.0,
+        "dt": 0.1,
+        "seed": 123,
+        "recordVariables": {
+            "update_rate": {
+                "sine_node": 0
+            },
+            "update_level": {
+                "sine_node": 0
+            },
+            "out_port": {
+                "sine_node": 0
+            }
+        }
+    }
+}

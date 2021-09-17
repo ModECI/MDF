@@ -11,13 +11,18 @@ mod = Model(id="Simple")
 doc = mod.generate_documentation(format="markdown")
 
 comment = "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**"
+
 with open("README.md", "w") as d:
     d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
     d.write("%s\n" % comment)
     d.write(doc)
 
-doc = mod.generate_documentation(format="dict")
+with open("sphinx/source/api/Specification.md", "w") as d:
+    d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
+    d.write("%s\n" % comment)
+    d.write(doc)
 
+doc = mod.generate_documentation(format="dict")
 
 doc = {
     "version": "ModECI MDF v%s" % MODECI_MDF_VERSION,
@@ -52,7 +57,7 @@ with open("MDF_function_specifications.yaml", "w") as d:
 
 
 func_doc = ""
-with open("MDF_function_specifications.md", "w") as d:
+with open("sphinx/source/api/MDF_function_specifications.md", "w") as d:
     d.write(
         "# Specification of standard functions in ModECI v%s\n" % MODECI_MDF_VERSION
     )
@@ -65,8 +70,8 @@ with open("MDF_function_specifications.md", "w") as d:
     d.write("## All functions:\n | ")
     all_f = sorted(mdf_functions.keys())
     for f in all_f:
-        c=':'
-        n=''
+        c = ":"
+        n = ""
         d.write(f'<a href="#{f.lower().replace(c,n)}">{f}</a> | ')
 
     for f in mdf_functions:
