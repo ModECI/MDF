@@ -330,23 +330,6 @@ class Node(MdfBaseWithId):
                 ),
             ]
         )
-        self.allowed_fields = collections.OrderedDict(
-            [("reference", ("The Reference into the Node", str))]
-        )
-
-        """The allowed fields for this type"""
-
-        """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
-        kwargs = {}
-        kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
 
         super().__init__(**kwargs)
 
@@ -430,18 +413,6 @@ class Function(MdfBaseWithId):
                 ),
             ]
         )
-        """The allowed fields for this type"""
-
-        """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
-        kwargs = {}
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
 
         super().__init__(**kwargs)
 
@@ -677,7 +648,7 @@ class ConditionSet(MdfBase):
                 ),
                 (
                     "termination",
-                    ("The _Condition_s corresponding to each _Node_", Condition),
+                    ("The _Condition_s corresponding to end of execution", Condition),
                 ),
             ]
         )
