@@ -72,6 +72,72 @@ def evaluate_expr(
     return e
 
 
+def parse_str_as_list(s: str) -> list:
+    """Produces a list from its string representation. Runs `eval` on
+    non-list elements within
+
+    Args:
+        s (str): a string representing a list
+
+    Returns:
+        list: a list containing elements from **s**
+    """
+
+    def try_eval_str(t):
+        try:
+            return eval(t)
+        except (NameError, SyntaxError):
+            return t
+
+    def _parse_str_as_list(t):
+        res = []
+        i = 0
+        j = 0
+        depth = 0
+
+        t = t.replace(" ", "")
+
+        while j < len(t):
+            if t[j] == "[":
+                depth += 1
+
+            if t[j] == "]":
+                depth -= 1
+
+                if depth == 0:
+                    res.append(_parse_str_as_list(t[i + 1 : j]))
+                    # also passes this check if at end of string
+                    if t[j : j + 1] not in ",]":
+                        raise ValueError(f"Malformed input at index {j} of {t} {t[j]}")
+                    i = j + 1
+
+            if t[j] == ",":
+                if depth == 0:
+                    if j > i:
+                        res.append(try_eval_str(t[i:j]))
+                    i = j + 1
+
+            j = j + 1
+
+        if depth > 0:
+            raise ValueError(f"Unmatched opening bracket in {t}")
+        elif depth < 0:
+            raise ValueError(f"Unmatched closing bracket in {t}")
+
+        if j > i:
+            res.append(try_eval_str(t[i:j]))
+
+        return res
+
+    res = _parse_str_as_list(s)
+
+    # avoid adding extra unnecessary list
+    if len(res) == 1:
+        return res[0]
+    else:
+        return res
+
+
 class EvaluableFunction:
     """Evaluates the function
     Args:
@@ -151,7 +217,7 @@ class EvaluableFunction:
                 # If this arg is a list of args, we are dealing with a variadic argument. Expand these
                 if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
                     # Use the Python interpreter to parse this into a List[str]
-                    arg_expr_list = eval(arg_expr)
+                    arg_expr_list = parse_str_as_list(arg_expr)
                     kwargs_for_onnx.update({a: func_params[a] for a in arg_expr_list})
                 else:
                     kwargs_for_onnx[kw] = func_params[kw]
@@ -309,7 +375,7 @@ class EvaluableParameter:
                     # If this arg is a list of args, we are dealing with a variadic argument. Expand these
                     if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
                         # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = eval(arg_expr)
+                        arg_expr_list = parse_str_as_list(arg_expr)
                         kwargs_for_onnx.update({a: func_params[a] for a in arg_expr_list})
                     else:
                         kwargs_for_onnx[kw] = func_params[kw]
@@ -519,7 +585,7 @@ class EvaluableNode:
                     # If we are dealing with a list of symbols, each must treated separately
                     if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
                         # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = eval(arg_expr)
+                        arg_expr_list = parse_str_as_list(arg_expr)
                     else:
                         arg_expr_list = [arg_expr]
 
@@ -574,7 +640,7 @@ class EvaluableNode:
                     # If we are dealing with a list of symbols, each must treated separately
                     if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
                         # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = eval(arg_expr)
+                        arg_expr_list = parse_str_as_list(arg_expr)
                     else:
                         arg_expr_list = [arg_expr]
 
