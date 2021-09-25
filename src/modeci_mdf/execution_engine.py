@@ -81,6 +81,64 @@ def evaluate_expr(
     return e
 
 
+def evaluate_onnx_expr(
+    expr: str,
+    base_parameters: Dict[str, Any],
+    evaluated_parameters: Dict,
+    verbose: bool = False,
+) -> Any:
+    """Evaluates a simple expression in string format representing an
+    ONNX function call
+
+    Args:
+        expr (str): Expression to be evaluated
+        base_parameters (Dict[str, Any]): A dict of parameters that may contain variables
+        evaluated_parameters (Dict): A dict mapping variables used in **base_parameters** to actual values
+        verbose (bool, optional): If set to True provides in-depth information else verbose message is not displayed. Defaults to False.
+
+    Returns:
+        Any: the return value of **expr**
+    """
+    # Get the ONNX function
+    onnx_name = expr.split("(")[0].split(".")[-1]
+    onnx_function = getattr(onnx_ops, onnx_name)
+    onnx_schema = onnx_ops.get_onnx_schema(onnx_name)
+    onnx_arguments = set(
+        list(onnx_schema.attributes.keys()) + [i.name for i in onnx_schema.inputs]
+    )
+    try:
+        has_variadic = (
+            onnx_schema.inputs[0].option == onnx_schema.FormalParameterOption.Variadic
+        )
+    except IndexError:
+        has_variadic = False
+
+    # ONNX functions expect input args or kwargs first, followed by parameters (called attributes in ONNX) as
+    # kwargs. Lets construct this.
+    kwargs_for_onnx = {}
+    for kw, arg_expr in base_parameters.items():
+
+        # If this arg is a list of args, we are dealing with a variadic argument. Expand these
+        if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+            # Use the Python interpreter to parse this into a List[str]
+            arg_expr_list = parse_str_as_list(arg_expr[1:-1])
+            kwargs_for_onnx.update({a: evaluated_parameters[a] for a in arg_expr_list})
+        else:
+            kwargs_for_onnx[kw] = evaluated_parameters[kw]
+
+    kwargs_for_onnx = {
+        k: v
+        for k, v in kwargs_for_onnx.items()
+        if (
+            (k in onnx_arguments or has_variadic)
+            and "onnx::" not in k  # filter Evaluable__ class names
+        )
+    }
+    if verbose:
+        print(f"Evaluating ONNX function {onnx_name} with {kwargs_for_onnx}")
+    return onnx_function(**kwargs_for_onnx)
+
+
 def parse_str_as_list(s: str) -> list:
     """Produces a list from its string representation. Runs `eval` on
     non-list elements within
@@ -219,28 +277,15 @@ class EvaluableFunction:
         # If this is an ONNX operation, evaluate it without neuromlite.
 
         if "onnx_ops." in expr:
-            # Get the ONNX function
-            onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
-
-            # ONNX functions expect input args or kwargs first, followed by parameters (called attributes in ONNX) as
-            # kwargs. Lets construct this.
-            kwargs_for_onnx = {}
-            for kw, arg_expr in self.function.args.items():
-
-                # If this arg is a list of args, we are dealing with a variadic argument. Expand these
-                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
-                    # Use the Python interpreter to parse this into a List[str]
-                    arg_expr_list = parse_str_as_list(arg_expr)
-                    kwargs_for_onnx.update({a: func_params[a] for a in arg_expr_list})
-                else:
-                    kwargs_for_onnx[kw] = func_params[kw]
-
-            # Now add anything in parameters that isn't already specified as an input argument
-            for kw, arg in parameters.items():
-                if kw not in self.function.args.values():
-                    kwargs_for_onnx[kw] = arg
-
-            self.curr_value = onnx_function(**kwargs_for_onnx)
+            if self.verbose:
+                print(f"{self.function.id} is evaluating ONNX function {expr}")
+            self.curr_value = evaluate_onnx_expr(
+                expr,
+                # parameters get overridden by self.function.args
+                {**parameters, **self.function.args},
+                func_params,
+                self.verbose,
+            )
         elif "actr." in expr:
             actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
             self.curr_value = actr_function(
@@ -402,44 +447,15 @@ class EvaluableParameter:
 
             # If this is an ONNX operation, evaluate it without neuromlite.
             if "onnx_ops." in expr:
-                # Get the ONNX function
-                onnx_function = getattr(onnx_ops, expr.split("(")[0].split(".")[-1])
-
-                # ONNX functions expect input args or kwargs first, followed by parameters (called attributes in ONNX) as
-                # kwargs. Lets construct this.
-                kwargs_for_onnx = {}
-                for kw, arg_expr in self.parameter.args.items():
-
-                    # If this arg is a list of args, we are dealing with a variadic argument. Expand these
-                    if (
-                        type(arg_expr) == str
-                        and arg_expr[0] == "["
-                        and arg_expr[-1] == "]"
-                    ):
-                        # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = parse_str_as_list(arg_expr)
-                        kwargs_for_onnx.update(
-                            {a: func_params[a] for a in arg_expr_list}
-                        )
-                    else:
-                        kwargs_for_onnx[kw] = func_params[kw]
-
-                # Now add anything in parameters that isn't already specified as an input argument
-                for kw, arg in parameters.items():
-
-                    if (
-                        kw not in self.parameter.args.values()
-                        and kw != self.parameter.id
-                        and kw != "__builtins__"
-                    ):
-                        kwargs_for_onnx[kw] = arg
                 if self.verbose:
-                    print(
-                        "%s is evaluating ONNX function %s with %s"
-                        % (self.parameter.id, expr, kwargs_for_onnx)
-                    )
-                self.curr_value = onnx_function(**kwargs_for_onnx)
-
+                    print(f"{self.parameter.id} is evaluating ONNX function {expr}")
+                self.curr_value = evaluate_onnx_expr(
+                    expr,
+                    # parameters get overridden by self.parameter.args
+                    {**parameters, **self.parameter.args},
+                    func_params,
+                    self.verbose,
+                )
             elif "actr." in expr:
                 actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
                 self.curr_value = actr_function(
