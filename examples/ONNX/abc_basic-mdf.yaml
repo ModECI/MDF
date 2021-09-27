@@ -1,0 +1,36 @@
+ONNX Model:
+  format: ModECI MDF v0.2
+  generating_application: Python modeci-mdf v0.2.1
+  graphs:
+    torch-jit-export:
+      edges:
+        Sin_0._1_Sin_1._1: {receiver: Sin_1, receiver_port: _1, sender: Sin_0, sender_port: _1}
+        Sin_1._2_Cos_2._2: {receiver: Cos_2, receiver_port: _2, sender: Sin_1, sender_port: _2}
+      nodes:
+        Cos_2:
+          input_ports:
+            _2: {shape: '(2, 3)'}
+          output_ports:
+            _3: {value: Cos_2}
+          parameters:
+            Cos_2:
+              args: {input: _2}
+              function: onnx::Cos
+        Sin_0:
+          input_ports:
+            input: {shape: '(2, 3)'}
+          output_ports:
+            _1: {value: Sin_0}
+          parameters:
+            Sin_0:
+              args: {input: input}
+              function: onnx::Sin
+        Sin_1:
+          input_ports:
+            _1: {shape: '(2, 3)'}
+          output_ports:
+            _2: {value: Sin_1}
+          parameters:
+            Sin_1:
+              args: {input: _1}
+              function: onnx::Sin
