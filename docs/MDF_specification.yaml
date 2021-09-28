@@ -16,7 +16,7 @@ specification:
                     file
             metadata:
                 type: dict
-                description: Dict of metadata for the Node
+                description: Dict of metadata for the model element
             id:
                 type: str
                 description: Unique ID of element
@@ -34,11 +34,11 @@ specification:
                 type: dict
                 description: Dict of global parameters for the Graph
             conditions:
-                type: dict
+                type: ConditionSet
                 description: The _ConditionSet_ for scheduling of the Graph
             metadata:
                 type: dict
-                description: Dict of metadata for the Node
+                description: Dict of metadata for the model element
             id:
                 type: str
                 description: Unique ID of element
@@ -52,6 +52,18 @@ specification:
             edges:
                 type: Edge
                 description: The _Edge_s between _Node_s in the Graph
+    ConditionSet:
+        definition: Specifies the non-default pattern of execution of _Node_s
+        allowed_parameters:
+            node_specific:
+                type: dict
+                description: The _Condition_s corresponding to each _Node_
+            termination:
+                type: dict
+                description: The _Condition_s that indicate when model execution ends
+            metadata:
+                type: dict
+                description: Dict of metadata for the model element
     Node:
         definition: 'A self contained unit of evaluation receiving input from other
             Nodes on _InputPort_s. The values from these are processed via a number
@@ -59,7 +71,7 @@ specification:
         allowed_parameters:
             metadata:
                 type: dict
-                description: Dict of metadata for the Node
+                description: Dict of metadata for the model element
             id:
                 type: str
                 description: Unique ID of element
@@ -81,6 +93,8 @@ specification:
                 description: The _OutputPort_s containing evaluated quantities from
                     the Node
     InputPort:
+        definition: The InputPort is an attribute of a _Node_ which allows external
+            information to be input to the _Node_
         allowed_parameters:
             shape:
                 type: str
@@ -92,7 +106,7 @@ specification:
                     for this so far '
             metadata:
                 type: dict
-                description: Dict of metadata for the Node
+                description: Dict of metadata for the model element
             id:
                 type: str
                 description: Unique ID of element
@@ -107,6 +121,9 @@ specification:
                 type: str
                 description: Which of the in-build MDF functions (linear etc.) this
                     uses
+            value:
+                type: str
+                description: evaluable expression
             args:
                 type: dict
                 description: Dictionary of values for each of the arguments for the
@@ -115,6 +132,9 @@ specification:
             id:
                 type: str
                 description: Unique ID of element
+            metadata:
+                type: dict
+                description: Dict of metadata for the model element
             notes:
                 type: str
                 description: Human readable notes
@@ -147,7 +167,7 @@ specification:
                     2"}
             metadata:
                 type: dict
-                description: Dict of metadata for the Node
+                description: Dict of metadata for the model element
             id:
                 type: str
                 description: Unique ID of element
@@ -155,6 +175,8 @@ specification:
                 type: str
                 description: Human readable notes
     OutputPort:
+        definition: The OutputPort is an attribute of a _Node_ which exports information
+            to another _Node_ connected by an _Edge_
         allowed_parameters:
             value:
                 type: str
@@ -162,7 +184,7 @@ specification:
                     and _Function_ values
             metadata:
                 type: dict
-                description: Dict of metadata for the Node
+                description: Dict of metadata for the model element
             id:
                 type: str
                 description: Unique ID of element
@@ -170,6 +192,8 @@ specification:
                 type: str
                 description: Human readable notes
     Edge:
+        definition: An Edge is an attribute of a _Graph_ that transmits computational
+            results from a sender's _OutputPort_ to a receiver's _InputPort_
         allowed_parameters:
             parameters:
                 type: dict
@@ -189,7 +213,7 @@ specification:
                 description: The id of the _InputPort_ on the receiver _Node_
             metadata:
                 type: dict
-                description: Dict of metadata for the Node
+                description: Dict of metadata for the model element
             id:
                 type: str
                 description: Unique ID of element

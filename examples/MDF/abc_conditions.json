@@ -9,8 +9,8 @@
                         "input0": {
                             "type": "BeforeNCalls",
                             "args": {
-                                "n": 1,
-                                "dependencies": "input0"
+                                "dependencies": "input0",
+                                "n": 1
                             }
                         },
                         "A": {
@@ -20,15 +20,15 @@
                         "B": {
                             "type": "EveryNCalls",
                             "args": {
-                                "n": 2,
-                                "dependencies": "A"
+                                "dependencies": "A",
+                                "n": 2
                             }
                         },
                         "C": {
                             "type": "EveryNCalls",
                             "args": {
-                                "n": 3,
-                                "dependencies": "A"
+                                "dependencies": "A",
+                                "n": 3
                             }
                         }
                     },
@@ -40,8 +40,8 @@
                                     {
                                         "type": "AfterNCalls",
                                         "args": {
-                                            "n": 2,
-                                            "dependencies": "C"
+                                            "dependencies": "C",
+                                            "n": 2
                                         }
                                     },
                                     {

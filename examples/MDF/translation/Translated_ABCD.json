@@ -6,6 +6,9 @@
             "abcd_example": {
                 "nodes": {
                     "input0": {
+                        "metadata": {
+                            "color": ".8 .8 .8"
+                        },
                         "parameters": {
                             "input_level": {
                                 "value": 0.0
@@ -19,6 +22,9 @@
                         "functions": {}
                     },
                     "A": {
+                        "metadata": {
+                            "color": ".8 0 0"
+                        },
                         "input_ports": {
                             "input_port1": {}
                         },
@@ -28,7 +34,14 @@
                             },
                             "intercept": {
                                 "value": 1.2
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_func"
+                            }
+                        },
+                        "functions": {
                             "linear_func": {
                                 "function": "linear",
                                 "args": {
@@ -37,15 +50,12 @@
                                     "intercept": "intercept"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "linear_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     },
                     "B": {
+                        "metadata": {
+                            "color": "0 .8 0"
+                        },
                         "input_ports": {
                             "input_port1": {}
                         },
@@ -58,7 +68,14 @@
                             },
                             "offset": {
                                 "value": 2.3
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "logistic_func"
+                            }
+                        },
+                        "functions": {
                             "logistic_func": {
                                 "function": "logistic",
                                 "args": {
@@ -68,15 +85,12 @@
                                     "offset": "offset"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "logistic_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     },
                     "C": {
+                        "metadata": {
+                            "color": "0 0 .8"
+                        },
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
@@ -94,7 +108,14 @@
                             },
                             "offset": {
                                 "value": 3.4
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "exponential_func"
+                            }
+                        },
+                        "functions": {
                             "exponential_func": {
                                 "function": "exponential",
                                 "args": {
@@ -105,15 +126,12 @@
                                     "offset": "offset"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "exponential_func"
-                            }
-                        },
-                        "functions": {}
+                        }
                     },
                     "D": {
+                        "metadata": {
+                            "color": ".8 0 .8"
+                        },
                         "input_ports": {
                             "input_port1": {
                                 "shape": "(1,)"
@@ -122,13 +140,6 @@
                         "parameters": {
                             "scale": {
                                 "value": 4.0
-                            },
-                            "sin_func": {
-                                "function": "sin",
-                                "args": {
-                                    "variable0": "input_port1",
-                                    "scale": "scale"
-                                }
                             }
                         },
                         "output_ports": {
@@ -136,7 +147,15 @@
                                 "value": "sin_func"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "sin_func": {
+                                "function": "sin",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "scale": "scale"
+                                }
+                            }
+                        }
                     }
                 },
                 "edges": {

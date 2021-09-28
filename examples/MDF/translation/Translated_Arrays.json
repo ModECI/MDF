@@ -46,7 +46,14 @@
                                         2.0
                                     ]
                                 ]
-                            },
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_1"
+                            }
+                        },
+                        "functions": {
                             "linear_1": {
                                 "function": "linear",
                                 "args": {
@@ -55,13 +62,7 @@
                                     "intercept": "intercept"
                                 }
                             }
-                        },
-                        "output_ports": {
-                            "output_1": {
-                                "value": "linear_1"
-                            }
-                        },
-                        "functions": {}
+                        }
                     }
                 },
                 "edges": {
