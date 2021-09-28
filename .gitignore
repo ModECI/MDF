@@ -227,3 +227,6 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/abcd.png
 /examples/MDF/abcd_3.png
 /test.json
+/examples/PyTorch/inception.onnx
+/examples/PyTorch/cifar_weights.npz
+/examples/PyTorch/cifar.json

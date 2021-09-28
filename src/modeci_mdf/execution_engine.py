@@ -184,6 +184,24 @@ class EvaluableFunction:
                 "    Evaluated %s with %s =\t%s"
                 % (self.function, _params_info(func_params), _val_info(self.curr_value))
             )
+
+        # If the function has multiple return values then we need to unpack the tuple
+        # that is returned by the function into the individual named parameters.
+        if self.function.return_values:
+
+            if len(self.function.return_values) != len(self.curr_value):
+                raise ValueError(
+                    f"Return value from function and return_values do not have same length. Cannot handle"
+                    f"multiple return values properly:\n"
+                    f"\tReturn value from {self.function.id}: {self.curr_value}"
+                    f"\treturn_values={self.function.return_values}"
+                )
+
+            self.curr_value = {
+                key: val
+                for key, val in zip(self.function.return_values, self.curr_value)
+            }
+
         return self.curr_value
 
 
@@ -219,6 +237,13 @@ class EvaluableParameter:
                         return self.parameter.default_initial_value
                     else:
                         return self.DEFAULT_INIT_VALUE
+
+                # Currently, evalulate_expr which invokes neuromlite's expression evaluator doesn't preserve float
+                # types when they evaluate int(value) == value. This causes problems with ONNX Ops that are strict with
+                # type.
+                elif type(self.parameter.value) == float:
+                    self.curr_value = self.parameter.value
+
                 else:
                     ips = {}
                     ips.update(parameters)
@@ -229,6 +254,7 @@ class EvaluableParameter:
                         verbose=False,
                         array_format=array_format,
                     )
+
                     if self.verbose:
                         print(
                             "    Initial eval of <{}> = {} ".format(
@@ -651,9 +677,18 @@ class EvaluableNode:
             )
 
         for ef in self.evaluable_functions:
-            curr_params[ef] = self.evaluable_functions[ef].evaluate(
+            val = self.evaluable_functions[ef].evaluate(
                 curr_params, array_format=array_format
             )
+
+            # If the evaluable function returns a dict, it has multiple return values.
+            # Add these return values one by one to the current parameters. We will also
+            # add the collection of them as a tuple to the current parameters
+            if type(val) == dict:
+                curr_params.update(val)
+                val = tuple(val.values())
+
+            curr_params[ef] = val
 
         # Now evaluate and set params to new parameter values for use in output...
         for ep in self.evaluable_parameters:

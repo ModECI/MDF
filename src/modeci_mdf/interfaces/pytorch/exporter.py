@@ -66,7 +66,7 @@ def make_model_graph_name(
 
 def process_torch_schema(
     node: torch.Node, consts: Dict, port_mapper: "PortMapper"
-) -> Tuple[List[str], Dict[str, Any]]:
+) -> Tuple[Dict[str, str], Dict[str, Any], List[str]]:
     """
     Parse a TorchScript node schema into argument names and constant attributes (parameters in MDF)
 
@@ -75,7 +75,10 @@ def process_torch_schema(
         consts: The constant nodes Dict for the graph we are working with.
 
     Returns:
-        A tuple containing a list of argument names and Dict of parameter names and values.
+        A tuple containing:
+            - - A dict representing argument names mapping to input port ids
+            - Dict of parameter names and values.
+            - List of return value names.
     """
 
     # Get the input node names
@@ -87,18 +90,24 @@ def process_torch_schema(
 
         # Get the arguments and covert to a simple List[str]
         schema_args = schema.arguments
-        schema_args = [schema_args[i].name for i, inp in enumerate(inputs)]
+        schema_args = {
+            schema_args[i].name: port_mapper.id_to_port(inp)
+            for i, inp in enumerate(inputs)
+        }
 
     else:
         logger.warning(
             f"Schema not found for TorchScript node ({node}), using placeholders for argument names."
         )
-        schema_args = [f"arg{i}" for i in range(len(inputs))]
+        schema_args = {
+            f"arg{i}": port_mapper.id_to_port(inp) for i, inp in enumerate(inputs)
+        }
 
     # Get any input to this node that is TorchScript node.kind() prim::Constant, make those a parameter
-    parameters = {
-        schema_args[i]: consts[inp] for i, inp in enumerate(inputs) if inp in consts
-    }
+    # parameters = {
+    #     schema_args[port_mapper.id_to_port(inp)]: consts[inp] for i, inp in enumerate(inputs) if inp in consts
+    # }
+    parameters = {}
 
     output_args = [f"out{o.unique()}" for o in node.outputs()]
 
@@ -107,7 +116,7 @@ def process_torch_schema(
 
 def process_onnx_schema(
     node: torch.Node, port_mapper: "PortMapper"
-) -> Tuple[Dict[str, str], Dict[str, Any]]:
+) -> Tuple[Dict[str, str], Dict[str, Any], List[str]]:
     """
     Retrieve the argument names and attributes (parameters in MDF) for this Operation.
 
@@ -116,9 +125,10 @@ def process_onnx_schema(
         port_mapper: The utitlity class for assigning TorchScript input output ids to Input Output Port ids.
 
     Returns:
-        A two element tuple:
+        A three element tuple:
             - A dict representing argument names mapping to input port ids
             - A dict mapping parameters (ONNX attributes) names mapping to values
+            - A list of names for the return values
     """
 
     # Get the input node names
@@ -314,12 +324,6 @@ def torchnode_to_mdfnode(
     for p in parameters:
         mdf_node.parameters.append(Parameter(id=p, value=parameters[p]))
 
-    # Add any output ports
-    for o in outputs:
-        mdf_node.output_ports.append(
-            OutputPort(id=port_mapper.id_to_port(o), value=make_func_id(node))
-        )
-
     # Add any input ports to the node, exclude inputs from constant nodes, these are parameters now
     for inp_i, inp in enumerate(inputs):
         if inp not in consts:
@@ -336,15 +340,12 @@ def torchnode_to_mdfnode(
                 InputPort(id=ip_name, shape=shape, type=str(inp_type))
             )
 
-    # Add Parameter
-    if type(arguments) == list:
-        arguments = {"arguments": arguments}
-    f = Parameter(id=make_func_id(node), function=op, args=arguments)
-    mdf_node.parameters.append(f)
-
-    # Add function
+    # Add function and output ports.
     if len(output_args) == 1:
         f = Function(id=make_func_id(node), function=op, args=arguments)
+        mdf_node.output_ports.append(
+            OutputPort(id=port_mapper.id_to_port(outputs[0]), value=make_func_id(node))
+        )
     else:
         f = Function(
             id=make_func_id(node),
@@ -352,6 +353,12 @@ def torchnode_to_mdfnode(
             args=arguments,
             return_values=output_args,
         )
+
+        # Add any output ports, output ports should correspond to return_values of function.
+        for o_index, o in enumerate(outputs):
+            mdf_node.output_ports.append(
+                OutputPort(id=port_mapper.id_to_port(o), value=output_args[o_index])
+            )
 
     mdf_node.functions.append(f)
 

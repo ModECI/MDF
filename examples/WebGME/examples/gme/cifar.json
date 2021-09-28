@@ -1,0 +1,1578 @@
+{
+  "attributes": {
+    "name": "Net",
+    "id": "Net",
+    "format": "ModECI MDF v0.1",
+    "generating_application": "Python modeci-mdf v0.1.3",
+    "notes": ""
+  },
+  "pointers": {
+    "base": "@meta:Model"
+  },
+  "children": [
+    {
+      "attributes": {
+        "id": "NetGraph",
+        "name": "NetGraph",
+        "notes": ""
+      },
+      "pointers": {
+        "base": "@meta:Graph"
+      },
+      "children": [
+        {
+          "id": "@id:Conv_11",
+          "attributes": {
+            "name": "Conv_11",
+            "id": "Conv_11"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:Conv_11_dilations",
+              "@id:Conv_11_group",
+              "@id:Conv_11_kernel_shape",
+              "@id:Conv_11_pads",
+              "@id:Conv_11_strides"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:Conv_11_dilations",
+              "attributes": {
+                "name": "dilations",
+                "value": [
+                  1,
+                  1
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_11_group",
+              "attributes": {
+                "name": "group",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_11_kernel_shape",
+              "attributes": {
+                "name": "kernel_shape",
+                "value": [
+                  5,
+                  5
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_11_pads",
+              "attributes": {
+                "name": "pads",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_11_strides",
+              "attributes": {
+                "name": "strides",
+                "value": [
+                  1,
+                  1
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_11_input1",
+              "attributes": {
+                "name": "input1",
+                "id": "input1",
+                "shape": "[4, 1, 28, 28]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Conv_11_conv1_weight",
+              "attributes": {
+                "name": "conv1_weight",
+                "id": "conv1_weight",
+                "shape": "[6, 1, 5, 5]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Conv_11_conv1_bias",
+              "attributes": {
+                "name": "conv1_bias",
+                "id": "conv1_bias",
+                "shape": "[6]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Conv_11__11",
+              "attributes": {
+                "name": "_11",
+                "id": "_11",
+                "value": "onnx::Conv_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Conv_1",
+                "id": "onnx::Conv_1",
+                "function": "onnx::Conv",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Conv_1_X",
+                  "@id:onnx::Conv_1_W",
+                  "@id:onnx::Conv_1_B"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Conv_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "input1"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Conv_1_W",
+                  "attributes": {
+                    "name": "W",
+                    "value": "conv1_weight"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Conv_1_B",
+                  "attributes": {
+                    "name": "B",
+                    "value": "conv1_bias"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Relu_12",
+          "attributes": {
+            "name": "Relu_12",
+            "id": "Relu_12"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": []
+          },
+          "children": [
+            {
+              "id": "@id:Relu_12__11",
+              "attributes": {
+                "name": "_11",
+                "id": "_11",
+                "shape": "[4, 6, 24, 24]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Relu_12__12",
+              "attributes": {
+                "name": "_12",
+                "id": "_12",
+                "value": "onnx::Relu_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Relu_1",
+                "id": "onnx::Relu_1",
+                "function": "onnx::Relu",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Relu_1_X"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Relu_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "_11"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:MaxPool_13",
+          "attributes": {
+            "name": "MaxPool_13",
+            "id": "MaxPool_13"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:MaxPool_13_ceil_mode",
+              "@id:MaxPool_13_kernel_shape",
+              "@id:MaxPool_13_pads",
+              "@id:MaxPool_13_strides"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:MaxPool_13_ceil_mode",
+              "attributes": {
+                "name": "ceil_mode",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_13_kernel_shape",
+              "attributes": {
+                "name": "kernel_shape",
+                "value": [
+                  2,
+                  2
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_13_pads",
+              "attributes": {
+                "name": "pads",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_13_strides",
+              "attributes": {
+                "name": "strides",
+                "value": [
+                  2,
+                  2
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_13__12",
+              "attributes": {
+                "name": "_12",
+                "id": "_12",
+                "shape": "[4, 6, 24, 24]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:MaxPool_13__13",
+              "attributes": {
+                "name": "_13",
+                "id": "_13",
+                "value": "onnx::MaxPool_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::MaxPool_1",
+                "id": "onnx::MaxPool_1",
+                "function": "onnx::MaxPool",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::MaxPool_1_X"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::MaxPool_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "_12"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Conv_14",
+          "attributes": {
+            "name": "Conv_14",
+            "id": "Conv_14"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:Conv_14_dilations",
+              "@id:Conv_14_group",
+              "@id:Conv_14_kernel_shape",
+              "@id:Conv_14_pads",
+              "@id:Conv_14_strides"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:Conv_14_dilations",
+              "attributes": {
+                "name": "dilations",
+                "value": [
+                  1,
+                  1
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_14_group",
+              "attributes": {
+                "name": "group",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_14_kernel_shape",
+              "attributes": {
+                "name": "kernel_shape",
+                "value": [
+                  5,
+                  5
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_14_pads",
+              "attributes": {
+                "name": "pads",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_14_strides",
+              "attributes": {
+                "name": "strides",
+                "value": [
+                  1,
+                  1
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Conv_14__13",
+              "attributes": {
+                "name": "_13",
+                "id": "_13",
+                "shape": "[4, 6, 12, 12]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Conv_14_conv2_weight",
+              "attributes": {
+                "name": "conv2_weight",
+                "id": "conv2_weight",
+                "shape": "[16, 6, 5, 5]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Conv_14_conv2_bias",
+              "attributes": {
+                "name": "conv2_bias",
+                "id": "conv2_bias",
+                "shape": "[16]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Conv_14__14",
+              "attributes": {
+                "name": "_14",
+                "id": "_14",
+                "value": "onnx::Conv_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Conv_1",
+                "id": "onnx::Conv_1",
+                "function": "onnx::Conv",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Conv_1_X",
+                  "@id:onnx::Conv_1_W",
+                  "@id:onnx::Conv_1_B"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Conv_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "_13"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Conv_1_W",
+                  "attributes": {
+                    "name": "W",
+                    "value": "conv2_weight"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Conv_1_B",
+                  "attributes": {
+                    "name": "B",
+                    "value": "conv2_bias"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Relu_15",
+          "attributes": {
+            "name": "Relu_15",
+            "id": "Relu_15"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": []
+          },
+          "children": [
+            {
+              "id": "@id:Relu_15__14",
+              "attributes": {
+                "name": "_14",
+                "id": "_14",
+                "shape": "[4, 16, 8, 8]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Relu_15__15",
+              "attributes": {
+                "name": "_15",
+                "id": "_15",
+                "value": "onnx::Relu_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Relu_1",
+                "id": "onnx::Relu_1",
+                "function": "onnx::Relu",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Relu_1_X"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Relu_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "_14"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:MaxPool_16",
+          "attributes": {
+            "name": "MaxPool_16",
+            "id": "MaxPool_16"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:MaxPool_16_ceil_mode",
+              "@id:MaxPool_16_kernel_shape",
+              "@id:MaxPool_16_pads",
+              "@id:MaxPool_16_strides"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:MaxPool_16_ceil_mode",
+              "attributes": {
+                "name": "ceil_mode",
+                "value": 0
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_16_kernel_shape",
+              "attributes": {
+                "name": "kernel_shape",
+                "value": [
+                  2,
+                  2
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_16_pads",
+              "attributes": {
+                "name": "pads",
+                "value": [
+                  0,
+                  0,
+                  0,
+                  0
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_16_strides",
+              "attributes": {
+                "name": "strides",
+                "value": [
+                  2,
+                  2
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:MaxPool_16__15",
+              "attributes": {
+                "name": "_15",
+                "id": "_15",
+                "shape": "[4, 16, 8, 8]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:MaxPool_16__16",
+              "attributes": {
+                "name": "_16",
+                "id": "_16",
+                "value": "onnx::MaxPool_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::MaxPool_1",
+                "id": "onnx::MaxPool_1",
+                "function": "onnx::MaxPool",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::MaxPool_1_X"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::MaxPool_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "_15"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Constant_17",
+          "attributes": {
+            "name": "Constant_17",
+            "id": "Constant_17"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:Constant_17_value"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:Constant_17_value",
+              "attributes": {
+                "name": "value",
+                "value": [
+                  -1,
+                  256
+                ]
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Constant_17__17",
+              "attributes": {
+                "name": "_17",
+                "id": "_17",
+                "value": "onnx::Constant_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Constant_1",
+                "id": "onnx::Constant_1",
+                "function": "onnx::Constant",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": []
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "id": "@id:Reshape_18",
+          "attributes": {
+            "name": "Reshape_18",
+            "id": "Reshape_18"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": []
+          },
+          "children": [
+            {
+              "id": "@id:Reshape_18__16",
+              "attributes": {
+                "name": "_16",
+                "id": "_16",
+                "shape": "[4, 16, 4, 4]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Reshape_18__17",
+              "attributes": {
+                "name": "_17",
+                "id": "_17",
+                "shape": "(?)"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Reshape_18__18",
+              "attributes": {
+                "name": "_18",
+                "id": "_18",
+                "value": "onnx::Reshape_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Reshape_1",
+                "id": "onnx::Reshape_1",
+                "function": "onnx::Reshape",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Reshape_1_data",
+                  "@id:onnx::Reshape_1_shape"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Reshape_1_data",
+                  "attributes": {
+                    "name": "data",
+                    "value": "_16"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Reshape_1_shape",
+                  "attributes": {
+                    "name": "shape",
+                    "value": "_17"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Gemm_19",
+          "attributes": {
+            "name": "Gemm_19",
+            "id": "Gemm_19"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:Gemm_19_alpha",
+              "@id:Gemm_19_beta",
+              "@id:Gemm_19_transB"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:Gemm_19_alpha",
+              "attributes": {
+                "name": "alpha",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_19_beta",
+              "attributes": {
+                "name": "beta",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_19_transB",
+              "attributes": {
+                "name": "transB",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_19__18",
+              "attributes": {
+                "name": "_18",
+                "id": "_18",
+                "shape": "[4, 256]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_19_fc1_weight",
+              "attributes": {
+                "name": "fc1_weight",
+                "id": "fc1_weight",
+                "shape": "[120, 256]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_19_fc1_bias",
+              "attributes": {
+                "name": "fc1_bias",
+                "id": "fc1_bias",
+                "shape": "[120]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_19__19",
+              "attributes": {
+                "name": "_19",
+                "id": "_19",
+                "value": "onnx::Gemm_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Gemm_1",
+                "id": "onnx::Gemm_1",
+                "function": "onnx::Gemm",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Gemm_1_A",
+                  "@id:onnx::Gemm_1_B",
+                  "@id:onnx::Gemm_1_C"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Gemm_1_A",
+                  "attributes": {
+                    "name": "A",
+                    "value": "_18"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Gemm_1_B",
+                  "attributes": {
+                    "name": "B",
+                    "value": "fc1_weight"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Gemm_1_C",
+                  "attributes": {
+                    "name": "C",
+                    "value": "fc1_bias"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Relu_20",
+          "attributes": {
+            "name": "Relu_20",
+            "id": "Relu_20"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": []
+          },
+          "children": [
+            {
+              "id": "@id:Relu_20__19",
+              "attributes": {
+                "name": "_19",
+                "id": "_19",
+                "shape": "[4, 120]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Relu_20__20",
+              "attributes": {
+                "name": "_20",
+                "id": "_20",
+                "value": "onnx::Relu_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Relu_1",
+                "id": "onnx::Relu_1",
+                "function": "onnx::Relu",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Relu_1_X"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Relu_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "_19"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Gemm_21",
+          "attributes": {
+            "name": "Gemm_21",
+            "id": "Gemm_21"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:Gemm_21_alpha",
+              "@id:Gemm_21_beta",
+              "@id:Gemm_21_transB"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:Gemm_21_alpha",
+              "attributes": {
+                "name": "alpha",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_21_beta",
+              "attributes": {
+                "name": "beta",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_21_transB",
+              "attributes": {
+                "name": "transB",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_21__20",
+              "attributes": {
+                "name": "_20",
+                "id": "_20",
+                "shape": "[4, 120]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_21_fc2_weight",
+              "attributes": {
+                "name": "fc2_weight",
+                "id": "fc2_weight",
+                "shape": "[84, 120]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_21_fc2_bias",
+              "attributes": {
+                "name": "fc2_bias",
+                "id": "fc2_bias",
+                "shape": "[84]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_21__21",
+              "attributes": {
+                "name": "_21",
+                "id": "_21",
+                "value": "onnx::Gemm_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Gemm_1",
+                "id": "onnx::Gemm_1",
+                "function": "onnx::Gemm",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Gemm_1_A",
+                  "@id:onnx::Gemm_1_B",
+                  "@id:onnx::Gemm_1_C"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Gemm_1_A",
+                  "attributes": {
+                    "name": "A",
+                    "value": "_20"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Gemm_1_B",
+                  "attributes": {
+                    "name": "B",
+                    "value": "fc2_weight"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Gemm_1_C",
+                  "attributes": {
+                    "name": "C",
+                    "value": "fc2_bias"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Relu_22",
+          "attributes": {
+            "name": "Relu_22",
+            "id": "Relu_22"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": []
+          },
+          "children": [
+            {
+              "id": "@id:Relu_22__21",
+              "attributes": {
+                "name": "_21",
+                "id": "_21",
+                "shape": "[4, 84]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Relu_22__22",
+              "attributes": {
+                "name": "_22",
+                "id": "_22",
+                "value": "onnx::Relu_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Relu_1",
+                "id": "onnx::Relu_1",
+                "function": "onnx::Relu",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Relu_1_X"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Relu_1_X",
+                  "attributes": {
+                    "name": "X",
+                    "value": "_21"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "@id:Gemm_23",
+          "attributes": {
+            "name": "Gemm_23",
+            "id": "Gemm_23"
+          },
+          "pointers": {
+            "base": "@meta:Node"
+          },
+          "sets": {
+            "parameters": [
+              "@id:Gemm_23_alpha",
+              "@id:Gemm_23_beta",
+              "@id:Gemm_23_transB"
+            ]
+          },
+          "children": [
+            {
+              "id": "@id:Gemm_23_alpha",
+              "attributes": {
+                "name": "alpha",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_23_beta",
+              "attributes": {
+                "name": "beta",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_23_transB",
+              "attributes": {
+                "name": "transB",
+                "value": 1
+              },
+              "pointers": {
+                "base": "@meta:DictionaryEntry"
+              }
+            },
+            {
+              "id": "@id:Gemm_23__22",
+              "attributes": {
+                "name": "_22",
+                "id": "_22",
+                "shape": "[4, 84]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_23_fc3_weight",
+              "attributes": {
+                "name": "fc3_weight",
+                "id": "fc3_weight",
+                "shape": "[10, 84]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_23_fc3_bias",
+              "attributes": {
+                "name": "fc3_bias",
+                "id": "fc3_bias",
+                "shape": "[10]"
+              },
+              "pointers": {
+                "base": "@meta:InputPort"
+              }
+            },
+            {
+              "id": "@id:Gemm_23__23",
+              "attributes": {
+                "name": "_23",
+                "id": "_23",
+                "value": "onnx::Gemm_1"
+              },
+              "pointers": {
+                "base": "@meta:OutputPort"
+              }
+            },
+            {
+              "attributes": {
+                "name": "onnx::Gemm_1",
+                "id": "onnx::Gemm_1",
+                "function": "onnx::Gemm",
+                "notes": ""
+              },
+              "pointers": {
+                "base": "@meta:Function"
+              },
+              "sets": {
+                "args": [
+                  "@id:onnx::Gemm_1_A",
+                  "@id:onnx::Gemm_1_B",
+                  "@id:onnx::Gemm_1_C"
+                ]
+              },
+              "children": [
+                {
+                  "id": "@id:onnx::Gemm_1_A",
+                  "attributes": {
+                    "name": "A",
+                    "value": "_22"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Gemm_1_B",
+                  "attributes": {
+                    "name": "B",
+                    "value": "fc3_weight"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                },
+                {
+                  "id": "@id:onnx::Gemm_1_C",
+                  "attributes": {
+                    "name": "C",
+                    "value": "fc3_bias"
+                  },
+                  "pointers": {
+                    "base": "@meta:DictionaryEntry"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "attributes": {
+            "name": "Conv_11_Relu_12"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Conv_11__11",
+            "dst": "@id:Relu_12__11"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Relu_12_MaxPool_13"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Relu_12__12",
+            "dst": "@id:MaxPool_13__12"
+          }
+        },
+        {
+          "attributes": {
+            "name": "MaxPool_13_Conv_14"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:MaxPool_13__13",
+            "dst": "@id:Conv_14__13"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Conv_14_Relu_15"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Conv_14__14",
+            "dst": "@id:Relu_15__14"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Relu_15_MaxPool_16"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Relu_15__15",
+            "dst": "@id:MaxPool_16__15"
+          }
+        },
+        {
+          "attributes": {
+            "name": "MaxPool_16_Reshape_18"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:MaxPool_16__16",
+            "dst": "@id:Reshape_18__16"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Constant_17_Reshape_18"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Constant_17__17",
+            "dst": "@id:Reshape_18__17"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Reshape_18_Gemm_19"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Reshape_18__18",
+            "dst": "@id:Gemm_19__18"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Gemm_19_Relu_20"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Gemm_19__19",
+            "dst": "@id:Relu_20__19"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Relu_20_Gemm_21"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Relu_20__20",
+            "dst": "@id:Gemm_21__20"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Gemm_21_Relu_22"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Gemm_21__21",
+            "dst": "@id:Relu_22__21"
+          }
+        },
+        {
+          "attributes": {
+            "name": "Relu_22_Gemm_23"
+          },
+          "pointers": {
+            "base": "@meta:Edge",
+            "src": "@id:Relu_22__22",
+            "dst": "@id:Gemm_23__22"
+          }
+        }
+      ]
+    }
+  ]
+}

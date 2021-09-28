@@ -7,12 +7,13 @@ from modeci_mdf.mdf import (
     InputPort,
     OutputPort,
     Function,
+    ConditionSet,
+    Condition,
 )
 
 from modeci_mdf.utils import load_mdf
 import pytest
 from modeci_mdf.execution_engine import EvaluableFunction
-from graph_scheduler import Condition, ConditionSet
 
 
 def test_model_init_kwargs():
