@@ -541,6 +541,10 @@ class EvaluableNode:
                 for arg in f.args:
                     arg_expr = f.args[arg]
 
+                    # some non-expression/str types will crash in sympy.simplify
+                    if not isinstance(arg_expr, (sympy.Expr, str)):
+                        continue
+
                     # If we are dealing with a list of symbols, each must treated separately
                     if (
                         type(arg_expr) == str
@@ -887,19 +891,29 @@ class EvaluableGraph:
 
         """
         try:
-            typ = getattr(graph_scheduler.condition, condition["type"])
+            cond_type = condition["type"]
+        except TypeError:
+            cond_type = condition.type
+
+        try:
+            cond_args = condition["args"]
+        except TypeError:
+            cond_args = condition.args
+
+        try:
+            typ = getattr(graph_scheduler.condition, cond_type)
         except AttributeError as e:
             raise ValueError(
-                "Unsupported condition type: %s" % condition["type"]
+                "Unsupported condition type: %s" % cond_type
             ) from e
         except TypeError as e:
             raise TypeError("Invalid condition dictionary: %s" % condition) from e
 
-        for k, v in condition["args"].items():
+        for k, v in cond_args.items():
             new_v = self.graph.get_node(v)
             if new_v is not None:
                 # arg is a node id
-                condition["args"][k] = new_v
+                cond_args[k] = new_v
 
             try:
                 if isinstance(v, list):
@@ -908,20 +922,20 @@ class EvaluableGraph:
                 else:
                     # arg is another condition
                     new_v = self.parse_condition(v)
-            except (TypeError, ValueError):
+            except (AttributeError, TypeError, ValueError):
                 try:
                     # value may be a string representing a TimeScale
-                    condition["args"][k] = getattr(
+                    cond_args[k] = getattr(
                         graph_scheduler.TimeScale,
                         re.match(r"TimeScale\.(.*)", v).groups()[0],
                     )
                 except (AttributeError, IndexError, TypeError):
                     pass
             else:
-                condition["args"][k] = new_v
+                cond_args[k] = new_v
 
         try:
-            return typ(**condition["args"])
+            return typ(**cond_args)
         except TypeError as e:
             sig = inspect.signature(typ)
 
@@ -936,17 +950,17 @@ class EvaluableGraph:
                 raise e
             else:
                 try:
-                    condition["args"][var_positional_arg]
+                    cond_args[var_positional_arg]
                 except KeyError:
                     # error is due to missing required parameter,
                     # not named variable positional argument
                     raise TypeError(f"Condition '{typ.__name__}': {e}")
                 else:
                     return typ(
-                        *condition["args"][var_positional_arg],
+                        *cond_args[var_positional_arg],
                         **{
                             k: v
-                            for k, v in condition["args"].items()
+                            for k, v in cond_args.items()
                             if k != var_positional_arg
                         },
                     )
