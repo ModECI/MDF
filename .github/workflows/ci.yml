@@ -53,10 +53,7 @@ jobs:
       run: python -m pip install .[test]
 
     - name: Test package
-      run:  |
-         python -m pytest -ra -v tests/*py
-         python -m pytest -ra -v tests/interfaces/pytorch/*py
-      shell: bash
+      run: python -m pytest -ra
 
 
   dist:
