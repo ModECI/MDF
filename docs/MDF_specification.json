@@ -1,5 +1,5 @@
 {
-    "version": "ModECI MDF v0.1",
+    "version": "ModECI MDF v0.2",
     "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**",
     "specification": {
         "Model": {
@@ -12,6 +12,10 @@
                 "generating_application": {
                     "type": "str",
                     "description": "Information on what application generated/saved this file"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -37,8 +41,12 @@
                     "description": "Dict of global parameters for the Graph"
                 },
                 "conditions": {
-                    "type": "dict",
+                    "type": "ConditionSet",
                     "description": "The _ConditionSet_ for scheduling of the Graph"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -60,12 +68,29 @@
                 }
             }
         },
-        "Node": {
-            "definition": "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. The values from these are processed via a number of _Function_s and one or more final values are calculated on the _OutputPort_s ",
+        "ConditionSet": {
+            "definition": "Specifies the non-default pattern of execution of _Node_s",
             "allowed_parameters": {
-                "parameters": {
+                "node_specific": {
                     "type": "dict",
-                    "description": "Dict of parameters for the Node"
+                    "description": "The _Condition_s corresponding to each _Node_"
+                },
+                "termination": {
+                    "type": "dict",
+                    "description": "The _Condition_s that indicate when model execution ends"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
+                }
+            }
+        },
+        "Node": {
+            "definition": "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. The values from these are processed via a number of Functions and one or more final values are calculated on the _OutputPort_s ",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -85,9 +110,9 @@
                     "type": "Function",
                     "description": "The _Function_s for the Node"
                 },
-                "states": {
-                    "type": "State",
-                    "description": "The _State_s of the Node"
+                "parameters": {
+                    "type": "Parameter",
+                    "description": "The _Parameter_s of the Node"
                 },
                 "output_ports": {
                     "type": "OutputPort",
@@ -96,6 +121,7 @@
             }
         },
         "InputPort": {
+            "definition": "The InputPort is an attribute of a _Node_ which allows external information to be input to the _Node_",
             "allowed_parameters": {
                 "shape": {
                     "type": "str",
@@ -104,6 +130,10 @@
                 "type": {
                     "type": "str",
                     "description": "The type of the variable (note: there is limited support for this so far "
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -122,13 +152,21 @@
                     "type": "str",
                     "description": "Which of the in-build MDF functions (linear etc.) this uses"
                 },
+                "value": {
+                    "type": "str",
+                    "description": "evaluable expression"
+                },
                 "args": {
                     "type": "dict",
                     "description": "Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"
                 },
                 "id": {
                     "type": "str",
-                    "description": "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value"
+                    "description": "Unique ID of element"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "notes": {
                     "type": "str",
@@ -136,20 +174,32 @@
                 }
             }
         },
-        "State": {
-            "definition": "A state variable of a _Node_, i.e. has a value that persists between evaluations of the _Node_.",
+        "Parameter": {
+            "definition": "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative",
             "allowed_parameters": {
                 "default_initial_value": {
                     "type": "str",
-                    "description": "The initial value of the state variable"
+                    "description": "The initial value of the parameter"
                 },
                 "value": {
-                    "type": "str",
-                    "description": "The next value of the state variable, in terms of the inputs, functions and PREVIOUS state values"
+                    "type": "EvaluableExpression",
+                    "description": "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values"
                 },
                 "time_derivative": {
                     "type": "str",
-                    "description": "How the state varies with time, i.e. ds/dt. Units of time are seconds."
+                    "description": "How the parameter with time, i.e. ds/dt. Units of time are seconds."
+                },
+                "function": {
+                    "type": "str",
+                    "description": "Which of the in-build MDF functions (linear etc.) this uses"
+                },
+                "args": {
+                    "type": "dict",
+                    "description": "Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -162,10 +212,15 @@
             }
         },
         "OutputPort": {
+            "definition": "The OutputPort is an attribute of a _Node_ which exports information to another _Node_ connected by an _Edge_",
             "allowed_parameters": {
                 "value": {
                     "type": "str",
                     "description": "The value of the OutputPort in terms of the _InputPort_ and _Function_ values"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",
@@ -178,6 +233,7 @@
             }
         },
         "Edge": {
+            "definition": "An Edge is an attribute of a _Graph_ that transmits computational results from a sender's _OutputPort_ to a receiver's _InputPort_",
             "allowed_parameters": {
                 "parameters": {
                     "type": "dict",
@@ -198,6 +254,10 @@
                 "receiver_port": {
                     "type": "str",
                     "description": "The id of the _InputPort_ on the receiver _Node_"
+                },
+                "metadata": {
+                    "type": "dict",
+                    "description": "Dict of metadata for the model element"
                 },
                 "id": {
                     "type": "str",

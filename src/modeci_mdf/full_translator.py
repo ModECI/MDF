@@ -19,7 +19,7 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 	f = open(file_path)
 	data = json.load(f)
 	
-	filtered_list = ['parameters','functions', 'states','output_ports','input_ports','notes']
+	filtered_list = ['parameters','metadata','functions', 'states','output_ports','input_ports','notes']
 	all_nodes = []
 	all_keys = []
 	def keysExtractor(nested_dictionary):
@@ -87,14 +87,20 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			flag = 0
 			if 'parameters' in d[key].keys():
 				vi += list(d[key]['parameters'].keys())
-			if 'states' in d[key].keys():
-				vi += list(d[key]['states'].keys())
-			if 'states' in d[key].keys():
-				for state in d[key]['states'].keys():
-					if 'time_derivative' in d[key]['states'][state].keys():
+				for param in d[key]['parameters'].keys():
+					if 'time_derivative' in d[key]['parameters'][param].keys():
 						flag = 1
 					if flag == 1 and 'dt' not in vi :
 						vi.append('dt')
+
+			if 'states' in d[key].keys():
+				vi += list(d[key]['states'].keys())
+			# if 'states' in d[key].keys():
+			# 	for state in d[key]['states'].keys():
+			# 		if 'time_derivative' in d[key]['states'][state].keys():
+			# 			flag = 1
+			# 		if flag == 1 and 'dt' not in vi :
+			# 			vi.append('dt')
 
 			arg_dict[key] = vi
 	get_arguments(nodes_dict)
@@ -111,32 +117,42 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			vi = []
 			li = []
 			temp_dic = {}
-			if 'states' in d[key].keys():
-				for state in d[key]['states'].keys():
+			if 'parameters' in d[key].keys():
+				for param in d[key]['parameters'].keys():
 					
-					if 'time_derivative' in d[key]['states'][state].keys():
-						li.append(state+"#state#time#derivative")
-						vi.append(d[key]['states'][state]['time_derivative'])
-					elif any(x in d[key]['states'][state]['value'] for x in expression_items):
-						li.append(state+"#state#expression")
-						vi.append(d[key]['states'][state]['value'])
+					if 'time_derivative' in d[key]['parameters'][param].keys():
+						li.append(param)
+						vi.append(d[key]['parameters'][param]['time_derivative'])
+					elif 'value' in d[key]['parameters'][param].keys():
+
+						if isinstance(d[key]['parameters'][param]['value'], str):
+							if any(x in d[key]['parameters'][param]['value'] for x in expression_items):
+								li.append(param)
+								vi.append(d[key]['parameters'][param]['value'])
+							else:
+								li.append(param)
+								vi.append(None)
+						else:
+							li.append(param)
+							vi.append(None)
 					else:
-						li.append(state+"#state")
+						li.append(param)
 						vi.append(None)
+
 			if 'output_ports' in d[key].keys():
 				for output_port in d[key]['output_ports'].keys():
 					if isinstance(d[key]['output_ports'][output_port]['value'], str): 					
 						if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
-							li.append(output_port+"#output#expression")
+							li.append(output_port)
 							vi.append(d[key]['output_ports'][output_port]['value'])
 						else:
-							li.append(output_port+"#output")
+							li.append(output_port)
 							vi.append(None)
 			for i in range(len(vi)):
 				temp_dic[li[i]] = vi[i]
 			expression_dict[key] = temp_dic
 	get_expression(nodes_dict)
-	# print("expression_dict>>>", expression_dict)
+	#print("expression_dict>>>", expression_dict)
 	
 	def createFunctions(d: Dict[str, Any] = None):
 		"""create functions for time_derivative expression for each state variable
@@ -150,26 +166,57 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			if 'functions' not in d[key].keys():
 				d[key]['functions'] = {}
 
-			if 'states' in d[key].keys():
-				statelist=[]
+			if 'parameters' in d[key].keys():
+				parameterlist=[]
 				
 				
-				for idx,state in enumerate(list(d[key]['states'].keys())):
-					if 'time_derivative' in d[key]['states'][state].keys() or any(x in d[key]['states'][state]['value'] for x in expression_items):
-						d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]={}
-						d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['function']={}
-						d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['function']= "evaluate_{}_{}_next_value".format(key, state)
-						d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['args']=  {}
-						for param in arg_dict[key]:
-							d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['args'][param] = param
+				for idx,param in enumerate(list(d[key]['parameters'].keys())):
+					if 'time_derivative' in d[key]['parameters'][param].keys():
 
 
+
+						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]={}
+						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['value']={}
+						
+
+						d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['value']=str(param) + "+" "(dt*" + str(expression_dict[key][param]) + ")" 
 					
-					statelist.append(state)
-					if idx>0:
-						for prev_state in statelist[:-1]:
+							
+						# d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args']=  {}
+						# for pp in arg_dict[key]:
+						# 	d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args'][pp] = pp
 
-							d[key]['functions']["evaluated_{}_{}_next_value".format(key, state)]['args'][prev_state] = "evaluated_{}_{}_next_value".format(key, prev_state)
+						parameterlist.append(param)
+					elif 'value' in d[key]['parameters'][param].keys():
+						if isinstance(d[key]['parameters'][param]['value'], str):
+
+							if any(x in d[key]['parameters'][param]['value'] for x in expression_items):
+								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]={}
+								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['value']={}
+						
+								d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['value']= expression_dict[key][param]
+								# d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args']=  {}
+								# for pp in arg_dict[key]:
+									# d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args'][pp] = pp
+								parameterlist.append(param)
+					
+					elif 'function' in d[key]['parameters'][param].keys():
+
+						d[key]['functions'][param]={}
+						d[key]['functions'][param]['function']={}
+						
+						d[key]['functions'][param]['function']= d[key]['parameters'][param]['function']
+						d[key]['functions'][param]['args']=  {}
+						d[key]['functions'][param]['args']=  d[key]['parameters'][param]['args']
+							
+
+
+					if idx>0:
+						for prev_param in parameterlist[:-1]:
+
+					 		# d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args'][prev_param] = "evaluated_{}_{}_next_value".format(key, prev_param)
+					 		d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['value'] = d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['value'].replace(prev_param,"evaluated_{}_{}_next_value".format(key, prev_param)) 
+
 
 
 			if 'output_ports' in d[key].keys():
@@ -178,11 +225,11 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 					if isinstance(d[key]['output_ports'][output_port]['value'], str):
 						if any(x in d[key]['output_ports'][output_port]['value'] for x in expression_items):
 							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]={}
-							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']={}
-							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['function']= "evaluate_{}_{}_value".format(key, output_port)
-							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args']=  {}
-							for param in arg_dict[key]:
-								d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args'][param] = param
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['value']={}
+							d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['value']= expression_dict[key][output_port]
+							# d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args']=  {}
+							# for param in arg_dict[key]:
+							# 	d[key]['functions']["evaluated_{}_{}_value".format(key, output_port)]['args'][param] = param
 
 
 	createFunctions(nodes_dict)
@@ -196,19 +243,21 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 			dictionary with stateful_parameters information
 		"""
 		for key in d.keys():
-			if 'states' in d[key].keys():
-				for state in list(d[key]['states'].keys()):
-					if 'time_derivative' in d[key]['states'][state].keys():
-						d[key]['parameters']['dt']=dt
-						if 'default_initial_value' in d[key]['states'][state].keys():
-							if d[key]['states'][state]['default_initial_value'] in d[key]['parameters']:
-								d[key]['states'][state]['default_initial_value'] = d[key]['parameters'][d[key]['states'][state]['default_initial_value']]
+			if 'parameters' in d[key].keys():
+				for param in list(d[key]['parameters'].keys()):
+					if 'time_derivative' in d[key]['parameters'][param].keys():
+						d[key]['parameters']['dt'] ={}
+						d[key]['parameters']['dt']['value']=dt
+						if 'default_initial_value' in d[key]['parameters'][param].keys():
+							if d[key]['parameters'][param]['default_initial_value'] in d[key]['parameters'].keys():
+								d[key]['parameters'][param]['default_initial_value'] = d[key]['parameters'][d[key]['parameters'][param]['default_initial_value']]['value']
+							
 						else:
-							d[key]['states'][state]['default_initial_value'] = 0
+							d[key]['parameters'][param]['default_initial_value'] = 0
 
-						d[key]['states'][state].pop('time_derivative')
-						d[key]['states'][state]['value']="evaluated_{}_{}_next_value".format(key, state)
-						d[key]['states']['time'] = {'default_initial_value': 0, 'value': 'evaluated_time_next_value'}
+						d[key]['parameters'][param].pop('time_derivative')
+						d[key]['parameters'][param]['value']="evaluated_{}_{}_next_value".format(key, param)
+						d[key]['parameters']['time'] = {'default_initial_value': 0, 'value': 'evaluated_time_next_value'}
 
 						d[key]['functions']["evaluated_time_next_value"]={}
 						d[key]['functions']["evaluated_time_next_value"]['function']={}
@@ -218,16 +267,20 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 					
 
 			
-    
-					elif any(x in d[key]['states'][state]['value'] for x in expression_items):
-						if 'default_initial_value' in d[key]['states'][state].keys():
-							if d[key]['states'][state]['default_initial_value'] in d[key]['parameters']:
-								d[key]['states'][state]['default_initial_value'] = d[key]['parameters'][d[key]['states'][state]['default_initial_value']]
-						else:
-							d[key]['states'][state]['default_initial_value'] = 0
+					elif 'value' in d[key]['parameters'][param].keys():
+						if isinstance(d[key]['parameters'][param]['value'], str):
+							if any(x in d[key]['parameters'][param]['value'] for x in expression_items):
+								if 'default_initial_value' in d[key]['parameters'][param].keys():
+									if d[key]['parameters'][param]['default_initial_value'] in d[key]['parameters'].keys():
+										d[key]['parameters'][param]['default_initial_value'] = d[key]['parameters'][d[key]['parameters'][param]['default_initial_value']]['value']
+									
+								else:
+									d[key]['parameters'][param]['default_initial_value'] = 0
 
-						d[key]['states'][state]['value']="evaluated_{}_{}_next_value".format(key, state)
+								d[key]['parameters'][param]['value']="evaluated_{}_{}_next_value".format(key, param)
 
+					elif 'function' in d[key]['parameters'][param].keys():
+						d[key]['parameters'].pop(param)
 				
 
 			if 'output_ports' in d[key].keys():
@@ -255,7 +308,7 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 		dr = dr.replace('state_example', 'stateful_parameters_example')
 		return eval(dr)
 	data= repl(data)
-	return data, expression_dict, arg_dict
+	return data
 	
 
 

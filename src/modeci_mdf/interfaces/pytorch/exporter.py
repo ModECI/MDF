@@ -14,7 +14,7 @@ import onnx.defs
 
 import torch
 
-from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Function
+from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Parameter
 from modeci_mdf.onnx_functions import onnx_opset_version as modeci_onnx_opset_version
 
 
@@ -301,7 +301,9 @@ def torchnode_to_mdfnode(
     else:
         arguments, parameters = process_torch_schema(node, consts, port_mapper)
 
-    mdf_node = Node(id=make_node_id(node), parameters=parameters)
+    mdf_node = Node(id=make_node_id(node))
+    for p in parameters:
+        mdf_node.parameters.append(Parameter(id=p,value=parameters[p]))
 
     # Add any output ports
     for o in outputs:
@@ -325,9 +327,11 @@ def torchnode_to_mdfnode(
                 InputPort(id=ip_name, shape=shape, type=str(inp_type))
             )
 
-    # Add function
-    f = Function(id=make_func_id(node), function=op, args=arguments)
-    mdf_node.functions.append(f)
+    # Add Parameter
+    if type(arguments)==list:
+        arguments = {'arguments':arguments}
+    f = Parameter(id=make_func_id(node), function=op, args=arguments)
+    mdf_node.parameters.append(f)
 
     return mdf_node
 

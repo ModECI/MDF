@@ -17,7 +17,7 @@ def main():
     
    
     file_path = 'ABCD.json'
-    data, expression_dict, arg_dict = convert_states_to_stateful_parameters('../'+file_path)
+    data = convert_states_to_stateful_parameters('../'+file_path)
     # print(data)
     with open('Translated_'+ file_path, 'w') as fp:
         json.dump(data, fp,  indent=4)
@@ -26,32 +26,6 @@ def main():
     if "-run" in sys.argv:
 
         
-        for node, keys in expression_dict.items():
-            for key in keys.keys():
-                if ("#state#time#derivative" in key) and (expression_dict[node][key] is not None):
-                    _add_mdf_function("evaluate_{}_{}_next_value".format(node, key.split('#')[0]),
-                                      description="computing the next value of stateful parameter {}".format(key.split('#')[0]),
-                                      arguments=arg_dict[node], expression_string=str(key.split('#')[0]) + "+" "(dt*" + str(
-                            expression_dict[node][key]) + ")", )
-                
-                elif ("#state#expression" in key) and (expression_dict[node][key] is not None):
-
-                    _add_mdf_function("evaluate_{}_{}_next_value".format(node, key.split('#')[0]),
-                                      description="computing the next value of stateful parameter {}".format(key.split('#')[0]),
-                                      arguments=arg_dict[node], expression_string=expression_dict[node][key])
-
-                elif ("#output#expression" in key) and (expression_dict[node][key] is not None):
-
-                    _add_mdf_function("evaluate_{}_{}_value".format(node, key.split('#')[0]),
-                                      description="computing the value of output port {}".format(key.split('#')[0]),
-                                      arguments=arg_dict[node], expression_string=expression_dict[node][key])
-
-
-                else:
-
-                    print('No need to create MDF function for node %s, key %s since there is no expression!' % (
-                        node, key))
-
         verbose = True
                 
             
@@ -71,9 +45,9 @@ def main():
 
         eg_old.evaluate(array_format=format)
 
-        print("Old file output value>>>",eg.enodes['D'].evaluable_outputs['output_1'].curr_value)
+        print("New file output value>>>",eg.enodes['D'].evaluable_outputs['output_1'].curr_value)
 
-        print("New file output value>>>",eg_old.enodes['D'].evaluable_outputs['output_1'].curr_value)
+        print("Old file output value>>>",eg_old.enodes['D'].evaluable_outputs['output_1'].curr_value)
         
       
 

@@ -1,7 +1,7 @@
 import pytest
 
 
-def test_simple_scheduler_main(tmpdir):
+def test_execution_engine_main(tmpdir):
 
     import modeci_mdf.execution_engine
     from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
@@ -37,6 +37,24 @@ def test_simple_scheduler_main(tmpdir):
             assert output==1
             output = eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value
             assert output==0
+
+
+def test_execution_engine_onnx(tmpdir):
+
+    import modeci_mdf.execution_engine
+    import numpy as np
+
+    mdf_formats = ['json','yaml']
+    from neuromllite.utils import FORMAT_NUMPY
+
+    array_format = FORMAT_NUMPY
+
+    for mdf_format in mdf_formats:
+
+            eg = modeci_mdf.execution_engine.main("examples/ONNX/ab.%s"%mdf_format, array_format=array_format)
+            output = eg.enodes['Mul_3'].evaluable_outputs['_4'].curr_value
+            assert output==5
+
 
 
 _abc_conditions_expected_output = [

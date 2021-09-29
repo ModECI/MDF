@@ -10,6 +10,7 @@ import psyneulink
 import sys
 import copy
 
+
 from distutils.dir_util import copy_tree
 from pathlib import Path
 
@@ -69,7 +70,8 @@ def chdir_back_to_root(mocker):
 
 
 @pytest.mark.parametrize("script", example_scripts)
-def test_example(script, tmpdir):
+@pytest.mark.parametrize("additional_args", [['-run']])
+def test_example(script, tmpdir, additional_args):
     """
     Run the examples/MDF
     """
@@ -91,8 +93,11 @@ def test_example(script, tmpdir):
         copy_tree(dir_path, tmpdir.strpath)
         os.chdir(tmpdir)
     else:
-        copy_tree("%s/.."%dir_path, tmpdir.strpath)
-        os.chdir("%s/translation"%tmpdir)
+        copy_tree("%s/.." % dir_path, tmpdir.strpath)
+        os.chdir("%s/translation" % tmpdir)
 
-    print("Running script %s in working dir %s"%(full_script_path, os.getcwd()))
+    print(f"Running script {full_script_path} in working dir {os.getcwd()}")
+    orig_argv = sys.argv
+    sys.argv = [os.path.basename(full_script_path)] + additional_args
     runpy.run_path(os.path.basename(full_script_path), run_name="__main__")
+    sys.argv = orig_argv

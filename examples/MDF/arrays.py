@@ -12,26 +12,28 @@ def main():
     mod_graph = Graph(id="array_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input_node", parameters={"input_level": [[1, 2.], [3, 4]]})
+    input_node = Node(id="input_node")
+
+    input_node.parameters.append(Parameter(id="input_level", value=[[1, 2.], [3, 4]]))
 
     op1 = OutputPort(id="out_port", value="input_level")
     input_node.output_ports.append(op1)
     mod_graph.nodes.append(input_node)
 
-    middle_node = Node(
-        id="middle_node", parameters={"slope": 0.5, "intercept": np.array([[0, 1.], [2, 2]])}
-    )
+    middle_node = Node(id="middle_node")
+    middle_node.parameters.append(Parameter(id="slope", value=0.5))
+    middle_node.parameters.append(Parameter(id="intercept", value=np.array([[0, 1.], [2, 2]])))
 
     ip1 = InputPort(id="input_port1")
     middle_node.input_ports.append(ip1)
     mod_graph.nodes.append(middle_node)
 
-    f1 = Function(
+    f1 = Parameter(
         id="linear_1",
         function="linear",
         args={"variable0": ip1.id, "slope": "slope", "intercept": "intercept"},
     )
-    middle_node.functions.append(f1)
+    middle_node.parameters.append(f1)
 
     middle_node.output_ports.append(OutputPort(id="output_1", value="linear_1"))
 

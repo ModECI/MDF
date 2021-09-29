@@ -6,7 +6,8 @@ pip install .
 # Note this:
 #    1) runs examples to regenerate yaml/json...
 #    2) tests examples with simple_scheduler
-pytest
+pytest -v -ra tests/interfaces/pytorch/*py
+pytest -v -ra tests/*py
 
 cd examples/MDF
 
@@ -46,6 +47,19 @@ mv abc_conditions_example.gv.png images/abc_conditions.png
 
 cd ../../examples/NeuroML
 ./regenerateAndTest.sh
+
+## Test ONNX examples
+
+cd ../../examples/ONNX
+python simple_ab.py -run
+python simple_abc.py
+python simple_abcd.py
+
+## Test ACT-R examples
+
+cd ../../examples/ACT-R
+python count.py
+python addition.py
 
 ## Generate the docs
 
