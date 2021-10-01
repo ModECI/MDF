@@ -629,9 +629,16 @@ class EvaluableNode:
                 )
             all_req_vars = []
 
-            if p.value is not None and type(p.value)==str:
-                param_expr = sympy.simplify(p.value)
-                all_req_vars.extend([str(s) for s in param_expr.free_symbols])
+            if p.value is not None and type(p.value) == str:
+                if p.value[0] == "[" and p.value[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = parse_str_as_list(p.value)
+                else:
+                    arg_expr_list = [p.value]
+
+                for e in arg_expr_list:
+                    param_expr = sympy.simplify(e)
+                    all_req_vars.extend([str(s) for s in param_expr.free_symbols])
 
             if p.args is not None:
                 for arg in p.args:

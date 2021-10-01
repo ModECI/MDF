@@ -588,14 +588,26 @@ class Parameter(MdfBaseWithId):
         super().__init__(**kwargs)
 
     def is_stateful(self):
+        from modeci_mdf.execution_engine import parse_str_as_list
 
         if self.time_derivative is not None:
             return True
         if self.default_initial_value is not None:
             return True
         if self.value is not None and type(self.value)==str:
-            param_expr = sympy.simplify(self.value)
-            sf = self.id in [str(s) for s in param_expr.free_symbols]
+            # If we are dealing with a list of symbols, each must treated separately
+            if self.value[0] == "[" and self.value[-1] == "]":
+                # Use the Python interpreter to parse this into a List[str]
+                arg_expr_list = parse_str_as_list(self.value)
+            else:
+                arg_expr_list = [self.value]
+
+            req_vars = []
+
+            for e in arg_expr_list:
+                param_expr = sympy.simplify(e)
+                req_vars.extend([str(s) for s in param_expr.free_symbols])
+            sf = self.id in req_vars
             print('Checking whether %s is stateful, %s: %s'%(self,param_expr.free_symbols,sf))
             return sf
         return False
