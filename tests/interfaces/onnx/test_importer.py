@@ -33,6 +33,10 @@ def test_ab():
     # Get the translated ONNX model
     onnx_models = mdf_to_onnx(mdf_model)
 
+    # Bluffing onnx that our model is 13 when it is actually 15. This is needed for older onnxruntime
+    # installations to run this model. See https://github.com/onnx/onnx/issues/3205
+    onnx_models[0].opset_import[0].version = 13
+
     # Get the result of running the ONNX model
     session = backend.prepare(onnx_models[0])
     onnx_output = session.run(test_input)  # run returns a list with the actual result and type
@@ -63,6 +67,10 @@ def test_abc():
     # Get the translated ONNX model
     onnx_models = mdf_to_onnx(mdf_model)
 
+    # Bluffing onnx that our model is 13 when it is actually 15. This is needed for older onnxruntime
+    # installations to run this model. See https://github.com/onnx/onnx/issues/3205
+    onnx_models[0].opset_import[0].version = 13
+    
     # Get the result of running the ONNX model
     session = backend.prepare(onnx_models[0])
     onnx_output = session.run(test_input)  # run returns a list with the actual result and type
