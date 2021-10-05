@@ -121,7 +121,11 @@ def onnx_node_to_mdf(
 
         for p in params_dict:
             if type(params_dict[p]) == Graph:
-                mdf_node.parameters.append(Parameter(id=p, value={'graph_%s'%params_dict[p].id:params_dict[p]}))
+                mdf_node.parameters.append(
+                    Parameter(
+                        id=p, value={"graph_%s" % params_dict[p].id: params_dict[p]}
+                    )
+                )
             else:
                 mdf_node.parameters.append(Parameter(id=p, value=params_dict[p]))
 
@@ -341,22 +345,7 @@ def convert_file(input_file: str):
     onnx.checker.check_model(onnx_model)
     mdf_model = onnx_to_mdf(onnx_model)
     mdf_model.to_json_file(f"{out_filename}.json")
-
-    # Lets convert to YAML as well
-    try:
-        import json
-        import yaml
-
-        with open(f"{out_filename}.yaml", "w") as file:
-            yaml.dump(
-                json.loads(mdf_model.to_json()),
-                file,
-                default_flow_style=None,
-                width=120,
-            )
-        print(f"YAML version written to {out_filename}.yaml")
-    except ImportError as ex:
-        print("Couldn't load pyaml, skipping YAML output.")
+    mdf_model.to_yaml_file(f"{out_filename}.yaml")
 
 
 def main():
