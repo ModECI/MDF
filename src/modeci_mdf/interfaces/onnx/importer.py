@@ -201,9 +201,9 @@ def main():
 
     args = parser.parse_args()
 
-    convert_file(args.input_file)
+    convert_mdf_file_to_onnx(args.input_file)
 
-def convert_file(input_file: str):
+def convert_mdf_file_to_onnx(input_file: str):
     """
     Converter from MDF to ONNX. Takes in a JSON/ONNX file and generates ONNX files.
 

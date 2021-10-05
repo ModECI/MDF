@@ -2,40 +2,81 @@ from modeci_mdf.utils import load_mdf
 from modeci_mdf.interfaces.onnx import mdf_to_onnx
 
 import onnx
-import unittest
 from pathlib import Path
 
-class SimpleTestCase(unittest.TestCase):
-    def test_ab(self):
-        base_path = Path(__file__).parent
+from modeci_mdf.execution_engine import EvaluableGraph
+import onnxruntime as rt
+import onnxruntime.backend as backend
+import numpy as np
 
-        filename = "examples/ONNX/ab.json"
-        file_path = (base_path / "../../.." / filename).resolve()
-        mdf_model = load_mdf(str(file_path))
-        onnx_models = mdf_to_onnx(mdf_model)
 
-        reference_onnx_filename = "examples/ONNX/ab.onnx"
-        reference_file_path = (base_path / "../../.." / reference_onnx_filename).resolve()
-        reference_onnx_model = onnx.load(reference_file_path)
+def test_ab():
+    base_path = Path(__file__).parent
 
-        for onnx_model in onnx_models:
-            assert onnx.checker.check_model(onnx_model) is None
+    filename = "examples/ONNX/ab.json"
+    file_path = (base_path / "../../.." / filename).resolve()
 
-    def test_abc(self):
-        base_path = Path(__file__).parent
+    # Load the MDF model
+    mdf_model = load_mdf(str(file_path))
 
-        filename = "examples/ONNX/abc_basic-mdf.json"
-        file_path = (base_path / "../../.." / filename).resolve()
-        mdf_model = load_mdf(str(file_path))
-        onnx_models = mdf_to_onnx(mdf_model)
+    # Test input
+    test_input = np.array([[0, 0, 0], [1, 1, 1]], dtype=np.float32)
 
-        reference_onnx_filename = "examples/ONNX/abc_basic.onnx"
-        reference_file_path = (base_path / "../../.." / reference_onnx_filename).resolve()
-        reference_onnx_model = onnx.load(reference_file_path)
+    # Get the result of MDF execution
+    mdf_executable = EvaluableGraph(mdf_model.graphs[0],
+                                    verbose=False)
+    # TODO: the int type cast is necessaryf or now because the nodes' parameters are constants and inputs must have
+    #  the same type
+    mdf_executable.evaluate(initializer={"input": test_input.astype(int)})
+    mdf_output = mdf_executable.enodes['Mul_3'].evaluable_outputs['_4'].curr_value
 
-        for onnx_model in onnx_models:
-            assert onnx.checker.check_model(onnx_model) is None
+    # Get the translated ONNX model
+    onnx_models = mdf_to_onnx(mdf_model)
+
+    # Get the result of running the ONNX model
+    session = backend.prepare(onnx_models[0])
+    onnx_output = session.run(test_input)  # run returns a list with the actual result and type
+    onnx_res_output = np.array(onnx_output[0])
+    # print(f"Output calculated by onnxruntime: {onnx_res_output} and MDF: {mdf_output.astype(float)}")
+
+    assert np.array_equal(onnx_res_output, mdf_output)
+
+
+def test_abc():
+    base_path = Path(__file__).parent
+
+    filename = "examples/ONNX/abc_basic-mdf.json"
+    file_path = (base_path / "../../.." / filename).resolve()
+
+    # Load the MDF model
+    mdf_model = load_mdf(str(file_path))
+
+    # Test input
+    test_input = np.array([[0, 0, 0], [1, 1, 1]], dtype=np.float32)
+
+    # Get the result of MDF execution
+    mdf_executable = EvaluableGraph(mdf_model.graphs[0],
+                                    verbose=False)
+    mdf_executable.evaluate(initializer={"input": test_input})
+    mdf_output = mdf_executable.enodes['Cos_2'].evaluable_outputs['_3'].curr_value
+
+    # Get the translated ONNX model
+    onnx_models = mdf_to_onnx(mdf_model)
+
+    # Get the result of running the ONNX model
+    session = backend.prepare(onnx_models[0])
+    onnx_output = session.run(test_input)  # run returns a list with the actual result and type
+    onnx_res_output = np.array(onnx_output[0])
+
+    assert np.array_equal(onnx_res_output, mdf_output)
+    #reference_onnx_filename = "examples/ONNX/abc_basic.onnx"
+    #reference_file_path = (base_path / "../../.." / reference_onnx_filename).resolve()
+    #reference_onnx_model = onnx.load(reference_file_path)
+
+    #for onnx_model in onnx_models:
+    #    assert onnx.checker.check_model(onnx_model) is None
 
 
 if __name__ == '__main__':
-    unittest.main()
+    test_ab()
+    test_abc()
