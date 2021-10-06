@@ -217,9 +217,11 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
 
         else:
             # First, check if kwargs contains any inputs
-            for kw, arg in kwargs.items():
-                if kw in input_names:
-                    inputs_dict[kw] = arg
+            for kw in input_names:
+                try:
+                    inputs_dict[kw] = kwargs[kw]
+                except KeyError:
+                    pass
 
             # Assign any input names that have not yet been assigned by kwargs the remaning positional args
             arg_i = 0
