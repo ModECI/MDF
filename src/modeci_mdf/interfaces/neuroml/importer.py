@@ -55,7 +55,6 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
         )
         net.populations.append(pop)
 
-
         if len(node.input_ports) > 1:
             raise Exception("Currently only max 1 input port supported in NeuroML...")
 
@@ -74,7 +73,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
         on_start = None
 
         for p in node.parameters:
-            print('Converting %s'%p)
+            print("Converting %s" % p)
             if p.value is not None:
                 try:
                     v_num = float(p.value)
@@ -85,7 +84,10 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
 
                     ct.add(lems.Exposure(p.id, "none"))
                     dv = lems.DerivedVariable(
-                        name=p.id, dimension="none", value="%s" % (p.value), exposure=p.id
+                        name=p.id,
+                        dimension="none",
+                        value="%s" % (p.value),
+                        exposure=p.id,
                     )
                     ct.dynamics.add(dv)
 
@@ -109,9 +111,10 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
                     if on_start is None:
                         on_start = lems.OnStart()
                         ct.dynamics.add(on_start)
-                    sa = lems.StateAssignment(variable=p.id, value=p.default_initial_value)
+                    sa = lems.StateAssignment(
+                        variable=p.id, value=p.default_initial_value
+                    )
                     on_start.actions.append(sa)
-
 
                 if p.time_derivative:
                     td = lems.TimeDerivative(variable=p.id, value=p.time_derivative)

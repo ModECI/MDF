@@ -70,7 +70,7 @@ def chdir_back_to_root(mocker):
 
 
 @pytest.mark.parametrize("script", example_scripts)
-@pytest.mark.parametrize("additional_args", [['-run']])
+@pytest.mark.parametrize("additional_args", [["-run"]])
 def test_example(script, tmpdir, additional_args):
     """
     Run the examples/MDF

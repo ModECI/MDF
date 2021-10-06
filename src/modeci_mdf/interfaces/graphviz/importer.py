@@ -29,7 +29,7 @@ LEVEL_2 = 2
 LEVEL_3 = 3
 
 COLOR_MAIN = "#444444"
-#COLOR_BG_MAIN = "#999911"
+# COLOR_BG_MAIN = "#999911"
 COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
 COLOR_PARAM = "#1666ff"
@@ -122,13 +122,13 @@ def mdf_to_graphviz(
     for node in mdf_graph.nodes:
         print("    Node: %s" % node.id)
         color = COLOR_MAIN
-        penwidth = '1'
-        #bg_color = COLOR_BG_MAIN
+        penwidth = "1"
+        # bg_color = COLOR_BG_MAIN
 
         if node.metadata is not None:
-            if 'color' in node.metadata:
-                color = color_rgb_to_hex(node.metadata['color'])
-                penwidth = '2'
+            if "color" in node.metadata:
+                color = color_rgb_to_hex(node.metadata["color"])
+                penwidth = "2"
 
         graph.attr(
             "node",
@@ -136,7 +136,7 @@ def mdf_to_graphviz(
             style="rounded",
             shape="box",
             fontcolor=COLOR_MAIN,
-            penwidth=penwidth
+            penwidth=penwidth,
         )
         info = '<table border="0" cellborder="0">'
         info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
@@ -146,9 +146,9 @@ def mdf_to_graphviz(
             info += "<tr><td>%s" % format_label("METADATA")
 
             for m in node.metadata:
-                info += format_standard_func_long('%s = %s'%(m,node.metadata[m]))
+                info += format_standard_func_long("%s = %s" % (m, node.metadata[m]))
 
-            info += '</td></tr>'
+            info += "</td></tr>"
 
         if level >= LEVEL_2:
             if node.parameters and len(node.parameters) > 0:
@@ -166,7 +166,9 @@ def mdf_to_graphviz(
                 for p in node.parameters:
                     if p.function is not None:
                         argstr = (
-                            ", ".join([match_in_expr(str(p.args[a]), node) for a in p.args])
+                            ", ".join(
+                                [match_in_expr(str(p.args[a]), node) for a in p.args]
+                            )
                             if p.args
                             else "???"
                         )
@@ -204,7 +206,6 @@ def mdf_to_graphviz(
                             format_label("PARAMETER"), format_param(p.id), v
                         )
 
-
             if node.functions and len(node.functions) > 0:
                 for f in node.functions:
                     argstr = (
@@ -231,14 +232,15 @@ def mdf_to_graphviz(
                             )
                         )
 
-
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
                     info += "<tr><td>{}{} = {} {}</td></tr>".format(
                         format_label("OUT"),
                         format_output(op.id),
                         match_in_expr(op.value, node),
-                        "(shape: %s)" % op.shape if op.shape is not None else ''
+                        "(shape: %s)" % op.shape
+                        if op.shape is not None
+                        else ""
                         if level >= LEVEL_2 and op.shape is not None
                         else "",
                     )
@@ -303,4 +305,6 @@ if __name__ == "__main__":
 
     print("------------------")
     # nmllite_file = example.replace('.json','.nmllite.json')
-    mdf_to_graphviz(mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2]))
+    mdf_to_graphviz(
+        mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2])
+    )

@@ -165,72 +165,75 @@ def get_module_declaration_text(
 
 
 def generate_main_forward(nodes, execution_order, constructor_calls):
-	"""
-	Helper function to generate the main forward method that will specify
-	the execution of the pytorch model. This requires proper ordering of module
-	calls as well as preservation of variables.
+    """
+    Helper function to generate the main forward method that will specify
+    the execution of the pytorch model. This requires proper ordering of module
+    calls as well as preservation of variables.
 
-	For example:
-		x1 = Function1(input)
-		x2 = Function2(x1)
+    For example:
+            x1 = Function1(input)
+            x2 = Function2(x1)
 
-	There are two categories of temporary variables to serve this purpose,
-	standard and non standard variables (svar and nsvar). Standard are considered
-	to be variable assignments that are not the product of an operation, ie:
+    There are two categories of temporary variables to serve this purpose,
+    standard and non standard variables (svar and nsvar). Standard are considered
+    to be variable assignments that are not the product of an operation, ie:
 
-		svar_1 = 5
+            svar_1 = 5
 
-	Where non standard variables are to preserve the hierarchy and flow of
-	information in the proper order.
+    Where non standard variables are to preserve the hierarchy and flow of
+    information in the proper order.
 
-		svar_1 = 5
-		nsvar_1 = abs(svar_1)
-		svar_2 = 6
-		nsvar_2 = add(nsvar_1, svar_2)
+            svar_1 = 5
+            nsvar_1 = abs(svar_1)
+            svar_2 = 6
+            nsvar_2 = add(nsvar_1, svar_2)
 
-	Function returns the main forward call that will be used to define pytorch
-	model.
-	"""
-	node_dict = {node.id:node for node in nodes}
+    Function returns the main forward call that will be used to define pytorch
+    model.
+    """
+    node_dict = {node.id: node for node in nodes}
 
-	# Index intermediate variables
-	std_var_idx = 0
-	nstd_var_idx = 0
+    # Index intermediate variables
+    std_var_idx = 0
+    nstd_var_idx = 0
 
-	# Map intermediate variable name to the module that produced it
-	return_vars = defaultdict(list)
+    # Map intermediate variable name to the module that produced it
+    return_vars = defaultdict(list)
 
-	main_forward = "\n\tdef forward(self, input):"
+    main_forward = "\n\tdef forward(self, input):"
 
-	# TODO: Handle multi-input graphs
-	for idx, node_name in enumerate(execution_order):
-		if idx==0:
-			standard_arg = "input"
-		else:
-			standard_arg = "svar_{}".format(std_var_idx-1)
+    # TODO: Handle multi-input graphs
+    for idx, node_name in enumerate(execution_order):
+        if idx == 0:
+            standard_arg = "input"
+        else:
+            standard_arg = "svar_{}".format(std_var_idx - 1)
 
-		node = node_dict[node_name]
-		non_standard_args = []
-		if node.parameters:
-			for param in node.parameters:
-				np.set_printoptions(threshold=sys.maxsize)
-				str_commas = np.array2string(param.value, separator=", ")
-				# TODO: Resolve ordering
-				pre_expression = "\n\t\tnsvar_{} = torch.Tensor({})".format(nstd_var_idx, str_commas)
-				main_forward += pre_expression
-				non_standard_args.append("nsvar_{}".format(nstd_var_idx))
-				nstd_var_idx+=1
+        node = node_dict[node_name]
+        non_standard_args = []
+        if node.parameters:
+            for param in node.parameters:
+                np.set_printoptions(threshold=sys.maxsize)
+                str_commas = np.array2string(param.value, separator=", ")
+                # TODO: Resolve ordering
+                pre_expression = "\n\t\tnsvar_{} = torch.Tensor({})".format(
+                    nstd_var_idx, str_commas
+                )
+                main_forward += pre_expression
+                non_standard_args.append("nsvar_{}".format(nstd_var_idx))
+                nstd_var_idx += 1
 
-		args = [standard_arg]
-		args.extend(non_standard_args)
+        args = [standard_arg]
+        args.extend(non_standard_args)
 
-		expression = "\n\t\tsvar_{} = self.{}({})".format(std_var_idx, node_name, ",".join(args))
-		main_forward += expression
-		std_var_idx+=1
-	main_forward+="\n\t\treturn {}".format("svar_{}".format(std_var_idx-1))
+        expression = "\n\t\tsvar_{} = self.{}({})".format(
+            std_var_idx, node_name, ",".join(args)
+        )
+        main_forward += expression
+        std_var_idx += 1
+    main_forward += "\n\t\treturn {}".format("svar_{}".format(std_var_idx - 1))
 
-
-	return main_forward
+    return main_forward
 
 
 def build_script(nodes, execution_order, conditions=None):
@@ -290,57 +293,57 @@ def build_script(nodes, execution_order, conditions=None):
 
 
 def _generate_scripts_from_json(model_input):
-	"""
-	Helper function to parse MDF objects from MDF json representation as well
-	as load the h5 weights for large weight matrices. Uses MDF scheduler to
-	determine proper ordering of nodes, and calls `build_script`.
+    """
+    Helper function to parse MDF objects from MDF json representation as well
+    as load the h5 weights for large weight matrices. Uses MDF scheduler to
+    determine proper ordering of nodes, and calls `build_script`.
 
-	Returns dictionary of scripts where key = name of mdf model, value is string
-	representation of script.
-	"""
-	file_dir = os.path.dirname(model_input)
+    Returns dictionary of scripts where key = name of mdf model, value is string
+    representation of script.
+    """
+    file_dir = os.path.dirname(model_input)
 
-	model = load_mdf(model_input)
-	scripts = {}
+    model = load_mdf(model_input)
+    scripts = {}
 
-	for graph in model.graphs:
-		nodes = graph.nodes
-		# Read weights.h5 if exists
-		if "weights.h5" in os.listdir(file_dir):
-			weight_dict = h5py.File(os.path.join(file_dir, "weights.h5"), 'r')
+    for graph in model.graphs:
+        nodes = graph.nodes
+        # Read weights.h5 if exists
+        if "weights.h5" in os.listdir(file_dir):
+            weight_dict = h5py.File(os.path.join(file_dir, "weights.h5"), "r")
 
-			# Hack to fix problem with HDF5 parameters
-			for node in graph.nodes:
-				if node.parameters:
-					for param in node.parameters:
-						param_key = param.id
-						param_val = param.value
-						if param_key in ["weight", "bias"] and type(param_val)==str:
-							# Load and reassign
-							array = weight_dict[param_val][:]
-							#np.set_printoptions(threshold=sys.maxsize)
-							param.value = array
+            # Hack to fix problem with HDF5 parameters
+            for node in graph.nodes:
+                if node.parameters:
+                    for param in node.parameters:
+                        param_key = param.id
+                        param_val = param.value
+                        if param_key in ["weight", "bias"] and type(param_val) == str:
+                            # Load and reassign
+                            array = weight_dict[param_val][:]
+                            # np.set_printoptions(threshold=sys.maxsize)
+                            param.value = array
 
-		evaluable_graph = EvaluableGraph(graph, verbose=False)
-		enodes = evaluable_graph.enodes
-		edges = evaluable_graph.ordered_edges
-		try:
-			conditions = evaluable_graph.conditions
-		except AttributeError:
-			conditions = {}
+        evaluable_graph = EvaluableGraph(graph, verbose=False)
+        enodes = evaluable_graph.enodes
+        edges = evaluable_graph.ordered_edges
+        try:
+            conditions = evaluable_graph.conditions
+        except AttributeError:
+            conditions = {}
 
-		# Use edges and nodes to construct execution order
-		execution_order = []
-		for idx, edge in enumerate(edges):
-			if idx==0:
-				execution_order.append(edge.sender)
-			execution_order.append(edge.receiver)
+        # Use edges and nodes to construct execution order
+        execution_order = []
+        for idx, edge in enumerate(edges):
+            if idx == 0:
+                execution_order.append(edge.sender)
+            execution_order.append(edge.receiver)
 
-		# Build script
-		script = build_script(nodes, execution_order, conditions=conditions)
-		scripts[graph.id] = script
+        # Build script
+        script = build_script(nodes, execution_order, conditions=conditions)
+        scripts[graph.id] = script
 
-	return scripts
+    return scripts
 
 
 def _script_to_model(script):

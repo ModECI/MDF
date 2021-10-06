@@ -18,14 +18,14 @@ def build_model() -> Model:
 
     # Declarative memory
     dm_node = Node(id="declarative_memory")
-    dm_node.parameters.append(Parameter(id="chunks",value=[]))
-    dm_node.parameters.append(Parameter(id="chunk_types",value=[]))
+    dm_node.parameters.append(Parameter(id="chunks", value=[]))
+    dm_node.parameters.append(Parameter(id="chunk_types", value=[]))
     dm_ip = InputPort(id="dm_input")
     dm_node.input_ports.append(dm_ip)
     retrieval_f = Parameter(
         id="retrieve_chunk",
         function="retrieve_chunk",
-        args={"pattern": dm_ip.id, "dm_chunks": "chunks", "types": "chunk_types"}
+        args={"pattern": dm_ip.id, "dm_chunks": "chunks", "types": "chunk_types"},
     )
     dm_node.parameters.append(retrieval_f)
     dm_op = OutputPort(id="dm_output", value=retrieval_f.id)
@@ -42,19 +42,20 @@ def build_model() -> Model:
 
     # Goal buffer with state
     goal_node = Node(id="goal_buffer")
-    goal_node.parameters.append(Parameter(id="first_goal",value={}))
+    goal_node.parameters.append(Parameter(id="first_goal", value={}))
     goal_ip = InputPort(id="goal_input")
     goal_node.input_ports.append(goal_ip)
     goal_f = Parameter(
         id="change_goal",
         function="change_goal",
-        args={"pattern": goal_ip.id, "curr_goal": "goal_state"}
+        args={"pattern": goal_ip.id, "curr_goal": "goal_state"},
     )
     goal_node.parameters.append(goal_f)
     goal_state = Parameter(
         id="goal_state",
         default_initial_value="first_goal",
-        value="first_goal if %s == {} else %s" % (goal_ip.id, goal_f.id))
+        value="first_goal if %s == {} else %s" % (goal_ip.id, goal_f.id),
+    )
     goal_node.parameters.append(goal_state)
     goal_op = OutputPort(id="goal_output", value=goal_state.id)
     goal_node.output_ports.append(goal_op)
@@ -62,7 +63,7 @@ def build_model() -> Model:
 
     # Procedural memory
     pm_node = Node(id="procedural_memory")
-    pm_node.parameters.append(Parameter(id="productions",value=[]))
+    pm_node.parameters.append(Parameter(id="productions", value=[]))
     pm_op = OutputPort(id="pm_output", value="productions")
     pm_node.output_ports.append(pm_op)
     mod_graph.nodes.append(pm_node)
@@ -76,7 +77,11 @@ def build_model() -> Model:
     pattern_f = Parameter(
         id="pattern_matching_function",
         function="pattern_matching_function",
-        args={"productions": pattern_ip1.id, "goal": pattern_ip2.id, "retrieval": pattern_ip3.id}
+        args={
+            "productions": pattern_ip1.id,
+            "goal": pattern_ip2.id,
+            "retrieval": pattern_ip3.id,
+        },
     )
     pattern_node.parameters.append(pattern_f)
     pattern_op = OutputPort(id="pattern_output", value=pattern_f.id)
@@ -90,7 +95,7 @@ def build_model() -> Model:
     conflict_f = Parameter(
         id="conflict_resolution_function",
         function="conflict_resolution_function",
-        args={"productions": conflict_ip.id}
+        args={"productions": conflict_ip.id},
     )
     conflict_node.parameters.append(conflict_f)
     conflict_op1 = OutputPort(id="conflict_output_to_fire_prod", value=conflict_f.id)
@@ -103,18 +108,18 @@ def build_model() -> Model:
     fire_prod_ip = InputPort(id="fire_prod_input")
     fire_prod_node.input_ports.append(fire_prod_ip)
     fire_prod_f1 = Parameter(
-        id="update_goal",
-        function="update_goal",
-        args={"production": fire_prod_ip.id}
+        id="update_goal", function="update_goal", args={"production": fire_prod_ip.id}
     )
     fire_prod_f2 = Parameter(
         id="update_retrieval",
         function="update_retrieval",
-        args={"production": fire_prod_ip.id}
+        args={"production": fire_prod_ip.id},
     )
     fire_prod_node.parameters.extend([fire_prod_f1, fire_prod_f2])
     fire_prod_op1 = OutputPort(id="fire_prod_output_to_goal", value=fire_prod_f1.id)
-    fire_prod_op2 = OutputPort(id="fire_prod_output_to_retrieval", value=fire_prod_f2.id)
+    fire_prod_op2 = OutputPort(
+        id="fire_prod_output_to_retrieval", value=fire_prod_f2.id
+    )
     fire_prod_node.output_ports.extend([fire_prod_op1, fire_prod_op2])
     mod_graph.nodes.append(fire_prod_node)
 
@@ -125,7 +130,7 @@ def build_model() -> Model:
     check_f = Parameter(
         id="check_termination",
         function="check_termination",
-        args={"production": check_ip.id}
+        args={"production": check_ip.id},
     )
     check_node.parameters.append(check_f)
     check_op = OutputPort(id="check_output", value=check_f.id)
@@ -206,16 +211,13 @@ def build_model() -> Model:
         dependencies=[
             Condition(type="EveryNCalls", dependencies=retrieval_node.id, n=1),
             Condition(type="EveryNCalls", dependencies=goal_node.id, n=1),
-            Condition(type="EveryNCalls", dependencies=dm_node.id, n=1)
-        ]
+            Condition(type="EveryNCalls", dependencies=dm_node.id, n=1),
+        ],
     )
     cond_conflict = Condition(type="JustRan", dependencies=pattern_node.id)
     cond_fire_prod = Condition(type="JustRan", dependencies=conflict_node.id)
     cond_check = Condition(type="JustRan", dependencies=conflict_node.id)
-    cond_term = Condition(
-        type="JustRan",
-        dependencies=[check_node.id]
-    )
+    cond_term = Condition(type="JustRan", dependencies=[check_node.id])
     mod_graph.conditions = ConditionSet(
         node_specific={
             dm_node.id: cond_dm,
@@ -225,9 +227,9 @@ def build_model() -> Model:
             pattern_node.id: cond_pattern,
             conflict_node.id: cond_conflict,
             fire_prod_node.id: cond_fire_prod,
-            check_node.id: cond_check
+            check_node.id: cond_check,
         },
-        termination={"check_term_true": cond_term}
+        termination={"check_term_true": cond_term},
     )
 
     return mod
@@ -328,14 +330,18 @@ def actr_to_mdf(file_name: str):
 
         # Generate MDF files
         mod.id = (
-            file_name[file_name.rindex("/")+1:-5]
+            file_name[file_name.rindex("/") + 1 : -5]
             if "/" in file_name
             else file_name[:-5]
         )
         mod.graphs[0].id = mod.id + "_graph"
         mod.graphs[0].get_node("declarative_memory").get_parameter("chunks").value = dm
-        mod.graphs[0].get_node("declarative_memory").get_parameter("chunk_types").value = chunk_types
-        mod.graphs[0].get_node("procedural_memory").get_parameter("productions").value = pm
+        mod.graphs[0].get_node("declarative_memory").get_parameter(
+            "chunk_types"
+        ).value = chunk_types
+        mod.graphs[0].get_node("procedural_memory").get_parameter(
+            "productions"
+        ).value = pm
         mod.graphs[0].get_node("goal_buffer").get_parameter("first_goal").value = goal
         mod.to_json_file("%s.json" % file_name[:-5])
         mod.to_yaml_file("%s.yaml" % file_name[:-5])
