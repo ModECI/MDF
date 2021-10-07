@@ -280,9 +280,14 @@ class EvaluableParameter:
                 self.curr_value = float(self.parameter.default_initial_value)
 
             else:
-
-                self.curr_value = self.parameter.default_initial_value
-
+                try:
+                    self.curr_value = evaluate_expr(
+                        self.parameter.default_initial_value,
+                        None,
+                    )
+                # evaluate_expr raises Exception
+                except Exception:
+                    self.curr_value = self.parameter.default_initial_value
         else:
             self.curr_value = None
 
