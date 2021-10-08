@@ -11,6 +11,7 @@ of the :class:`EvaluableGraph` class. The external library `graph-scheduler
 conditional constraints.
 
 """
+import functools
 import inspect
 import os
 import re
@@ -106,6 +107,17 @@ def evaluate_onnx_expr(
     onnx_arguments = set(
         list(onnx_schema.attributes.keys()) + [i.name for i in onnx_schema.inputs]
     )
+    # used to attempt to match inputs to expected onnx input types
+    onnx_typecast_mappings = {
+        onnx_schema.AttrType.INT: int,
+        onnx_schema.AttrType.FLOAT: float,
+        onnx_schema.AttrType.STRING: str,
+        onnx_schema.AttrType.INTS: functools.partial(np.array, dtype=int),
+        onnx_schema.AttrType.FLOATS: functools.partial(np.array, dtype=float),
+        onnx_schema.AttrType.STRINGS: functools.partial(np.array, dtype=str),
+        # TODO: add tensor and graph types?
+    }
+
     try:
         has_variadic = (
             onnx_schema.inputs[0].option == onnx_schema.FormalParameterOption.Variadic
@@ -134,6 +146,24 @@ def evaluate_onnx_expr(
             and "onnx::" not in k  # filter Evaluable__ class names
         )
     }
+
+    # attempt to cast attributes to what onnx_function expects
+    for k, v in kwargs_for_onnx.items():
+        try:
+            onnx_attr = onnx_schema.attributes[k]
+        except KeyError:
+            continue
+
+        try:
+            cast_type = onnx_typecast_mappings[onnx_attr.type]
+        except KeyError:
+            continue
+
+        try:
+            kwargs_for_onnx[k] = cast_type(v)
+        except (TypeError, ValueError):
+            pass
+
     if verbose:
         print(f"Evaluating ONNX function {onnx_name} with {kwargs_for_onnx}")
     return onnx_function(**kwargs_for_onnx)
