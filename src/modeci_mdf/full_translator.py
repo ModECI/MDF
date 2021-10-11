@@ -6,8 +6,7 @@ from modeci_mdf.standard_functions import (
     _add_mdf_function,
 )
 from typing import List, Tuple, Dict, Optional, Set, Any, Union
-from modeci_mdf.utils import load_mdf, print_summary, load_mdf_json
-
+from modeci_mdf.utils import load_mdf, print_summary
 from modeci_mdf.execution_engine import EvaluableGraph
 import glom
 
