@@ -83,6 +83,7 @@ def main():
     mdf_model.to_json_file("ddm.json")
 
     import sys
+
     if "-graph" in sys.argv:
         mdf_model.to_graph_image(
             engine="dot",
@@ -90,7 +91,7 @@ def main():
             view_on_render=False,
             level=2,
             filename_root="ddm",
-            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

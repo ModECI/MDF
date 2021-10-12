@@ -47,17 +47,15 @@ class ABC(torch.nn.Module):
 
         return y
 
+
 def main():
 
     model = ABC()
     dummy_input = torch.zeros(2, 3)
     # loop_count = torch.tensor(5, dtype=torch.long)
-    torch.onnx.export(model,
-                      (dummy_input),
-                      'abc_basic.onnx',
-                      verbose=True,
-                      input_names=['input'])
-	
+    torch.onnx.export(
+        model, (dummy_input), "abc_basic.onnx", verbose=True, input_names=["input"]
+    )
 
     # Load it back in using ONNX package
     onnx_model = onnx.load("abc_basic.onnx")
@@ -66,16 +64,17 @@ def main():
 
     # Extract the loop or if body as a sub-model, this is just because I want
     # to view it in netron and sub-graphs can't be rendered
-    for node in [node for node in onnx_model.graph.node if node.op_type in ["Loop", 'If']]:
+    for node in [
+        node for node in onnx_model.graph.node if node.op_type in ["Loop", "If"]
+    ]:
 
         # Get the GraphProto of the body
         body_graph = node.attribute[0].g
 
         # Turn it into a model
-        model_def = helper.make_model(body_graph, producer_name='abc_basic.py')
+        model_def = helper.make_model(body_graph, producer_name="abc_basic.py")
 
-        onnx.save(model_def, f'examples/{node.name}_body.onnx')
-
+        onnx.save(model_def, f"examples/{node.name}_body.onnx")
 
     convert_file("abc_basic.onnx")
 

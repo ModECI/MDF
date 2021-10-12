@@ -46,7 +46,9 @@ def main():
 
     output = model(dummy_input)
 
-    print("PyTorch model: %s created. Evaluates %s as %s"%(model,dummy_input,output))
+    print(
+        "PyTorch model: %s created. Evaluates %s as %s" % (model, dummy_input, output)
+    )
 
     torch.onnx.export(
         model,
@@ -65,7 +67,9 @@ def main():
 
     sess = rt.InferenceSession("ab.onnx")
 
-    res = sess.run([sess.get_outputs()[0].name], {sess.get_inputs()[0].name: dummy_input.numpy()})
+    res = sess.run(
+        [sess.get_outputs()[0].name], {sess.get_inputs()[0].name: dummy_input.numpy()}
+    )
     print(f"Output calculated by onnxruntime (input: {dummy_input}):  {res}")
 
     mdf_model = onnx_to_mdf(onnx_model)
@@ -78,7 +82,7 @@ def main():
         view_on_render=False,
         level=3,
         filename_root="ab",
-        only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
     )
     if "-run" in sys.argv:
         verbose = True
@@ -86,17 +90,16 @@ def main():
 
         from modeci_mdf.execution_engine import EvaluableGraph
 
-        eg = EvaluableGraph(mdf_model.graphs[0],
-                            verbose=verbose)
+        eg = EvaluableGraph(mdf_model.graphs[0], verbose=verbose)
 
-        print('Evaluating graph...')
-        test_values = [0,1,[1,2],dummy_input.numpy()]
-        test_values = [0,1,[1,2]]
+        print("Evaluating graph...")
+        test_values = [0, 1, [1, 2], dummy_input.numpy()]
+        test_values = [0, 1, [1, 2]]
 
         for t in test_values:
-            print("===================\nEvaluating MDF model with input: %s"%t)
-            eg.evaluate(initializer={"input":t})
-            print("Output: %s"%eg.enodes['Mul_3'].evaluable_outputs['_4'].curr_value)
+            print("===================\nEvaluating MDF model with input: %s" % t)
+            eg.evaluate(initializer={"input": t})
+            print("Output: %s" % eg.enodes["Mul_3"].evaluable_outputs["_4"].curr_value)
 
 
 if __name__ == "__main__":
