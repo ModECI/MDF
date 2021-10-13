@@ -303,7 +303,7 @@ def torchnode_to_mdfnode(
 
     mdf_node = Node(id=make_node_id(node))
     for p in parameters:
-        mdf_node.parameters.append(Parameter(id=p,value=parameters[p]))
+        mdf_node.parameters.append(Parameter(id=p, value=parameters[p]))
 
     # Add any output ports
     for o in outputs:
@@ -328,8 +328,8 @@ def torchnode_to_mdfnode(
             )
 
     # Add Parameter
-    if type(arguments)==list:
-        arguments = {'arguments':arguments}
+    if type(arguments) == list:
+        arguments = {"arguments": arguments}
     f = Parameter(id=make_func_id(node), function=op, args=arguments)
     mdf_node.parameters.append(f)
 

@@ -17,13 +17,17 @@ from neuromllite import EvaluableExpression
 
 class MdfBaseWithId(BaseWithId):
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
+        self.allowed_fields.update(
+            {"metadata": ("Dict of metadata for the model element", dict)}
+        )
         super().__init__(**kwargs)
 
 
 class MdfBase(Base):
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
+        self.allowed_fields.update(
+            {"metadata": ("Dict of metadata for the model element", dict)}
+        )
         super().__init__(**kwargs)
 
 
@@ -37,7 +41,6 @@ class Model(MdfBaseWithId):
     """
     _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
 
-
     def __init__(self, **kwargs):
         """The top level construct in MDF is Model which consists of Graph's and model attributed
         Args:
@@ -45,7 +48,7 @@ class Model(MdfBaseWithId):
             format: Information on the version of MDF used in this file
             generating_application: Information on what application generated/saved this file
         """
-        '''
+        """
         kwargs = {}
         if id is not None:
             kwargs["id"] = id
@@ -54,7 +57,7 @@ class Model(MdfBaseWithId):
         if generating_application is not None:
             kwargs["generating_application"] = generating_application
         if metadata is not None:
-            kwargs["metadata"] = metadata'''
+            kwargs["metadata"] = metadata"""
 
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
@@ -75,7 +78,7 @@ class Model(MdfBaseWithId):
         """The allowed fields for this type"""
 
         # Removed for now...
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -85,7 +88,7 @@ class Model(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
@@ -213,7 +216,7 @@ class Graph(MdfBaseWithId):
             ]
         )
         """The allowed fields for this type"""
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         #kwargs["id"] = id
@@ -223,7 +226,7 @@ class Graph(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
@@ -329,7 +332,7 @@ class Node(MdfBaseWithId):
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -339,7 +342,7 @@ class Node(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
@@ -352,10 +355,10 @@ class Node(MdfBaseWithId):
         """
         return self.__getattr__("input_ports")
 
-
     def get_parameter(self, id):
         for p in self.parameters:
-            if p.id==id: return p
+            if p.id == id:
+                return p
         return None
 
     @property
@@ -366,7 +369,6 @@ class Node(MdfBaseWithId):
             A list of Function(s) at the given Node
         """
         return self.__getattr__("functions")
-
 
     @property
     def output_ports(self) -> List["OutputPort"]:
@@ -390,7 +392,6 @@ class Function(MdfBaseWithId):
     """
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
 
-
     def __init__(self, **kwargs):
 
         self.allowed_fields = collections.OrderedDict(
@@ -402,7 +403,6 @@ class Function(MdfBaseWithId):
                         str,
                     ),
                 ),
-
                 (
                     "value",
                     (
@@ -410,8 +410,6 @@ class Function(MdfBaseWithId):
                         str,
                     ),
                 ),
-
-
                 (
                     "args",
                     (
@@ -430,7 +428,7 @@ class Function(MdfBaseWithId):
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         for f in self.allowed_fields:
@@ -439,7 +437,7 @@ class Function(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
@@ -476,7 +474,7 @@ class InputPort(MdfBaseWithId):
                         "The type of the variable (note: there is limited support for this so far ",
                         str,
                     ),
-                )
+                ),
             ]
         )
 
@@ -512,12 +510,11 @@ class OutputPort(MdfBaseWithId):
                         str,
                     ),
                 ),
-
             ]
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -527,10 +524,9 @@ class OutputPort(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
-
 
 
 class Parameter(MdfBaseWithId):
@@ -542,11 +538,10 @@ class Parameter(MdfBaseWithId):
         time_derivative: How the parameter with time, i.e. ds/dt. Units of time are seconds.
         function: Which of the in-build MDF functions (linear etc.) this uses
         args: Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-        """
+    """
     _definition = "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative"
 
     def __init__(self, **kwargs):
-
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -593,10 +588,13 @@ class Parameter(MdfBaseWithId):
             return True
         if self.default_initial_value is not None:
             return True
-        if self.value is not None and type(self.value)==str:
+        if self.value is not None and type(self.value) == str:
             param_expr = sympy.simplify(self.value)
             sf = self.id in [str(s) for s in param_expr.free_symbols]
-            print('Checking whether %s is stateful, %s: %s'%(self,param_expr.free_symbols,sf))
+            print(
+                "Checking whether %s is stateful, %s: %s"
+                % (self, param_expr.free_symbols, sf)
+            )
             return sf
         return False
 
@@ -612,7 +610,6 @@ class Edge(MdfBaseWithId):
         receiver_port: The id of the InputPort on the receiver Node
     """
     _definition = "An Edge is an attribute of a _Graph_ that transmits computational results from a sender's _OutputPort_ to a receiver's _InputPort_"
-
 
     def __init__(self, **kwargs):
 
@@ -642,7 +639,7 @@ class Edge(MdfBaseWithId):
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -652,7 +649,7 @@ class Edge(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 

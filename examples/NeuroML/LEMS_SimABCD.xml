@@ -1,11 +1,11 @@
 <Lems>
-    
-    <!-- 
+
+    <!--
 
         This LEMS file has been automatically generated using PyNeuroML v0.5.13 (libNeuroML v0.2.57)
 
      -->
-    
+
     <!-- Specify which component to run -->
     <Target component="SimABCD" reportFile="report.SimABCD.txt"/>
 
@@ -13,53 +13,53 @@
     <Include file="Cells.xml"/>
     <Include file="Networks.xml"/>
     <Include file="Simulation.xml"/>
-    
+
     <Include file="PyNN.xml"/>
     <Include file="ABCD.net.nml"/>
     <Include file="ABCD__lems.xml"/>
-   
+
     <Simulation id="SimABCD" length="5000.0ms" step="100.0ms" target="ABCD" seed="123">  <!-- Note seed: ensures same random numbers used every run -->
-        
+
         <Display id="A_0_OUTPUT" title="Plots of A_0_OUTPUT" timeScale="1ms" xmin="-500.0" xmax="5500.0" ymin="-1" ymax="1">
             <Line id="A_0_a_OUTPUT" quantity="A/0/a/OUTPUT" scale="1" color="#d54f33" timeScale="1ms"/>
         </Display>
-        
+
         <Display id="A_input_0_OUTPUT" title="Plots of A_input_0_OUTPUT" timeScale="1ms" xmin="-500.0" xmax="5500.0" ymin="-1" ymax="1">
             <Line id="A_input_0_a_input_OUTPUT" quantity="A_input/0/a_input/OUTPUT" scale="1" color="#0534e4" timeScale="1ms"/>
         </Display>
-        
+
         <Display id="B_0_OUTPUT" title="Plots of B_0_OUTPUT" timeScale="1ms" xmin="-500.0" xmax="5500.0" ymin="-1" ymax="1">
             <Line id="B_0_b_OUTPUT" quantity="B/0/b/OUTPUT" scale="1" color="#98e752" timeScale="1ms"/>
         </Display>
-        
+
         <Display id="C_0_OUTPUT" title="Plots of C_0_OUTPUT" timeScale="1ms" xmin="-500.0" xmax="5500.0" ymin="-1" ymax="1">
             <Line id="C_0_c_OUTPUT" quantity="C/0/c/OUTPUT" scale="1" color="#bca074" timeScale="1ms"/>
         </Display>
-        
+
         <Display id="D_0_OUTPUT" title="Plots of D_0_OUTPUT" timeScale="1ms" xmin="-500.0" xmax="5500.0" ymin="-1" ymax="1">
             <Line id="D_0_d_OUTPUT" quantity="D/0/d/OUTPUT" scale="1" color="#632794" timeScale="1ms"/>
         </Display>
-        
+
         <OutputFile id="A_0_OUTPUT_dat" fileName="A_0.OUTPUT.dat">
-            <OutputColumn id="A_0_a_OUTPUT" quantity="A/0/a/OUTPUT"/> 
+            <OutputColumn id="A_0_a_OUTPUT" quantity="A/0/a/OUTPUT"/>
         </OutputFile>
-        
+
         <OutputFile id="A_input_0_OUTPUT_dat" fileName="A_input_0.OUTPUT.dat">
-            <OutputColumn id="A_input_0_a_input_OUTPUT" quantity="A_input/0/a_input/OUTPUT"/> 
+            <OutputColumn id="A_input_0_a_input_OUTPUT" quantity="A_input/0/a_input/OUTPUT"/>
         </OutputFile>
-        
+
         <OutputFile id="B_0_OUTPUT_dat" fileName="B_0.OUTPUT.dat">
-            <OutputColumn id="B_0_b_OUTPUT" quantity="B/0/b/OUTPUT"/> 
+            <OutputColumn id="B_0_b_OUTPUT" quantity="B/0/b/OUTPUT"/>
         </OutputFile>
-        
+
         <OutputFile id="C_0_OUTPUT_dat" fileName="C_0.OUTPUT.dat">
-            <OutputColumn id="C_0_c_OUTPUT" quantity="C/0/c/OUTPUT"/> 
+            <OutputColumn id="C_0_c_OUTPUT" quantity="C/0/c/OUTPUT"/>
         </OutputFile>
-        
+
         <OutputFile id="D_0_OUTPUT_dat" fileName="D_0.OUTPUT.dat">
-            <OutputColumn id="D_0_d_OUTPUT" quantity="D/0/d/OUTPUT"/> 
+            <OutputColumn id="D_0_d_OUTPUT" quantity="D/0/d/OUTPUT"/>
         </OutputFile>
-        
+
     </Simulation>
 
 </Lems>

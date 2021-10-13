@@ -17,9 +17,19 @@ def main():
     retrieval = {}
     while not term:
         eg.evaluate(initializer={"goal_input": goal, "dm_input": retrieval})
-        term = eg.enodes["check_termination"].evaluable_outputs["check_output"].curr_value
-        goal = eg.enodes["fire_production"].evaluable_outputs["fire_prod_output_to_goal"].curr_value
-        retrieval = eg.enodes["fire_production"].evaluable_outputs["fire_prod_output_to_retrieval"].curr_value
+        term = (
+            eg.enodes["check_termination"].evaluable_outputs["check_output"].curr_value
+        )
+        goal = (
+            eg.enodes["fire_production"]
+            .evaluable_outputs["fire_prod_output_to_goal"]
+            .curr_value
+        )
+        retrieval = (
+            eg.enodes["fire_production"]
+            .evaluable_outputs["fire_prod_output_to_retrieval"]
+            .curr_value
+        )
     print("Final Goal:")
     print(eg.enodes["goal_buffer"].evaluable_outputs["goal_output"].curr_value)
 

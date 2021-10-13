@@ -59,7 +59,7 @@ Specifies the non-default pattern of execution of <a href="#node">Node</a>s
 </table>
 
 ## Node
-A self contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of Functions and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s 
+A self contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of Functions and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s
 #### Allowed parameters
 <table><tr><td><b>metadata</b></td><td>dict</td><td><i>Dict of metadata for the model element</i></td></tr>
 
@@ -173,4 +173,3 @@ An Edge is an attribute of a <a href="#graph">Graph</a> that transmits computati
 
 
 </table>
-

@@ -6,10 +6,11 @@ from .ccm.dm import Memory
 from .ccm.buffer import Chunk, Buffer
 from typing import Union, Dict, Any, Tuple, List, Callable
 
+
 def chunk_to_string(chunk: Dict[str, str]) -> str:
     """Converts a chunk dictionary to a string format.
-    
-    Args: 
+
+    Args:
         chunk: A dict representing a chunk.
 
     Returns:
@@ -23,8 +24,8 @@ def chunk_to_string(chunk: Dict[str, str]) -> str:
 
 def pattern_to_string(pattern: Dict[str, str]) -> str:
     """Converts a pattern dictionary to a string format.
-    
-    Args: 
+
+    Args:
         chunk: A dict representing a pattern.
 
     Returns:
@@ -35,13 +36,13 @@ def pattern_to_string(pattern: Dict[str, str]) -> str:
 
 def change_goal(pattern: Dict[str, str], curr_goal: Dict[str, str]):
     """Modifies the current goal buffer using the given pattern.
-    
+
     Args:
         pattern: A dict representing a pattern.
         curr_goal: A dict representing the current goal pattern.
 
     Returns:
-        The current goal updated with the data in pattern. 
+        The current goal updated with the data in pattern.
     """
     if curr_goal == 0:
         return {}
@@ -52,11 +53,12 @@ def change_goal(pattern: Dict[str, str], curr_goal: Dict[str, str]):
 
 
 def retrieve_chunk(
-    pattern: Dict[str, str], 
-    dm_chunks: List[Dict[str, str]], 
-    types: Dict[str, List[str]]) -> Dict[str, str]:
+    pattern: Dict[str, str],
+    dm_chunks: List[Dict[str, str]],
+    types: Dict[str, List[str]],
+) -> Dict[str, str]:
     """Retrieve a chunk from declarative memory given a pattern.
-    
+
     Args:
         pattern: A dict representing the pattern to match.
         dm_chunks: A list of dicts, each representing a chunk in declarative memory.
@@ -79,16 +81,16 @@ def retrieve_chunk(
     isa = match[0]
     retrieved = {"ISA": isa}
     for i in range(1, len(match.values())):
-        retrieved[types[isa][i-1]] = match[i]
+        retrieved[types[isa][i - 1]] = match[i]
     return retrieved
 
 
 def match_production(
-    production: Dict[str, Any], 
-    context: Dict[str, Dict[str, str]]) -> bool:
-    """Returns True if the production's left hand side matches the given context 
+    production: Dict[str, Any], context: Dict[str, Dict[str, str]]
+) -> bool:
+    """Returns True if the production's left hand side matches the given context
     and adds the matching bindings to the production.
-    
+
     Args:
         production: A dict representing a production.
         context: A dict with the contents of the goal and retrieval buffers.
@@ -108,11 +110,10 @@ def match_production(
 
 
 def pattern_matching_function(
-    productions: List[Dict[str, Any]], 
-    goal: Dict[str, str], 
-    retrieval: Dict[str, str]) -> List[Dict[str, Any]]:
+    productions: List[Dict[str, Any]], goal: Dict[str, str], retrieval: Dict[str, str]
+) -> List[Dict[str, Any]]:
     """Returns the productions that match the given goal and retrieval buffers.
-    
+
     Args:
         productions: A list of all productions as dicts.
         goal: The current value of the goal buffer as a dict.
@@ -122,17 +123,17 @@ def pattern_matching_function(
         A list of productions that match the buffers.
     """
     context = {
-        "goal": Chunk(chunk_to_string(goal)), 
-        "retrieval": Chunk(chunk_to_string(retrieval)) if retrieval != {} else None
+        "goal": Chunk(chunk_to_string(goal)),
+        "retrieval": Chunk(chunk_to_string(retrieval)) if retrieval != {} else None,
     }
     return [p for p in productions if match_production(p, context)]
-    
+
 
 def conflict_resolution_function(productions: List[Dict[str, Any]]) -> Dict[str, Any]:
     """ACT-R conflict resolution function. Currently selects a production at
     random from the already matched productions, since utility values and learning
     are not implemented yet.
-    
+
     Args:
         productions: A list of productions as dicts.
 
@@ -147,7 +148,7 @@ def conflict_resolution_function(productions: List[Dict[str, Any]]) -> Dict[str,
 
 def update_buffer(production: Dict[str, Any], buffer: str) -> Dict[str, str]:
     """Returns a pattern to update the given buffer with.
-    
+
     Args:
         production: The production dict that specifies the buffer update.
         buffer: The name of the buffer to update.
@@ -185,7 +186,7 @@ def update_retrieval(production: Dict[str, Any]) -> Dict[str, str]:
 
     Args:
         production: The production dict that specifies the retrieval buffer update.
-    
+
     Returns:
         A pattern that the retrieval buffer will be updated with.
     """
@@ -194,7 +195,7 @@ def update_retrieval(production: Dict[str, Any]) -> Dict[str, str]:
 
 def check_termination(production: Dict[str, Any]):
     """Function used to check if no production was selected.
-    
+
     Args:
         production: A production dict that was selected.
 
@@ -206,7 +207,7 @@ def check_termination(production: Dict[str, Any]):
 
 def get_actr_functions() -> List[Dict[str, Any]]:
     """Creates a list of all the ACT-R functions as MDF specifications.
-    
+
     Returns:
         A list of MDF function specifications.
     """
@@ -216,7 +217,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="change_goal",
             description="ACT-R change goal buffer function",
             arguments=["pattern", "curr_goal"],
-            expression_string="actr_functions.change_goal(pattern, curr_goal)"
+            expression_string="actr_functions.change_goal(pattern, curr_goal)",
         )
     )
     actr_funcs.append(
@@ -224,7 +225,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="retrieve_chunk",
             description="ACT-R retrieve chunk function",
             arguments=["pattern", "dm_chunks", "types"],
-            expression_string="actr_functions.retrieve_chunk(pattern, dm_chunks, types)"
+            expression_string="actr_functions.retrieve_chunk(pattern, dm_chunks, types)",
         )
     )
     actr_funcs.append(
@@ -232,7 +233,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="pattern_matching_function",
             description="ACT-R pattern matching function",
             arguments=["productions", "goal", "retrieval"],
-            expression_string="actr_functions.pattern_matching_function(productions, goal, retrieval)"
+            expression_string="actr_functions.pattern_matching_function(productions, goal, retrieval)",
         )
     )
     actr_funcs.append(
@@ -240,7 +241,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="conflict_resolution_function",
             description="ACT-R conflict resolution function",
             arguments=["productions"],
-            expression_string="actr_functions.conflict_resolution_function(productions)"
+            expression_string="actr_functions.conflict_resolution_function(productions)",
         )
     )
     actr_funcs.append(
@@ -248,7 +249,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="update_goal",
             description="ACT-R update goal buffer function",
             arguments=["production"],
-            expression_string="actr_functions.update_goal(production)"
+            expression_string="actr_functions.update_goal(production)",
         )
     )
     actr_funcs.append(
@@ -256,7 +257,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="update_retrieval",
             description="ACT-R update retrieval buffer function",
             arguments=["production"],
-            expression_string="actr_functions.update_retrieval(production)"
+            expression_string="actr_functions.update_retrieval(production)",
         )
     )
     actr_funcs.append(
@@ -264,7 +265,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="check_termination",
             description="check_termination",
             arguments=["production"],
-            expression_string="actr_functions.check_termination(production)"
+            expression_string="actr_functions.check_termination(production)",
         )
     )
     return actr_funcs

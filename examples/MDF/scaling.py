@@ -24,11 +24,11 @@ def generate_test_model(
     mod_graph = Graph(id=id)
     mod.graphs.append(mod_graph)
 
-    input_node = Node(
-        id="input_node"
-    )
+    input_node = Node(id="input_node")
 
-    input_node.parameters.append(Parameter(id="input_level", value=np.random.random_sample(input_shape).tolist()))
+    input_node.parameters.append(
+        Parameter(id="input_level", value=np.random.random_sample(input_shape).tolist())
+    )
 
     input_node.output_ports.append(OutputPort(id="out_port", value="input_level"))
 
@@ -38,13 +38,15 @@ def generate_test_model(
 
     for i in range(hidden_layers):
 
-        hidden_node = Node(
-            id="hidden_node_%i" % i
-        )
+        hidden_node = Node(id="hidden_node_%i" % i)
 
         hidden_node.input_ports.append(InputPort(id="in_port"))
         hidden_node.parameters.append(Parameter(id="slope0", value=0.5))
-        hidden_node.parameters.append(Parameter(id="intercept0", value=np.random.random_sample(hidden_shape).tolist()))
+        hidden_node.parameters.append(
+            Parameter(
+                id="intercept0", value=np.random.random_sample(hidden_shape).tolist()
+            )
+        )
 
         mod_graph.nodes.append(hidden_node)
 
