@@ -71,12 +71,8 @@ Stroop_model.add_controller(control)
 
 # Assign conditions:
 settling_time = 10
-Stroop_model.scheduler.add_condition(
-    color_hidden, pnl.EveryNCalls(task, settling_time)
-)
-Stroop_model.scheduler.add_condition(
-    word_hidden, pnl.EveryNCalls(task, settling_time)
-)
+Stroop_model.scheduler.add_condition(color_hidden, pnl.EveryNCalls(task, settling_time))
+Stroop_model.scheduler.add_condition(word_hidden, pnl.EveryNCalls(task, settling_time))
 Stroop_model.scheduler.add_condition(
     output,
     pnl.All(pnl.EveryNCalls(color_hidden, 1), pnl.EveryNCalls(word_hidden, 1)),

@@ -26,7 +26,6 @@ with torch.no_grad():
 
 #### B
 class MyLogistic(nn.Module):
-
     def __init__(self, gain, bias, offset):
         super().__init__()
         self.gain = gain
@@ -36,11 +35,11 @@ class MyLogistic(nn.Module):
     def forward(self, input: torch.Tensor):
         return 1 / (1 + torch.exp(-1 * self.gain * (input + self.bias) + self.offset))
 
+
 B = MyLogistic(abcd.B_gain, abcd.B_bias, abcd.B_offset)
 
 #### C
 class MyExp(nn.Module):
-
     def __init__(self, scale, rate, bias, offset):
         super().__init__()
         self.scale = scale
@@ -51,11 +50,11 @@ class MyExp(nn.Module):
     def forward(self, input: torch.Tensor):
         return self.scale * torch.exp((self.rate * input) + self.bias) + self.offset
 
+
 C = MyExp(abcd.C_scale, abcd.C_rate, abcd.C_bias, abcd.C_offset)
 
 #### D
 class MySin(nn.Module):
-
     def __init__(self, scale):
         super().__init__()
         self.scale = scale
@@ -63,12 +62,13 @@ class MySin(nn.Module):
     def forward(self, input: torch.Tensor):
         return self.scale * torch.sin(input)
 
+
 D = MySin(abcd.D_scale)
 
 m_a = nn.Sequential(A)
-m_ab = nn.Sequential(A,B)
-m_abc = nn.Sequential(A,B,C)
-m_abcd = nn.Sequential(A,B,C,D)
+m_ab = nn.Sequential(A, B)
+m_abc = nn.Sequential(A, B, C)
+m_abcd = nn.Sequential(A, B, C, D)
 print("Model: %s" % m_abcd)
 # print(dir(m))
 
@@ -80,7 +80,9 @@ for i in abcd.test_values:
     output_abc = m_abc(input)
     output_abcd = m_abcd(input)
 
-    print(f"Output calculated by pytorch (input {input}) - A={'%f'%output_a}\tB={'%f'%output_ab}\tC={'%f'%output_abc}\tD={'%f'%output_abcd}\t")
+    print(
+        f"Output calculated by pytorch (input {input}) - A={'%f'%output_a}\tB={'%f'%output_ab}\tC={'%f'%output_abc}\tD={'%f'%output_abcd}\t"
+    )
 
 # Export the model
 fn = "ABCD_from_torch.onnx"
@@ -98,8 +100,10 @@ import onnx
 onnx_model = onnx.load(fn)
 # print('Model: %s'%onnx_model)
 
+
 def info(a):
     print(f"Info: {a.name} ({a.type}), {a.shape}")
+
 
 import onnxruntime as rt
 
