@@ -21,6 +21,7 @@ import numpy as np
 
 
 import graph_scheduler
+import onnxruntime
 
 from modeci_mdf.functions.standard import mdf_functions, create_python_expression
 from modeci_mdf.utils import is_number
@@ -166,7 +167,38 @@ def evaluate_onnx_expr(
 
     if verbose:
         print(f"Evaluating ONNX function {onnx_name} with {kwargs_for_onnx}")
-    return onnx_function(**kwargs_for_onnx)
+
+    try:
+        result = onnx_function(**kwargs_for_onnx)
+    except (
+        onnxruntime.capi.onnxruntime_pybind11_state.NotImplemented,
+        onnxruntime.capi.onnxruntime_pybind11_state.Fail,
+    ) as e:
+        err = str(e)
+        if (
+            "bound to different types (tensor(double) and tensor(float)" not in err
+            and "Could not find an implementation for the node" not in err
+        ):
+            raise
+
+        # assume this is related to lack of support for float64/double
+        # for Cos, Relu (and likely others) on onnx CPUExecutionProvider
+        result = onnx_function(
+            **{
+                k: v.astype(np.float32)
+                if hasattr(v, "dtype") and v.dtype == np.float64
+                else v
+                for k, v in kwargs_for_onnx.items()
+            }
+        )
+
+    try:
+        if result.dtype == np.float32:
+            result = result.astype(np.float64)
+    except AttributeError:
+        pass
+
+    return result
 
 
 def parse_str_as_list(s: str) -> list:
