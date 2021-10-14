@@ -16,18 +16,18 @@ modeci\_mdf.execution_engine
    :undoc-members:
    :show-inheritance:
 
-modeci\_mdf.standard_functions
+modeci\_mdf.functions.standard
 ==============================
 
-.. automodule:: modeci_mdf.standard_functions
+.. automodule:: modeci_mdf.functions.standard
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-modeci\_mdf.onnx_functions
+modeci\_mdf.functions.onnx
 ==========================================
-.. automodule:: modeci_mdf.onnx_functions.__init__
+.. automodule:: modeci_mdf.functions.onnx
    :members:
    :undoc-members:
    :show-inheritance:
