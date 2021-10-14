@@ -3,7 +3,7 @@ import math
 import numpy
 import pytest
 
-import modeci_mdf.standard_functions as stdf
+import modeci_mdf.functions.standard as stdf
 
 
 @pytest.mark.parametrize(

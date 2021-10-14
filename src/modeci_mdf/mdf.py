@@ -1,5 +1,7 @@
-"""
-    Defines the structure of ModECI MDF - Work in progress!!!
+r"""
+    This module implements the main MDF API. Each core component of the MDF specification (Model, Graph, Node, etc.)
+    is implemented as a class. Instances of these objects can be composed to create a representation of
+    an MDF model as Python objects. This model can then be serialized and deserialized to and from JSON\YAML.
 """
 
 import collections
@@ -13,6 +15,19 @@ from typing import List, Tuple, Dict, Optional, Set, Any, Union
 from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
+
+__all__ = [
+    "Model",
+    "Graph",
+    "Node",
+    "Function",
+    "InputPort",
+    "OutputPort",
+    "Parameter",
+    "Edge",
+    "ConditionSet",
+    "Condition",
+]
 
 
 class MdfBaseWithId(BaseWithId):

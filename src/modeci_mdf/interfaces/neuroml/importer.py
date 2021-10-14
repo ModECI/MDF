@@ -10,7 +10,7 @@ import os
 import neuromllite
 import lems.api as lems
 
-from modeci_mdf.standard_functions import mdf_functions, substitute_args
+from modeci_mdf.functions.standard import mdf_functions, substitute_args
 
 
 def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):

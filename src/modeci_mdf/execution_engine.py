@@ -8,11 +8,11 @@ import numpy as np
 
 import graph_scheduler
 
-from modeci_mdf.standard_functions import mdf_functions, create_python_expression
+from modeci_mdf.functions.standard import mdf_functions, create_python_expression
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
 from neuromllite.utils import _params_info, _val_info
-from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+from neuromllite.utils import FORMAT_NUMPY
 
 from collections import OrderedDict
 from typing import Union, List, Dict, Optional, Any
@@ -26,8 +26,8 @@ from modeci_mdf.mdf import (
     Node,
 )
 
-import modeci_mdf.onnx_functions as onnx_ops
-import modeci_mdf.actr_functions as actr_funcs
+import modeci_mdf.functions.onnx as onnx_ops
+import modeci_mdf.functions.actr as actr_funcs
 
 
 FORMAT_DEFAULT = FORMAT_NUMPY
@@ -167,7 +167,7 @@ class EvaluableFunction:
                     kwargs_for_onnx[kw] = arg
 
             self.curr_value = onnx_function(**kwargs_for_onnx)
-        elif "actr_functions." in expr:
+        elif "actr." in expr:
             actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
             self.curr_value = actr_function(
                 *[func_params[arg] for arg in self.function.args]
@@ -328,7 +328,7 @@ class EvaluableParameter:
                     )
                 self.curr_value = onnx_function(**kwargs_for_onnx)
 
-            elif "actr_functions." in expr:
+            elif "actr." in expr:
                 actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
                 self.curr_value = actr_function(
                     *[func_params[arg] for arg in self.parameter.args]
@@ -927,7 +927,7 @@ class EvaluableGraph:
                     )
 
 
-from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+from neuromllite.utils import FORMAT_NUMPY
 
 
 def main(example_file, array_format=FORMAT_NUMPY, verbose=False):

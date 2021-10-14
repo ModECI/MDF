@@ -15,7 +15,7 @@ import onnx.defs
 import torch
 
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Parameter
-from modeci_mdf.onnx_functions import onnx_opset_version as modeci_onnx_opset_version
+from modeci_mdf.functions.onnx import onnx_opset_version as modeci_onnx_opset_version
 
 
 logger = logging.getLogger(__name__)

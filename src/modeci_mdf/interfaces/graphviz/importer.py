@@ -8,7 +8,7 @@ import sys
 import graphviz
 import numpy as np
 
-from modeci_mdf.standard_functions import mdf_functions
+from modeci_mdf.functions.standard import mdf_functions
 
 from modeci_mdf.utils import color_rgb_to_hex
 

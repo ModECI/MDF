@@ -1,7 +1,7 @@
 import json
 import ntpath
 
-from modeci_mdf.standard_functions import (
+from modeci_mdf.functions.standard import (
     mdf_functions,
     create_python_expression,
     _add_mdf_function,

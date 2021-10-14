@@ -217,7 +217,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="change_goal",
             description="ACT-R change goal buffer function",
             arguments=["pattern", "curr_goal"],
-            expression_string="actr_functions.change_goal(pattern, curr_goal)",
+            expression_string="actr.change_goal(pattern, curr_goal)",
         )
     )
     actr_funcs.append(
@@ -225,7 +225,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="retrieve_chunk",
             description="ACT-R retrieve chunk function",
             arguments=["pattern", "dm_chunks", "types"],
-            expression_string="actr_functions.retrieve_chunk(pattern, dm_chunks, types)",
+            expression_string="actr.retrieve_chunk(pattern, dm_chunks, types)",
         )
     )
     actr_funcs.append(
@@ -233,7 +233,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="pattern_matching_function",
             description="ACT-R pattern matching function",
             arguments=["productions", "goal", "retrieval"],
-            expression_string="actr_functions.pattern_matching_function(productions, goal, retrieval)",
+            expression_string="actr.pattern_matching_function(productions, goal, retrieval)",
         )
     )
     actr_funcs.append(
@@ -241,7 +241,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="conflict_resolution_function",
             description="ACT-R conflict resolution function",
             arguments=["productions"],
-            expression_string="actr_functions.conflict_resolution_function(productions)",
+            expression_string="actr.conflict_resolution_function(productions)",
         )
     )
     actr_funcs.append(
@@ -249,7 +249,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="update_goal",
             description="ACT-R update goal buffer function",
             arguments=["production"],
-            expression_string="actr_functions.update_goal(production)",
+            expression_string="actr.update_goal(production)",
         )
     )
     actr_funcs.append(
@@ -257,7 +257,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="update_retrieval",
             description="ACT-R update retrieval buffer function",
             arguments=["production"],
-            expression_string="actr_functions.update_retrieval(production)",
+            expression_string="actr.update_retrieval(production)",
         )
     )
     actr_funcs.append(
@@ -265,7 +265,7 @@ def get_actr_functions() -> List[Dict[str, Any]]:
             name="check_termination",
             description="check_termination",
             arguments=["production"],
-            expression_string="actr_functions.check_termination(production)",
+            expression_string="actr.check_termination(production)",
         )
     )
     return actr_funcs

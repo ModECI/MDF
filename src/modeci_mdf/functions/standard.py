@@ -1,10 +1,10 @@
-import math
+from typing import List, Dict
 
+# Make sure we import math and numpy for Python expression strings. These imports
+# are important, do not remove even though they appear unused.
+import math
 import numpy
 
-import modeci_mdf.onnx_functions as onnx_ops
-
-from typing import List, Dict, Union, Any, Optional
 
 mdf_functions = {}
 
@@ -169,13 +169,13 @@ if len(mdf_functions) == 0:
     )
 
     # Enumerate all available ONNX operators and add them as MDF functions.
-    from modeci_mdf.onnx_functions import get_onnx_ops
+    from modeci_mdf.functions.onnx import get_onnx_ops
 
     for mdf_func_spec in get_onnx_ops():
         _add_mdf_function(**mdf_func_spec)
 
     # Add the ACT-R functions.
-    from modeci_mdf.actr_functions import get_actr_functions
+    from modeci_mdf.functions.actr import get_actr_functions
 
     for mdf_func_spec in get_actr_functions():
         _add_mdf_function(**mdf_func_spec)

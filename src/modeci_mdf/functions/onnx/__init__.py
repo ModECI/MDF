@@ -9,7 +9,8 @@ import numpy as np
 import onnxruntime as ort
 import onnx.defs
 
-# Currently using sklearn2onnx API to define ONNX operations. This dependency can probably be removed pretty easilly.
+# Currently using sklearn2onnx API to define ONNX operations. This dependency can probably be removed pretty easily.
+# Do not remove this import even though it appears unused.
 import skl2onnx.algebra.onnx_ops
 
 from typing import Dict, Tuple, Any, List, Callable
@@ -20,6 +21,13 @@ FormalParameterOption = OpSchema.FormalParameterOption
 # Use the same ONNX opset version that torch is using for defaults now
 # from torch.onnx.symbolic_helper import _default_onnx_opset_version as onnx_opset_version
 onnx_opset_version = 13
+
+__all__ = [
+    "predict_with_onnxruntime",
+    "run_onnx_op",
+    "get_onnx_ops",
+    "get_all_schemas_version",
+]
 
 
 def import_class(name: str) -> Any:
@@ -52,6 +60,7 @@ def predict_with_onnxruntime(model_def, *inputs) -> Dict[str, np.array]:
 
 
 def convert_type(v):
+    """Helper function to convert types to ONNX compatible types."""
 
     if type(v) == list:
         v = np.array(v)
@@ -116,7 +125,16 @@ def run_onnx_op(
     return predict_with_onnxruntime(model_def, *input_vals)
 
 
-def get_all_schemas_version(max_version):
+def get_all_schemas_version(max_version: int) -> List[onnx.defs.OpSchema]:
+    """
+    Enumerate all the OpSchemas available from ONNX.
+
+    Args:
+        max_version: Only include up to max_version.
+
+    Returns:
+        A list of all OpSchemas
+    """
     schemas = {}
 
     for schema in onnx.defs.get_all_schemas_with_history():
