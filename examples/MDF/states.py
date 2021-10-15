@@ -31,10 +31,16 @@ def main():
     sine_node.parameters.append(Parameter(id="amp", value=3))
     sine_node.parameters.append(Parameter(id="period", value=0.4))
 
-    s1 = Parameter(id="level", default_initial_value=0, time_derivative='6.283185 * rate / period')
+    s1 = Parameter(
+        id="level", default_initial_value=0, time_derivative="6.283185 * rate / period"
+    )
     sine_node.parameters.append(s1)
 
-    s2 = Parameter(id="rate", default_initial_value=1, time_derivative='-1 * 6.283185 * level / period')
+    s2 = Parameter(
+        id="rate",
+        default_initial_value=1,
+        time_derivative="-1 * 6.283185 * level / period",
+    )
     sine_node.parameters.append(s2)
 
     op1 = OutputPort(id="out_port", value="amp * level")
@@ -47,7 +53,7 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
-        #verbose = False
+        # verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
         from modeci_mdf.execution_engine import EvaluableGraph
@@ -55,28 +61,27 @@ def main():
         eg = EvaluableGraph(mod_graph, verbose)
         dt = 0.01
 
-        duration= 2
+        duration = 2
         t = 0
         recorded = {}
         times = []
         s = []
-        while t<=duration:
+        while t <= duration:
             times.append(t)
-            print("======   Evaluating at t = %s  ======"%(t))
+            print("======   Evaluating at t = %s  ======" % (t))
             if t == 0:
-                eg.evaluate() # replace with initialize?
+                eg.evaluate()  # replace with initialize?
             else:
                 eg.evaluate(time_increment=dt)
 
-            s.append(eg.enodes['sine_node'].evaluable_outputs['out_port'].curr_value)
-            t+=dt
-
+            s.append(eg.enodes["sine_node"].evaluable_outputs["out_port"].curr_value)
+            t += dt
 
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
-            plt.plot(times,s)
-            plt.show()
 
+            plt.plot(times, s)
+            plt.show()
 
     if "-graph" in sys.argv:
         mod.to_graph_image(
@@ -85,9 +90,8 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="states",
-            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
-
 
     return mod_graph
 

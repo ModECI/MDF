@@ -227,3 +227,10 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/abcd.png
 /examples/MDF/abcd_3.png
 /test.json
+/docs/sphinx/source/_build/
+/examples/PyTorch/cifar.json
+/examples/PyTorch/cifar_weights.npz
+/examples/PyTorch/example_data/
+/examples/PyTorch/data/
+/examples/PyTorch/runs/
+/docs/sphinx/source/api/_autosummary/

@@ -14,7 +14,7 @@ def main():
 
     input_node = Node(id="input_node")
 
-    input_node.parameters.append(Parameter(id="input_level", value=[[1, 2.], [3, 4]]))
+    input_node.parameters.append(Parameter(id="input_level", value=[[1, 2.0], [3, 4]]))
 
     op1 = OutputPort(id="out_port", value="input_level")
     input_node.output_ports.append(op1)
@@ -22,7 +22,9 @@ def main():
 
     middle_node = Node(id="middle_node")
     middle_node.parameters.append(Parameter(id="slope", value=0.5))
-    middle_node.parameters.append(Parameter(id="intercept", value=np.array([[0, 1.], [2, 2]])))
+    middle_node.parameters.append(
+        Parameter(id="intercept", value=np.array([[0, 1.0], [2, 2]]))
+    )
 
     ip1 = InputPort(id="input_port1")
     middle_node.input_ports.append(ip1)
@@ -53,7 +55,7 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
-        #verbose = False
+        # verbose = False
         from modeci_mdf.execution_engine import EvaluableGraph
 
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
@@ -69,8 +71,9 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="arrays",
-            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
+
 
 if __name__ == "__main__":
     main()

@@ -52,7 +52,9 @@ def main():
         return n
 
     p_a = {"slope": abcd.A_slope, "intercept": abcd.A_intercept}
-    f_a = Parameter(id="linear_func", function="linear", args={k: k for k in p_a.keys()})
+    f_a = Parameter(
+        id="linear_func", function="linear", args={k: k for k in p_a.keys()}
+    )
     a = create_simple_node(mod_graph, "A", f_a, p_a, input_node)
 
     p_b = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
@@ -95,11 +97,13 @@ def main():
     print_summary(mod_graph)
 
     import sys
+
     if "-run" in sys.argv:
         verbose = True
-        #verbose = False
+        # verbose = False
         from modeci_mdf.execution_engine import EvaluableGraph
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
         eg.evaluate(array_format=format)
@@ -111,7 +115,7 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="abc_conditions",
-            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

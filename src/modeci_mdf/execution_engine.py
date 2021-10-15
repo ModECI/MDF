@@ -1,3 +1,16 @@
+"""The reference implementation of the MDF execution engine; allows for executing :class:`~modeci.mdf.Graph`
+objects in Python.
+
+This module implements a set of classes for executing loaded MDF models in Python.
+The implementation is organized such that each class present in :mod:`~modeci_mdf.mdf`
+has a corresponding :code:`Evaluable` version of the class. Each of these classes implements
+the execution of these components and tracks their state during execution. The organization of the entire execution of
+the model is implemented at the top-level :func:`~modeci_mdf.execution_engine.EvaluableGraph.evaluate` method
+of the :class:`EvaluableGraph` class. The external library `graph-scheduler
+<https://pypi.org/project/graph-scheduler/>`_ is used to implement the scheduling of nodes under declarative
+conditional constraints.
+
+"""
 import inspect
 import os
 import re
@@ -8,11 +21,12 @@ import numpy as np
 
 import graph_scheduler
 
-from modeci_mdf.standard_functions import mdf_functions, create_python_expression
+from modeci_mdf.functions.standard import mdf_functions, create_python_expression
+from modeci_mdf.utils import is_number
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
 from neuromllite.utils import _params_info, _val_info
-from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+from neuromllite.utils import FORMAT_NUMPY
 
 from collections import OrderedDict
 from typing import Union, List, Dict, Optional, Any
@@ -24,21 +38,16 @@ from modeci_mdf.mdf import (
     OutputPort,
     InputPort,
     Node,
+    Parameter,
 )
 
-import modeci_mdf.onnx_functions as onnx_ops
-import modeci_mdf.actr_functions as actr_funcs
+import modeci_mdf.functions.onnx as onnx_ops
+import modeci_mdf.functions.actr as actr_funcs
 
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
-KNOWN_PARAMETERS = ['constant']
-def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
+KNOWN_PARAMETERS = ["constant"]
 
 
 def evaluate_expr(
@@ -48,11 +57,11 @@ def evaluate_expr(
     verbose: Optional[bool] = False,
 ) -> np.ndarray:
 
-    """Evaluates an expression given in string format using func_parameters
+    """Evaluates an expression given in string format and a :code:`dict` of parameters.
 
     Args:
         expr: Expression or list of expressions to be evaluated
-        func_params: A dict of parameters (e.g. {'weight':2})
+        func_params: A dict of parameters (e.g. :code:`{'weight': 2}`)
         array_format: It can be a n-dimensional array or a tensor
         verbose: If set to True provides in-depth information else verbose message is not displayed
 
@@ -73,9 +82,10 @@ def evaluate_expr(
 
 
 class EvaluableFunction:
-    """Evaluates the function
+    """Evaluates a :class:`~modeci_mdf.mdf.Function` value during MDF graph execution.
+
     Args:
-        function: Function to be evaluated e.g. mdf standard function
+        function: :func:`~modeci_mdf.mdf.Function` to be evaluated e.g. mdf standard function
         verbose: If set to True Provides in-depth information else verbose message is not displayed
     """
 
@@ -106,15 +116,16 @@ class EvaluableFunction:
 
             for f in mdf_functions:
                 if self.function.function == f:
-                    expr = create_python_expression(mdf_functions[f]["expression_string"])
+                    expr = create_python_expression(
+                        mdf_functions[f]["expression_string"]
+                    )
 
         else:
-            expr  = self.function.value
-            #raise "Unknown function: {}. Known functions: {}".format(
+            expr = self.function.value
+            # raise "Unknown function: {}. Known functions: {}".format(
             #    self.function.function,
             #    mdf_functions.keys,
-            #)
-
+            # )
 
         func_params = {}
         func_params.update(parameters)
@@ -134,7 +145,9 @@ class EvaluableFunction:
                 )
                 if self.verbose:
                     print(
-                        "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+                        "      Arg: {} became: {}".format(
+                            arg, _val_info(func_params[arg])
+                        )
                     )
 
         # If this is an ONNX operation, evaluate it without neuromlite.
@@ -162,7 +175,7 @@ class EvaluableFunction:
                     kwargs_for_onnx[kw] = arg
 
             self.curr_value = onnx_function(**kwargs_for_onnx)
-        elif "actr_functions." in expr:
+        elif "actr." in expr:
             actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
             self.curr_value = actr_function(
                 *[func_params[arg] for arg in self.function.args]
@@ -181,21 +194,24 @@ class EvaluableFunction:
 
 
 class EvaluableParameter:
+    """
+    Evaluates the current value of a :class:`~modeci_mdf.mdf.Parameter` during MDF graph execution.
 
-    DEFAULT_INIT_VALUE = 0 # Temporary!
+    Args:
+        parameter: The parameter to evaluate during execution.
+        verbose: Whether to print output of parameter calculations.
+    """
 
-    def __init__(self, parameter, verbose=False):
+    DEFAULT_INIT_VALUE = 0  # Temporary!
+
+    def __init__(self, parameter: Parameter, verbose: bool = False):
         self.verbose = verbose
         self.parameter = parameter
-
-
 
         if self.parameter.default_initial_value is not None:
             if is_number(self.parameter.default_initial_value):
 
-
                 self.curr_value = float(self.parameter.default_initial_value)
-
 
             else:
 
@@ -204,30 +220,35 @@ class EvaluableParameter:
         else:
             self.curr_value = None
 
+    def get_current_value(
+        self, parameters: Dict[str, Any], array_format: str = FORMAT_DEFAULT
+    ) -> Any:
+        """
+        Get the current value of the parameter; evaluates the expression if needed.
 
+        Args:
+            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+                parameter.
+            array_format: The array format to use (either :code:`'numpy'` or :code:`tensorflow'`).
 
+        Returns:
+            The evaluated value of the parameter.
+        """
 
-    def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
-
-
+        # FIXME: Shouldn't this just call self.evaluate, seems like there is redundant code here?
         if self.curr_value is None:
 
             if self.parameter.value is not None:
                 if self.parameter.is_stateful():
 
-
-
                     if self.parameter.default_initial_value is not None:
-
-
-
                         return self.parameter.default_initial_value
                     else:
                         return self.DEFAULT_INIT_VALUE
                 else:
                     ips = {}
                     ips.update(parameters)
-                    ips[self.parameter.id]=self.DEFAULT_INIT_VALUE
+                    ips[self.parameter.id] = self.DEFAULT_INIT_VALUE
                     self.curr_value = evaluate_expr(
                         self.parameter.value,
                         ips,
@@ -241,13 +262,27 @@ class EvaluableParameter:
                             )
                         )
 
-
-
-
         return self.curr_value
 
+    def evaluate(
+        self,
+        parameters: Dict[str, Any],
+        time_increment: Optional[float] = None,
+        array_format: str = FORMAT_DEFAULT,
+    ) -> Any:
+        """
+        Evaluate the parameter and store the result in the :code:`curr_value` attribute.
 
-    def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
+        Args:
+            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+                parameter.
+            time_increment: a floating point value specifying the timestep size, only used for :code:`time_derivative`
+                parameters
+            array_format: The array format to use (either :code:`'numpy'` or :code:`tensorflow'`).
+
+        Returns:
+            The current value of the parameter.
+        """
         if self.verbose:
             print(
                 "    Evaluating {} with {} ".format(
@@ -267,15 +302,16 @@ class EvaluableParameter:
             expr = None
             for f in mdf_functions:
                 if self.parameter.function == f:
-                    expr = create_python_expression(mdf_functions[f]["expression_string"])
+                    expr = create_python_expression(
+                        mdf_functions[f]["expression_string"]
+                    )
             if not expr:
 
                 expr = self.parameter.function
-                #raise "Unknown function: {}. Known functions: {}".format(
+                # raise "Unknown function: {}. Known functions: {}".format(
                 #    self.parameter.function,
                 #    mdf_functions.keys,
-                #)
-
+                # )
 
             func_params = {}
             func_params.update(parameters)
@@ -293,7 +329,9 @@ class EvaluableParameter:
                 )
                 if self.verbose:
                     print(
-                        "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+                        "      Arg: {} became: {}".format(
+                            arg, _val_info(func_params[arg])
+                        )
                     )
 
             # If this is an ONNX operation, evaluate it without neuromlite.
@@ -307,26 +345,40 @@ class EvaluableParameter:
                 for kw, arg_expr in self.parameter.args.items():
 
                     # If this arg is a list of args, we are dealing with a variadic argument. Expand these
-                    if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    if (
+                        type(arg_expr) == str
+                        and arg_expr[0] == "["
+                        and arg_expr[-1] == "]"
+                    ):
                         # Use the Python interpreter to parse this into a List[str]
                         arg_expr_list = eval(arg_expr)
-                        kwargs_for_onnx.update({a: func_params[a] for a in arg_expr_list})
+                        kwargs_for_onnx.update(
+                            {a: func_params[a] for a in arg_expr_list}
+                        )
                     else:
                         kwargs_for_onnx[kw] = func_params[kw]
 
                 # Now add anything in parameters that isn't already specified as an input argument
                 for kw, arg in parameters.items():
 
-                    if kw not in self.parameter.args.values() and kw != self.parameter.id and kw != '__builtins__':
+                    if (
+                        kw not in self.parameter.args.values()
+                        and kw != self.parameter.id
+                        and kw != "__builtins__"
+                    ):
                         kwargs_for_onnx[kw] = arg
-                if self.verbose: print("%s is evaluating ONNX function %s with %s"%(self.parameter.id, expr, kwargs_for_onnx))
+                if self.verbose:
+                    print(
+                        "%s is evaluating ONNX function %s with %s"
+                        % (self.parameter.id, expr, kwargs_for_onnx)
+                    )
                 self.curr_value = onnx_function(**kwargs_for_onnx)
 
-
-
-            elif "actr_functions." in expr:
+            elif "actr." in expr:
                 actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
-                self.curr_value = actr_function(*[func_params[arg] for arg in self.parameter.args])
+                self.curr_value = actr_function(
+                    *[func_params[arg] for arg in self.parameter.args]
+                )
             else:
                 self.curr_value = evaluate_expr(
                     expr, func_params, verbose=self.verbose, array_format=array_format
@@ -356,13 +408,12 @@ class EvaluableParameter:
                 "    Evaluated %s with %s \n       =\t%s"
                 % (self.parameter, _params_info(parameters), _val_info(self.curr_value))
             )
+
         return self.curr_value
 
 
-
-
 class EvaluableOutput:
-    """Evaluate the value at Output Port
+    r"""Evaluates the current value of an :class:`~modeci_mdf.mdf.OutputPort` during MDF graph execution.
 
     Args:
         output_port: Attribute of a Node which exports information to the dependent Node object
@@ -410,10 +461,11 @@ class EvaluableOutput:
 
 
 class EvaluableInput:
-    """Evaluates Input value at Input_port of the node
+    """Evaluates input value at the :class:`~modeci_mdf.mdf.InputPort` of the node during MDF graph execution.
 
     Args:
-        input_port: The InputPort is an attribute of a Node which imports information to the Node
+        input_port: The :class:`~modeci_mdf.mdf.InputPort` is an attribute of a Node which imports information to the
+            :class:`~modeci_mdf.mdf.Node`
         verbose: If set to True Provides in-depth information else verbose message is not displayed
     """
 
@@ -458,10 +510,11 @@ class EvaluableInput:
 
 
 class EvaluableNode:
-    """Evaluates Node
+    r"""Evaluates a :class:`~modeci_mdf.mdf.Node` during MDF graph execution.
 
     Args:
-        node: A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
+        node: A self contained unit of evaluation receiving input from other :class:`~modeci_mdf.mdf.Node`\(s) on
+            :class:`~modeci_mdf.mdf.InputPort`\(s).
         verbose: If set to True Provides in-depth information else verbose message is not displayed
     """
 
@@ -478,24 +531,21 @@ class EvaluableNode:
 
         all_known_vars += KNOWN_PARAMETERS
 
-
         for ip in node.input_ports:
             rip = EvaluableInput(ip, self.verbose)
             self.evaluable_inputs[ip.id] = rip
             all_known_vars.append(ip.id)
             # params_init[ip] = ip.curr_value
 
-
         for p in node.parameters:
             all_known_vars.append(p.id)
 
-        '''
+        """
         for p in node.parameters:
             ep = EvaluableParameter(p, self.verbose)
             self.evaluable_parameters[p.id] = ep
             all_known_vars.append(p.id)
-            # params_init[s] = s.curr_value'''
-
+            # params_init[s] = s.curr_value"""
 
         all_funcs = [f for f in node.functions]
 
@@ -517,7 +567,11 @@ class EvaluableNode:
                         continue
 
                     # If we are dealing with a list of symbols, each must treated separately
-                    if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    if (
+                        type(arg_expr) == str
+                        and arg_expr[0] == "["
+                        and arg_expr[-1] == "]"
+                    ):
                         # Use the Python interpreter to parse this into a List[str]
                         arg_expr_list = eval(arg_expr)
                     else:
@@ -550,7 +604,8 @@ class EvaluableNode:
                 else:
                     all_funcs.append(f)
         all_params_to_check = [p for p in node.parameters]
-        if self.verbose: print('all_params_to_check: %s'%all_params_to_check)
+        if self.verbose:
+            print("all_params_to_check: %s" % all_params_to_check)
 
         # Order the parameters into the correct sequence
         while len(all_params_to_check) > 0:
@@ -563,7 +618,7 @@ class EvaluableNode:
                 )
             all_req_vars = []
 
-            if p.value is not None and type(p.value)==str:
+            if p.value is not None and type(p.value) == str:
                 param_expr = sympy.simplify(p.value)
                 all_req_vars.extend([str(s) for s in param_expr.free_symbols])
 
@@ -572,7 +627,11 @@ class EvaluableNode:
                     arg_expr = p.args[arg]
 
                     # If we are dealing with a list of symbols, each must treated separately
-                    if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    if (
+                        type(arg_expr) == str
+                        and arg_expr[0] == "["
+                        and arg_expr[-1] == "]"
+                    ):
                         # Use the Python interpreter to parse this into a List[str]
                         arg_expr_list = eval(arg_expr)
                     else:
@@ -582,13 +641,18 @@ class EvaluableNode:
                         param_expr = sympy.simplify(e)
                         all_req_vars.extend([str(s) for s in param_expr.free_symbols])
 
-            all_known_vars_plus_this = all_known_vars+[p.id]
+            all_known_vars_plus_this = all_known_vars + [p.id]
             all_present = [v in all_known_vars_plus_this for v in all_req_vars]
 
             if verbose:
                 print(
                     "    Are all of %s in %s? %s, i.e. %s"
-                    % (all_req_vars, all_known_vars_plus_this, all_present, all(all_present))
+                    % (
+                        all_req_vars,
+                        all_known_vars_plus_this,
+                        all_present,
+                        all(all_present),
+                    )
                 )
             if all(all_present):
                 ep = EvaluableParameter(p, self.verbose)
@@ -630,18 +694,17 @@ class EvaluableNode:
             )
             curr_params[eip] = i
 
-
         # First set params to previous parameter values for use in funcs and states...
         for ep in self.evaluable_parameters:
 
-            curr_params[ep] = self.evaluable_parameters[ep].get_current_value(curr_params, array_format=array_format)
-
+            curr_params[ep] = self.evaluable_parameters[ep].get_current_value(
+                curr_params, array_format=array_format
+            )
 
         for ef in self.evaluable_functions:
             curr_params[ef] = self.evaluable_functions[ef].evaluate(
                 curr_params, array_format=array_format
             )
-
 
         # Now evaluate and set params to new parameter values for use in output...
         for ep in self.evaluable_parameters:
@@ -668,10 +731,11 @@ class EvaluableNode:
 
 
 class EvaluableGraph:
-    """Evaluates graph
+    r"""
+    Evaluates a :class:`~modeci_mdf.mdf.Graph` with the MDF execution engine. This is the top-level interface to the execution engine.
 
     Args:
-        graph: A directed graph consisting of Node(s) connected via Edge(s)
+        graph: A directed graph consisting of :class:`~modeci_mdf.mdf.Node`\(s) connected via :class:`~modeci_mdf.mdf.Edge`\(s)
         verbose: If set to True Provides in-depth information else verbose message is not displayed
 
     """
@@ -737,7 +801,8 @@ class EvaluableGraph:
         array_format: str = FORMAT_DEFAULT,
         initializer: Optional[Dict[str, Any]] = None,
     ):
-        """Evaluates the graph
+        """
+        Evaluates a :class:`~modeci_mdf.mdf.Graph`. This is the top-level interface to the execution engine.
 
         Args:
             time_increment: Time step for next execution
@@ -852,9 +917,7 @@ class EvaluableGraph:
         try:
             typ = getattr(graph_scheduler.condition, cond_type)
         except AttributeError as e:
-            raise ValueError(
-                "Unsupported condition type: %s" % cond_type
-            ) from e
+            raise ValueError("Unsupported condition type: %s" % cond_type) from e
         except TypeError as e:
             raise TypeError("Invalid condition dictionary: %s" % condition) from e
 
@@ -876,7 +939,7 @@ class EvaluableGraph:
                     # value may be a string representing a TimeScale
                     cond_args[k] = getattr(
                         graph_scheduler.TimeScale,
-                        re.match(r'TimeScale\.(.*)', v).groups()[0]
+                        re.match(r"TimeScale\.(.*)", v).groups()[0],
                     )
                 except (AttributeError, IndexError, TypeError):
                     pass
@@ -911,15 +974,23 @@ class EvaluableGraph:
                             k: v
                             for k, v in cond_args.items()
                             if k != var_positional_arg
-                        }
+                        },
                     )
 
 
+from neuromllite.utils import FORMAT_NUMPY
 
-from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
+def main(example_file: str, array_format: str = FORMAT_NUMPY, verbose: bool = False):
+    """
+    Main entry point for execution engine.
 
-def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
+    Args:
+        example_file: The MDF file to execute.
+        array_format: The format of arrays to use. Allowed values: 'numpy' or 'tensorflow'.
+        verbose: Whether to print output to standard out during execution.
+
+    """
 
     from modeci_mdf.utils import load_mdf, print_summary
 

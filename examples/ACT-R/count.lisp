@@ -50,7 +50,7 @@
       number      =num2
    !output!       (=num1)
    )
-   
+
 (P stop
    =goal>
       ISA         count-from

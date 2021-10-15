@@ -1,12 +1,16 @@
-"""
-    Defines the structure of ModECI MDF - Work in progress!!!
+r"""
+    The main object-oriented implementation of the MDF schema, with each core component of the `MDF specification <../Specification.html>`_
+    implemented as a :code:`class`. Instances of these objects can be composed to create a representation of
+    an MDF model as Python objects. These models can then be serialized and deserialized to and from JSON or YAML,
+    executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
+    environments using the :mod:`~modeci_mdf.interfaces` module.
 """
 
 import collections
 import onnx.defs
 import sympy
 
-from typing import List, Tuple, Dict, Optional, Set, Any, Union
+from typing import List, Tuple, Dict, Optional, Set, Any, Union, Optional
 
 # Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
 #  Try: pip install neuromllite
@@ -14,21 +18,42 @@ from neuromllite.BaseTypes import Base
 from neuromllite.BaseTypes import BaseWithId
 from neuromllite import EvaluableExpression
 
+__all__ = [
+    "Model",
+    "Graph",
+    "Node",
+    "Function",
+    "InputPort",
+    "OutputPort",
+    "Parameter",
+    "Edge",
+    "ConditionSet",
+    "Condition",
+]
+
 
 class MdfBaseWithId(BaseWithId):
+    """Override BaseWithId from nueromllite"""
+
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
+        self.allowed_fields.update(
+            {"metadata": ("Dict of metadata for the model element", dict)}
+        )
         super().__init__(**kwargs)
 
 
 class MdfBase(Base):
+    """Override Base from nueromllite"""
+
     def __init__(self, **kwargs):
-        self.allowed_fields.update({'metadata':("Dict of metadata for the model element", dict)})
+        self.allowed_fields.update(
+            {"metadata": ("Dict of metadata for the model element", dict)}
+        )
         super().__init__(**kwargs)
 
 
 class Model(MdfBaseWithId):
-    r"""The top level construct in MDF is Model which consists of Graph(s) and model attribute(s)
+    r"""The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
 
     Args:
         id: A unique identifier for this Model
@@ -37,25 +62,7 @@ class Model(MdfBaseWithId):
     """
     _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
 
-
     def __init__(self, **kwargs):
-        """The top level construct in MDF is Model which consists of Graph's and model attributed
-        Args:
-            id: A unique identifier for this Model.
-            format: Information on the version of MDF used in this file
-            generating_application: Information on what application generated/saved this file
-        """
-        '''
-        kwargs = {}
-        if id is not None:
-            kwargs["id"] = id
-        if format is not None:
-            kwargs["format"] = format
-        if generating_application is not None:
-            kwargs["generating_application"] = generating_application
-        if metadata is not None:
-            kwargs["metadata"] = metadata'''
-
         self.allowed_children = collections.OrderedDict(
             [("graphs", ("The list of _Graph_s in this Model", Graph))]
         )
@@ -75,7 +82,7 @@ class Model(MdfBaseWithId):
         """The allowed fields for this type"""
 
         # Removed for now...
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -85,7 +92,7 @@ class Model(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
@@ -95,7 +102,7 @@ class Model(MdfBaseWithId):
         return self.__getattr__("graphs")
 
     def _include_metadata(self):
-        """Information on the version of ModECI_MDF"""
+        """Information on the version of ModECI MDF"""
 
         from modeci_mdf import MODECI_MDF_VERSION
         from modeci_mdf import __version__
@@ -104,7 +111,7 @@ class Model(MdfBaseWithId):
         self.generating_application = "Python modeci-mdf v%s" % __version__
 
     # Overrides BaseWithId.to_json_file
-    def to_json_file(self, filename, include_metadata=True) -> str:
+    def to_json_file(self, filename: str, include_metadata: bool = True) -> str:
         """Convert the file in MDF format to JSON format
 
          .. note::
@@ -126,7 +133,7 @@ class Model(MdfBaseWithId):
         return new_file
 
     # Overrides BaseWithId.to_yaml_file
-    def to_yaml_file(self, filename, include_metadata=True):
+    def to_yaml_file(self, filename: str, include_metadata: bool = True) -> str:
         """Convert file in MDF format to yaml format
 
         Args:
@@ -146,23 +153,24 @@ class Model(MdfBaseWithId):
 
     def to_graph_image(
         self,
-        engine="dot",
-        output_format="png",
-        view_on_render=False,
-        level=2,
-        filename_root=None,
-        only_warn_on_fail=False,
+        engine: str = "dot",
+        output_format: str = "png",
+        view_on_render: bool = False,
+        level: int = 2,
+        filename_root: Optional[str] = None,
+        only_warn_on_fail: bool = False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
+
         Args:
             engine: dot or other Graphviz formats
             output_format: e.g. png (default) or svg
             view_on_render: if True, will open generated image in system viewer
             level: 1,2,3, depending on how much detail to include
             filename_root: will change name of file generated to filename_root.png, etc.
-            only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing erros in automated tests
+            only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing errors in automated tests
         """
-        from modeci_mdf.interfaces.graphviz.importer import mdf_to_graphviz
+        from modeci_mdf.interfaces.graphviz.exporter import mdf_to_graphviz
 
         try:
             mdf_to_graphviz(
@@ -213,7 +221,7 @@ class Graph(MdfBaseWithId):
             ]
         )
         """The allowed fields for this type"""
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         #kwargs["id"] = id
@@ -223,7 +231,7 @@ class Graph(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
@@ -237,10 +245,12 @@ class Graph(MdfBaseWithId):
         """Edge(s) present in this graph"""
         return self.__getattr__("edges")
 
-    def get_node(self, id):
+    def get_node(self, id: str) -> "Node":
         """Retrieve Node object corresponding to the given id
+
         Args:
             id: Unique identifier of Node object
+
         Returns:
             Node object if the entered id matches with the id of Node present in the Graph
         """
@@ -271,7 +281,9 @@ class Graph(MdfBaseWithId):
 
     @property
     def inputs(self: "Graph") -> List[Tuple["Node", "InputPort"]]:
-        """Enumerate all Node-InputPort pairs that specify no incoming edge. These are input ports for the graph itself and must be provided values to evaluate
+        """
+        Enumerate all Node-InputPort pairs that specify no incoming edge.
+        These are input ports for the graph itself and must be provided values to evaluate
 
         Returns:
             A list of Node, InputPort tuples
@@ -288,14 +300,18 @@ class Graph(MdfBaseWithId):
 
 
 class Node(MdfBaseWithId):
-    r"""A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
-    The values from these are processed via a number of Functions and one or more final values
-    are calculated on the OutputPort
+    r"""
+    A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\(s).
+    The values from these are processed via a number of :class:`Function`\(s) and one or more final values
+    are calculated on the :class:`OutputPort`\(s)
 
     Args:
-        id: Unique Identity of the element
-        parameters: Dictionary of parameters required at the Node for computation
+        input_ports: Dictionary of the :class:`InputPort` objects in the Node
+        parameters: Dictionary of :class:`Parameter`\(s) for the node
+        functions: The :class:`Function`\(s) for computation the node
+        output_ports: The :class:`OutputPort`\(s) containing evaluated quantities from the node
     """
+
     _definition = (
         "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. "
         + "The values from these are processed via a number of Functions and one or more final values "
@@ -303,15 +319,6 @@ class Node(MdfBaseWithId):
     )
 
     def __init__(self, **kwargs):
-        """A self contained unit of evaluation receiving input from other Nodes on _InputPort_s.
-        The values from these are processed via a number of _Function_s and one or more final values
-        are calculated on the _OutputPort_
-        Args:
-            input_ports (obj): Dictionary of the InputPort objects in the Node
-            parameters : Dictionary of parameters for the Node
-            functions (obj): The _Function_s for computation the Node
-            output_ports (obj): The _OutputPort_s containing evaluated quantities from the Node
-        """
 
         self.allowed_children = collections.OrderedDict(
             [
@@ -329,7 +336,7 @@ class Node(MdfBaseWithId):
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -339,38 +346,48 @@ class Node(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
+    def get_parameter(self, id: str) -> "Parameter":
+        r"""Get a parameter by its string :code:`id`
+
+        Args:
+            id: The unique string id of the :class:`Parameter`
+
+        Returns:
+            The :class:`Parameter` object stored on this node.
+        """
+        for p in self.parameters:
+            if p.id == id:
+                return p
+        return None
+
     @property
     def input_ports(self) -> List["InputPort"]:
-        """The InputPort(s) present in the Node
+        r"""
+        The InputPort(s) present in the Node
 
         Returns:
             A list of InputPort(s) at the given Node
         """
         return self.__getattr__("input_ports")
 
-
-    def get_parameter(self, id):
-        for p in self.parameters:
-            if p.id==id: return p
-        return None
-
     @property
     def functions(self) -> List["Function"]:
-        """The Functions define computation at the Node
+        r"""
+        The :class:`Function`\(s) define computation at the :class:`Node`.
 
         Returns:
-            A list of Function(s) at the given Node
+            A list of :class:`Function`\ s at the given Node
         """
         return self.__getattr__("functions")
 
-
     @property
     def output_ports(self) -> List["OutputPort"]:
-        """The OutputPort(s) present at the Node
+        r"""
+        The :class:`OutputPort`\(s) present at the Node
 
         Returns:
             A list of OutputPorts at the given Node
@@ -379,17 +396,16 @@ class Node(MdfBaseWithId):
 
 
 class Function(MdfBaseWithId):
-    r"""A single value which is evaluated as a function of values on InputPorts and other Functions
+    r"""A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
 
     Args:
+        id: The unique (for this Node) id of the function, which will be used in other Functions and the _OutputPort_s
+            for its value
         function: Which of the in-build MDF functions (linear etc.) this uses
         args: Dictionary of values for each of the arguments for the Function, e.g. if the in-build function
               is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-        id: The unique (for this Node) id of the function, which will be used in other Functions and the _OutputPort_s
-            for its value
     """
     _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
-
 
     def __init__(self, **kwargs):
 
@@ -402,7 +418,6 @@ class Function(MdfBaseWithId):
                         str,
                     ),
                 ),
-
                 (
                     "value",
                     (
@@ -410,8 +425,6 @@ class Function(MdfBaseWithId):
                         str,
                     ),
                 ),
-
-
                 (
                     "args",
                     (
@@ -430,7 +443,7 @@ class Function(MdfBaseWithId):
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         for f in self.allowed_fields:
@@ -439,13 +452,13 @@ class Function(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
 
 class InputPort(MdfBaseWithId):
-    r"""The InputPort is an attribute of a Node which allows external information to be input to the Node
+    r"""The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node
 
     Args:
         shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
@@ -476,7 +489,7 @@ class InputPort(MdfBaseWithId):
                         "The type of the variable (note: there is limited support for this so far ",
                         str,
                     ),
-                )
+                ),
             ]
         )
 
@@ -495,9 +508,10 @@ class InputPort(MdfBaseWithId):
 
 class OutputPort(MdfBaseWithId):
     r"""The OutputPort is an attribute of a Node which exports information to another Node connected by an Edge
+
     Args:
-        id: Unique Indenty of the element
-        value: The value of the OutputPort in terms of the InputPort and Function values
+        id: Unique indentifier for the element
+        value: The value of the :class:`OutputPort` in terms of the :class:`InputPort` and :class:`Function` values
     """
     _definition = "The OutputPort is an attribute of a _Node_ which exports information to another _Node_ connected by an _Edge_"
 
@@ -512,12 +526,11 @@ class OutputPort(MdfBaseWithId):
                         str,
                     ),
                 ),
-
             ]
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -527,14 +540,15 @@ class OutputPort(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
 
-
 class Parameter(MdfBaseWithId):
-    r"""A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative
+    r"""A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
+    referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function with args, or change from a
+    :code:`default_initial_value` with a :code:`time_derivative`.
 
     Args:
         default_initial_value: The initial value of the parameter
@@ -542,11 +556,10 @@ class Parameter(MdfBaseWithId):
         time_derivative: How the parameter with time, i.e. ds/dt. Units of time are seconds.
         function: Which of the in-build MDF functions (linear etc.) this uses
         args: Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-        """
+    """
     _definition = "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative"
 
     def __init__(self, **kwargs):
-
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -587,22 +600,35 @@ class Parameter(MdfBaseWithId):
 
         super().__init__(**kwargs)
 
-    def is_stateful(self):
+    def is_stateful(self) -> bool:
+        """
+        Is the parameter stateful?
+
+        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`defualt_initial_value`, or it's
+        id is referenced in its value expression.
+
+        Returns:
+            :code:`True` if stateful, `False` if not.
+        """
 
         if self.time_derivative is not None:
             return True
         if self.default_initial_value is not None:
             return True
-        if self.value is not None and type(self.value)==str:
+        if self.value is not None and type(self.value) == str:
             param_expr = sympy.simplify(self.value)
             sf = self.id in [str(s) for s in param_expr.free_symbols]
-            print('Checking whether %s is stateful, %s: %s'%(self,param_expr.free_symbols,sf))
+            print(
+                "Checking whether %s is stateful, %s: %s"
+                % (self, param_expr.free_symbols, sf)
+            )
             return sf
         return False
 
 
 class Edge(MdfBaseWithId):
-    r"""An Edge is an attribute of a Graph that transmits computational results from a sender's OutputPort to a receiver's InputPort
+    r"""An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's
+    :class:`OutputPort` to a receiver's :class:`InputPort`.
 
     Args:
         parameters: Dictionary of parameters for the Edge
@@ -612,7 +638,6 @@ class Edge(MdfBaseWithId):
         receiver_port: The id of the InputPort on the receiver Node
     """
     _definition = "An Edge is an attribute of a _Graph_ that transmits computational results from a sender's _OutputPort_ to a receiver's _InputPort_"
-
 
     def __init__(self, **kwargs):
 
@@ -642,7 +667,7 @@ class Edge(MdfBaseWithId):
         )
         """The allowed fields for this type"""
 
-        '''
+        """
         # FIXME: Reconstruct kwargs as neuromlite expects them
         kwargs = {}
         kwargs["id"] = id
@@ -652,7 +677,7 @@ class Edge(MdfBaseWithId):
                 if val is not None:
                     kwargs[f] = val
             except KeyError:
-                pass'''
+                pass"""
 
         super().__init__(**kwargs)
 
@@ -700,10 +725,12 @@ class ConditionSet(MdfBase):
 
 
 class Condition(MdfBase):
-    r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements
+    r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
+
     Args:
-        type: The type of Condition from the library
-        args: The dictionary of arguments needed to evaluate the Condition
+        type: The type of :class:`Condition` from the library
+        args: The dictionary of arguments needed to evaluate the :class:`Condition`
+
     """
     _definition = "A set of descriptors which specify conditional execution of _Node_s to meet complex execution requirements"
 
