@@ -1,3 +1,15 @@
+"""The reference implementation of the MDF execution engine.
+
+This module implements a set of classes for executing loaded MDF models in Python.
+The implementation is organized such that each class present in :mod:`~modeci_mdf.mdf`
+has a corresponding :code:`Evaluable` version of the class. Each of these classes implements
+the execution of these components and tracks their state during execution. The organization of the entire execution of
+the model is implemented at the top-level :func:`~modeci_mdf.execution_engine.EvaluableGraph.evaluate` method
+of the :class:`EvaluableGraph` class. The external library `graph-scheduler
+<https://pypi.org/project/graph-scheduler/>`_ is used to implement the scheduling of nodes under declarative
+conditional constraints.
+
+"""
 import inspect
 import os
 import re
@@ -9,6 +21,7 @@ import numpy as np
 import graph_scheduler
 
 from modeci_mdf.functions.standard import mdf_functions, create_python_expression
+from modeci_mdf.utils import is_number
 
 from neuromllite.utils import evaluate as evaluate_params_nmllite
 from neuromllite.utils import _params_info, _val_info
@@ -24,6 +37,7 @@ from modeci_mdf.mdf import (
     OutputPort,
     InputPort,
     Node,
+    Parameter,
 )
 
 import modeci_mdf.functions.onnx as onnx_ops
@@ -35,14 +49,6 @@ FORMAT_DEFAULT = FORMAT_NUMPY
 KNOWN_PARAMETERS = ["constant"]
 
 
-def is_number(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
-
-
 def evaluate_expr(
     expr: Union[str, List[str], np.ndarray, "tf.tensor"] = None,
     func_params: Dict[str, Any] = None,
@@ -50,11 +56,11 @@ def evaluate_expr(
     verbose: Optional[bool] = False,
 ) -> np.ndarray:
 
-    """Evaluates an expression given in string format using func_parameters
+    """Evaluates an expression given in string format and a :code:`dict` of parameters.
 
     Args:
         expr: Expression or list of expressions to be evaluated
-        func_params: A dict of parameters (e.g. {'weight':2})
+        func_params: A dict of parameters (e.g. :code:`{'weight': 2}`)
         array_format: It can be a n-dimensional array or a tensor
         verbose: If set to True provides in-depth information else verbose message is not displayed
 
@@ -75,9 +81,10 @@ def evaluate_expr(
 
 
 class EvaluableFunction:
-    """Evaluates the function
+    """Evaluates a :class:`~modeci_mdf.mdf.Function` value during MDF graph execution.
+
     Args:
-        function: Function to be evaluated e.g. mdf standard function
+        function: :func:`~modeci_mdf.mdf.Function` to be evaluated e.g. mdf standard function
         verbose: If set to True Provides in-depth information else verbose message is not displayed
     """
 
@@ -186,10 +193,16 @@ class EvaluableFunction:
 
 
 class EvaluableParameter:
+    """
+    Evaluates the current value of a :class:`~modeci_mdf.mdf.Parameter` during MDF graph execution.
+
+    Args:
+        parameter: The parameter to evaluate during execution.
+    """
 
     DEFAULT_INIT_VALUE = 0  # Temporary!
 
-    def __init__(self, parameter, verbose=False):
+    def __init__(self, parameter: Parameter, verbose=False):
         self.verbose = verbose
         self.parameter = parameter
 
@@ -366,7 +379,7 @@ class EvaluableParameter:
 
 
 class EvaluableOutput:
-    """Evaluate the value at Output Port
+    r"""Evaluates the current value of an :class:`~modeci_mdf.mdf.OutputPort` during MDF graph execution.
 
     Args:
         output_port: Attribute of a Node which exports information to the dependent Node object
@@ -414,10 +427,11 @@ class EvaluableOutput:
 
 
 class EvaluableInput:
-    """Evaluates Input value at Input_port of the node
+    """Evaluates input value at the :class:`~modeci_mdf.mdf.InputPort` of the node during MDF graph execution.
 
     Args:
-        input_port: The InputPort is an attribute of a Node which imports information to the Node
+        input_port: The :class:`~modeci_mdf.mdf.InputPort` is an attribute of a Node which imports information to the
+        :class:`~modeci_mdf.mdf.Node`
         verbose: If set to True Provides in-depth information else verbose message is not displayed
     """
 
@@ -462,10 +476,11 @@ class EvaluableInput:
 
 
 class EvaluableNode:
-    """Evaluates Node
+    r"""Evaluates a :class:`~modeci_mdf.mdf.Node` during MDF graph execution.
 
     Args:
-        node: A self contained unit of evaluation receiving input from other Nodes on InputPort(s).
+        node: A self contained unit of evaluation receiving input from other :class:`~modeci_mdf.mdf.Node`\(s) on
+            :class:`~modeci_mdf.mdf.InputPort`\(s).
         verbose: If set to True Provides in-depth information else verbose message is not displayed
     """
 
@@ -682,10 +697,11 @@ class EvaluableNode:
 
 
 class EvaluableGraph:
-    """Evaluates graph
+    r"""
+    Evaluates a :class:`~modeci_mdf.mdf.Graph` with the MDF execution engine. This is the top-level interface to the execution engine.
 
     Args:
-        graph: A directed graph consisting of Node(s) connected via Edge(s)
+        graph: A directed graph consisting of :class:`~modeci_mdf.mdf.Node`\(s) connected via :class:`~modeci_mdf.mdf.Edge`\(s)
         verbose: If set to True Provides in-depth information else verbose message is not displayed
 
     """
@@ -751,7 +767,8 @@ class EvaluableGraph:
         array_format: str = FORMAT_DEFAULT,
         initializer: Optional[Dict[str, Any]] = None,
     ):
-        """Evaluates the graph
+        """
+        Evaluates a :class:`~modeci_mdf.mdf.Graph`. This is the top-level interface to the execution engine.
 
         Args:
             time_increment: Time step for next execution
@@ -930,7 +947,16 @@ class EvaluableGraph:
 from neuromllite.utils import FORMAT_NUMPY
 
 
-def main(example_file, array_format=FORMAT_NUMPY, verbose=False):
+def main(example_file: str, array_format: str = FORMAT_NUMPY, verbose: bool = False):
+    """
+    Main entry point for execution engine.
+
+    Args:
+        example_file: The MDF file to execute.
+        array_format: The format of arrays to use. Allowed values: 'numpy' or 'tensorflow'.
+        verbose: Whether to print output to standard out during execution.
+
+    """
 
     from modeci_mdf.utils import load_mdf, print_summary
 

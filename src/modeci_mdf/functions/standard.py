@@ -1,3 +1,9 @@
+"""
+Implementation of core MDF function ontology.
+
+This module implements and registers all builtin MDF functions.
+
+"""
 from typing import List, Dict
 
 # Make sure we import math and numpy for Python expression strings. These imports
@@ -6,17 +12,22 @@ import math
 import numpy
 
 
+"""
+A dict that stores all registered MDF functions.
+"""
 mdf_functions = {}
 
 
-def _add_mdf_function(
+def add_mdf_function(
     name: str = None,
     description: str = None,
     arguments: List[str] = None,
     expression_string: str = None,
 ):
 
-    """To include a new function in mdf_functions
+    """Register a function with MDF function ontology.
+
+    Adds a function to the registered list of available MDF functions.
 
     Args:
         name: name of the function e.g.'sin','cos','linear'
@@ -66,7 +77,6 @@ def create_python_expression(expression_string: str = None) -> str:
 
 
 def substitute_args(expression_string: str = None, args: Dict[str, str] = None) -> str:
-
     """Substitute arg with the value in args dict
 
     Args:
@@ -87,8 +97,7 @@ def create_python_function(
     expression_string: str = None,
     arguments: List[str] = None,
 ) -> "types.FunctionType":
-
-    """create a python function e.g. linear, exponential, sin, cos, ReLu
+    """Create a Python function e.g. linear, exponential, sin, cos, ReLu
 
     Args:
         name: name of the function e.g.'sin','cos','linear'
@@ -118,14 +127,14 @@ if len(mdf_functions) == 0:
     STANDARD_ARG_0 = "variable0"
     STANDARD_ARG_1 = "variable1"
 
-    _add_mdf_function(
+    add_mdf_function(
         "linear",
         description="A linear function, calculated from a slope and an intercept",
         arguments=[STANDARD_ARG_0, "slope", "intercept"],
         expression_string="(%s * slope + intercept)" % (STANDARD_ARG_0),
     )
 
-    _add_mdf_function(
+    add_mdf_function(
         "logistic",
         description="Logistic function",
         arguments=[STANDARD_ARG_0, "gain", "bias", "offset"],
@@ -133,35 +142,35 @@ if len(mdf_functions) == 0:
         % (STANDARD_ARG_0),
     )
 
-    _add_mdf_function(
+    add_mdf_function(
         "exponential",
         description="Exponential function",
         arguments=[STANDARD_ARG_0, "scale", "rate", "bias", "offset"],
         expression_string="scale * exp((rate * %s) + bias) + offset" % (STANDARD_ARG_0),
     )
 
-    _add_mdf_function(
+    add_mdf_function(
         "sin",
         description="Sine function",
         arguments=[STANDARD_ARG_0, "scale"],
         expression_string="scale * sin(%s)" % (STANDARD_ARG_0),
     )
 
-    _add_mdf_function(
+    add_mdf_function(
         "cos",
         description="Cosine function",
         arguments=[STANDARD_ARG_0, "scale"],
         expression_string="scale * cos(%s)" % (STANDARD_ARG_0),
     )
 
-    _add_mdf_function(
+    add_mdf_function(
         "MatMul",
         description="Matrix multiplication (work in progress...)",
         arguments=["A", "B"],
         expression_string="A @ B",
     )
 
-    _add_mdf_function(
+    add_mdf_function(
         "Relu",
         description="Rectified linear function (work in progress...)",
         arguments=["A"],
@@ -172,13 +181,13 @@ if len(mdf_functions) == 0:
     from modeci_mdf.functions.onnx import get_onnx_ops
 
     for mdf_func_spec in get_onnx_ops():
-        _add_mdf_function(**mdf_func_spec)
+        add_mdf_function(**mdf_func_spec)
 
     # Add the ACT-R functions.
     from modeci_mdf.functions.actr import get_actr_functions
 
     for mdf_func_spec in get_actr_functions():
-        _add_mdf_function(**mdf_func_spec)
+        add_mdf_function(**mdf_func_spec)
 
 
 if __name__ == "__main__":

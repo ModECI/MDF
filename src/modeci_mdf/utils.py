@@ -1,16 +1,21 @@
 """
-    Example of ModECI MDF - Work in progress!!!
+    Useful utility functions for dealing with MDF objects.
 """
 
-from modeci_mdf.mdf import InputPort
-from modeci_mdf.mdf import Function
-from modeci_mdf.mdf import OutputPort
-from modeci_mdf.mdf import Edge
-from modeci_mdf.mdf import Model
-from modeci_mdf.mdf import Node
+from modeci_mdf.mdf import Model, Graph, Node, Edge, OutputPort, Function, InputPort
 
 
-def create_example_node(node_id, graph):
+def create_example_node(node_id: str, graph: Graph) -> Node:
+    """
+    Create a simple example node with Input inside a graph
+
+    Args:
+        node_id: The unique id for the first node in the graph.
+        graph: The graph to add the example node.
+
+    Returns:
+        The node (with id=node_id) created in the graph.
+    """
 
     a = Node(id=node_id)
     graph.nodes.append(a)
@@ -36,7 +41,18 @@ def create_example_node(node_id, graph):
     return a
 
 
-def simple_connect(pre_node, post_node, graph):
+def simple_connect(pre_node, post_node, graph) -> Edge:
+    """
+    Create an edge connecting two nodes in a graph.
+
+    Args:
+        pre_node: The source node.
+        post_node: The destination node.
+        graph: The graph to and the edge.
+
+    Returns:
+        The edge that has been added to the graph.
+    """
 
     e1 = Edge(
         id=f"edge_{pre_node.id}_{post_node.id}",
@@ -50,7 +66,8 @@ def simple_connect(pre_node, post_node, graph):
     return e1
 
 
-def print_summary(graph):
+def print_summary(graph: Graph):
+    """Print a summary of a graph to standard out."""
     print(
         "Graph %s with %i nodes and %s edges\n"
         % (graph.id, len(graph.nodes), len(graph.edges))
@@ -61,7 +78,10 @@ def print_summary(graph):
         print("%s" % edge)
 
 
-def load_mdf(filename):
+def load_mdf(filename: str) -> Model:
+    """
+    Load an MDF file from JSON or YAML. File type is detected automatically based on extension.
+    """
 
     if filename.endswith("yaml") or filename.endswith("yml"):
         return load_mdf_yaml(filename)
@@ -69,7 +89,7 @@ def load_mdf(filename):
         return load_mdf_json(filename)
 
 
-def load_mdf_json(filename):
+def load_mdf_json(filename: str) -> Model:
     """
     Load an MDF JSON file
     """
@@ -87,7 +107,7 @@ def load_mdf_json(filename):
     return model
 
 
-def load_mdf_yaml(filename):
+def load_mdf_yaml(filename: str) -> Model:
     """
     Load an MDF YAML file
     """
@@ -106,8 +126,18 @@ def load_mdf_yaml(filename):
 
 
 def color_rgb_to_hex(rgb):
+    """Convert a rgb color to hexadecimal format."""
     color = "#"
     print("Converting %s to hex color" % rgb)
     for a in rgb.split():
         color = color + "%02x" % int(float(a) * 255)
     return color
+
+
+def is_number(s):
+    """Return :code:`True` if cast to :code:`float` does not throw ValueError, :code:`False` otherwise. """
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False

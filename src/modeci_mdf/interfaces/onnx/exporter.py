@@ -74,10 +74,7 @@ def onnx_node_to_mdf(
             a ValueInfoProto specifying an input or output.
         onnx_initializer: A specification of values in the graph that ONNX has
             marked as initializer's. This dict is keyed on the name of the parameter,
-            the value is another dict with two entries:
-                - 'shape': The shape of the parameter
-                - 'type': The data type of the parameter
-                - 'value': The actual value if present.
+            the value is another dict with three entries; shape, type, and value.
 
     Returns:
         The equivalent MDF node for the ONNX node passed in as argument.
@@ -175,10 +172,7 @@ def onnx_to_mdf(
         onnx_model: The ONNX model to convert. Typically, this is the result of a call to onnx.load()
         onnx_initializer: A specification of values in the graph that ONNX has
             marked as initializer's. This dict is keyed on the name of the parameter,
-            the value is another dict with two entries:
-                - 'shape': The shape of the parameter
-                - 'type': The data type of the parameter
-                - 'value': The actual value if present.
+            the value is another dict with three entries; shape, type, and value.
 
     Returns:
         An MDF description of the ONNX model.

@@ -1,5 +1,5 @@
 """
-This module programmatically defines every ONNX operation as a python callable function. Executing ONNX graphs in this
+Programmatically defines every ONNX operation as a python callable function. Executing ONNX graphs in this
 way somewhat defeats the performance purposes of ONNX since the overhead for each operation will be high. However, this
 allows us to test the MDF scheduler (which invokes Python functions) on any MDF model defined over ONNX operations. In
 the future, the MDF should probably just compile to ONNX (or some other IR) for execution.
@@ -160,7 +160,7 @@ def get_onnx_ops(opset_version: int = onnx_opset_version) -> List[Dict]:
 
     Returns:
         A list of MDF function specifications. Each entry is a Dict that is feed directly to
-            _add_mdf_function.
+            add_mdf_function.
     """
 
     mdf_funcspecs = []
@@ -305,6 +305,9 @@ def _define_onnx_functions(opset_version):
 
         # Lets call this function a lowercase version of the opname, follow PEP 8
         func_name = schema.name.lower()
+
+        # Lets add some documentation.
+        onnx_wrapper.__doc__ = schema.doc
 
         setattr(current_module, func_name, onnx_wrapper)
 

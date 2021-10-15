@@ -233,3 +233,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PyTorch/example_data/
 /examples/PyTorch/data/
 /examples/PyTorch/runs/
+/docs/sphinx/source/api/_autosummary/

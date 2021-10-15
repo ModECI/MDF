@@ -4,7 +4,7 @@ import ntpath
 from modeci_mdf.functions.standard import (
     mdf_functions,
     create_python_expression,
-    _add_mdf_function,
+    add_mdf_function,
 )
 from typing import List, Tuple, Dict, Optional, Set, Any, Union
 from modeci_mdf.utils import load_mdf, print_summary

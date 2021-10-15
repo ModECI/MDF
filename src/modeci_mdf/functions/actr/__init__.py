@@ -1,4 +1,5 @@
-"""This module contains implementations of ACT-R functions using the ccm library."""
+"""Contains implementations of ACT-R functions using the ccm library."""
+
 import random
 from .ccm.pattern import Pattern
 from .ccm.scheduler import Scheduler
