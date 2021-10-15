@@ -1,3 +1,6 @@
+"""
+Functions for converting from MDF models to PyTorch models.
+"""
 import os
 import sys
 import h5py

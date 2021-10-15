@@ -58,6 +58,7 @@ html_show_sourcelink = (
 autodoc_mock_imports = [
     "modeci_mdf.version",
     "modeci_mdf.interfaces.pytorch.mod_torch_builtins",
+    "modeci_mdf.interfaces.pytorch.builtins",
 ]
 
 # To exclude a class, function, method or attribute, use autodoc-skip-member. (Note this can also

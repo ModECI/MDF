@@ -1,4 +1,5 @@
-"""The reference implementation of the MDF execution engine.
+"""The reference implementation of the MDF execution engine; allows for executing :class:`~modeci.mdf.Graph`
+objects in Python.
 
 This module implements a set of classes for executing loaded MDF models in Python.
 The implementation is organized such that each class present in :mod:`~modeci_mdf.mdf`
@@ -198,11 +199,12 @@ class EvaluableParameter:
 
     Args:
         parameter: The parameter to evaluate during execution.
+        verbose: Whether to print output of parameter calculations.
     """
 
     DEFAULT_INIT_VALUE = 0  # Temporary!
 
-    def __init__(self, parameter: Parameter, verbose=False):
+    def __init__(self, parameter: Parameter, verbose: bool = False):
         self.verbose = verbose
         self.parameter = parameter
 
@@ -218,15 +220,28 @@ class EvaluableParameter:
         else:
             self.curr_value = None
 
-    def get_current_value(self, parameters, array_format=FORMAT_DEFAULT):
+    def get_current_value(
+        self, parameters: Dict[str, Any], array_format: str = FORMAT_DEFAULT
+    ) -> Any:
+        """
+        Get the current value of the parameter; evaluates the expression if needed.
 
+        Args:
+            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+                parameter.
+            array_format: The array format to use (either :code:`'numpy'` or :code:`tensorflow'`).
+
+        Returns:
+            The evaluated value of the parameter.
+        """
+
+        # FIXME: Shouldn't this just call self.evaluate, seems like there is redundant code here?
         if self.curr_value is None:
 
             if self.parameter.value is not None:
                 if self.parameter.is_stateful():
 
                     if self.parameter.default_initial_value is not None:
-
                         return self.parameter.default_initial_value
                     else:
                         return self.DEFAULT_INIT_VALUE
@@ -249,7 +264,25 @@ class EvaluableParameter:
 
         return self.curr_value
 
-    def evaluate(self, parameters, time_increment=None, array_format=FORMAT_DEFAULT):
+    def evaluate(
+        self,
+        parameters: Dict[str, Any],
+        time_increment: Optional[float] = None,
+        array_format: str = FORMAT_DEFAULT,
+    ) -> Any:
+        """
+        Evaluate the parameter and store the result in the :code:`curr_value` attribute.
+
+        Args:
+            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+                parameter.
+            time_increment: a floating point value specifying the timestep size, only used for :code:`time_derivative`
+                parameters
+            array_format: The array format to use (either :code:`'numpy'` or :code:`tensorflow'`).
+
+        Returns:
+            The current value of the parameter.
+        """
         if self.verbose:
             print(
                 "    Evaluating {} with {} ".format(
@@ -375,6 +408,7 @@ class EvaluableParameter:
                 "    Evaluated %s with %s \n       =\t%s"
                 % (self.parameter, _params_info(parameters), _val_info(self.curr_value))
             )
+
         return self.curr_value
 
 

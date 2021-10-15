@@ -1,6 +1,6 @@
 r"""
-    This module implements the main MDF API. Each core component of the `MDF specification <../Specification.html>`_
-    is implemented as a class. Instances of these objects can be composed to create a representation of
+    The main object-oriented implementation of the MDF schema, with each core component of the `MDF specification <../Specification.html>`_
+    implemented as a :code:`class`. Instances of these objects can be composed to create a representation of
     an MDF model as Python objects. These models can then be serialized and deserialized to and from JSON or YAML,
     executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
     environments using the :mod:`~modeci_mdf.interfaces` module.
