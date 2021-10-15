@@ -465,7 +465,7 @@ class EvaluableInput:
 
     Args:
         input_port: The :class:`~modeci_mdf.mdf.InputPort` is an attribute of a Node which imports information to the
-        :class:`~modeci_mdf.mdf.Node`
+            :class:`~modeci_mdf.mdf.Node`
         verbose: If set to True Provides in-depth information else verbose message is not displayed
     """
 
