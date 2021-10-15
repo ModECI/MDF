@@ -1,6 +1,6 @@
 """
     This module defines the base implementation of ACT-R in MDF and a function
-    for exporting ACT-R models to MDF.
+    for importing ACT-R models into MDF.
 """
 from modeci_mdf.mdf import *
 

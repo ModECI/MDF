@@ -1,5 +1,5 @@
 """
-Simple export of MDF to NeuroML(2/lite) & LEMS...
+Simple export of MDF to NeuroML(2/lite) and LEMS.
 
 Work in progress...
 

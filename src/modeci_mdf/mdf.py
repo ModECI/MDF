@@ -170,7 +170,7 @@ class Model(MdfBaseWithId):
             filename_root: will change name of file generated to filename_root.png, etc.
             only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing errors in automated tests
         """
-        from modeci_mdf.interfaces.graphviz.importer import mdf_to_graphviz
+        from modeci_mdf.interfaces.graphviz.exporter import mdf_to_graphviz
 
         try:
             mdf_to_graphviz(
