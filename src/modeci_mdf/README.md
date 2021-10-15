@@ -2,7 +2,6 @@ The MDF Python API can be used to create or load an MDF model for inspection and
 It also includes a basic execution engine for simulating models in the format. See the HTML documentation
 for these modules [here](https://mdf.readthedocs.io/en/latest/api/_autosummary/modeci_mdf.html)
 
-<br></br>
 <table class="longtable docutils align-default">
 <colgroup>
 <col style="width: 10%">
