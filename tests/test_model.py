@@ -214,13 +214,12 @@ def test_node_metadata_empty_dict():
     Node(id="n0", metadata={}).to_json()
 
 
-@pytest.mark.xfail(reason="Should fail on non dict")
 def test_metadata_dict():
     """
     Test whether we get a serialization error when passing anything else from a dictionary
     """
-    tr
-    Graph(id="n0", metadata="info").to_json()
+    with pytest.raises(Exception):
+        Graph(id="n0", metadata="info").to_json()
 
 
 def test_param_args_empty_dict():

@@ -45,9 +45,9 @@ re-used in other environments.
    api/MDF_function_specifications
 
 .. toctree::
-   :caption: API Reference:
+   :caption: API Reference
 
-   api/modules
+   api/_autosummary/modeci_mdf
 
 
 Indices and tables

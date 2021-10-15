@@ -3,7 +3,7 @@ import torch
 import numpy as np
 import torch.nn
 import sys
-from modeci_mdf.interfaces.pytorch import importer
+from modeci_mdf.interfaces.pytorch.exporter import mdf_to_pytorch
 
 
 # Load Model
@@ -12,7 +12,7 @@ mdf_name = "mlp_classifier.json"
 
 file_path = os.path.join(os.getcwd(), script_dir, mdf_name)
 
-models = importer.mdf_to_pytorch(file_path, eval_models=True)
+models = mdf_to_pytorch(file_path, eval_models=True)
 model = models["mlp_classifier"]
 model.eval()
 
