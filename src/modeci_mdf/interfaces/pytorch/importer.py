@@ -284,7 +284,7 @@ def torchnode_to_mdfnode(
     if op == "onnx::Loop":
         sub_mdf_graph = Graph(id=f"LoopSubgraph{make_node_id(node)}")
         block_graph = list(node.blocks())[0]
-        _translate_graph(
+        translate_graph(
             graph=block_graph,
             mdf_graph=sub_mdf_graph,
             consts=consts,
@@ -336,12 +336,25 @@ def torchnode_to_mdfnode(
     return mdf_node
 
 
-def _translate_graph(
+def translate_graph(
     graph: Union[torch.Graph, torch.Block],
     mdf_graph: Graph,
     consts: Dict[str, Any],
     port_mapper: "PortMapper",
 ):
+    """
+    Go through a :class:`~torch.Graph` or :class:`~torch.Block` and translate the nodes and edges to MDF nodes and
+    edges.
+
+    Args:
+        graph: The graph to translate.
+        mdf_graph: The MDF graph to store the translation into.
+        consts: Constant to use for parameters of nodes.
+        port_mapper: A port mapper instance to handle translating names.
+
+    Returns:
+
+    """
 
     # For every node, cache its input edges. This will let us look this up quickly for
     # any node in the loop below.
@@ -475,7 +488,7 @@ def pytorch_to_mdf(
     port_mapper = PortMapper(graph=graph, args=args)
 
     # Translate the TorchScript graph to and MDF graph object. This could be a recursive call
-    _translate_graph(
+    translate_graph(
         graph=graph, mdf_graph=mdf_graph, consts=consts, port_mapper=port_mapper
     )
 

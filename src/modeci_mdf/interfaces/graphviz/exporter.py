@@ -1,5 +1,6 @@
 """
-Simple export of MDF to GraphViz for generating graphics
+Simple export of MDF to GraphViz for generating graphics.
+
 Work in progress...
 """
 
