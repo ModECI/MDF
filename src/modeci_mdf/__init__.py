@@ -10,7 +10,7 @@ widely-used programming environments in a range of disciplines, and for easily e
 """
 
 # Version of the specification for MDF
-MODECI_MDF_VERSION = "0.2"
+MODECI_MDF_VERSION = "0.3"
 
 # Version of the python module. Use MDF version here and just change minor version
 __version__ = "%s.1" % MODECI_MDF_VERSION

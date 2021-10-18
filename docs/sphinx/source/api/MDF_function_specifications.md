@@ -1,4 +1,4 @@
-# Specification of standard functions in ModECI v0.2
+# Specification of standard functions in ModECI v0.3
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**
 These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py
 ## All functions:
@@ -2973,35 +2973,35 @@ This operator has **optional** inputs/outputs. See [the doc](IR.md) for more det
 
 ## change_goal
  <p><i>ACT-R change goal buffer function</i></p>
-<p><b>change_goal(pattern, curr_goal)</b> = actr_functions.change_goal(pattern, curr_goal)</p>
-<p>Python version: actr_functions.change_goal(pattern, curr_goal)</p>
+<p><b>change_goal(pattern, curr_goal)</b> = actr.change_goal(pattern, curr_goal)</p>
+<p>Python version: actr.change_goal(pattern, curr_goal)</p>
 
 ## retrieve_chunk
  <p><i>ACT-R retrieve chunk function</i></p>
-<p><b>retrieve_chunk(pattern, dm_chunks, types)</b> = actr_functions.retrieve_chunk(pattern, dm_chunks, types)</p>
-<p>Python version: actr_functions.retrieve_chunk(pattern, dm_chunks, types)</p>
+<p><b>retrieve_chunk(pattern, dm_chunks, types)</b> = actr.retrieve_chunk(pattern, dm_chunks, types)</p>
+<p>Python version: actr.retrieve_chunk(pattern, dm_chunks, types)</p>
 
 ## pattern_matching_function
  <p><i>ACT-R pattern matching function</i></p>
-<p><b>pattern_matching_function(productions, goal, retrieval)</b> = actr_functions.pattern_matching_function(productions, goal, retrieval)</p>
-<p>Python version: actr_functions.pattern_matching_function(productions, goal, retrieval)</p>
+<p><b>pattern_matching_function(productions, goal, retrieval)</b> = actr.pattern_matching_function(productions, goal, retrieval)</p>
+<p>Python version: actr.pattern_matching_function(productions, goal, retrieval)</p>
 
 ## conflict_resolution_function
  <p><i>ACT-R conflict resolution function</i></p>
-<p><b>conflict_resolution_function(productions)</b> = actr_functions.conflict_resolution_function(productions)</p>
-<p>Python version: actr_functions.conflict_resolution_function(productions)</p>
+<p><b>conflict_resolution_function(productions)</b> = actr.conflict_resolution_function(productions)</p>
+<p>Python version: actr.conflict_resolution_function(productions)</p>
 
 ## update_goal
  <p><i>ACT-R update goal buffer function</i></p>
-<p><b>update_goal(production)</b> = actr_functions.update_goal(production)</p>
-<p>Python version: actr_functions.update_goal(production)</p>
+<p><b>update_goal(production)</b> = actr.update_goal(production)</p>
+<p>Python version: actr.update_goal(production)</p>
 
 ## update_retrieval
  <p><i>ACT-R update retrieval buffer function</i></p>
-<p><b>update_retrieval(production)</b> = actr_functions.update_retrieval(production)</p>
-<p>Python version: actr_functions.update_retrieval(production)</p>
+<p><b>update_retrieval(production)</b> = actr.update_retrieval(production)</p>
+<p>Python version: actr.update_retrieval(production)</p>
 
 ## check_termination
  <p><i>check_termination</i></p>
-<p><b>check_termination(production)</b> = actr_functions.check_termination(production)</p>
-<p>Python version: actr_functions.check_termination(production)</p>
+<p><b>check_termination(production)</b> = actr.check_termination(production)</p>
+<p>Python version: actr.check_termination(production)</p>

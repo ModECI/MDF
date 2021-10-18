@@ -1,5 +1,5 @@
 ABCD:
-    format: ModECI MDF v0.2
+    format: ModECI MDF v0.3
     graphs:
         ABCD:
             notes: Example of a simplified network
