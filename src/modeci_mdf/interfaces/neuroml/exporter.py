@@ -248,14 +248,13 @@ if __name__ == "__main__":
 
     print("------------------")
     nmllite_file = example.replace(".json", ".nmllite.json")
-    # nmllite_file = example.split('/')[-1].replace('.json','.nmllite.json')
     net, sim = mdf_to_neuroml(
         mod_graph, save_to=nmllite_file, format=model.format, run_duration_sec=2
     )
 
     if run:
         sf = "%s.json" % sim.id
-        print("Running model: %s" % sf)
+        print('Running the model: %s' % sf)
         from neuromllite.NetworkGenerator import generate_and_run
 
         simulator = "jNeuroML"
