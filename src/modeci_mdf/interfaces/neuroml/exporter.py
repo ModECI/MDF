@@ -254,7 +254,7 @@ if __name__ == "__main__":
 
     if run:
         sf = "%s.json" % sim.id
-        print('Running the model: %s' % sf)
+        print("Running the model: %s" % sf)
         from neuromllite.NetworkGenerator import generate_and_run
 
         simulator = "jNeuroML"
