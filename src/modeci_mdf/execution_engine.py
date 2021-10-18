@@ -967,7 +967,9 @@ class EvaluableGraph:
         input_value = value if weight == 1 else value * weight
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
-    def parse_condition(self, condition: Condition) -> graph_scheduler.Condition:
+    def parse_condition(
+        self, condition: Union[Condition, dict]
+    ) -> graph_scheduler.Condition:
         """Convert the condition in a specific format
 
         Args:
@@ -977,15 +979,35 @@ class EvaluableGraph:
             Condition in specific format
 
         """
+
+        def substitute_condition_arguments(condition, condition_type):
+            # mdf format prefers the key name for all conditions that use it or
+            # its value as an __init__ argument
+            combined_condition_arguments = {"dependencies": "dependency"}
+            sig = inspect.signature(condition_type)
+
+            for preferred, actual in combined_condition_arguments.items():
+                if (
+                    preferred in condition.args
+                    and preferred not in sig.parameters
+                    and actual in sig.parameters
+                ):
+                    condition.args[actual] = condition.args[preferred]
+                    del condition.args[preferred]
+
+        # if specified as dict
         try:
-            cond_type = condition["type"]
-        except TypeError:
-            cond_type = condition.type
+            args = condition["args"]
+        except (TypeError, KeyError):
+            args = {}
 
         try:
-            cond_args = condition["args"]
-        except TypeError:
-            cond_args = condition.args
+            condition = Condition(condition["type"], **args)
+        except (TypeError, KeyError):
+            pass
+
+        cond_type = condition.type
+        cond_args = condition.args
 
         try:
             typ = getattr(graph_scheduler.condition, cond_type)
@@ -1018,6 +1040,8 @@ class EvaluableGraph:
                     pass
             else:
                 cond_args[k] = new_v
+
+        substitute_condition_arguments(condition, typ)
 
         try:
             return typ(**cond_args)
