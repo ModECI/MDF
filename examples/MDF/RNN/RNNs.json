@@ -1,0 +1,64 @@
+{
+    "RNNs": {
+        "format": "ModECI MDF v0.3",
+        "generating_application": "Python modeci-mdf v0.3.1",
+        "graphs": {
+            "rnn_example": {
+                "nodes": {
+                    "input_node": {
+                        "parameters": {
+                            "t": {
+                                "default_initial_value": "0",
+                                "time_derivative": "1"
+                            },
+                            "rate": {
+                                "value": 3
+                            },
+                            "level": {
+                                "value": "-3 + rate*t"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "level"
+                            },
+                            "t_out_port": {
+                                "value": "t"
+                            }
+                        }
+                    },
+                    "rnn_node": {
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "r": {
+                                "function": "tanh",
+                                "args": {
+                                    "variable0": "input",
+                                    "scale": 1
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "r"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "input_edge": {
+                        "parameters": {
+                            "weight": 1
+                        },
+                        "sender": "input_node",
+                        "receiver": "rnn_node",
+                        "sender_port": "out_port",
+                        "receiver_port": "input"
+                    }
+                }
+            }
+        }
+    }
+}
