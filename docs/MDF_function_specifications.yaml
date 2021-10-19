@@ -3258,8 +3258,7 @@ pattern_matching_function:
     - productions
     - goal
     - retrieval
-    expression_string: actr.pattern_matching_function(productions, goal,
-        retrieval)
+    expression_string: actr.pattern_matching_function(productions, goal, retrieval)
 conflict_resolution_function:
     description: ACT-R conflict resolution function
     arguments:

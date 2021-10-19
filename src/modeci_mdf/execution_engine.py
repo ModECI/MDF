@@ -81,6 +81,72 @@ def evaluate_expr(
     return e
 
 
+def parse_str_as_list(s: str) -> list:
+    """Produces a list from its string representation. Runs `eval` on
+    non-list elements within
+
+    Args:
+        s (str): a string representing a list
+
+    Returns:
+        list: a list containing elements from **s**
+    """
+
+    def try_eval_str(t):
+        try:
+            return eval(t)
+        except (NameError, SyntaxError):
+            return t
+
+    def _parse_str_as_list(t):
+        res = []
+        i = 0
+        j = 0
+        depth = 0
+
+        t = t.replace(" ", "")
+
+        while j < len(t):
+            if t[j] == "[":
+                depth += 1
+
+            if t[j] == "]":
+                depth -= 1
+
+                if depth == 0:
+                    res.append(_parse_str_as_list(t[i + 1 : j]))
+                    # also passes this check if at end of string
+                    if t[j : j + 1] not in ",]":
+                        raise ValueError(f"Malformed input at index {j} of {t} {t[j]}")
+                    i = j + 1
+
+            if t[j] == ",":
+                if depth == 0:
+                    if j > i:
+                        res.append(try_eval_str(t[i:j]))
+                    i = j + 1
+
+            j = j + 1
+
+        if depth > 0:
+            raise ValueError(f"Unmatched opening bracket in {t}")
+        elif depth < 0:
+            raise ValueError(f"Unmatched closing bracket in {t}")
+
+        if j > i:
+            res.append(try_eval_str(t[i:j]))
+
+        return res
+
+    res = _parse_str_as_list(s)
+
+    # avoid adding extra unnecessary list
+    if len(res) == 1:
+        return res[0]
+    else:
+        return res
+
+
 class EvaluableFunction:
     """Evaluates a :class:`~modeci_mdf.mdf.Function` value during MDF graph execution.
 
@@ -164,7 +230,7 @@ class EvaluableFunction:
                 # If this arg is a list of args, we are dealing with a variadic argument. Expand these
                 if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
                     # Use the Python interpreter to parse this into a List[str]
-                    arg_expr_list = eval(arg_expr)
+                    arg_expr_list = parse_str_as_list(arg_expr)
                     kwargs_for_onnx.update({a: func_params[a] for a in arg_expr_list})
                 else:
                     kwargs_for_onnx[kw] = func_params[kw]
@@ -351,7 +417,7 @@ class EvaluableParameter:
                         and arg_expr[-1] == "]"
                     ):
                         # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = eval(arg_expr)
+                        arg_expr_list = parse_str_as_list(arg_expr)
                         kwargs_for_onnx.update(
                             {a: func_params[a] for a in arg_expr_list}
                         )
@@ -573,7 +639,7 @@ class EvaluableNode:
                         and arg_expr[-1] == "]"
                     ):
                         # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = eval(arg_expr)
+                        arg_expr_list = parse_str_as_list(arg_expr)
                     else:
                         arg_expr_list = [arg_expr]
 
@@ -619,8 +685,15 @@ class EvaluableNode:
             all_req_vars = []
 
             if p.value is not None and type(p.value) == str:
-                param_expr = sympy.simplify(p.value)
-                all_req_vars.extend([str(s) for s in param_expr.free_symbols])
+                if p.value[0] == "[" and p.value[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = parse_str_as_list(p.value)
+                else:
+                    arg_expr_list = [p.value]
+
+                for e in arg_expr_list:
+                    param_expr = sympy.simplify(e)
+                    all_req_vars.extend([str(s) for s in param_expr.free_symbols])
 
             if p.args is not None:
                 for arg in p.args:
@@ -633,7 +706,7 @@ class EvaluableNode:
                         and arg_expr[-1] == "]"
                     ):
                         # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = eval(arg_expr)
+                        arg_expr_list = parse_str_as_list(arg_expr)
                     else:
                         arg_expr_list = [arg_expr]
 
@@ -894,7 +967,9 @@ class EvaluableGraph:
         input_value = value if weight == 1 else value * weight
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
-    def parse_condition(self, condition: Condition) -> graph_scheduler.Condition:
+    def parse_condition(
+        self, condition: Union[Condition, dict]
+    ) -> graph_scheduler.Condition:
         """Convert the condition in a specific format
 
         Args:
@@ -904,15 +979,35 @@ class EvaluableGraph:
             Condition in specific format
 
         """
+
+        def substitute_condition_arguments(condition, condition_type):
+            # mdf format prefers the key name for all conditions that use it or
+            # its value as an __init__ argument
+            combined_condition_arguments = {"dependencies": "dependency"}
+            sig = inspect.signature(condition_type)
+
+            for preferred, actual in combined_condition_arguments.items():
+                if (
+                    preferred in condition.args
+                    and preferred not in sig.parameters
+                    and actual in sig.parameters
+                ):
+                    condition.args[actual] = condition.args[preferred]
+                    del condition.args[preferred]
+
+        # if specified as dict
         try:
-            cond_type = condition["type"]
-        except TypeError:
-            cond_type = condition.type
+            args = condition["args"]
+        except (TypeError, KeyError):
+            args = {}
 
         try:
-            cond_args = condition["args"]
-        except TypeError:
-            cond_args = condition.args
+            condition = Condition(condition["type"], **args)
+        except (TypeError, KeyError):
+            pass
+
+        cond_type = condition.type
+        cond_args = condition.args
 
         try:
             typ = getattr(graph_scheduler.condition, cond_type)
@@ -945,6 +1040,8 @@ class EvaluableGraph:
                     pass
             else:
                 cond_args[k] = new_v
+
+        substitute_condition_arguments(condition, typ)
 
         try:
             return typ(**cond_args)
