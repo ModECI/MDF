@@ -2,7 +2,7 @@
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**
 These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py
 ## All functions:
- | <a href="#matmul">MatMul</a> | <a href="#relu">Relu</a> | <a href="#change_goal">change_goal</a> | <a href="#check_termination">check_termination</a> | <a href="#conflict_resolution_function">conflict_resolution_function</a> | <a href="#cos">cos</a> | <a href="#exponential">exponential</a> | <a href="#linear">linear</a> | <a href="#logistic">logistic</a> | <a href="#onnxabs">onnx::Abs</a> | <a href="#onnxacos">onnx::Acos</a> | <a href="#onnxacosh">onnx::Acosh</a> | <a href="#onnxadd">onnx::Add</a> | <a href="#onnxand">onnx::And</a> | <a href="#onnxargmax">onnx::ArgMax</a> | <a href="#onnxargmin">onnx::ArgMin</a> | <a href="#onnxasin">onnx::Asin</a> | <a href="#onnxasinh">onnx::Asinh</a> | <a href="#onnxatan">onnx::Atan</a> | <a href="#onnxatanh">onnx::Atanh</a> | <a href="#onnxaveragepool">onnx::AveragePool</a> | <a href="#onnxbatchnormalization">onnx::BatchNormalization</a> | <a href="#onnxbitshift">onnx::BitShift</a> | <a href="#onnxcast">onnx::Cast</a> | <a href="#onnxceil">onnx::Ceil</a> | <a href="#onnxcelu">onnx::Celu</a> | <a href="#onnxclip">onnx::Clip</a> | <a href="#onnxcompress">onnx::Compress</a> | <a href="#onnxconcat">onnx::Concat</a> | <a href="#onnxconcatfromsequence">onnx::ConcatFromSequence</a> | <a href="#onnxconstant">onnx::Constant</a> | <a href="#onnxconstantofshape">onnx::ConstantOfShape</a> | <a href="#onnxconv">onnx::Conv</a> | <a href="#onnxconvinteger">onnx::ConvInteger</a> | <a href="#onnxconvtranspose">onnx::ConvTranspose</a> | <a href="#onnxcos">onnx::Cos</a> | <a href="#onnxcosh">onnx::Cosh</a> | <a href="#onnxcumsum">onnx::CumSum</a> | <a href="#onnxdepthtospace">onnx::DepthToSpace</a> | <a href="#onnxdequantizelinear">onnx::DequantizeLinear</a> | <a href="#onnxdet">onnx::Det</a> | <a href="#onnxdiv">onnx::Div</a> | <a href="#onnxdropout">onnx::Dropout</a> | <a href="#onnxdynamicquantizelinear">onnx::DynamicQuantizeLinear</a> | <a href="#onnxeinsum">onnx::Einsum</a> | <a href="#onnxelu">onnx::Elu</a> | <a href="#onnxequal">onnx::Equal</a> | <a href="#onnxerf">onnx::Erf</a> | <a href="#onnxexp">onnx::Exp</a> | <a href="#onnxexpand">onnx::Expand</a> | <a href="#onnxeyelike">onnx::EyeLike</a> | <a href="#onnxflatten">onnx::Flatten</a> | <a href="#onnxfloor">onnx::Floor</a> | <a href="#onnxgru">onnx::GRU</a> | <a href="#onnxgather">onnx::Gather</a> | <a href="#onnxgatherelements">onnx::GatherElements</a> | <a href="#onnxgathernd">onnx::GatherND</a> | <a href="#onnxgemm">onnx::Gemm</a> | <a href="#onnxglobalaveragepool">onnx::GlobalAveragePool</a> | <a href="#onnxgloballppool">onnx::GlobalLpPool</a> | <a href="#onnxglobalmaxpool">onnx::GlobalMaxPool</a> | <a href="#onnxgreater">onnx::Greater</a> | <a href="#onnxgreaterorequal">onnx::GreaterOrEqual</a> | <a href="#onnxhardsigmoid">onnx::HardSigmoid</a> | <a href="#onnxhardmax">onnx::Hardmax</a> | <a href="#onnxidentity">onnx::Identity</a> | <a href="#onnxif">onnx::If</a> | <a href="#onnxinstancenormalization">onnx::InstanceNormalization</a> | <a href="#onnxisinf">onnx::IsInf</a> | <a href="#onnxisnan">onnx::IsNaN</a> | <a href="#onnxlrn">onnx::LRN</a> | <a href="#onnxlstm">onnx::LSTM</a> | <a href="#onnxleakyrelu">onnx::LeakyRelu</a> | <a href="#onnxless">onnx::Less</a> | <a href="#onnxlessorequal">onnx::LessOrEqual</a> | <a href="#onnxlog">onnx::Log</a> | <a href="#onnxlogsoftmax">onnx::LogSoftmax</a> | <a href="#onnxloop">onnx::Loop</a> | <a href="#onnxlpnormalization">onnx::LpNormalization</a> | <a href="#onnxlppool">onnx::LpPool</a> | <a href="#onnxmatmul">onnx::MatMul</a> | <a href="#onnxmatmulinteger">onnx::MatMulInteger</a> | <a href="#onnxmax">onnx::Max</a> | <a href="#onnxmaxpool">onnx::MaxPool</a> | <a href="#onnxmaxroipool">onnx::MaxRoiPool</a> | <a href="#onnxmaxunpool">onnx::MaxUnpool</a> | <a href="#onnxmean">onnx::Mean</a> | <a href="#onnxmeanvariancenormalization">onnx::MeanVarianceNormalization</a> | <a href="#onnxmin">onnx::Min</a> | <a href="#onnxmod">onnx::Mod</a> | <a href="#onnxmul">onnx::Mul</a> | <a href="#onnxmultinomial">onnx::Multinomial</a> | <a href="#onnxneg">onnx::Neg</a> | <a href="#onnxnegativeloglikelihoodloss">onnx::NegativeLogLikelihoodLoss</a> | <a href="#onnxnonmaxsuppression">onnx::NonMaxSuppression</a> | <a href="#onnxnonzero">onnx::NonZero</a> | <a href="#onnxnot">onnx::Not</a> | <a href="#onnxonehot">onnx::OneHot</a> | <a href="#onnxor">onnx::Or</a> | <a href="#onnxprelu">onnx::PRelu</a> | <a href="#onnxpad">onnx::Pad</a> | <a href="#onnxpow">onnx::Pow</a> | <a href="#onnxqlinearconv">onnx::QLinearConv</a> | <a href="#onnxqlinearmatmul">onnx::QLinearMatMul</a> | <a href="#onnxquantizelinear">onnx::QuantizeLinear</a> | <a href="#onnxrnn">onnx::RNN</a> | <a href="#onnxrandomnormal">onnx::RandomNormal</a> | <a href="#onnxrandomnormallike">onnx::RandomNormalLike</a> | <a href="#onnxrandomuniform">onnx::RandomUniform</a> | <a href="#onnxrandomuniformlike">onnx::RandomUniformLike</a> | <a href="#onnxrange">onnx::Range</a> | <a href="#onnxreciprocal">onnx::Reciprocal</a> | <a href="#onnxreducel1">onnx::ReduceL1</a> | <a href="#onnxreducel2">onnx::ReduceL2</a> | <a href="#onnxreducelogsum">onnx::ReduceLogSum</a> | <a href="#onnxreducelogsumexp">onnx::ReduceLogSumExp</a> | <a href="#onnxreducemax">onnx::ReduceMax</a> | <a href="#onnxreducemean">onnx::ReduceMean</a> | <a href="#onnxreducemin">onnx::ReduceMin</a> | <a href="#onnxreduceprod">onnx::ReduceProd</a> | <a href="#onnxreducesum">onnx::ReduceSum</a> | <a href="#onnxreducesumsquare">onnx::ReduceSumSquare</a> | <a href="#onnxrelu">onnx::Relu</a> | <a href="#onnxreshape">onnx::Reshape</a> | <a href="#onnxresize">onnx::Resize</a> | <a href="#onnxreversesequence">onnx::ReverseSequence</a> | <a href="#onnxroialign">onnx::RoiAlign</a> | <a href="#onnxround">onnx::Round</a> | <a href="#onnxscan">onnx::Scan</a> | <a href="#onnxscatter">onnx::Scatter</a> | <a href="#onnxscatterelements">onnx::ScatterElements</a> | <a href="#onnxscatternd">onnx::ScatterND</a> | <a href="#onnxselu">onnx::Selu</a> | <a href="#onnxsequenceat">onnx::SequenceAt</a> | <a href="#onnxsequenceconstruct">onnx::SequenceConstruct</a> | <a href="#onnxsequenceempty">onnx::SequenceEmpty</a> | <a href="#onnxsequenceerase">onnx::SequenceErase</a> | <a href="#onnxsequenceinsert">onnx::SequenceInsert</a> | <a href="#onnxsequencelength">onnx::SequenceLength</a> | <a href="#onnxshape">onnx::Shape</a> | <a href="#onnxshrink">onnx::Shrink</a> | <a href="#onnxsigmoid">onnx::Sigmoid</a> | <a href="#onnxsign">onnx::Sign</a> | <a href="#onnxsin">onnx::Sin</a> | <a href="#onnxsinh">onnx::Sinh</a> | <a href="#onnxsize">onnx::Size</a> | <a href="#onnxslice">onnx::Slice</a> | <a href="#onnxsoftmax">onnx::Softmax</a> | <a href="#onnxsoftmaxcrossentropyloss">onnx::SoftmaxCrossEntropyLoss</a> | <a href="#onnxsoftplus">onnx::Softplus</a> | <a href="#onnxsoftsign">onnx::Softsign</a> | <a href="#onnxspacetodepth">onnx::SpaceToDepth</a> | <a href="#onnxsplit">onnx::Split</a> | <a href="#onnxsplittosequence">onnx::SplitToSequence</a> | <a href="#onnxsqrt">onnx::Sqrt</a> | <a href="#onnxsqueeze">onnx::Squeeze</a> | <a href="#onnxstringnormalizer">onnx::StringNormalizer</a> | <a href="#onnxsub">onnx::Sub</a> | <a href="#onnxsum">onnx::Sum</a> | <a href="#onnxtan">onnx::Tan</a> | <a href="#onnxtanh">onnx::Tanh</a> | <a href="#onnxtfidfvectorizer">onnx::TfIdfVectorizer</a> | <a href="#onnxthresholdedrelu">onnx::ThresholdedRelu</a> | <a href="#onnxtile">onnx::Tile</a> | <a href="#onnxtopk">onnx::TopK</a> | <a href="#onnxtranspose">onnx::Transpose</a> | <a href="#onnxunique">onnx::Unique</a> | <a href="#onnxunsqueeze">onnx::Unsqueeze</a> | <a href="#onnxupsample">onnx::Upsample</a> | <a href="#onnxwhere">onnx::Where</a> | <a href="#onnxxor">onnx::Xor</a> | <a href="#pattern_matching_function">pattern_matching_function</a> | <a href="#retrieve_chunk">retrieve_chunk</a> | <a href="#sin">sin</a> | <a href="#update_goal">update_goal</a> | <a href="#update_retrieval">update_retrieval</a> |
+ | <a href="#matmul">MatMul</a> | <a href="#relu">Relu</a> | <a href="#change_goal">change_goal</a> | <a href="#check_termination">check_termination</a> | <a href="#conflict_resolution_function">conflict_resolution_function</a> | <a href="#cos">cos</a> | <a href="#cosh">cosh</a> | <a href="#exponential">exponential</a> | <a href="#linear">linear</a> | <a href="#logistic">logistic</a> | <a href="#onnxabs">onnx::Abs</a> | <a href="#onnxacos">onnx::Acos</a> | <a href="#onnxacosh">onnx::Acosh</a> | <a href="#onnxadd">onnx::Add</a> | <a href="#onnxand">onnx::And</a> | <a href="#onnxargmax">onnx::ArgMax</a> | <a href="#onnxargmin">onnx::ArgMin</a> | <a href="#onnxasin">onnx::Asin</a> | <a href="#onnxasinh">onnx::Asinh</a> | <a href="#onnxatan">onnx::Atan</a> | <a href="#onnxatanh">onnx::Atanh</a> | <a href="#onnxaveragepool">onnx::AveragePool</a> | <a href="#onnxbatchnormalization">onnx::BatchNormalization</a> | <a href="#onnxbitshift">onnx::BitShift</a> | <a href="#onnxcast">onnx::Cast</a> | <a href="#onnxceil">onnx::Ceil</a> | <a href="#onnxcelu">onnx::Celu</a> | <a href="#onnxclip">onnx::Clip</a> | <a href="#onnxcompress">onnx::Compress</a> | <a href="#onnxconcat">onnx::Concat</a> | <a href="#onnxconcatfromsequence">onnx::ConcatFromSequence</a> | <a href="#onnxconstant">onnx::Constant</a> | <a href="#onnxconstantofshape">onnx::ConstantOfShape</a> | <a href="#onnxconv">onnx::Conv</a> | <a href="#onnxconvinteger">onnx::ConvInteger</a> | <a href="#onnxconvtranspose">onnx::ConvTranspose</a> | <a href="#onnxcos">onnx::Cos</a> | <a href="#onnxcosh">onnx::Cosh</a> | <a href="#onnxcumsum">onnx::CumSum</a> | <a href="#onnxdepthtospace">onnx::DepthToSpace</a> | <a href="#onnxdequantizelinear">onnx::DequantizeLinear</a> | <a href="#onnxdet">onnx::Det</a> | <a href="#onnxdiv">onnx::Div</a> | <a href="#onnxdropout">onnx::Dropout</a> | <a href="#onnxdynamicquantizelinear">onnx::DynamicQuantizeLinear</a> | <a href="#onnxeinsum">onnx::Einsum</a> | <a href="#onnxelu">onnx::Elu</a> | <a href="#onnxequal">onnx::Equal</a> | <a href="#onnxerf">onnx::Erf</a> | <a href="#onnxexp">onnx::Exp</a> | <a href="#onnxexpand">onnx::Expand</a> | <a href="#onnxeyelike">onnx::EyeLike</a> | <a href="#onnxflatten">onnx::Flatten</a> | <a href="#onnxfloor">onnx::Floor</a> | <a href="#onnxgru">onnx::GRU</a> | <a href="#onnxgather">onnx::Gather</a> | <a href="#onnxgatherelements">onnx::GatherElements</a> | <a href="#onnxgathernd">onnx::GatherND</a> | <a href="#onnxgemm">onnx::Gemm</a> | <a href="#onnxglobalaveragepool">onnx::GlobalAveragePool</a> | <a href="#onnxgloballppool">onnx::GlobalLpPool</a> | <a href="#onnxglobalmaxpool">onnx::GlobalMaxPool</a> | <a href="#onnxgreater">onnx::Greater</a> | <a href="#onnxgreaterorequal">onnx::GreaterOrEqual</a> | <a href="#onnxhardsigmoid">onnx::HardSigmoid</a> | <a href="#onnxhardmax">onnx::Hardmax</a> | <a href="#onnxidentity">onnx::Identity</a> | <a href="#onnxif">onnx::If</a> | <a href="#onnxinstancenormalization">onnx::InstanceNormalization</a> | <a href="#onnxisinf">onnx::IsInf</a> | <a href="#onnxisnan">onnx::IsNaN</a> | <a href="#onnxlrn">onnx::LRN</a> | <a href="#onnxlstm">onnx::LSTM</a> | <a href="#onnxleakyrelu">onnx::LeakyRelu</a> | <a href="#onnxless">onnx::Less</a> | <a href="#onnxlessorequal">onnx::LessOrEqual</a> | <a href="#onnxlog">onnx::Log</a> | <a href="#onnxlogsoftmax">onnx::LogSoftmax</a> | <a href="#onnxloop">onnx::Loop</a> | <a href="#onnxlpnormalization">onnx::LpNormalization</a> | <a href="#onnxlppool">onnx::LpPool</a> | <a href="#onnxmatmul">onnx::MatMul</a> | <a href="#onnxmatmulinteger">onnx::MatMulInteger</a> | <a href="#onnxmax">onnx::Max</a> | <a href="#onnxmaxpool">onnx::MaxPool</a> | <a href="#onnxmaxroipool">onnx::MaxRoiPool</a> | <a href="#onnxmaxunpool">onnx::MaxUnpool</a> | <a href="#onnxmean">onnx::Mean</a> | <a href="#onnxmeanvariancenormalization">onnx::MeanVarianceNormalization</a> | <a href="#onnxmin">onnx::Min</a> | <a href="#onnxmod">onnx::Mod</a> | <a href="#onnxmul">onnx::Mul</a> | <a href="#onnxmultinomial">onnx::Multinomial</a> | <a href="#onnxneg">onnx::Neg</a> | <a href="#onnxnegativeloglikelihoodloss">onnx::NegativeLogLikelihoodLoss</a> | <a href="#onnxnonmaxsuppression">onnx::NonMaxSuppression</a> | <a href="#onnxnonzero">onnx::NonZero</a> | <a href="#onnxnot">onnx::Not</a> | <a href="#onnxonehot">onnx::OneHot</a> | <a href="#onnxor">onnx::Or</a> | <a href="#onnxprelu">onnx::PRelu</a> | <a href="#onnxpad">onnx::Pad</a> | <a href="#onnxpow">onnx::Pow</a> | <a href="#onnxqlinearconv">onnx::QLinearConv</a> | <a href="#onnxqlinearmatmul">onnx::QLinearMatMul</a> | <a href="#onnxquantizelinear">onnx::QuantizeLinear</a> | <a href="#onnxrnn">onnx::RNN</a> | <a href="#onnxrandomnormal">onnx::RandomNormal</a> | <a href="#onnxrandomnormallike">onnx::RandomNormalLike</a> | <a href="#onnxrandomuniform">onnx::RandomUniform</a> | <a href="#onnxrandomuniformlike">onnx::RandomUniformLike</a> | <a href="#onnxrange">onnx::Range</a> | <a href="#onnxreciprocal">onnx::Reciprocal</a> | <a href="#onnxreducel1">onnx::ReduceL1</a> | <a href="#onnxreducel2">onnx::ReduceL2</a> | <a href="#onnxreducelogsum">onnx::ReduceLogSum</a> | <a href="#onnxreducelogsumexp">onnx::ReduceLogSumExp</a> | <a href="#onnxreducemax">onnx::ReduceMax</a> | <a href="#onnxreducemean">onnx::ReduceMean</a> | <a href="#onnxreducemin">onnx::ReduceMin</a> | <a href="#onnxreduceprod">onnx::ReduceProd</a> | <a href="#onnxreducesum">onnx::ReduceSum</a> | <a href="#onnxreducesumsquare">onnx::ReduceSumSquare</a> | <a href="#onnxrelu">onnx::Relu</a> | <a href="#onnxreshape">onnx::Reshape</a> | <a href="#onnxresize">onnx::Resize</a> | <a href="#onnxreversesequence">onnx::ReverseSequence</a> | <a href="#onnxroialign">onnx::RoiAlign</a> | <a href="#onnxround">onnx::Round</a> | <a href="#onnxscan">onnx::Scan</a> | <a href="#onnxscatter">onnx::Scatter</a> | <a href="#onnxscatterelements">onnx::ScatterElements</a> | <a href="#onnxscatternd">onnx::ScatterND</a> | <a href="#onnxselu">onnx::Selu</a> | <a href="#onnxsequenceat">onnx::SequenceAt</a> | <a href="#onnxsequenceconstruct">onnx::SequenceConstruct</a> | <a href="#onnxsequenceempty">onnx::SequenceEmpty</a> | <a href="#onnxsequenceerase">onnx::SequenceErase</a> | <a href="#onnxsequenceinsert">onnx::SequenceInsert</a> | <a href="#onnxsequencelength">onnx::SequenceLength</a> | <a href="#onnxshape">onnx::Shape</a> | <a href="#onnxshrink">onnx::Shrink</a> | <a href="#onnxsigmoid">onnx::Sigmoid</a> | <a href="#onnxsign">onnx::Sign</a> | <a href="#onnxsin">onnx::Sin</a> | <a href="#onnxsinh">onnx::Sinh</a> | <a href="#onnxsize">onnx::Size</a> | <a href="#onnxslice">onnx::Slice</a> | <a href="#onnxsoftmax">onnx::Softmax</a> | <a href="#onnxsoftmaxcrossentropyloss">onnx::SoftmaxCrossEntropyLoss</a> | <a href="#onnxsoftplus">onnx::Softplus</a> | <a href="#onnxsoftsign">onnx::Softsign</a> | <a href="#onnxspacetodepth">onnx::SpaceToDepth</a> | <a href="#onnxsplit">onnx::Split</a> | <a href="#onnxsplittosequence">onnx::SplitToSequence</a> | <a href="#onnxsqrt">onnx::Sqrt</a> | <a href="#onnxsqueeze">onnx::Squeeze</a> | <a href="#onnxstringnormalizer">onnx::StringNormalizer</a> | <a href="#onnxsub">onnx::Sub</a> | <a href="#onnxsum">onnx::Sum</a> | <a href="#onnxtan">onnx::Tan</a> | <a href="#onnxtanh">onnx::Tanh</a> | <a href="#onnxtfidfvectorizer">onnx::TfIdfVectorizer</a> | <a href="#onnxthresholdedrelu">onnx::ThresholdedRelu</a> | <a href="#onnxtile">onnx::Tile</a> | <a href="#onnxtopk">onnx::TopK</a> | <a href="#onnxtranspose">onnx::Transpose</a> | <a href="#onnxunique">onnx::Unique</a> | <a href="#onnxunsqueeze">onnx::Unsqueeze</a> | <a href="#onnxupsample">onnx::Upsample</a> | <a href="#onnxwhere">onnx::Where</a> | <a href="#onnxxor">onnx::Xor</a> | <a href="#pattern_matching_function">pattern_matching_function</a> | <a href="#retrieve_chunk">retrieve_chunk</a> | <a href="#sin">sin</a> | <a href="#sinh">sinh</a> | <a href="#tan">tan</a> | <a href="#tanh">tanh</a> | <a href="#update_goal">update_goal</a> | <a href="#update_retrieval">update_retrieval</a> |
 ## linear
  <p><i>A linear function, calculated from a slope and an intercept</i></p>
 <p><b>linear(variable0, slope, intercept)</b> = (variable0 * slope + intercept)</p>
@@ -27,6 +27,26 @@ These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modec
  <p><i>Cosine function</i></p>
 <p><b>cos(variable0, scale)</b> = scale * cos(variable0)</p>
 <p>Python version: scale * math.cos(variable0)</p>
+
+## tan
+ <p><i>Tangent function</i></p>
+<p><b>tan(variable0, scale)</b> = scale * tan(variable0)</p>
+<p>Python version: scale * math.tan(variable0)</p>
+
+## sinh
+ <p><i>Hyperbolic sine function</i></p>
+<p><b>sinh(variable0, scale)</b> = scale * sinh(variable0)</p>
+<p>Python version: scale * math.sinh(variable0)</p>
+
+## cosh
+ <p><i>Hyperbolic cosine function</i></p>
+<p><b>cosh(variable0, scale)</b> = scale * cosh(variable0)</p>
+<p>Python version: scale * math.cosh(variable0)</p>
+
+## tanh
+ <p><i>Hyperbolic tangent function</i></p>
+<p><b>tanh(variable0, scale)</b> = scale * tanh(variable0)</p>
+<p>Python version: scale * math.tanh(variable0)</p>
 
 ## MatMul
  <p><i>Matrix multiplication (work in progress...)</i></p>
@@ -746,7 +766,7 @@ If x > lambd, y = x - bias; Otherwise, y = 0.
 Calculates the hyperbolic sine of the given input tensor element-wise.
 </i></p>
 <p><b>onnx::Sinh(input)</b> = onnx_ops.sinh(input)</p>
-<p>Python version: onnx_ops.sinh(input)</p>
+<p>Python version: onnx_ops.math.sinh(input)</p>
 
 ## onnx::Mod
  <p><i>
@@ -1190,7 +1210,7 @@ the shape. If an axis is selected with shape entry not equal to one, an error is
 Calculates the hyperbolic arccosine of the given input tensor element-wise.
 </i></p>
 <p><b>onnx::Acosh(input)</b> = onnx_ops.acosh(input)</p>
-<p>Python version: onnx_ops.acosh(input)</p>
+<p>Python version: onnx_ops.amath.cosh(input)</p>
 
 ## onnx::ReduceLogSum
  <p><i>
@@ -1313,7 +1333,7 @@ This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; fo
 Calculates the hyperbolic tangent of the given input tensor element-wise.
 </i></p>
 <p><b>onnx::Tanh(input)</b> = onnx_ops.tanh(input)</p>
-<p>Python version: onnx_ops.tanh(input)</p>
+<p>Python version: onnx_ops.math.tanh(input)</p>
 
 ## onnx::Transpose
  <p><i>
@@ -1545,7 +1565,7 @@ TensorProto message, and be valid as an output type.
 Calculates the hyperbolic arcsine of the given input tensor element-wise.
 </i></p>
 <p><b>onnx::Asinh(input)</b> = onnx_ops.asinh(input)</p>
-<p>Python version: onnx_ops.asinh(input)</p>
+<p>Python version: onnx_ops.amath.sinh(input)</p>
 
 ## onnx::RNN
  <p><i>
@@ -2044,7 +2064,7 @@ This operator has **optional** inputs/outputs. See [the doc](IR.md) for more det
 Calculates the hyperbolic cosine of the given input tensor element-wise.
 </i></p>
 <p><b>onnx::Cosh(input)</b> = onnx_ops.cosh(input)</p>
-<p>Python version: onnx_ops.cosh(input)</p>
+<p>Python version: onnx_ops.math.cosh(input)</p>
 
 ## onnx::Cast
  <p><i>
@@ -2423,7 +2443,7 @@ output[i_{0}, ..., i_{q-1}, j_{0}, ..., j_{r-2}] = input[j_{0}, k, j_{1}, ..., j
 Calculates the hyperbolic arctangent of the given input tensor element-wise.
 </i></p>
 <p><b>onnx::Atanh(input)</b> = onnx_ops.atanh(input)</p>
-<p>Python version: onnx_ops.atanh(input)</p>
+<p>Python version: onnx_ops.amath.tanh(input)</p>
 
 ## onnx::HardSigmoid
  <p><i>
@@ -2568,7 +2588,7 @@ Elu takes one input data (Tensor<T>) and produces one output data
 Calculates the tangent of the given input tensor, element-wise.
 </i></p>
 <p><b>onnx::Tan(input)</b> = onnx_ops.tan(input)</p>
-<p>Python version: onnx_ops.tan(input)</p>
+<p>Python version: onnx_ops.math.tan(input)</p>
 
 ## onnx::Exp
  <p><i>
@@ -2854,7 +2874,7 @@ the tensor elementwise.
 Calculates the arctangent (inverse of tangent) of the given input tensor, element-wise.
 </i></p>
 <p><b>onnx::Atan(input)</b> = onnx_ops.atan(input)</p>
-<p>Python version: onnx_ops.atan(input)</p>
+<p>Python version: onnx_ops.amath.tan(input)</p>
 
 ## onnx::LogSoftmax
  <p><i>

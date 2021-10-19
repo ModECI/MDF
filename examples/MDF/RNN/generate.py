@@ -5,6 +5,7 @@
 from modeci_mdf.mdf import *
 import sys
 
+
 def main():
     mod = Model(id="RNNs")
     mod_graph = Graph(id="rnn_example")
@@ -13,9 +14,7 @@ def main():
     ## Counter node
     input_node = Node(id="input_node")
 
-    t_param = Parameter(
-        id="t", default_initial_value=0, time_derivative="1"
-    )
+    t_param = Parameter(id="t", default_initial_value=0, time_derivative="1")
     input_node.parameters.append(t_param)
 
     p0 = Parameter(id="initial", value=-3)
@@ -38,8 +37,7 @@ def main():
     ip1 = InputPort(id="input")
     rnn_node.input_ports.append(ip1)
 
-    s1 = Parameter(id="r", function="tanh", args={"variable0": ip1.id, "scale": 1}
-    )
+    s1 = Parameter(id="r", function="tanh", args={"variable0": ip1.id, "scale": 1})
     rnn_node.parameters.append(s1)
 
     op1 = OutputPort(id="out_port", value="r")
@@ -93,9 +91,9 @@ def main():
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
 
-            plt.plot(times, t, label='time at input node')
-            plt.plot(times, i, label='state of input node')
-            plt.plot(times, s, label='RNN 0 state')
+            plt.plot(times, t, label="time at input node")
+            plt.plot(times, i, label="state of input node")
+            plt.plot(times, s, label="RNN 0 state")
             plt.legend()
             plt.show()
 

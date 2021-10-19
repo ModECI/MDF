@@ -34,6 +34,30 @@ cos:
     - variable0
     - scale
     expression_string: scale * cos(variable0)
+tan:
+    description: Tangent function
+    arguments:
+    - variable0
+    - scale
+    expression_string: scale * tan(variable0)
+sinh:
+    description: Hyperbolic sine function
+    arguments:
+    - variable0
+    - scale
+    expression_string: scale * sinh(variable0)
+cosh:
+    description: Hyperbolic cosine function
+    arguments:
+    - variable0
+    - scale
+    expression_string: scale * cosh(variable0)
+tanh:
+    description: Hyperbolic tangent function
+    arguments:
+    - variable0
+    - scale
+    expression_string: scale * tanh(variable0)
 MatMul:
     description: Matrix multiplication (work in progress...)
     arguments:
