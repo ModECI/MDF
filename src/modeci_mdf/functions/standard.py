@@ -64,7 +64,7 @@ def create_python_expression(expression_string: str = None) -> str:
         function expression in python
     """
 
-    for func in ["exp", "sin", "cos"]:
+    for func in ["exp", "sin", "cos", "tan", "sinh", "cosh", "tanh"]:
         if "math." + func not in expression_string:
 
             expression_string = expression_string.replace(
@@ -161,6 +161,34 @@ if len(mdf_functions) == 0:
         description="Cosine function",
         arguments=[STANDARD_ARG_0, "scale"],
         expression_string="scale * cos(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "tan",
+        description="Tangent function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * tan(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "sinh",
+        description="Hyperbolic sine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * sinh(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "cosh",
+        description="Hyperbolic cosine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * cosh(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "tanh",
+        description="Hyperbolic tangent function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * tanh(%s)" % (STANDARD_ARG_0),
     )
 
     add_mdf_function(

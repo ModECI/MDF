@@ -18,10 +18,12 @@ def main():
     )
     input_node.parameters.append(t_param)
 
+    p0 = Parameter(id="initial", value=-3)
+    input_node.parameters.append(p0)
     p1 = Parameter(id="rate", value=3)
     input_node.parameters.append(p1)
 
-    p2 = Parameter(id="level", value="-3 + rate*t")
+    p2 = Parameter(id="level", value="initial + rate*t")
     input_node.parameters.append(p2)
 
     op1 = OutputPort(id="out_port", value=p2.id)
