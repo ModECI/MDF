@@ -38,6 +38,8 @@ def test_graph_init_kwargs():
 
 def test_Node_init_kwargs():
     n = Node(id="test_node")
+    print(n)
+    print(n.id)
     assert n.id == "test_node"
 
 
@@ -73,6 +75,14 @@ def test_Edge_init_kwargs():
     assert e.sender_port == "test_sender_port"
     assert e.receiver_port == "test_receiver_port"
     assert e.id == "test_Edge"
+
+
+def test_ConditionSet_init_kwargs():
+    CS = ConditionSet(
+        node_specific={"test_node_specific": 1}, termination={"test_termination": 3}
+    )
+    assert CS.node_specific == {"test_node_specific": 1}
+    assert CS.termination == {"test_termination": 3}
 
 
 def test_Condition_init_kwargs():
@@ -204,12 +214,12 @@ def test_node_metadata_empty_dict():
     Node(id="n0", metadata={}).to_json()
 
 
-@pytest.mark.xfail(reason="Should fail on non dict")
 def test_metadata_dict():
     """
     Test whether we get a serialization error when passing anything else from a dictionary
     """
-    Graph(id="n0", metadata="info").to_json()
+    with pytest.raises(Exception):
+        Graph(id="n0", metadata="info").to_json()
 
 
 def test_param_args_empty_dict():

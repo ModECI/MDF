@@ -3,6 +3,7 @@
 </p>
 
 [![Actions Status][actions-badge]][actions-link]
+[![Documentation Status][rtd-badge]][rtd-link]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # ModECI Model Description Format (MDF)
@@ -55,3 +56,5 @@ Multiple examples of serialized MDF files, the Python scripts used to generate t
 
 [actions-badge]:            https://github.com/ModECI/MDF/actions/workflows/ci.yml/badge.svg
 [actions-link]:             https://github.com/ModECI/MDF/actions
+[rtd-badge]:                https://readthedocs.org/projects/mdf/badge/?version=latest
+[rtd-link]:                 https://mdf.readthedocs.io/en/latest/?badge=latest

@@ -1,7 +1,7 @@
 {
     "ONNX Model": {
-        "format": "ModECI MDF v0.2",
-        "generating_application": "Python modeci-mdf v0.2.1",
+        "format": "ModECI MDF v0.3",
+        "generating_application": "Python modeci-mdf v0.3.1",
         "graphs": {
             "torch-jit-export": {
                 "nodes": {

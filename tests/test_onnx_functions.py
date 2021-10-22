@@ -5,7 +5,7 @@ I have hand coded some tests for operators that are used in the examples we have
 worked on. There could be broken operators.
 """
 import numpy as np
-import modeci_mdf.onnx_functions as onnx_ops
+import modeci_mdf.functions.onnx as onnx_ops
 
 
 def test_conv():

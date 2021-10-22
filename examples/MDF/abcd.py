@@ -7,7 +7,7 @@ from modeci_mdf.mdf import *
 from modeci_mdf.utils import simple_connect, print_summary
 
 import abcd_python as abcd
- 
+
 
 def main():
     mod = Model(id="ABCD")
@@ -116,7 +116,7 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
-        #verbose = False
+        # verbose = False
         from modeci_mdf.execution_engine import EvaluableGraph
         from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
@@ -139,7 +139,7 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="abcd_3",
-            only_warn_on_fail=True  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

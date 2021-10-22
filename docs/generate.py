@@ -1,7 +1,6 @@
 from modeci_mdf.mdf import *
 
 from modeci_mdf import MODECI_MDF_VERSION
-from modeci_mdf import __version__
 import json
 import types
 import yaml
@@ -39,7 +38,7 @@ print("Written main documentation")
 
 # Generate standard function generate_documentation
 
-from modeci_mdf.standard_functions import mdf_functions, create_python_expression
+from modeci_mdf.functions.standard import mdf_functions, create_python_expression
 
 mdf_dumpable = {
     name: {

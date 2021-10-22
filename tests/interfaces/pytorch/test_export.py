@@ -12,6 +12,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
 from modeci_mdf.utils import load_mdf_json
 import json
 
+
 def _check_model(mdf_model):
     """A helper function to JIT compile a function or torch.nn.Module into Torchscript and convert to MDF and check it"""
 
@@ -74,14 +75,12 @@ def test_inception(inception_model_pytorch):
     # Get the graph
     mdf_graph = mdf_model.graphs[0]
 
-
     # Add inputs to the parameters dict so we can feed this to the EvaluableGraph for initialization of all
     # graph inputs.
     params_dict["input1"] = galaxy_images_output.numpy()
     params_dict["input2"] = ebv_output.numpy()
 
     eg = EvaluableGraph(graph=mdf_graph, verbose=False)
-
 
     eg.evaluate(initializer=params_dict)
 
@@ -91,6 +90,5 @@ def test_inception(inception_model_pytorch):
     )
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_simple_module()
