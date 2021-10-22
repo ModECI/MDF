@@ -15,16 +15,11 @@ import yaml
 import onnx.defs
 import sympy
 
-from typing import List, Tuple, Dict, Optional, Set, Any, Union, Optional
+from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
 from modeci_mdf import MODECI_MDF_VERSION
 from modeci_mdf import __version__
 
-# Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
-#  Try: pip install neuromllite
-from neuromllite.BaseTypes import Base
-from neuromllite.BaseTypes import BaseWithId
-from neuromllite import EvaluableExpression
 
 __all__ = [
     "Model",
