@@ -565,7 +565,7 @@ class Parameter(MdfBaseWithId):
             [
                 (
                     "default_initial_value",
-                    ("The initial value of the parameter", str),
+                    ("The initial value of the parameter", EvaluableExpression),
                 ),
                 (
                     "value",
