@@ -4,6 +4,7 @@ way somewhat defeats the performance purposes of ONNX since the overhead for eac
 allows us to test the MDF scheduler (which invokes Python functions) on any MDF model defined over ONNX operations. In
 the future, the MDF should probably just compile to ONNX (or some other IR) for execution.
 """
+import functools
 
 import numpy as np
 import onnxruntime as ort
@@ -149,6 +150,36 @@ def get_all_schemas_version(max_version: int) -> List[onnx.defs.OpSchema]:
                 schemas[schema.name] = schema
 
     return list(schemas.values())
+
+
+@functools.lru_cache()
+def get_onnx_schema(
+    func_name: str, opset_version: int = onnx_opset_version
+) -> onnx.defs.OpSchema:
+    """Return the ONNX schema corresponding to a generated ONNX python
+    function with name **func_name**
+
+    Args:
+        func_name (str): the name of the ONNX python function
+        opset_version (int, optional): The opset version to use. Defaults to onnx_opset_version.
+
+    Raises:
+        ValueError: **func_name** does not correspond to a generated ONNX python function
+
+    Returns:
+        onnx.defs.OpSchema: The ONNX schema corresponding to function **func_name**
+    """
+    try:
+        schema = list(
+            filter(
+                lambda f: f.name.lower() == func_name,
+                get_all_schemas_version(onnx_opset_version),
+            )
+        )[0]
+    except IndexError:
+        raise ValueError("No corresponding onnx schema for %s" % func_name)
+    else:
+        return schema
 
 
 def get_onnx_ops(opset_version: int = onnx_opset_version) -> List[Dict]:
