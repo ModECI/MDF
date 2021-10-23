@@ -14,8 +14,9 @@ import json
 import yaml
 import onnx.defs
 import sympy
+import sys
 
-from typing import List, Tuple, Dict, Set, Any, Union, Optional
+from typing import List, Tuple, Dict, Set, Any, Union, Optional, ForwardRef
 
 from modeci_mdf import MODECI_MDF_VERSION
 from modeci_mdf import __version__
@@ -37,7 +38,7 @@ __all__ = [
 converter = cattr.Converter()
 
 
-@attr.define
+@attr.define(eq=False)
 class MdfBase:
     """
     Base class for all MDF core classes that implements common functionality.
@@ -57,23 +58,27 @@ class MdfBase:
         """
         Convert the model to a JSON string representation.
         """
-        return json.dumps(self.to_dict())
+        return json.dumps(self.to_dict(), indent=4)
 
 
-@attr.define
+@attr.define(eq=False)
 class Model(MdfBase):
-    r"""The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
+    r"""
+    The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
 
     Args:
         id: A unique identifier for this Model
+        graphs: The collection of graphs that make up the MDF model.
         format: Information on the version of MDF used in this file
         generating_application: Information on what application generated/saved this file
+        onnx_opset_version: The ONNX opset used for any ONNX functions in this model.
 
     """
     id: str
     graphs: List["Graph"] = attr.field(factory=list)
     format: str = f"ModECI MDF v{MODECI_MDF_VERSION}"
     generating_application: str = f"Python modeci-mdf v{__version__}"
+    onnx_opset_version: Optional[str] = None
 
     def to_json_file(
         self, filename: Optional[str] = None, include_metadata: bool = True
@@ -95,7 +100,7 @@ class Model(MdfBase):
             filename = f"{self.id}.json"
 
         with open(filename, "w") as outfile:
-            json.dump(self.to_dict(), outfile)
+            json.dump(self.to_dict(), outfile, indent=4)
 
         return filename
 
@@ -158,8 +163,60 @@ class Model(MdfBase):
             else:
                 raise (e)
 
+    @classmethod
+    def from_file(cls, filename: str) -> "Model":
+        """
+        Create a :class:`.Model` from its representation stored in a file. Auto-detect the correct deserialization code
+        based on file extension. Currently supported formats are; JSON(.json) and YAML (.yaml or .yml)
 
-@attr.define
+        Args:
+            filename: The name of the file to load.
+
+        Returns:
+            An MDF :class:`.Model` for this file.
+        """
+        if filename.endswith(".yaml") or filename.endswith(".yml"):
+            return cls.from_yaml_file(filename)
+        elif filename.endswith(".json"):
+            return cls.from_json_file(filename)
+        else:
+            raise ValueError(
+                f"Cannot auto-detect MDF serialization format from filename ({filename}). The filename "
+                f"must have one of the following extensions: .json, .yml, or .yaml."
+            )
+
+    @classmethod
+    def from_json_file(cls, filename: str) -> "Model":
+        """
+        Create a :class:`.Model` from its JSON representation stored in a file.
+
+        Args:
+            filename: The file from which to load the JSON data.
+
+        Returns:
+            An MDF :class:`.Model` for this JSON
+        """
+        with open(filename) as infile:
+            d = json.load(infile)
+            return converter.structure(d, cls)
+
+    @classmethod
+    def from_yaml_file(cls, filename: str) -> "Model":
+        """
+        Create a :class:`.Model` from its YAML representation stored in a file.
+
+        Args:
+            filename: The file from which to load the YAML data.
+
+        Returns:
+            An MDF :class:`.Model` for this YAML
+        """
+        with open(filename) as infile:
+            d = yaml.load(infile)
+            return converter.structure(d, cls)
+
+
+@attr.define(eq=False)
 class Graph(MdfBase):
     r"""
     A directed graph consisting of Node(s) connected via Edge(s)
@@ -232,7 +289,7 @@ class Graph(MdfBase):
         return list(filter(lambda x: x not in all_receiver_ports, all_ips))
 
 
-@attr.define
+@attr.define(eq=False)
 class Node(MdfBase):
     r"""
     A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\(s).
@@ -269,7 +326,7 @@ class Node(MdfBase):
         return None
 
 
-@attr.define
+@attr.define(eq=False)
 class Function(MdfBase):
     r"""
     A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
@@ -287,7 +344,7 @@ class Function(MdfBase):
     args: Optional[Dict[str, Any]] = None
 
 
-@attr.define
+@attr.define(eq=False)
 class InputPort(MdfBase):
     r"""
     The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node
@@ -302,7 +359,7 @@ class InputPort(MdfBase):
     type: Optional[str] = None
 
 
-@attr.define
+@attr.define(eq=False)
 class OutputPort(MdfBase):
     r"""
     The :class:`OutputPort` is an attribute of a :class:`Node` which exports information to another :class:`Node`
@@ -314,10 +371,10 @@ class OutputPort(MdfBase):
             :class:`Parameter` values.
     """
     id: str
-    value: str
+    value: Optional[str] = None
 
 
-@attr.define
+@attr.define(eq=False)
 class Parameter(MdfBase):
     r"""
     A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
@@ -381,7 +438,7 @@ class Parameter(MdfBase):
         return False
 
 
-@attr.define
+@attr.define(eq=False)
 class Edge(MdfBase):
     r"""
     An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's
@@ -402,7 +459,7 @@ class Edge(MdfBase):
     parameters: Optional[Dict[str, Any]] = None
 
 
-@attr.define
+@attr.define(eq=False)
 class ConditionSet(MdfBase):
     r"""
     Specifies the non-default pattern of execution of Nodes
@@ -415,7 +472,7 @@ class ConditionSet(MdfBase):
     termination: Optional[Dict[str, "Condition"]] = None
 
 
-@attr.define
+@attr.define(eq=False)
 class Condition(MdfBase):
     r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
 
@@ -424,16 +481,56 @@ class Condition(MdfBase):
         kwargs: The dictionary of keyword arguments needed to evaluate the :class:`Condition`
 
     """
-    type: Optional[str] = None
-    kwargs = attr.field(factory=dict)
+    type: str = attr.field()
+    kwargs: Optional[Dict[str, Any]] = attr.field()
 
     def __init__(
         self,
         type: Optional[str] = None,
         **kwargs: Optional[Dict[str, Any]],
     ):
-        self.__attrs_init__(type=type, kwargs=kwargs)
+        # We need to right out own __init__ in this case because the current API for Condition requires saving
+        # kwargs.
+        self.__attrs_init__(type, kwargs)
 
+
+# We need to register some structure hooks for the ForwardRef type annotations we have used.
+# Haven't figured out a slicker way to do this. Cleanest way is to probably avoid most of
+# the ForwardRef by defining the classes in opposite order.
+# for type_name in __all__:
+#     converter.register_structure_hook(ForwardRef(type_name),
+#                                       lambda d, t: converter.structure(d, getattr(sys.modules[__name__], type_name)))
+
+converter.register_structure_hook(
+    ForwardRef("Model"), lambda d, t: converter.structure(d, Model)
+)
+converter.register_structure_hook(
+    ForwardRef("Graph"), lambda d, t: converter.structure(d, Graph)
+)
+converter.register_structure_hook(
+    ForwardRef("Node"), lambda d, t: converter.structure(d, Node)
+)
+converter.register_structure_hook(
+    ForwardRef("Function"), lambda d, t: converter.structure(d, Function)
+)
+converter.register_structure_hook(
+    ForwardRef("InputPort"), lambda d, t: converter.structure(d, InputPort)
+)
+converter.register_structure_hook(
+    ForwardRef("OutputPort"), lambda d, t: converter.structure(d, OutputPort)
+)
+converter.register_structure_hook(
+    ForwardRef("Parameter"), lambda d, t: converter.structure(d, Parameter)
+)
+converter.register_structure_hook(
+    ForwardRef("Edge"), lambda d, t: converter.structure(d, Edge)
+)
+converter.register_structure_hook(
+    ForwardRef("ConditionSet"), lambda d, t: converter.structure(d, ConditionSet)
+)
+converter.register_structure_hook(
+    ForwardRef("Condition"), lambda d, t: converter.structure(d, Condition)
+)
 
 if __name__ == "__main__":
     model = Model(id="MyModel")

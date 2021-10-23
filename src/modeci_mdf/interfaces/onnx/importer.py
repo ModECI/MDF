@@ -142,7 +142,7 @@ def onnx_node_to_mdf(
             mdf_node.input_ports.append(ip)
 
         for out in node.output:
-            op = OutputPort(id=id_to_port(out), value=func.get_id())
+            op = OutputPort(id=id_to_port(out), value=func.id)
             mdf_node.output_ports.append(op)
 
     elif type(node) == onnx.ValueInfoProto:

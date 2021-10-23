@@ -89,13 +89,13 @@ def test_Condition_init_kwargs():
     """ Check the working of Condition"""
     C = Condition(type="test_type", n="test_n", dependency="test_dependency")
     assert C.type == "test_type"
-    assert C.args == {"n": "test_n", "dependency": "test_dependency"}
+    assert C.kwargs == {"n": "test_n", "dependency": "test_dependency"}
 
 
 def test_Condition_init_kwargs():
     C = Condition(type="test_type", n="test_n", dependencies="test_dependencies")
     assert C.type == "test_type"
-    assert C.args == {"n": "test_n", "dependencies": "test_dependencies"}
+    assert C.kwargs == {"n": "test_n", "dependencies": "test_dependencies"}
 
 
 def test_model_graph_to_json():

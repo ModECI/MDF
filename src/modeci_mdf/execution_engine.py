@@ -988,12 +988,12 @@ class EvaluableGraph:
 
             for preferred, actual in combined_condition_arguments.items():
                 if (
-                    preferred in condition.args
+                    preferred in condition.kwargs
                     and preferred not in sig.parameters
                     and actual in sig.parameters
                 ):
-                    condition.args[actual] = condition.args[preferred]
-                    del condition.args[preferred]
+                    condition.kwargs[actual] = condition.kwargs[preferred]
+                    del condition.kwargs[preferred]
 
         # if specified as dict
         try:
@@ -1007,7 +1007,7 @@ class EvaluableGraph:
             pass
 
         cond_type = condition.type
-        cond_args = condition.args
+        cond_args = condition.kwargs
 
         try:
             typ = getattr(graph_scheduler.condition, cond_type)

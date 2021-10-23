@@ -1,216 +1,94 @@
 {
-    "addition": {
-        "format": "ModECI MDF v0.3",
-        "generating_application": "Python modeci-mdf v0.3.1",
-        "graphs": {
-            "addition_graph": {
-                "conditions": {
-                    "node_specific": {
-                        "declarative_memory": {
-                            "type": "Always",
-                            "args": {}
-                        },
-                        "retrieval_buffer": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "declarative_memory"
-                            }
-                        },
-                        "goal_buffer": {
-                            "type": "Always",
-                            "args": {}
-                        },
-                        "procedural_memory": {
-                            "type": "Always",
-                            "args": {}
-                        },
-                        "pattern_matching": {
-                            "type": "And",
-                            "args": {
-                                "dependencies": [
-                                    {
-                                        "type": "EveryNCalls",
-                                        "args": {
-                                            "dependencies": "retrieval_buffer",
-                                            "n": 1
-                                        }
-                                    },
-                                    {
-                                        "type": "EveryNCalls",
-                                        "args": {
-                                            "dependencies": "goal_buffer",
-                                            "n": 1
-                                        }
-                                    },
-                                    {
-                                        "type": "EveryNCalls",
-                                        "args": {
-                                            "dependencies": "declarative_memory",
-                                            "n": 1
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        "conflict_resolution": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "pattern_matching"
-                            }
-                        },
-                        "fire_production": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "conflict_resolution"
-                            }
-                        },
-                        "check_termination": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "conflict_resolution"
-                            }
+    "metadata": null,
+    "id": "addition",
+    "graphs": [
+        {
+            "metadata": null,
+            "id": "addition_graph",
+            "nodes": [
+                {
+                    "metadata": null,
+                    "id": "declarative_memory",
+                    "input_ports": [
+                        {
+                            "metadata": null,
+                            "id": "dm_input",
+                            "shape": null,
+                            "type": null
                         }
-                    },
-                    "termination": {
-                        "check_term_true": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": [
-                                    "check_termination"
-                                ]
-                            }
-                        }
-                    }
-                },
-                "nodes": {
-                    "declarative_memory": {
-                        "input_ports": {
-                            "dm_input": {}
-                        },
-                        "parameters": {
-                            "chunks": {
-                                "value": [
-                                    {
-                                        "name": "zero",
-                                        "isa": "number",
-                                        "number": "zero",
-                                        "next": "one"
-                                    },
-                                    {
-                                        "name": "one",
-                                        "isa": "number",
-                                        "number": "one",
-                                        "next": "two"
-                                    },
-                                    {
-                                        "name": "two",
-                                        "isa": "number",
-                                        "number": "two",
-                                        "next": "three"
-                                    },
-                                    {
-                                        "name": "three",
-                                        "isa": "number",
-                                        "number": "three",
-                                        "next": "four"
-                                    },
-                                    {
-                                        "name": "four",
-                                        "isa": "number",
-                                        "number": "four",
-                                        "next": "five"
-                                    },
-                                    {
-                                        "name": "five",
-                                        "isa": "number",
-                                        "number": "five",
-                                        "next": "six"
-                                    },
-                                    {
-                                        "name": "six",
-                                        "isa": "number",
-                                        "number": "six",
-                                        "next": "seven"
-                                    },
-                                    {
-                                        "name": "seven",
-                                        "isa": "number",
-                                        "number": "seven",
-                                        "next": "eight"
-                                    },
-                                    {
-                                        "name": "eight",
-                                        "isa": "number",
-                                        "number": "eight",
-                                        "next": "nine"
-                                    },
-                                    {
-                                        "name": "nine",
-                                        "isa": "number",
-                                        "number": "nine",
-                                        "next": "ten"
-                                    },
-                                    {
-                                        "name": "ten",
-                                        "isa": "number",
-                                        "number": "ten"
-                                    },
-                                    {
-                                        "name": "second-goal",
-                                        "ISA": "add",
-                                        "arg1": "five",
-                                        "arg2": "two",
-                                        "sum": "nil",
-                                        "count": "nil"
-                                    }
-                                ]
-                            },
-                            "chunk_types": {
-                                "value": {
-                                    "number": [
-                                        "number",
-                                        "next"
-                                    ],
-                                    "add": [
-                                        "arg1",
-                                        "arg2",
-                                        "sum",
-                                        "count"
-                                    ]
-                                }
-                            },
-                            "retrieve_chunk": {
-                                "function": "retrieve_chunk",
-                                "args": {
-                                    "pattern": "dm_input",
-                                    "dm_chunks": "chunks",
-                                    "types": "chunk_types"
-                                }
-                            }
-                        },
-                        "output_ports": {
-                            "dm_output": {
-                                "value": "retrieve_chunk"
-                            }
-                        }
-                    },
-                    "retrieval_buffer": {
-                        "input_ports": {
-                            "retrieval_input": {}
-                        },
-                        "output_ports": {
-                            "retrieval_output": {
-                                "value": "retrieval_input"
-                            }
-                        }
-                    },
-                    "goal_buffer": {
-                        "input_ports": {
-                            "goal_input": {}
-                        },
-                        "parameters": {
-                            "first_goal": {
-                                "value": {
+                    ],
+                    "functions": [],
+                    "parameters": [
+                        {
+                            "metadata": null,
+                            "id": "chunks",
+                            "value": [
+                                {
+                                    "name": "zero",
+                                    "isa": "number",
+                                    "number": "zero",
+                                    "next": "one"
+                                },
+                                {
+                                    "name": "one",
+                                    "isa": "number",
+                                    "number": "one",
+                                    "next": "two"
+                                },
+                                {
+                                    "name": "two",
+                                    "isa": "number",
+                                    "number": "two",
+                                    "next": "three"
+                                },
+                                {
+                                    "name": "three",
+                                    "isa": "number",
+                                    "number": "three",
+                                    "next": "four"
+                                },
+                                {
+                                    "name": "four",
+                                    "isa": "number",
+                                    "number": "four",
+                                    "next": "five"
+                                },
+                                {
+                                    "name": "five",
+                                    "isa": "number",
+                                    "number": "five",
+                                    "next": "six"
+                                },
+                                {
+                                    "name": "six",
+                                    "isa": "number",
+                                    "number": "six",
+                                    "next": "seven"
+                                },
+                                {
+                                    "name": "seven",
+                                    "isa": "number",
+                                    "number": "seven",
+                                    "next": "eight"
+                                },
+                                {
+                                    "name": "eight",
+                                    "isa": "number",
+                                    "number": "eight",
+                                    "next": "nine"
+                                },
+                                {
+                                    "name": "nine",
+                                    "isa": "number",
+                                    "number": "nine",
+                                    "next": "ten"
+                                },
+                                {
+                                    "name": "ten",
+                                    "isa": "number",
+                                    "number": "ten"
+                                },
+                                {
                                     "name": "second-goal",
                                     "ISA": "add",
                                     "arg1": "five",
@@ -218,286 +96,601 @@
                                     "sum": "nil",
                                     "count": "nil"
                                 }
-                            },
-                            "change_goal": {
-                                "function": "change_goal",
-                                "args": {
-                                    "pattern": "goal_input",
-                                    "curr_goal": "goal_state"
-                                }
-                            },
-                            "goal_state": {
-                                "default_initial_value": "first_goal",
-                                "value": "first_goal if goal_input == {} else change_goal"
-                            }
+                            ],
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": null,
+                            "args": null
                         },
-                        "output_ports": {
-                            "goal_output": {
-                                "value": "goal_state"
+                        {
+                            "metadata": null,
+                            "id": "chunk_types",
+                            "value": {
+                                "number": [
+                                    "number",
+                                    "next"
+                                ],
+                                "add": [
+                                    "arg1",
+                                    "arg2",
+                                    "sum",
+                                    "count"
+                                ]
+                            },
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": null,
+                            "args": null
+                        },
+                        {
+                            "metadata": null,
+                            "id": "retrieve_chunk",
+                            "value": null,
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": "retrieve_chunk",
+                            "args": {
+                                "pattern": "dm_input",
+                                "dm_chunks": "chunks",
+                                "types": "chunk_types"
                             }
                         }
+                    ],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "dm_output",
+                            "value": "retrieve_chunk"
+                        }
+                    ]
+                },
+                {
+                    "metadata": null,
+                    "id": "retrieval_buffer",
+                    "input_ports": [
+                        {
+                            "metadata": null,
+                            "id": "retrieval_input",
+                            "shape": null,
+                            "type": null
+                        }
+                    ],
+                    "functions": [],
+                    "parameters": [],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "retrieval_output",
+                            "value": "retrieval_input"
+                        }
+                    ]
+                },
+                {
+                    "metadata": null,
+                    "id": "goal_buffer",
+                    "input_ports": [
+                        {
+                            "metadata": null,
+                            "id": "goal_input",
+                            "shape": null,
+                            "type": null
+                        }
+                    ],
+                    "functions": [],
+                    "parameters": [
+                        {
+                            "metadata": null,
+                            "id": "first_goal",
+                            "value": {
+                                "name": "second-goal",
+                                "ISA": "add",
+                                "arg1": "five",
+                                "arg2": "two",
+                                "sum": "nil",
+                                "count": "nil"
+                            },
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": null,
+                            "args": null
+                        },
+                        {
+                            "metadata": null,
+                            "id": "change_goal",
+                            "value": null,
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": "change_goal",
+                            "args": {
+                                "pattern": "goal_input",
+                                "curr_goal": "goal_state"
+                            }
+                        },
+                        {
+                            "metadata": null,
+                            "id": "goal_state",
+                            "value": "first_goal if goal_input == {} else change_goal",
+                            "default_initial_value": "first_goal",
+                            "time_derivative": null,
+                            "function": null,
+                            "args": null
+                        }
+                    ],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "goal_output",
+                            "value": "goal_state"
+                        }
+                    ]
+                },
+                {
+                    "metadata": null,
+                    "id": "procedural_memory",
+                    "input_ports": [],
+                    "functions": [],
+                    "parameters": [
+                        {
+                            "metadata": null,
+                            "id": "productions",
+                            "value": [
+                                {
+                                    "name": "initialize-addition",
+                                    "lhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "arg1": "=num1",
+                                            "arg2": "=num2",
+                                            "sum": "nil",
+                                            "count": "=count"
+                                        }
+                                    ],
+                                    "rhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "sum": "=num1",
+                                            "count": "zero"
+                                        },
+                                        {
+                                            "buffer": "retrieval",
+                                            "ISA": "number",
+                                            "number": "=num1"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "terminate-addition",
+                                    "lhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "arg1": "=arg1",
+                                            "arg2": "=num",
+                                            "sum": "=answer",
+                                            "count": "=num"
+                                        },
+                                        {
+                                            "buffer": "retrieval",
+                                            "ISA": "number",
+                                            "number": "=answer",
+                                            "next": "=next"
+                                        }
+                                    ],
+                                    "rhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "count": "nil"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "increment-count",
+                                    "lhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "arg1": "=arg1",
+                                            "arg2": "=arg2",
+                                            "sum": "=sum",
+                                            "count": "=count"
+                                        },
+                                        {
+                                            "buffer": "retrieval",
+                                            "ISA": "number",
+                                            "number": "=count",
+                                            "next": "=newcount"
+                                        }
+                                    ],
+                                    "rhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "count": "=newcount"
+                                        },
+                                        {
+                                            "buffer": "retrieval",
+                                            "ISA": "number",
+                                            "number": "=sum"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "increment-sum",
+                                    "lhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "arg1": "=arg1",
+                                            "arg2": "-=count",
+                                            "sum": "=sum",
+                                            "count": "=count"
+                                        },
+                                        {
+                                            "buffer": "retrieval",
+                                            "ISA": "number",
+                                            "number": "=sum",
+                                            "next": "=newsum"
+                                        }
+                                    ],
+                                    "rhs": [
+                                        {
+                                            "buffer": "goal",
+                                            "ISA": "add",
+                                            "sum": "=newsum"
+                                        },
+                                        {
+                                            "buffer": "retrieval",
+                                            "ISA": "number",
+                                            "number": "=count"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": null,
+                            "args": null
+                        }
+                    ],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "pm_output",
+                            "value": "productions"
+                        }
+                    ]
+                },
+                {
+                    "metadata": null,
+                    "id": "pattern_matching",
+                    "input_ports": [
+                        {
+                            "metadata": null,
+                            "id": "pattern_input_from_pm",
+                            "shape": null,
+                            "type": null
+                        },
+                        {
+                            "metadata": null,
+                            "id": "pattern_input_from_goal",
+                            "shape": null,
+                            "type": null
+                        },
+                        {
+                            "metadata": null,
+                            "id": "pattern_input_from_retrieval",
+                            "shape": null,
+                            "type": null
+                        }
+                    ],
+                    "functions": [],
+                    "parameters": [
+                        {
+                            "metadata": null,
+                            "id": "pattern_matching_function",
+                            "value": null,
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": "pattern_matching_function",
+                            "args": {
+                                "productions": "pattern_input_from_pm",
+                                "goal": "pattern_input_from_goal",
+                                "retrieval": "pattern_input_from_retrieval"
+                            }
+                        }
+                    ],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "pattern_output",
+                            "value": "pattern_matching_function"
+                        }
+                    ]
+                },
+                {
+                    "metadata": null,
+                    "id": "conflict_resolution",
+                    "input_ports": [
+                        {
+                            "metadata": null,
+                            "id": "conflict_input",
+                            "shape": null,
+                            "type": null
+                        }
+                    ],
+                    "functions": [],
+                    "parameters": [
+                        {
+                            "metadata": null,
+                            "id": "conflict_resolution_function",
+                            "value": null,
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": "conflict_resolution_function",
+                            "args": {
+                                "productions": "conflict_input"
+                            }
+                        }
+                    ],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "conflict_output_to_fire_prod",
+                            "value": "conflict_resolution_function"
+                        },
+                        {
+                            "metadata": null,
+                            "id": "conflict_output_to_check",
+                            "value": "conflict_resolution_function"
+                        }
+                    ]
+                },
+                {
+                    "metadata": null,
+                    "id": "fire_production",
+                    "input_ports": [
+                        {
+                            "metadata": null,
+                            "id": "fire_prod_input",
+                            "shape": null,
+                            "type": null
+                        }
+                    ],
+                    "functions": [],
+                    "parameters": [
+                        {
+                            "metadata": null,
+                            "id": "update_goal",
+                            "value": null,
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": "update_goal",
+                            "args": {
+                                "production": "fire_prod_input"
+                            }
+                        },
+                        {
+                            "metadata": null,
+                            "id": "update_retrieval",
+                            "value": null,
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": "update_retrieval",
+                            "args": {
+                                "production": "fire_prod_input"
+                            }
+                        }
+                    ],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "fire_prod_output_to_goal",
+                            "value": "update_goal"
+                        },
+                        {
+                            "metadata": null,
+                            "id": "fire_prod_output_to_retrieval",
+                            "value": "update_retrieval"
+                        }
+                    ]
+                },
+                {
+                    "metadata": null,
+                    "id": "check_termination",
+                    "input_ports": [
+                        {
+                            "metadata": null,
+                            "id": "check_input",
+                            "shape": null,
+                            "type": null
+                        }
+                    ],
+                    "functions": [],
+                    "parameters": [
+                        {
+                            "metadata": null,
+                            "id": "check_termination",
+                            "value": null,
+                            "default_initial_value": null,
+                            "time_derivative": null,
+                            "function": "check_termination",
+                            "args": {
+                                "production": "check_input"
+                            }
+                        }
+                    ],
+                    "output_ports": [
+                        {
+                            "metadata": null,
+                            "id": "check_output",
+                            "value": "check_termination"
+                        }
+                    ]
+                }
+            ],
+            "edges": [
+                {
+                    "metadata": null,
+                    "id": "dm_to_pattern_edge",
+                    "sender": "declarative_memory",
+                    "receiver": "retrieval_buffer",
+                    "sender_port": "dm_output",
+                    "receiver_port": "retrieval_input",
+                    "parameters": null
+                },
+                {
+                    "metadata": null,
+                    "id": "retrieval_to_pattern_edge",
+                    "sender": "retrieval_buffer",
+                    "receiver": "pattern_matching",
+                    "sender_port": "retrieval_output",
+                    "receiver_port": "pattern_input_from_retrieval",
+                    "parameters": null
+                },
+                {
+                    "metadata": null,
+                    "id": "goal_to_pattern_edge",
+                    "sender": "goal_buffer",
+                    "receiver": "pattern_matching",
+                    "sender_port": "goal_output",
+                    "receiver_port": "pattern_input_from_goal",
+                    "parameters": null
+                },
+                {
+                    "metadata": null,
+                    "id": "pm_to_pattern_edge",
+                    "sender": "procedural_memory",
+                    "receiver": "pattern_matching",
+                    "sender_port": "pm_output",
+                    "receiver_port": "pattern_input_from_pm",
+                    "parameters": null
+                },
+                {
+                    "metadata": null,
+                    "id": "pattern_to_conflict_edge",
+                    "sender": "pattern_matching",
+                    "receiver": "conflict_resolution",
+                    "sender_port": "pattern_output",
+                    "receiver_port": "conflict_input",
+                    "parameters": null
+                },
+                {
+                    "metadata": null,
+                    "id": "conflict_to_fire_prod_edge",
+                    "sender": "conflict_resolution",
+                    "receiver": "fire_production",
+                    "sender_port": "conflict_output_to_fire_prod",
+                    "receiver_port": "fire_prod_input",
+                    "parameters": null
+                },
+                {
+                    "metadata": null,
+                    "id": "conflict_to_check_edge",
+                    "sender": "conflict_resolution",
+                    "receiver": "check_termination",
+                    "sender_port": "conflict_output_to_fire_prod",
+                    "receiver_port": "check_input",
+                    "parameters": null
+                }
+            ],
+            "parameters": null,
+            "conditions": {
+                "metadata": null,
+                "node_specific": {
+                    "declarative_memory": {
+                        "metadata": null,
+                        "type": "Always",
+                        "kwargs": {}
+                    },
+                    "retrieval_buffer": {
+                        "metadata": null,
+                        "type": "JustRan",
+                        "kwargs": {
+                            "dependencies": "declarative_memory"
+                        }
+                    },
+                    "goal_buffer": {
+                        "metadata": null,
+                        "type": "Always",
+                        "kwargs": {}
                     },
                     "procedural_memory": {
-                        "parameters": {
-                            "productions": {
-                                "value": [
-                                    {
-                                        "name": "initialize-addition",
-                                        "lhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "arg1": "=num1",
-                                                "arg2": "=num2",
-                                                "sum": "nil",
-                                                "count": "=count"
-                                            }
-                                        ],
-                                        "rhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "sum": "=num1",
-                                                "count": "zero"
-                                            },
-                                            {
-                                                "buffer": "retrieval",
-                                                "ISA": "number",
-                                                "number": "=num1"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "name": "terminate-addition",
-                                        "lhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "arg1": "=arg1",
-                                                "arg2": "=num",
-                                                "sum": "=answer",
-                                                "count": "=num"
-                                            },
-                                            {
-                                                "buffer": "retrieval",
-                                                "ISA": "number",
-                                                "number": "=answer",
-                                                "next": "=next"
-                                            }
-                                        ],
-                                        "rhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "count": "nil"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "name": "increment-count",
-                                        "lhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "arg1": "=arg1",
-                                                "arg2": "=arg2",
-                                                "sum": "=sum",
-                                                "count": "=count"
-                                            },
-                                            {
-                                                "buffer": "retrieval",
-                                                "ISA": "number",
-                                                "number": "=count",
-                                                "next": "=newcount"
-                                            }
-                                        ],
-                                        "rhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "count": "=newcount"
-                                            },
-                                            {
-                                                "buffer": "retrieval",
-                                                "ISA": "number",
-                                                "number": "=sum"
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        "name": "increment-sum",
-                                        "lhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "arg1": "=arg1",
-                                                "arg2": "-=count",
-                                                "sum": "=sum",
-                                                "count": "=count"
-                                            },
-                                            {
-                                                "buffer": "retrieval",
-                                                "ISA": "number",
-                                                "number": "=sum",
-                                                "next": "=newsum"
-                                            }
-                                        ],
-                                        "rhs": [
-                                            {
-                                                "buffer": "goal",
-                                                "ISA": "add",
-                                                "sum": "=newsum"
-                                            },
-                                            {
-                                                "buffer": "retrieval",
-                                                "ISA": "number",
-                                                "number": "=count"
-                                            }
-                                        ]
-                                    }
-                                ]
-                            }
-                        },
-                        "output_ports": {
-                            "pm_output": {
-                                "value": "productions"
-                            }
-                        }
+                        "metadata": null,
+                        "type": "Always",
+                        "kwargs": {}
                     },
                     "pattern_matching": {
-                        "input_ports": {
-                            "pattern_input_from_pm": {},
-                            "pattern_input_from_goal": {},
-                            "pattern_input_from_retrieval": {}
-                        },
-                        "parameters": {
-                            "pattern_matching_function": {
-                                "function": "pattern_matching_function",
-                                "args": {
-                                    "productions": "pattern_input_from_pm",
-                                    "goal": "pattern_input_from_goal",
-                                    "retrieval": "pattern_input_from_retrieval"
+                        "metadata": null,
+                        "type": "And",
+                        "kwargs": {
+                            "dependencies": [
+                                {
+                                    "metadata": null,
+                                    "type": "EveryNCalls",
+                                    "kwargs": {
+                                        "dependencies": "retrieval_buffer",
+                                        "n": 1
+                                    }
+                                },
+                                {
+                                    "metadata": null,
+                                    "type": "EveryNCalls",
+                                    "kwargs": {
+                                        "dependencies": "goal_buffer",
+                                        "n": 1
+                                    }
+                                },
+                                {
+                                    "metadata": null,
+                                    "type": "EveryNCalls",
+                                    "kwargs": {
+                                        "dependencies": "declarative_memory",
+                                        "n": 1
+                                    }
                                 }
-                            }
-                        },
-                        "output_ports": {
-                            "pattern_output": {
-                                "value": "pattern_matching_function"
-                            }
+                            ]
                         }
                     },
                     "conflict_resolution": {
-                        "input_ports": {
-                            "conflict_input": {}
-                        },
-                        "parameters": {
-                            "conflict_resolution_function": {
-                                "function": "conflict_resolution_function",
-                                "args": {
-                                    "productions": "conflict_input"
-                                }
-                            }
-                        },
-                        "output_ports": {
-                            "conflict_output_to_fire_prod": {
-                                "value": "conflict_resolution_function"
-                            },
-                            "conflict_output_to_check": {
-                                "value": "conflict_resolution_function"
-                            }
+                        "metadata": null,
+                        "type": "JustRan",
+                        "kwargs": {
+                            "dependencies": "pattern_matching"
                         }
                     },
                     "fire_production": {
-                        "input_ports": {
-                            "fire_prod_input": {}
-                        },
-                        "parameters": {
-                            "update_goal": {
-                                "function": "update_goal",
-                                "args": {
-                                    "production": "fire_prod_input"
-                                }
-                            },
-                            "update_retrieval": {
-                                "function": "update_retrieval",
-                                "args": {
-                                    "production": "fire_prod_input"
-                                }
-                            }
-                        },
-                        "output_ports": {
-                            "fire_prod_output_to_goal": {
-                                "value": "update_goal"
-                            },
-                            "fire_prod_output_to_retrieval": {
-                                "value": "update_retrieval"
-                            }
+                        "metadata": null,
+                        "type": "JustRan",
+                        "kwargs": {
+                            "dependencies": "conflict_resolution"
                         }
                     },
                     "check_termination": {
-                        "input_ports": {
-                            "check_input": {}
-                        },
-                        "parameters": {
-                            "check_termination": {
-                                "function": "check_termination",
-                                "args": {
-                                    "production": "check_input"
-                                }
-                            }
-                        },
-                        "output_ports": {
-                            "check_output": {
-                                "value": "check_termination"
-                            }
+                        "metadata": null,
+                        "type": "JustRan",
+                        "kwargs": {
+                            "dependencies": "conflict_resolution"
                         }
                     }
                 },
-                "edges": {
-                    "dm_to_pattern_edge": {
-                        "sender": "declarative_memory",
-                        "receiver": "retrieval_buffer",
-                        "sender_port": "dm_output",
-                        "receiver_port": "retrieval_input"
-                    },
-                    "retrieval_to_pattern_edge": {
-                        "sender": "retrieval_buffer",
-                        "receiver": "pattern_matching",
-                        "sender_port": "retrieval_output",
-                        "receiver_port": "pattern_input_from_retrieval"
-                    },
-                    "goal_to_pattern_edge": {
-                        "sender": "goal_buffer",
-                        "receiver": "pattern_matching",
-                        "sender_port": "goal_output",
-                        "receiver_port": "pattern_input_from_goal"
-                    },
-                    "pm_to_pattern_edge": {
-                        "sender": "procedural_memory",
-                        "receiver": "pattern_matching",
-                        "sender_port": "pm_output",
-                        "receiver_port": "pattern_input_from_pm"
-                    },
-                    "pattern_to_conflict_edge": {
-                        "sender": "pattern_matching",
-                        "receiver": "conflict_resolution",
-                        "sender_port": "pattern_output",
-                        "receiver_port": "conflict_input"
-                    },
-                    "conflict_to_fire_prod_edge": {
-                        "sender": "conflict_resolution",
-                        "receiver": "fire_production",
-                        "sender_port": "conflict_output_to_fire_prod",
-                        "receiver_port": "fire_prod_input"
-                    },
-                    "conflict_to_check_edge": {
-                        "sender": "conflict_resolution",
-                        "receiver": "check_termination",
-                        "sender_port": "conflict_output_to_fire_prod",
-                        "receiver_port": "check_input"
+                "termination": {
+                    "check_term_true": {
+                        "metadata": null,
+                        "type": "JustRan",
+                        "kwargs": {
+                            "dependencies": [
+                                "check_termination"
+                            ]
+                        }
                     }
                 }
             }
         }
-    }
+    ],
+    "format": "ModECI MDF v0.3",
+    "generating_application": "Python modeci-mdf v0.3.1",
+    "onnx_opset_version": null
 }
