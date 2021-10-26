@@ -298,21 +298,33 @@ class EvaluableFunction:
 
         expr = None
 
-        if self.function.function:
+
+
+        func_val  = self.function.value
+        
+        if isinstance(func_val, dict):
+
+
+
 
             for f in mdf_functions:
-                if self.function.function == f:
-                    expr = create_python_expression(
-                        mdf_functions[f]["expression_string"]
-                    )
 
-        else:
-            expr = self.function.value
-            # raise "Unknown function: {}. Known functions: {}".format(
-            #    self.function.function,
-            #    mdf_functions.keys,
-            # )
+     
+                if f in func_val.keys():
 
+           
+                    expr = create_python_expression(mdf_functions[f]["expression_string"])
+
+                    break
+        
+        if expr is None:
+            expr  = func_val
+        #     #raise "Unknown function: {}. Known functions: {}".format(
+        #     #    self.function.function,
+        #     #    mdf_functions.keys,
+        #     #)
+
+        
         func_params = {}
         func_params.update(parameters)
         if self.verbose:
@@ -320,21 +332,27 @@ class EvaluableFunction:
                 "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
-        if self.function.args:
+        if isinstance(func_val,dict):
 
-            for arg in self.function.args:
-                func_params[arg] = evaluate_expr(
-                    self.function.args[arg],
-                    func_params,
-                    verbose=False,
-                    array_format=array_format,
-                )
-                if self.verbose:
-                    print(
-                        "      Arg: {} became: {}".format(
-                            arg, _val_info(func_params[arg])
+            for f in mdf_functions:
+
+
+                if f in func_val.keys():
+
+                    for arg in func_val[f].keys():
+                        
+                        func_params[arg] = evaluate_expr(
+                            func_val[f][arg],
+                            func_params,
+                            verbose=False,
+                            array_format=array_format,
                         )
-                    )
+                        if self.verbose:
+                            print(
+                                "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+                            )
+                    break
+     
 
         # If this is an ONNX operation, evaluate it without neuromlite.
 

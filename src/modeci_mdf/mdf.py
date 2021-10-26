@@ -422,7 +422,7 @@ class Function(MdfBaseWithId):
                     "value",
                     (
                         "evaluable expression",
-                        str,
+                        dict,
                     ),
                 ),
                 (
