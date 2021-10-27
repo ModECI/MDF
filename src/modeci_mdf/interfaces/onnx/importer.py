@@ -137,7 +137,7 @@ def onnx_node_to_mdf(
         # Recreate inputs and outputs of ONNX node as InputPorts and OutputPorts
         for inp in non_constant_inputs:
             param_info = onnx_initializer.get(inp, None)
-            shape = param_info["shape"] if param_info else ""
+            shape = param_info["shape"] if param_info else None
             ip = InputPort(id=id_to_port(inp), shape=shape)
             mdf_node.input_ports.append(ip)
 
@@ -231,7 +231,7 @@ def onnx_to_mdf(
         if onnx_node.op_type == "Constant":
             v = get_onnx_attribute(onnx_node.attribute[0])
             constants[onnx_node.output[0]] = {
-                "shape": v.shape if hasattr(v, "shape") else "(1,)",
+                "shape": v.shape if hasattr(v, "shape") else (1,),
                 "type": str(v.dtype) if hasattr(v, "dtype") else str(type(v)),
                 "value": v,
             }

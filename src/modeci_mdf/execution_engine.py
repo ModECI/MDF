@@ -968,7 +968,7 @@ class EvaluableGraph:
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
     def parse_condition(
-        self, condition: Union[Condition, dict]
+        self, condition: Union[Condition, Dict]
     ) -> graph_scheduler.Condition:
         """Convert the condition in a specific format
 
@@ -997,7 +997,7 @@ class EvaluableGraph:
 
         # if specified as dict
         try:
-            args = condition["args"]
+            args = condition["kwargs"]
         except (TypeError, KeyError):
             args = {}
 

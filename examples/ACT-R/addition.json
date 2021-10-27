@@ -1,26 +1,20 @@
 {
-    "metadata": null,
     "id": "addition",
+    "format": "ModECI MDF v0.3",
+    "generating_application": "Python modeci-mdf v0.3.1",
     "graphs": [
         {
-            "metadata": null,
             "id": "addition_graph",
             "nodes": [
                 {
-                    "metadata": null,
                     "id": "declarative_memory",
                     "input_ports": [
                         {
-                            "metadata": null,
-                            "id": "dm_input",
-                            "shape": null,
-                            "type": null
+                            "id": "dm_input"
                         }
                     ],
-                    "functions": [],
                     "parameters": [
                         {
-                            "metadata": null,
                             "id": "chunks",
                             "value": [
                                 {
@@ -96,14 +90,9 @@
                                     "sum": "nil",
                                     "count": "nil"
                                 }
-                            ],
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
+                            ]
                         },
                         {
-                            "metadata": null,
                             "id": "chunk_types",
                             "value": {
                                 "number": [
@@ -116,18 +105,10 @@
                                     "sum",
                                     "count"
                                 ]
-                            },
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
+                            }
                         },
                         {
-                            "metadata": null,
                             "id": "retrieve_chunk",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
                             "function": "retrieve_chunk",
                             "args": {
                                 "pattern": "dm_input",
@@ -138,48 +119,34 @@
                     ],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "dm_output",
                             "value": "retrieve_chunk"
                         }
                     ]
                 },
                 {
-                    "metadata": null,
                     "id": "retrieval_buffer",
                     "input_ports": [
                         {
-                            "metadata": null,
-                            "id": "retrieval_input",
-                            "shape": null,
-                            "type": null
+                            "id": "retrieval_input"
                         }
                     ],
-                    "functions": [],
-                    "parameters": [],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "retrieval_output",
                             "value": "retrieval_input"
                         }
                     ]
                 },
                 {
-                    "metadata": null,
                     "id": "goal_buffer",
                     "input_ports": [
                         {
-                            "metadata": null,
-                            "id": "goal_input",
-                            "shape": null,
-                            "type": null
+                            "id": "goal_input"
                         }
                     ],
-                    "functions": [],
                     "parameters": [
                         {
-                            "metadata": null,
                             "id": "first_goal",
                             "value": {
                                 "name": "second-goal",
@@ -188,18 +155,10 @@
                                 "arg2": "two",
                                 "sum": "nil",
                                 "count": "nil"
-                            },
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
+                            }
                         },
                         {
-                            "metadata": null,
                             "id": "change_goal",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
                             "function": "change_goal",
                             "args": {
                                 "pattern": "goal_input",
@@ -207,31 +166,22 @@
                             }
                         },
                         {
-                            "metadata": null,
                             "id": "goal_state",
                             "value": "first_goal if goal_input == {} else change_goal",
-                            "default_initial_value": "first_goal",
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
+                            "default_initial_value": "first_goal"
                         }
                     ],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "goal_output",
                             "value": "goal_state"
                         }
                     ]
                 },
                 {
-                    "metadata": null,
                     "id": "procedural_memory",
-                    "input_ports": [],
-                    "functions": [],
                     "parameters": [
                         {
-                            "metadata": null,
                             "id": "productions",
                             "value": [
                                 {
@@ -348,52 +298,32 @@
                                         }
                                     ]
                                 }
-                            ],
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
+                            ]
                         }
                     ],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "pm_output",
                             "value": "productions"
                         }
                     ]
                 },
                 {
-                    "metadata": null,
                     "id": "pattern_matching",
                     "input_ports": [
                         {
-                            "metadata": null,
-                            "id": "pattern_input_from_pm",
-                            "shape": null,
-                            "type": null
+                            "id": "pattern_input_from_pm"
                         },
                         {
-                            "metadata": null,
-                            "id": "pattern_input_from_goal",
-                            "shape": null,
-                            "type": null
+                            "id": "pattern_input_from_goal"
                         },
                         {
-                            "metadata": null,
-                            "id": "pattern_input_from_retrieval",
-                            "shape": null,
-                            "type": null
+                            "id": "pattern_input_from_retrieval"
                         }
                     ],
-                    "functions": [],
                     "parameters": [
                         {
-                            "metadata": null,
                             "id": "pattern_matching_function",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
                             "function": "pattern_matching_function",
                             "args": {
                                 "productions": "pattern_input_from_pm",
@@ -404,31 +334,21 @@
                     ],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "pattern_output",
                             "value": "pattern_matching_function"
                         }
                     ]
                 },
                 {
-                    "metadata": null,
                     "id": "conflict_resolution",
                     "input_ports": [
                         {
-                            "metadata": null,
-                            "id": "conflict_input",
-                            "shape": null,
-                            "type": null
+                            "id": "conflict_input"
                         }
                     ],
-                    "functions": [],
                     "parameters": [
                         {
-                            "metadata": null,
                             "id": "conflict_resolution_function",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
                             "function": "conflict_resolution_function",
                             "args": {
                                 "productions": "conflict_input"
@@ -437,47 +357,32 @@
                     ],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "conflict_output_to_fire_prod",
                             "value": "conflict_resolution_function"
                         },
                         {
-                            "metadata": null,
                             "id": "conflict_output_to_check",
                             "value": "conflict_resolution_function"
                         }
                     ]
                 },
                 {
-                    "metadata": null,
                     "id": "fire_production",
                     "input_ports": [
                         {
-                            "metadata": null,
-                            "id": "fire_prod_input",
-                            "shape": null,
-                            "type": null
+                            "id": "fire_prod_input"
                         }
                     ],
-                    "functions": [],
                     "parameters": [
                         {
-                            "metadata": null,
                             "id": "update_goal",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
                             "function": "update_goal",
                             "args": {
                                 "production": "fire_prod_input"
                             }
                         },
                         {
-                            "metadata": null,
                             "id": "update_retrieval",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
                             "function": "update_retrieval",
                             "args": {
                                 "production": "fire_prod_input"
@@ -486,36 +391,25 @@
                     ],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "fire_prod_output_to_goal",
                             "value": "update_goal"
                         },
                         {
-                            "metadata": null,
                             "id": "fire_prod_output_to_retrieval",
                             "value": "update_retrieval"
                         }
                     ]
                 },
                 {
-                    "metadata": null,
                     "id": "check_termination",
                     "input_ports": [
                         {
-                            "metadata": null,
-                            "id": "check_input",
-                            "shape": null,
-                            "type": null
+                            "id": "check_input"
                         }
                     ],
-                    "functions": [],
                     "parameters": [
                         {
-                            "metadata": null,
                             "id": "check_termination",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
                             "function": "check_termination",
                             "args": {
                                 "production": "check_input"
@@ -524,7 +418,6 @@
                     ],
                     "output_ports": [
                         {
-                            "metadata": null,
                             "id": "check_output",
                             "value": "check_termination"
                         }
@@ -533,102 +426,80 @@
             ],
             "edges": [
                 {
-                    "metadata": null,
                     "id": "dm_to_pattern_edge",
                     "sender": "declarative_memory",
                     "receiver": "retrieval_buffer",
                     "sender_port": "dm_output",
-                    "receiver_port": "retrieval_input",
-                    "parameters": null
+                    "receiver_port": "retrieval_input"
                 },
                 {
-                    "metadata": null,
                     "id": "retrieval_to_pattern_edge",
                     "sender": "retrieval_buffer",
                     "receiver": "pattern_matching",
                     "sender_port": "retrieval_output",
-                    "receiver_port": "pattern_input_from_retrieval",
-                    "parameters": null
+                    "receiver_port": "pattern_input_from_retrieval"
                 },
                 {
-                    "metadata": null,
                     "id": "goal_to_pattern_edge",
                     "sender": "goal_buffer",
                     "receiver": "pattern_matching",
                     "sender_port": "goal_output",
-                    "receiver_port": "pattern_input_from_goal",
-                    "parameters": null
+                    "receiver_port": "pattern_input_from_goal"
                 },
                 {
-                    "metadata": null,
                     "id": "pm_to_pattern_edge",
                     "sender": "procedural_memory",
                     "receiver": "pattern_matching",
                     "sender_port": "pm_output",
-                    "receiver_port": "pattern_input_from_pm",
-                    "parameters": null
+                    "receiver_port": "pattern_input_from_pm"
                 },
                 {
-                    "metadata": null,
                     "id": "pattern_to_conflict_edge",
                     "sender": "pattern_matching",
                     "receiver": "conflict_resolution",
                     "sender_port": "pattern_output",
-                    "receiver_port": "conflict_input",
-                    "parameters": null
+                    "receiver_port": "conflict_input"
                 },
                 {
-                    "metadata": null,
                     "id": "conflict_to_fire_prod_edge",
                     "sender": "conflict_resolution",
                     "receiver": "fire_production",
                     "sender_port": "conflict_output_to_fire_prod",
-                    "receiver_port": "fire_prod_input",
-                    "parameters": null
+                    "receiver_port": "fire_prod_input"
                 },
                 {
-                    "metadata": null,
                     "id": "conflict_to_check_edge",
                     "sender": "conflict_resolution",
                     "receiver": "check_termination",
                     "sender_port": "conflict_output_to_fire_prod",
-                    "receiver_port": "check_input",
-                    "parameters": null
+                    "receiver_port": "check_input"
                 }
             ],
-            "parameters": null,
             "conditions": {
-                "metadata": null,
                 "node_specific": {
                     "declarative_memory": {
-                        "metadata": null,
                         "type": "Always",
                         "kwargs": {}
                     },
                     "retrieval_buffer": {
-                        "metadata": null,
                         "type": "JustRan",
                         "kwargs": {
                             "dependencies": "declarative_memory"
                         }
                     },
                     "goal_buffer": {
-                        "metadata": null,
                         "type": "Always",
                         "kwargs": {}
                     },
                     "procedural_memory": {
-                        "metadata": null,
                         "type": "Always",
                         "kwargs": {}
                     },
                     "pattern_matching": {
-                        "metadata": null,
                         "type": "And",
                         "kwargs": {
                             "dependencies": [
                                 {
-                                    "metadata": null,
                                     "type": "EveryNCalls",
                                     "kwargs": {
                                         "dependencies": "retrieval_buffer",
@@ -636,7 +507,6 @@
                                     }
                                 },
                                 {
-                                    "metadata": null,
                                     "type": "EveryNCalls",
                                     "kwargs": {
                                         "dependencies": "goal_buffer",
@@ -644,7 +514,6 @@
                                     }
                                 },
                                 {
-                                    "metadata": null,
                                     "type": "EveryNCalls",
                                     "kwargs": {
                                         "dependencies": "declarative_memory",
@@ -655,21 +524,18 @@
                         }
                     },
                     "conflict_resolution": {
-                        "metadata": null,
                         "type": "JustRan",
                         "kwargs": {
                             "dependencies": "pattern_matching"
                         }
                     },
                     "fire_production": {
-                        "metadata": null,
                         "type": "JustRan",
                         "kwargs": {
                             "dependencies": "conflict_resolution"
                         }
                     },
                     "check_termination": {
-                        "metadata": null,
                         "type": "JustRan",
                         "kwargs": {
                             "dependencies": "conflict_resolution"
@@ -678,7 +544,6 @@
                 },
                 "termination": {
                     "check_term_true": {
-                        "metadata": null,
                         "type": "JustRan",
                         "kwargs": {
                             "dependencies": [
@@ -689,8 +554,5 @@
                 }
             }
         }
-    ],
-    "format": "ModECI MDF v0.3",
-    "generating_application": "Python modeci-mdf v0.3.1",
-    "onnx_opset_version": null
+    ]
 }

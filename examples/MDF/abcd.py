@@ -64,7 +64,7 @@ def main():
 
     c = Node(id="C", metadata={"color": "0 0 .8"})
     mod_graph.nodes.append(c)
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    ip1 = InputPort(id="input_port1", shape=(1,))
     c.input_ports.append(ip1)
 
     c.parameters.append(Parameter(id="scale", value=abcd.C_scale))
@@ -91,7 +91,7 @@ def main():
     d = Node(id="D", metadata={"color": ".8 0 .8"})
     mod_graph.nodes.append(d)
 
-    ip1 = InputPort(id="input_port1", shape="(1,)")
+    ip1 = InputPort(id="input_port1", shape=(1,))
     d.input_ports.append(ip1)
     d.parameters.append(Parameter(id="scale", value=abcd.D_scale))
 

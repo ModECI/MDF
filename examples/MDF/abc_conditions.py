@@ -38,7 +38,7 @@ def main():
         for p in parameters:
             n.parameters.append(Parameter(id=p, value=parameters[p]))
 
-        ip1 = InputPort(id="input_port1", shape="(1,)")
+        ip1 = InputPort(id="input_port1", shape=(1,))
         n.input_ports.append(ip1)
 
         function.args["variable0"] = ip1.id

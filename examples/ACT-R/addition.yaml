@@ -2,30 +2,24 @@ format: ModECI MDF v0.3
 generating_application: Python modeci-mdf v0.3.1
 graphs:
 - conditions:
-    metadata: null
     node_specific:
       check_termination:
         kwargs:
           dependencies: conflict_resolution
-        metadata: null
         type: JustRan
       conflict_resolution:
         kwargs:
           dependencies: pattern_matching
-        metadata: null
         type: JustRan
       declarative_memory:
         kwargs: {}
-        metadata: null
         type: Always
       fire_production:
         kwargs:
           dependencies: conflict_resolution
-        metadata: null
         type: JustRan
       goal_buffer:
         kwargs: {}
-        metadata: null
         type: Always
       pattern_matching:
         kwargs:
@@ -33,108 +27,75 @@ graphs:
           - kwargs:
               dependencies: retrieval_buffer
               n: 1
-            metadata: null
             type: EveryNCalls
           - kwargs:
               dependencies: goal_buffer
               n: 1
-            metadata: null
             type: EveryNCalls
           - kwargs:
               dependencies: declarative_memory
               n: 1
-            metadata: null
             type: EveryNCalls
-        metadata: null
         type: And
       procedural_memory:
         kwargs: {}
-        metadata: null
         type: Always
       retrieval_buffer:
         kwargs:
           dependencies: declarative_memory
-        metadata: null
         type: JustRan
     termination:
       check_term_true:
         kwargs:
           dependencies:
           - check_termination
-        metadata: null
         type: JustRan
   edges:
   - id: dm_to_pattern_edge
-    metadata: null
-    parameters: null
     receiver: retrieval_buffer
     receiver_port: retrieval_input
     sender: declarative_memory
     sender_port: dm_output
   - id: retrieval_to_pattern_edge
-    metadata: null
-    parameters: null
     receiver: pattern_matching
     receiver_port: pattern_input_from_retrieval
     sender: retrieval_buffer
     sender_port: retrieval_output
   - id: goal_to_pattern_edge
-    metadata: null
-    parameters: null
     receiver: pattern_matching
     receiver_port: pattern_input_from_goal
     sender: goal_buffer
     sender_port: goal_output
   - id: pm_to_pattern_edge
-    metadata: null
-    parameters: null
     receiver: pattern_matching
     receiver_port: pattern_input_from_pm
     sender: procedural_memory
     sender_port: pm_output
   - id: pattern_to_conflict_edge
-    metadata: null
-    parameters: null
     receiver: conflict_resolution
     receiver_port: conflict_input
     sender: pattern_matching
     sender_port: pattern_output
   - id: conflict_to_fire_prod_edge
-    metadata: null
-    parameters: null
     receiver: fire_production
     receiver_port: fire_prod_input
     sender: conflict_resolution
     sender_port: conflict_output_to_fire_prod
   - id: conflict_to_check_edge
-    metadata: null
-    parameters: null
     receiver: check_termination
     receiver_port: check_input
     sender: conflict_resolution
     sender_port: conflict_output_to_fire_prod
   id: addition_graph
-  metadata: null
   nodes:
-  - functions: []
-    id: declarative_memory
+  - id: declarative_memory
     input_ports:
     - id: dm_input
-      metadata: null
-      shape: null
-      type: null
-    metadata: null
     output_ports:
     - id: dm_output
-      metadata: null
       value: retrieve_chunk
     parameters:
-    - args: null
-      default_initial_value: null
-      function: null
-      id: chunks
-      metadata: null
-      time_derivative: null
+    - id: chunks
       value:
       - isa: number
         name: zero
@@ -185,12 +146,7 @@ graphs:
         count: nil
         name: second-goal
         sum: nil
-    - args: null
-      default_initial_value: null
-      function: null
-      id: chunk_types
-      metadata: null
-      time_derivative: null
+    - id: chunk_types
       value:
         add:
         - arg1
@@ -204,44 +160,22 @@ graphs:
         dm_chunks: chunks
         pattern: dm_input
         types: chunk_types
-      default_initial_value: null
       function: retrieve_chunk
       id: retrieve_chunk
-      metadata: null
-      time_derivative: null
-      value: null
-  - functions: []
-    id: retrieval_buffer
+  - id: retrieval_buffer
     input_ports:
     - id: retrieval_input
-      metadata: null
-      shape: null
-      type: null
-    metadata: null
     output_ports:
     - id: retrieval_output
-      metadata: null
       value: retrieval_input
-    parameters: []
-  - functions: []
-    id: goal_buffer
+  - id: goal_buffer
     input_ports:
     - id: goal_input
-      metadata: null
-      shape: null
-      type: null
-    metadata: null
     output_ports:
     - id: goal_output
-      metadata: null
       value: goal_state
     parameters:
-    - args: null
-      default_initial_value: null
-      function: null
-      id: first_goal
-      metadata: null
-      time_derivative: null
+    - id: first_goal
       value:
         ISA: add
         arg1: five
@@ -252,34 +186,17 @@ graphs:
     - args:
         curr_goal: goal_state
         pattern: goal_input
-      default_initial_value: null
       function: change_goal
       id: change_goal
-      metadata: null
-      time_derivative: null
-      value: null
-    - args: null
-      default_initial_value: first_goal
-      function: null
+    - default_initial_value: first_goal
       id: goal_state
-      metadata: null
-      time_derivative: null
       value: first_goal if goal_input == {} else change_goal
-  - functions: []
-    id: procedural_memory
-    input_ports: []
-    metadata: null
+  - id: procedural_memory
     output_ports:
     - id: pm_output
-      metadata: null
       value: productions
     parameters:
-    - args: null
-      default_initial_value: null
-      function: null
-      id: productions
-      metadata: null
-      time_derivative: null
+    - id: productions
       value:
       - lhs:
         - ISA: add
@@ -351,115 +268,60 @@ graphs:
         - ISA: number
           buffer: retrieval
           number: =count
-  - functions: []
-    id: pattern_matching
+  - id: pattern_matching
     input_ports:
     - id: pattern_input_from_pm
-      metadata: null
-      shape: null
-      type: null
     - id: pattern_input_from_goal
-      metadata: null
-      shape: null
-      type: null
     - id: pattern_input_from_retrieval
-      metadata: null
-      shape: null
-      type: null
-    metadata: null
     output_ports:
     - id: pattern_output
-      metadata: null
       value: pattern_matching_function
     parameters:
     - args:
         goal: pattern_input_from_goal
         productions: pattern_input_from_pm
         retrieval: pattern_input_from_retrieval
-      default_initial_value: null
       function: pattern_matching_function
       id: pattern_matching_function
-      metadata: null
-      time_derivative: null
-      value: null
-  - functions: []
-    id: conflict_resolution
+  - id: conflict_resolution
     input_ports:
     - id: conflict_input
-      metadata: null
-      shape: null
-      type: null
-    metadata: null
     output_ports:
     - id: conflict_output_to_fire_prod
-      metadata: null
       value: conflict_resolution_function
     - id: conflict_output_to_check
-      metadata: null
       value: conflict_resolution_function
     parameters:
     - args:
         productions: conflict_input
-      default_initial_value: null
       function: conflict_resolution_function
       id: conflict_resolution_function
-      metadata: null
-      time_derivative: null
-      value: null
-  - functions: []
-    id: fire_production
+  - id: fire_production
     input_ports:
     - id: fire_prod_input
-      metadata: null
-      shape: null
-      type: null
-    metadata: null
     output_ports:
     - id: fire_prod_output_to_goal
-      metadata: null
       value: update_goal
     - id: fire_prod_output_to_retrieval
-      metadata: null
       value: update_retrieval
     parameters:
     - args:
         production: fire_prod_input
-      default_initial_value: null
       function: update_goal
       id: update_goal
-      metadata: null
-      time_derivative: null
-      value: null
     - args:
         production: fire_prod_input
-      default_initial_value: null
       function: update_retrieval
       id: update_retrieval
-      metadata: null
-      time_derivative: null
-      value: null
-  - functions: []
-    id: check_termination
+  - id: check_termination
     input_ports:
     - id: check_input
-      metadata: null
-      shape: null
-      type: null
-    metadata: null
     output_ports:
     - id: check_output
-      metadata: null
       value: check_termination
     parameters:
     - args:
         production: check_input
-      default_initial_value: null
       function: check_termination
       id: check_termination
-      metadata: null
-      time_derivative: null
-      value: null
-  parameters: null
 id: addition
-metadata: null
-onnx_opset_version: null

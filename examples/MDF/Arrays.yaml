@@ -1,50 +1,85 @@
-Arrays:
-    format: ModECI MDF v0.3
-    generating_application: Python modeci-mdf v0.3.1
-    graphs:
-        array_example:
-            nodes:
-                input_node:
-                    parameters:
-                        input_level:
-                            value:
-                            -   - 1
-                                - 2.0
-                            -   - 3
-                                - 4
-                    output_ports:
-                        out_port:
-                            value: input_level
-                middle_node:
-                    input_ports:
-                        input_port1: {}
-                    parameters:
-                        slope:
-                            value: 0.5
-                        intercept:
-                            value:
-                            -   - 0.0
-                                - 1.0
-                            -   - 2.0
-                                - 2.0
-                        linear_1:
-                            function: linear
-                            args:
-                                variable0: input_port1
-                                slope: slope
-                                intercept: intercept
-                    output_ports:
-                        output_1:
-                            value: linear_1
-            edges:
-                input_edge:
-                    parameters:
-                        weight:
-                        -   - 1
-                            - 0
-                        -   - 0
-                            - 1
-                    sender: input_node
-                    receiver: middle_node
-                    sender_port: out_port
-                    receiver_port: input_port1
+format: ModECI MDF v0.3
+generating_application: Python modeci-mdf v0.3.1
+graphs:
+- conditions: null
+  edges:
+  - id: input_edge
+    metadata: null
+    parameters:
+      weight:
+      - - 1
+        - 0
+      - - 0
+        - 1
+    receiver: middle_node
+    receiver_port: input_port1
+    sender: input_node
+    sender_port: out_port
+  id: array_example
+  metadata: null
+  nodes:
+  - functions: []
+    id: input_node
+    input_ports: []
+    metadata: null
+    output_ports:
+    - id: out_port
+      metadata: null
+      value: input_level
+    parameters:
+    - args: null
+      default_initial_value: null
+      function: null
+      id: input_level
+      metadata: null
+      time_derivative: null
+      value:
+      - - 1
+        - 2.0
+      - - 3
+        - 4
+  - functions: []
+    id: middle_node
+    input_ports:
+    - id: input_port1
+      metadata: null
+      shape: null
+      type: null
+    metadata: null
+    output_ports:
+    - id: output_1
+      metadata: null
+      value: linear_1
+    parameters:
+    - args: null
+      default_initial_value: null
+      function: null
+      id: slope
+      metadata: null
+      time_derivative: null
+      value: 0.5
+    - args: null
+      default_initial_value: null
+      function: null
+      id: intercept
+      metadata: null
+      time_derivative: null
+      value:
+      - - 0.0
+        - 1.0
+      - - 2.0
+        - 2.0
+    - args:
+        intercept: intercept
+        slope: slope
+        variable0: input_port1
+      default_initial_value: null
+      function: linear
+      id: linear_1
+      metadata: null
+      time_derivative: null
+      value: null
+  parameters: null
+id: Arrays
+metadata: null
+onnx_opset_version: null

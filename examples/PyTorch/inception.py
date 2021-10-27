@@ -283,7 +283,7 @@ def main():
     eg = EvaluableGraph(graph=mdf_graph, verbose=False)
     eg.evaluate(initializer=params_dict)
 
-    # Make sure the results are the same betweeen PyTorch and MDF
+    # Make sure the results are the same between PyTorch and MDF
     assert np.allclose(
         output,
         eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
