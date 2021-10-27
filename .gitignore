@@ -235,3 +235,5 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PyTorch/runs/
 /docs/sphinx/source/api/_autosummary/
 /examples/MDF/RNN/rnn
+/examples/MDF/RNN/iaf
+/preek.sh
