@@ -9,7 +9,7 @@ color_input = pnl.ProcessingMechanism(
 )
 color_hidden = pnl.ProcessingMechanism(
     name="color_hidden",
-    function=pnl.Logistic(bias=-4, default_variable=[[0.0, 0.0]]),
+    function=pnl.Logistic(bias=-4.0, default_variable=[[0.0, 0.0]]),
     default_variable=[[0.0, 0.0]],
 )
 OUTPUT = pnl.ProcessingMechanism(
@@ -24,7 +24,7 @@ word_input = pnl.ProcessingMechanism(
 )
 word_hidden = pnl.ProcessingMechanism(
     name="word_hidden",
-    function=pnl.Logistic(bias=-4, default_variable=[[0.0, 0.0]]),
+    function=pnl.Logistic(bias=-4.0, default_variable=[[0.0, 0.0]]),
     default_variable=[[0.0, 0.0]],
 )
 task_input = pnl.ProcessingMechanism(
@@ -34,8 +34,14 @@ task_input = pnl.ProcessingMechanism(
 )
 TASK = pnl.LCAMechanism(
     name="TASK",
+    combination_function=pnl.LinearCombination(default_variable=[[0.0, 0.0]]),
     function=pnl.Logistic(default_variable=[[0.0, 0.0]]),
-    initial_value=[[0.5, 0.5]],
+    integrator_function=pnl.LeakyCompetingIntegrator(
+        name="LeakyCompetingIntegrator_Function_0",
+        initializer=[[0.5, 0.5]],
+        rate=0.5,
+        default_variable=[[0.0, 0.0]],
+    ),
     output_ports=["RESULTS"],
     termination_comparison_op=">=",
     default_variable=[[0.0, 0.0]],
@@ -45,11 +51,17 @@ DECISION = pnl.DDM(
     function=pnl.DriftDiffusionAnalytical(default_variable=[[0.0]]),
     input_ports=[
         {
-            pnl.FUNCTION: pnl.Reduce(default_variable=[[0.0, 0.0]], weights=[1, -1]),
             pnl.NAME: pnl.ARRAY,
             pnl.VARIABLE: [[0.0, 0.0]],
+            pnl.FUNCTION: pnl.Reduce(default_variable=[[0.0, 0.0]], weights=[1, -1]),
         }
     ],
+)
+Conflict_Monitor = pnl.ObjectiveMechanism(
+    name="Conflict_Monitor",
+    function=pnl.Energy(matrix=[[0, -2.5], [-2.5, 0]], default_variable=[[0.0, 0.0]]),
+    monitor=[OUTPUT],
+    default_variable=[[0.0, 0.0]],
 )
 
 CONTROL = pnl.ControlMechanism(
@@ -57,15 +69,8 @@ CONTROL = pnl.ControlMechanism(
     default_allocation=[0.5],
     function=pnl.DefaultAllocationFunction(default_variable=[[1.0]]),
     monitor_for_control=[],
-    objective_mechanism=pnl.ObjectiveMechanism(
-        name="Conflict Monitor",
-        function=pnl.Energy(
-            matrix=[[0, -2.5], [-2.5, 0]], default_variable=[[0.0, 0.0]]
-        ),
-        monitor=[OUTPUT],
-        default_variable=[[0.0, 0.0]],
-    ),
-    control=[{pnl.MECHANISM: TASK, pnl.NAME: pnl.GAIN}],
+    objective_mechanism=Conflict_Monitor,
+    control=[{pnl.NAME: pnl.GAIN, pnl.MECHANISM: TASK}],
 )
 
 Stroop_model.add_node(color_input)
@@ -76,67 +81,13 @@ Stroop_model.add_node(word_hidden)
 Stroop_model.add_node(task_input)
 Stroop_model.add_node(TASK)
 Stroop_model.add_node(DECISION)
+Stroop_model.add_node(Conflict_Monitor, pnl.NodeRole.CONTROLLER_OBJECTIVE)
 
 Stroop_model.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from OUTPUT[OutputPort-0] to DECISION[ARRAY]",
+        name="MappingProjection_from_task_input_OutputPort_0__to_TASK_InputPort_0_",
         function=pnl.LinearMatrix(
-            matrix=[[1.0, 0.0], [0.0, 1.0]], default_variable=[0.5, 0.5]
-        ),
-    ),
-    sender=OUTPUT,
-    receiver=DECISION,
-)
-Stroop_model.add_projection(
-    projection=pnl.MappingProjection(
-        name="MappingProjection from TASK[RESULT] to color_hidden[InputPort-0]",
-        function=pnl.LinearMatrix(
-            matrix=[[4.0, 4.0], [0.0, 0.0]], default_variable=[0.5, 0.5]
-        ),
-        matrix=[[4, 4], [0, 0]],
-    ),
-    sender=TASK,
-    receiver=color_hidden,
-)
-Stroop_model.add_projection(
-    projection=pnl.MappingProjection(
-        name="MappingProjection from TASK[RESULT] to word_hidden[InputPort-0]",
-        function=pnl.LinearMatrix(
-            matrix=[[0.0, 0.0], [4.0, 4.0]], default_variable=[0.5, 0.5]
-        ),
-        matrix=[[0, 0], [4, 4]],
-    ),
-    sender=TASK,
-    receiver=word_hidden,
-)
-Stroop_model.add_projection(
-    projection=pnl.MappingProjection(
-        name="MappingProjection from color_hidden[OutputPort-0] to OUTPUT[InputPort-0]",
-        function=pnl.LinearMatrix(
-            matrix=[[2.0, -2.0], [-2.0, 2.0]],
-            default_variable=[0.017986209962091562, 0.017986209962091562],
-        ),
-        matrix=[[2, -2], [-2, 2]],
-    ),
-    sender=color_hidden,
-    receiver=OUTPUT,
-)
-Stroop_model.add_projection(
-    projection=pnl.MappingProjection(
-        name="MappingProjection from color_input[OutputPort-0] to color_hidden[InputPort-0]",
-        function=pnl.LinearMatrix(
-            matrix=[[2.0, -2.0], [-2.0, 2.0]], default_variable=[0.0, 0.0]
-        ),
-        matrix=[[2, -2], [-2, 2]],
-    ),
-    sender=color_input,
-    receiver=color_hidden,
-)
-Stroop_model.add_projection(
-    projection=pnl.MappingProjection(
-        name="MappingProjection from task_input[OutputPort-0] to TASK[InputPort-0]",
-        function=pnl.LinearMatrix(
-            matrix=[[1.0, 0.0], [0.0, 1.0]], default_variable=[0.0, 0.0]
+            default_variable=[0.0, 0.0], matrix=[[1.0, 0.0], [0.0, 1.0]]
         ),
     ),
     sender=task_input,
@@ -144,37 +95,104 @@ Stroop_model.add_projection(
 )
 Stroop_model.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from word_hidden[OutputPort-0] to OUTPUT[InputPort-0]",
+        name="MappingProjection_from_OUTPUT_OutputPort_0__to_DECISION_ARRAY_",
         function=pnl.LinearMatrix(
-            matrix=[[3.0, -3.0], [-3.0, 3.0]],
-            default_variable=[0.017986209962091562, 0.017986209962091562],
+            default_variable=[0.5, 0.5], matrix=[[1.0, 0.0], [0.0, 1.0]]
         ),
-        matrix=[[3, -3], [-3, 3]],
+    ),
+    sender=OUTPUT,
+    receiver=DECISION,
+)
+Stroop_model.add_projection(
+    projection=pnl.MappingProjection(
+        name="MappingProjection_from_OUTPUT_OutputPort_0__to_Conflict_Monitor_InputPort_0_",
+        function=pnl.LinearMatrix(
+            default_variable=[0.5, 0.5], matrix=[[1.0, 0.0], [0.0, 1.0]]
+        ),
+    ),
+    sender=OUTPUT,
+    receiver=Conflict_Monitor,
+)
+Stroop_model.add_projection(
+    projection=pnl.MappingProjection(
+        name="MappingProjection_from_color_input_OutputPort_0__to_color_hidden_InputPort_0",
+        function=pnl.LinearMatrix(
+            default_variable=[0.0, 0.0], matrix=[[2.0, -2.0], [-2.0, 2.0]]
+        ),
+    ),
+    sender=color_input,
+    receiver=color_hidden,
+)
+Stroop_model.add_projection(
+    projection=pnl.MappingProjection(
+        name="MappingProjection_from_color_hidden_OutputPort_0__to_OUTPUT_InputPort_0",
+        function=pnl.LinearMatrix(
+            default_variable=[0.017986209962091562, 0.017986209962091562],
+            matrix=[[2.0, -2.0], [-2.0, 2.0]],
+        ),
+    ),
+    sender=color_hidden,
+    receiver=OUTPUT,
+)
+Stroop_model.add_projection(
+    projection=pnl.MappingProjection(
+        name="MappingProjection_from_word_input_OutputPort_0__to_word_hidden_InputPort_0",
+        function=pnl.LinearMatrix(
+            default_variable=[0.0, 0.0], matrix=[[3.0, -3.0], [-3.0, 3.0]]
+        ),
+    ),
+    sender=word_input,
+    receiver=word_hidden,
+)
+Stroop_model.add_projection(
+    projection=pnl.MappingProjection(
+        name="MappingProjection_from_word_hidden_OutputPort_0__to_OUTPUT_InputPort_0",
+        function=pnl.LinearMatrix(
+            default_variable=[0.017986209962091562, 0.017986209962091562],
+            matrix=[[3.0, -3.0], [-3.0, 3.0]],
+        ),
     ),
     sender=word_hidden,
     receiver=OUTPUT,
 )
 Stroop_model.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from word_input[OutputPort-0] to word_hidden[InputPort-0]",
+        name="MappingProjection_from_TASK_RESULT__to_color_hidden_InputPort_0",
         function=pnl.LinearMatrix(
-            matrix=[[3.0, -3.0], [-3.0, 3.0]], default_variable=[0.0, 0.0]
+            default_variable=[0.5, 0.5], matrix=[[4.0, 4.0], [0.0, 0.0]]
         ),
-        matrix=[[3, -3], [-3, 3]],
     ),
-    sender=word_input,
+    sender=TASK,
+    receiver=color_hidden,
+)
+Stroop_model.add_projection(
+    projection=pnl.MappingProjection(
+        name="MappingProjection_from_TASK_RESULT__to_word_hidden_InputPort_0",
+        function=pnl.LinearMatrix(
+            default_variable=[0.5, 0.5], matrix=[[0.0, 0.0], [4.0, 4.0]]
+        ),
+    ),
+    sender=TASK,
     receiver=word_hidden,
 )
 Stroop_model.add_controller(CONTROL)
 
-Stroop_model.scheduler.add_condition(DECISION, pnl.EveryNCalls(OUTPUT, 1))
 Stroop_model.scheduler.add_condition(
-    OUTPUT, pnl.All(pnl.EveryNCalls(color_hidden, 1), pnl.EveryNCalls(word_hidden, 1))
+    word_hidden, pnl.EveryNCalls(dependency=TASK, n=10)
 )
-Stroop_model.scheduler.add_condition(color_hidden, pnl.EveryNCalls(TASK, 10))
-Stroop_model.scheduler.add_condition(word_hidden, pnl.EveryNCalls(TASK, 10))
+Stroop_model.scheduler.add_condition(
+    color_hidden, pnl.EveryNCalls(dependency=TASK, n=10)
+)
+Stroop_model.scheduler.add_condition(
+    OUTPUT,
+    pnl.All(
+        pnl.EveryNCalls(dependency=color_hidden, n=1),
+        pnl.EveryNCalls(dependency=word_hidden, n=1),
+    ),
+)
+Stroop_model.scheduler.add_condition(DECISION, pnl.EveryNCalls(dependency=OUTPUT, n=1))
 
 Stroop_model.scheduler.termination_conds = {
-    pnl.TimeScale.RUN: pnl.Never(),
-    pnl.TimeScale.TRIAL: pnl.AllHaveRun(),
+    pnl.TimeScale.ENVIRONMENT_SEQUENCE: pnl.Never(),
+    pnl.TimeScale.ENVIRONMENT_STATE_UPDATE: pnl.AllHaveRun(),
 }

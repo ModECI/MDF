@@ -79,6 +79,7 @@ def format_output(s):
 
 def match_in_expr(s, node):
 
+    s = str(s)  # ensure it's a string
     for p in node.parameters:
         if p.id in s:
             s = s.replace(p.id, format_param(p.id))
