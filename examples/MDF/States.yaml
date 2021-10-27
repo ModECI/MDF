@@ -20,10 +20,10 @@ States:
                         period:
                             value: 0.4
                         level:
-                            default_initial_value: '0'
+                            default_initial_value: 0
                             time_derivative: 6.283185 * rate / period
                         rate:
-                            default_initial_value: '1'
+                            default_initial_value: 1
                             time_derivative: -1 * 6.283185 * level / period
                     output_ports:
                         out_port:

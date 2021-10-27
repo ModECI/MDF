@@ -11,6 +11,7 @@ import neuromllite
 import lems.api as lems
 
 from modeci_mdf.functions.standard import mdf_functions, substitute_args
+from modeci_mdf.execution_engine import evaluate_expr
 
 
 def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
@@ -112,7 +113,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
                         on_start = lems.OnStart()
                         ct.dynamics.add(on_start)
                     sa = lems.StateAssignment(
-                        variable=p.id, value=p.default_initial_value
+                        variable=p.id, value=str(evaluate_expr(p.default_initial_value))
                     )
                     on_start.actions.append(sa)
 
