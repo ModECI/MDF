@@ -15,7 +15,13 @@ import numpy as np
 
 import sympy
 
-from typing import List, Tuple, Dict, Set, Any, Union, Optional, get_args, get_origin
+from typing import List, Tuple, Dict, Set, Any, Union, Optional
+
+# If we running python version 3.7 or lower, we need to using typing_compat
+if sys.version_info < (3, 8):
+    from typing_compat import get_args, get_origin
+else:
+    from typing import get_args, get_origin
 
 from attr import has, field, fields
 from attr.validators import optional, instance_of, in_
