@@ -58,13 +58,13 @@
                 },
                 "edges": {
                     "input_edge": {
-                        "parameters": {
-                            "weight": 0.55
-                        },
                         "sender": "input_node",
                         "receiver": "processing_node",
                         "sender_port": "out_port",
-                        "receiver_port": "input_port1"
+                        "receiver_port": "input_port1",
+                        "parameters": {
+                            "weight": 0.55
+                        }
                     }
                 }
             }

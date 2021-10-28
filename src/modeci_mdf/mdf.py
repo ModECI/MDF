@@ -54,40 +54,6 @@ value_expr_converter = cattr.Converter()
 ValueExprType = Union[str, List, Dict, np.ndarray]
 
 
-def _unstructure_value_expr(o):
-    """Handle unstructuring of value expressions from JSON"""
-    try:
-        # If this is an np.ndarray type, it should have a tolist
-        return o.tolist()
-    except AttributeError:
-        return converter.unstructure(o)
-
-
-def _structure_value_expr(o, t):
-    """Handle re-structuring of value expressions from JSON"""
-
-    # Don't convert scalars to arrays
-    if np.isscalar(o):
-        return o
-
-    # Try to turn it into a numpy array
-    arr = np.array(o)
-
-    # Make sure the dtype is not object or string, we want to keep these as lists
-    if arr.dtype.type not in [np.object_, np.str_]:
-        return arr
-
-    return o
-
-
-value_expr_converter.register_structure_hook(
-    Optional[ValueExprType], _structure_value_expr
-)
-value_expr_converter.register_unstructure_hook(
-    Optional[ValueExprType], _unstructure_value_expr
-)
-
-
 @attr.define(eq=False)
 class MdfBase:
     """
@@ -102,15 +68,25 @@ class MdfBase:
         kw_only=True, default=None, validator=optional(instance_of(dict))
     )
 
-    def to_dict(self):
-        """Convert the model to a nested dict structure."""
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert the Mdf object to a nested dict structure."""
         return converter.unstructure(self)
 
     def to_json(self) -> str:
         """
-        Convert the model to a JSON string representation.
+        Convert the Mdf object to a JSON string representation.
         """
         return json.dumps(self.to_dict(), indent=4)
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> "MdfBase":
+        """Instantiate an MDF object from a dictionary"""
+        return converter.structure(d, cls)
+
+    @classmethod
+    def from_json(cls, json_str: str) -> "MdfBase":
+        """Instantiate an MDF object from a JSON string"""
+        return cls.from_dict(json.loads(json_str))
 
 
 @attr.define(eq=False)
@@ -452,6 +428,43 @@ class Model(MdfBase):
     )
     onnx_opset_version: Optional[str] = field(default=None)
 
+    def to_dict(self):
+        """
+        Convert the Model to a dictionary
+
+        Returns:
+            A dictionary representation of the Model. All sub -objects are converted to dictionaries as well.
+        """
+
+        # Note: we must override the base class from_dict method because the Model class is serialized as a dictionary
+        # with the id as the key. This is not the case for the base class.
+
+        d = super().to_dict()
+
+        # Drop the id field
+        del d["id"]
+
+        return {self.id: d}
+
+    @classmethod
+    def from_dict(cls, d: Dict[str, Any]) -> "Model":
+        """
+        Create a Model object from a dictionary
+
+        Args:
+            d: A dictionary containing the Model object
+
+        Returns:
+            A Model object
+        """
+
+        # Note: we must override the base class from_dict method because the Model class is serialized as a dictionary
+        # with the id as the key. This is not the case for the base class.
+
+        id = list(d.keys())[0]
+        d = {"id": id, **d[id]}
+        return converter.structure(d, Model)
+
     def to_json_file(
         self, filename: Optional[str] = None, include_metadata: bool = True
     ) -> str:
@@ -572,7 +585,7 @@ class Model(MdfBase):
         """
         with open(filename) as infile:
             d = json.load(infile)
-            return converter.structure(d, cls)
+            return Model.from_dict(d)
 
     @classmethod
     def from_yaml_file(cls, filename: str) -> "Model":
@@ -588,18 +601,57 @@ class Model(MdfBase):
         with open(filename) as infile:
             d = yaml.safe_load(infile)
             d = yaml_converter.structure(d, Dict)
-            return converter.structure(d, cls)
+            return Model.from_dict(d)
 
 
 # Below are a set of structure and unstructure hooks needed to help cattr serialize and deserialize from JSON the
 # non-standard things.
 
+
+def _unstructure_value_expr(o):
+    """Handle unstructuring of value expressions from JSON"""
+    try:
+        # If this is an np.ndarray type, it should have a tolist
+        return o.tolist()
+    except AttributeError:
+        return converter.unstructure(o)
+
+
+def _structure_value_expr(o, t):
+    """Handle re-structuring of value expressions from JSON"""
+
+    # Don't convert scalars to arrays
+    if np.isscalar(o):
+        return o
+
+    # Try to turn it into a numpy array
+    arr = np.array(o)
+
+    # Make sure the dtype is not object or string, we want to keep these as lists
+    if arr.dtype.type not in [np.object_, np.str_]:
+        return arr
+
+    return o
+
+
+# Register a structure and unstructure hook to handle value expressions that
+# can either be str or Dict (not sure if this should be allowed but ACT-R examples
+# depend on this feature). Value expressions should probably become their own
+# type later down the line. We want a converter that just handles value expressions
+# and we also want to add hooks for this to the general converter.
+value_expr_converter.register_structure_hook(
+    Optional[ValueExprType], _structure_value_expr
+)
+value_expr_converter.register_unstructure_hook(
+    Optional[ValueExprType], _unstructure_value_expr
+)
 converter.register_unstructure_hook(Optional[ValueExprType], _unstructure_value_expr)
 converter.register_structure_hook(Optional[ValueExprType], _structure_value_expr)
 
 
-# Setup a hook factory for any MDF base class so we don't serialize default values.
-def _make_mdfbase_unstructure_hook(cl):
+# Setup a hook factory for any MDF base class so we don't serialize attributes whose
+# current value is the default value.
+def _mdfbase_unstruct_hook_factory(cl):
     """Generate an unstructure hook for the a class that inherits from MdfBase"""
 
     # Generate overrides for all fields so that we omit default values from serialization
@@ -612,55 +664,95 @@ def _make_mdfbase_unstructure_hook(cl):
     return make_dict_unstructure_fn(cl, converter, **field_overrides)
 
 
+# Most of the code below is needed to handle serialization and deserialization of lists of
+# MdfBase objects that have ids as dicts where the keys are the ids.
+def _mdfbase_struct_hook_factory(cl):
+    """
+    This is a very simple modification to cattr.Converter.structure_attrs_fromdict. The only
+    difference is that we give the id value a default value of empty string when structuring.
+    This is because objects with id are serialized without id when they are stored in a list.
+    The idea is stored in the key of a dictionary.
+    """
+
+    def _structure_mdfbase(obj, t):
+        """Instantiate a subclass of MdfBase class from a mapping (dict)."""
+
+        conv_obj = {"id": ""}
+        for a in fields(cl):  # type: ignore
+            name = a.name
+
+            try:
+                val = obj[name]
+            except KeyError:
+                continue
+
+            if name[0] == "_":
+                name = name[1:]
+
+            conv_obj[name] = converter._structure_attribute(a, val)
+
+        return cl(**conv_obj)
+
+    return _structure_mdfbase
+
+
+# Register the structure and unstructure hooks for collections of MdfBase classes.
+def _unstructure_list_mdfbase(cl):
+    """Serialize list of MdfBase objects as dicts if all of their elements have ids"""
+
+    def f(obj_list):
+        try:
+            # If all the elements of this list have id's, we can serialize them as a dict.
+            d = {o.id: converter.unstructure(o) for o in obj_list}
+
+            # Remove the ids from each element since they are stored in the dict's keys now.
+            for id, objd in d.items():
+                del objd["id"]
+
+            return d
+
+        except AttributeError:
+            return obj_list
+
+    return f
+
+
+def _structure_list_mdfbase(cl):
+    """Deserialize list of dict of MdfBase objects as a list if all of their elements have ids"""
+    mdf_class = get_args(cl)[0]
+
+    def f(obj_dict, t):
+        try:
+            obj_list = [converter.structure(v, mdf_class) for v in obj_dict.values()]
+
+            # Give each object the id that is its key in the dict.
+            for id, obj in zip(obj_dict.keys(), obj_list):
+                obj.id = id
+
+            return obj_list
+
+        except AttributeError:
+            return obj_dict
+
+    return f
+
+
+def _is_list_mdfbase(cl):
+    """
+    Check if a class is a list of MdfBase objects. These will be serialized as dicts if the underlying class has an id
+    attribute.
+    """
+    return get_origin(cl) == list and issubclass(get_args(cl)[0], MdfBase)
+
+
+converter.register_unstructure_hook_factory(_is_list_mdfbase, _unstructure_list_mdfbase)
+converter.register_structure_hook_factory(_is_list_mdfbase, _structure_list_mdfbase)
 converter.register_unstructure_hook_factory(
     lambda cl: issubclass(cl, MdfBase) and cl != Parameter,
-    _make_mdfbase_unstructure_hook,
+    _mdfbase_unstruct_hook_factory,
 )
 converter.register_unstructure_hook(Parameter, Parameter.unstructure)
-
-
-# # Register the structure and unstructure hooks for collections of MdfBase classes.
-# def _unstructure_list_mdfbase(cl):
-#     """Serialize list of MdfBase objects as dicts if all of their elements have ids"""
-#
-#     def f(obj_list):
-#         try:
-#             # If all the elements of this list have id's, we can serialize them as a dict.
-#             return {o.id: converter.unstructure(o) for o in obj_list}
-#         except AttributeError:
-#             return obj_list
-#
-#     return f
-#
-#
-# def _structure_list_mdfbase(cl):
-#     """Deserialize list of dict of MdfBase objects as a list if all of their elements have ids"""
-#     mdf_class = getattr(sys.modules[__name__], get_args(cl)[0].__forward_arg__)
-#
-#     def f(obj_dict, t):
-#         try:
-#             return converter.structure(list(obj_dict.values()), List)
-#         except AttributeError:
-#             return obj_dict
-#
-#     return f
-#
-#
-# def _is_list_mdfbase(cl):
-#     """Check if a class is a list of MdfBase objects"""
-#     try:
-#         mdf_class = getattr(sys.modules[__name__], get_args(cl)[0].__forward_arg__)
-#         return get_origin(cl) == list and issubclass(mdf_class, MdfBase)
-#     except AttributeError:
-#         return False
-#
-#
-# converter.register_unstructure_hook_factory(_is_list_mdfbase, _unstructure_list_mdfbase)
-# converter.register_structure_hook_factory(_is_list_mdfbase, _structure_list_mdfbase)
-
-# Register a structure and unstructure hook to handle value expressions that
-# can either be str or Dict (not sure if this should be allowed but ACT-R examples
-# depend on this feature). I feel like value expressions should probably become their own
-# type later down the line.
-converter.register_unstructure_hook(Optional[ValueExprType], _unstructure_value_expr)
-converter.register_structure_hook(Optional[ValueExprType], _structure_value_expr)
+converter.register_structure_hook_factory(
+    lambda cl: issubclass(cl, MdfBase) and "id" in [a.name for a in fields(cl)],
+    _mdfbase_struct_hook_factory,
+)

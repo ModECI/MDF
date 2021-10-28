@@ -1,134 +1,88 @@
 {
-    "metadata": null,
-    "id": "Arrays",
-    "graphs": [
-        {
-            "metadata": null,
-            "id": "array_example",
-            "nodes": [
-                {
-                    "metadata": null,
-                    "id": "input_node",
-                    "input_ports": [],
-                    "functions": [],
-                    "parameters": [
-                        {
-                            "metadata": null,
-                            "id": "input_level",
-                            "value": [
-                                [
-                                    1,
-                                    2.0
-                                ],
-                                [
-                                    3,
-                                    4
+    "Arrays": {
+        "format": "ModECI MDF v0.3",
+        "generating_application": "Python modeci-mdf v0.3.1",
+        "graphs": {
+            "array_example": {
+                "nodes": {
+                    "input_node": {
+                        "parameters": {
+                            "input_level": {
+                                "value": [
+                                    [
+                                        1,
+                                        2.0
+                                    ],
+                                    [
+                                        3,
+                                        4
+                                    ]
                                 ]
-                            ],
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
-                        }
-                    ],
-                    "output_ports": [
-                        {
-                            "metadata": null,
-                            "id": "out_port",
-                            "value": "input_level"
-                        }
-                    ]
-                },
-                {
-                    "metadata": null,
-                    "id": "middle_node",
-                    "input_ports": [
-                        {
-                            "metadata": null,
-                            "id": "input_port1",
-                            "shape": null,
-                            "type": null
-                        }
-                    ],
-                    "functions": [],
-                    "parameters": [
-                        {
-                            "metadata": null,
-                            "id": "slope",
-                            "value": 0.5,
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
+                            }
                         },
-                        {
-                            "metadata": null,
-                            "id": "intercept",
-                            "value": [
-                                [
-                                    0.0,
-                                    1.0
-                                ],
-                                [
-                                    2.0,
-                                    2.0
-                                ]
-                            ],
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": null,
-                            "args": null
-                        },
-                        {
-                            "metadata": null,
-                            "id": "linear_1",
-                            "value": null,
-                            "default_initial_value": null,
-                            "time_derivative": null,
-                            "function": "linear",
-                            "args": {
-                                "variable0": "input_port1",
-                                "slope": "slope",
-                                "intercept": "intercept"
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
                             }
                         }
-                    ],
-                    "output_ports": [
-                        {
-                            "metadata": null,
-                            "id": "output_1",
-                            "value": "linear_1"
+                    },
+                    "middle_node": {
+                        "input_ports": {
+                            "input_port1": {}
+                        },
+                        "parameters": {
+                            "slope": {
+                                "value": 0.5
+                            },
+                            "intercept": {
+                                "value": [
+                                    [
+                                        0.0,
+                                        1.0
+                                    ],
+                                    [
+                                        2.0,
+                                        2.0
+                                    ]
+                                ]
+                            },
+                            "linear_1": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "input_port1",
+                                    "slope": "slope",
+                                    "intercept": "intercept"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "linear_1"
+                            }
                         }
-                    ]
-                }
-            ],
-            "edges": [
-                {
-                    "metadata": null,
-                    "id": "input_edge",
-                    "sender": "input_node",
-                    "receiver": "middle_node",
-                    "sender_port": "out_port",
-                    "receiver_port": "input_port1",
-                    "parameters": {
-                        "weight": [
-                            [
-                                1,
-                                0
-                            ],
-                            [
-                                0,
-                                1
+                    }
+                },
+                "edges": {
+                    "input_edge": {
+                        "sender": "input_node",
+                        "receiver": "middle_node",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port1",
+                        "parameters": {
+                            "weight": [
+                                [
+                                    1,
+                                    0
+                                ],
+                                [
+                                    0,
+                                    1
+                                ]
                             ]
-                        ]
+                        }
                     }
                 }
-            ],
-            "parameters": null,
-            "conditions": null
+            }
         }
-    ],
-    "format": "ModECI MDF v0.3",
-    "generating_application": "Python modeci-mdf v0.3.1",
-    "onnx_opset_version": null
+    }
 }

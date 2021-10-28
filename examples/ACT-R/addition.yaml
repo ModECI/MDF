@@ -1,327 +1,327 @@
-format: ModECI MDF v0.3
-generating_application: Python modeci-mdf v0.3.1
-graphs:
-- conditions:
-    node_specific:
-      check_termination:
-        kwargs:
-          dependencies: conflict_resolution
-        type: JustRan
-      conflict_resolution:
-        kwargs:
-          dependencies: pattern_matching
-        type: JustRan
-      declarative_memory:
-        kwargs: {}
-        type: Always
-      fire_production:
-        kwargs:
-          dependencies: conflict_resolution
-        type: JustRan
-      goal_buffer:
-        kwargs: {}
-        type: Always
-      pattern_matching:
-        kwargs:
-          dependencies:
-          - kwargs:
-              dependencies: retrieval_buffer
-              n: 1
-            type: EveryNCalls
-          - kwargs:
-              dependencies: goal_buffer
-              n: 1
-            type: EveryNCalls
-          - kwargs:
+addition:
+  format: ModECI MDF v0.3
+  generating_application: Python modeci-mdf v0.3.1
+  graphs:
+    addition_graph:
+      conditions:
+        node_specific:
+          check_termination:
+            kwargs:
+              dependencies: conflict_resolution
+            type: JustRan
+          conflict_resolution:
+            kwargs:
+              dependencies: pattern_matching
+            type: JustRan
+          declarative_memory:
+            kwargs: {}
+            type: Always
+          fire_production:
+            kwargs:
+              dependencies: conflict_resolution
+            type: JustRan
+          goal_buffer:
+            kwargs: {}
+            type: Always
+          pattern_matching:
+            kwargs:
+              dependencies:
+              - kwargs:
+                  dependencies: retrieval_buffer
+                  n: 1
+                type: EveryNCalls
+              - kwargs:
+                  dependencies: goal_buffer
+                  n: 1
+                type: EveryNCalls
+              - kwargs:
+                  dependencies: declarative_memory
+                  n: 1
+                type: EveryNCalls
+            type: And
+          procedural_memory:
+            kwargs: {}
+            type: Always
+          retrieval_buffer:
+            kwargs:
               dependencies: declarative_memory
-              n: 1
-            type: EveryNCalls
-        type: And
-      procedural_memory:
-        kwargs: {}
-        type: Always
-      retrieval_buffer:
-        kwargs:
-          dependencies: declarative_memory
-        type: JustRan
-    termination:
-      check_term_true:
-        kwargs:
-          dependencies:
-          - check_termination
-        type: JustRan
-  edges:
-  - id: dm_to_pattern_edge
-    receiver: retrieval_buffer
-    receiver_port: retrieval_input
-    sender: declarative_memory
-    sender_port: dm_output
-  - id: retrieval_to_pattern_edge
-    receiver: pattern_matching
-    receiver_port: pattern_input_from_retrieval
-    sender: retrieval_buffer
-    sender_port: retrieval_output
-  - id: goal_to_pattern_edge
-    receiver: pattern_matching
-    receiver_port: pattern_input_from_goal
-    sender: goal_buffer
-    sender_port: goal_output
-  - id: pm_to_pattern_edge
-    receiver: pattern_matching
-    receiver_port: pattern_input_from_pm
-    sender: procedural_memory
-    sender_port: pm_output
-  - id: pattern_to_conflict_edge
-    receiver: conflict_resolution
-    receiver_port: conflict_input
-    sender: pattern_matching
-    sender_port: pattern_output
-  - id: conflict_to_fire_prod_edge
-    receiver: fire_production
-    receiver_port: fire_prod_input
-    sender: conflict_resolution
-    sender_port: conflict_output_to_fire_prod
-  - id: conflict_to_check_edge
-    receiver: check_termination
-    receiver_port: check_input
-    sender: conflict_resolution
-    sender_port: conflict_output_to_fire_prod
-  id: addition_graph
-  nodes:
-  - id: declarative_memory
-    input_ports:
-    - id: dm_input
-    output_ports:
-    - id: dm_output
-      value: retrieve_chunk
-    parameters:
-    - id: chunks
-      value:
-      - isa: number
-        name: zero
-        next: one
-        number: zero
-      - isa: number
-        name: one
-        next: two
-        number: one
-      - isa: number
-        name: two
-        next: three
-        number: two
-      - isa: number
-        name: three
-        next: four
-        number: three
-      - isa: number
-        name: four
-        next: five
-        number: four
-      - isa: number
-        name: five
-        next: six
-        number: five
-      - isa: number
-        name: six
-        next: seven
-        number: six
-      - isa: number
-        name: seven
-        next: eight
-        number: seven
-      - isa: number
-        name: eight
-        next: nine
-        number: eight
-      - isa: number
-        name: nine
-        next: ten
-        number: nine
-      - isa: number
-        name: ten
-        number: ten
-      - ISA: add
-        arg1: five
-        arg2: two
-        count: nil
-        name: second-goal
-        sum: nil
-    - id: chunk_types
-      value:
-        add:
-        - arg1
-        - arg2
-        - sum
-        - count
-        number:
-        - number
-        - next
-    - args:
-        dm_chunks: chunks
-        pattern: dm_input
-        types: chunk_types
-      function: retrieve_chunk
-      id: retrieve_chunk
-  - id: retrieval_buffer
-    input_ports:
-    - id: retrieval_input
-    output_ports:
-    - id: retrieval_output
-      value: retrieval_input
-  - id: goal_buffer
-    input_ports:
-    - id: goal_input
-    output_ports:
-    - id: goal_output
-      value: goal_state
-    parameters:
-    - id: first_goal
-      value:
-        ISA: add
-        arg1: five
-        arg2: two
-        count: nil
-        name: second-goal
-        sum: nil
-    - args:
-        curr_goal: goal_state
-        pattern: goal_input
-      function: change_goal
-      id: change_goal
-    - default_initial_value: first_goal
-      id: goal_state
-      value: first_goal if goal_input == {} else change_goal
-  - id: procedural_memory
-    output_ports:
-    - id: pm_output
-      value: productions
-    parameters:
-    - id: productions
-      value:
-      - lhs:
-        - ISA: add
-          arg1: =num1
-          arg2: =num2
-          buffer: goal
-          count: =count
-          sum: nil
-        name: initialize-addition
-        rhs:
-        - ISA: add
-          buffer: goal
-          count: zero
-          sum: =num1
-        - ISA: number
-          buffer: retrieval
-          number: =num1
-      - lhs:
-        - ISA: add
-          arg1: =arg1
-          arg2: =num
-          buffer: goal
-          count: =num
-          sum: =answer
-        - ISA: number
-          buffer: retrieval
-          next: =next
-          number: =answer
-        name: terminate-addition
-        rhs:
-        - ISA: add
-          buffer: goal
-          count: nil
-      - lhs:
-        - ISA: add
-          arg1: =arg1
-          arg2: =arg2
-          buffer: goal
-          count: =count
-          sum: =sum
-        - ISA: number
-          buffer: retrieval
-          next: =newcount
-          number: =count
-        name: increment-count
-        rhs:
-        - ISA: add
-          buffer: goal
-          count: =newcount
-        - ISA: number
-          buffer: retrieval
-          number: =sum
-      - lhs:
-        - ISA: add
-          arg1: =arg1
-          arg2: -=count
-          buffer: goal
-          count: =count
-          sum: =sum
-        - ISA: number
-          buffer: retrieval
-          next: =newsum
-          number: =sum
-        name: increment-sum
-        rhs:
-        - ISA: add
-          buffer: goal
-          sum: =newsum
-        - ISA: number
-          buffer: retrieval
-          number: =count
-  - id: pattern_matching
-    input_ports:
-    - id: pattern_input_from_pm
-    - id: pattern_input_from_goal
-    - id: pattern_input_from_retrieval
-    output_ports:
-    - id: pattern_output
-      value: pattern_matching_function
-    parameters:
-    - args:
-        goal: pattern_input_from_goal
-        productions: pattern_input_from_pm
-        retrieval: pattern_input_from_retrieval
-      function: pattern_matching_function
-      id: pattern_matching_function
-  - id: conflict_resolution
-    input_ports:
-    - id: conflict_input
-    output_ports:
-    - id: conflict_output_to_fire_prod
-      value: conflict_resolution_function
-    - id: conflict_output_to_check
-      value: conflict_resolution_function
-    parameters:
-    - args:
-        productions: conflict_input
-      function: conflict_resolution_function
-      id: conflict_resolution_function
-  - id: fire_production
-    input_ports:
-    - id: fire_prod_input
-    output_ports:
-    - id: fire_prod_output_to_goal
-      value: update_goal
-    - id: fire_prod_output_to_retrieval
-      value: update_retrieval
-    parameters:
-    - args:
-        production: fire_prod_input
-      function: update_goal
-      id: update_goal
-    - args:
-        production: fire_prod_input
-      function: update_retrieval
-      id: update_retrieval
-  - id: check_termination
-    input_ports:
-    - id: check_input
-    output_ports:
-    - id: check_output
-      value: check_termination
-    parameters:
-    - args:
-        production: check_input
-      function: check_termination
-      id: check_termination
-id: addition
+            type: JustRan
+        termination:
+          check_term_true:
+            kwargs:
+              dependencies:
+              - check_termination
+            type: JustRan
+      edges:
+        conflict_to_check_edge:
+          receiver: check_termination
+          receiver_port: check_input
+          sender: conflict_resolution
+          sender_port: conflict_output_to_fire_prod
+        conflict_to_fire_prod_edge:
+          receiver: fire_production
+          receiver_port: fire_prod_input
+          sender: conflict_resolution
+          sender_port: conflict_output_to_fire_prod
+        dm_to_pattern_edge:
+          receiver: retrieval_buffer
+          receiver_port: retrieval_input
+          sender: declarative_memory
+          sender_port: dm_output
+        goal_to_pattern_edge:
+          receiver: pattern_matching
+          receiver_port: pattern_input_from_goal
+          sender: goal_buffer
+          sender_port: goal_output
+        pattern_to_conflict_edge:
+          receiver: conflict_resolution
+          receiver_port: conflict_input
+          sender: pattern_matching
+          sender_port: pattern_output
+        pm_to_pattern_edge:
+          receiver: pattern_matching
+          receiver_port: pattern_input_from_pm
+          sender: procedural_memory
+          sender_port: pm_output
+        retrieval_to_pattern_edge:
+          receiver: pattern_matching
+          receiver_port: pattern_input_from_retrieval
+          sender: retrieval_buffer
+          sender_port: retrieval_output
+      nodes:
+        check_termination:
+          input_ports:
+            check_input: {}
+          output_ports:
+            check_output:
+              value: check_termination
+          parameters:
+            check_termination:
+              args:
+                production: check_input
+              function: check_termination
+        conflict_resolution:
+          input_ports:
+            conflict_input: {}
+          output_ports:
+            conflict_output_to_check:
+              value: conflict_resolution_function
+            conflict_output_to_fire_prod:
+              value: conflict_resolution_function
+          parameters:
+            conflict_resolution_function:
+              args:
+                productions: conflict_input
+              function: conflict_resolution_function
+        declarative_memory:
+          input_ports:
+            dm_input: {}
+          output_ports:
+            dm_output:
+              value: retrieve_chunk
+          parameters:
+            chunk_types:
+              value:
+                add:
+                - arg1
+                - arg2
+                - sum
+                - count
+                number:
+                - number
+                - next
+            chunks:
+              value:
+              - isa: number
+                name: zero
+                next: one
+                number: zero
+              - isa: number
+                name: one
+                next: two
+                number: one
+              - isa: number
+                name: two
+                next: three
+                number: two
+              - isa: number
+                name: three
+                next: four
+                number: three
+              - isa: number
+                name: four
+                next: five
+                number: four
+              - isa: number
+                name: five
+                next: six
+                number: five
+              - isa: number
+                name: six
+                next: seven
+                number: six
+              - isa: number
+                name: seven
+                next: eight
+                number: seven
+              - isa: number
+                name: eight
+                next: nine
+                number: eight
+              - isa: number
+                name: nine
+                next: ten
+                number: nine
+              - isa: number
+                name: ten
+                number: ten
+              - ISA: add
+                arg1: five
+                arg2: two
+                count: nil
+                name: second-goal
+                sum: nil
+            retrieve_chunk:
+              args:
+                dm_chunks: chunks
+                pattern: dm_input
+                types: chunk_types
+              function: retrieve_chunk
+        fire_production:
+          input_ports:
+            fire_prod_input: {}
+          output_ports:
+            fire_prod_output_to_goal:
+              value: update_goal
+            fire_prod_output_to_retrieval:
+              value: update_retrieval
+          parameters:
+            update_goal:
+              args:
+                production: fire_prod_input
+              function: update_goal
+            update_retrieval:
+              args:
+                production: fire_prod_input
+              function: update_retrieval
+        goal_buffer:
+          input_ports:
+            goal_input: {}
+          output_ports:
+            goal_output:
+              value: goal_state
+          parameters:
+            change_goal:
+              args:
+                curr_goal: goal_state
+                pattern: goal_input
+              function: change_goal
+            first_goal:
+              value:
+                ISA: add
+                arg1: five
+                arg2: two
+                count: nil
+                name: second-goal
+                sum: nil
+            goal_state:
+              default_initial_value: first_goal
+              value: first_goal if goal_input == {} else change_goal
+        pattern_matching:
+          input_ports:
+            pattern_input_from_goal: {}
+            pattern_input_from_pm: {}
+            pattern_input_from_retrieval: {}
+          output_ports:
+            pattern_output:
+              value: pattern_matching_function
+          parameters:
+            pattern_matching_function:
+              args:
+                goal: pattern_input_from_goal
+                productions: pattern_input_from_pm
+                retrieval: pattern_input_from_retrieval
+              function: pattern_matching_function
+        procedural_memory:
+          output_ports:
+            pm_output:
+              value: productions
+          parameters:
+            productions:
+              value:
+              - lhs:
+                - ISA: add
+                  arg1: =num1
+                  arg2: =num2
+                  buffer: goal
+                  count: =count
+                  sum: nil
+                name: initialize-addition
+                rhs:
+                - ISA: add
+                  buffer: goal
+                  count: zero
+                  sum: =num1
+                - ISA: number
+                  buffer: retrieval
+                  number: =num1
+              - lhs:
+                - ISA: add
+                  arg1: =arg1
+                  arg2: =num
+                  buffer: goal
+                  count: =num
+                  sum: =answer
+                - ISA: number
+                  buffer: retrieval
+                  next: =next
+                  number: =answer
+                name: terminate-addition
+                rhs:
+                - ISA: add
+                  buffer: goal
+                  count: nil
+              - lhs:
+                - ISA: add
+                  arg1: =arg1
+                  arg2: =arg2
+                  buffer: goal
+                  count: =count
+                  sum: =sum
+                - ISA: number
+                  buffer: retrieval
+                  next: =newcount
+                  number: =count
+                name: increment-count
+                rhs:
+                - ISA: add
+                  buffer: goal
+                  count: =newcount
+                - ISA: number
+                  buffer: retrieval
+                  number: =sum
+              - lhs:
+                - ISA: add
+                  arg1: =arg1
+                  arg2: -=count
+                  buffer: goal
+                  count: =count
+                  sum: =sum
+                - ISA: number
+                  buffer: retrieval
+                  next: =newsum
+                  number: =sum
+                name: increment-sum
+                rhs:
+                - ISA: add
+                  buffer: goal
+                  sum: =newsum
+                - ISA: number
+                  buffer: retrieval
+                  number: =count
+        retrieval_buffer:
+          input_ports:
+            retrieval_input: {}
+          output_ports:
+            retrieval_output:
+              value: retrieval_input
