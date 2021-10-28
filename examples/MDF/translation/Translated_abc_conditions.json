@@ -90,7 +90,7 @@
                         },
                         "functions": {
                             "linear_func": {
-                                "value": {
+                                "function": {
                                     "linear": {
                                         "slope": "slope",
                                         "intercept": "intercept",
@@ -124,7 +124,7 @@
                         },
                         "functions": {
                             "logistic_func": {
-                                "value": {
+                                "function": {
                                     "logistic": {
                                         "gain": "gain",
                                         "bias": "bias",
@@ -162,7 +162,7 @@
                         },
                         "functions": {
                             "exponential_func": {
-                                "value": {
+                                "function": {
                                     "exponential": {
                                         "scale": "scale",
                                         "rate": "rate",

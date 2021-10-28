@@ -94,7 +94,7 @@
                                 "value": "W+(dt*(mode*a_w*evaluated_FNpop_0_V_next_value + b_w*W + c_w + (1-mode)*uncorrelated_activity) / (time_constant_w*MSEC))"
                             },
                             "evaluated_time_next_value": {
-                                "value": {
+                                "function": {
                                     "linear": {
                                         "variable0": "time",
                                         "slope": 1,

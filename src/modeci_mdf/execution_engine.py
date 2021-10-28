@@ -298,11 +298,11 @@ class EvaluableFunction:
 
         expr = None
 
+        # print("functions value and function>>>", self.function.value, self.function.function)
 
-
-        func_val  = self.function.value
+        # func_val  = self.function.value
         
-        if isinstance(func_val, dict):
+        if self.function.function:
 
 
 
@@ -310,7 +310,7 @@ class EvaluableFunction:
             for f in mdf_functions:
 
      
-                if f in func_val.keys():
+                if f in self.function.function.keys():
 
            
                     expr = create_python_expression(mdf_functions[f]["expression_string"])
@@ -318,7 +318,7 @@ class EvaluableFunction:
                     break
         
         if expr is None:
-            expr  = func_val
+            expr  = self.function.value
         #     #raise "Unknown function: {}. Known functions: {}".format(
         #     #    self.function.function,
         #     #    mdf_functions.keys,
@@ -332,17 +332,17 @@ class EvaluableFunction:
                 "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
-        if isinstance(func_val,dict):
+        if self.function.function:
 
             for f in mdf_functions:
 
 
-                if f in func_val.keys():
+                if f in self.function.function.keys():
 
-                    for arg in func_val[f].keys():
+                    for arg in self.function.function[f].keys():
                         
                         func_params[arg] = evaluate_expr(
-                            func_val[f][arg],
+                            self.function.function[f][arg],
                             func_params,
                             verbose=False,
                             array_format=array_format,

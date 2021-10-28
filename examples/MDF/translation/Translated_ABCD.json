@@ -43,7 +43,7 @@
                         },
                         "functions": {
                             "linear_func": {
-                                "value": {
+                                "function": {
                                     "linear": {
                                         "variable0": "input_port1",
                                         "slope": "slope",
@@ -78,7 +78,7 @@
                         },
                         "functions": {
                             "logistic_func": {
-                                "value": {
+                                "function": {
                                     "logistic": {
                                         "variable0": "input_port1",
                                         "gain": "gain",
@@ -119,7 +119,7 @@
                         },
                         "functions": {
                             "exponential_func": {
-                                "value": {
+                                "function": {
                                     "exponential": {
                                         "variable0": "input_port1",
                                         "scale": "scale",
@@ -152,7 +152,7 @@
                         },
                         "functions": {
                             "sin_func": {
-                                "value": {
+                                "function": {
                                     "sin": {
                                         "variable0": "input_port1",
                                         "scale": "scale"

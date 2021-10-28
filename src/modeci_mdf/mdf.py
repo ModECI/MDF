@@ -415,15 +415,15 @@ class Function(MdfBaseWithId):
                     "function",
                     (
                         "Which of the in-build MDF functions (linear etc.) this uses",
-                        str,
+                        dict,
                     ),
                 ),
                 (
                     "value",
                     (
                         "evaluable expression",
-                        dict,
-                        
+                        str,
+
                     ),
                 ),
                 (

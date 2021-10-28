@@ -202,13 +202,13 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 					elif 'function' in d[key]['parameters'][param].keys():
 
 						d[key]['functions'][param]={}
-						d[key]['functions'][param]['value'] = {}
+						d[key]['functions'][param]['function'] = {}
 						
 						
 					
 
-						d[key]['functions'][param]['value'][d[key]['parameters'][param]['function']] ={}
-						d[key]['functions'][param]['value'][d[key]['parameters'][param]['function']]=d[key]['parameters'][param]['args']
+						d[key]['functions'][param]['function'][d[key]['parameters'][param]['function']] ={}
+						d[key]['functions'][param]['function'][d[key]['parameters'][param]['function']]=d[key]['parameters'][param]['args']
 							
 
 
@@ -261,11 +261,11 @@ def convert_states_to_stateful_parameters(file_path: str=None, dt = 5e-05):
 						d[key]['parameters']['time'] = {'default_initial_value': 0, 'value': 'evaluated_time_next_value'}
 
 						d[key]['functions']["evaluated_time_next_value"]={}
-						d[key]['functions']["evaluated_time_next_value"]["value"]={}
+						d[key]['functions']["evaluated_time_next_value"]["function"]={}
 						
-						d[key]['functions']["evaluated_time_next_value"]["value"]["linear"]={}
+						d[key]['functions']["evaluated_time_next_value"]["function"]["linear"]={}
 
-						d[key]['functions']["evaluated_time_next_value"]["value"]["linear"]= {"variable0":"time" , "slope": 1, "intercept": "dt"}
+						d[key]['functions']["evaluated_time_next_value"]["function"]["linear"]= {"variable0":"time" , "slope": 1, "intercept": "dt"}
 						
 						
 					

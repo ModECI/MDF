@@ -40,7 +40,7 @@
                         },
                         "functions": {
                             "linear_1": {
-                                "value": {
+                                "function": {
                                     "linear": {
                                         "variable0": "input_port1",
                                         "slope": "lin_slope",
@@ -49,7 +49,7 @@
                                 }
                             },
                             "logistic_1": {
-                                "value": {
+                                "function": {
                                     "logistic": {
                                         "variable0": "linear_1",
                                         "gain": "log_gain",
