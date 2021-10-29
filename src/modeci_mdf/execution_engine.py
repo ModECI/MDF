@@ -745,14 +745,19 @@ class EvaluableNode:
             rop = EvaluableOutput(op, self.verbose)
             self.evaluable_outputs[op.id] = rop
 
-    def initialize(self):
-        pass
-
     def evaluate(
         self,
         time_increment: Union[int, float] = None,
         array_format: str = FORMAT_DEFAULT,
     ):
+        """
+        Evaluate the Node for one time-step
+
+        Args:
+            time_increment: The time-increment to use for this evaluation.
+            array_format: The format to use for arrays.
+
+        """
 
         if self.verbose:
             print(

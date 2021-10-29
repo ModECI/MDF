@@ -15,13 +15,18 @@
    {% endblock %}
 
    {% block functions %}
+
+   {% functions.filter( %}
+
    {% if functions %}
    .. rubric:: {{ _('Functions') }}
 
    .. autosummary::
       :toctree:
    {% for item in functions %}
-      {{ item }}
+      {%- if not item.startswith('_') %}
+        {{ item }}
+      {% endif %}
    {%- endfor %}
    {% endif %}
    {% endblock %}
