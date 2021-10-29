@@ -1,4 +1,3 @@
-
 import json
 import ntpath
 
@@ -12,49 +11,41 @@ from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 import argparse
 import sys
 
+
 def main():
 
-    
-   
-    file_path = 'ABCD.json'
-    data = convert_states_to_stateful_parameters('../'+file_path)
+    file_path = "ABCD.json"
+    data = convert_states_to_stateful_parameters("../" + file_path)
     # print(data)
-    with open('Translated_'+ file_path, 'w') as fp:
-        json.dump(data, fp,  indent=4)
-
+    with open("Translated_" + file_path, "w") as fp:
+        json.dump(data, fp, indent=4)
 
     if "-run" in sys.argv:
 
-        
         verbose = True
-                
-            
-        mod_graph = load_mdf('Translated_%s'% file_path).graphs[0]
+
+        mod_graph = load_mdf("Translated_%s" % file_path).graphs[0]
         eg = EvaluableGraph(mod_graph, verbose)
-        
-        mod_graph_old = load_mdf('../'+file_path).graphs[0]
+
+        mod_graph_old = load_mdf("../" + file_path).graphs[0]
         eg_old = EvaluableGraph(mod_graph_old, verbose)
-        
-        
-        
-    
+
         format = FORMAT_NUMPY
-        
-           
+
         eg.evaluate(array_format=format)
 
         eg_old.evaluate(array_format=format)
 
-        print("New file output value>>>",eg.enodes['D'].evaluable_outputs['output_1'].curr_value)
+        print(
+            "New file output value>>>",
+            eg.enodes["D"].evaluable_outputs["output_1"].curr_value,
+        )
 
-        print("Old file output value>>>",eg_old.enodes['D'].evaluable_outputs['output_1'].curr_value)
-        
-      
-
-       
-
+        print(
+            "Old file output value>>>",
+            eg_old.enodes["D"].evaluable_outputs["output_1"].curr_value,
+        )
 
 
 if __name__ == "__main__":
     main()
-

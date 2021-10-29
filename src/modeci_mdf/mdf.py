@@ -423,7 +423,6 @@ class Function(MdfBaseWithId):
                     (
                         "evaluable expression",
                         str,
-
                     ),
                 ),
                 (

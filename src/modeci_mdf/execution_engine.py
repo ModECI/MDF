@@ -301,30 +301,26 @@ class EvaluableFunction:
         # print("functions value and function>>>", self.function.value, self.function.function)
 
         # func_val  = self.function.value
-        
+
         if self.function.function:
-
-
-
 
             for f in mdf_functions:
 
-     
                 if f in self.function.function.keys():
 
-           
-                    expr = create_python_expression(mdf_functions[f]["expression_string"])
+                    expr = create_python_expression(
+                        mdf_functions[f]["expression_string"]
+                    )
 
                     break
-        
+
         if expr is None:
-            expr  = self.function.value
+            expr = self.function.value
         #     #raise "Unknown function: {}. Known functions: {}".format(
         #     #    self.function.function,
         #     #    mdf_functions.keys,
         #     #)
 
-        
         func_params = {}
         func_params.update(parameters)
         if self.verbose:
@@ -336,11 +332,10 @@ class EvaluableFunction:
 
             for f in mdf_functions:
 
-
                 if f in self.function.function.keys():
 
                     for arg in self.function.function[f].keys():
-                        
+
                         func_params[arg] = evaluate_expr(
                             self.function.function[f][arg],
                             func_params,
@@ -349,10 +344,11 @@ class EvaluableFunction:
                         )
                         if self.verbose:
                             print(
-                                "      Arg: {} became: {}".format(arg, _val_info(func_params[arg]))
+                                "      Arg: {} became: {}".format(
+                                    arg, _val_info(func_params[arg])
+                                )
                             )
                     break
-     
 
         # If this is an ONNX operation, evaluate it without neuromlite.
 
