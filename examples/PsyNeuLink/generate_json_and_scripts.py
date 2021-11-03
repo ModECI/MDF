@@ -39,10 +39,12 @@ def main():
 
         with open(f"{base_fname}.json", "w") as outfi:
             outfi.write(json_summary)
+            outfi.write("\n")
 
         reconstructed_fname = f"{base_fname}.{reconstructed_identifer}.py"
         with open(reconstructed_fname, "w") as outfi:
             outfi.write(pnl.generate_script_from_json(json_summary))
+            outfi.write("\n")
         subprocess.run(["black", reconstructed_fname])
         subprocess.run(["python", reconstructed_fname])
 
