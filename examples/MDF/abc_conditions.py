@@ -56,12 +56,16 @@ def main():
         id="linear_func", function="linear", args={k: k for k in p_a.keys()}
     )
     a = create_simple_node(mod_graph, "A", f_a, p_a, input_node)
+    a.parameters.append(Parameter(id="stateful_val", value="stateful_val + linear_func"))
+    a.output_ports[0].value = "stateful_val"
 
     p_b = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
     f_b = Parameter(
         id="logistic_func", function="logistic", args={k: k for k in p_b.keys()}
     )
     b = create_simple_node(mod_graph, "B", f_b, p_b, a)
+    b.parameters.append((Parameter(id="stateful_val_b", value="stateful_val_b + logistic_func")))
+    b.output_ports[0].value = "stateful_val_b"
 
     p_c = {
         "scale": abcd.C_scale,
@@ -73,6 +77,8 @@ def main():
         id="exponential_func", function="exponential", args={k: k for k in p_c.keys()}
     )
     c = create_simple_node(mod_graph, "C", f_c, p_c, a)
+    c.parameters.append((Parameter(id="stateful_val_c", value="stateful_val_c+ exponential_func")))
+    c.output_ports[0].value = "stateful_val_c"
 
     cond_i = Condition(type="BeforeNCalls", dependencies=input_node.id, n=1)
     cond_a = Condition(type="Always")

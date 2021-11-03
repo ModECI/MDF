@@ -98,5 +98,8 @@ def test_condition_scheduler_main(fi, expected_output):
 
     eg = modeci_mdf.execution_engine.main(fi)
     output = [{n.id for n in nodes} for nodes in eg.scheduler.execution_list[None]]
-
     assert output == expected_output
+
+    assert eg.enodes['A'].evaluable_outputs["output_1"].curr_value==8.4
+    assert eg.enodes['B'].evaluable_outputs["output_1"].curr_value == 2.999360060797154
+
