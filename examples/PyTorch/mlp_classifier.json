@@ -12,13 +12,13 @@
             },
             "functions":{
                 "Linear_1": {
-                  "function": "MatMul",
-                  "args":{
+                  "function": {"MatMul":{
                     "A":"in_1",
                     "B":"weight"
                   }
                 }
-               },
+               }
+},
             "input_ports": {
               "in_1": {
                 "shape": "(196,)"
@@ -39,13 +39,13 @@
             },
             "functions":{
                 "Bias_Add_1": {
-                  "function": "Add",
-                  "args":{
+                  "function": {"Add":{
                     "A":"in_1",
                     "B":"bias"
                   }
                 }
-              },
+              }
+},
             "input_ports": {
               "in_1": {
                 "shape": "(128,)"
@@ -61,12 +61,12 @@
           "mlp_input_relu": {
             "functions": {
                 "Relu_1": {
-                  "function": "relu",
-                  "args": {
+                  "function": {"relu": {
                     "A": "in_1"
                   }
                 }
-              },
+              }
+},
             "input_ports": {
               "in_1": {
                 "shape": "(128,)"
@@ -88,12 +88,12 @@
             },
             "functions":{
                 "Linear_2": {
-                  "function": "MatMul",
-                  "args":{
+                  "function": {"MatMul":{
                     "A":"in_1",
                     "B":"weight"
                   }
                 }
+}
               },
             "input_ports": {
               "in_1": {
@@ -115,12 +115,12 @@
             },
             "functions":{
                 "Bias_Add_2": {
-                  "function": "Add",
-                  "args":{
+                  "function": {"Add":{
                     "A":"in_1",
                     "B":"bias"
                   }
                 }
+}
               },
             "input_ports": {
               "in_1": {
@@ -137,11 +137,11 @@
           "mlp_hidden_relu": {
             "functions": {
                 "Relu_2": {
-                  "function": "relu",
-                  "args": {
+                  "function": {"relu": {
                     "A": "in_1"
                   }
                 }
+}
               },
             "input_ports": {
               "in_1": {
@@ -164,12 +164,12 @@
             },
             "functions":{
                 "Linear_3": {
-                  "function": "MatMul",
-                  "args": {
+                  "function": {"MatMul": {
                     "A": "in_1",
                     "B": "weight"
                   }
                 }
+}
               },
             "input_ports": {
               "in_1": {
@@ -191,12 +191,12 @@
             },
             "functions":{
                 "Bias_Add_3": {
-                  "function": "Add",
-                  "args": {
+                  "function":{ "Add": {
                     "A": "in_1",
                     "B": "bias"
                   }
                 }
+}
               },
             "input_ports": {
               "in_1": {
@@ -214,11 +214,11 @@
           "argmax_1": {
             "functions": {
                 "argmax_1": {
-                  "function": "argmax",
-                  "args": {
+                  "function":{ "argmax": {
                     "A": "in_1"
                   }
                 }
+}
               },
             "input_ports": {
               "in_1": {
