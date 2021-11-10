@@ -16,8 +16,6 @@
 
    {% block functions %}
 
-   {% functions.filter( %}
-
    {% if functions %}
    .. rubric:: {{ _('Functions') }}
 

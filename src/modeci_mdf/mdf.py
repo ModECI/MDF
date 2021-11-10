@@ -65,7 +65,7 @@ class MdfBase:
     """
     Base class for all MDF core classes that implements common functionality.
 
-    Args:
+    Attributes:
         metadata: Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
 
     """
@@ -100,7 +100,7 @@ class Function(MdfBase):
     r"""
     A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
 
-    Args:
+    Attributes:
         id: The unique (for this Node) id of the function, which will be used in other :class:`~Function`s and
             the :class:`~OutputPort`s for its value
         function: Which of the in-build MDF functions (:code:`linear`, etc.). See supported functions:
@@ -118,10 +118,11 @@ class InputPort(MdfBase):
     r"""
     The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node
 
-    Args:
+    Attributes:
         id: The unique (for this Node) id of the input port,
-        shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
-        type: The data type of the input received at a port or the output sent by a port
+        shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
+        type: The data type of the input received at a port or the output sent by a port.
+
     """
     id: str = field(validator=instance_of(str))
     shape: Optional[Tuple[int, ...]] = field(
@@ -136,7 +137,7 @@ class OutputPort(MdfBase):
     The :class:`OutputPort` is an attribute of a :class:`Node` which exports information to another :class:`Node`
     connected by an :class:`Edge`
 
-    Args:
+    Attributes:
         id: Unique identifier for the output port.
         value: The value of the :class:`OutputPort` in terms of the :class:`InputPort`, :class:`Function` values, and
             :class:`Parameter` values.
@@ -152,7 +153,7 @@ class Parameter(MdfBase):
     referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function with args, or change from a
     :code:`default_initial_value` with a :code:`time_derivative`.
 
-    Args:
+    Attributes:
         value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
         default_initial_value: The initial value of the parameter, only used when parameter is stateful.
         time_derivative: How the parameter changes with time, i.e. ds/dt. Units of time are seconds.
@@ -232,7 +233,7 @@ class Node(MdfBase):
     The values from these are processed via a number of :class:`Function`\(s) and one or more final values
     are calculated on the :class:`OutputPort`\(s)
 
-    Args:
+    Attributes:
         id: A unique identifier for the node.
         input_ports: Dictionary of the :class:`InputPort` objects in the Node
         parameters: Dictionary of :class:`Parameter`\(s) for the node
@@ -268,7 +269,7 @@ class Edge(MdfBase):
     An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's
     :class:`OutputPort` to a receiver's :class:`InputPort`.
 
-    Args:
+    Attributes:
         id: A unique string identifier for this edge.
         sender: The :code:`id` of the :class:`~Node` which is the source of the edge.
         receiver: The :code:`id` of the :class:`~Node` which is the target of the edge.
@@ -291,7 +292,7 @@ class Edge(MdfBase):
 class Condition(MdfBase):
     r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
 
-    Args:
+    Attributes:
         type: The type of :class:`Condition` from the library
         kwargs: The dictionary of keyword arguments needed to evaluate the :class:`Condition`
 
@@ -326,7 +327,7 @@ class ConditionSet(MdfBase):
     r"""
     Specifies the non-default pattern of execution of Nodes
 
-    Args:
+    Attributes:
         node_specific: A dictionary mapping nodes to any non-default run conditions
         termination: A dictionary mapping time scales of model execution to conditions indicating when they end
     """
@@ -343,7 +344,7 @@ class Graph(MdfBase):
     r"""
     A directed graph consisting of Node(s) connected via Edge(s)
 
-    Args:
+    Attributes:
         id: A unique identifier for this Graph
         parameters: Dictionary of global parameters for the Graph
         conditions: The ConditionSet stored as dictionary for scheduling of the Graph
@@ -416,7 +417,7 @@ class Model(MdfBase):
     r"""
     The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
 
-    Args:
+    Attributes:
         id: A unique identifier for this Model
         graphs: The collection of graphs that make up the MDF model.
         format: Information on the version of MDF used in this file
