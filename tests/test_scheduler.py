@@ -4,7 +4,7 @@ import pytest
 def test_execution_engine_main(tmpdir):
 
     import modeci_mdf.execution_engine
-    from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+    from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
     import numpy as np
 
     mdf_formats = ["json", "yaml"]
@@ -55,7 +55,7 @@ def test_execution_engine_onnx(tmpdir):
     import numpy as np
 
     mdf_formats = ["json", "yaml"]
-    from neuromllite.utils import FORMAT_NUMPY
+    from modelspec.utils import FORMAT_NUMPY
 
     array_format = FORMAT_NUMPY
 

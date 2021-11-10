@@ -14,9 +14,9 @@ from typing import List, Tuple, Dict, Optional, Set, Any, Union, Optional
 
 # Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
 #  Try: pip install neuromllite
-from neuromllite.BaseTypes import Base
-from neuromllite.BaseTypes import BaseWithId
-from neuromllite import EvaluableExpression
+from modelspec.BaseTypes import Base
+from modelspec.BaseTypes import BaseWithId
+from modelspec import EvaluableExpression
 
 __all__ = [
     "Model",
@@ -33,7 +33,7 @@ __all__ = [
 
 
 class MdfBaseWithId(BaseWithId):
-    """Override BaseWithId from nueromllite"""
+    """Override BaseWithId from modelspec"""
 
     def __init__(self, **kwargs):
         self.allowed_fields.update(
@@ -43,7 +43,7 @@ class MdfBaseWithId(BaseWithId):
 
 
 class MdfBase(Base):
-    """Override Base from nueromllite"""
+    """Override Base from modelspec"""
 
     def __init__(self, **kwargs):
         self.allowed_fields.update(
@@ -83,7 +83,7 @@ class Model(MdfBaseWithId):
 
         # Removed for now...
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -222,7 +222,7 @@ class Graph(MdfBaseWithId):
         )
         """The allowed fields for this type"""
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         #kwargs["id"] = id
         for f in self.allowed_fields:
