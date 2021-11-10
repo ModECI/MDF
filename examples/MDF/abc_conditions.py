@@ -57,9 +57,9 @@ def main():
     )
     a = create_simple_node(mod_graph, "A", f_a, p_a, input_node)
     a.parameters.append(
-        Parameter(id="stateful_val", value="stateful_val + linear_func")
+        Parameter(id="stateful_val_a", value="stateful_val_a + linear_func")
     )
-    a.output_ports[0].value = "stateful_val"
+    a.output_ports[0].value = "stateful_val_a"
 
     p_b = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
     f_b = Parameter(

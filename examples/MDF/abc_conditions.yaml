@@ -58,11 +58,11 @@ abc_conditions:
                                 slope: slope
                                 intercept: intercept
                                 variable0: input_port1
-                        stateful_val:
-                            value: stateful_val + linear_func
+                        stateful_val_a:
+                            value: stateful_val_a + linear_func
                     output_ports:
                         output_1:
-                            value: stateful_val
+                            value: stateful_val_a
                 B:
                     input_ports:
                         input_port1:

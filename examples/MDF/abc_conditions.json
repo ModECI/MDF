@@ -89,13 +89,13 @@
                                     "variable0": "input_port1"
                                 }
                             },
-                            "stateful_val": {
-                                "value": "stateful_val + linear_func"
+                            "stateful_val_a": {
+                                "value": "stateful_val_a + linear_func"
                             }
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "stateful_val"
+                                "value": "stateful_val_a"
                             }
                         }
                     },
@@ -164,7 +164,7 @@
                                 }
                             },
                             "stateful_val_c": {
-                                "value": "stateful_val_c + exponential_func"
+                                "value": "stateful_val_c+ exponential_func"
                             }
                         },
                         "output_ports": {
