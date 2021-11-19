@@ -1,4 +1,5 @@
 import pytest
+from graph_scheduler import *
 
 
 def test_execution_engine_main(tmpdir):
@@ -97,5 +98,7 @@ def test_condition_scheduler_main(fi, expected_output):
 
     eg = modeci_mdf.execution_engine.main(fi)
     output = [{n.id for n in nodes} for nodes in eg.scheduler.execution_list[None]]
-
     assert output == expected_output
+
+    assert eg.enodes["A"].evaluable_parameters["count_A"].curr_value == 7
+    assert eg.enodes["B"].evaluable_parameters["count_B"].curr_value == 3
