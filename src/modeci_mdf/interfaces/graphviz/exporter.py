@@ -238,17 +238,17 @@ def mdf_to_graphviz(
                                 )
                             )
                         )
-            if mdf_graph.conditions.node_specific:
+            if mdf_graph.conditions and mdf_graph.conditions.node_specific:
+                ns = mdf_graph.conditions.node_specific[node.id]
                 info += "<tr><td>{}{}={} ".format(
                     format_label("CONDITION"),
                     format_output("type"),
-                    mdf_graph.conditions.node_specific[node.id].type,
+                    ns["type"] if "type" in ns else ns.type,
                 )
-                if mdf_graph.conditions.node_specific[node.id].args:
-                    for con in mdf_graph.conditions.node_specific[node.id].args:
-                        nn = format_num(
-                            mdf_graph.conditions.node_specific[node.id].args[con]
-                        )
+                args = ns["args"] if "args" in ns else ns.args
+                if args:
+                    for con in args:
+                        nn = format_num(args[con])
                         breaker = "<br/>"
                         info += "{} = {}{}".format(
                             format_condition(con),
