@@ -119,7 +119,7 @@ A single value which is evaluated as a function of values on <a href="#inputport
 ## Parameter
 A Parameter of the <a href="#node">Node</a>, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default<a href="#initial">initial</a>value with a time<a href="#derivative">derivative</a>
 #### Allowed parameters
-<table><tr><td><b>default_initial_value</b></td><td>str</td><td><i>The initial value of the parameter</i></td></tr>
+<table><tr><td><b>default_initial_value</b></td><td>EvaluableExpression</td><td><i>The initial value of the parameter</i></td></tr>
 
 <tr><td><b>value</b></td><td>EvaluableExpression</td><td><i>The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values</i></td></tr>
 

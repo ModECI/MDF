@@ -145,7 +145,7 @@ specification:
             with a time_derivative
         allowed_parameters:
             default_initial_value:
-                type: str
+                type: EvaluableExpression
                 description: The initial value of the parameter
             value:
                 type: EvaluableExpression
