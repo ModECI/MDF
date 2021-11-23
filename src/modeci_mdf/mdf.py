@@ -12,11 +12,9 @@ import sympy
 
 from typing import List, Tuple, Dict, Optional, Set, Any, Union, Optional
 
-# Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
-#  Try: pip install neuromllite
 from modelspec.BaseTypes import Base
 from modelspec.BaseTypes import BaseWithId
-from modelspec import EvaluableExpression
+from modelspec.BaseTypes import EvaluableExpression
 
 __all__ = [
     "Model",
@@ -337,7 +335,7 @@ class Node(MdfBaseWithId):
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -444,7 +442,7 @@ class Function(MdfBaseWithId):
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         for f in self.allowed_fields:
             try:
@@ -493,7 +491,7 @@ class InputPort(MdfBaseWithId):
             ]
         )
 
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
@@ -531,7 +529,7 @@ class OutputPort(MdfBaseWithId):
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -680,7 +678,7 @@ class Edge(MdfBaseWithId):
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -723,7 +721,7 @@ class ConditionSet(MdfBase):
         )
         """The allowed fields for this type"""
 
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         for f in self.allowed_fields:
             try:

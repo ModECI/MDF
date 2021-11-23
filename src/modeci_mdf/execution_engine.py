@@ -26,7 +26,7 @@ import onnxruntime
 from modeci_mdf.functions.standard import mdf_functions, create_python_expression
 from modeci_mdf.utils import is_number
 
-from modelspec.utils import evaluate as evaluate_params_nmllite
+from modelspec.utils import evaluate as evaluate_params_modelspec
 from modelspec.utils import _params_info, _val_info
 from modelspec.utils import FORMAT_NUMPY
 
@@ -72,7 +72,7 @@ def evaluate_expr(
 
     """
 
-    e = evaluate_params_nmllite(
+    e = evaluate_params_modelspec(
         expr, func_params, array_format=array_format, verbose=verbose
     )
     if type(e) == str and e not in KNOWN_PARAMETERS:
@@ -336,7 +336,7 @@ class EvaluableFunction:
                         )
                     )
 
-        # If this is an ONNX operation, evaluate it without neuromlite.
+        # If this is an ONNX operation, evaluate it without modelspec.
 
         if "onnx_ops." in expr:
             if self.verbose:
@@ -512,7 +512,7 @@ class EvaluableParameter:
                         )
                     )
 
-            # If this is an ONNX operation, evaluate it without neuromlite.
+            # If this is an ONNX operation, evaluate it without modelspec.
             if "onnx_ops." in expr:
                 if self.verbose:
                     print(f"{self.parameter.id} is evaluating ONNX function {expr}")
