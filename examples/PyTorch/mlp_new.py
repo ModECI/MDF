@@ -39,8 +39,7 @@ def main():
 
     model = MlpBlocks()
 
-    model_ckp = torch.load("weights.h5")
-    print(model_ckp["model_state_dict"])
+ 
 
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
     model.eval()
