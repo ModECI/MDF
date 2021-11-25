@@ -14,7 +14,7 @@ def get_weight_info():
     for key in list(f.keys()):
         weight_mat = f[key][:]
         weights[key] = weight_mat
-        print("Loaded %s: %s" % (key, weight_mat.shape))
+        print(f"Loaded {key}: {weight_mat.shape}")
     f.close()
 
     return weights
@@ -185,7 +185,7 @@ def main():
         "mlp_output_layer",
     ]:
         out = eg.enodes[n].evaluable_outputs["out_port"].curr_value
-        print("Final output value of node %s: %s, shape: %s" % (n, out, out.shape))
+        print(f"Final output value of node {n}: {out}, shape: {out.shape}")
 
     if "-graph" in sys.argv:
         mod.to_graph_image(
@@ -232,7 +232,7 @@ def main():
             match = target == int(prediction)
             if match:
                 matches += 1
-            print("Target: %s, prediction: %s, match: %s" % (target, prediction, match))
+            print(f"Target: {target}, prediction: {prediction}, match: {match}")
         t = time.time() - start
         print(
             "Matches: %i/%i, accuracy: %s%%. Total time: %.4f sec (%.4fs per run)"
