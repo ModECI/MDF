@@ -94,7 +94,7 @@ def load_mdf_json(filename: str) -> Model:
     Load an MDF JSON file
     """
 
-    from neuromllite.utils import load_json, _parse_element
+    from modelspec.utils import load_json, _parse_element
 
     data = load_json(filename)
 
@@ -112,7 +112,7 @@ def load_mdf_yaml(filename: str) -> Model:
     Load an MDF YAML file
     """
 
-    from neuromllite.utils import load_yaml, _parse_element
+    from modelspec.utils import load_yaml, _parse_element
 
     data = load_yaml(filename)
 
