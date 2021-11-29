@@ -234,3 +234,5 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PyTorch/data/
 /examples/PyTorch/runs/
 /docs/sphinx/source/api/_autosummary/
+/examples/PyTorch/mlp_pure_mdf
+*ek.sh

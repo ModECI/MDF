@@ -13,6 +13,8 @@ from modeci_mdf.functions.standard import mdf_functions
 
 from modeci_mdf.utils import color_rgb_to_hex
 
+from modelspec.utils import _val_info
+
 engines = {
     "d": "dot",
     "c": "circo",
@@ -41,7 +43,8 @@ COLOR_COND = "#ffa1d"
 
 
 def format_label(s):
-    return f'<font color="{COLOR_LABEL}"><b>{s}: </b></font></td><td>'
+    # return f'<font color="{COLOR_LABEL}"><b>{s}</b></font></td><td>'
+    return ""
 
 
 def format_num(s):
@@ -84,23 +87,25 @@ def format_condition(s):
 
 def match_in_expr(s, node):
 
-    s = str(s)  # ensure it's a string
-    for p in node.parameters:
-        if p.id in s:
-            s = s.replace(p.id, format_param(p.id))
+    if type(s) != str:
+        return "%s" % _val_info(s)
+    else:
+        for p in node.parameters:
+            if p.id in s:
+                s = s.replace(p.id, format_param(p.id))
 
-    for ip in node.input_ports:
-        if ip.id in s:
-            s = s.replace(ip.id, format_input(ip.id))
+        for ip in node.input_ports:
+            if ip.id in s:
+                s = s.replace(ip.id, format_input(ip.id))
 
-    for f in node.functions:
-        if f.id in s:
-            s = s.replace(f.id, format_func(f.id))
+        for f in node.functions:
+            if f.id in s:
+                s = s.replace(f.id, format_func(f.id))
 
-    for op in node.output_ports:
-        if op.id in s:
-            s = s.replace(op.id, format_output(op.id))
-    return s
+        for op in node.output_ports:
+            if op.id in s:
+                s = s.replace(op.id, format_output(op.id))
+        return s
 
 
 def mdf_to_graphviz(
@@ -158,17 +163,18 @@ def mdf_to_graphviz(
             info += "</td></tr>"
 
         if level >= LEVEL_2:
-            if node.parameters and len(node.parameters) > 0:
 
-                if node.input_ports and len(node.input_ports) > 0:
-                    for ip in node.input_ports:
-                        info += "<tr><td>{}{} {}</td></tr>".format(
-                            format_label("IN"),
-                            format_input(ip.id),
-                            "(shape: %s)" % ip.shape
-                            if level >= LEVEL_2 and ip.shape is not None
-                            else "",
-                        )
+            if node.input_ports and len(node.input_ports) > 0:
+                for ip in node.input_ports:
+                    info += "<tr><td>{}{} {}</td></tr>".format(
+                        format_label("IN"),
+                        format_input(ip.id),
+                        "(shape: %s)" % ip.shape
+                        if level >= LEVEL_2 and ip.shape is not None
+                        else "",
+                    )
+
+            if node.parameters and len(node.parameters) > 0:
 
                 for p in node.parameters:
                     if p.function is not None:
@@ -180,14 +186,14 @@ def mdf_to_graphviz(
                             else "???"
                         )
                         info += "<tr><td>{}{} = {}({})</td></tr>".format(
-                            format_label("PARAMETER"),
+                            format_label(" "),
                             format_param(p.id),
                             format_standard_func(p.function),
                             argstr,
                         )
                         if level >= LEVEL_3:
                             func_info = mdf_functions[p.function]
-                            info += '<tr><td colspan="2">%s</td></tr>' % (
+                            info += "<tr><td>%s</td></tr>" % (
                                 format_standard_func_long(
                                     "%s(%s) = %s"
                                     % (
@@ -200,17 +206,18 @@ def mdf_to_graphviz(
                     else:
                         v = ""
                         if p.value is not None:
-                            v += "= %s" % match_in_expr(str(p.value), node)
-                        if p.default_initial_value:
+                            val = match_in_expr(p.value, node)
+                            v += val
+                        if p.default_initial_value is not None:
                             v += "<i>def init value:</i> %s" % match_in_expr(
                                 p.default_initial_value, node
                             )
-                        if p.time_derivative:
+                        if p.time_derivative is not None:
                             v += ", <i>d/dt:</i> %s" % match_in_expr(
                                 p.time_derivative, node
                             )
-                        info += "<tr><td>{}{}: {}</td></tr>".format(
-                            format_label("PARAMETER"), format_param(p.id), v
+                        info += "<tr><td>{}{} = {}</td></tr>".format(
+                            format_label(" "), format_param(p.id), v
                         )
 
             if node.functions and len(node.functions) > 0:
