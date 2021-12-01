@@ -17,16 +17,21 @@ def main():
     t_param = Parameter(id="t", default_initial_value=0, time_derivative="1")
     input_node.parameters.append(t_param)
 
-    p0 = Parameter(id="initial", value=-3)
+    p0 = Parameter(id="start", value=20)
     input_node.parameters.append(p0)
-    p1 = Parameter(id="rate", value=0.2)
+
+    p1 = Parameter(id="duration", value=60)
     input_node.parameters.append(p1)
 
-    p2 = Parameter(id="level", value="initial + rate*t")
+    p2 = Parameter(id="amplitude", value=10)
     input_node.parameters.append(p2)
 
-    op1 = OutputPort(id="out_port", value=p2.id)
+    p3 = Parameter(id="level", value="amplitude * int(t > start)")
+    input_node.parameters.append(p3)
+
+    op1 = OutputPort(id="out_port", value=p3.id)
     input_node.output_ports.append(op1)
+
     op2 = OutputPort(id="t_out_port", value=t_param.id)
     input_node.output_ports.append(op2)
 
