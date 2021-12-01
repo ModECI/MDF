@@ -379,6 +379,7 @@ class EvaluableFunction:
             )
         return self.curr_value
 
+
 class EvaluableParameter:
     """
     Evaluates the current value of a :class:`~modeci_mdf.mdf.Parameter` during MDF graph execution.
