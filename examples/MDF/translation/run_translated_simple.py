@@ -7,7 +7,7 @@ from modeci_mdf.utils import load_mdf, print_summary
 from modeci_mdf.mdf import *
 from modeci_mdf.full_translator import *
 from modeci_mdf.execution_engine import EvaluableGraph
-from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 import argparse
 import sys
 
