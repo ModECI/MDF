@@ -8,7 +8,7 @@
                     "input_node": {
                         "parameters": {
                             "t": {
-                                "default_initial_value": "0",
+                                "default_initial_value": 0,
                                 "time_derivative": "1"
                             },
                             "initial": {
