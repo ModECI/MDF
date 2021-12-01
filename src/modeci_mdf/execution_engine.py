@@ -26,9 +26,9 @@ import onnxruntime
 from modeci_mdf.functions.standard import mdf_functions, create_python_expression
 from modeci_mdf.utils import is_number
 
-from neuromllite.utils import evaluate as evaluate_params_nmllite
-from neuromllite.utils import _params_info, _val_info
-from neuromllite.utils import FORMAT_NUMPY
+from modelspec.utils import evaluate as evaluate_params_modelspec
+from modelspec.utils import _params_info, _val_info
+from modelspec.utils import FORMAT_NUMPY
 
 from collections import OrderedDict
 from typing import Union, List, Dict, Optional, Any
@@ -72,7 +72,7 @@ def evaluate_expr(
 
     """
 
-    e = evaluate_params_nmllite(
+    e = evaluate_params_modelspec(
         expr, func_params, array_format=array_format, verbose=verbose
     )
     if type(e) == str and e not in KNOWN_PARAMETERS:
@@ -336,7 +336,7 @@ class EvaluableFunction:
                         )
                     )
 
-        # If this is an ONNX operation, evaluate it without neuromlite.
+        # If this is an ONNX operation, evaluate it without modelspec.
 
         if "onnx_ops." in expr:
             if self.verbose:
@@ -512,7 +512,7 @@ class EvaluableParameter:
                         )
                     )
 
-            # If this is an ONNX operation, evaluate it without neuromlite.
+            # If this is an ONNX operation, evaluate it without modelspec.
             if "onnx_ops." in expr:
                 if self.verbose:
                     print(f"{self.parameter.id} is evaluating ONNX function {expr}")
@@ -1158,7 +1158,7 @@ class EvaluableGraph:
                     )
 
 
-from neuromllite.utils import FORMAT_NUMPY
+from modelspec.utils import FORMAT_NUMPY
 
 
 def main(example_file: str, array_format: str = FORMAT_NUMPY, verbose: bool = False):
@@ -1201,7 +1201,7 @@ if __name__ == "__main__":
     else:
         verbose = False
 
-    from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+    from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
     format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
 

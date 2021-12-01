@@ -1,10 +1,11 @@
 import pytest
+from graph_scheduler import *
 
 
 def test_execution_engine_main(tmpdir):
 
     import modeci_mdf.execution_engine
-    from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+    from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
     import numpy as np
 
     mdf_formats = ["json", "yaml"]
@@ -55,7 +56,7 @@ def test_execution_engine_onnx(tmpdir):
     import numpy as np
 
     mdf_formats = ["json", "yaml"]
-    from neuromllite.utils import FORMAT_NUMPY
+    from modelspec.utils import FORMAT_NUMPY
 
     array_format = FORMAT_NUMPY
 
@@ -97,5 +98,7 @@ def test_condition_scheduler_main(fi, expected_output):
 
     eg = modeci_mdf.execution_engine.main(fi)
     output = [{n.id for n in nodes} for nodes in eg.scheduler.execution_list[None]]
-
     assert output == expected_output
+
+    assert eg.enodes["A"].evaluable_parameters["count_A"].curr_value == 7
+    assert eg.enodes["B"].evaluable_parameters["count_B"].curr_value == 3

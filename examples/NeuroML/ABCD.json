@@ -1,6 +1,6 @@
 {
     "ABCD": {
-        "version": "NeuroMLlite v0.3.4",
+        "version": "NeuroMLlite v0.4.0",
         "parameters": {
             "A_initial": 0.1,
             "A_slope": 2.2

@@ -26,6 +26,7 @@ def main():
 
     input_node = Node(id="input0")
     input_node.parameters.append(Parameter(id="input_level", value=0.0))
+    input_node.parameters.append(Parameter(id="count_0", value="count_0 + 1"))
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
     input_node.output_ports.append(op1)
@@ -56,12 +57,16 @@ def main():
         id="linear_func", function="linear", args={k: k for k in p_a.keys()}
     )
     a = create_simple_node(mod_graph, "A", f_a, p_a, input_node)
+    a.parameters.append(Parameter(id="count_A", value="count_A + 1"))
+    a.output_ports[0].value = "linear_func"
 
     p_b = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
     f_b = Parameter(
         id="logistic_func", function="logistic", args={k: k for k in p_b.keys()}
     )
     b = create_simple_node(mod_graph, "B", f_b, p_b, a)
+    b.parameters.append(Parameter(id="count_B", value="count_B + 1"))
+    b.output_ports[0].value = "logistic_func"
 
     p_c = {
         "scale": abcd.C_scale,
@@ -73,6 +78,8 @@ def main():
         id="exponential_func", function="exponential", args={k: k for k in p_c.keys()}
     )
     c = create_simple_node(mod_graph, "C", f_c, p_c, a)
+    c.parameters.append(Parameter(id="count_C", value="count_C+ 1"))
+    c.output_ports[0].value = "exponential_func"
 
     cond_i = Condition(type="BeforeNCalls", dependencies=input_node.id, n=1)
     cond_a = Condition(type="Always")
@@ -102,7 +109,7 @@ def main():
         verbose = True
         # verbose = False
         from modeci_mdf.execution_engine import EvaluableGraph
-        from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+        from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
