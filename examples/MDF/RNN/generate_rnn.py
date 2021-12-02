@@ -17,12 +17,16 @@ def main():
     t_param = Parameter(id="t", default_initial_value=0, time_derivative="1")
     input_node.parameters.append(t_param)
 
-    p0 = Parameter(id="initial", value=-3)
+    p0 = Parameter(id="amplitude", value=[1, 2])
     input_node.parameters.append(p0)
-    p1 = Parameter(id="rate", value=3)
+    p1 = Parameter(id="period", value=[0.5, 0.4])
     input_node.parameters.append(p1)
 
-    p2 = Parameter(id="level", value="initial + rate*t")
+    p2 = Parameter(
+        id="level",
+        function="sin",
+        args={"variable0": "2*3.14159*t/period", "scale": "amplitude"},
+    )
     input_node.parameters.append(p2)
 
     op1 = OutputPort(id="out_port", value=p2.id)
@@ -34,14 +38,22 @@ def main():
 
     ## RNN node...
     rnn_node = Node(id="rnn_node")
-    ip1 = InputPort(id="input")
-    rnn_node.input_ports.append(ip1)
+    ipr1 = InputPort(id="input")
+    rnn_node.input_ports.append(ipr1)
 
-    s1 = Parameter(id="r", function="tanh", args={"variable0": ip1.id, "scale": 1})
-    rnn_node.parameters.append(s1)
+    x = Parameter(id="x", default_initial_value=1, time_derivative="-x + input")
+    rnn_node.parameters.append(x)
 
-    op1 = OutputPort(id="out_port", value="r")
-    rnn_node.output_ports.append(op1)
+    r = Parameter(id="r", function="tanh", args={"variable0": x.id, "scale": 1})
+    # r = Parameter(id="r", value="x")
+    rnn_node.parameters.append(r)
+
+    op_x = OutputPort(id="out_port_x", value="x")
+    rnn_node.output_ports.append(op_x)
+
+    op_r = OutputPort(id="out_port_r", value="r")
+    rnn_node.output_ports.append(op_r)
+
     mod_graph.nodes.append(rnn_node)
 
     e1 = Edge(
@@ -50,7 +62,7 @@ def main():
         sender=input_node.id,
         sender_port=op1.id,
         receiver=rnn_node.id,
-        receiver_port=ip1.id,
+        receiver_port=ipr1.id,
     )
 
     mod_graph.edges.append(e1)
@@ -60,7 +72,7 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
-        # verbose = False
+        verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
         from modeci_mdf.execution_engine import EvaluableGraph
@@ -74,7 +86,8 @@ def main():
         times = []
         t = []
         i = []
-        s = []
+        x = []
+        r = []
         while t_ext <= duration:
             times.append(t_ext)
             print("======   Evaluating at t = %s  ======" % (t_ext))
@@ -85,15 +98,18 @@ def main():
 
             i.append(eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value)
             t.append(eg.enodes["input_node"].evaluable_outputs["t_out_port"].curr_value)
-            s.append(eg.enodes["rnn_node"].evaluable_outputs["out_port"].curr_value)
+
+            x.append(eg.enodes["rnn_node"].evaluable_outputs["out_port_x"].curr_value)
+            r.append(eg.enodes["rnn_node"].evaluable_outputs["out_port_r"].curr_value)
             t_ext += dt
 
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
 
-            plt.plot(times, t, label="time at input node")
+            # plt.plot(times, t, label="time at input node")
             plt.plot(times, i, label="state of input node")
-            plt.plot(times, s, label="RNN 0 state")
+            plt.plot(times, x, label="RNN x state")
+            plt.plot(times, r, label="RNN r state")
             plt.legend()
             plt.show()
 

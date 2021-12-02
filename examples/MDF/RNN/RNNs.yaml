@@ -9,12 +9,19 @@ RNNs:
                         t:
                             default_initial_value: 0
                             time_derivative: '1'
-                        initial:
-                            value: -3
-                        rate:
-                            value: 3
+                        amplitude:
+                            value:
+                            - 1
+                            - 2
+                        period:
+                            value:
+                            - 0.5
+                            - 0.4
                         level:
-                            value: initial + rate*t
+                            function: sin
+                            args:
+                                variable0: 2*3.14159*t/period
+                                scale: amplitude
                     output_ports:
                         out_port:
                             value: level
@@ -24,13 +31,18 @@ RNNs:
                     input_ports:
                         input: {}
                     parameters:
+                        x:
+                            default_initial_value: 1
+                            time_derivative: -x + input
                         r:
                             function: tanh
                             args:
-                                variable0: input
+                                variable0: x
                                 scale: 1
                     output_ports:
-                        out_port:
+                        out_port_x:
+                            value: x
+                        out_port_r:
                             value: r
             edges:
                 input_edge:

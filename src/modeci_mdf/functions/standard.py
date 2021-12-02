@@ -65,10 +65,10 @@ def create_python_expression(expression_string: str = None) -> str:
     """
 
     for func in ["exp", "sin", "cos", "tan", "sinh", "cosh", "tanh"]:
-        if "math." + func not in expression_string:
+        if "numpy." + func not in expression_string:
 
             expression_string = expression_string.replace(
-                "%s(" % func, "math.%s(" % func
+                "%s(" % func, "numpy.%s(" % func
             )
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
