@@ -1,7 +1,7 @@
 {
     "abc_conditions": {
         "format": "ModECI MDF v0.3",
-        "generating_application": "Python modeci-mdf v0.3.1",
+        "generating_application": "Python modeci-mdf v0.3.2",
         "graphs": {
             "abc_conditions_example": {
                 "conditions": {
@@ -60,6 +60,9 @@
                         "parameters": {
                             "input_level": {
                                 "value": 0.0
+                            },
+                            "count_0": {
+                                "value": "count_0 + 1"
                             }
                         },
                         "output_ports": {
@@ -75,24 +78,13 @@
                             }
                         },
                         "parameters": {
-                            "slope": {
-                                "value": 1.1
-                            },
-                            "intercept": {
-                                "value": 1.2
-                            },
-                            "linear_func": {
-                                "function": "linear",
-                                "args": {
-                                    "slope": "slope",
-                                    "intercept": "intercept",
-                                    "variable0": "input_port1"
-                                }
+                            "count_A": {
+                                "value": "count_A + 1"
                             }
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "linear_func"
+                                "value": "input_port1"
                             }
                         }
                     },
@@ -103,28 +95,13 @@
                             }
                         },
                         "parameters": {
-                            "gain": {
-                                "value": 2.1
-                            },
-                            "bias": {
-                                "value": 2.2
-                            },
-                            "offset": {
-                                "value": 2.3
-                            },
-                            "logistic_func": {
-                                "function": "logistic",
-                                "args": {
-                                    "gain": "gain",
-                                    "bias": "bias",
-                                    "offset": "offset",
-                                    "variable0": "input_port1"
-                                }
+                            "count_B": {
+                                "value": "count_B + 1"
                             }
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "logistic_func"
+                                "value": "input_port1"
                             }
                         }
                     },
@@ -135,32 +112,13 @@
                             }
                         },
                         "parameters": {
-                            "scale": {
-                                "value": 3.1
-                            },
-                            "rate": {
-                                "value": 3.2
-                            },
-                            "bias": {
-                                "value": 3.3
-                            },
-                            "offset": {
-                                "value": 3.4
-                            },
-                            "exponential_func": {
-                                "function": "exponential",
-                                "args": {
-                                    "scale": "scale",
-                                    "rate": "rate",
-                                    "bias": "bias",
-                                    "offset": "offset",
-                                    "variable0": "input_port1"
-                                }
+                            "count_C": {
+                                "value": "count_C+ 1"
                             }
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "exponential_func"
+                                "value": "input_port1"
                             }
                         }
                     }

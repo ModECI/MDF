@@ -5,7 +5,7 @@ comp = pnl.Composition(name="comp")
 fn = pnl.IntegratorMechanism(
     name="fn",
     function=pnl.FitzHughNagumoIntegrator(
-        name="FitzHughNagumoIntegrator Function-0",
+        name="FitzHughNagumoIntegrator_Function_0",
         d_v=1,
         initial_v=-1,
         initializer=[[0]],
@@ -24,8 +24,8 @@ comp.add_node(im)
 
 comp.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from fn[OutputPort-0] to im[InputPort-0]",
-        function=pnl.LinearMatrix(matrix=[[1.0]], default_variable=[-1.0]),
+        name="MappingProjection_from_fn_OutputPort_0__to_im_InputPort_0_",
+        function=pnl.LinearMatrix(default_variable=[-1.0], matrix=[[1.0]]),
     ),
     sender=fn,
     receiver=im,
@@ -34,27 +34,29 @@ comp.add_projection(
 comp.scheduler.add_condition(
     fn,
     pnl.TimeInterval(
-        end=None,
-        end_inclusive=True,
-        repeat="50 us",
+        repeat="50 microsecond",
         start=None,
-        start_inclusive=True,
+        end=None,
         unit="ms",
+        start_inclusive=True,
+        end_inclusive=True,
     ),
 )
 comp.scheduler.add_condition(
     im,
     pnl.TimeInterval(
+        repeat="1 millisecond",
+        start="80 millisecond",
         end=None,
-        end_inclusive=True,
-        repeat="1 ms",
-        start="80 ms",
-        start_inclusive=True,
         unit="ms",
+        start_inclusive=True,
+        end_inclusive=True,
     ),
 )
 
 comp.scheduler.termination_conds = {
-    pnl.TimeScale.RUN: pnl.Never(),
-    pnl.TimeScale.TRIAL: pnl.TimeTermination(inclusive=True, t="100 ms"),
+    pnl.TimeScale.ENVIRONMENT_SEQUENCE: pnl.Never(),
+    pnl.TimeScale.ENVIRONMENT_STATE_UPDATE: pnl.TimeTermination(
+        t="100 millisecond", inclusive=True, unit="millisecond"
+    ),
 }

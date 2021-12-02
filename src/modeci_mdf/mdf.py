@@ -12,11 +12,9 @@ import sympy
 
 from typing import List, Tuple, Dict, Optional, Set, Any, Union, Optional
 
-# Currently based on elements of NeuroMLlite: https://github.com/NeuroML/NeuroMLlite/tree/master/neuromllite
-#  Try: pip install neuromllite
-from neuromllite.BaseTypes import Base
-from neuromllite.BaseTypes import BaseWithId
-from neuromllite import EvaluableExpression
+from modelspec.BaseTypes import Base
+from modelspec.BaseTypes import BaseWithId
+from modelspec.BaseTypes import EvaluableExpression
 
 __all__ = [
     "Model",
@@ -33,22 +31,26 @@ __all__ = [
 
 
 class MdfBaseWithId(BaseWithId):
-    """Override BaseWithId from nueromllite"""
+    """Override BaseWithId from modelspec"""
 
     def __init__(self, **kwargs):
-        self.allowed_fields.update(
-            {"metadata": ("Dict of metadata for the model element", dict)}
+
+        self.add_allowed_field(
+            "metadata", "Dict of metadata for the model element", dict
         )
+
         super().__init__(**kwargs)
 
 
 class MdfBase(Base):
-    """Override Base from nueromllite"""
+    """Override Base from modelspec"""
 
     def __init__(self, **kwargs):
-        self.allowed_fields.update(
-            {"metadata": ("Dict of metadata for the model element", dict)}
+
+        self.add_allowed_field(
+            "metadata", "Dict of metadata for the model element", dict
         )
+
         super().__init__(**kwargs)
 
 
@@ -63,9 +65,8 @@ class Model(MdfBaseWithId):
     _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
 
     def __init__(self, **kwargs):
-        self.allowed_children = collections.OrderedDict(
-            [("graphs", ("The list of _Graph_s in this Model", Graph))]
-        )
+
+        self.add_allowed_child("graphs", "The list of _Graph_s in this Model", Graph)
 
         self.allowed_fields = collections.OrderedDict(
             [
@@ -83,7 +84,7 @@ class Model(MdfBaseWithId):
 
         # Removed for now...
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -204,25 +205,21 @@ class Graph(MdfBaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_children = collections.OrderedDict(
-            [
-                ("nodes", ("The _Node_s present in the Graph", Node)),
-                ("edges", ("The _Edge_s between _Node_s in the Graph", Edge)),
-            ]
+        self.add_allowed_child("nodes", "The _Node_s present in the Graph", Node)
+        self.add_allowed_child(
+            "edges", "The _Edge_s between _Node_s in the Graph", Edge
         )
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                ("parameters", ("Dict of global parameters for the Graph", dict)),
-                (
-                    "conditions",
-                    ("The _ConditionSet_ for scheduling of the Graph", ConditionSet),
-                ),
-            ]
+        self.add_allowed_field(
+            "parameters", "Dict of global parameters for the Graph", dict
         )
+        self.add_allowed_field(
+            "conditions", "The _ConditionSet_ for scheduling of the Graph", ConditionSet
+        )
+
         """The allowed fields for this type"""
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         #kwargs["id"] = id
         for f in self.allowed_fields:
@@ -320,24 +317,21 @@ class Node(MdfBaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_children = collections.OrderedDict(
-            [
-                ("input_ports", ("The _InputPort_s into the Node", InputPort)),
-                ("functions", ("The _Function_s for the Node", Function)),
-                ("parameters", ("The _Parameter_s of the Node", Parameter)),
-                (
-                    "output_ports",
-                    (
-                        "The _OutputPort_s containing evaluated quantities from the Node",
-                        OutputPort,
-                    ),
-                ),
-            ]
+        self.add_allowed_child(
+            "input_ports", "The _InputPort_s into the Node", InputPort
         )
+        self.add_allowed_child("functions", "The _Function_s for the Node", Function)
+        self.add_allowed_child("parameters", "The _Parameter_s of the Node", Parameter)
+        self.add_allowed_child(
+            "output_ports",
+            "The _OutputPort_s containing evaluated quantities from the Node",
+            OutputPort,
+        )
+
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -409,42 +403,31 @@ class Function(MdfBaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "function",
-                    (
-                        "Which of the in-build MDF functions (linear etc.) this uses",
-                        str,
-                    ),
-                ),
-                (
-                    "value",
-                    (
-                        "evaluable expression",
-                        str,
-                    ),
-                ),
-                (
-                    "args",
-                    (
-                        'Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
-                        dict,
-                    ),
-                ),
-                (
-                    "id",
-                    (
-                        "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value",
-                        str,
-                    ),
-                ),
-            ]
+        self.add_allowed_field(
+            "function",
+            "Which of the in-build MDF functions (linear etc.) this uses",
+            dict,
         )
+        self.add_allowed_field(
+            "value",
+            "evaluable expression",
+            str,
+        )
+        self.add_allowed_field(
+            "args",
+            'Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
+            dict,
+        )
+        self.add_allowed_field(
+            "id",
+            "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value",
+            str,
+        )
+
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         for f in self.allowed_fields:
             try:
@@ -474,26 +457,18 @@ class InputPort(MdfBaseWithId):
         **kwargs,
     ):
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "shape",
-                    (
-                        "The shape of the variable (note: there is limited support for this so far...)",
-                        str,
-                    ),
-                ),
-                (
-                    "type",
-                    (
-                        "The type of the variable (note: there is limited support for this so far ",
-                        str,
-                    ),
-                ),
-            ]
+        self.add_allowed_field(
+            "shape",
+            "The shape of the variable (note: there is limited support for this so far...)",
+            str,
+        )
+        self.add_allowed_field(
+            "type",
+            "The type of the variable (note: there is limited support for this so far ",
+            str,
         )
 
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs["id"] = id
         for f in self.allowed_fields:
             try:
@@ -517,21 +492,15 @@ class OutputPort(MdfBaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "value",
-                    (
-                        "The value of the OutputPort in terms of the _InputPort_ and _Function_ values",
-                        str,
-                    ),
-                ),
-            ]
+        self.add_allowed_field(
+            "value",
+            "The value of the OutputPort in terms of the _InputPort_ and _Function_ values",
+            str,
         )
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -561,41 +530,30 @@ class Parameter(MdfBaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "default_initial_value",
-                    ("The initial value of the parameter", str),
-                ),
-                (
-                    "value",
-                    (
-                        "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values",
-                        EvaluableExpression,
-                    ),
-                ),
-                (
-                    "time_derivative",
-                    (
-                        "How the parameter with time, i.e. ds/dt. Units of time are seconds.",
-                        str,
-                    ),
-                ),
-                (
-                    "function",
-                    (
-                        "Which of the in-build MDF functions (linear etc.) this uses",
-                        str,
-                    ),
-                ),
-                (
-                    "args",
-                    (
-                        'Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
-                        dict,
-                    ),
-                ),
-            ]
+        self.add_allowed_field(
+            "default_initial_value",
+            "The initial value of the parameter",
+            EvaluableExpression,
+        )
+        self.add_allowed_field(
+            "value",
+            "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values",
+            EvaluableExpression,
+        )
+        self.add_allowed_field(
+            "time_derivative",
+            "How the parameter with time, i.e. ds/dt. Units of time are seconds.",
+            str,
+        )
+        self.add_allowed_field(
+            "function",
+            "Which of the in-build MDF functions (linear etc.) this uses",
+            str,
+        )
+        self.add_allowed_field(
+            "args",
+            'Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
+            dict,
         )
 
         super().__init__(**kwargs)
@@ -653,34 +611,26 @@ class Edge(MdfBaseWithId):
 
     def __init__(self, **kwargs):
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                ("parameters", ("Dict of parameters for the Edge", dict)),
-                (
-                    "sender",
-                    ("The id of the _Node_ which is the source of the Edge", str),
-                ),
-                (
-                    "receiver",
-                    ("The id of the _Node_ which is the target of the Edge", str),
-                ),
-                (
-                    "sender_port",
-                    (
-                        "The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port",
-                        str,
-                    ),
-                ),
-                (
-                    "receiver_port",
-                    ("The id of the _InputPort_ on the receiver _Node_", str),
-                ),
-            ]
+        self.add_allowed_field("parameters", "Dict of parameters for the Edge", dict)
+        self.add_allowed_field(
+            "sender", "The id of the _Node_ which is the source of the Edge", str
         )
+        self.add_allowed_field(
+            "receiver", "The id of the _Node_ which is the target of the Edge", str
+        )
+        self.add_allowed_field(
+            "sender_port",
+            "The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port",
+            str,
+        )
+        self.add_allowed_field(
+            "receiver_port", "The id of the _InputPort_ on the receiver _Node_", str
+        )
+
         """The allowed fields for this type"""
 
         """
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         kwargs["id"] = id
         for f in self.allowed_fields:
@@ -709,21 +659,18 @@ class ConditionSet(MdfBase):
         termination: Optional[Dict["str", "Condition"]] = None,
     ):
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "node_specific",
-                    ("The _Condition_s corresponding to each _Node_", dict),
-                ),
-                (
-                    "termination",
-                    ("The _Condition_s that indicate when model execution ends", dict),
-                ),
-            ]
+        self.add_allowed_field(
+            "node_specific", "The _Condition_s corresponding to each _Node_", dict
         )
+        self.add_allowed_field(
+            "termination",
+            "The _Condition_s that indicate when model execution ends",
+            dict,
+        )
+
         """The allowed fields for this type"""
 
-        # FIXME: Reconstruct kwargs as neuromlite expects them
+        # FIXME: Reconstruct kwargs as modelspec expects them
         kwargs = {}
         for f in self.allowed_fields:
             try:
@@ -752,17 +699,11 @@ class Condition(MdfBase):
         **args: Optional[Any],
     ):
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                ("type", ("The type of _Condition_ from the library", str)),
-                (
-                    "args",
-                    (
-                        "The dictionary of arguments needed to evaluate the _Condition_",
-                        dict,
-                    ),
-                ),
-            ]
+        self.add_allowed_field("type", "The type of _Condition_ from the library", str)
+        self.add_allowed_field(
+            "args",
+            "The dictionary of arguments needed to evaluate the _Condition_",
+            dict,
         )
 
         super().__init__(type=type, args=args)

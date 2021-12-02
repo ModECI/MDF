@@ -5,6 +5,9 @@ comp = pnl.Composition(name="comp")
 A = pnl.TransferMechanism(
     name="A",
     function=pnl.Linear(intercept=2.0, slope=5.0, default_variable=[[0]]),
+    integrator_function=pnl.AdaptiveIntegrator(
+        initializer=[[0]], rate=0.5, default_variable=[[0]]
+    ),
     termination_measure=pnl.Distance(
         metric=pnl.MAX_ABS_DIFF, default_variable=[[[0]], [[0]]]
     ),
@@ -12,14 +15,20 @@ A = pnl.TransferMechanism(
 B = pnl.TransferMechanism(
     name="B",
     function=pnl.Logistic(default_variable=[[0]]),
+    integrator_function=pnl.AdaptiveIntegrator(
+        initializer=[[0]], rate=0.5, default_variable=[[0]]
+    ),
     termination_measure=pnl.Distance(
         metric=pnl.MAX_ABS_DIFF, default_variable=[[[0]], [[0]]]
     ),
 )
 C = pnl.RecurrentTransferMechanism(
     name="C",
+    combination_function=pnl.LinearCombination(default_variable=[[0]]),
     function=pnl.Linear(default_variable=[[0]]),
-    initial_value=[[0]],
+    integrator_function=pnl.AdaptiveIntegrator(
+        initializer=[[0]], rate=0.5, default_variable=[[0]]
+    ),
     output_ports=["RESULTS"],
     termination_measure=pnl.Distance(
         metric=pnl.MAX_ABS_DIFF, default_variable=[[[0]], [[0]]]
@@ -28,41 +37,7 @@ C = pnl.RecurrentTransferMechanism(
 D = pnl.IntegratorMechanism(
     name="D", function=pnl.SimpleIntegrator(initializer=[[0]], default_variable=[[0]])
 )
-
-Inner_Composition = pnl.Composition(name="Inner Composition")
-
-E = pnl.TransferMechanism(
-    name="E",
-    function=pnl.Linear(default_variable=[[0]]),
-    termination_measure=pnl.Distance(
-        metric=pnl.MAX_ABS_DIFF, default_variable=[[[0]], [[0]]]
-    ),
-)
-F = pnl.TransferMechanism(
-    name="F",
-    function=pnl.Linear(default_variable=[[0]]),
-    termination_measure=pnl.Distance(
-        metric=pnl.MAX_ABS_DIFF, default_variable=[[[0]], [[0]]]
-    ),
-)
-
-Inner_Composition.add_node(E)
-Inner_Composition.add_node(F)
-
-Inner_Composition.add_projection(
-    projection=pnl.MappingProjection(
-        name="MappingProjection from E[RESULT] to F[InputPort-0]",
-        function=pnl.LinearMatrix(matrix=[[1.0]]),
-    ),
-    sender=E,
-    receiver=F,
-)
-
-
-Inner_Composition.scheduler.termination_conds = {
-    pnl.TimeScale.RUN: pnl.Never(),
-    pnl.TimeScale.TRIAL: pnl.AllHaveRun(),
-}
+Inner_Composition = pnl.Composition(name="Inner_Composition")
 
 comp.add_node(A)
 comp.add_node(B)
@@ -72,50 +47,48 @@ comp.add_node(Inner_Composition)
 
 comp.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from A[RESULT] to B[InputPort-0]",
-        function=pnl.LinearMatrix(matrix=[[1.0]], default_variable=[2.0]),
+        name="MappingProjection_from_A_RESULT__to_B_InputPort_0_",
+        function=pnl.LinearMatrix(default_variable=[2.0], matrix=[[1.0]]),
     ),
     sender=A,
     receiver=B,
 )
 comp.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from A[RESULT] to C[InputPort-0]",
-        function=pnl.LinearMatrix(matrix=[[1.0]], default_variable=[2.0]),
+        name="MappingProjection_from_A_RESULT__to_C_InputPort_0_",
+        function=pnl.LinearMatrix(default_variable=[2.0], matrix=[[1.0]]),
     ),
     sender=A,
     receiver=C,
 )
 comp.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from B[RESULT] to D[InputPort-0]",
-        function=pnl.LinearMatrix(matrix=[[1.0]], default_variable=[0.5]),
+        name="MappingProjection_from_B_RESULT__to_D_InputPort_0_",
+        function=pnl.LinearMatrix(default_variable=[0.5], matrix=[[1.0]]),
     ),
     sender=B,
     receiver=D,
 )
 comp.add_projection(
     projection=pnl.MappingProjection(
-        name="MappingProjection from C[RESULT] to D[InputPort-0]",
+        name="MappingProjection_from_C_RESULT__to_D_InputPort_0_",
         function=pnl.LinearMatrix(matrix=[[1.0]]),
     ),
     sender=C,
     receiver=D,
 )
-comp.add_projection(
-    projection=pnl.MappingProjection(
-        name="MappingProjection from C[RESULT] to Inner Composition Input_CIM[INPUT_CIM_E_InputPort-0]",
-        function=pnl.LinearMatrix(matrix=[[1.0]]),
-    ),
-    sender=C,
-    receiver=Inner_Composition,
-)
 
-comp.scheduler.add_condition(A, pnl.EveryNPasses(1, pnl.TimeScale.TRIAL))
-comp.scheduler.add_condition(B, pnl.EveryNCalls(A, 2))
-comp.scheduler.add_condition(C, pnl.EveryNCalls(B, 2))
+comp.scheduler.add_condition(
+    A, pnl.EveryNPasses(n=1, time_scale=pnl.TimeScale.ENVIRONMENT_STATE_UPDATE)
+)
+comp.scheduler.add_condition(B, pnl.EveryNCalls(dependency=A, n=2))
+comp.scheduler.add_condition(C, pnl.EveryNCalls(dependency=B, n=2))
 
 comp.scheduler.termination_conds = {
-    pnl.TimeScale.RUN: pnl.AfterNTrials(1, pnl.TimeScale.RUN),
-    pnl.TimeScale.TRIAL: pnl.AfterNCalls(D, 4),
+    pnl.TimeScale.ENVIRONMENT_SEQUENCE: pnl.AfterNTrials(
+        n=1, time_scale=pnl.TimeScale.ENVIRONMENT_SEQUENCE
+    ),
+    pnl.TimeScale.ENVIRONMENT_STATE_UPDATE: pnl.AfterNCalls(
+        dependency=D, n=4, time_scale=pnl.TimeScale.ENVIRONMENT_STATE_UPDATE
+    ),
 }
