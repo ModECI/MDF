@@ -101,7 +101,7 @@ The InputPort is an attribute of a <a href="#node">Node</a> which allows externa
 ## Function
 A single value which is evaluated as a function of values on <a href="#inputport">InputPort</a>s and other Functions
 #### Allowed parameters
-<table><tr><td><b>function</b></td><td>str</td><td><i>Which of the in-build MDF functions (linear etc.) this uses</i></td></tr>
+<table><tr><td><b>function</b></td><td>dict</td><td><i>Which of the in-build MDF functions (linear etc.) this uses</i></td></tr>
 
 <tr><td><b>value</b></td><td>str</td><td><i>evaluable expression</i></td></tr>
 

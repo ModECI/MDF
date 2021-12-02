@@ -57,6 +57,10 @@ def format_num(s):
     return f'<font color="{COLOR_NUM}"><b>{ss}</b>{info}</font>'
 
 
+def format_bold(s, use_bold=True):
+    return f"<b>{s}</b>" if use_bold else s
+
+
 def format_param(s):
     return f'<font color="{COLOR_PARAM}">{s}</font>'
 
@@ -177,6 +181,7 @@ def mdf_to_graphviz(
             if node.parameters and len(node.parameters) > 0:
 
                 for p in node.parameters:
+                    stateful = p.is_stateful()
                     if p.function is not None:
                         argstr = (
                             ", ".join(
@@ -187,7 +192,7 @@ def mdf_to_graphviz(
                         )
                         info += "<tr><td>{}{} = {}({})</td></tr>".format(
                             format_label(" "),
-                            format_param(p.id),
+                            format_bold(format_param(p.id), stateful),
                             format_standard_func(p.function),
                             argstr,
                         )
@@ -217,7 +222,9 @@ def mdf_to_graphviz(
                                 p.time_derivative, node
                             )
                         info += "<tr><td>{}{} = {}</td></tr>".format(
-                            format_label(" "), format_param(p.id), v
+                            format_label(" "),
+                            format_bold(format_param(p.id), stateful),
+                            v,
                         )
 
             if node.functions and len(node.functions) > 0:
@@ -248,8 +255,8 @@ def mdf_to_graphviz(
             if mdf_graph.conditions and mdf_graph.conditions.node_specific:
                 ns = mdf_graph.conditions.node_specific[node.id]
                 info += "<tr><td>{}{}={} ".format(
-                    format_label("CONDITION"),
-                    format_output("type"),
+                    format_label(" "),
+                    format_condition("condition"),
                     ns["type"] if "type" in ns else ns.type,
                 )
                 args = ns["args"] if "args" in ns else ns.args
