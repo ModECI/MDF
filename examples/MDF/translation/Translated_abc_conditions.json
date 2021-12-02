@@ -1,7 +1,7 @@
 {
     "abc_conditions": {
         "format": "ModECI MDF v0.3",
-        "generating_application": "Python modeci-mdf v0.3.1",
+        "generating_application": "Python modeci-mdf v0.3.2",
         "graphs": {
             "abc_conditions_example": {
                 "conditions": {
@@ -60,6 +60,10 @@
                         "parameters": {
                             "input_level": {
                                 "value": 0.0
+                            },
+                            "count_0": {
+                                "value": "evaluated_input0_count_0_next_value",
+                                "default_initial_value": 0
                             }
                         },
                         "output_ports": {
@@ -67,7 +71,11 @@
                                 "value": "input_level"
                             }
                         },
-                        "functions": {}
+                        "functions": {
+                            "evaluated_input0_count_0_next_value": {
+                                "value": "count_0 + 1"
+                            }
+                        }
                     },
                     "A": {
                         "input_ports": {
@@ -81,6 +89,10 @@
                             },
                             "intercept": {
                                 "value": 1.2
+                            },
+                            "count_A": {
+                                "value": "evaluated_A_count_A_next_value",
+                                "default_initial_value": 0
                             }
                         },
                         "output_ports": {
@@ -97,6 +109,9 @@
                                         "variable0": "input_port1"
                                     }
                                 }
+                            },
+                            "evaluated_A_count_A_next_value": {
+                                "value": "count_A + 1"
                             }
                         }
                     },
@@ -115,6 +130,10 @@
                             },
                             "offset": {
                                 "value": 2.3
+                            },
+                            "count_B": {
+                                "value": "evaluated_B_count_B_next_value",
+                                "default_initial_value": 0
                             }
                         },
                         "output_ports": {
@@ -132,6 +151,9 @@
                                         "variable0": "input_port1"
                                     }
                                 }
+                            },
+                            "evaluated_B_count_B_next_value": {
+                                "value": "count_B + 1"
                             }
                         }
                     },
@@ -153,6 +175,10 @@
                             },
                             "offset": {
                                 "value": 3.4
+                            },
+                            "count_C": {
+                                "value": "evaluated_C_count_C_next_value",
+                                "default_initial_value": 0
                             }
                         },
                         "output_ports": {
@@ -171,6 +197,9 @@
                                         "variable0": "input_port1"
                                     }
                                 }
+                            },
+                            "evaluated_C_count_C_next_value": {
+                                "value": "count_C+ 1"
                             }
                         }
                     }
