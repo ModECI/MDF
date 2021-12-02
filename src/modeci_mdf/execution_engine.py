@@ -648,7 +648,7 @@ class EvaluableInput:
         """
         if self.verbose:
             print(
-                "    Evaluated %s with %s =\t%s"
+                "    Evaluated %s with params %s =\t%s"
                 % (
                     self.input_port,
                     _params_info(parameters),

@@ -38,10 +38,12 @@ def main():
 
     ## RNN node...
     rnn_node = Node(id="rnn_node")
-    ipr1 = InputPort(id="input")
+    ipr1 = InputPort(id="ext_input")
     rnn_node.input_ports.append(ipr1)
 
-    x = Parameter(id="x", default_initial_value=1, time_derivative="-x + input")
+    x = Parameter(
+        id="x", default_initial_value=[1.0, 1.0], time_derivative="-x + %s" % ipr1.id
+    )
     rnn_node.parameters.append(x)
 
     r = Parameter(id="r", function="tanh", args={"variable0": x.id, "scale": 1})
@@ -72,6 +74,7 @@ def main():
 
     if "-run" in sys.argv:
         verbose = True
+        #
         verbose = False
         from modeci_mdf.utils import load_mdf, print_summary
 
@@ -84,32 +87,42 @@ def main():
         t_ext = 0
         recorded = {}
         times = []
-        t = []
-        i = []
-        x = []
-        r = []
+        ts = []
+        ins = []
+        xs = []
+        rs = []
         while t_ext <= duration:
             times.append(t_ext)
             print("======   Evaluating at t = %s  ======" % (t_ext))
-            if t == 0:
+            if t_ext == 0:
                 eg.evaluate()  # replace with initialize?
             else:
                 eg.evaluate(time_increment=dt)
 
-            i.append(eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value)
-            t.append(eg.enodes["input_node"].evaluable_outputs["t_out_port"].curr_value)
+            t = eg.enodes["input_node"].evaluable_outputs["t_out_port"].curr_value
+            i = eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value
+            x = eg.enodes["rnn_node"].evaluable_outputs["out_port_x"].curr_value
+            r = eg.enodes["rnn_node"].evaluable_outputs["out_port_r"].curr_value
 
-            x.append(eg.enodes["rnn_node"].evaluable_outputs["out_port_x"].curr_value)
-            r.append(eg.enodes["rnn_node"].evaluable_outputs["out_port_r"].curr_value)
+            print(f"  - Values at {t}: i={i}; x={x}; r={r}")
+
+            ins.append(i)
+            ts.append(t)
+            xs.append(x)
+            rs.append(r)
             t_ext += dt
 
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
 
-            # plt.plot(times, t, label="time at input node")
-            plt.plot(times, i, label="state of input node")
-            plt.plot(times, x, label="RNN x state")
-            plt.plot(times, r, label="RNN r state")
+            print("i: %s" % ins)
+            print("x: %s" % xs)
+            print("r: %s" % rs)
+
+            # plt.plot(times, ts, label="time at input node")
+            plt.plot(times, ins, label="state of input node")
+            plt.plot(times, xs, label="RNN x state")
+            plt.plot(times, rs, label="RNN r state")
             plt.legend()
             plt.show()
 

@@ -29,11 +29,13 @@ RNNs:
                             value: t
                 rnn_node:
                     input_ports:
-                        input: {}
+                        ext_input: {}
                     parameters:
                         x:
-                            default_initial_value: 1
-                            time_derivative: -x + input
+                            default_initial_value:
+                            - 1.0
+                            - 1.0
+                            time_derivative: -x + ext_input
                         r:
                             function: tanh
                             args:
@@ -51,4 +53,4 @@ RNNs:
                     sender: input_node
                     receiver: rnn_node
                     sender_port: out_port
-                    receiver_port: input
+                    receiver_port: ext_input
