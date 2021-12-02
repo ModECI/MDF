@@ -255,8 +255,8 @@ def mdf_to_graphviz(
             if mdf_graph.conditions and mdf_graph.conditions.node_specific:
                 ns = mdf_graph.conditions.node_specific[node.id]
                 info += "<tr><td>{}{}={} ".format(
-                    format_label("CONDITION"),
-                    format_output("type"),
+                    format_label(" "),
+                    format_condition("condition"),
                     ns["type"] if "type" in ns else ns.type,
                 )
                 args = ns["args"] if "args" in ns else ns.args

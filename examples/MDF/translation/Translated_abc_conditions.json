@@ -84,12 +84,6 @@
                             }
                         },
                         "parameters": {
-                            "slope": {
-                                "value": 1.1
-                            },
-                            "intercept": {
-                                "value": 1.2
-                            },
                             "count_A": {
                                 "value": "evaluated_A_count_A_next_value",
                                 "default_initial_value": 0
@@ -97,19 +91,10 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "linear_func"
+                                "value": "input_port1"
                             }
                         },
                         "functions": {
-                            "linear_func": {
-                                "function": {
-                                    "linear": {
-                                        "slope": "slope",
-                                        "intercept": "intercept",
-                                        "variable0": "input_port1"
-                                    }
-                                }
-                            },
                             "evaluated_A_count_A_next_value": {
                                 "value": "count_A + 1"
                             }
@@ -122,15 +107,6 @@
                             }
                         },
                         "parameters": {
-                            "gain": {
-                                "value": 2.1
-                            },
-                            "bias": {
-                                "value": 2.2
-                            },
-                            "offset": {
-                                "value": 2.3
-                            },
                             "count_B": {
                                 "value": "evaluated_B_count_B_next_value",
                                 "default_initial_value": 0
@@ -138,20 +114,10 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "logistic_func"
+                                "value": "input_port1"
                             }
                         },
                         "functions": {
-                            "logistic_func": {
-                                "function": {
-                                    "logistic": {
-                                        "gain": "gain",
-                                        "bias": "bias",
-                                        "offset": "offset",
-                                        "variable0": "input_port1"
-                                    }
-                                }
-                            },
                             "evaluated_B_count_B_next_value": {
                                 "value": "count_B + 1"
                             }
@@ -164,18 +130,6 @@
                             }
                         },
                         "parameters": {
-                            "scale": {
-                                "value": 3.1
-                            },
-                            "rate": {
-                                "value": 3.2
-                            },
-                            "bias": {
-                                "value": 3.3
-                            },
-                            "offset": {
-                                "value": 3.4
-                            },
                             "count_C": {
                                 "value": "evaluated_C_count_C_next_value",
                                 "default_initial_value": 0
@@ -183,21 +137,10 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "exponential_func"
+                                "value": "input_port1"
                             }
                         },
                         "functions": {
-                            "exponential_func": {
-                                "function": {
-                                    "exponential": {
-                                        "scale": "scale",
-                                        "rate": "rate",
-                                        "bias": "bias",
-                                        "offset": "offset",
-                                        "variable0": "input_port1"
-                                    }
-                                }
-                            },
                             "evaluated_C_count_C_next_value": {
                                 "value": "count_C+ 1"
                             }
