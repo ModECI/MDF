@@ -118,7 +118,7 @@ specification:
             and other Functions
         allowed_parameters:
             function:
-                type: str
+                type: dict
                 description: Which of the in-build MDF functions (linear etc.) this
                     uses
             value:

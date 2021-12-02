@@ -149,7 +149,7 @@
             "definition": "A single value which is evaluated as a function of values on _InputPort_s and other Functions",
             "allowed_parameters": {
                 "function": {
-                    "type": "str",
+                    "type": "dict",
                     "description": "Which of the in-build MDF functions (linear etc.) this uses"
                 },
                 "value": {
