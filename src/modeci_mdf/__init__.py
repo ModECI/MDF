@@ -12,5 +12,5 @@ widely-used programming environments in a range of disciplines, and for easily e
 # Version of the specification for MDF
 MODECI_MDF_VERSION = "0.3"
 
-# Version of the python module.
-__version__ = "0.3.2"
+# Version of the Python module.
+__version__ = "0.3.3"
