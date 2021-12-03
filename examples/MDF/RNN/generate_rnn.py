@@ -101,15 +101,16 @@ def main():
 
             t = eg.enodes["input_node"].evaluable_outputs["t_out_port"].curr_value
             i = eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value
-            x = eg.enodes["rnn_node"].evaluable_outputs["out_port_x"].curr_value
+            xx = eg.enodes["rnn_node"].evaluable_outputs["out_port_x"].curr_value
             r = eg.enodes["rnn_node"].evaluable_outputs["out_port_r"].curr_value
 
-            print(f"  - Values at {t}: i={i}; x={x}; r={r}")
+            print(f"  - Values at {t}: i={i}; x={xx}; r={r}")
 
-            ins.append(i)
+            ins.append(i[0])
             ts.append(t)
-            xs.append(x)
+            xs.append(xx)
             rs.append(r)
+
             t_ext += dt
 
         if "-nogui" not in sys.argv:

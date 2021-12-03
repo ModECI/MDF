@@ -94,20 +94,24 @@ def match_in_expr(s, node):
     if type(s) != str:
         return "%s" % _val_info(s)
     else:
+
+        def _var_present(v, s):
+            return s.startswith(v + " ") or s.endswith(v + " ") or " %s " % s in v
+
         for p in node.parameters:
-            if p.id in s:
+            if _var_present(p.id, s):
                 s = s.replace(p.id, format_param(p.id))
 
         for ip in node.input_ports:
-            if ip.id in s:
+            if _var_present(ip.id, s):
                 s = s.replace(ip.id, format_input(ip.id))
 
         for f in node.functions:
-            if f.id in s:
+            if _var_present(f.id, s):
                 s = s.replace(f.id, format_func(f.id))
 
         for op in node.output_ports:
-            if op.id in s:
+            if _var_present(op.id, s):
                 s = s.replace(op.id, format_output(op.id))
         return s
 

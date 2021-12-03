@@ -63,7 +63,7 @@ FN:
                         \ 'a_w': 'a_w', 'b_w': 'b_w', 'c_w': 'c_w', 'time_constant_w':\
                         \ 'time_constant_w', 'threshold': 'threshold', 'mode': 'mode',\
                         \ 'uncorrelated_activity': 'uncorrelated_activity', 'Iext':\
-                        \ 'Iext'}] is defined in /home/padraig/git/MDF/examples/NeuroML/FN_Definitions.xml\
+                        \ 'Iext'}] is defined in /Users/padraig/git/MDF/examples/NeuroML/FN_Definitions.xml\
                         \ and in Lems is: Component, id: fn, type: fnCell,\n   parameters:\
                         \ {'initial_w': '0.0', 'initial_v': '-1', 'a_v': '-0.3333333333333333',\
                         \ 'b_v': '0.0', 'c_v': '1.0', 'd_v': '1', 'e_v': '-1.0', 'f_v':\
