@@ -406,7 +406,7 @@ class Function(MdfBaseWithId):
         self.add_allowed_field(
             "function",
             "Which of the in-build MDF functions (linear etc.) this uses",
-            str,
+            dict,
         )
         self.add_allowed_field(
             "value",

@@ -32,54 +32,29 @@ def main():
     input_node.output_ports.append(op1)
     mod_graph.nodes.append(input_node)
 
-    def create_simple_node(graph, id_, function, parameters, sender=None):
+    def create_simple_node(graph, id_, sender=None):
         n = Node(id=id_)
         graph.nodes.append(n)
-
-        for p in parameters:
-            n.parameters.append(Parameter(id=p, value=parameters[p]))
 
         ip1 = InputPort(id="input_port1", shape="(1,)")
         n.input_ports.append(ip1)
 
-        function.args["variable0"] = ip1.id
-        n.parameters.append(function)
-
-        n.output_ports.append(OutputPort(id="output_1", value=function.id))
+        n.output_ports.append(OutputPort(id="output_1", value=ip1.id))
 
         if sender is not None:
             simple_connect(sender, n, graph)
 
         return n
 
-    p_a = {"slope": abcd.A_slope, "intercept": abcd.A_intercept}
-    f_a = Parameter(
-        id="linear_func", function="linear", args={k: k for k in p_a.keys()}
-    )
-    a = create_simple_node(mod_graph, "A", f_a, p_a, input_node)
+    a = create_simple_node(mod_graph, "A", input_node)
     a.parameters.append(Parameter(id="count_A", value="count_A + 1"))
-    a.output_ports[0].value = "linear_func"
 
-    p_b = {"gain": abcd.B_gain, "bias": abcd.B_bias, "offset": abcd.B_offset}
-    f_b = Parameter(
-        id="logistic_func", function="logistic", args={k: k for k in p_b.keys()}
-    )
-    b = create_simple_node(mod_graph, "B", f_b, p_b, a)
+    b = create_simple_node(mod_graph, "B", a)
     b.parameters.append(Parameter(id="count_B", value="count_B + 1"))
-    b.output_ports[0].value = "logistic_func"
 
-    p_c = {
-        "scale": abcd.C_scale,
-        "rate": abcd.C_rate,
-        "bias": abcd.C_bias,
-        "offset": abcd.C_offset,
-    }
-    f_c = Parameter(
-        id="exponential_func", function="exponential", args={k: k for k in p_c.keys()}
-    )
-    c = create_simple_node(mod_graph, "C", f_c, p_c, a)
+    c = create_simple_node(mod_graph, "C", a)
+
     c.parameters.append(Parameter(id="count_C", value="count_C+ 1"))
-    c.output_ports[0].value = "exponential_func"
 
     cond_i = Condition(type="BeforeNCalls", dependencies=input_node.id, n=1)
     cond_a = Condition(type="Always")
