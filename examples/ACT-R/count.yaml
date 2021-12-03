@@ -1,6 +1,6 @@
 count:
     format: ModECI MDF v0.3
-    generating_application: Python modeci-mdf v0.3.2
+    generating_application: Python modeci-mdf v0.3.3
     graphs:
         count_graph:
             conditions:
