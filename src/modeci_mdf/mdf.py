@@ -358,6 +358,32 @@ class Node(MdfBaseWithId):
                 return p
         return None
 
+    def get_input_port(self, id: str) -> "InputPort":
+        """Retrieve :class:`InputPort` object corresponding to the given id
+
+        Args:
+            id: Unique identifier of class:`InputPort` object
+
+        Returns:
+            class:`InputPort` object if the entered id matches with the id of class:`InputPort` present in the class:`Node`
+        """
+        for ip in self.input_ports:
+            if id == ip.id:
+                return ip
+
+    def get_output_port(self, id: str) -> "OutputPort":
+        """Retrieve :class:`OutputPort` object corresponding to the given id
+
+        Args:
+            id: Unique identifier of class:`OutputPort` object
+
+        Returns:
+            class:`OutputPort` object if the entered id matches with the id of class:`OutputPort` present in the class:`Node`
+        """
+        for op in self.output_ports:
+            if id == op.id:
+                return op
+
     @property
     def input_ports(self) -> List["InputPort"]:
         r"""

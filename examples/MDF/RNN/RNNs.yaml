@@ -12,11 +12,9 @@ RNNs:
                         amplitude:
                             value:
                             - 1
-                            - 2
                         period:
                             value:
                             - 0.5
-                            - 0.4
                         level:
                             function: sin
                             args:
@@ -31,26 +29,94 @@ RNNs:
                     input_ports:
                         ext_input: {}
                     parameters:
+                        M:
+                            value:
+                            -   - 0.788049224295591
+                                - -0.4886341813270365
+                                - -0.8533432525361502
+                                - 0.6229419596375172
+                                - -0.3502383774449005
+                            -   - 0.021888053632851845
+                                - 0.4553493843963319
+                                - 0.5316873258429329
+                                - 0.3938783459436548
+                                - -0.6572129128501334
+                            -   - 0.22877337980345014
+                                - 0.35678034702548667
+                                - 0.3255150881072042
+                                - 0.7485565638009413
+                                - -0.7133445532936888
+                            -   - 0.42764667374249465
+                                - -0.8380697104676365
+                                - -0.7992852133608255
+                                - 0.08491815865497787
+                                - 0.2306514017189769
+                            -   - -0.2664159662635166
+                                - 0.7831695447273699
+                                - -0.22891062654409988
+                                - -0.6745469426415063
+                                - -0.8995426162028408
+                        g:
+                            value: 1
                         x:
                             default_initial_value:
-                            - 1.0
-                            - 1.0
-                            time_derivative: -x + ext_input
+                            - 0.24065341554453257
+                            - -0.10610548368227946
+                            - -0.027480152780470224
+                            - 0.21348632390366573
+                            - 0.32955183570024005
+                            time_derivative: -x + g*int_fb + ext_input
                         r:
                             function: tanh
                             args:
                                 variable0: x
                                 scale: 1
+                        int_fb:
+                            function: MatMul
+                            args:
+                                A: M
+                                B: r
                     output_ports:
                         out_port_x:
                             value: x
                         out_port_r:
                             value: r
+                readout_node:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        wr:
+                            value:
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                        zi:
+                            function: MatMul
+                            args:
+                                A: input
+                                B: wr
+                    output_ports:
+                        z:
+                            value: zi
             edges:
                 input_edge:
                     parameters:
-                        weight: 1
+                        weight:
+                        - 1.0
+                        - 0.0
+                        - 0.0
+                        - 0.0
+                        - 0.0
                     sender: input_node
                     receiver: rnn_node
                     sender_port: out_port
                     receiver_port: ext_input
+                readout_edge:
+                    parameters:
+                        weight: 0.5
+                    sender: rnn_node
+                    receiver: readout_node
+                    sender_port: out_port_r
+                    receiver_port: input

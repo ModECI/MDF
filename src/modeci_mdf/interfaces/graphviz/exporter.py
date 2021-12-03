@@ -96,7 +96,12 @@ def match_in_expr(s, node):
     else:
 
         def _var_present(v, s):
-            return s.startswith(v + " ") or s.endswith(v + " ") or " %s " % s in v
+            return (
+                s == v
+                or s.startswith(v + " ")
+                or s.endswith(" " + v)
+                or " %s " % v in s
+            )
 
         for p in node.parameters:
             if _var_present(p.id, s):

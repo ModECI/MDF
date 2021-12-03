@@ -78,7 +78,7 @@ def evaluate_expr(
     if type(e) == str and e not in KNOWN_PARAMETERS:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
-            % (expr, _params_info(func_params), e, type(e))
+            % (expr, _params_info(func_params, multiline=True), e, type(e))
         )
     return e
 
@@ -1003,8 +1003,9 @@ class EvaluableGraph:
                 for scale, cond in self.scheduler.termination_conds.items()
             ]
         )
-        print(" node-based conditions\n  %s" % str_conds_nb)
-        print(" termination conditions\n  %s" % str_conds_term)
+        if self.verbose:
+            print(" node-based conditions\n  %s" % str_conds_nb)
+            print(" termination conditions\n  %s" % str_conds_term)
 
         incoming_edges = {n: set() for n in self.graph.nodes}
         for edge in self.graph.edges:
@@ -1061,7 +1062,10 @@ class EvaluableGraph:
                     _val_info(weight),
                 )
             )
-        input_value = value if weight == 1 else value * weight
+        if (type(weight) == int or type(weight) == float) and weight == 1:
+            input_value = value
+        else:
+            input_value = weight * value
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
     def parse_condition(
