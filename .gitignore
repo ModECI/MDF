@@ -240,3 +240,4 @@ Thumbs.db #thumbnail cache on Windows
 *ek.sh
 /examples/MDF/RNN/iaf
 /examples/MDF/RNN/rnn
+*_brian2.py

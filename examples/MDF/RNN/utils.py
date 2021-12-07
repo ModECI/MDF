@@ -9,6 +9,9 @@ def create_rnn_node(id, N, g):
     ipr1 = InputPort(id="ext_input")
     rnn_node.input_ports.append(ipr1)
 
+    ipr2 = InputPort(id="fb_input")
+    rnn_node.input_ports.append(ipr2)
+
     default_initial_value = np.zeros(N)
     default_initial_value = 2 * np.random.random(N) - 1
 

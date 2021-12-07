@@ -5,6 +5,7 @@
 from modeci_mdf.mdf import *
 import sys
 import numpy as np
+import time
 
 from utils import create_rnn_node
 
@@ -22,7 +23,7 @@ def main():
 
     p0 = Parameter(id="amplitude", value=[1])
     input_node.parameters.append(p0)
-    p1 = Parameter(id="period", value=[0.5])
+    p1 = Parameter(id="period", value=[10])
     input_node.parameters.append(p1)
 
     p2 = Parameter(
@@ -40,7 +41,7 @@ def main():
     mod_graph.nodes.append(input_node)
 
     N = 5
-    g = 1
+    g = 1.5
     rnn_node = create_rnn_node("rnn_node", N, g)
 
     mod_graph.nodes.append(rnn_node)
@@ -77,7 +78,7 @@ def main():
 
     e2 = Edge(
         id="readout_edge",
-        parameters={"weight": 0.5},
+        parameters={"weight": 1},
         sender=rnn_node.id,
         sender_port=rnn_node.get_output_port("out_port_r").id,
         receiver=readout_node.id,
@@ -85,8 +86,20 @@ def main():
     )
     mod_graph.edges.append(e2)
 
-    new_file = mod.to_json_file("%s.json" % mod.id)
-    new_file = mod.to_yaml_file("%s.yaml" % mod.id)
+    """
+    e3 = Edge(
+        id="feedback_edge",
+        parameters={"weight": 0.1},
+        sender=readout_node.id,
+        sender_port=readout_node.get_output_port("z").id,
+        receiver=rnn_node.id,
+        receiver_port=rnn_node.get_input_port("fb_input").id,
+    )
+    mod_graph.edges.append(e3)"""
+
+    if N < 100:
+        new_file = mod.to_json_file("%s.json" % mod.id)
+        new_file = mod.to_yaml_file("%s.yaml" % mod.id)
 
     if "-run" in sys.argv:
 
@@ -97,12 +110,20 @@ def main():
 
         from modeci_mdf.execution_engine import EvaluableGraph
 
-        eg = EvaluableGraph(mod_graph, verbose)
-        dt = 0.01
+        start_time = time.time()
 
-        duration = 5
+        from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
+        format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
+
+        eg = EvaluableGraph(mod_graph, verbose)
+        dt = 0.1
+
+        duration = 50
         t_ext = 0
-        recorded = {}
+        max_num_rec_r = min(5, N)
+        max_num_rec_x = min(100, N)
+
         times = []
         ts = []
         ins = []
@@ -113,25 +134,30 @@ def main():
             times.append(t_ext)
             print("======   Evaluating at t = %s  ======" % (t_ext))
             if t_ext == 0:
-                eg.evaluate()  # replace with initialize?
+                eg.evaluate(array_format=format)  # replace with initialize?
             else:
-                eg.evaluate(time_increment=dt)
+                eg.evaluate(time_increment=dt, array_format=format)
 
-            t = eg.enodes["input_node"].evaluable_outputs["t_out_port"].curr_value
             i = eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value
             xx = eg.enodes["rnn_node"].evaluable_outputs["out_port_x"].curr_value
             r = eg.enodes["rnn_node"].evaluable_outputs["out_port_r"].curr_value
             z = eg.enodes["readout_node"].evaluable_outputs["z"].curr_value
 
-            print(f"  - Values at {t}: i={i}; x={xx}; r={r}; z={z}")
+            if verbose:
+                print(f"  - Values at {t_ext}: i={i}; x={xx}; r={r}; z={z}")
 
             ins.append(i[0])
-            ts.append(t)
-            xs.append(xx)
-            rs.append(r)
+            xs.append(xx[0:max_num_rec_x])
+            rs.append(r[0:max_num_rec_r])
             zs.append(z)
 
             t_ext += dt
+
+        stop_time = time.time()
+        dur = stop_time - start_time
+        print(
+            f"Finished {len(times)} steps in {dur:.4f}s, so {(dur/len(times)):.5f}s per step"
+        )
 
         if "-nogui" not in sys.argv:
             import matplotlib.pyplot as plt
@@ -143,7 +169,7 @@ def main():
 
             # plt.plot(times, ts, label="time at input node")
             plt.plot(times, ins, label="state of input node")
-            plt.plot(times, xs, label="RNN x state", linewidth=0.5)
+            plt.plot(times, xs, linewidth=0.25)
             plt.plot(times, rs, label="RNN r state")
             plt.plot(times, zs, label="z readout", linewidth=3)
             plt.legend()
@@ -154,7 +180,7 @@ def main():
             engine="dot",
             output_format="png",
             view_on_render=False,
-            level=3,
+            level=2,
             filename_root="rnn",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
