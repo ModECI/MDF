@@ -17,19 +17,29 @@ def main():
     t_param = Parameter(id="t", default_initial_value=0, time_derivative="1")
     input_node.parameters.append(t_param)
 
-    p0 = Parameter(id="start", value=20)
-    input_node.parameters.append(p0)
+    start = Parameter(id="start", value=20)
+    input_node.parameters.append(start)
 
-    p1 = Parameter(id="duration", value=60)
-    input_node.parameters.append(p1)
+    dur = Parameter(id="duration", value=60)
+    input_node.parameters.append(dur)
 
-    p2 = Parameter(id="amplitude", value=10)
-    input_node.parameters.append(p2)
+    amp = Parameter(id="amplitude", value=10)
+    input_node.parameters.append(amp)
 
-    p3 = Parameter(id="level", value="amplitude * int(t > start)")
-    input_node.parameters.append(p3)
+    level = Parameter(id="level", value=0)
 
-    op1 = OutputPort(id="out_port", value=p3.id)
+    level.conditions.append(
+        ParameterCondition(
+            id="on", test="t > start and t < start + duration", value=amp.id
+        )
+    )
+    level.conditions.append(
+        ParameterCondition(id="off", test="t > start + duration", value=0)
+    )
+
+    input_node.parameters.append(level)
+
+    op1 = OutputPort(id="out_port", value=level.id)
     input_node.output_ports.append(op1)
 
     op2 = OutputPort(id="t_out_port", value=t_param.id)
@@ -52,16 +62,14 @@ def main():
     # v_init = Parameter(id="v_init", value=-30)
     # iaf_node.parameters.append(v_init)
 
-    pc = ParameterCondition()
-    pc.test = "v>thresh"
-    pc.value = "erev"
+    pc = ParameterCondition(id="reset", test="v > thresh", value="erev")
 
     v = Parameter(
         id="v",
         default_initial_value="-50",
         time_derivative="-1 * (v-erev)/tau + input",
-        condition=pc,
     )
+    v.conditions.append(pc)
 
     iaf_node.parameters.append(v)
 

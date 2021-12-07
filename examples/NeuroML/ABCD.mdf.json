@@ -20,7 +20,7 @@
                                 "value": "variable"
                             }
                         },
-                        "notes": "Cell: [Cell (a_input), lems_source_file = PNL.xml, parameters = {'variable': 'A_initial'}] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: a_input, type: inputNode,\n   parameters: {'variable': '2'}\n   parent: None\n"
+                        "notes": "Cell: [Cell (a_input), lems_source_file = PNL.xml, parameters = {'variable': 'A_initial'}] is defined in PNL.xml and in Lems is: Component, id: a_input, type: inputNode,\n   parameters: {'variable': '2'}\n   parent: None\n"
                     },
                     "A_0": {
                         "parameters": {
@@ -42,7 +42,7 @@
                                 "value": "INPUT*slope + intercept"
                             }
                         },
-                        "notes": "Cell: [Cell (a), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n   parameters: {'slope': '2', 'intercept': '2'}\n   parent: None\n"
+                        "notes": "Cell: [Cell (a), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n   parameters: {'slope': '2', 'intercept': '2'}\n   parent: None\n"
                     },
                     "B_0": {
                         "parameters": {
@@ -70,7 +70,7 @@
                                 "value": "1/(1+math.exp(-1*gain*(INPUT + bias - x_0)+offset))"
                             }
                         },
-                        "notes": "Cell: [Cell (b), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0', 'offset': '0.0'}\n   parent: None\n"
+                        "notes": "Cell: [Cell (b), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0', 'offset': '0.0'}\n   parent: None\n"
                     },
                     "C_0": {
                         "parameters": {
@@ -98,7 +98,7 @@
                                 "value": "scale * math.exp((rate * INPUT) + bias) + offset"
                             }
                         },
-                        "notes": "Cell: [Cell (c), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0', 'offset': '0.0'}\n   parent: None\n"
+                        "notes": "Cell: [Cell (c), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0', 'offset': '0.0'}\n   parent: None\n"
                     },
                     "D_0": {
                         "parameters": {
@@ -120,7 +120,7 @@
                                 "value": 0
                             }
                         },
-                        "notes": "Cell: [Cell (d), lems_source_file = PNL.xml] is defined in /Users/padraig/git/MDF/examples/NeuroML/PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n"
+                        "notes": "Cell: [Cell (d), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n"
                     }
                 },
                 "edges": {

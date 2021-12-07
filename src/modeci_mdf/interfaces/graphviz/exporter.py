@@ -89,36 +89,42 @@ def format_condition(s):
     return f'<font color="{COLOR_COND}">{s}</font>'
 
 
-def match_in_expr(s, node):
+def match_in_expr(expr, node):
 
-    if type(s) != str:
-        return "%s" % _val_info(s)
+    if type(expr) != str:
+        return "%s" % _val_info(expr)
     else:
+        print("Checking %s" % (expr))
 
-        def _var_present(v, s):
-            return (
-                s == v
-                or s.startswith(v + " ")
-                or s.endswith(" " + v)
-                or " %s " % v in s
-            )
+        expr = " %s " % expr
+
+        def _replace_var(v, expr, format_method):
+            print(f"Replacing {v} in {expr}")
+
+            if expr == v:
+                return format_method(expr)
+            can_start = [" ", "+", "-", "*", "/", "("]
+            can_end = [" ", "+", "-", "*", "/", ")"]
+            for s in can_start:
+                for e in can_end:
+                    expr = expr.replace(s + v + e, s + format_method(v) + e)
+            return expr
 
         for p in node.parameters:
-            if _var_present(p.id, s):
-                s = s.replace(p.id, format_param(p.id))
+            expr = _replace_var(p.id, expr, format_param)
 
         for ip in node.input_ports:
-            if _var_present(ip.id, s):
-                s = s.replace(ip.id, format_input(ip.id))
+            expr = _replace_var(ip.id, expr, format_input)
 
         for f in node.functions:
-            if _var_present(f.id, s):
-                s = s.replace(f.id, format_func(f.id))
+            expr = _replace_var(f.id, expr, format_function)
 
         for op in node.output_ports:
-            if _var_present(op.id, s):
-                s = s.replace(op.id, format_output(op.id))
-        return s
+            expr = _replace_var(op.id, expr, format_output)
+
+        print("Checked %s" % (expr))
+
+        return expr.strip()
 
 
 def mdf_to_graphviz(
@@ -229,6 +235,14 @@ def mdf_to_graphviz(
                         if p.time_derivative is not None:
                             v += ", <i>d/dt:</i> %s" % match_in_expr(
                                 p.time_derivative, node
+                            )
+                        for cond in p.conditions:
+                            test = cond.test.replace(">", "&gt;").replace("<", "&lt;")
+                            v += "<br/><i>{}: </i>IF {} THEN {}={}".format(
+                                cond.id,
+                                match_in_expr(test, node),
+                                format_param(p.id),
+                                match_in_expr(cond.value, node),
                             )
                         info += "<tr><td>{}{} = {}</td></tr>".format(
                             format_label(" "),

@@ -174,6 +174,29 @@ specification:
             notes:
                 type: str
                 description: Human readable notes
+        allowed_children:
+            conditions:
+                type: ParameterCondition
+                description: Parameter specific conditions
+    ParameterCondition:
+        definition: A condition to test on a _Node_'s parameters, which if true, sets
+            the vaue of this _Parameter_
+        allowed_parameters:
+            test:
+                type: EvaluableExpression
+                description: The boolean expression to evaluate
+            value:
+                type: EvaluableExpression
+                description: The new value of the Parameter if the test is true
+            metadata:
+                type: dict
+                description: Dict of metadata for the model element
+            id:
+                type: str
+                description: Unique ID of element
+            notes:
+                type: str
+                description: Human readable notes
     OutputPort:
         definition: The OutputPort is an attribute of a _Node_ which exports information
             to another _Node_ connected by an _Edge_

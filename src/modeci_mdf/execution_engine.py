@@ -483,25 +483,27 @@ class EvaluableParameter:
             )
 
         continue_eval = True
-        if self.parameter.condition is not None:
-            test = evaluate_expr(
-                self.parameter.condition.test,
-                parameters,
-                verbose=False,
-                array_format=array_format,
-            )
-            if test == True:
-                self.curr_value = evaluate_expr(
-                    self.parameter.condition.value,
+        if len(self.parameter.conditions) > 0:
+            for condition in self.parameter.conditions:
+                test = evaluate_expr(
+                    condition.test,
                     parameters,
                     verbose=False,
                     array_format=array_format,
                 )
-                continue_eval = True
-            print(
-                " --- %s = %s (continuing: %s)"
-                % (self.parameter.condition.test, test, continue_eval)
-            )
+                if test == True:
+                    self.curr_value = evaluate_expr(
+                        condition.value,
+                        parameters,
+                        verbose=False,
+                        array_format=array_format,
+                    )
+                    continue_eval = False
+                    break
+                print(
+                    " --- %s: %s = %s (continuing: %s)"
+                    % (condition.id, condition.test, test, continue_eval)
+                )
 
         if continue_eval:
             if self.parameter.value is not None:

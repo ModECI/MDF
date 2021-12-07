@@ -21,7 +21,17 @@
                                 "value": 10
                             },
                             "level": {
-                                "value": "amplitude * int(t > start)"
+                                "value": 0,
+                                "conditions": {
+                                    "on": {
+                                        "test": "t > start and t < start + duration",
+                                        "value": "amplitude"
+                                    },
+                                    "off": {
+                                        "test": "t > start + duration",
+                                        "value": 0
+                                    }
+                                }
                             }
                         },
                         "output_ports": {
@@ -50,9 +60,11 @@
                             "v": {
                                 "default_initial_value": "-50",
                                 "time_derivative": "-1 * (v-erev)/tau + input",
-                                "condition": {
-                                    "test": "v>thresh",
-                                    "value": "erev"
+                                "conditions": {
+                                    "reset": {
+                                        "test": "v > thresh",
+                                        "value": "erev"
+                                    }
                                 }
                             }
                         },

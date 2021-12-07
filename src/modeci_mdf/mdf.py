@@ -69,19 +69,14 @@ class Model(MdfBaseWithId):
 
         self.add_allowed_child("graphs", "The list of _Graph_s in this Model", Graph)
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "format",
-                    ("Information on the version of MDF used in this file", str),
-                ),
-                (
-                    "generating_application",
-                    ("Information on what application generated/saved this file", str),
-                ),
-            ]
+        self.add_allowed_field(
+            "format", "Information on the version of MDF used in this file", str
         )
-        """The allowed fields for this type"""
+        self.add_allowed_field(
+            "generating_application",
+            "Information on what application generated/saved this file",
+            str,
+        )
 
         # Removed for now...
         """
@@ -571,11 +566,6 @@ class Parameter(MdfBaseWithId):
             str,
         )
         self.add_allowed_field(
-            "condition",
-            "Parameter specific condition.",
-            ParameterCondition,
-        )
-        self.add_allowed_field(
             "function",
             "Which of the in-build MDF functions (linear etc.) this uses",
             str,
@@ -584,6 +574,12 @@ class Parameter(MdfBaseWithId):
             "args",
             'Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
             dict,
+        )
+
+        self.add_allowed_child(
+            "conditions",
+            "Parameter specific conditions",
+            ParameterCondition,
         )
 
         super().__init__(**kwargs)
@@ -739,7 +735,7 @@ class Condition(MdfBase):
         super().__init__(type=type, args=args)
 
 
-class ParameterCondition(MdfBase):
+class ParameterCondition(MdfBaseWithId):
     r"""A condition to test on a Node's parameters, which if true, sets the vaue of this Parameter
 
     Args:
