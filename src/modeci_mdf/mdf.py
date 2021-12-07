@@ -27,11 +27,12 @@ __all__ = [
     "Edge",
     "ConditionSet",
     "Condition",
+    "ParameterCondition",
 ]
 
 
 class MdfBaseWithId(BaseWithId):
-    """Override BaseWithId from modelspec"""
+    """Override BaseWithId from modelspec. Allows a dict of metadata to be added to these types"""
 
     def __init__(self, **kwargs):
 
@@ -572,6 +573,11 @@ class Parameter(MdfBaseWithId):
             str,
         )
         self.add_allowed_field(
+            "condition",
+            "Parameter specific condition.",
+            ParameterCondition,
+        )
+        self.add_allowed_field(
             "function",
             "Which of the in-build MDF functions (linear etc.) this uses",
             str,
@@ -733,6 +739,28 @@ class Condition(MdfBase):
         )
 
         super().__init__(type=type, args=args)
+
+
+class ParameterCondition(MdfBase):
+    r"""A condition to test on a Node's parameters, which if true, sets the vaue of this Parameter
+
+    Args:
+        test: The boolean expression to evaluate
+        value: The new value of the Parameter if the test is true
+
+    """
+    _definition = "A condition to test on a _Node_'s parameters, which if true, sets the vaue of this _Parameter_"
+
+    def __init__(self, **kwargs):
+
+        self.add_allowed_field("test", "The boolean expression to evaluate", str)
+        self.add_allowed_field(
+            "value",
+            "The new value of the Parameter if the test is true",
+            str,
+        )
+
+        super().__init__(**kwargs)
 
 
 if __name__ == "__main__":

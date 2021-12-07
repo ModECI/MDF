@@ -35,6 +35,9 @@ IAFs:
                         v:
                             default_initial_value: '-50'
                             time_derivative: -1 * (v-erev)/tau + input
+                            condition:
+                                test: v>thresh
+                                value: erev
                     output_ports:
                         out_port:
                             value: v

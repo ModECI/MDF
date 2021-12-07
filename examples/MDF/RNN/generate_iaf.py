@@ -48,12 +48,21 @@ def main():
     iaf_node.parameters.append(tau)
     thresh = Parameter(id="thresh", value=-20)
     iaf_node.parameters.append(thresh)
+
     # v_init = Parameter(id="v_init", value=-30)
     # iaf_node.parameters.append(v_init)
 
+    pc = ParameterCondition()
+    pc.test = "v>thresh"
+    pc.value = "erev"
+
     v = Parameter(
-        id="v", default_initial_value="-50", time_derivative="-1 * (v-erev)/tau + input"
+        id="v",
+        default_initial_value="-50",
+        time_derivative="-1 * (v-erev)/tau + input",
+        condition=pc,
     )
+
     iaf_node.parameters.append(v)
 
     op1 = OutputPort(id="out_port", value="v")
@@ -75,8 +84,9 @@ def main():
     new_file = mod.to_yaml_file("%s.yaml" % mod.id)
 
     if "-run" in sys.argv:
-        verbose = True
-        verbose = False
+
+        verbose = "-v" in sys.argv
+
         from modeci_mdf.utils import load_mdf, print_summary
 
         from modeci_mdf.execution_engine import EvaluableGraph
