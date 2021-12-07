@@ -8,12 +8,16 @@ ABCD:
                     parameters:
                         variable:
                             value: 2.0
-                    input_ports: {}
-                    output_ports:
                         V:
                             value: 0
                         OUTPUT:
                             value: variable
+                    input_ports: {}
+                    output_ports:
+                        V:
+                            value: V
+                        OUTPUT:
+                            value: OUTPUT
                     notes: "Cell: [Cell (a_input), lems_source_file = PNL.xml, parameters\
                         \ = {'variable': 'A_initial'}] is defined in PNL.xml and in\
                         \ Lems is: Component, id: a_input, type: inputNode,\n   parameters:\
@@ -24,13 +28,17 @@ ABCD:
                             value: 2.0
                         intercept:
                             value: 2.0
-                    input_ports:
-                        INPUT: {}
-                    output_ports:
                         V:
                             value: 0
                         OUTPUT:
                             value: INPUT*slope + intercept
+                    input_ports:
+                        INPUT: {}
+                    output_ports:
+                        V:
+                            value: V
+                        OUTPUT:
+                            value: OUTPUT
                     notes: "Cell: [Cell (a), lems_source_file = PNL.xml] is defined\
                         \ in PNL.xml and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n\
                         \   parameters: {'slope': '2', 'intercept': '2'}\n   parent:\
@@ -45,13 +53,17 @@ ABCD:
                             value: 0.0
                         offset:
                             value: 0.0
-                    input_ports:
-                        INPUT: {}
-                    output_ports:
                         V:
                             value: 0
                         OUTPUT:
                             value: 1/(1+math.exp(-1*gain*(INPUT + bias - x_0)+offset))
+                    input_ports:
+                        INPUT: {}
+                    output_ports:
+                        V:
+                            value: V
+                        OUTPUT:
+                            value: OUTPUT
                     notes: "Cell: [Cell (b), lems_source_file = PNL.xml] is defined\
                         \ in PNL.xml and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n\
                         \   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0',\
@@ -66,13 +78,17 @@ ABCD:
                             value: 1.0
                         offset:
                             value: 0.0
-                    input_ports:
-                        INPUT: {}
-                    output_ports:
                         V:
                             value: 0
                         OUTPUT:
                             value: scale * math.exp((rate * INPUT) + bias) + offset
+                    input_ports:
+                        INPUT: {}
+                    output_ports:
+                        V:
+                            value: V
+                        OUTPUT:
+                            value: OUTPUT
                     notes: "Cell: [Cell (c), lems_source_file = PNL.xml] is defined\
                         \ in PNL.xml and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n\
                         \   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0',\
@@ -85,11 +101,15 @@ ABCD:
                             value: 0.1
                         OUTPUT:
                             time_derivative: (rate * INPUT) / time_step_size
+                        V:
+                            value: 0
                     input_ports:
                         INPUT: {}
                     output_ports:
+                        OUTPUT:
+                            value: OUTPUT
                         V:
-                            value: 0
+                            value: V
                     notes: "Cell: [Cell (d), lems_source_file = PNL.xml] is defined\
                         \ in PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n\
                         \   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n\

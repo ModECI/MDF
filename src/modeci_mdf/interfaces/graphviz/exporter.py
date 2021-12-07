@@ -94,13 +94,12 @@ def match_in_expr(expr, node):
     if type(expr) != str:
         return "%s" % _val_info(expr)
     else:
-        print("Checking %s" % (expr))
+        # print("Checking %s" % (expr))
 
         expr = " %s " % expr
 
         def _replace_var(v, expr, format_method):
-            print(f"Replacing {v} in {expr}")
-
+            # print(f"Replacing {v} in {expr}")
             if expr == v:
                 return format_method(expr)
             can_start = [" ", "+", "-", "*", "/", "("]
@@ -122,7 +121,7 @@ def match_in_expr(expr, node):
         for op in node.output_ports:
             expr = _replace_var(op.id, expr, format_output)
 
-        print("Checked %s" % (expr))
+        # print("Checked %s" % (expr))
 
         return expr.strip()
 
@@ -196,7 +195,10 @@ def mdf_to_graphviz(
             if node.parameters and len(node.parameters) > 0:
 
                 for p in node.parameters:
-                    stateful = p.is_stateful()
+                    try:
+                        stateful = p.is_stateful()
+                    except:
+                        stateful = False
                     if p.function is not None:
                         argstr = (
                             ", ".join(

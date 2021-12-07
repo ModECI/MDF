@@ -54,8 +54,10 @@ FN:
                     input_ports:
                         INPUT: {}
                     output_ports:
-                        OUTPUT:
+                        V:
                             value: V
+                        W:
+                            value: W
                     notes: "Cell: [Cell (fn), lems_source_file = FN_Definitions.xml,\
                         \ parameters = {'initial_w': 'initial_w', 'initial_v': 'initial_v',\
                         \ 'a_v': 'a_v', 'b_v': 'b_v', 'c_v': 'c_v', 'd_v': 'd_v',\

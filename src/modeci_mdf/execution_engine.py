@@ -395,6 +395,7 @@ class EvaluableParameter:
         self.verbose = verbose
         self.parameter = parameter
 
+        """
         if self.parameter.default_initial_value is not None:
             if is_number(self.parameter.default_initial_value):
 
@@ -410,7 +411,8 @@ class EvaluableParameter:
                 except Exception:
                     self.curr_value = self.parameter.default_initial_value
         else:
-            self.curr_value = None
+            self.curr_value = None"""
+        self.curr_value = None
 
     def get_current_value(
         self, parameters: Dict[str, Any], array_format: str = FORMAT_DEFAULT
@@ -426,15 +428,23 @@ class EvaluableParameter:
         Returns:
             The evaluated value of the parameter.
         """
-
         # FIXME: Shouldn't this just call self.evaluate, seems like there is redundant code here?
         if self.curr_value is None:
-
-            if self.parameter.value is not None:
+            if (
+                self.parameter.value is not None
+                or self.parameter.default_initial_value is not None
+            ):
                 if self.parameter.is_stateful():
+                    if self.verbose:
+                        print(f"    Initial eval of <{self.parameter}>  ")
 
                     if self.parameter.default_initial_value is not None:
-                        return self.parameter.default_initial_value
+                        return evaluate_expr(
+                            self.parameter.default_initial_value,
+                            parameters,
+                            verbose=False,
+                            array_format=array_format,
+                        )
                     else:
                         return self.DEFAULT_INIT_VALUE
                 else:
@@ -500,10 +510,12 @@ class EvaluableParameter:
                     )
                     continue_eval = False
                     break
-                print(
-                    " --- %s: %s = %s (continuing: %s)"
-                    % (condition.id, condition.test, test, continue_eval)
-                )
+
+                if self.verbose:
+                    print(
+                        " --- %s: %s = %s (continuing: %s)"
+                        % (condition.id, condition.test, test, continue_eval)
+                    )
 
         if continue_eval:
             if self.parameter.value is not None:
@@ -795,7 +807,9 @@ class EvaluableNode:
                     )
                 else:
                     all_funcs.append(f)
+
         all_params_to_check = [p for p in node.parameters]
+
         if self.verbose:
             print("all_params_to_check: %s" % all_params_to_check)
 

@@ -241,3 +241,16 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/RNN/iaf
 /examples/MDF/RNN/rnn
 *_brian2.py
+/examples/NeuroML/FNmulti
+/examples/NeuroML/FNmulti.png
+/examples/NeuroML/Izh
+/examples/NeuroML/Izh.png
+/examples/NeuroML/Izh_multi
+/examples/NeuroML/Izh_multi.png
+/examples/NeuroML/Izh_run.png
+/examples/NeuroML/IzhikevichTest.mdf.json
+/examples/NeuroML/IzhikevichTest.net.nml
+/examples/NeuroML/IzhikevichTest.nmllite.yaml
+/examples/NeuroML/LEMS_SimIzhikevichTest.xml
+/examples/NeuroML/SimIzhikevichTest.json
+/examples/NeuroML/SimIzhikevichTest.yaml

@@ -22,13 +22,11 @@
     <Attachments name="synapses" type="basePointCurrentDL"/>
     <EventPort name="spike" direction="out" description="Spike event"/>
     <Exposure name="W" dimension="none"/>
-    <Exposure name="OUTPUT" dimension="none"/>
     <Exposure name="INPUT" dimension="none"/>
     <Dynamics>
       <StateVariable name="V" dimension="none" exposure="V"/>
       <StateVariable name="W" dimension="none" exposure="W"/>
       <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add"/>
-      <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="V"/>
       <TimeDerivative variable="V" value="(a_v*V*V*V + (1+threshold)*b_v*V*V + (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT) / (time_constant_v*MSEC)"/>
       <TimeDerivative variable="W" value="(mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity) / (time_constant_w*MSEC)"/>
       <OnStart>

@@ -112,7 +112,7 @@ def main():
         while t_ext <= duration:
             times.append(t_ext)
             print("======   Evaluating at t = %s  ======" % (t_ext))
-            if t == 0:
+            if t_ext == 0:
                 eg.evaluate()  # replace with initialize?
             else:
                 eg.evaluate(time_increment=dt)
