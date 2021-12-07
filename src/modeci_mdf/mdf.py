@@ -103,8 +103,8 @@ class Model(MdfBaseWithId):
         """The graphs present in the model"""
         return self.__getattr__("graphs")
 
-    def _include_metadata(self):
-        """Information on the version of ModECI MDF"""
+    def _include_version_data(self):
+        """Information on the version of ModECI MDF & package"""
 
         from modeci_mdf import MODECI_MDF_VERSION
         from modeci_mdf import __version__
@@ -113,7 +113,7 @@ class Model(MdfBaseWithId):
         self.generating_application = "Python modeci-mdf v%s" % __version__
 
     # Overrides BaseWithId.to_json_file
-    def to_json_file(self, filename: str, include_metadata: bool = True) -> str:
+    def to_json_file(self, filename: str, include_version_data: bool = True) -> str:
         """Convert the file in MDF format to JSON format
 
          .. note::
@@ -121,33 +121,31 @@ class Model(MdfBaseWithId):
 
         Args:
             filename: file in MDF format (.mdf extension)
-            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
-                              benchmark results, and environments in which the specified model was originally implemented
+            include_version_data: Add info on the version of MDF & generating application
         Returns:
             The name of the generated JSON file
         """
 
-        if include_metadata:
-            self._include_metadata()
+        if include_version_data:
+            self._include_version_data()
 
         new_file = super().to_json_file(filename)
 
         return new_file
 
     # Overrides BaseWithId.to_yaml_file
-    def to_yaml_file(self, filename: str, include_metadata: bool = True) -> str:
+    def to_yaml_file(self, filename: str, include_version_data: bool = True) -> str:
         """Convert file in MDF format to yaml format
 
         Args:
             filename: File in MDF format (Filename extension: .mdf )
-            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
-                              benchmark results, and environments in which the specified model was originally implemented
+            include_version_data: Add info on the version of MDF & generating application
         Returns:
             The name of the generated yaml file
         """
 
-        if include_metadata:
-            self._include_metadata()
+        if include_version_data:
+            self._include_version_data()
 
         new_file = super().to_yaml_file(filename)
 
@@ -753,11 +751,13 @@ class ParameterCondition(MdfBase):
 
     def __init__(self, **kwargs):
 
-        self.add_allowed_field("test", "The boolean expression to evaluate", str)
+        self.add_allowed_field(
+            "test", "The boolean expression to evaluate", EvaluableExpression
+        )
         self.add_allowed_field(
             "value",
             "The new value of the Parameter if the test is true",
-            str,
+            EvaluableExpression,
         )
 
         super().__init__(**kwargs)
