@@ -21,6 +21,16 @@ with open("sphinx/source/api/Specification.md", "w") as d:
     d.write("%s\n" % comment)
     d.write(doc)
 
+
+doc = mod.generate_documentation(format="rst")
+
+with open("sphinx/source/api/Specification.rst", "w") as d:
+    d.write("=======================================\n")
+    d.write("Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
+    d.write("=======================================\n")
+    d.write("%s\n" % comment)
+    d.write(doc)
+
 doc = mod.generate_documentation(format="dict")
 
 doc = {
