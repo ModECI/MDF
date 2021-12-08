@@ -23,7 +23,7 @@ The implementation and dissemination of the MDF language and associated tools is
 
 <p align="center">
   <a href="examples/README.md">
-    <img alt="mdf interacts" width="400" src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/ModECI_MDF.png"/>
+    <img alt="mdf interacts" width="400" src="https://raw.githubusercontent.com/ModECI/MDF/development/examples/ModECI_MDF.png"/>
   </a>
 <br/><sup><i><b>Fig 1:</b> Some of the current and planned formats which MDF will interact with. Click on the image for more information.</i></sup></p>
 
