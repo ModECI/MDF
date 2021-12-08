@@ -1,4 +1,4 @@
-<p><img width="800" src="ModECI_MDF.svg"/></p>
+<p><img width="800" src="ModECI_MDF.png"/></p>
 
 # Examples of MDF files and conversions to target environments
 
