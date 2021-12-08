@@ -46,7 +46,7 @@ def execute(multi=False):
 
         size = 1
         max_amp = 5e-10
-        input = np.array([max_amp * (-1 + 2.0 * i / size) for i in range(size)])
+        input = np.array([max_amp * (-1 + 2.0e-10 * i / size) for i in range(size)])
         input = [1.0e-10]
         input_node = Node(id="input_node")
         input_node.parameters.append(Parameter(id="input_level", value=input))
@@ -106,7 +106,6 @@ def execute(multi=False):
                 uu[i] = []
             v = eg.enodes["izhPop_0"].evaluable_parameters["v"].curr_value[i]
             u = eg.enodes["izhPop_0"].evaluable_parameters["u"].curr_value[i]
-            u = 0
             vv[i].append(v)
             uu[i].append(u)
             if i == 0:
