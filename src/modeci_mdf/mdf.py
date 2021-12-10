@@ -614,10 +614,11 @@ class Parameter(MdfBaseWithId):
                 param_expr = sympy.simplify(e)
                 req_vars.extend([str(s) for s in param_expr.free_symbols])
             sf = self.id in req_vars
+            """
             print(
                 "Checking whether %s is stateful, %s: %s"
                 % (self, param_expr.free_symbols, sf)
-            )
+            )"""
             return sf
         return False
 
