@@ -1,245 +1,140 @@
-"""
-Functions for converting from MDF models to PyTorch models.
-"""
 import os
 import sys
 import h5py
 import importlib
 from collections import defaultdict
 from inspect import getmembers, signature, getsource, isclass
-
+import modeci_mdf
 import numpy as np
+import sympy
 
 import torch
 import torch.nn as nn
 
-from modeci_mdf.interfaces.pytorch import mod_torch_builtins as torch_builtins
+from modeci_mdf.functions.standard import mdf_functions
 
 from modeci_mdf.utils import load_mdf
 from modeci_mdf.execution_engine import EvaluableGraph
 
-
-def generate_initializer_call(func_class, params, idx=False):
-    """
-    Helper function to generate string in module.py. String will create an
-    instance of the torch object corresponding to the node function.
-
-    Function returns the string representation of this initialization.
-    """
-    settable_params = get_instance_params(func_class)
-
-    text = ""
-
-    for param in settable_params:
-        if param in params:
-
-            param_text = "nn.Parameter(torch.Tensor({}))".format(params[param])
-
-            if not idx:
-                text += f"\n\t\tself.function.{param} = {param_text}"
-            else:
-                text += f"\n\t\tself.function_list[-1].{param} = {param_text}"
-
-    return text
-
-
-def get_instance_params(funcname):
-    """
-    Helper function called by `generate_initializer_call`. Function creates a
-    dummy object of type specified in `generate_initializer_call`, which will
-    most likely be a pytorch builtin.
-
-    Dummy object can then be introspected to create a list of parameters
-    necessary to construct the object.
-
-    Funtion returns list of parameters so they can be matched to available
-    parameters when constructing script.
-    """
-    sig = signature(funcname)
-    args = []
-    for param in sig.parameters.values():
-        if "=" not in str(param):
-            arg_type = param.annotation
-            if arg_type == int:
-                args.append(1)
-            elif arg_type == list:
-                args.append([1])
-            elif arg_type == torch.Tensor:
-                args.append(torch.Tensor([1]))
-    dummy = funcname(*args)
-
-    params = []
-
-    for member in getmembers(dummy):
-        name, member_type = member
-        if type(member_type) == nn.parameter.Parameter:
-            params.append(name)
-    del dummy
-
-    return params
+not_self = set()
+param_set = set()
+graph_input = []
 
 
 def get_module_declaration_text(
     name, node_dict, execution_order, declared_module_types
 ):
     """
-    Helper function to generate text for module.py. Generated text specifies the
-    definition of class that will form the pytorch model, including __init__
-    method and forward method.
+    name:Name of the node
+    node_dict: dictionary with attributes of the node such as function and parameters
 
-    Returns string of the class definition with parameters and arguments
-    assigned.
     """
-    declaration_text = (
-        "\nclass {}(nn.Module):"
-        "\n\tdef __init__(self):"
-        "\n\t\tsuper().__init__()"
-        "\n\t\tself.calls = 0"
-    ).format(name)
+    FLAG = 0
+
+    declaration_text = ("\nclass {}(nn.Module):").format(name)
+    constructor_info = ()
 
     functions = node_dict["functions"]
     parameters = node_dict["parameters"]
+    output_ports = node_dict["output_ports"]
 
-    # Single function node
-    if len(functions) == 1:
+    if parameters and not functions:
+        declaration_text += "\n\tdef __init__(self,"
+        for parameter in parameters:
+            if parameter.id == "input_level":
+                graph_input.append(parameter.value)
+            if not parameter.function:
+                param_set.add(parameter.id)
+            if not parameter.is_stateful() and not parameter.function:
+                declaration_text += f"{parameter.id}=torch.tensor({parameter.value}),"
+            elif parameter.is_stateful():
+                if parameter.value:
+                    declaration_text += "{}=torch.tensor({}),".format(parameter.id, 0)
+                else:
+                    if (
+                        parameter.default_initial_value == "str"
+                        and parameter.default_initial_value in param_set
+                    ):
+                        declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value.value}),"
+                    else:
+                        declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value}),"
+        declaration_text += "):"
+        declaration_text += "\n\t\tsuper().__init__()"
+        for parameter in parameters:
+            if not parameter.function:
+                declaration_text += f"\n\t\tself.{parameter.id}={parameter.id}"
+        declaration_text += "\n\t\tself.{}={}".format(
+            "execution_count", "torch.tensor(0)"
+        )
+        declaration_text += "\n\tdef forward(self,"
+        for parameter in parameters:
+            if parameter.function:
+                not_self.add(parameter.id)
+                for arg in mdf_functions[parameter.function]["arguments"]:
+                    if arg not in param_set:
+                        declaration_text += arg
 
-        current_function = functions[0]
-        function_name = current_function.id
-        function_type = current_function.function
-        function_args = current_function.args
+        declaration_text += "):"
+        declaration_text += "\n\t\tself.{}=self.{}".format(
+            "execution_count", "execution_count+torch.tensor(1)"
+        )
+        for parameter in parameters:
+            if parameter.is_stateful() and not parameter.function:
+                if parameter.value:
+                    declaration_text += "\n\t\tself.{}={}".format(
+                        parameter.id, sym(parameter.value)
+                    )
+                elif parameter.time_derivative:
+                    declaration_text += "\n\t\tself.{}={}".format(
+                        parameter.id, sym(parameter.time_derivative)
+                    )
 
-        # TODO: Expand alias_table and move to separate module
-        alias_table = {
-            "matmul": "matmul",
-            "conv_2d": "conv2d",
-            "add": "add",
-            "argmax": "argmax",
-        }
+            if parameter.function:
+                declaration_text += f"\n\t\t{parameter.id}="
+                if parameter.function in mdf_functions:
+                    exp = mdf_functions[parameter.function]["expression_string"]
+                    exp = sym(exp)
+                declaration_text += exp
 
-        function_type_alias = str(function_type).lower()
-
-        if function_type_alias in alias_table:
-            function_type = alias_table[function_type_alias]
-
-        # For torch builtins implemented as modules
-        if function_type in torch_builtins.__all__:
-            function_object = getattr(torch_builtins, function_type)
-
-            # Grab source code and prepend to text
-            if function_type not in declared_module_types:
-                declaration_text = "\n" + getsource(function_object) + declaration_text
-                declared_module_types.add(function_type)
-            declaration_text += f"\n\t\tself.function = {function_type}()"
-
-            # Get the signature to call this module
-            source_string = getsource(function_object)
-            args = source_string.split("forward(")[1].split("):")[0].split(", ")[1:]
-            # annotated_args = ["{}:{}".format(k, function_args[k]) for k in args]
-            # call_signature = "{}({})".format(function_name, ",".join(args))
-
-            constructor_info = ("builtin", function_name, function_type, args)
-
-            # Make a forward call
-            declaration_text += "\n\tdef forward(self, {}):".format(",".join(args))
-            declaration_text += "\n\t\treturn self.function({})".format(",".join(args))
-
+        if output_ports[0].value in not_self:
+            declaration_text += "\n\t\treturn {}".format(output_ports[0].value)
         else:
-            # Get torch.nn module
-            function_object = None
-            for class_tup in getmembers(nn, isclass):
-                if class_tup[0].lower() == function_type.lower():
-                    function_type = class_tup[0]
-                    function_object = class_tup[1]
-                    break
-            constructor_info = ("nn", function_name, function_type, [])
-
-            declaration_text += "\n\t\tself.function = nn.{}()".format(
-                str(function_object).split(".")[-1].split("'")[0]
-            )
-
-            # TODO: Resolve ordering of args
-            args = list(function_args.keys())
-            declaration_text += "\n\tdef forward(self, {}):".format(",".join(args))
-            declaration_text += "\n\t\treturn self.function({})".format(",".join(args))
-
-    # TODO: Fix for Multi function nodes
+            declaration_text += "\n\t\treturn {}".format(sym(output_ports[0].value))
 
     return declaration_text, constructor_info
 
 
+def sym(value):
+    for i in param_set:
+        if i in value:
+            value = value.replace(i, "self." + i)
+    return value
+
+
 def generate_main_forward(nodes, execution_order, constructor_calls):
-    """
-    Helper function to generate the main forward method that will specify
-    the execution of the pytorch model. This requires proper ordering of module
-    calls as well as preservation of variables.
-
-    For example:
-            x1 = Function1(input)
-            x2 = Function2(x1)
-
-    There are two categories of temporary variables to serve this purpose,
-    standard and non standard variables (svar and nsvar). Standard are considered
-    to be variable assignments that are not the product of an operation, ie:
-
-            svar_1 = 5
-
-    Where non standard variables are to preserve the hierarchy and flow of
-    information in the proper order.
-
-            svar_1 = 5
-            nsvar_1 = abs(svar_1)
-            svar_2 = 6
-            nsvar_2 = add(nsvar_1, svar_2)
-
-    Function returns the main forward call that will be used to define pytorch
-    model.
-    """
     node_dict = {node.id: node for node in nodes}
 
-    # Index intermediate variables
-    std_var_idx = 0
-    nstd_var_idx = 0
-
-    # Map intermediate variable name to the module that produced it
-    return_vars = defaultdict(list)
-
+    d = {}
     main_forward = "\n\tdef forward(self, input):"
+    for node in execution_order:
+        main_forward += f"\n\t\t val_{node}=torch.zeros_like(input)"
 
-    # TODO: Handle multi-input graphs
-    for idx, node_name in enumerate(execution_order):
+    for idx, node in enumerate(execution_order):
         if idx == 0:
-            standard_arg = "input"
+            main_forward += f"\n\n\t\t val_{node}=val_{node}+self.{node}()"
+            d[node] = f"val_{node}"
         else:
-            standard_arg = "svar_{}".format(std_var_idx - 1)
+            main_forward += f"\n\t\t val_{node}=val_{node}+self.{node}(val_{execution_order[idx-1]})"
+            d[node] = f"val_{node}"
+    main_forward += "\n\n\t\t return "
 
-        node = node_dict[node_name]
-        non_standard_args = []
-        if node.parameters:
-            for param in node.parameters:
-                np.set_printoptions(threshold=sys.maxsize)
-                str_commas = np.array2string(param.value, separator=", ")
-                # TODO: Resolve ordering
-                pre_expression = (
-                    f"\n\t\tnsvar_{nstd_var_idx} = torch.Tensor({str_commas})"
-                )
-                main_forward += pre_expression
-                non_standard_args.append(f"nsvar_{nstd_var_idx}")
-                nstd_var_idx += 1
-
-        args = [standard_arg]
-        args.extend(non_standard_args)
-
-        expression = "\n\t\tsvar_{} = self.{}({})".format(
-            std_var_idx, node_name, ",".join(args)
-        )
-        main_forward += expression
-        std_var_idx += 1
-    main_forward += "\n\t\treturn {}".format("svar_{}".format(std_var_idx - 1))
+    for node in execution_order:
+        main_forward += d[node] + ","
 
     return main_forward
 
 
-def build_script(nodes, execution_order, conditions=None):
+def build_script(nodes, execution_order, model_id1, conditions=None):
     """
     Helper function to create and assemble text components necessary to specify
     module.py importable model script.  These include:
@@ -254,8 +149,12 @@ def build_script(nodes, execution_order, conditions=None):
 
     Returns complete module.py script as a formatted string.
     """
+    model_id = model_id1 + ".onnx"
     script = ""
-    imports_string = "import torch" "\nimport torch.nn as nn"
+    imports_string = (
+        "import torch"
+        "\nimport torch.nn as nn\nimport onnx\nimport onnxruntime as rt\nfrom math import *"
+    )
 
     # Declarations string
     modules_declaration_text = ""
@@ -263,9 +162,17 @@ def build_script(nodes, execution_order, conditions=None):
     declared_module_types = set()
 
     for node in nodes:
-
-        id, funcs, params = node.id, node.functions, node.parameters
-        node_dict = {"functions": funcs, "parameters": params}
+        id, funcs, params, out_ports = (
+            node.id,
+            node.functions,
+            node.parameters,
+            node.output_ports,
+        )
+        node_dict = {
+            "functions": funcs,
+            "parameters": params,
+            "output_ports": out_ports,
+        }
 
         declaration_text, constructor_call = get_module_declaration_text(
             id, node_dict, execution_order, declared_module_types
@@ -275,58 +182,53 @@ def build_script(nodes, execution_order, conditions=None):
         constructor_calls[id] = constructor_call
 
     # Build Main call
-    main_call_declaration = (
-        "\nclass Model(nn.Module):" "\n\tdef __init__(self):" "\n\t\tsuper().__init__()"
-    )
 
-    for node in execution_order:
-        main_call_declaration += f"\n\t\tself.{node} = {node}()"
+    main_call_declaration = "\nclass Model(nn.Module):" "\n\tdef __init__(self,"
+    for node in nodes:
+        main_call_declaration += f"{node.id}" + ", "
+    main_call_declaration += "):" "\n\t\tsuper().__init__()"
+
+    for idx, node in enumerate(nodes):
+        main_call_declaration += f"\n\t\tself.{node.id} = {node.id}"
 
     # Build Main forward
     main_call_forward = generate_main_forward(nodes, execution_order, constructor_calls)
 
     # Compose script
+    if execution_order == []:
+        main_call_declaration = ""
+        main_call_forward = ""
+
     script += imports_string
     script += modules_declaration_text
     script += main_call_declaration
     script += main_call_forward
 
-    script += "\nmodel = Model()"
+    if len(nodes) == 1:
+        script += "f\nmodel={nodes[0].id}"
+        return script
+    script += "\nmodel = Model("
+    for node in nodes:
+        script += f"{node.id}={node.id}(),"
+    script += ")"
+    script += "\nmodel=torch.jit.script(model)"
+    script += f"\ndummy_input =torch.tensor{tuple(graph_input)}"
+    script += "\noutput = model(dummy_input)"
+    script += f"\ntorch.onnx.export(model,dummy_input,'{model_id}',verbose=True,input_names=[],example_outputs=output,opset_version=9)"
+    script += f"\nonnx_model = onnx.load('{model_id}')"
+    script += "\nonnx.checker.check_model(onnx_model)"
+    script += f"\nsess = rt.InferenceSession('{model_id}')"
+    script += "\nres = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})"
+    # script+='\nprint(f'Output calculated by onnxruntime (input: {dummy_input}):  {res}')'
+
     return script
 
 
-def _generate_scripts_from_json(model_input):
-    """
-    Helper function to parse MDF objects from MDF json representation as well
-    as load the h5 weights for large weight matrices. Uses MDF scheduler to
-    determine proper ordering of nodes, and calls `build_script`.
-
-    Returns dictionary of scripts where key = name of mdf model, value is string
-    representation of script.
-    """
-    file_dir = os.path.dirname(model_input)
-
-    model = load_mdf(model_input)
+def _generate_scripts_from_model(mdf_model):
     scripts = {}
-
-    for graph in model.graphs:
+    model_id1 = mdf_model.id
+    for graph in mdf_model.graphs:
         nodes = graph.nodes
-        # Read weights.h5 if exists
-        if "weights.h5" in os.listdir(file_dir):
-            weight_dict = h5py.File(os.path.join(file_dir, "weights.h5"), "r")
-
-            # Hack to fix problem with HDF5 parameters
-            for node in graph.nodes:
-                if node.parameters:
-                    for param in node.parameters:
-                        param_key = param.id
-                        param_val = param.value
-                        if param_key in ["weight", "bias"] and type(param_val) == str:
-                            # Load and reassign
-                            array = weight_dict[param_val][:]
-                            # np.set_printoptions(threshold=sys.maxsize)
-                            param.value = array
-
         evaluable_graph = EvaluableGraph(graph, verbose=False)
         enodes = evaluable_graph.enodes
         edges = evaluable_graph.ordered_edges
@@ -341,15 +243,14 @@ def _generate_scripts_from_json(model_input):
             if idx == 0:
                 execution_order.append(edge.sender)
             execution_order.append(edge.receiver)
-
         # Build script
-        script = build_script(nodes, execution_order, conditions=conditions)
+        script = build_script(nodes, execution_order, model_id1, conditions=conditions)
         scripts[graph.id] = script
 
     return scripts
 
 
-def _script_to_model(script):
+def _script_to_model(script, model_id1):
     """
     Helper function to take the autogenerated module.py python script, and import
     it such that the pytorch model specified by this script is importable to the
@@ -360,7 +261,7 @@ def _script_to_model(script):
     import importlib.util
 
     # For testing, need to add prefix if calling from out of examples directory
-    module_path = os.path.join(os.getcwd(), os.path.dirname(sys.argv[0]), "module.py")
+    module_path = f"{model_id1}_pytorch.py"
 
     with open(module_path, mode="w") as f:
         f.write(script)
@@ -371,23 +272,21 @@ def _script_to_model(script):
 
     model = torch_module.model
 
-    os.remove(module_path)
-
     return model
 
 
-def mdf_to_pytorch(model_input, eval_models=True):
+def mdf_to_pytorch(mdf_model, eval_models=True):
     """
     Function loads and returns a pytorch model for all models specified in an
     mdf file.
 
     Returns a dictionary where key = model name, value = pytorch model object
     """
-    scripts = _generate_scripts_from_json(model_input)
+    scripts = _generate_scripts_from_model(mdf_model)
     models = {}
 
     for script_name, script in scripts.items():
-        model = _script_to_model(script)
+        model = _script_to_model(script, mdf_model.id)
 
         if eval_models:
             model.eval()
@@ -398,3 +297,11 @@ def mdf_to_pytorch(model_input, eval_models=True):
 
 
 __all__ = ["mdf_to_pytorch"]
+
+
+if __name__ == "__main__":
+    from pathlib import Path
+
+    model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/MDF/ABCD.json"
+    mdf_model = load_mdf(model_input)
+    pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False)
