@@ -1,3 +1,4 @@
+import collections
 import os
 import sys
 import h5py
@@ -37,6 +38,10 @@ def get_module_declaration_text(
     functions = node_dict["functions"]
     parameters = node_dict["parameters"]
     output_ports = node_dict["output_ports"]
+    function_set = set()
+    for parameter in parameters:
+        if parameter.function:
+            function_set.add(parameter)
 
     if parameters and not functions:
         declaration_text += "\n\tdef __init__(self,"
@@ -63,18 +68,23 @@ def get_module_declaration_text(
         for parameter in parameters:
             if not parameter.function:
                 declaration_text += f"\n\t\tself.{parameter.id}={parameter.id}"
+            elif parameter.function:
+                function_set.add(parameter)
+
         declaration_text += "\n\t\tself.{}={}".format(
             "execution_count", "torch.tensor(0)"
         )
         declaration_text += "\n\tdef forward(self,"
+        args_func = collections.defaultdict(list)
         for parameter in parameters:
             if parameter.function:
                 not_self.add(parameter.id)
                 for arg in mdf_functions[parameter.function]["arguments"]:
                     if arg not in param_set:
+                        args_func[parameter.function].append(arg)
                         declaration_text += arg
 
-        declaration_text += "):"
+        declaration_text += " ):"
         declaration_text += "\n\t\tself.{}=self.{}".format(
             "execution_count", "execution_count+torch.tensor(1)"
         )
@@ -93,6 +103,7 @@ def get_module_declaration_text(
                 declaration_text += f"\n\t\t{parameter.id}="
                 if parameter.function in mdf_functions:
                     exp = mdf_functions[parameter.function]["expression_string"]
+
                     exp = sym(exp)
                 declaration_text += exp
 
@@ -111,7 +122,7 @@ def sym(value):
     return value
 
 
-def generate_main_forward(nodes, execution_order, constructor_calls):
+def generate_main_forward(nodes, execution_order, d_e, constructor_calls):
     node_dict = {node.id: node for node in nodes}
 
     d = {}
@@ -119,13 +130,17 @@ def generate_main_forward(nodes, execution_order, constructor_calls):
     for node in execution_order:
         main_forward += f"\n\t\t val_{node}=torch.zeros_like(input)"
 
-    for idx, node in enumerate(execution_order):
-        if idx == 0:
+    for node, dependency_set in d_e.items():
+        if dependency_set == {}:
             main_forward += f"\n\n\t\t val_{node}=val_{node}+self.{node}()"
             d[node] = f"val_{node}"
         else:
-            main_forward += f"\n\t\t val_{node}=val_{node}+self.{node}(val_{execution_order[idx-1]})"
-            d[node] = f"val_{node}"
+            for k, v in dependency_set.items():
+                if v == None:
+                    main_forward += f"\n\t\t val_{node}=val_{node}+self.{node}(val_{k})"
+                else:
+                    main_forward += f"\n\t\t val_{node}=val_{node}+self.{node}(val_{k}*torch.tensor({v}))"
+                d[node] = f"val_{node}"
     main_forward += "\n\n\t\t return "
 
     for node in execution_order:
@@ -134,7 +149,7 @@ def generate_main_forward(nodes, execution_order, constructor_calls):
     return main_forward
 
 
-def build_script(nodes, execution_order, model_id1, conditions=None):
+def build_script(nodes, execution_order, model_id1, d_e, conditions=None):
     """
     Helper function to create and assemble text components necessary to specify
     module.py importable model script.  These include:
@@ -192,7 +207,9 @@ def build_script(nodes, execution_order, model_id1, conditions=None):
         main_call_declaration += f"\n\t\tself.{node.id} = {node.id}"
 
     # Build Main forward
-    main_call_forward = generate_main_forward(nodes, execution_order, constructor_calls)
+    main_call_forward = generate_main_forward(
+        nodes, execution_order, d_e, constructor_calls
+    )
 
     # Compose script
     if execution_order == []:
@@ -219,7 +236,6 @@ def build_script(nodes, execution_order, model_id1, conditions=None):
     script += "\nonnx.checker.check_model(onnx_model)"
     script += f"\nsess = rt.InferenceSession('{model_id}')"
     script += "\nres = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})"
-    # script+='\nprint(f'Output calculated by onnxruntime (input: {dummy_input}):  {res}')'
 
     return script
 
@@ -239,12 +255,26 @@ def _generate_scripts_from_model(mdf_model):
 
         # Use edges and nodes to construct execution order
         execution_order = []
+        depend_dict = graph.dependency_dict
+        d_e = {n.id: collections.defaultdict(dict) for n in graph.nodes}
+        for graph in mdf_model.graphs:
+            for edge in graph.edges:
+                sender = graph.get_node(edge.sender)
+                receiver = graph.get_node(edge.receiver)
+                if edge.parameters and "weight" in edge.parameters:
+                    d_e[receiver.id][sender.id] = edge.parameters["weight"]
+                else:
+                    d_e[receiver.id][sender.id] = None
+
         for idx, edge in enumerate(edges):
             if idx == 0:
                 execution_order.append(edge.sender)
             execution_order.append(edge.receiver)
+
         # Build script
-        script = build_script(nodes, execution_order, model_id1, conditions=conditions)
+        script = build_script(
+            nodes, execution_order, model_id1, d_e, conditions=conditions
+        )
         scripts[graph.id] = script
 
     return scripts
@@ -298,10 +328,10 @@ def mdf_to_pytorch(mdf_model, eval_models=True):
 
 __all__ = ["mdf_to_pytorch"]
 
-
 if __name__ == "__main__":
     from pathlib import Path
 
-    model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/MDF/ABCD.json"
+    model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/MDF/Arrays.json"
     mdf_model = load_mdf(model_input)
+
     pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False)
