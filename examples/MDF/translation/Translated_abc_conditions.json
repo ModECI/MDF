@@ -1,0 +1,173 @@
+{
+    "abc_conditions": {
+        "format": "ModECI MDF v0.3",
+        "generating_application": "Python modeci-mdf v0.3.3",
+        "graphs": {
+            "abc_conditions_example": {
+                "conditions": {
+                    "node_specific": {
+                        "input0": {
+                            "type": "BeforeNCalls",
+                            "args": {
+                                "dependencies": "input0",
+                                "n": 1
+                            }
+                        },
+                        "A": {
+                            "type": "Always",
+                            "args": {}
+                        },
+                        "B": {
+                            "type": "EveryNCalls",
+                            "args": {
+                                "dependencies": "A",
+                                "n": 2
+                            }
+                        },
+                        "C": {
+                            "type": "EveryNCalls",
+                            "args": {
+                                "dependencies": "A",
+                                "n": 3
+                            }
+                        }
+                    },
+                    "termination": {
+                        "environment_state_update": {
+                            "type": "And",
+                            "args": {
+                                "dependencies": [
+                                    {
+                                        "type": "AfterNCalls",
+                                        "args": {
+                                            "dependencies": "C",
+                                            "n": 2
+                                        }
+                                    },
+                                    {
+                                        "type": "JustRan",
+                                        "args": {
+                                            "dependencies": "A"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "nodes": {
+                    "input0": {
+                        "parameters": {
+                            "input_level": {
+                                "value": 0.0
+                            },
+                            "count_0": {
+                                "value": "evaluated_input0_count_0_next_value",
+                                "default_initial_value": 0
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_input0_count_0_next_value": {
+                                "value": "count_0 + 1"
+                            }
+                        }
+                    },
+                    "A": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "parameters": {
+                            "count_A": {
+                                "value": "evaluated_A_count_A_next_value",
+                                "default_initial_value": 0
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "input_port1"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_A_count_A_next_value": {
+                                "value": "count_A + 1"
+                            }
+                        }
+                    },
+                    "B": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "parameters": {
+                            "count_B": {
+                                "value": "evaluated_B_count_B_next_value",
+                                "default_initial_value": 0
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "input_port1"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_B_count_B_next_value": {
+                                "value": "count_B + 1"
+                            }
+                        }
+                    },
+                    "C": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": "(1,)"
+                            }
+                        },
+                        "parameters": {
+                            "count_C": {
+                                "value": "evaluated_C_count_C_next_value",
+                                "default_initial_value": 0
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "input_port1"
+                            }
+                        },
+                        "functions": {
+                            "evaluated_C_count_C_next_value": {
+                                "value": "count_C+ 1"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_input0_A": {
+                        "sender": "input0",
+                        "receiver": "A",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_A_B": {
+                        "sender": "A",
+                        "receiver": "B",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_A_C": {
+                        "sender": "A",
+                        "receiver": "C",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    }
+                }
+            }
+        }
+    }
+}

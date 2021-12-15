@@ -3,7 +3,7 @@ from modeci_mdf.mdf import Node, Edge, OutputPort
 
 from modeci_mdf.execution_engine import EvaluableGraph
 
-from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 import sys
 import numpy as np
 

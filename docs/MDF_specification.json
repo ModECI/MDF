@@ -149,7 +149,7 @@
             "definition": "A single value which is evaluated as a function of values on _InputPort_s and other Functions",
             "allowed_parameters": {
                 "function": {
-                    "type": "str",
+                    "type": "dict",
                     "description": "Which of the in-build MDF functions (linear etc.) this uses"
                 },
                 "value": {
@@ -178,7 +178,7 @@
             "definition": "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative",
             "allowed_parameters": {
                 "default_initial_value": {
-                    "type": "str",
+                    "type": "EvaluableExpression",
                     "description": "The initial value of the parameter"
                 },
                 "value": {

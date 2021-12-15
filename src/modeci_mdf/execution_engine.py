@@ -26,6 +26,10 @@ import onnxruntime
 from modeci_mdf.functions.standard import mdf_functions, create_python_expression
 from modeci_mdf.utils import is_number
 
+from modelspec.utils import evaluate as evaluate_params_modelspec
+from modelspec.utils import _params_info, _val_info
+from modelspec.utils import FORMAT_NUMPY
+
 from collections import OrderedDict
 from typing import Union, List, Dict, Optional, Any
 from modeci_mdf.mdf import (
@@ -42,149 +46,10 @@ from modeci_mdf.mdf import (
 import modeci_mdf.functions.onnx as onnx_ops
 import modeci_mdf.functions.actr as actr_funcs
 
-# Ideas in development...
-FORMAT_NUMPY = "numpy"
-FORMAT_TENSORFLOW = "tensorflow"
+
 FORMAT_DEFAULT = FORMAT_NUMPY
 
 KNOWN_PARAMETERS = ["constant"]
-
-
-def _val_info(param_val):
-    if type(param_val) == np.ndarray:
-        pp = "%s" % (np.array2string(param_val, threshold=4, edgeitems=1))
-        pp = pp.replace("\n", "")
-        pp += f" (NP {param_val.shape} {param_val.dtype})"
-    elif type(param_val).__name__ == "EagerTensor":
-        pp = "%s" % param_val
-        pp = pp.replace("\n", "")
-        # pp+=' (TF %s %s)'%(param_val.shape,param_val.dtype)
-    elif type(param_val) == tuple:
-        # If param_val is a tuple, recursively print its elements
-        # separated by commas and wrapped in parentheses
-        pp = "(" + ", ".join([_val_info(el) for el in param_val]) + ")"
-    else:
-        pp = "%s" % param_val
-        t = type(param_val)
-        if not (t == int or t == float):
-            pp += "(%s)" % (t if type(t) == str else t.__name__)
-    return pp
-
-
-def _params_info(parameters):
-    """
-    Short info on names, values and types in parameter list
-    """
-    pi = "["
-    if parameters is not None:
-        for p in parameters:
-            if not p == "__builtins__":
-                param_val = parameters[p]
-                pp = _val_info(param_val)
-
-                pi += f"{p}={pp}, "
-        pi = pi[:-2]
-    pi += "]"
-    return pi
-
-
-def _evaluate_expr(
-    expr, parameters={}, rng=None, array_format=FORMAT_NUMPY, verbose=False
-):
-    """
-    Evaluate a general string like expression (e.g. "2 * weight") using a dict
-    of parameters (e.g. {'weight':10}). Returns floats, ints, etc. if that's what's
-    given in expr
-    """
-
-    if array_format == FORMAT_TENSORFLOW:
-        import tensorflow as tf
-
-    print(
-        " > Evaluating: [%s] which is a: %s, vs parameters: %s (using %s arrays)..."
-        % (expr, type(expr).__name__, _params_info(parameters), array_format),
-        verbose,
-    )
-    try:
-        if type(expr) == str and expr in parameters:
-            expr = parameters[
-                expr
-            ]  # replace with the value in parameters & check whether it's float/int...
-            print("Using for that param: %s" % _val_info(expr), verbose)
-
-        if type(expr) == str:
-            try:
-                if array_format == FORMAT_TENSORFLOW:
-                    expr = tf.constant(int(expr))
-                else:
-                    expr = int(expr)
-            except:
-                pass
-            try:
-                if array_format == FORMAT_TENSORFLOW:
-                    expr = tf.constant(float(expr))
-                else:
-                    expr = float(expr)
-            except:
-                pass
-
-        if type(expr) == list:
-            print("Returning a list in format: %s" % array_format, verbose)
-            if array_format == FORMAT_TENSORFLOW:
-                return tf.constant(expr, dtype=tf.float64)
-            else:
-                return np.array(expr)
-
-        if type(expr) == np.ndarray:
-            print("Returning a numpy array in format: %s" % array_format, verbose)
-            if array_format == FORMAT_TENSORFLOW:
-                return tf.convert_to_tensor(expr, dtype=tf.float64)
-            else:
-                return expr
-
-        if "Tensor" in type(expr).__name__:
-            print("Returning a tensorflow Tensor in format: %s" % array_format, verbose)
-            if array_format == FORMAT_NUMPY:
-                return expr.numpy()
-            else:
-                return expr
-
-        if int(expr) == expr:
-            print("Returning int: %s" % int(expr), verbose)
-            return int(expr)
-        else:  # will have failed if not number
-            print("Returning float: %s" % expr, verbose)
-            return float(expr)
-    except:
-        try:
-            if rng:
-                expr = expr.replace("random()", "rng.random()")
-                parameters["rng"] = rng
-
-            if type(expr) == str and "math." in expr:
-                parameters["math"] = math
-            if type(expr) == str and "numpy." in expr:
-                parameters["numpy"] = np
-
-            print(
-                "Trying to eval [%s] with Python using %s..."
-                % (expr, parameters.keys()),
-                verbose,
-            )
-
-            v = eval(expr, parameters)
-            print("Evaluated with Python: {} = {}".format(expr, _val_info(v)), verbose)
-            if (type(v) == float or type(v) == str) and int(v) == v:
-                print("Returning int: %s" % int(v), verbose)
-
-                if array_format == FORMAT_TENSORFLOW:
-                    return tf.constant(int(v))
-                else:
-                    return int(v)
-            return v
-        except Exception as e:
-            print(f"Returning without altering: {expr} (error: {e})", verbose)
-            return expr
 
 
 def evaluate_expr(
@@ -207,7 +72,9 @@ def evaluate_expr(
 
     """
 
-    e = _evaluate_expr(expr, func_params, array_format=array_format, verbose=verbose)
+    e = evaluate_params_modelspec(
+        expr, func_params, array_format=array_format, verbose=verbose
+    )
     if type(e) == str and e not in KNOWN_PARAMETERS:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
@@ -431,20 +298,28 @@ class EvaluableFunction:
 
         expr = None
 
+        # print("functions value and function>>>", self.function.value, self.function.function)
+
+        # func_val  = self.function.value
+
         if self.function.function:
 
             for f in mdf_functions:
-                if self.function.function == f:
+
+                if f in self.function.function.keys():
+
                     expr = create_python_expression(
                         mdf_functions[f]["expression_string"]
                     )
 
-        else:
+                    break
+
+        if expr is None:
             expr = self.function.value
-            # raise "Unknown function: {}. Known functions: {}".format(
-            #    self.function.function,
-            #    mdf_functions.keys,
-            # )
+        #     #raise "Unknown function: {}. Known functions: {}".format(
+        #     #    self.function.function,
+        #     #    mdf_functions.keys,
+        #     #)
 
         func_params = {}
         func_params.update(parameters)
@@ -453,23 +328,29 @@ class EvaluableFunction:
                 "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
-        if self.function.args:
+        if self.function.function:
 
-            for arg in self.function.args:
-                func_params[arg] = evaluate_expr(
-                    self.function.args[arg],
-                    func_params,
-                    verbose=False,
-                    array_format=array_format,
-                )
-                if self.verbose:
-                    print(
-                        "      Arg: {} became: {}".format(
-                            arg, _val_info(func_params[arg])
+            for f in mdf_functions:
+
+                if f in self.function.function.keys():
+
+                    for arg in self.function.function[f].keys():
+
+                        func_params[arg] = evaluate_expr(
+                            self.function.function[f][arg],
+                            func_params,
+                            verbose=False,
+                            array_format=array_format,
                         )
-                    )
+                        if self.verbose:
+                            print(
+                                "      Arg: {} became: {}".format(
+                                    arg, _val_info(func_params[arg])
+                                )
+                            )
+                    break
 
-        # If this is an ONNX operation, evaluate it without neuromlite.
+        # If this is an ONNX operation, evaluate it without modelspec.
 
         if "onnx_ops." in expr:
             if self.verbose:
@@ -645,7 +526,7 @@ class EvaluableParameter:
                         )
                     )
 
-            # If this is an ONNX operation, evaluate it without neuromlite.
+            # If this is an ONNX operation, evaluate it without modelspec.
             if "onnx_ops." in expr:
                 if self.verbose:
                     print(f"{self.parameter.id} is evaluating ONNX function {expr}")
@@ -1296,9 +1177,6 @@ class EvaluableGraph:
                     )
 
 
-from neuromllite.utils import FORMAT_NUMPY
-
-
 def main(example_file: str, array_format: str = FORMAT_NUMPY, verbose: bool = False):
     """
     Main entry point for execution engine.
@@ -1339,7 +1217,7 @@ if __name__ == "__main__":
     else:
         verbose = False
 
-    from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+    from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
     format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
 

@@ -116,7 +116,7 @@ def main():
 
     if "-run" in sys.argv:
 
-        from neuromllite.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+        from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         print("------------------")
