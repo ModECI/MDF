@@ -150,13 +150,13 @@ output = model(dummy_input)
 torch.onnx.export(
     model,
     dummy_input,
-    "ABCD.onnx",
+    "translated_ABCD.onnx",
     verbose=True,
     input_names=[],
     example_outputs=output,
     opset_version=9,
 )
-onnx_model = onnx.load("ABCD.onnx")
+onnx_model = onnx.load("translated_ABCD.onnx")
 onnx.checker.check_model(onnx_model)
-sess = rt.InferenceSession("ABCD.onnx")
+sess = rt.InferenceSession("translated_ABCD.onnx")
 res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})

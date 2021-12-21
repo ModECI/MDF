@@ -8,7 +8,7 @@ from math import *
 class input_node(nn.Module):
     def __init__(
         self,
-        input_level=torch.tensor([[1, 2.0], [3, 4]]),
+        input_level=torch.tensor(0.5),
     ):
         super().__init__()
         self.input_level = input_level
@@ -21,67 +21,70 @@ class input_node(nn.Module):
         return self.input_level
 
 
-class middle_node(nn.Module):
+class processing_node(nn.Module):
     def __init__(
         self,
-        slope=torch.tensor(0.5),
-        intercept=torch.tensor([[0.0, 1.0], [2.0, 2.0]]),
+        lin_slope=torch.tensor(0.5),
+        lin_intercept=torch.tensor(0),
+        log_gain=torch.tensor(3),
     ):
         super().__init__()
-        self.slope = slope
-        self.intercept = intercept
+        self.lin_slope = lin_slope
+        self.lin_intercept = lin_intercept
+        self.log_gain = log_gain
         self.execution_count = torch.tensor(0)
 
     def forward(self, input_port1):
         self.execution_count = self.execution_count + torch.tensor(1)
-        linear_1 = input_port1 * self.slope + self.intercept
-        return linear_1
+        linear_1 = input_port1 * self.lin_slope + self.lin_intercept
+        logistic_1 = 1 / (1 + exp(-1 * self.log_gain * (linear_1 + 0) + 0))
+        return logistic_1
 
 
 class Model(nn.Module):
     def __init__(
         self,
         input_node,
-        middle_node,
+        processing_node,
     ):
         super().__init__()
         self.input_node = input_node
-        self.middle_node = middle_node
+        self.processing_node = processing_node
 
     def forward(self, input):
         val_input_node = torch.zeros_like(input)
-        val_middle_node = torch.zeros_like(input)
+        val_processing_node = torch.zeros_like(input)
 
         val_input_node = val_input_node + self.input_node()
-        val_middle_node = val_middle_node + self.middle_node(
-            val_input_node * torch.tensor([[1, 0], [0, 1]])
+        val_processing_node = val_processing_node + self.processing_node(
+            val_input_node * torch.tensor(0.55)
         )
 
         return (
             val_input_node,
-            val_middle_node,
+            val_processing_node,
         )
 
 
 model = Model(
     input_node=input_node(),
-    middle_node=middle_node(),
+    processing_node=processing_node(),
 )
 model = torch.jit.script(model)
 dummy_input = torch.tensor(
-    [[1, 2.0], [3, 4]],
+    0.5,
 )
 output = model(dummy_input)
 torch.onnx.export(
     model,
     dummy_input,
-    "Arrays.onnx",
+    "Simple.onnx",
     verbose=True,
     input_names=[],
     example_outputs=output,
     opset_version=9,
 )
-onnx_model = onnx.load("Arrays.onnx")
+onnx_model = onnx.load("Simple.onnx")
 onnx.checker.check_model(onnx_model)
-sess = rt.InferenceSession("Arrays.onnx")
+sess = rt.InferenceSession("Simple.onnx")
 res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
