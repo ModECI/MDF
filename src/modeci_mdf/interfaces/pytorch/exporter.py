@@ -26,7 +26,7 @@ graph_input = []
 
 
 def get_module_declaration_text(
-    name: str, node_dict: dict[Any, Any], execution_order: list[str]
+    name: str, node_dict: Dict[Any, Any], execution_order: List[str]
 ):
     """
     Helper function to generate string in module.py. String will create an
@@ -140,7 +140,7 @@ def func_args(exp, arg_dict):
 
 # Define the forward method of the main function--graph
 def generate_main_forward(
-    nodes: list["node"], execution_order: list[str], d_e: dict[str, Any]
+    nodes: List["node"], execution_order: List[str], d_e: Dict[str, Any]
 ):
 
     """Helper function to generate the main forward method that will specify
@@ -188,10 +188,10 @@ def generate_main_forward(
 
 # Create Script
 def build_script(
-    nodes: list["node"],
-    execution_order: list[str],
+    nodes: List["node"],
+    execution_order: List[str],
     model_id1: str,
-    d_e: dict[str, Any],
+    d_e: Dict[str, Any],
     conditions=None,
 ):
     """Helper function to create and assemble text components necessary to specify
@@ -387,6 +387,6 @@ __all__ = ["mdf_to_pytorch"]
 if __name__ == "__main__":
     from pathlib import Path
 
-    model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/PyTorch/Inception.json"
-    mdf_model = load_mdf(model_input)
-    pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False)
+    # model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/PyTorch/Inception.json"
+    # mdf_model = load_mdf(model_input)
+    # pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False)
