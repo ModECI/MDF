@@ -1,3 +1,6 @@
+"""
+Functions for converting from MDF models version: mdf.0 to PyTorch
+"""
 import collections
 import os
 import sys
@@ -5,6 +8,7 @@ import h5py
 import importlib
 from collections import defaultdict
 from inspect import getmembers, signature, getsource, isclass
+from typing import Union, Dict, Any, Tuple, List, Callable
 import modeci_mdf
 import numpy as np
 import sympy
@@ -20,12 +24,23 @@ graph_input = []
 
 
 def get_module_declaration_text(
-    name, node_dict, execution_order, declared_module_types
+    name: str, node_dict: Dict[Any, Any], execution_order: list[str]
 ):
     """
-    name:Name of the node
-    node_dict: dictionary with attributes of the node such as function and parameters
+    Helper function to generate string in module.py. String will create an
+    instance of the torch object corresponding to the node and function at node as method
+    Function returns the string representation of this initialization.
 
+    Generated text specifies the definition of class that will form the pytorch model,
+    including __init__method and forward method.
+    Returns string of the class definition with parameters and arguments assigned.
+
+    Args:
+        name: Name of the node
+        node_dict: dictionary with attributes of the node such as Input Ports, functions, parameters and
+        execution_order: List of nodes in the order of execution
+
+    Returns: Script in PyTorch schema
     """
 
     declaration_text = ("\nclass {}(nn.Module):").format(name)
@@ -103,7 +118,7 @@ def get_module_declaration_text(
         else:
             declaration_text += "\n\t\treturn {}".format(sym(output_ports[0].value))
 
-    return declaration_text, constructor_info
+    return declaration_text
 
 
 # Add self to parameters
@@ -122,8 +137,22 @@ def func_args(exp, arg_dict):
 
 
 # Define the forward method of the main function--graph
-def generate_main_forward(nodes, execution_order, d_e, constructor_calls):
-    node_dict = {node.id: node for node in nodes}
+def generate_main_forward(
+    nodes: list["node"], execution_order: list[str], d_e: Dict[str, Any]
+):
+
+    """Helper function to generate the main forward method that will specify
+    the execution of the pytorch model. This requires proper ordering of module
+    calls as well as preservation of variables.
+
+    Args:
+        nodes: list of nodes in the graph
+        execution_order: List of nodes in the order of execution
+        d_e: Weights on edges stored in dict format
+
+    Returns: Function returns the main forward call that will be used to define pytorch
+    model
+    """
 
     d = {}
     main_forward = "\n\tdef forward(self, input):"
@@ -154,20 +183,28 @@ def generate_main_forward(nodes, execution_order, d_e, constructor_calls):
 
 
 # Create Script
-def build_script(nodes, execution_order, model_id1, d_e, conditions=None):
-    """
-    Helper function to create and assemble text components necessary to specify
+def build_script(
+    nodes: list["node"],
+    execution_order: list[str],
+    model_id1: str,
+    d_e: Dict[str, Any],
+    conditions=None,
+):
+    """Helper function to create and assemble text components necessary to specify
     module.py importable model script.  These include:
-
             * Module declarations
                     * Initialization of functions
                     * Definition of forward function
-
             * Model main call declaration:
                     * Initialization of subcomponents
                     * Forward function logic
-
-    Returns complete module.py script as a formatted string.
+    Args:
+        nodes: list of nodes in the graph
+        execution_order: List of nodes in the order of execution
+        d_e: Weights on edges stored in dict format
+        model_id1: id of the model to be converted
+        conditions:
+    Returns: complete module.py script as a formatted string
     """
     model_id = "translated_" + model_id1 + ".onnx"
     script = ""
@@ -178,8 +215,6 @@ def build_script(nodes, execution_order, model_id1, d_e, conditions=None):
 
     # Declarations string
     modules_declaration_text = ""
-    constructor_calls = {}
-    declared_module_types = set()
 
     for node in nodes:
         id, funcs, params, out_ports, input_ports = (
@@ -195,16 +230,10 @@ def build_script(nodes, execution_order, model_id1, d_e, conditions=None):
             "output_ports": out_ports,
             "input_ports": input_ports,
         }
-
-        declaration_text, constructor_call = get_module_declaration_text(
-            id, node_dict, execution_order, declared_module_types
-        )
-
+        declaration_text = get_module_declaration_text(id, node_dict, execution_order)
         modules_declaration_text += declaration_text
-        constructor_calls[id] = constructor_call
 
     # Build Main call
-
     main_call_declaration = "\nclass Model(nn.Module):" "\n\tdef __init__(self,"
     for node in nodes:
         main_call_declaration += f"{node.id}" + ", "
@@ -214,10 +243,7 @@ def build_script(nodes, execution_order, model_id1, d_e, conditions=None):
         main_call_declaration += f"\n\t\tself.{node.id} = {node.id}"
 
     # Build Main forward
-    main_call_forward = generate_main_forward(
-        nodes, execution_order, d_e, constructor_calls
-    )
-
+    main_call_forward = generate_main_forward(nodes, execution_order, d_e)
     # Compose script
     # if execution_order == []:
     #     main_call_declaration = ""
@@ -250,7 +276,17 @@ def build_script(nodes, execution_order, model_id1, d_e, conditions=None):
     return script
 
 
-def _generate_scripts_from_model(mdf_model):
+def _generate_scripts_from_model(mdf_model: "Model") -> str:
+    """Generating scripts from components of model
+    Helper function to parse MDF objects from MDF json representation. Uses MDF scheduler to
+    determine proper ordering of nodes, and calls `build_script`.
+
+    Args:
+        mdf_model: MDF model to be exported to PyTorch
+
+    Returns:  dictionary of scripts where key = name of mdf model, value is string
+    representation of script.
+    """
     scripts = {}
     model_id1 = mdf_model.id
     for graph in mdf_model.graphs:
@@ -294,7 +330,7 @@ def _generate_scripts_from_model(mdf_model):
 
 
 # Generating PyTorch Script
-def _script_to_model(script, model_id1):
+def _script_to_model(script: str, model_id1: str):
     """
     Helper function to take the autogenerated module.py python script, and import
     it such that the pytorch model specified by this script is importable to the
@@ -305,7 +341,11 @@ def _script_to_model(script, model_id1):
     import importlib.util
 
     # For testing, need to add prefix if calling from out of examples directory
-    module_path = f"translated_{model_id1}_pytorch.py"
+    import importlib.util
+
+    path_list = model_input.split("/")[:-3] + ["PyTorch/"]
+    out_filename = "/".join(path_list)
+    module_path = str(out_filename) + f"translated_{model_id1}" + "_pytorch.py"
 
     with open(module_path, mode="w") as f:
         f.write(script)
