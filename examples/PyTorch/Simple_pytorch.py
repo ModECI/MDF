@@ -1,3 +1,4 @@
+"Converted examples from MDF models version(mdf.s) to PyTorch/ONNX"
 import torch
 import torch.nn as nn
 import onnx
@@ -34,7 +35,10 @@ class processing_node(nn.Module):
         self.log_gain = log_gain
         self.execution_count = torch.tensor(0)
 
-    def forward(self, input_port1):
+    def forward(
+        self,
+        input_port1,
+    ):
         self.execution_count = self.execution_count + torch.tensor(1)
         linear_1 = input_port1 * self.lin_slope + self.lin_intercept
         logistic_1 = 1 / (1 + exp(-1 * self.log_gain * (linear_1 + 0) + 0))
@@ -88,3 +92,5 @@ onnx_model = onnx.load("Simple.onnx")
 onnx.checker.check_model(onnx_model)
 sess = rt.InferenceSession("Simple.onnx")
 res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+if __name__ == "__main__":
+    print("Exported to PyTorch and ONNX")

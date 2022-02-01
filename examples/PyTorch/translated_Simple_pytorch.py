@@ -1,3 +1,4 @@
+"Converted examples from MDF models version(mdf.0) to PyTorch/ONNX"
 import torch
 import torch.nn as nn
 import onnx
@@ -78,13 +79,15 @@ output = model(dummy_input)
 torch.onnx.export(
     model,
     dummy_input,
-    "translated_Simple.onnx",
+    "Simple.onnx",
     verbose=True,
     input_names=[],
     example_outputs=output,
     opset_version=9,
 )
-onnx_model = onnx.load("translated_Simple.onnx")
+onnx_model = onnx.load("Simple.onnx")
 onnx.checker.check_model(onnx_model)
-sess = rt.InferenceSession("translated_Simple.onnx")
+sess = rt.InferenceSession("Simple.onnx")
 res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+if __name__ == "__main__":
+    print("Exported to PyTorch and ONNX")

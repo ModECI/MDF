@@ -1,3 +1,4 @@
+"Converted examples from MDF models version(mdf.s) to PyTorch/ONNX"
 import torch
 import torch.nn as nn
 import onnx
@@ -32,7 +33,10 @@ class middle_node(nn.Module):
         self.intercept = intercept
         self.execution_count = torch.tensor(0)
 
-    def forward(self, input_port1):
+    def forward(
+        self,
+        input_port1,
+    ):
         self.execution_count = self.execution_count + torch.tensor(1)
         linear_1 = input_port1 * self.slope + self.intercept
         return linear_1
@@ -85,3 +89,5 @@ onnx_model = onnx.load("Arrays.onnx")
 onnx.checker.check_model(onnx_model)
 sess = rt.InferenceSession("Arrays.onnx")
 res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+if __name__ == "__main__":
+    print("Exported to PyTorch and ONNX")

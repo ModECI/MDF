@@ -1,3 +1,4 @@
+"Converted examples from MDF models version(mdf.s) to PyTorch/ONNX"
 import torch
 import torch.nn as nn
 import onnx
@@ -32,7 +33,10 @@ class A(nn.Module):
         self.intercept = intercept
         self.execution_count = torch.tensor(0)
 
-    def forward(self, input_port1):
+    def forward(
+        self,
+        input_port1,
+    ):
         self.execution_count = self.execution_count + torch.tensor(1)
         linear_func = input_port1 * self.slope + self.intercept
         return linear_func
@@ -51,7 +55,10 @@ class B(nn.Module):
         self.offset = offset
         self.execution_count = torch.tensor(0)
 
-    def forward(self, input_port1):
+    def forward(
+        self,
+        input_port1,
+    ):
         self.execution_count = self.execution_count + torch.tensor(1)
         logistic_func = 1 / (
             1 + exp(-1 * self.gain * (input_port1 + self.bias) + self.offset)
@@ -74,7 +81,10 @@ class C(nn.Module):
         self.offset = offset
         self.execution_count = torch.tensor(0)
 
-    def forward(self, input_port1):
+    def forward(
+        self,
+        input_port1,
+    ):
         self.execution_count = self.execution_count + torch.tensor(1)
         exponential_func = (
             self.scale * exp((self.rate * input_port1) + self.bias) + self.offset
@@ -91,7 +101,10 @@ class D(nn.Module):
         self.scale = scale
         self.execution_count = torch.tensor(0)
 
-    def forward(self, input_port1):
+    def forward(
+        self,
+        input_port1,
+    ):
         self.execution_count = self.execution_count + torch.tensor(1)
         sin_func = self.scale * sin(input_port1)
         return sin_func
@@ -160,3 +173,5 @@ onnx_model = onnx.load("ABCD.onnx")
 onnx.checker.check_model(onnx_model)
 sess = rt.InferenceSession("ABCD.onnx")
 res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+if __name__ == "__main__":
+    print("Exported to PyTorch and ONNX")

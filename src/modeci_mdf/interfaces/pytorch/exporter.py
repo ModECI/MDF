@@ -1,7 +1,6 @@
 """
-Functions for converting from MDF models version: mdf.0 to PyTorch
+Functions for converting from MDF models version: mdf.s to PyTorch
 """
-
 import collections
 import os
 import sys
@@ -26,7 +25,7 @@ graph_input = []
 
 
 def get_module_declaration_text(
-    name: str, node_dict: Dict[Any, Any], execution_order: List[str]
+    name: str, node_dict: Dict[Any, Any], execution_order: List[str], version: str
 ):
     """
     Helper function to generate string in module.py. String will create an
@@ -48,79 +47,157 @@ def get_module_declaration_text(
     functions = node_dict["functions"]
     parameters = node_dict["parameters"]
     output_ports = node_dict["output_ports"]
-
-    function_set = set()
-    for parameter in parameters:
-        if parameter.function:
-            function_set.add(parameter)
-
-    if parameters and not functions:
-        declaration_text += "\n\tdef __init__(self,"
+    if version == "mdf.s":
+        function_set = set()
         for parameter in parameters:
-            if parameter.id == "input_level":
-                graph_input.append(parameter.value)
-            if not parameter.function:
-                param_set.add(parameter.id)
-            if not parameter.is_stateful() and not parameter.function:
-                declaration_text += f"{parameter.id}=torch.tensor({parameter.value}),"
-            elif parameter.is_stateful():
-                if parameter.value:
-                    declaration_text += "{}=torch.tensor({}),".format(parameter.id, 0)
-                else:
-                    if (
-                        parameter.default_initial_value == "str"
-                        and parameter.default_initial_value in param_set
-                    ):
-                        declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value.value}),"
-                    else:
-                        declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value}),"
-        declaration_text += "):"
-        declaration_text += "\n\t\tsuper().__init__()"
-        for parameter in parameters:
-            if not parameter.function:
-                declaration_text += f"\n\t\tself.{parameter.id}={parameter.id}"
-            elif parameter.function:
+            if parameter.function:
                 function_set.add(parameter)
 
-        declaration_text += "\n\t\tself.{}={}".format(
-            "execution_count", "torch.tensor(0)"
-        )
-        # define the forward method of node
-        declaration_text += "\n\tdef forward(self,"
-        for input_port in input_ports:
-            declaration_text += input_port.id
+        if parameters and not functions:
+            declaration_text += "\n\tdef __init__(self,"
+            for parameter in parameters:
+                if parameter.id == "input_level":
+                    graph_input.append(parameter.value)
+                if not parameter.function:
+                    param_set.add(parameter.id)
+                if not parameter.is_stateful() and not parameter.function:
+                    declaration_text += (
+                        f"{parameter.id}=torch.tensor({parameter.value}),"
+                    )
 
-        declaration_text += " ):"
-        declaration_text += "\n\t\tself.{}=self.{}".format(
-            "execution_count", "execution_count+torch.tensor(1)"
-        )
-        # Handles the sateful parameter in forward method
+                elif parameter.is_stateful():
+                    if parameter.value:
+                        declaration_text += "{}=torch.tensor({}),".format(
+                            parameter.id, 0
+                        )
+                    else:
+                        if (
+                            parameter.default_initial_value == "str"
+                            and parameter.default_initial_value in param_set
+                        ):
+                            declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value.value}),"
+                        else:
+                            declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value}),"
+            declaration_text += "):"
+            declaration_text += "\n\t\tsuper().__init__()"
+            for parameter in parameters:
+                if not parameter.function:
+                    declaration_text += f"\n\t\tself.{parameter.id}={parameter.id}"
+                elif parameter.function:
+                    function_set.add(parameter)
+
+            declaration_text += "\n\t\tself.{}={}".format(
+                "execution_count", "torch.tensor(0)"
+            )
+            # define the forward method of node
+            declaration_text += "\n\tdef forward(self,"
+            for input_port in input_ports:
+                declaration_text += input_port.id + ","
+
+            declaration_text += " ):"
+            declaration_text += "\n\t\tself.{}=self.{}".format(
+                "execution_count", "execution_count+torch.tensor(1)"
+            )
+            # Handles the sateful parameter in forward method
+            for parameter in parameters:
+                if parameter.is_stateful() and not parameter.function:
+                    if parameter.value:
+                        declaration_text += "\n\t\tself.{}={}".format(
+                            parameter.id, sym(parameter.value)
+                        )
+                    elif parameter.time_derivative:
+                        declaration_text += "\n\t\tself.{}=self.{}+({})".format(
+                            parameter.id, parameter.id, sym(parameter.time_derivative)
+                        )
+                # Handles the function at forward method
+                if parameter.function:
+                    declaration_text += f"\n\t\t{parameter.id}="
+                    if parameter.function in mdf_functions:
+                        exp = mdf_functions[parameter.function]["expression_string"]
+                        exp = func_args(exp, parameter.args)
+                        exp = sym(exp)
+
+                    declaration_text += exp
+            # Value to be returned as output of forward method of each node
+            if output_ports[0].value in not_self:
+                declaration_text += "\n\t\treturn {}".format(output_ports[0].value)
+            else:
+                declaration_text += "\n\t\treturn {}".format(sym(output_ports[0].value))
+
+        return declaration_text
+    elif version == "mdf.0":
         for parameter in parameters:
-            if parameter.is_stateful() and not parameter.function:
-                if parameter.value:
-                    declaration_text += "\n\t\tself.{}={}".format(
-                        parameter.id, sym(parameter.value)
-                    )
-                elif parameter.time_derivative:
-                    declaration_text += "\n\t\tself.{}=self.{}+({})".format(
-                        parameter.id, parameter.id, sym(parameter.time_derivative)
-                    )
-            # Handles the function at forward method
-            if parameter.function:
-                declaration_text += f"\n\t\t{parameter.id}="
-                if parameter.function in mdf_functions:
-                    exp = mdf_functions[parameter.function]["expression_string"]
-                    exp = func_args(exp, parameter.args)
-                    exp = sym(exp)
+            param_set.add(parameter.id)
 
-                declaration_text += exp
-        # Value to be returned as output of forward method of each node
-        if output_ports[0].value in not_self:
-            declaration_text += "\n\t\treturn {}".format(output_ports[0].value)
-        else:
-            declaration_text += "\n\t\treturn {}".format(sym(output_ports[0].value))
+        if parameters:
+            declaration_text += "\n\tdef __init__(self,"
+            for parameter in parameters:
+                if parameter.id == "input_level":
+                    graph_input.append(parameter.value)
+                if not parameter.is_stateful():
+                    declaration_text += (
+                        f"{parameter.id}=torch.tensor({parameter.value}),"
+                    )
+                elif parameter.is_stateful():
+                    if parameter.value:
+                        declaration_text += "{}=torch.tensor({}),".format(
+                            parameter.id, 0
+                        )
+                    else:
+                        if (
+                            parameter.default_initial_value == "str"
+                            and parameter.default_initial_value in param_set
+                        ):
+                            declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value.value}),"
+                        else:
+                            declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value}),"
+            declaration_text += "):"
+            declaration_text += "\n\t\tsuper().__init__()"
+            for parameter in parameters:
+                declaration_text += f"\n\t\tself.{parameter.id}={parameter.id}"
 
-    return declaration_text
+            declaration_text += "\n\t\tself.{}={}".format(
+                "execution_count", "torch.tensor(0)"
+            )
+            # define the forward method
+            declaration_text += "\n\tdef forward(self,"
+            for input_port in input_ports:
+                declaration_text += input_port.id
+
+            declaration_text += " ):"
+            declaration_text += "\n\t\tself.{}=self.{}".format(
+                "execution_count", "execution_count+torch.tensor(1)"
+            )
+            # Handles the sateful parameter in forward method
+            for parameter in parameters:
+                if parameter.is_stateful():
+                    if parameter.value:
+                        declaration_text += "\n\t\tself.{}={}".format(
+                            parameter.id, sym(parameter.value)
+                        )
+                    elif parameter.time_derivative:
+                        declaration_text += "\n\t\tself.{}=self.{}+({})".format(
+                            parameter.id, parameter.id, sym(parameter.time_derivative)
+                        )
+                # Handles the function at forward method
+            if functions:
+                for function in functions:
+                    declaration_text += f"\n\t\t{function.id}="
+                    func_dic = function.function
+                    for i in func_dic:
+                        if i in mdf_functions:
+                            exp = mdf_functions[i]["expression_string"]
+                            exp = func_args(exp, func_dic[i])
+                            exp = sym(exp)
+
+                    declaration_text += exp
+            # Value to be returned as output of forward method
+            if output_ports[0].value in not_self:
+                declaration_text += "\n\t\treturn {}".format(output_ports[0].value)
+            else:
+                declaration_text += "\n\t\treturn {}".format(sym(output_ports[0].value))
+
+        return declaration_text
 
 
 # Add self to parameters to make it as attribute of pytorch node
@@ -192,7 +269,8 @@ def build_script(
     execution_order: List[str],
     model_id1: str,
     d_e: Dict[str, Any],
-    conditions=None,
+    conditions,
+    version: str,
 ):
     """Helper function to create and assemble text components necessary to specify
     module.py importable model script.  These include:
@@ -217,10 +295,17 @@ def build_script(
     """
     model_id = model_id1 + ".onnx"
     script = ""
+    if version == "mdf.s":
+        s1 = "Converted examples from MDF models version(mdf.s) to PyTorch/ONNX"
+        script += f"'{s1}'"
+    elif version == "mdf.0":
+        s2 = "Converted examples from MDF models version(mdf.0) to PyTorch/ONNX"
+        script += f"'{s2}'"
     imports_string = (
-        "import torch"
+        "\nimport torch"
         "\nimport torch.nn as nn\nimport onnx\nimport onnxruntime as rt\nfrom math import *"
     )
+    print(script)
 
     # Declarations string
     modules_declaration_text = ""
@@ -241,7 +326,9 @@ def build_script(
             "output_ports": out_ports,
             "input_ports": input_ports,
         }
-        declaration_text = get_module_declaration_text(id, node_dict, execution_order)
+        declaration_text = get_module_declaration_text(
+            id, node_dict, execution_order, version=version
+        )
         modules_declaration_text += declaration_text
 
     # Build Main call
@@ -278,11 +365,14 @@ def build_script(
     script += "\nonnx.checker.check_model(onnx_model)"
     script += f"\nsess = rt.InferenceSession('{model_id}')"
     script += "\nres = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})"
+    x, y = "__main__", "Exported to PyTorch and ONNX"
+    script += f"\nif __name__ == '{x}':"
+    script += f"\n\tprint('{y}')"
 
     return script
 
 
-def _generate_scripts_from_model(mdf_model: "Model") -> str:
+def _generate_scripts_from_model(mdf_model: "Model", version: str) -> str:
     """Generating scripts from components of model
     Helper function to parse MDF objects from MDF json representation. Uses MDF scheduler to
     determine proper ordering of nodes, and calls `build_script`.
@@ -328,7 +418,7 @@ def _generate_scripts_from_model(mdf_model: "Model") -> str:
 
         # Build script
         script = build_script(
-            nodes, execution_order, model_id1, d_e, conditions=conditions
+            nodes, execution_order, model_id1, d_e, conditions, version
         )
         scripts[graph.id] = script
 
@@ -336,7 +426,7 @@ def _generate_scripts_from_model(mdf_model: "Model") -> str:
 
 
 # Generating PyTorch Script
-def _script_to_model(script: str, model_id1: str):
+def _script_to_model(script: str, model_id1: str, version: str):
     """
     Helper function to take the autogenerated module.py python script, and import
     it such that the pytorch model specified by this script is importable to the
@@ -346,9 +436,15 @@ def _script_to_model(script: str, model_id1: str):
     """
     import importlib.util
 
-    path_list = model_input.split("/")[:-2] + ["PyTorch/"]
-    out_filename = "/".join(path_list)
-    module_path = str(out_filename) + f"{model_id1}" + "_pytorch.py"
+    print("version", version)
+    if version == "mdf.s":
+        path_list = model_input.split("/")[:-2] + ["PyTorch/"]
+        out_filename = "/".join(path_list)
+        module_path = str(out_filename) + f"{model_id1}" + "_pytorch.py"
+    elif version == "mdf.0":
+        path_list = model_input.split("/")[:-3] + ["PyTorch/"]
+        out_filename = "/".join(path_list)
+        module_path = str(out_filename) + f"translated_{model_id1}" + "_pytorch.py"
 
     with open(module_path, mode="w") as f:
         f.write(script)
@@ -362,7 +458,7 @@ def _script_to_model(script: str, model_id1: str):
     return model
 
 
-def mdf_to_pytorch(mdf_model: "Model", eval_models=True):
+def mdf_to_pytorch(mdf_model: "Model", eval_models, version):
     """Function loads and returns a pytorch model for all models specified in an
     mdf file
     Args:
@@ -371,11 +467,11 @@ def mdf_to_pytorch(mdf_model: "Model", eval_models=True):
 
     Returns: Returns a dictionary where key = model name, value = pytorch model object
     """
-    scripts = _generate_scripts_from_model(mdf_model)
+    scripts = _generate_scripts_from_model(mdf_model, version)
     models = {}
 
     for script_name, script in scripts.items():
-        model = _script_to_model(script, mdf_model.id)
+        model = _script_to_model(script, mdf_model.id, version)
         if eval_models:
             model.eval()
         models[script_name] = model
@@ -387,6 +483,9 @@ __all__ = ["mdf_to_pytorch"]
 if __name__ == "__main__":
     from pathlib import Path
 
-    # model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/PyTorch/Inception.json"
-    # mdf_model = load_mdf(model_input)
-    # pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False)
+    model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/MDF/translation/Translated_Arrays.json"
+    mdf_model = load_mdf(model_input)
+    if "Translated" in model_input:
+        pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False, version="mdf.0")
+    else:
+        pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False, version="mdf.s")
