@@ -95,7 +95,9 @@
                         },
                         "input_ports": {
                             "input_port1": {
-                                "shape": "(1,)"
+                                "shape": [
+                                    1
+                                ]
                             }
                         },
                         "parameters": {
@@ -137,7 +139,9 @@
                         },
                         "input_ports": {
                             "input_port1": {
-                                "shape": "(1,)"
+                                "shape": [
+                                    1
+                                ]
                             }
                         },
                         "parameters": {

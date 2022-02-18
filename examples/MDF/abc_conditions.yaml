@@ -7,33 +7,33 @@ abc_conditions:
                 node_specific:
                     input0:
                         type: BeforeNCalls
-                        args:
+                        kwargs:
                             dependencies: input0
                             n: 1
                     A:
                         type: Always
-                        args: {}
+                        kwargs: {}
                     B:
                         type: EveryNCalls
-                        args:
+                        kwargs:
                             dependencies: A
                             n: 2
                     C:
                         type: EveryNCalls
-                        args:
+                        kwargs:
                             dependencies: A
                             n: 3
                 termination:
                     environment_state_update:
                         type: And
-                        args:
+                        kwargs:
                             dependencies:
                             -   type: AfterNCalls
-                                args:
+                                kwargs:
                                     dependencies: C
                                     n: 2
                             -   type: JustRan
-                                args:
+                                kwargs:
                                     dependencies: A
             nodes:
                 input0:
@@ -48,7 +48,7 @@ abc_conditions:
                 A:
                     input_ports:
                         input_port1:
-                            shape: (1,)
+                            shape: [1]
                     parameters:
                         count_A:
                             value: count_A + 1
@@ -58,7 +58,7 @@ abc_conditions:
                 B:
                     input_ports:
                         input_port1:
-                            shape: (1,)
+                            shape: [1]
                     parameters:
                         count_B:
                             value: count_B + 1
@@ -68,7 +68,7 @@ abc_conditions:
                 C:
                     input_ports:
                         input_port1:
-                            shape: (1,)
+                            shape: [1]
                     parameters:
                         count_C:
                             value: count_C+ 1

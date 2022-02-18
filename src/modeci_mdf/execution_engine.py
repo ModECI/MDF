@@ -303,15 +303,11 @@ class EvaluableFunction:
         # func_val  = self.function.value
 
         if self.function.function:
-
             for f in mdf_functions:
-
-                if f in self.function.function.keys():
-
+                if f == self.function.function:
                     expr = create_python_expression(
                         mdf_functions[f]["expression_string"]
                     )
-
                     break
 
         if expr is None:
@@ -329,15 +325,11 @@ class EvaluableFunction:
                 % (self.function, _params_info(func_params), expr)
             )
         if self.function.function:
-
             for f in mdf_functions:
-
-                if f in self.function.function.keys():
-
-                    for arg in self.function.function[f].keys():
-
+                if f == self.function.function:
+                    for arg in self.function.args.keys():
                         func_params[arg] = evaluate_expr(
-                            self.function.function[f][arg],
+                            self.function.args[arg],
                             func_params,
                             verbose=False,
                             array_format=array_format,

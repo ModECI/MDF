@@ -17,6 +17,7 @@ import sympy
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
+
 # If we running python version 3.7 or lower, we need to using typing_compat
 if sys.version_info < (3, 8):
     from typing_compat import get_args, get_origin
@@ -28,6 +29,16 @@ from attr.validators import optional, instance_of, in_
 
 from cattr.gen import make_dict_unstructure_fn, make_dict_structure_fn, override
 from cattr.preconf.pyyaml import make_converter as make_yaml_converter
+
+from ast import literal_eval as make_tuple
+
+from modelspec.base_types import (
+    Base,
+    converter,
+    ValueExprType,
+    value_expr_types,
+    value_expr_converter,
+)
 
 from modeci_mdf import MODECI_MDF_VERSION
 from modeci_mdf import __version__
@@ -46,22 +57,9 @@ __all__ = [
     "Condition",
 ]
 
-# A general purpose converter for all MDF objects
-converter = cattr.Converter()
-
-# A setup an additional converter to apply when we are serializeing using PyYAML.
-# This handles things like tuples as lists.
-yaml_converter = make_yaml_converter()
-
-# A simple converter that handles only value expressions.
-value_expr_converter = cattr.Converter()
-
-# Union of types that are allowed as value expressions for parameters.
-ValueExprType = Union[str, List, Dict, np.ndarray]
-
 
 @attr.define(eq=False)
-class MdfBase:
+class MdfBase(Base):
     """
     Base class for all MDF core classes that implements common functionality.
 
@@ -73,26 +71,6 @@ class MdfBase:
     metadata: Optional[Dict[str, Any]] = field(
         kw_only=True, default=None, validator=optional(instance_of(dict))
     )
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert the Mdf object to a nested dict structure."""
-        return converter.unstructure(self)
-
-    def to_json(self) -> str:
-        """
-        Convert the Mdf object to a JSON string representation.
-        """
-        return json.dumps(self.to_dict(), indent=4)
-
-    @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "MdfBase":
-        """Instantiate an MDF object from a dictionary"""
-        return converter.structure(d, cls)
-
-    @classmethod
-    def from_json(cls, json_str: str) -> "MdfBase":
-        """Instantiate an MDF object from a JSON string"""
-        return cls.from_dict(json.loads(json_str))
 
 
 @attr.define(eq=False)
@@ -107,10 +85,39 @@ class Function(MdfBase):
             https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
         args: Dictionary of values for each of the arguments for the Function, e.g. if the in-built function
               is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
+        value: If the function is a value expression, this attribute will contain the expression and the function
+            and args attributes will be None.
     """
     id: str = field(validator=instance_of(str))
-    function: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+    function: Optional[str] = field(default=None, validator=optional(instance_of(str)))
     args: Optional[Dict[str, Any]] = field(default=None)
+    value: Optional[ValueExprType] = field(
+        default=None, validator=optional(instance_of(value_expr_types))
+    )
+
+    @classmethod
+    def _structure(cls, o: Dict[str, Any], t: Any) -> "Function":
+        """
+        A custom structuring hook for Functions that handle the "translated" case when function is specified as
+        a dictionary
+        """
+
+        # This structure function creates function objects without id as empty strings if it is not specified.
+        if "id" not in o:
+            id = ""
+        else:
+            id = o["id"]
+
+        if "function" in o.keys() and isinstance(o["function"], dict):
+            func_name = list(o["function"].keys())[0]
+            args = o["function"][func_name]
+            return cls(id=id, function=func_name, args=args)
+        elif "function" in o.keys() and isinstance(o["function"], str):
+            return cls(id=id, function=o["function"], args=o["args"])
+        elif "value" in o.keys():
+            return cls(id=id, value=o["value"])
+        else:
+            raise ValueError(f"Could not parse function specification: {o}")
 
 
 @attr.define(eq=False)
@@ -126,7 +133,9 @@ class InputPort(MdfBase):
     """
     id: str = field(validator=instance_of(str))
     shape: Optional[Tuple[int, ...]] = field(
-        validator=optional(instance_of(tuple)), default=None
+        validator=optional(instance_of(tuple)),
+        default=None,
+        converter=lambda x: make_tuple(x) if type(x) == str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
 
@@ -214,10 +223,10 @@ class Parameter(MdfBase):
         return False
 
     @staticmethod
-    def unstructure(o: "Parameter"):
+    def _unstructure(o: "Parameter"):
         """A custom unstructuring hook for parameters that removes default values of None from the output."""
 
-        # Unstructure the paramter and any value expressions it contains.
+        # Unstructure the parameter and any value expressions it contains.
         d = value_expr_converter.unstructure(o)
 
         # Remove any fields that are None by default
@@ -435,88 +444,6 @@ class Model(MdfBase):
     )
     onnx_opset_version: Optional[str] = field(default=None)
 
-    def to_dict(self):
-        """
-        Convert the Model to a dictionary
-
-        Returns:
-            A dictionary representation of the Model. All sub -objects are converted to dictionaries as well.
-        """
-
-        # Note: we must override the base class from_dict method because the Model class is serialized as a dictionary
-        # with the id as the key. This is not the case for the base class.
-
-        d = super().to_dict()
-
-        # Drop the id field
-        del d["id"]
-
-        return {self.id: d}
-
-    @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "Model":
-        """
-        Create a Model object from a dictionary
-
-        Args:
-            d: A dictionary containing the Model object
-
-        Returns:
-            A Model object
-        """
-
-        # Note: we must override the base class from_dict method because the Model class is serialized as a dictionary
-        # with the id as the key. This is not the case for the base class.
-
-        id = list(d.keys())[0]
-        d = {"id": id, **d[id]}
-        return converter.structure(d, Model)
-
-    def to_json_file(
-        self, filename: Optional[str] = None, include_metadata: bool = True
-    ) -> str:
-        """Convert the MDF model to JSON format and save to a file.
-
-         .. note::
-            JSON is standard file format uses human-readable text to store and transmit data objects consisting of attribute–value pairs and arrays
-
-        Args:
-            filename: The name of the file to save. If None, use the  (.json extension)
-            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
-                              benchmark results, and environments in which the specified model was originally implemented
-        Returns:
-            The name of the generated JSON file
-        """
-
-        if filename is None:
-            filename = f"{self.id}.json"
-
-        with open(filename, "w") as outfile:
-            json.dump(self.to_dict(), outfile, indent=4)
-
-        return filename
-
-    def to_yaml_file(self, filename: str, include_metadata: bool = True) -> str:
-        """Convert file in MDF format to yaml format
-
-        Args:
-            filename: File in MDF format (Filename extension: .mdf )
-            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
-                              benchmark results, and environments in which the specified model was originally implemented
-        Returns:
-            The name of the generated yaml file
-        """
-
-        if filename is None:
-            filename = f"{self.id}.yaml"
-
-        with open(filename, "w") as outfile:
-
-            # We need to setup another
-            yaml.dump(yaml_converter.unstructure(self.to_dict()), outfile)
-
-        return filename
-
     def to_graph_image(
         self,
         engine: str = "dot",
@@ -557,209 +484,7 @@ class Model(MdfBase):
             else:
                 raise (e)
 
-    @classmethod
-    def from_file(cls, filename: str) -> "Model":
-        """
-        Create a :class:`.Model` from its representation stored in a file. Auto-detect the correct deserialization code
-        based on file extension. Currently supported formats are; JSON(.json) and YAML (.yaml or .yml)
 
-        Args:
-            filename: The name of the file to load.
-
-        Returns:
-            An MDF :class:`.Model` for this file.
-        """
-        if filename.endswith(".yaml") or filename.endswith(".yml"):
-            return cls.from_yaml_file(filename)
-        elif filename.endswith(".json"):
-            return cls.from_json_file(filename)
-        else:
-            raise ValueError(
-                f"Cannot auto-detect MDF serialization format from filename ({filename}). The filename "
-                f"must have one of the following extensions: .json, .yml, or .yaml."
-            )
-
-    @classmethod
-    def from_json_file(cls, filename: str) -> "Model":
-        """
-        Create a :class:`.Model` from its JSON representation stored in a file.
-
-        Args:
-            filename: The file from which to load the JSON data.
-
-        Returns:
-            An MDF :class:`.Model` for this JSON
-        """
-        with open(filename) as infile:
-            d = json.load(infile)
-            return Model.from_dict(d)
-
-    @classmethod
-    def from_yaml_file(cls, filename: str) -> "Model":
-        """
-        Create a :class:`.Model` from its YAML representation stored in a file.
-
-        Args:
-            filename: The file from which to load the YAML data.
-
-        Returns:
-            An MDF :class:`.Model` for this YAML
-        """
-        with open(filename) as infile:
-            d = yaml.safe_load(infile)
-            d = yaml_converter.structure(d, Dict)
-            return Model.from_dict(d)
-
-
-# Below are a set of structure and unstructure hooks needed to help cattr serialize and deserialize from JSON the
-# non-standard things.
-
-
-def _unstructure_value_expr(o):
-    """Handle unstructuring of value expressions from JSON"""
-    try:
-        # If this is an np.ndarray type, it should have a tolist
-        return o.tolist()
-    except AttributeError:
-        return converter.unstructure(o)
-
-
-def _structure_value_expr(o, t):
-    """Handle re-structuring of value expressions from JSON"""
-
-    # Don't convert scalars to arrays
-    if np.isscalar(o):
-        return o
-
-    # Try to turn it into a numpy array
-    arr = np.array(o)
-
-    # Make sure the dtype is not object or string, we want to keep these as lists
-    if arr.dtype.type not in [np.object_, np.str_]:
-        return arr
-
-    return o
-
-
-# Register a structure and unstructure hook to handle value expressions that
-# can either be str or Dict (not sure if this should be allowed but ACT-R examples
-# depend on this feature). Value expressions should probably become their own
-# type later down the line. We want a converter that just handles value expressions
-# and we also want to add hooks for this to the general converter.
-value_expr_converter.register_structure_hook(
-    Optional[ValueExprType], _structure_value_expr
-)
-value_expr_converter.register_unstructure_hook(
-    Optional[ValueExprType], _unstructure_value_expr
-)
-converter.register_unstructure_hook(Optional[ValueExprType], _unstructure_value_expr)
-converter.register_structure_hook(Optional[ValueExprType], _structure_value_expr)
-
-
-# Setup a hook factory for any MDF base class so we don't serialize attributes whose
-# current value is the default value.
-def _mdfbase_unstruct_hook_factory(cl):
-    """Generate an unstructure hook for the a class that inherits from MdfBase"""
-
-    # Generate overrides for all fields so that we omit default values from serialization
-    field_overrides = {
-        a.name: override(omit_if_default=True)
-        for a in fields(cl)
-        if a.metadata.get("omit_if_default", True)
-    }
-
-    return make_dict_unstructure_fn(cl, converter, **field_overrides)
-
-
-# Most of the code below is needed to handle serialization and deserialization of lists of
-# MdfBase objects that have ids as dicts where the keys are the ids.
-def _mdfbase_struct_hook_factory(cl):
-    """
-    This is a very simple modification to cattr.Converter.structure_attrs_fromdict. The only
-    difference is that we give the id value a default value of empty string when structuring.
-    This is because objects with id are serialized without id when they are stored in a list.
-    The idea is stored in the key of a dictionary.
-    """
-
-    def _structure_mdfbase(obj, t):
-        """Instantiate a subclass of MdfBase class from a mapping (dict)."""
-
-        conv_obj = {"id": ""}
-        for a in fields(cl):  # type: ignore
-            name = a.name
-
-            try:
-                val = obj[name]
-            except KeyError:
-                continue
-
-            if name[0] == "_":
-                name = name[1:]
-
-            conv_obj[name] = converter._structure_attribute(a, val)
-
-        return cl(**conv_obj)
-
-    return _structure_mdfbase
-
-
-# Register the structure and unstructure hooks for collections of MdfBase classes.
-def _unstructure_list_mdfbase(cl):
-    """Serialize list of MdfBase objects as dicts if all of their elements have ids"""
-
-    def f(obj_list):
-        try:
-            # If all the elements of this list have id's, we can serialize them as a dict.
-            d = {o.id: converter.unstructure(o) for o in obj_list}
-
-            # Remove the ids from each element since they are stored in the dict's keys now.
-            for id, objd in d.items():
-                del objd["id"]
-
-            return d
-
-        except AttributeError:
-            return obj_list
-
-    return f
-
-
-def _structure_list_mdfbase(cl):
-    """Deserialize list of dict of MdfBase objects as a list if all of their elements have ids"""
-    mdf_class = get_args(cl)[0]
-
-    def f(obj_dict, t):
-        try:
-            obj_list = [converter.structure(v, mdf_class) for v in obj_dict.values()]
-
-            # Give each object the id that is its key in the dict.
-            for id, obj in zip(obj_dict.keys(), obj_list):
-                obj.id = id
-
-            return obj_list
-
-        except AttributeError:
-            return obj_dict
-
-    return f
-
-
-def _is_list_mdfbase(cl):
-    """
-    Check if a class is a list of MdfBase objects. These will be serialized as dicts if the underlying class has an id
-    attribute.
-    """
-    return get_origin(cl) == list and issubclass(get_args(cl)[0], MdfBase)
-
-
-converter.register_unstructure_hook_factory(_is_list_mdfbase, _unstructure_list_mdfbase)
-converter.register_structure_hook_factory(_is_list_mdfbase, _structure_list_mdfbase)
-converter.register_unstructure_hook_factory(
-    lambda cl: issubclass(cl, MdfBase) and cl != Parameter,
-    _mdfbase_unstruct_hook_factory,
-)
-converter.register_unstructure_hook(Parameter, Parameter.unstructure)
-converter.register_structure_hook_factory(
-    lambda cl: issubclass(cl, MdfBase) and "id" in [a.name for a in fields(cl)],
-    _mdfbase_struct_hook_factory,
-)
+# Add a special hook for handling unstructuring of Parameters and Functions
+converter.register_unstructure_hook(Parameter, Parameter._unstructure)
+converter.register_structure_hook(Function, Function._structure)

@@ -6,6 +6,7 @@ the future, the MDF should probably just compile to ONNX (or some other IR) for 
 """
 import functools
 
+import torch
 import numpy as np
 import onnxruntime as ort
 import onnx.defs
@@ -72,6 +73,12 @@ def convert_type(v):
     if hasattr(v, "dtype") and v.dtype == np.int32:
         v = v.astype(np.int64)
 
+    if hasattr(v, "dtype") and v.dtype == np.float64:
+        v = v.astype(np.float32)
+
+    if isinstance(v, torch.Tensor):
+        v = v.detach().cpu().numpy()
+
     return v
 
 
@@ -122,6 +129,7 @@ def run_onnx_op(
     op = op_class(
         *input_names, output_names=output_names, op_version=opset_version, **attributes
     )
+
     model_def = op.to_onnx(inputs)
     return predict_with_onnxruntime(model_def, *input_vals)
 
