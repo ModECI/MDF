@@ -39,3 +39,24 @@ To run an example where a simple Multi-Layer Perceptron (MLP) created using the 
 ```bash
 python mlp.py
 ```
+
+### ABCD Model in MDF to PyTorch Conversion
+To run an example ABCD model created using the MDF specification is translated to a PyTorch model and executed using sample test data, run:
+
+```bash
+python ABCD_pytorch.py
+```
+
+### Arrays Model in MDF to PyTorch Conversion
+To run an example Arrays model created using the MDF specification is translated to a PyTorch model and executed using sample test data, run:
+
+```bash
+python Arrays_pytorch.py
+```
+
+### Simple Model in MDF to PyTorch Conversion
+To run an example Simple model created using the MDF specification is translated to a PyTorch model and executed using sample test data, run:
+
+```bash
+python Simple_pytorch.py
+```

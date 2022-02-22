@@ -1,5 +1,5 @@
 """
-Functions for converting from MDF models version: mdf.s to PyTorch
+Functions for converting from MDF models to PyTorch
 """
 import collections
 import os
@@ -200,15 +200,31 @@ def get_module_declaration_text(
         return declaration_text
 
 
-# Add self to parameters to make it as attribute of pytorch node
-def sym(value):
+def sym(value: str):
+    """
+    String manipulation to make parameters as an attribute of pytorch node
+    Args:
+        value: parameter of node for mdf model
+
+    Returns: parameter of pytorch node class
+
+    """
     for i in param_set:
         if i in value:
             value = value.replace(i, "self." + i)
     return value
 
 
-def func_args(exp, arg_dict):
+def func_args(exp: str, arg_dict: Dict[str, Any]):
+    """
+    Function to assign value to each parameter which is passed as an argument to function
+    Args:
+        exp: Mathematical expression of Function{e.g. variable0*slope+intercept}
+        arg_dict: dict of value of variables used in function
+
+    Returns: Updated expression of function with input value of variable
+
+    """
     for i in arg_dict:
         if i in exp:
             exp = exp.replace(i, str(arg_dict[i]))
@@ -219,7 +235,6 @@ def func_args(exp, arg_dict):
 def generate_main_forward(
     nodes: List["node"], execution_order: List[str], d_e: Dict[str, Any]
 ):
-
     """Helper function to generate the main forward method that will specify
     the execution of the pytorch model. This requires proper ordering of module
     calls as well as preservation of variables.
@@ -438,11 +453,11 @@ def _script_to_model(script: str, model_id1: str, version: str):
 
     print("version", version)
     if version == "mdf.s":
-        path_list = model_input.split("/")[:-2] + ["PyTorch/"]
+        path_list = model_input.split("/")[:-2] + ["PyTorch/MDF_PyTorch/"]
         out_filename = "/".join(path_list)
         module_path = str(out_filename) + f"{model_id1}" + "_pytorch.py"
     elif version == "mdf.0":
-        path_list = model_input.split("/")[:-3] + ["PyTorch/"]
+        path_list = model_input.split("/")[:-3] + ["PyTorch/MDF_PyTorch/"]
         out_filename = "/".join(path_list)
         module_path = str(out_filename) + f"translated_{model_id1}" + "_pytorch.py"
 
@@ -482,8 +497,13 @@ __all__ = ["mdf_to_pytorch"]
 
 if __name__ == "__main__":
     from pathlib import Path
+    import os
 
-    model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/MDF/translation/Translated_Arrays.json"
+    base_path = Path(__file__).parent.parent
+    filename = "examples/MDF/translation/Translated_Arrays.json"
+    file_path = str((base_path / "../../.." / filename).resolve())
+    model_input = file_path.replace(os.sep, "/")
+
     mdf_model = load_mdf(model_input)
     if "Translated" in model_input:
         pytorch_model = mdf_to_pytorch(mdf_model, eval_models=False, version="mdf.0")

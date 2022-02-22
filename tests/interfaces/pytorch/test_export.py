@@ -2,14 +2,13 @@ import numpy as np
 import modeci_mdf.execution_engine
 import modeci_mdf.interfaces.pytorch.exporter
 from pathlib import Path
-from examples.PyTorch import ABCD_pytorch
-from examples.PyTorch import Arrays_pytorch
-from examples.PyTorch import Simple_pytorch
+from examples.PyTorch.MDF_PyTorch import ABCD_pytorch
+from examples.PyTorch.MDF_PyTorch import Arrays_pytorch
+from examples.PyTorch.MDF_PyTorch import Simple_pytorch
 
 
 def test_ABCD():
     base_path = Path(__file__).parent
-    print(base_path)
 
     filename = "examples/MDF/ABCD.json"
     file_path = (base_path / "../../.." / filename).resolve()
