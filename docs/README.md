@@ -1,5 +1,5 @@
 # Specification of ModECI v0.3
-**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See `here <https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification>`_ for ongoing discussions.
+**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.
 ## Model
 
 The top level Model containing <a href="#graph">Graph</a>s consisting of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
