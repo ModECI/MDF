@@ -7,6 +7,8 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 # ModECI Model Description Format (MDF)
+[**Click here for full documentation**](https://mdf.readthedocs.io)
+
 **Note: MDF is still in development! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](http://modeci.org/#aboutPage) to get in contact regarding MDF.**
 *The MDF format was first proposed following a meeting organised at Princeton in July 2019 by Russ Poldrack of the Center for Reproducible Neuroscience (CRN) at Stanford and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative. For more on the previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF).*
 
@@ -22,7 +24,9 @@ The MDF Python API can be used to create or load an MDF model for inspection and
 The implementation and dissemination of the MDF language and associated tools is being carried out by the [Model Exchange and Convergence Initiative (ModECI)](http://modeci.org/), with support from the [NSF Convergence Accelerator Program](https://www.nsf.gov/od/oia/convergence-accelerator/) (Track D: AI-Driven Innovation via Data and Model Sharing), as a publicly accessible open source project. The initial design has been informed by a series of workshops involving developers of key software environments and other stakeholders in machine learning, cognitive science and neuroscience. Future workshops will address broadening of support to other domains in basic and applied science and technology development (e.g., population biology, medical informatics, structural and environmental monitoring, and complex systems control).  Environments for which support is currently being developed include [PyTorch](https://pytorch.org), [ONNX](http://onnx.ai), [WebGME](https://webgme.org), [NeuroML](https://neuroml.org), [PsyNeuLink](http://www.psyneuln.deptcpanel.princeton.edu), and [ACT-R](http://act-r.psy.cmu.edu).
 
 <p align="center">
-  <a href="examples/README.md"><img alt="mdf interacts" width="400" src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/ModECI_MDF.svg"/></a>
+  <a href="examples/README.md">
+    <img alt="mdf interacts" width="400" src="examples/ModECI_MDF.png"/>
+  </a>
 <br/><sup><i><b>Fig 1:</b> Some of the current and planned formats which MDF will interact with. Click on the image for more information.</i></sup></p>
 
 Successful interfacing of MDF to existing disciplinary standards (such as [ONNX](http://onnx.ai) in machine learning, and [NeuroML](https://neuroml.org) in neuroscience) as well as general purpose simulation environments (such as [WebGME](https://webgme.org)) will permit bridging between these environments, and translation to the broader set of environments supported by those standards (such as [Tensorflow](https://www.tensorflow.org) & [Keras](https://keras.io) in the case of ONNX, and [The Virtual Brain](https://www.thevirtualbrain.org) and [SONATA](https://github.com/AllenInstitute/sonata) in the case of NeuroML).  Efforts are also underway, in collaboration with projects in the NSF Accelerator Track C (Quantum Technology), to use MDF for facilitating the implementation of computational models on [quantum hardware](https://github.com/ModECI/MDF/blob/readme_update/examples/Quantum).

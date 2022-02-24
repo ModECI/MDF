@@ -7,18 +7,31 @@ import yaml
 
 mod = Model(id="Simple")
 
+
 doc = mod.generate_documentation(format="markdown")
 
-comment = "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**"
+comment = "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions."
+comment_rst = "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See `here <https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification>`_ for ongoing discussions."
 
 with open("README.md", "w") as d:
     d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
     d.write("%s\n" % comment)
     d.write(doc)
-
+"""
 with open("sphinx/source/api/Specification.md", "w") as d:
     d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
     d.write("%s\n" % comment)
+    d.write(doc)"""
+
+
+doc = mod.generate_documentation(format="rst")
+
+with open("sphinx/source/api/Specification.rst", "w") as d:
+    ver = "Specification of ModECI v%s RST" % MODECI_MDF_VERSION
+    d.write("%s\n" % ("=" * len(ver)))
+    d.write("%s\n" % ver)
+    d.write("%s\n\n" % ("=" * len(ver)))
+    d.write("%s\n\n" % comment_rst)
     d.write(doc)
 
 doc = mod.generate_documentation(format="dict")
