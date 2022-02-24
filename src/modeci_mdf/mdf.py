@@ -17,18 +17,8 @@ import sympy
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
-
-# If we running python version 3.7 or lower, we need to using typing_compat
-if sys.version_info < (3, 8):
-    from typing_compat import get_args, get_origin
-else:
-    from typing import get_args, get_origin
-
 from attr import has, field, fields
 from attr.validators import optional, instance_of, in_
-
-from cattr.gen import make_dict_unstructure_fn, make_dict_structure_fn, override
-from cattr.preconf.pyyaml import make_converter as make_yaml_converter
 
 from ast import literal_eval as make_tuple
 
@@ -127,7 +117,8 @@ class InputPort(MdfBase):
 
     Attributes:
         id: The unique (for this Node) id of the input port,
-        shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
+        shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes
+            (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
         type: The data type of the input received at a port or the output sent by a port.
 
     """
