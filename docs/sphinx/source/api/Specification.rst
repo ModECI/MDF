@@ -9,8 +9,7 @@ Model
 =====
 The top level Model containing Graphs consisting of Nodes connected via Edges.
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 ==========================  ===========  ===========================================================
 Allowed field               Data Type    Description
@@ -22,8 +21,7 @@ Allowed field               Data Type    Description
 **notes**                   str          *Human readable notes*
 ==========================  ===========  ===========================================================
 
-Allowed children
-================
+**Allowed children**
 
 ===============  =================  ==================================
 Allowed child    Data Type          Description
@@ -36,8 +34,7 @@ Graph
 =====
 A directed graph consisting of Nodes connected via Edges.
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 ===============  ===============================  ==============================================
 Allowed field    Data Type                        Description
@@ -49,8 +46,7 @@ Allowed field    Data Type                        Description
 **notes**        str                              *Human readable notes*
 ===============  ===============================  ==============================================
 
-Allowed children
-================
+**Allowed children**
 
 ===============  ===============  ======================================
 Allowed child    Data Type        Description
@@ -64,8 +60,7 @@ ConditionSet
 ============
 Specifies the non-default pattern of execution of Nodes
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 =================  ===========  ========================================================
 Allowed field      Data Type    Description
@@ -80,8 +75,7 @@ Node
 ====
 A self contained unit of evaluation receiving input from other Nodes on InputPorts. The values from these are processed via a number of Functions and one or more final values are calculated on the OutputPorts
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 ===============  ===========  ========================================
 Allowed field    Data Type    Description
@@ -91,8 +85,7 @@ Allowed field    Data Type    Description
 **notes**        str          *Human readable notes*
 ===============  ===========  ========================================
 
-Allowed children
-================
+**Allowed children**
 
 ================  ===========================  ===============================================================
 Allowed child     Data Type                    Description
@@ -108,8 +101,7 @@ InputPort
 =========
 The InputPort is an attribute of a Node which allows external information to be input to the Node
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 ===============  ===========  ===============================================================================
 Allowed field    Data Type    Description
@@ -126,8 +118,7 @@ Function
 ========
 A single value which is evaluated as a function of values on InputPorts and other Functions
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 ===============  ===========  =====================================================================================================================================================================================
 Allowed field    Data Type    Description
@@ -145,8 +136,7 @@ Parameter
 =========
 A Parameter of the Node, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a defaultinitialvalue with a timederivative
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 =========================  ===================  ======================================================================================================================================================================================================
 Allowed field              Data Type            Description
@@ -166,8 +156,7 @@ OutputPort
 ==========
 The OutputPort is an attribute of a Node which exports information to another Node connected by an Edge
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 ===============  ===========  ===========================================================================
 Allowed field    Data Type    Description
@@ -183,8 +172,7 @@ Edge
 ====
 An Edge is an attribute of a Graph that transmits computational results from a sender's OutputPort to a receiver's InputPort
 
-Allowed parameters
-==================
+**Allowed parameters**
 
 =================  ===========  =============================================================================================
 Allowed field      Data Type    Description
