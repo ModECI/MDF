@@ -5,23 +5,12 @@ r"""
     executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
     environments using the :mod:`~modeci_mdf.interfaces` module.
 """
-import sys
-import attr
-import cattr
-
-import json
-import yaml
-import numpy as np
-
 import sympy
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
-from attr import has, field, fields
-from attr.validators import optional, instance_of, in_
-
-from ast import literal_eval as make_tuple
-
+import modelspec
+from modelspec import has, field, fields, optional, instance_of, in_
 from modelspec.base_types import (
     Base,
     converter,
@@ -29,6 +18,8 @@ from modelspec.base_types import (
     value_expr_types,
     value_expr_converter,
 )
+
+from ast import literal_eval as make_tuple
 
 from modeci_mdf import MODECI_MDF_VERSION
 from modeci_mdf import __version__
@@ -48,7 +39,7 @@ __all__ = [
 ]
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class MdfBase(Base):
     """
     Base class for all MDF core classes that implements common functionality.
@@ -63,7 +54,7 @@ class MdfBase(Base):
     )
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class Function(MdfBase):
     r"""
     A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
@@ -110,7 +101,7 @@ class Function(MdfBase):
             raise ValueError(f"Could not parse function specification: {o}")
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class InputPort(MdfBase):
     r"""
     The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node
@@ -131,7 +122,7 @@ class InputPort(MdfBase):
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class OutputPort(MdfBase):
     r"""
     The :class:`OutputPort` is an attribute of a :class:`Node` which exports information to another :class:`Node`
@@ -146,7 +137,7 @@ class OutputPort(MdfBase):
     value: Optional[str] = field(validator=optional(instance_of(str)), default=None)
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class Parameter(MdfBase):
     r"""
     A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
@@ -226,7 +217,7 @@ class Parameter(MdfBase):
         return d
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class Node(MdfBase):
     r"""
     A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\(s).
@@ -263,7 +254,7 @@ class Node(MdfBase):
         return None
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class Edge(MdfBase):
     r"""
     An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's
@@ -288,7 +279,7 @@ class Edge(MdfBase):
     )
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class Condition(MdfBase):
     r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
 
@@ -308,7 +299,7 @@ class Condition(MdfBase):
         **kwargs: Optional[Dict[str, Any]],
     ):
         # We need to right our own __init__ in this case because the current API for Condition requires saving
-        # kwargs.
+        # kwargs. This code is very attrs specific and hacky. Wish there was a better way to do this.
 
         # Remove any field from kwargs that is pre-defined field on the MDF Condition class.
         for a in self.__attrs_attrs__:
@@ -322,7 +313,7 @@ class Condition(MdfBase):
         self.__attrs_init__(type, kwargs)
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class ConditionSet(MdfBase):
     r"""
     Specifies the non-default pattern of execution of Nodes
@@ -339,7 +330,7 @@ class ConditionSet(MdfBase):
     )
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class Graph(MdfBase):
     r"""
     A directed graph consisting of Node(s) connected via Edge(s)
@@ -412,7 +403,7 @@ class Graph(MdfBase):
         return list(filter(lambda x: x not in all_receiver_ports, all_ips))
 
 
-@attr.define(eq=False)
+@modelspec.define(eq=False)
 class Model(MdfBase):
     r"""
     The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
