@@ -9,7 +9,7 @@ from modeci_mdf.utils import load_mdf
 from modeci_mdf.execution_engine import EvaluableGraph
 
 import onnx
-from onnx import helper, shape_inference
+from onnx import helper, shape_inference, numpy_helper
 from onnx import AttributeProto, TensorProto, GraphProto
 from onnx.defs import get_schema
 
@@ -117,13 +117,9 @@ def generate_onnx_node(node, graph):
             onnx_initializer[param.id] = constant
         elif type(param.value) == list:
             name = node.id + "_" + param.id
-            constant = helper.make_tensor(
-                name,
-                data_type=TensorProto.FLOAT,
-                dims=np.array(param.value).shape,
-                vals=param.value,
+            onnx_initializer[param.id] = numpy_helper.from_array(
+                np.array(param.value), name
             )
-            onnx_initializer[param.id] = constant
 
             # The following will be the sender port from the constant onnx node for this parameter
             sender_port_name[param.id] = name
@@ -166,6 +162,10 @@ def generate_onnx_node(node, graph):
         sender_port_name[in_edge.receiver_port] = (
             in_edge.sender + "_" + in_edge.sender_port
         )
+
+    if len(schema.inputs) > 0 and schema.inputs[0].option.name == "Variadic":
+        function_input_names = literal_eval(function_input_names[0])
+
     onnx_node_input_names = [
         sender_port_name[function_input_name]
         if function_input_name in sender_port_name
@@ -173,8 +173,10 @@ def generate_onnx_node(node, graph):
         for function_input_name in function_input_names
     ]
 
-    # No parameters. Constants became their own nodes earlier
-    onnx_node_parameters = {}
+    # Get any attributes that have been specified as MDF parameters
+    onnx_node_attributes = {
+        p.id: p.value for p in node.parameters if p.id in schema.attributes
+    }
 
     # Find the outputs of the new ONNX node. These are the output ports of the node
     onnx_node_output_names = [node.id + "_" + port.id for port in node.output_ports]
@@ -182,13 +184,21 @@ def generate_onnx_node(node, graph):
     # print(node.id, node_in_edges,node_out_edges)
     # print(function_name, onnx_node_input_names, onnx_node_output_names)
 
+    if (
+        function_name in ("ConstantOfShape", "Constant")
+        and "value" in onnx_node_attributes
+    ):
+        onnx_node_attributes["value"] = numpy_helper.from_array(
+            np.array(onnx_node_attributes["value"])
+        )
+
     # Create an ONNX node
     onnx_node = helper.make_node(
         function_name,
         onnx_node_input_names,
         onnx_node_output_names,
         name=node.id,
-        **onnx_node_parameters,
+        **onnx_node_attributes,
     )
 
     # Check if any of the node's inputs are the inputs to the ONNX graph itself.
@@ -222,8 +232,10 @@ def generate_onnx_node(node, graph):
         # Create ONNX graph output ports
         for output_port in output_ports_without_edge:
             # No need to create output shapes because they are inferred by ONNX
-            value_info = helper.make_empty_tensor_value_info(
-                node.id + "_" + output_port.id
+            value_info = helper.make_tensor_value_info(
+                node.id + "_" + output_port.id,
+                TensorProto.FLOAT,
+                [1, 10],
             )
             onnx_graph_outputs.append(value_info)
     # print("Graph ip op", input_ports_without_edge, output_ports_without_edge)
