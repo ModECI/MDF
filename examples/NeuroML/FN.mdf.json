@@ -68,6 +68,9 @@
                             "W": {
                                 "default_initial_value": "initial_w",
                                 "time_derivative": "(mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity) / (time_constant_w*MSEC)"
+                            },
+                            "OUTPUT": {
+                                "value": "V"
                             }
                         },
                         "input_ports": {

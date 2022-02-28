@@ -29,7 +29,7 @@ python ABCD.py -mdf
 python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3 -noview
 
 ####  Test evaluating MDF version
-#python -m modeci_mdf.execution_engine ABCD.mdf.json
+##python -m modeci_mdf.execution_engine ABCD.mdf.json
 
 ####  Generate a graph depicting the structure & *dynamics* of the network from the LEMS description
 pynml LEMS_SimABCD.xml -lems-graph
