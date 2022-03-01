@@ -339,5 +339,10 @@ def test_arrays(tmpdir):
         ).all()
 
 
+def test_ndarray_json_metadata():
+    model = Node(id="a", metadata={"b": np.array([0])})
+    model.to_json()
+
+
 if __name__ == "__main__":
     test_graph_types("/tmp")

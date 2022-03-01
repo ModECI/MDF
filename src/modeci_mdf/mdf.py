@@ -6,6 +6,7 @@ r"""
     environments using the :mod:`~modeci_mdf.interfaces` module.
 """
 import sympy
+import numpy as np
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
