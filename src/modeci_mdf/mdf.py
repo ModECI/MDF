@@ -109,9 +109,9 @@ class InputPort(MdfBase):
 
     Attributes:
         id: The unique (for this Node) id of the input port,
-        shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes
+        shape: The shape of the input port. This uses the same syntax as numpy ndarray shapes
             (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
-        type: The data type of the input received at a port or the output sent by a port.
+        type: The data type of the input received at a port.
 
     """
     id: str = field(validator=instance_of(str))
@@ -133,9 +133,18 @@ class OutputPort(MdfBase):
         id: Unique identifier for the output port.
         value: The value of the :class:`OutputPort` in terms of the :class:`InputPort`, :class:`Function` values, and
             :class:`Parameter` values.
+        shape: The shape of the output port. This uses the same syntax as numpy ndarray shapes
+            (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
+        type: The data type of the output sent by a port.
     """
     id: str = field(validator=instance_of(str))
     value: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+    shape: Optional[Tuple[int, ...]] = field(
+        validator=optional(instance_of(tuple)),
+        default=None,
+        converter=lambda x: make_tuple(x) if type(x) == str else x,
+    )
+    type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
 
 
 @modelspec.define(eq=False)
