@@ -6,11 +6,10 @@ from modeci_mdf.interfaces.pytorch.exporter import mdf_to_pytorch
 # sample_examples=["examples/MDF/translation/Translated_Arrays.json", "examples/MDF/translation/Translated_Simple.json",
 #                "examples/MDF/translation/Translated_ABCD.json", "examples/MDF/ABCD.json", "examples/MDF/Arrays.json"
 #                  "examples/MDF/Simple.json"]
-def main(model_input):
-
-    # base_path = Path(__file__).parent
-    # file_path = str((base_path / "../../.." / filename).resolve())
-    # model_input = file_path.replace(os.sep, "/")
+def main(filename):
+    base_path = Path(__file__).parent
+    file_path = str((base_path / "../../.." / filename).resolve())
+    model_input = file_path.replace(os.sep, "/")
 
     mdf_model = load_mdf(model_input)
     if "Translated" in model_input:
@@ -24,5 +23,5 @@ def main(model_input):
 
 
 if __name__ == "__main__":
-    model_input = "C:/Users/mraunak/PycharmProjects/MDF/examples/MDF/Arrays.json"
-    main(model_input)
+    filename = "examples/MDF/ABCD.json"
+    main()
