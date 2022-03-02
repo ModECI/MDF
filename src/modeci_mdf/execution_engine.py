@@ -988,7 +988,7 @@ class EvaluableGraph:
                     inp.set_input_value(initializer[inp_name])
 
         print(
-            "\nEvaluating graph: %s, root nodes: %s, with array format %s"
+            "Evaluating graph: %s, root nodes: %s, with array format %s"
             % (self.graph.id, self.root_nodes, array_format)
         )
         str_conds_nb = "\n  ".join(
@@ -1003,8 +1003,9 @@ class EvaluableGraph:
                 for scale, cond in self.scheduler.termination_conds.items()
             ]
         )
-        print(" node-based conditions\n  %s" % str_conds_nb)
-        print(" termination conditions\n  %s" % str_conds_term)
+        if self.verbose:
+            print(" node-based conditions\n  %s" % str_conds_nb)
+            print(" termination conditions\n  %s" % str_conds_term)
 
         incoming_edges = {n: set() for n in self.graph.nodes}
         for edge in self.graph.edges:
