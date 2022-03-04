@@ -24,4 +24,4 @@ def main(filename):
 
 if __name__ == "__main__":
     filename = "examples/MDF/ABCD.json"
-    main()
+    main(filename)
