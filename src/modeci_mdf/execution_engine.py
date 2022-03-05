@@ -14,6 +14,7 @@ conditional constraints.
 import copy
 import functools
 import inspect
+import itertools
 import os
 import re
 import sys
@@ -1167,7 +1168,17 @@ class EvaluableGraph:
 
         """
 
-        def substitute_condition_arguments(args, condition_type):
+        def get_custom_parameter_getter(eobj):
+            def getter(dependency, parameter):
+                res = eobj.curr_value
+                if res is None:
+                    return 0
+                else:
+                    return res
+
+            return getter
+
+        def update_condition_arguments(args, condition_type):
             # mdf format prefers the key name for all conditions that use it or
             # its value as an __init__ argument
             combined_condition_arguments = {"dependencies": "dependency"}
@@ -1181,6 +1192,45 @@ class EvaluableGraph:
                 ):
                     args[actual] = args[preferred]
                     del args[preferred]
+
+            if "custom_parameter_getter" in sig.parameters:
+                try:
+                    dependency = args["dependency"]
+                    parameter = args["parameter"]
+                except KeyError as e:
+                    raise ValueError(
+                        "Threshold condition did not specify dependency or parameter"
+                    ) from e
+
+                # self is EvaluableGraph condition is running under,
+                enode = self.enodes[dependency.id]
+                evaluable_objects = [
+                    enode.evaluable_inputs,
+                    enode.evaluable_parameters,
+                    enode.evaluable_functions,
+                    enode.evaluable_outputs,
+                ]
+                valid_parameters = itertools.chain.from_iterable(
+                    [obj for obj in evaluable_objects]
+                )
+                args["custom_parameter_validator"] = (
+                    lambda dependency, parameter: parameter in valid_parameters
+                )
+                # assumes a unique parameter id among evaluable objects for
+                # dependency, or will resolve in favor of first with that id
+                for obj in evaluable_objects:
+                    try:
+                        obj = obj[parameter]
+                    except KeyError:
+                        pass
+                    else:
+                        args["custom_parameter_getter"] = get_custom_parameter_getter(
+                            obj
+                        )
+                else:
+                    raise ValueError(
+                        f"No {parameter} evaluable object for {dependency}, options: {list(valid_parameters)}"
+                    )
 
             return args
 
@@ -1230,7 +1280,7 @@ class EvaluableGraph:
             else:
                 cond_args[k] = new_v
 
-        cond_args = substitute_condition_arguments(cond_args, typ)
+        cond_args = update_condition_arguments(cond_args, typ)
 
         try:
             return typ(**cond_args)
