@@ -1,6 +1,6 @@
 {
     "version": "ModECI MDF v0.3",
-    "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice. See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.**",
+    "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.",
     "specification": {
         "Model": {
             "definition": "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s.",
