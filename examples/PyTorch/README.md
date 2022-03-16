@@ -22,16 +22,6 @@ convert the underlying IR representation of the model to MDF. The MDF for this
 model is the written to [inception.json](inception.json). The model is then executed
 via the MDF scheduler and the results are compared to the native execution in PyTorch.
 
-### Drift Diffusion Model
-
-A simple example of a Drift Diffusion Model implemented in PyTorch and converted to
-MDF can be executed with:
-
-```bash
-python pytorch_ddm.python
-```
-
-This will generate the MDF representation in [ddm.json](ddm.json)
 
 ### Multi-Layer Perceptron MDF to PyTorch Conversion
 To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification is translated to a PyTorch model and executed using sample digit-recognition data, run:
