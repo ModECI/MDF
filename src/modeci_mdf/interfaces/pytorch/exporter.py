@@ -41,7 +41,7 @@ def get_module_declaration_text(
 
     Returns: Script in PyTorch schema
     """
-    declaration_text = ("\nclass {}(nn.Module):").format(name)
+    declaration_text = ("\n\nclass {}(nn.Module):").format(name)
 
     input_ports = node_dict["input_ports"]
     functions = node_dict["functions"]
@@ -53,16 +53,21 @@ def get_module_declaration_text(
             if parameter.function:
                 function_set.add(parameter)
 
+        torch.set_printoptions(profile="full")
         if parameters and not functions:
-            declaration_text += "\n\tdef __init__(self,"
+            declaration_text += "\n\tdef __init__(\n\t\tself,"
             for parameter in parameters:
                 if parameter.id == "input_level":
                     graph_input.append(parameter.value)
                 if not parameter.function:
                     param_set.add(parameter.id)
                 if not parameter.is_stateful() and not parameter.function:
+                    val = f"torch.tensor({parameter.value})"
+                    ot = type(parameter.value)
+                    if ot == np.ndarray:
+                        val = f"torch.{torch.from_numpy(parameter.value)}"
                     declaration_text += (
-                        f"{parameter.id}=torch.tensor({parameter.value}),"
+                        f"\n\t\t{parameter.id} = {val}, # orig type: {ot}"
                     )
 
                 elif parameter.is_stateful():
@@ -78,7 +83,7 @@ def get_module_declaration_text(
                             declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value.value}),"
                         else:
                             declaration_text += f"{parameter.id}=torch.tensor({parameter.default_initial_value}),"
-            declaration_text += "):"
+            declaration_text += "\n\t):"
             declaration_text += "\n\t\tsuper().__init__()"
             for parameter in parameters:
                 if not parameter.function:
@@ -296,10 +301,10 @@ def build_script(
     script = ""
     if version == "mdf.s":
         s1 = "Converted examples from MDF models version(mdf.s) to PyTorch/ONNX"
-        script += f"'{s1}'"
+        script += f'"{s1}"'
     elif version == "mdf.0":
         s2 = "Converted examples from MDF models version(mdf.0) to PyTorch/ONNX"
-        script += f"'{s2}'"
+        script += f'"{s2}"'
     imports_string = (
         "\nimport torch"
         "\nimport torch.nn as nn\nimport onnx\nimport onnxruntime as rt\nfrom math import *"
@@ -331,7 +336,7 @@ def build_script(
         modules_declaration_text += declaration_text
 
     # Build Main call
-    main_call_declaration = "\nclass Model(nn.Module):" "\n\tdef __init__(self,"
+    main_call_declaration = "\n\nclass Model(nn.Module):" "\n\tdef __init__(self,"
     for node in nodes:
         main_call_declaration += f"{node.id}" + ", "
     main_call_declaration += "):" "\n\t\tsuper().__init__()"
@@ -469,6 +474,9 @@ def mdf_to_pytorch(
         model_input: input file name
     Returns: Returns a dictionary where key = model name, value = pytorch model object
     """
+    print(
+        f"Using mdf_to_pytorch to convert {mdf_model.id} from {model_input}, evaluating: {eval_models}, version {version}"
+    )
     scripts = _generate_scripts_from_model(mdf_model, version)
     models = {}
 
@@ -488,6 +496,7 @@ if __name__ == "__main__":
 
     base_path = Path(__file__).parent.parent
     filename = "examples/MDF/translation/Translated_ABCD.json"
+    filename = "examples/MDF/Arrays.json"
     file_path = str((base_path / "../../.." / filename).resolve())
     model_input = file_path.replace(os.sep, "/")
 

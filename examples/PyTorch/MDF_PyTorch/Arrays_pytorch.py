@@ -9,7 +9,7 @@ from math import *
 class input_node(nn.Module):
     def __init__(
         self,
-        input_level=torch.tensor([[1, 2.0], [3, 4]]),
+        input_level=torch.tensor([[1, 2.0], [3, 4]]),  # orig type: <class 'list'>
     ):
         super().__init__()
         self.input_level = input_level
@@ -25,8 +25,8 @@ class input_node(nn.Module):
 class middle_node(nn.Module):
     def __init__(
         self,
-        slope=torch.tensor(0.5),
-        intercept=torch.tensor([[0.0, 1.0], [2.0, 2.0]]),
+        slope=torch.tensor(0.5),  # orig type: <class 'float'>
+        intercept=torch.tensor([[0.0, 1.0], [2.0, 2.0]]),  # orig type: <class 'list'>
     ):
         super().__init__()
         self.slope = slope
