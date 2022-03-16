@@ -39,3 +39,18 @@ To run an example where a simple Multi-Layer Perceptron (MLP) created using the 
 ```bash
 python mlp.py
 ```
+To perform an MDF to PyTorch conversion, provide an MDF model as an input to mdf_to_pytorch function
+which is available at src/modeci_mdf/interfaces/pytorch/exporter.py. The output of mdf_to_pytorch
+are PyTorch model.  Below are some working examples of this functionality. The converted
+models are available in folder: examples/PyTorch/MDF_PyTorch
+The demo to convert an MDF model to PyTorch is at MDF/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py
+
+### Model in MDF to PyTorch Conversion
+Any model created using the MDF specification is translated to a PyTorch model, run:
+
+```bash
+python MDF_to_PyTorch
+```
+
+One of sample MDF examples [ABCD.json](ABCD.json) is converted PyTorch [ABCD_pytorch.py](ABCD_pytorch.py)
+The PyTorch model is further converted to ONNX [ABCD.onnx](ABCD.onnx) and the results are compared in all three environments.
