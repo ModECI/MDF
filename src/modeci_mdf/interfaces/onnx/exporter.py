@@ -17,6 +17,8 @@ from ast import literal_eval
 import argparse
 import os
 
+import numpy
+
 
 def mdf_to_onnx(mdf_model):
     """
@@ -105,7 +107,7 @@ def generate_onnx_node(node, graph):
     # If there are multiple functions, the code should change so that each function should become its own node.
     for param in node.parameters:
         # If this is a constant
-        if param.value:
+        if type(param.value) == int or type(param.value) == float:
             # Create a constant onnx node
             name = node.id + "_" + param.id
             constant = helper.make_tensor(
@@ -140,14 +142,12 @@ def generate_onnx_node(node, graph):
         sender_port_name[in_edge.receiver_port] = (
             in_edge.sender + "_" + in_edge.sender_port
         )
-
     onnx_node_input_names = [
         sender_port_name[function_input_name]
         if function_input_name in sender_port_name
         else function_input_name
         for function_input_name in function_input_names
     ]
-
     # No parameters. Constants became their own nodes earlier
     onnx_node_parameters = {}
 
