@@ -254,3 +254,5 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/LEMS_SimIzhikevichTest.xml
 /examples/NeuroML/SimIzhikevichTest.json
 /examples/NeuroML/SimIzhikevichTest.yaml
+/examples/AB
+/examples/AB.png

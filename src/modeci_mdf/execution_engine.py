@@ -1031,7 +1031,7 @@ class EvaluableGraph:
                     inp.set_input_value(initializer[inp_name])
 
         print(
-            "\nEvaluating graph: %s, root nodes: %s, with array format %s"
+            "Evaluating graph: %s, root nodes: %s, with array format %s"
             % (self.graph.id, self.root_nodes, array_format)
         )
         str_conds_nb = "\n  ".join(
