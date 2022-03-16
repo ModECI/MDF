@@ -8,7 +8,8 @@ several working examples of this functionality.
 
 ### Inception Blocks Model
 
-![Inception](inception.svg?raw=1)
+![Inception from PyTorch](inception.svg?raw=1)
+<img alt="Inception MDF" height="500" src="inception.png"/>
 
 To run an example of converting a PyTorch InceptionV3 like model written in PyTorch
 to its MDF representation simply run:
@@ -21,6 +22,12 @@ This will define the model in PyTorch, invoke the TorchScript tracing compiler,
 convert the underlying IR representation of the model to MDF. The MDF for this
 model is the written to [inception.json](inception.json). The model is then executed
 via the MDF scheduler and the results are compared to the native execution in PyTorch.
+
+The graph representation of the MDF model can be generated with:
+
+```bash
+python inception.py -graph
+```
 
 
 ### Multi-Layer Perceptron MDF to PyTorch Conversion

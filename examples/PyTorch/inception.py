@@ -263,6 +263,10 @@ def main():
     # Run the model once to get some ground truth outpot (from PyTorch)
     output = model(galaxy_images_output, ebv_output).detach().numpy()
 
+    from modelspec.utils import _val_info
+    #print("Inputs: %s, %s"% (_val_info(galaxy_images_output),_val_info(ebv_output)))
+    print("Evaluated the graph in PyTorch, output: %s"% (_val_info(output)))
+
     # Convert to MDF
     mdf_model, params_dict = pytorch_to_mdf(
         model=model,
@@ -282,11 +286,14 @@ def main():
     # Evaluate the model via the MDF scheduler
     eg = EvaluableGraph(graph=mdf_graph, verbose=False)
     eg.evaluate(initializer=params_dict)
+    output_mdf = eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value
+
+    print("Evaluated the graph in PyTorch, output: %s"% (_val_info(output_mdf)))
 
     # Make sure the results are the same betweeen PyTorch and MDF
     assert np.allclose(
         output,
-        eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
+        output_mdf,
     )
     print("Passed all comparison tests!")
 
