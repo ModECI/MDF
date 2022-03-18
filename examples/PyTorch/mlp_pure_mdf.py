@@ -191,7 +191,7 @@ def main():
 
     from modeci_mdf.interfaces.pytorch import mdf_to_pytorch
 
-    pytorch_model = mdf_to_pytorch(mod, ".", eval_models=False, version="mdf.s")
+    ###pytorch_model = mdf_to_pytorch(mod, ".", eval_models=False, version="mdf.s")
 
     if "-graph" in sys.argv:
         mod.to_graph_image(
