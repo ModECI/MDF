@@ -58,7 +58,7 @@
         "arguments": [
             "A"
         ],
-        "expression_string": "maximum(A,0)"
+        "expression_string": "A * (A > 0)"
     },
     "onnx::LessOrEqual": {
         "description": "\nReturns the tensor resulted from performing the `less_equal` logical operation\nelementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).\n\nThis operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).\n",

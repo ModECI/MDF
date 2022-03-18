@@ -240,3 +240,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/RNN/rnn
 /examples/AB
 /examples/AB.png
+*.onnx
