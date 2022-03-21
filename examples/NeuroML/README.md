@@ -1,6 +1,26 @@
 # Interactions between NeuroML and MDF
 
-## FitzHugh Nagumo cell models
+## 1) Converting NeuroML to MDF
+
+## 1.1) Simple ABCD model
+
+**Summary: A model is created in NeuroML (using cell dynamics specified in LEMS and a network in NeuroMLlite) and converted to the equivalent model in MDF, which runs with the reference MDF execution engine.**
+
+### NeuroMLlite version
+
+[ABCD.py](ABCD.py) is a script using the [NeuroMLlite](https://docs.neuroml.org/Userdocs/Software/NeuroMLlite.html) package to create a simple network with 4 connected elements. The network built can be seen below (this can be generated with `python ABCD.py -graph2`):
+
+<p align="center"><img src="ABCD.nmllite.png" alt="ABCD.nmllite.png" height="300"></p>
+
+A version of the network in NeuroML 2 can be generated with `python ABCD.py -nml`, or generated and executed with jNeuroML with `python ABCD.py -nml`.
+This will produce the NeuroML file: [ABCD.net.nml](ABCD.net.nml) (note though this is not valid, as not all the elements included are pure NeuroML). A [LEMS Simulation file](https://docs.neuroml.org/Userdocs/LEMSSimulation.html) is generated for running the model in jNeuroML or pyNeuroML: [LEMS_SimABCD.xml](LEMS_SimABCD.xml)
+
+The definitions of the components used for A, B, etc. can be found in [PNL.xml](PNL.xml). This is a set of definitions of component types based on those present in PsyNeuLink. A graph depicting the definitions of the network elements can be generated with `pynml LEMS_SimABCD.xml -lems-graph`:
+
+<p align="center"><img src="LEMS_SimABCD.png" alt="LEMS_SimABCD.png" height="400"></p>
+
+
+## 1.2) FitzHugh Nagumo cell models
 
 ### NeuroML version
 

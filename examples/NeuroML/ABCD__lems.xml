@@ -92,7 +92,7 @@
     <InstanceRequirement name="peer" type="synapseDL"/>
     <Dynamics>
       <DerivedVariable name="rpeer" dimension="none" select="peer/OUTPUT"/>
-      <DerivedVariable name="I" dimension="none" exposure="I" value="weight * SEC * rpeer"/>
+      <DerivedVariable name="I" dimension="none" exposure="I" value="weight * rpeer"/>
     </Dynamics>
   </ComponentType>
   <Component id="a_input" type="inputNode" variable="0.1"/>

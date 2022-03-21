@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -ex
 
 run_gui_examples=true
@@ -34,11 +33,9 @@ python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3 -noview
 ####  Generate a graph depicting the structure & *dynamics* of the network from the LEMS description
 pynml LEMS_SimABCD.xml -lems-graph
 
-if [ "$run_gui_examples" == true ]; then
-    ####  Generate a graph depicting the structure of network from NeuroMLlite
-    python ABCD.py -graph2
-
-fi
+####  Generate a graph depicting the structure of network from NeuroMLlite
+python ABCD.py -graph2 -nogui
+mv ABCD.gv.png ABCD.nmllite.png
 
 
 ####  Generate and run jNeuroML version of the network from NeuroMLlite definition

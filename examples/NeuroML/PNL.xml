@@ -214,7 +214,7 @@
 
         <Dynamics>
             <DerivedVariable name="rpeer" dimension="none" select="peer/OUTPUT"/>
-            <DerivedVariable name="I" exposure="I" dimension="none" value="weight * SEC * rpeer"/>
+            <DerivedVariable name="I" exposure="I" dimension="none" value="weight * rpeer"/>
         </Dynamics>
 
     </ComponentType>
