@@ -35,8 +35,8 @@ These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modec
 
 ## Relu
  <p><i>Rectified linear function (work in progress...)</i></p>
-<p><b>Relu(A)</b> = maximum(A,0)</p>
-<p>Python version: numpy.maximum(A,0)</p>
+<p><b>Relu(A)</b> = A * (A > 0)</p>
+<p>Python version: A * (A > 0)</p>
 
 ## onnx::LessOrEqual
  <p><i>

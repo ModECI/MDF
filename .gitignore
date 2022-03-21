@@ -256,3 +256,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/SimIzhikevichTest.yaml
 /examples/AB
 /examples/AB.png
+*.onnx

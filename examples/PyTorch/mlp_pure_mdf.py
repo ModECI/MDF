@@ -176,6 +176,8 @@ def main():
     eg = EvaluableGraph(mod_graph, verbose=False)
     eg.evaluate(array_format=format)
 
+    from modelspec.utils import _val_info
+
     print("Finished evaluating graph using array format %s" % format)
 
     for n in [
@@ -184,8 +186,12 @@ def main():
         "mlp_hidden_layer_with_relu",
         "mlp_output_layer",
     ]:
-        out = eg.enodes[n].evaluable_outputs["out_port"].curr_value
-        print(f"Final output value of node {n}: {out}, shape: {out.shape}")
+        out = _val_info(eg.enodes[n].evaluable_outputs["out_port"].curr_value)
+        print(f"Final output value of node {n}:\t {out}")
+
+    from modeci_mdf.interfaces.pytorch import mdf_to_pytorch
+
+    ###pytorch_model = mdf_to_pytorch(mod, ".", eval_models=False, version="mdf.s")
 
     if "-graph" in sys.argv:
         mod.to_graph_image(

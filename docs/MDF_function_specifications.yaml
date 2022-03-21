@@ -68,7 +68,7 @@ Relu:
     description: Rectified linear function (work in progress...)
     arguments:
     - A
-    expression_string: maximum(A,0)
+    expression_string: A * (A > 0)
 onnx::LessOrEqual:
     description: '
 

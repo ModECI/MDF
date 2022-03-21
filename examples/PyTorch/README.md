@@ -8,7 +8,8 @@ several working examples of this functionality.
 
 ### Inception Blocks Model
 
-![Inception](inception.svg?raw=1)
+![Inception from PyTorch](inception.svg?raw=1)
+<img alt="Inception MDF" height="500" src="inception.png"/>
 
 To run an example of converting a PyTorch InceptionV3 like model written in PyTorch
 to its MDF representation simply run:
@@ -22,16 +23,12 @@ convert the underlying IR representation of the model to MDF. The MDF for this
 model is the written to [inception.json](inception.json). The model is then executed
 via the MDF scheduler and the results are compared to the native execution in PyTorch.
 
-### Drift Diffusion Model
-
-A simple example of a Drift Diffusion Model implemented in PyTorch and converted to
-MDF can be executed with:
+The graph representation of the MDF model can be generated with:
 
 ```bash
-python pytorch_ddm.python
+python inception.py -graph
 ```
 
-This will generate the MDF representation in [ddm.json](ddm.json)
 
 ### Multi-Layer Perceptron MDF to PyTorch Conversion
 To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification is translated to a PyTorch model and executed using sample digit-recognition data, run:
@@ -39,3 +36,18 @@ To run an example where a simple Multi-Layer Perceptron (MLP) created using the 
 ```bash
 python mlp.py
 ```
+To perform an MDF to PyTorch conversion, provide an MDF model as an input to mdf_to_pytorch function
+which is available at src/modeci_mdf/interfaces/pytorch/exporter.py. The output of mdf_to_pytorch
+are PyTorch model.  Below are some working examples of this functionality. The converted
+models are available in folder: examples/PyTorch/MDF_PyTorch
+The demo to convert an MDF model to PyTorch is at MDF/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py
+
+### Model in MDF to PyTorch Conversion
+Any model created using the MDF specification is translated to a PyTorch model, run:
+
+```bash
+python MDF_to_PyTorch
+```
+
+One of sample MDF examples [ABCD.json](ABCD.json) is converted PyTorch [ABCD_pytorch.py](ABCD_pytorch.py)
+The PyTorch model is further converted to ONNX [ABCD.onnx](ABCD.onnx) and the results are compared in all three environments.
