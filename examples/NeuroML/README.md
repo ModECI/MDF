@@ -22,9 +22,10 @@ The definitions of the components used for A, B, etc. can be found in [PNL.xml](
 
 A version of the network in MDF can be generated from NeuroMLlite definition with: `python ABCD.py -mdf` producing [ABCD.mdf.yaml](ABCD.mdf.yaml) and [ABCD.mdf.json](ABCD.mdf.json).
 
-A graph of the structure of the MDF model can be generated with: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3`
+A graph of the structure of the MDF model can be generated with: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 1` (left below), or with more detail: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3` (right below.)
 
-<p align="center"><img src="ABCD.mdf.png" alt="ABCD.mdf.png" height="400"></p>
+<p align="center"><img src="ABCD.1.mdf.png" alt="ABCD.1.mdf.png" height="300"> 
+<img src="ABCD.mdf.png" alt="ABCD.mdf.png" height="400"></p>
 
 
 

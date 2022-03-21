@@ -25,6 +25,8 @@ mv ABCD.gv.png ABCD.nmllite.png
 python ABCD.py -mdf
 
 ####  Generate graph from MDF version
+python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 1 -noview
+mv ABCD.gv.png ABCD.1.mdf.png
 python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3 -noview
 mv ABCD.gv.png ABCD.mdf.png
 

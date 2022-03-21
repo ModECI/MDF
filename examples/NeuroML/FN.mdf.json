@@ -6,6 +6,11 @@
                 "notes": "FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS",
                 "nodes": {
                     "FNpop_0": {
+                        "metadata": {
+                            "color": "0.2 0.2 0.2",
+                            "radius": 3,
+                            "region": "region1"
+                        },
                         "parameters": {
                             "initial_w": {
                                 "value": 0.0
