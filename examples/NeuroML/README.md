@@ -20,6 +20,14 @@ The definitions of the components used for A, B, etc. can be found in [PNL.xml](
 <p align="center"><img src="LEMS_SimABCD.png" alt="LEMS_SimABCD.png" height="400"></p>
 
 
+A version of the network in MDF can be generated from NeuroMLlite definition with: `python ABCD.py -mdf` producing [ABCD.mdf.yaml](ABCD.mdf.yaml) and [ABCD.mdf.json](ABCD.mdf.json).
+
+A graph of the structure of the MDF model can be generated with: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3`
+
+<p align="center"><img src="ABCD.mdf.png" alt="ABCD.mdf.png" height="400"></p>
+
+
+
 ## 1.2) FitzHugh Nagumo cell models
 
 ### NeuroML version
