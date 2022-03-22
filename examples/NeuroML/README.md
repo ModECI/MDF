@@ -24,7 +24,7 @@ A version of the network in MDF can be generated from NeuroMLlite definition wit
 
 A graph of the structure of the MDF model can be generated with: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 1` (left below), or with more detail: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3` (right below.)
 
-<p align="center"><img src="ABCD.1.mdf.png" alt="ABCD.1.mdf.png" height="300"> 
+<p align="center"><img src="ABCD.1.mdf.png" alt="ABCD.1.mdf.png" height="300">
 <img src="ABCD.mdf.png" alt="ABCD.mdf.png" height="400"></p>
 
 
