@@ -76,6 +76,15 @@ python FNrun.py    # Load FN model and run with MDF scheduler
 
 <p align="center"><img src="MDFFNrun.png" alt="MDFFNrun.png" height="400"></p>
 
+
+Adding the option `-multi` to the Python script for running the FN example, modifies the graph to add an input node with an array of values, meaning multiple instances of the FN neuron will be simulated:
+
+```
+python FN.py -multi
+```
+
+<p align="center"><img src="FNmulti.png" alt="FNmulti.png" height="300"> <img src="MDFFNrun.multi.png" alt="MDFFNrun.multi.png" height="300"></p>
+
 ## 2) Converting MDF to NeuroML/LEMS
 
 

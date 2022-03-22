@@ -17,7 +17,7 @@ def execute(multi=False):
     mod_graph = mdf_model.graphs[0]
 
     dt = 0.001
-    duration = 0.03
+    duration = 0.2
 
     if not multi:
 
