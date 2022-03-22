@@ -33,14 +33,15 @@ A graph of the structure of the MDF model can be generated with: `python -m mode
 
 ### NeuroML version
 
-A version of the FitzHugh Nagumo neuron model has been specified in LEMS ([LEMS_SimFN.xml](LEMS_SimFN.xml)) for use in NeuroML ([FN.net.nml](FN.net.nml)).
+A version of the FitzHugh Nagumo neuron model has been created using NeuroMLlite ([FN.py](FN.py)) which generated LEMS ([LEMS_SimFN.xml](LEMS_SimFN.xml)) which can simulate the NeuroML model ([FN.net.nml](FN.net.nml)).
+
 A graphical representation of the LEMS is below:
 
 <p align="center"><img src="LEMS_SimFN.png" alt="LEMS_SimFN.png" height="400"></p>
 
-The network is originally specified in NeuroMLlite ([FN.py](FN.py)) and is generated in LEMS and run with:
+It can be run with:
 ```
-python FN.py -jnml      # Generate the LEMS file from the NeuroMLlite description
+python FN.py -jnml      # Generate and run the LEMS file from the NeuroMLlite description
 pynml LEMS_SimFN.xml    # Run the LEMS file using pyNeuroML
 ```
 
@@ -50,7 +51,7 @@ pynml LEMS_SimFN.xml    # Run the LEMS file using pyNeuroML
 ### NeuroML to MDF
 
 
-The NeuroMLlite version can be used to generate MDF for the model:
+The NeuroMLlite version can also be used to generate MDF for the model:
 
 ```
 python FN.py -mdf      # Generate the MDF serializations (JSON and YAML) from the NeuroMLlite description
@@ -67,10 +68,23 @@ python -m modeci_mdf.interfaces.graphviz.importer FN.mdf.yaml 3    #  Generate g
 
 ### Execute model using MDF
 
-The model can be loaded and run in MDF using the standard scheduler with:
+A script has been created ([FNrun.py](FNrun.py)) where the model is loaded, run using the standard MDF execution engine, and plotted:
 
 ```
 python FNrun.py    # Load FN model and run with MDF scheduler
 ```
 
 <p align="center"><img src="MDFFNrun.png" alt="MDFFNrun.png" height="400"></p>
+
+## 2) Converting MDF to NeuroML/LEMS
+
+
+It is also possible to convert MDF models into equivalents in NeuroML/LEMS:
+
+```
+cd ../MDF  # convert some of the examples in the examples/MDF directory
+
+python -m modeci_mdf.interfaces.neuroml.exporter Simple.json -run
+python -m modeci_mdf.interfaces.neuroml.exporter ABCD.json -run
+python -m modeci_mdf.interfaces.neuroml.exporter States.json -run
+```
