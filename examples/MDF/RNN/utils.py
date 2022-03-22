@@ -2,7 +2,9 @@ from modeci_mdf.mdf import *
 import numpy as np
 
 
-def create_rnn_node(id, N, g):
+def create_rnn_node(id, N, g, seed=1234):
+
+    np.random.seed(seed)
 
     ## RNN node...
     rnn_node = Node(id=id)

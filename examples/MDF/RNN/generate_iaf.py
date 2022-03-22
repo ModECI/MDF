@@ -122,13 +122,16 @@ def main():
             s.append(eg.enodes["iaf_node"].evaluable_outputs["out_port"].curr_value)
             t_ext += dt
 
-        if "-nogui" not in sys.argv:
-            import matplotlib.pyplot as plt
+        import matplotlib.pyplot as plt
 
-            plt.plot(times, t, label="time at input node")
-            plt.plot(times, i, label="state of input node")
-            plt.plot(times, s, label="IaF 0 state")
-            plt.legend()
+        plt.plot(times, t, label="time at input node")
+        plt.plot(times, i, label="state of input node")
+        plt.plot(times, s, label="IaF 0 state")
+        plt.legend()
+
+        plt.savefig("IaF.run.png", bbox_inches="tight")
+
+        if "-nogui" not in sys.argv:
             plt.show()
 
     if "-graph" in sys.argv:

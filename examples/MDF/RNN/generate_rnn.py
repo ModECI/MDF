@@ -42,7 +42,7 @@ def main():
 
     N = 5
     g = 1.5
-    rnn_node = create_rnn_node("rnn_node", N, g)
+    rnn_node = create_rnn_node("rnn_node", N, g, seed=123)
 
     mod_graph.nodes.append(rnn_node)
 
@@ -159,20 +159,23 @@ def main():
             f"Finished {len(times)} steps in {dur:.4f}s, so {(dur/len(times)):.5f}s per step"
         )
 
+        import matplotlib.pyplot as plt
+
+        """
+        print("i: %s" % ins)
+        print("x: %s" % xs)
+        print("r: %s" % rs)"""
+
+        # plt.plot(times, ts, label="time at input node")
+        plt.plot(times, ins, label="state of input node")
+        plt.plot(times, xs, linewidth=0.25)
+        plt.plot(times, rs, label="RNN r state")
+        plt.plot(times, zs, label="z readout", linewidth=3)
+        plt.legend()
+
+        plt.savefig("RNN.run.png", bbox_inches="tight")
+
         if "-nogui" not in sys.argv:
-            import matplotlib.pyplot as plt
-
-            """
-            print("i: %s" % ins)
-            print("x: %s" % xs)
-            print("r: %s" % rs)"""
-
-            # plt.plot(times, ts, label="time at input node")
-            plt.plot(times, ins, label="state of input node")
-            plt.plot(times, xs, linewidth=0.25)
-            plt.plot(times, rs, label="RNN r state")
-            plt.plot(times, zs, label="z readout", linewidth=3)
-            plt.legend()
             plt.show()
 
     if "-graph" in sys.argv:
