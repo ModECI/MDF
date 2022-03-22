@@ -29,25 +29,33 @@ The graph representation of the MDF model can be generated with:
 python inception.py -graph
 ```
 
-
 ### Multi-Layer Perceptron MDF to PyTorch Conversion
-To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification is translated to a PyTorch model and executed using sample digit-recognition data, run:
+
+To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification and executed using sample digit-recognition data, run:
 
 ```bash
-python mlp.py
+python mlp_pure_mdf.py
 ```
-To perform an MDF to PyTorch conversion, provide an MDF model as an input to mdf_to_pytorch function
-which is available at src/modeci_mdf/interfaces/pytorch/exporter.py. The output of mdf_to_pytorch
-are PyTorch model.  Below are some working examples of this functionality. The converted
-models are available in folder: examples/PyTorch/MDF_PyTorch
-The demo to convert an MDF model to PyTorch is at MDF/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py
 
-### Model in MDF to PyTorch Conversion
+A graph of the network can be created with `python mlp_pure_mdf.py -graph`:
+
+<p align="center"><img src="mlp_pure_mdf.png" alt="mlp_pure_mdf.png" height="400"></p>
+
+
+### MDF to PyTorch Conversion
+
+To perform an MDF to PyTorch conversion, provide an MDF model as an input to the `mdf_to_pytorch` function
+which is available in [exporter.py](https://github.com/ModECI/MDF/blob/development/src/modeci_mdf/interfaces/pytorch/exporter.py). The output of `mdf_to_pytorch`
+are PyTorch models.  Below are some working examples of this functionality. The converted
+models are available in folder: [MDF_PyTorch](https://github.com/ModECI/MDF/tree/development/examples/PyTorch/MDF_PyTorch).
+
+The demo to convert an MDF model to PyTorch is at [MDF_to_PyTorch.py](https://github.com/ModECI/MDF/blob/development/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py).
+
 Any model created using the MDF specification is translated to a PyTorch model, run:
 
 ```bash
 python MDF_to_PyTorch
 ```
 
-One of sample MDF examples [ABCD.json](ABCD.json) is converted PyTorch [ABCD_pytorch.py](ABCD_pytorch.py)
-The PyTorch model is further converted to ONNX [ABCD.onnx](ABCD.onnx) and the results are compared in all three environments.
+One of sample MDF examples [ABCD.json](../MDF/ABCD.json) is converted PyTorch [ABCD_pytorch.py](MDF_PyTorch/ABCD_pytorch.py)
+The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx) and the results are compared in all three environments.
