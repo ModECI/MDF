@@ -9,7 +9,6 @@ several working examples of this functionality.
 ### Inception Blocks Model
 
 ![Inception from PyTorch](inception.svg?raw=1)
-<img alt="Inception MDF" height="500" src="inception.png"/>
 
 To run an example of converting a PyTorch InceptionV3 like model written in PyTorch
 to its MDF representation simply run:
@@ -29,6 +28,8 @@ The graph representation of the MDF model can be generated with:
 python inception.py -graph
 ```
 
+<img alt="Inception MDF" height="500" src="inception.png"/>
+
 ### Multi-Layer Perceptron MDF to PyTorch Conversion
 
 To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification and executed using sample digit-recognition data, run:
@@ -40,6 +41,12 @@ python mlp_pure_mdf.py
 A graph of the network can be created with `python mlp_pure_mdf.py -graph`:
 
 <p align="center"><img src="mlp_pure_mdf.png" alt="mlp_pure_mdf.png" height="400"></p>
+
+The network can be run against images from the MNIST database with: `python mlp_pure_mdf.py -run`, and produce 98% accuracy. The image below shows the results of 300 images:
+
+<p align="center"><img src="mlp_pure_mdf.results.png" alt="mlp_pure_mdf.results.png"></p>
+
+Conversion to PyTorch: TODO...
 
 
 ### MDF to PyTorch Conversion
