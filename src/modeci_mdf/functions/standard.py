@@ -72,6 +72,10 @@ def create_python_expression(expression_string: str = None) -> str:
             )
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
+    """for func in ["max"]:
+        expression_string = expression_string.replace(
+            "%s(" % func, "numpy.%simum(" % func
+        )"""
 
     return expression_string
 
@@ -174,7 +178,7 @@ if len(mdf_functions) == 0:
         "Relu",
         description="Rectified linear function (work in progress...)",
         arguments=["A"],
-        expression_string="maximum(A,0)",
+        expression_string="A * (A > 0)",
     )
 
     # Enumerate all available ONNX operators and add them as MDF functions.
