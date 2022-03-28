@@ -149,6 +149,21 @@ class OutputPort(MdfBase):
 
 
 @modelspec.define(eq=False)
+class ParameterCondition(MdfBase):
+    r"""
+    A condition to test on a Node's parameters, which if true, sets the vaue of this Parameter
+
+    Attributes:
+        id: A unique identifier for the ParameterCondition
+        test: The boolean expression to evaluate
+        value: The new value of the Parameter if the test is true
+    """
+    id: str = field(validator=instance_of(str))
+    test: Optional[ValueExprType] = field(default=None)
+    value: Optional[ValueExprType] = field(default=None)
+
+
+@modelspec.define(eq=False)
 class Parameter(MdfBase):
     r"""
     A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
@@ -164,6 +179,7 @@ class Parameter(MdfBase):
         args: Dictionary of values for each of the arguments for the function of the parameter,
             e.g. if the in-build function is :code:`linear(slope)`, the args here could be :code:`{"slope": 3}` or
             :code:`{"slope": "input_port_0 + 2"}`
+        conditions: Parameter specific conditions
     """
 
     id: str = field(validator=instance_of(str))
@@ -176,6 +192,7 @@ class Parameter(MdfBase):
     args: Optional[Dict[str, Any]] = field(
         validator=optional(instance_of(dict)), default=None
     )
+    conditions: List[ParameterCondition] = field(factory=list)
 
     def is_stateful(self) -> bool:
         """
@@ -263,6 +280,28 @@ class Node(MdfBase):
                 return p
 
         return None
+
+    def get_input_port(self, id: str) -> "InputPort":
+        """Retrieve :class:`InputPort` object corresponding to the given id
+        Args:
+            id: Unique identifier of class:`InputPort` object
+        Returns:
+            class:`InputPort` object if the entered id matches with the id of class:`InputPort` present in the class:`Node`
+        """
+        for ip in self.input_ports:
+            if id == ip.id:
+                return ip
+
+    def get_output_port(self, id: str) -> "OutputPort":
+        """Retrieve :class:`OutputPort` object corresponding to the given id
+        Args:
+            id: Unique identifier of class:`OutputPort` object
+        Returns:
+            class:`OutputPort` object if the entered id matches with the id of class:`OutputPort` present in the class:`Node`
+        """
+        for op in self.output_ports:
+            if id == op.id:
+                return op
 
 
 @modelspec.define(eq=False)
