@@ -22,7 +22,9 @@
                                 "value": "variable"
                             }
                         },
-                        "input_ports": {},
+                        "input_ports": {
+                            "INPUT": {}
+                        },
                         "output_ports": {
                             "V": {
                                 "value": "V"

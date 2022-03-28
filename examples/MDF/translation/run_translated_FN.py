@@ -23,7 +23,7 @@ def main():
 
     if "-run" in sys.argv:
 
-        verbose = True
+        verbose = False
 
         mod_graph = load_mdf("Translated_%s" % file_path).graphs[0]
         eg = EvaluableGraph(mod_graph, verbose)
@@ -43,6 +43,10 @@ def main():
         ww_old = []
 
         while t <= duration + dt:
+            if t == 0:
+                eg_old.evaluate()  # replace with initialize?
+                eg.evaluate()  # replace with initialize?
+
             print("======   Evaluating at t = %s  ======" % (t))
 
             vv.append(float(eg.enodes["FNpop_0"].evaluable_parameters["V"].curr_value))
@@ -54,12 +58,7 @@ def main():
             t = float(eg.enodes["FNpop_0"].evaluable_parameters["time"].curr_value)
             times.append(t)
 
-            if t == 0:
-
-                eg_old.evaluate()  # replace with initialize?
-            else:
-
-                eg_old.evaluate(time_increment=dt)
+            eg_old.evaluate(time_increment=dt)
 
             vv_old.append(eg_old.enodes["FNpop_0"].evaluable_parameters["V"].curr_value)
             ww_old.append(eg_old.enodes["FNpop_0"].evaluable_parameters["W"].curr_value)

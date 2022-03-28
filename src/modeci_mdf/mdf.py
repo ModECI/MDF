@@ -37,6 +37,7 @@ __all__ = [
     "Edge",
     "ConditionSet",
     "Condition",
+    "ParameterCondition",
 ]
 
 

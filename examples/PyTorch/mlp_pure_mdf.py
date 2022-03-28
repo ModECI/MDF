@@ -5,7 +5,7 @@ import sys
 import h5py
 import time
 
-
+# Note: the weights for this model were precomputed and saved in the file weights.h5
 def get_weight_info():
 
     weights = {}
@@ -214,6 +214,9 @@ def main():
         imgs_to_test = imgs[:300]
 
         start = time.time()
+        all_guess = None
+        labelled_guess = {}
+
         for i in range(len(imgs_to_test)):
             ii = imgs[i, :, :]
             target = labels[i]
@@ -233,12 +236,30 @@ def main():
                     "Output of evaluated graph: %s %s (%s)"
                     % (out, out.shape, type(out).__name__)
                 )
+
+                """print(
+                    "Guesses:  %s, %s"
+                    % (all_guess, all_guess.shape if all_guess is not None else "-")
+                )"""
+                if all_guess is None:
+                    all_guess = out
+                else:
+                    all_guess = np.concatenate((all_guess, out))
+
+                if target not in labelled_guess:
+                    labelled_guess[target] = out
+                else:
+                    labelled_guess[target] = np.concatenate(
+                        (labelled_guess[target], out)
+                    )
+
                 prediction = np.argmax(out)
 
             match = target == int(prediction)
             if match:
                 matches += 1
             print(f"Target: {target}, prediction: {prediction}, match: {match}")
+
         t = time.time() - start
         print(
             "Matches: %i/%i, accuracy: %s%%. Total time: %.4f sec (%.4fs per run)"
@@ -250,6 +271,39 @@ def main():
                 t / len(imgs_to_test),
             )
         )
+
+        print(f"Guesses:  {all_guess}, {all_guess.shape}")
+
+        import matplotlib.pyplot as plt
+
+        fig, ax = plt.subplots()
+        title = "Guesses"
+        # plt.title(title)
+        # fig.canvas.set_window_title(title)
+        import matplotlib
+
+        cm = matplotlib.cm.get_cmap("Blues")
+
+        sorted_guesses = labelled_guess[0]
+        for i in range(9):
+            sorted_guesses = np.concatenate((sorted_guesses, labelled_guess[i + 1]))
+
+        im = plt.imshow(sorted_guesses, cmap=cm, aspect="auto")
+
+        cbar = plt.colorbar(im)
+
+        ax = plt.gca()
+
+        ax.set_xticks([i for i in range(10)])
+
+        ax.set_xlabel("Est. likelihood of each digit")
+
+        ax.set_ylabel("%i images ordered by label" % (len(imgs_to_test)))
+
+        plt.savefig("mlp_pure_mdf.results.png", bbox_inches="tight")
+
+        if "-nogui" not in sys.argv:
+            plt.show()
 
 
 if __name__ == "__main__":

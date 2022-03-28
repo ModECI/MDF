@@ -1,0 +1,59 @@
+IAFs:
+    format: ModECI MDF v0.3
+    generating_application: Python modeci-mdf v0.3.3
+    graphs:
+        iaf_example:
+            nodes:
+                input_node:
+                    parameters:
+                        t:
+                            default_initial_value: 0
+                            time_derivative: '1'
+                        start:
+                            value: 20
+                        duration:
+                            value: 60
+                        amplitude:
+                            value: 10
+                        level:
+                            value: 0
+                            conditions:
+                                'on':
+                                    test: t > start and t < start + duration
+                                    value: amplitude
+                                'off':
+                                    test: t > start + duration
+                                    value: 0
+                    output_ports:
+                        out_port:
+                            value: level
+                        t_out_port:
+                            value: t
+                iaf_node:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        erev:
+                            value: -70
+                        tau:
+                            value: 10
+                        thresh:
+                            value: -20
+                        v:
+                            default_initial_value: '-50'
+                            time_derivative: -1 * (v-erev)/tau + input
+                            conditions:
+                                reset:
+                                    test: v > thresh
+                                    value: erev
+                    output_ports:
+                        out_port:
+                            value: v
+            edges:
+                input_edge:
+                    parameters:
+                        weight: 1
+                    sender: input_node
+                    receiver: iaf_node
+                    sender_port: out_port
+                    receiver_port: input

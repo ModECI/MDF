@@ -78,7 +78,7 @@ def evaluate_expr(
     if type(e) == str and e not in KNOWN_PARAMETERS:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
-            % (expr, _params_info(func_params), e, type(e))
+            % (expr, _params_info(func_params, multiline=True), e, type(e))
         )
     return e
 
@@ -387,6 +387,7 @@ class EvaluableParameter:
         self.verbose = verbose
         self.parameter = parameter
 
+        """
         if self.parameter.default_initial_value is not None:
             if is_number(self.parameter.default_initial_value):
 
@@ -402,7 +403,8 @@ class EvaluableParameter:
                 except Exception:
                     self.curr_value = self.parameter.default_initial_value
         else:
-            self.curr_value = None
+            self.curr_value = None"""
+        self.curr_value = None
 
     def get_current_value(
         self, parameters: Dict[str, Any], array_format: str = FORMAT_DEFAULT
@@ -418,15 +420,23 @@ class EvaluableParameter:
         Returns:
             The evaluated value of the parameter.
         """
-
         # FIXME: Shouldn't this just call self.evaluate, seems like there is redundant code here?
         if self.curr_value is None:
-
-            if self.parameter.value is not None:
+            if (
+                self.parameter.value is not None
+                or self.parameter.default_initial_value is not None
+            ):
                 if self.parameter.is_stateful():
+                    if self.verbose:
+                        print(f"    Initial eval of <{self.parameter}>  ")
 
                     if self.parameter.default_initial_value is not None:
-                        return self.parameter.default_initial_value
+                        return evaluate_expr(
+                            self.parameter.default_initial_value,
+                            parameters,
+                            verbose=False,
+                            array_format=array_format,
+                        )
                     else:
                         return self.DEFAULT_INIT_VALUE
                 else:
@@ -474,89 +484,120 @@ class EvaluableParameter:
                 )
             )
 
-        if self.parameter.value is not None:
-
-            self.curr_value = evaluate_expr(
-                self.parameter.value,
-                parameters,
-                verbose=False,
-                array_format=array_format,
-            )
-        elif self.parameter.function:
-            expr = None
-            for f in mdf_functions:
-                if self.parameter.function == f:
-                    expr = create_python_expression(
-                        mdf_functions[f]["expression_string"]
-                    )
-            if not expr:
-
-                expr = self.parameter.function
-                # raise "Unknown function: {}. Known functions: {}".format(
-                #    self.parameter.function,
-                #    mdf_functions.keys,
-                # )
-
-            func_params = {}
-            func_params.update(parameters)
-            if self.verbose:
-                print(
-                    "    Evaluating %s with %s, i.e. [%s]"
-                    % (self.parameter, _params_info(func_params), expr)
-                )
-            for arg in self.parameter.args:
-                func_params[arg] = evaluate_expr(
-                    self.parameter.args[arg],
-                    func_params,
+        continue_eval = True
+        if len(self.parameter.conditions) > 0:
+            for condition in self.parameter.conditions:
+                test = evaluate_expr(
+                    condition.test,
+                    parameters,
                     verbose=False,
                     array_format=array_format,
                 )
+                if test == True:
+                    self.curr_value = evaluate_expr(
+                        condition.value,
+                        parameters,
+                        verbose=False,
+                        array_format=array_format,
+                    )
+                    continue_eval = False
+                    break
+
                 if self.verbose:
                     print(
-                        "      Arg: {} became: {}".format(
-                            arg, _val_info(func_params[arg])
-                        )
+                        " --- %s: %s = %s (continuing: %s)"
+                        % (condition.id, condition.test, test, continue_eval)
                     )
 
-            # If this is an ONNX operation, evaluate it without modelspec.
-            if "onnx_ops." in expr:
+        if continue_eval:
+            if self.parameter.value is not None:
+
+                self.curr_value = evaluate_expr(
+                    self.parameter.value,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+            elif self.parameter.function:
+                expr = None
+                for f in mdf_functions:
+                    if self.parameter.function == f:
+                        expr = create_python_expression(
+                            mdf_functions[f]["expression_string"]
+                        )
+                if not expr:
+
+                    expr = self.parameter.function
+                    # raise "Unknown function: {}. Known functions: {}".format(
+                    #    self.parameter.function,
+                    #    mdf_functions.keys,
+                    # )
+
+                func_params = {}
+                func_params.update(parameters)
                 if self.verbose:
-                    print(f"{self.parameter.id} is evaluating ONNX function {expr}")
-                self.curr_value = evaluate_onnx_expr(
-                    expr,
-                    # parameters get overridden by self.parameter.args
-                    {**parameters, **self.parameter.args},
-                    func_params,
-                    self.verbose,
-                )
-            elif "actr." in expr:
-                actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
-                self.curr_value = actr_function(
-                    *[func_params[arg] for arg in self.parameter.args]
-                )
+                    print(
+                        "    Evaluating %s with %s, i.e. [%s]"
+                        % (self.parameter, _params_info(func_params), expr)
+                    )
+                for arg in self.parameter.args:
+                    func_params[arg] = evaluate_expr(
+                        self.parameter.args[arg],
+                        func_params,
+                        verbose=False,
+                        array_format=array_format,
+                    )
+                    if self.verbose:
+                        print(
+                            "      Arg: {} became: {}".format(
+                                arg, _val_info(func_params[arg])
+                            )
+                        )
+
+                # If this is an ONNX operation, evaluate it without modelspec.
+                if "onnx_ops." in expr:
+                    if self.verbose:
+                        print(f"{self.parameter.id} is evaluating ONNX function {expr}")
+                    self.curr_value = evaluate_onnx_expr(
+                        expr,
+                        # parameters get overridden by self.parameter.args
+                        {**parameters, **self.parameter.args},
+                        func_params,
+                        self.verbose,
+                    )
+                elif "actr." in expr:
+                    actr_function = getattr(
+                        actr_funcs, expr.split("(")[0].split(".")[-1]
+                    )
+                    self.curr_value = actr_function(
+                        *[func_params[arg] for arg in self.parameter.args]
+                    )
+                else:
+                    self.curr_value = evaluate_expr(
+                        expr,
+                        func_params,
+                        verbose=self.verbose,
+                        array_format=array_format,
+                    )
             else:
-                self.curr_value = evaluate_expr(
-                    expr, func_params, verbose=self.verbose, array_format=array_format
-                )
-        else:
-            if time_increment == None:
+                if time_increment == None:
 
-                self.curr_value = evaluate_expr(
-                    self.parameter.default_initial_value,
-                    parameters,
-                    verbose=False,
-                    array_format=array_format,
-                )
+                    self.curr_value = evaluate_expr(
+                        self.parameter.default_initial_value,
+                        parameters,
+                        verbose=False,
+                        array_format=array_format,
+                    )
 
-            else:
-                td = evaluate_expr(
-                    self.parameter.time_derivative,
-                    parameters,
-                    verbose=False,
-                    array_format=array_format,
-                )
+                else:
+                    td = evaluate_expr(
+                        self.parameter.time_derivative,
+                        parameters,
+                        verbose=False,
+                        array_format=array_format,
+                    )
 
-                self.curr_value += td * time_increment
+                    self.curr_value += td * time_increment
 
         if self.verbose:
             print(
@@ -654,7 +695,7 @@ class EvaluableInput:
         """
         if self.verbose:
             print(
-                "    Evaluated %s with %s =\t%s"
+                "    Evaluated %s with params %s =\t%s"
                 % (
                     self.input_port,
                     _params_info(parameters),
@@ -758,7 +799,9 @@ class EvaluableNode:
                     )
                 else:
                     all_funcs.append(f)
+
         all_params_to_check = [p for p in node.parameters]
+
         if self.verbose:
             print("all_params_to_check: %s" % all_params_to_check)
 
@@ -1059,7 +1102,10 @@ class EvaluableGraph:
                     _val_info(weight),
                 )
             )
-        input_value = value if weight == 1 else value * weight
+        if (type(weight) == int or type(weight) == float) and weight == 1:
+            input_value = value
+        else:
+            input_value = weight * value
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
     def parse_condition(

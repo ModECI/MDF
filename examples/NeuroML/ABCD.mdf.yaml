@@ -5,6 +5,10 @@ ABCD:
             notes: Example of a simplified network
             nodes:
                 A_input_0:
+                    metadata:
+                        color: 0.2 0.2 0.2
+                        radius: 3
+                        region: region1
                     parameters:
                         variable:
                             value: 2.0
@@ -12,7 +16,8 @@ ABCD:
                             value: 0
                         OUTPUT:
                             value: variable
-                    input_ports: {}
+                    input_ports:
+                        INPUT: {}
                     output_ports:
                         V:
                             value: V
@@ -23,6 +28,10 @@ ABCD:
                         \ Lems is: Component, id: a_input, type: inputNode,\n   parameters:\
                         \ {'variable': '2'}\n   parent: None\n"
                 A_0:
+                    metadata:
+                        color: 0 0.9 0
+                        radius: 5
+                        region: region1
                     parameters:
                         slope:
                             value: 2.0
@@ -44,6 +53,10 @@ ABCD:
                         \   parameters: {'slope': '2', 'intercept': '2'}\n   parent:\
                         \ None\n"
                 B_0:
+                    metadata:
+                        color: .8 .8 .8
+                        radius: 5
+                        region: region1
                     parameters:
                         gain:
                             value: 1.0
@@ -69,6 +82,10 @@ ABCD:
                         \   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0',\
                         \ 'offset': '0.0'}\n   parent: None\n"
                 C_0:
+                    metadata:
+                        color: 0.7 0.7 0.7
+                        radius: 5
+                        region: region1
                     parameters:
                         rate:
                             value: 1.0
@@ -94,6 +111,10 @@ ABCD:
                         \   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0',\
                         \ 'offset': '0.0'}\n   parent: None\n"
                 D_0:
+                    metadata:
+                        color: 0.7 0 0
+                        radius: 5
+                        region: region1
                     parameters:
                         rate:
                             value: 0.05

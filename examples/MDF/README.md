@@ -49,3 +49,8 @@ An example with [Nodes](../../docs/README.md#node) containing persistent [States
 A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions](../../docs/README.md#condition)
 
 <p align="center"><img src="images/abc_conditions.png" alt="simple"/></p>
+
+
+## More examples
+
+There are further examples under development, including of a Recurrent Neural Network (RNN), and an Integrate and Fire (IaF) neuron model in [this directory](RNN).
