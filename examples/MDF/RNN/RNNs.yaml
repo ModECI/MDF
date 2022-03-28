@@ -1,0 +1,123 @@
+RNNs:
+    format: ModECI MDF v0.3
+    generating_application: Python modeci-mdf v0.3.3
+    graphs:
+        rnn_example:
+            nodes:
+                input_node:
+                    parameters:
+                        t:
+                            default_initial_value: 0
+                            time_derivative: '1'
+                        amplitude:
+                            value:
+                            - 1
+                        period:
+                            value:
+                            - 10
+                        level:
+                            function: sin
+                            args:
+                                variable0: 2*3.14159*t/period
+                                scale: amplitude
+                    output_ports:
+                        out_port:
+                            value: level
+                        t_out_port:
+                            value: t
+                rnn_node:
+                    input_ports:
+                        ext_input: {}
+                        fb_input: {}
+                    parameters:
+                        M:
+                            value:
+                            -   - -0.15378707975107808
+                                - 0.961528396769231
+                                - 0.3696594771697266
+                                - -0.03813619703127813
+                                - -0.21576496361169895
+                            -   - -0.3136439676982612
+                                - 0.45809941476808325
+                                - -0.12285551064075118
+                                - -0.8806442067808633
+                                - -0.20391148933913716
+                            -   - 0.4759908114640714
+                                - -0.635016539093
+                                - -0.6490964877050149
+                                - 0.06310274768367674
+                                - 0.06365517419373212
+                            -   - 0.2688019171026421
+                                - 0.6988635881555791
+                                - 0.4489106497212705
+                                - 0.22204702135516574
+                                - 0.4448867651404431
+                            -   - -0.3540821722936436
+                                - -0.2764226887553718
+                                - -0.5434735382420888
+                                - -0.41257190722234127
+                                - 0.2619522477089755
+                        g:
+                            value: 1.5
+                        x:
+                            default_initial_value:
+                            - 0.3929383711957233
+                            - -0.42772133009924107
+                            - -0.5462970928715938
+                            - 0.10262953816578246
+                            - 0.43893793957112615
+                            time_derivative: -x + g*int_fb + ext_input
+                        r:
+                            function: tanh
+                            args:
+                                variable0: x
+                                scale: 1
+                        int_fb:
+                            function: MatMul
+                            args:
+                                A: M
+                                B: r
+                    output_ports:
+                        out_port_x:
+                            value: x
+                        out_port_r:
+                            value: r
+                readout_node:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        wr:
+                            value:
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                        zi:
+                            function: MatMul
+                            args:
+                                A: input
+                                B: wr
+                    output_ports:
+                        z:
+                            value: zi
+            edges:
+                input_edge:
+                    parameters:
+                        weight:
+                        - 1.0
+                        - 0.0
+                        - 0.0
+                        - 0.0
+                        - 0.0
+                    sender: input_node
+                    receiver: rnn_node
+                    sender_port: out_port
+                    receiver_port: ext_input
+                readout_edge:
+                    parameters:
+                        weight: 1
+                    sender: rnn_node
+                    receiver: readout_node
+                    sender_port: out_port_r
+                    receiver_port: input

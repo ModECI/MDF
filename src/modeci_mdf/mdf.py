@@ -27,11 +27,12 @@ __all__ = [
     "Edge",
     "ConditionSet",
     "Condition",
+    "ParameterCondition",
 ]
 
 
 class MdfBaseWithId(BaseWithId):
-    """Override BaseWithId from modelspec"""
+    """Override BaseWithId from modelspec. Allows a dict of metadata to be added to these types"""
 
     def __init__(self, **kwargs):
 
@@ -68,19 +69,14 @@ class Model(MdfBaseWithId):
 
         self.add_allowed_child("graphs", "The list of _Graph_s in this Model", Graph)
 
-        self.allowed_fields = collections.OrderedDict(
-            [
-                (
-                    "format",
-                    ("Information on the version of MDF used in this file", str),
-                ),
-                (
-                    "generating_application",
-                    ("Information on what application generated/saved this file", str),
-                ),
-            ]
+        self.add_allowed_field(
+            "format", "Information on the version of MDF used in this file", str
         )
-        """The allowed fields for this type"""
+        self.add_allowed_field(
+            "generating_application",
+            "Information on what application generated/saved this file",
+            str,
+        )
 
         # Removed for now...
         """
@@ -102,8 +98,8 @@ class Model(MdfBaseWithId):
         """The graphs present in the model"""
         return self.__getattr__("graphs")
 
-    def _include_metadata(self):
-        """Information on the version of ModECI MDF"""
+    def _include_version_data(self):
+        """Information on the version of ModECI MDF & package"""
 
         from modeci_mdf import MODECI_MDF_VERSION
         from modeci_mdf import __version__
@@ -112,7 +108,7 @@ class Model(MdfBaseWithId):
         self.generating_application = "Python modeci-mdf v%s" % __version__
 
     # Overrides BaseWithId.to_json_file
-    def to_json_file(self, filename: str, include_metadata: bool = True) -> str:
+    def to_json_file(self, filename: str, include_version_data: bool = True) -> str:
         """Convert the file in MDF format to JSON format
 
          .. note::
@@ -120,33 +116,31 @@ class Model(MdfBaseWithId):
 
         Args:
             filename: file in MDF format (.mdf extension)
-            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
-                              benchmark results, and environments in which the specified model was originally implemented
+            include_version_data: Add info on the version of MDF & generating application
         Returns:
             The name of the generated JSON file
         """
 
-        if include_metadata:
-            self._include_metadata()
+        if include_version_data:
+            self._include_version_data()
 
         new_file = super().to_json_file(filename)
 
         return new_file
 
     # Overrides BaseWithId.to_yaml_file
-    def to_yaml_file(self, filename: str, include_metadata: bool = True) -> str:
+    def to_yaml_file(self, filename: str, include_version_data: bool = True) -> str:
         """Convert file in MDF format to yaml format
 
         Args:
             filename: File in MDF format (Filename extension: .mdf )
-            include_metadata: Contains contact information, citations, acknowledgements, pointers to sample data,
-                              benchmark results, and environments in which the specified model was originally implemented
+            include_version_data: Add info on the version of MDF & generating application
         Returns:
             The name of the generated yaml file
         """
 
-        if include_metadata:
-            self._include_metadata()
+        if include_version_data:
+            self._include_version_data()
 
         new_file = super().to_yaml_file(filename)
 
@@ -358,6 +352,32 @@ class Node(MdfBaseWithId):
                 return p
         return None
 
+    def get_input_port(self, id: str) -> "InputPort":
+        """Retrieve :class:`InputPort` object corresponding to the given id
+
+        Args:
+            id: Unique identifier of class:`InputPort` object
+
+        Returns:
+            class:`InputPort` object if the entered id matches with the id of class:`InputPort` present in the class:`Node`
+        """
+        for ip in self.input_ports:
+            if id == ip.id:
+                return ip
+
+    def get_output_port(self, id: str) -> "OutputPort":
+        """Retrieve :class:`OutputPort` object corresponding to the given id
+
+        Args:
+            id: Unique identifier of class:`OutputPort` object
+
+        Returns:
+            class:`OutputPort` object if the entered id matches with the id of class:`OutputPort` present in the class:`Node`
+        """
+        for op in self.output_ports:
+            if id == op.id:
+                return op
+
     @property
     def input_ports(self) -> List["InputPort"]:
         r"""
@@ -556,6 +576,12 @@ class Parameter(MdfBaseWithId):
             dict,
         )
 
+        self.add_allowed_child(
+            "conditions",
+            "Parameter specific conditions",
+            ParameterCondition,
+        )
+
         super().__init__(**kwargs)
 
     def is_stateful(self) -> bool:
@@ -708,6 +734,30 @@ class Condition(MdfBase):
         )
 
         super().__init__(type=type, args=args)
+
+
+class ParameterCondition(MdfBaseWithId):
+    r"""A condition to test on a Node's parameters, which if true, sets the vaue of this Parameter
+
+    Args:
+        test: The boolean expression to evaluate
+        value: The new value of the Parameter if the test is true
+
+    """
+    _definition = "A condition to test on a _Node_'s parameters, which if true, sets the vaue of this _Parameter_"
+
+    def __init__(self, **kwargs):
+
+        self.add_allowed_field(
+            "test", "The boolean expression to evaluate", EvaluableExpression
+        )
+        self.add_allowed_field(
+            "value",
+            "The new value of the Parameter if the test is true",
+            EvaluableExpression,
+        )
+
+        super().__init__(**kwargs)
 
 
 if __name__ == "__main__":

@@ -24,6 +24,7 @@
     <Parameter name="variable" dimension="none"/>
     <Attachments name="synapses" type="basePointCurrentDL"/>
     <Dynamics>
+      <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" value="0"/>
       <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
       <DerivedVariable name="OUTPUT" dimension="none" exposure="OUTPUT" value="variable"/>
       <OnCondition test="OUTPUT .lt. 0">
@@ -91,7 +92,7 @@
     <InstanceRequirement name="peer" type="synapseDL"/>
     <Dynamics>
       <DerivedVariable name="rpeer" dimension="none" select="peer/OUTPUT"/>
-      <DerivedVariable name="I" dimension="none" exposure="I" value="weight * SEC * rpeer"/>
+      <DerivedVariable name="I" dimension="none" exposure="I" value="weight * rpeer"/>
     </Dynamics>
   </ComponentType>
   <Component id="a_input" type="inputNode" variable="0.1"/>

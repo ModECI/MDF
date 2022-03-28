@@ -323,6 +323,55 @@ A Parameter of the <a href="#node">Node</a>, which can have a specific value (a 
 
 </table>
 
+#### Allowed children
+
+<table>
+  <tr>
+    <td><b>conditions</b></td>
+    <td><a href="#parametercondition">ParameterCondition</a></td>
+    <td><i>Parameter specific conditions</i></td>
+  </tr>
+
+</table>
+
+## ParameterCondition
+
+A condition to test on a <a href="#node">Node</a>'s parameters, which if true, sets the vaue of this <a href="#parameter">Parameter</a>
+
+### Allowed parameters
+<table>
+  <tr>
+    <td><b>test</b></td>
+    <td>EvaluableExpression</td>
+    <td><i>The boolean expression to evaluate</i></td>
+  </tr>
+
+  <tr>
+    <td><b>value</b></td>
+    <td>EvaluableExpression</td>
+    <td><i>The new value of the Parameter if the test is true</i></td>
+  </tr>
+
+  <tr>
+    <td><b>metadata</b></td>
+    <td>dict</td>
+    <td><i>Dict of metadata for the model element</i></td>
+  </tr>
+
+  <tr>
+    <td><b>id</b></td>
+    <td>str</td>
+    <td><i>Unique ID of element</i></td>
+  </tr>
+
+  <tr>
+    <td><b>notes</b></td>
+    <td>str</td>
+    <td><i>Human readable notes</i></td>
+  </tr>
+
+</table>
+
 ## OutputPort
 
 The OutputPort is an attribute of a <a href="#node">Node</a> which exports information to another <a href="#node">Node</a> connected by an <a href="#edge">Edge</a>

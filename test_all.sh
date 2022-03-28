@@ -47,19 +47,25 @@ mv abc_conditions_example.gv.png images/abc_conditions.png
 
 ## Test regenerating NeuroML
 
-cd ../../examples/NeuroML
+cd RNN
+./regenerate.sh
+
+
+## Test regenerating NeuroML
+
+cd ../../NeuroML
 ./regenerateAndTest.sh -nogui
 
 ## Test ONNX examples
 
-cd ../../examples/ONNX
+cd ../ONNX
 python simple_ab.py -run
 python simple_abc.py
 python simple_abcd.py
 
 ## Test ACT-R examples
 
-cd ../../examples/ACT-R
+cd ../ACT-R
 python count.py
 python addition.py
 

@@ -5,6 +5,10 @@ FN:
             notes: FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS
             nodes:
                 FNpop_0:
+                    metadata:
+                        color: 0.2 0.2 0.2
+                        radius: 3
+                        region: region1
                     parameters:
                         initial_w:
                             value: 0.0
@@ -51,8 +55,6 @@ FN:
                             default_initial_value: initial_w
                             time_derivative: (mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity)
                                 / (time_constant_w*MSEC)
-                        OUTPUT:
-                            value: V
                     input_ports:
                         INPUT: {}
                     output_ports:
@@ -60,8 +62,6 @@ FN:
                             value: V
                         W:
                             value: W
-                        OUTPUT:
-                            value: OUTPUT
                     notes: "Cell: [Cell (fn), lems_source_file = FN_Definitions.xml,\
                         \ parameters = {'initial_w': 'initial_w', 'initial_v': 'initial_v',\
                         \ 'a_v': 'a_v', 'b_v': 'b_v', 'c_v': 'c_v', 'd_v': 'd_v',\

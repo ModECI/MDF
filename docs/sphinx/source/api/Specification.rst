@@ -151,6 +151,31 @@ Allowed field              Data Type            Description
 **notes**                  str                  *Human readable notes*
 =========================  ===================  ======================================================================================================================================================================================================
 
+**Allowed children**
+
+===============  ===========================================  ===============================
+Allowed child    Data Type                                    Description
+===============  ===========================================  ===============================
+**conditions**   `ParameterCondition <#parametercondition>`_  *Parameter specific conditions*
+===============  ===========================================  ===============================
+
+==================
+ParameterCondition
+==================
+A condition to test on a Node's parameters, which if true, sets the vaue of this Parameter
+
+**Allowed parameters**
+
+===============  ===================  ====================================================
+Allowed field    Data Type            Description
+===============  ===================  ====================================================
+**test**         EvaluableExpression  *The boolean expression to evaluate*
+**value**        EvaluableExpression  *The new value of the Parameter if the test is true*
+**metadata**     dict                 *Dict of metadata for the model element*
+**id**           str                  *Unique ID of element*
+**notes**        str                  *Human readable notes*
+===============  ===================  ====================================================
+
 ==========
 OutputPort
 ==========
