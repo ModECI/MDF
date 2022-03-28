@@ -8,8 +8,8 @@ ONNX Model:
                     input_ports:
                         input:
                             shape:
-                                - 2
-                                - 3
+                            - 2
+                            - 3
                     parameters:
                         B:
                             value: 1.0
@@ -25,8 +25,8 @@ ONNX Model:
                     input_ports:
                         _2:
                             shape:
-                                - 2
-                                - 3
+                            - 2
+                            - 3
                     parameters:
                         B:
                             value: 5.0

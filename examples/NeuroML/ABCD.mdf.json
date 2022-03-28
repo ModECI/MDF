@@ -6,6 +6,11 @@
                 "notes": "Example of a simplified network",
                 "nodes": {
                     "A_input_0": {
+                        "metadata": {
+                            "color": "0.2 0.2 0.2",
+                            "radius": 3,
+                            "region": "region1"
+                        },
                         "parameters": {
                             "variable": {
                                 "value": 2.0
@@ -26,9 +31,14 @@
                                 "value": "OUTPUT"
                             }
                         },
-                        "notes": "Cell: [Cell (a_input), lems_source_file = PNL.xml, parameters = {'variable': 'A_initial'}] is defined in PNL.xml and in Lems is: Component, id: a_input, type: inputNode,\n   parameters: {'variable': '2'}\n   parent: None\n"
+                        "notes": "Cell: [Cell(notes=None, id='a_input', parameters={'variable': 'A_initial'}, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: a_input, type: inputNode,\n   parameters: {'variable': '2'}\n   parent: None\n"
                     },
                     "A_0": {
+                        "metadata": {
+                            "color": "0 0.9 0",
+                            "radius": 5,
+                            "region": "region1"
+                        },
                         "parameters": {
                             "slope": {
                                 "value": 2.0
@@ -54,9 +64,14 @@
                                 "value": "OUTPUT"
                             }
                         },
-                        "notes": "Cell: [Cell (a), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n   parameters: {'slope': '2', 'intercept': '2'}\n   parent: None\n"
+                        "notes": "Cell: [Cell(notes=None, id='a', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n   parameters: {'slope': '2', 'intercept': '2'}\n   parent: None\n"
                     },
                     "B_0": {
+                        "metadata": {
+                            "color": ".8 .8 .8",
+                            "radius": 5,
+                            "region": "region1"
+                        },
                         "parameters": {
                             "gain": {
                                 "value": 1.0
@@ -88,9 +103,14 @@
                                 "value": "OUTPUT"
                             }
                         },
-                        "notes": "Cell: [Cell (b), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0', 'offset': '0.0'}\n   parent: None\n"
+                        "notes": "Cell: [Cell(notes=None, id='b', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0', 'offset': '0.0'}\n   parent: None\n"
                     },
                     "C_0": {
+                        "metadata": {
+                            "color": "0.7 0.7 0.7",
+                            "radius": 5,
+                            "region": "region1"
+                        },
                         "parameters": {
                             "rate": {
                                 "value": 1.0
@@ -122,9 +142,14 @@
                                 "value": "OUTPUT"
                             }
                         },
-                        "notes": "Cell: [Cell (c), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0', 'offset': '0.0'}\n   parent: None\n"
+                        "notes": "Cell: [Cell(notes=None, id='c', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0', 'offset': '0.0'}\n   parent: None\n"
                     },
                     "D_0": {
+                        "metadata": {
+                            "color": "0.7 0 0",
+                            "radius": 5,
+                            "region": "region1"
+                        },
                         "parameters": {
                             "rate": {
                                 "value": 0.05
@@ -150,7 +175,7 @@
                                 "value": "V"
                             }
                         },
-                        "notes": "Cell: [Cell (d), lems_source_file = PNL.xml] is defined in PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n"
+                        "notes": "Cell: [Cell(notes=None, id='d', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n"
                     }
                 },
                 "edges": {

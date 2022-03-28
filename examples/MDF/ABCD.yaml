@@ -59,7 +59,8 @@ ABCD:
                         color: 0 0 .8
                     input_ports:
                         input_port1:
-                            shape: [1]
+                            shape:
+                            - 1
                     parameters:
                         scale:
                             value: 3.1
@@ -85,7 +86,8 @@ ABCD:
                         color: .8 0 .8
                     input_ports:
                         input_port1:
-                            shape: [1]
+                            shape:
+                            - 1
                     parameters:
                         scale:
                             value: 4.0

@@ -8,7 +8,10 @@
                     "Add_1": {
                         "input_ports": {
                             "input": {
-                                "shape": [2, 3]
+                                "shape": [
+                                    2,
+                                    3
+                                ]
                             }
                         },
                         "parameters": {
@@ -32,7 +35,10 @@
                     "Mul_3": {
                         "input_ports": {
                             "_2": {
-                                "shape": [2, 3]
+                                "shape": [
+                                    2,
+                                    3
+                                ]
                             }
                         },
                         "parameters": {

@@ -1,11 +1,11 @@
 {
     "SimABCD": {
-        "version": "NeuroMLlite v0.4.3",
+        "version": "NeuroMLlite v0.5.0",
         "network": "ABCD.json",
         "duration": 5000.0,
         "dt": 100.0,
         "seed": 123,
-        "recordVariables": {
+        "record_variables": {
             "OUTPUT": {
                 "all": "*"
             }
