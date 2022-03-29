@@ -33,11 +33,11 @@ __all__ = [
     "Function",
     "InputPort",
     "OutputPort",
+    "ParameterCondition",
     "Parameter",
     "Edge",
     "ConditionSet",
     "Condition",
-    "ParameterCondition",
 ]
 
 
@@ -192,7 +192,9 @@ class Parameter(MdfBase):
     args: Optional[Dict[str, Any]] = field(
         validator=optional(instance_of(dict)), default=None
     )
-    conditions: List[ParameterCondition] = field(factory=list)
+    conditions: List[ParameterCondition] = field(
+        factory=list, validator=instance_of(list)
+    )
 
     def is_stateful(self) -> bool:
         """
@@ -240,7 +242,11 @@ class Parameter(MdfBase):
         d = value_expr_converter.unstructure(o)
 
         # Remove any fields that are None by default
-        d = {name: val for name, val in d.items() if val is not None}
+        d = {
+            name: val
+            for name, val in d.items()
+            if not ((val is None) or (type(val) == list and len(val) == 0))
+        }
 
         return d
 

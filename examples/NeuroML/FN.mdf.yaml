@@ -62,8 +62,6 @@ FN:
                             value: V
                         W:
                             value: W
-                        OUTPUT:
-                            value: OUTPUT
                     notes: "Cell: [Cell(notes=None, id='fn', parameters={'initial_w':\
                         \ 'initial_w', 'initial_v': 'initial_v', 'a_v': 'a_v', 'b_v':\
                         \ 'b_v', 'c_v': 'c_v', 'd_v': 'd_v', 'e_v': 'e_v', 'f_v':\

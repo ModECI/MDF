@@ -22,16 +22,20 @@
                             },
                             "level": {
                                 "value": 0,
-                                "conditions": {
-                                    "on": {
+                                "conditions": [
+                                    {
+                                        "metadata": null,
+                                        "id": "on",
                                         "test": "t > start and t < start + duration",
                                         "value": "amplitude"
                                     },
-                                    "off": {
+                                    {
+                                        "metadata": null,
+                                        "id": "off",
                                         "test": "t > start + duration",
                                         "value": 0
                                     }
-                                }
+                                ]
                             }
                         },
                         "output_ports": {
@@ -60,12 +64,14 @@
                             "v": {
                                 "default_initial_value": "-50",
                                 "time_derivative": "-1 * (v-erev)/tau + input",
-                                "conditions": {
-                                    "reset": {
+                                "conditions": [
+                                    {
+                                        "metadata": null,
+                                        "id": "reset",
                                         "test": "v > thresh",
                                         "value": "erev"
                                     }
-                                }
+                                ]
                             }
                         },
                         "output_ports": {
@@ -77,13 +83,13 @@
                 },
                 "edges": {
                     "input_edge": {
-                        "parameters": {
-                            "weight": 1
-                        },
                         "sender": "input_node",
                         "receiver": "iaf_node",
                         "sender_port": "out_port",
-                        "receiver_port": "input"
+                        "receiver_port": "input",
+                        "parameters": {
+                            "weight": 1
+                        }
                     }
                 }
             }
