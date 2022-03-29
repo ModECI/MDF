@@ -18,12 +18,10 @@ IAFs:
                         level:
                             value: 0
                             conditions:
-                            -   metadata: null
-                                id: 'on'
+                            -   id: 'on'
                                 test: t > start and t < start + duration
                                 value: amplitude
-                            -   metadata: null
-                                id: 'off'
+                            -   id: 'off'
                                 test: t > start + duration
                                 value: 0
                     output_ports:
@@ -45,8 +43,7 @@ IAFs:
                             default_initial_value: '-50'
                             time_derivative: -1 * (v-erev)/tau + input
                             conditions:
-                            -   metadata: null
-                                id: reset
+                            -   id: reset
                                 test: v > thresh
                                 value: erev
                     output_ports:

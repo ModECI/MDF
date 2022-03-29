@@ -24,13 +24,11 @@
                                 "value": 0,
                                 "conditions": [
                                     {
-                                        "metadata": null,
                                         "id": "on",
                                         "test": "t > start and t < start + duration",
                                         "value": "amplitude"
                                     },
                                     {
-                                        "metadata": null,
                                         "id": "off",
                                         "test": "t > start + duration",
                                         "value": 0
@@ -66,7 +64,6 @@
                                 "time_derivative": "-1 * (v-erev)/tau + input",
                                 "conditions": [
                                     {
-                                        "metadata": null,
                                         "id": "reset",
                                         "test": "v > thresh",
                                         "value": "erev"

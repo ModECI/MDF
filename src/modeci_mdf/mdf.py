@@ -149,9 +149,9 @@ class OutputPort(MdfBase):
 
 
 @modelspec.define(eq=False)
-class ParameterCondition(MdfBase):
+class ParameterCondition(Base):
     r"""
-    A condition to test on a Node's parameters, which if true, sets the vaue of this Parameter
+    A condition to test on a Node's parameters, which if true, sets the value of this Parameter
 
     Attributes:
         id: A unique identifier for the ParameterCondition
