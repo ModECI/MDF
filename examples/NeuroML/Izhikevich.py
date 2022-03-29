@@ -73,19 +73,19 @@ new_file = net.to_yaml_file("%s.nmllite.yaml" % net.id)
 ################################################################################
 ###   Build Simulation object & save as JSON
 
-recordVariables = {"v": {"all": "*"}}
+record_variables = {"v": {"all": "*"}}
 if not "-iaf" in sys.argv:
-    recordVariables["u"] = {"all": "*"}
+    record_variables["u"] = {"all": "*"}
 
 sim = Simulation(
     id="Sim%s" % net.id,
     network=new_file,
     duration="700",
     dt="0.025",
-    recordVariables=recordVariables,
+    record_variables=record_variables,
 )
 
-sim.to_yaml_file()
+sim.to_yaml_file("%s.yaml" % sim.id)
 
 
 ################################################################################
