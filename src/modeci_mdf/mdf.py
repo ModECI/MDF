@@ -393,6 +393,8 @@ class Graph(MdfBase):
 
     Attributes:
         id: A unique identifier for this Graph
+        nodes: One or more :class:`Node`\(s) present in the graph
+        edges: Zero or more :class:`Edge`\(s) present in the graph
         parameters: Dictionary of global parameters for the Graph
         conditions: The ConditionSet stored as dictionary for scheduling of the Graph
     """

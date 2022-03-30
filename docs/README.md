@@ -93,14 +93,14 @@ A directed graph consisting of Node(s) connected via Edge(s)
   <tr>
     <td><b>nodes</b></td>
     <td><a href="#node">Node</a></td>
-    <td><i></i></td>
+    <td><i>One or more <a href="#node">Node</a>\(s) present in the graph</i></td>
   </tr>
 
 
   <tr>
     <td><b>edges</b></td>
     <td><a href="#edge">Edge</a></td>
-    <td><i></i></td>
+    <td><i>Zero or more <a href="#edge">Edge</a>\(s) present in the graph</i></td>
   </tr>
 
 

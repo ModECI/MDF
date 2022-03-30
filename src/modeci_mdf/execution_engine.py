@@ -413,7 +413,7 @@ class EvaluableParameter:
         Get the current value of the parameter; evaluates the expression if needed.
 
         Args:
-            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+            parameters: a dictionary of parameters and their values that may or may not be needed to evaluate this
                 parameter.
             array_format: The array format to use (either :code:`'numpy'` or :code:`tensorflow'`).
 
@@ -468,7 +468,7 @@ class EvaluableParameter:
         Evaluate the parameter and store the result in the :code:`curr_value` attribute.
 
         Args:
-            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+            parameters: a dictionary of parameters and their values that may or may not be needed to evaluate this
                 parameter.
             time_increment: a floating point value specifying the timestep size, only used for :code:`time_derivative`
                 parameters
