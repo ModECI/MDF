@@ -5,16 +5,26 @@ r"""
     executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
     environments using the :mod:`~modeci_mdf.interfaces` module.
 """
-
-import collections
-import onnx.defs
 import sympy
+import numpy as np
 
-from typing import List, Tuple, Dict, Optional, Set, Any, Union, Optional
+from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
-from modelspec.BaseTypes import Base
-from modelspec.BaseTypes import BaseWithId
-from modelspec.BaseTypes import EvaluableExpression
+import modelspec
+from modelspec import has, field, fields, optional, instance_of, in_
+from modelspec.base_types import (
+    Base,
+    converter,
+    ValueExprType,
+    value_expr_types,
+    value_expr_converter,
+)
+
+from ast import literal_eval as make_tuple
+
+from modeci_mdf import MODECI_MDF_VERSION
+from modeci_mdf import __version__
+
 
 __all__ = [
     "Model",
@@ -23,128 +33,456 @@ __all__ = [
     "Function",
     "InputPort",
     "OutputPort",
+    "ParameterCondition",
     "Parameter",
     "Edge",
     "ConditionSet",
     "Condition",
-    "ParameterCondition",
 ]
 
 
-class MdfBaseWithId(BaseWithId):
-    """Override BaseWithId from modelspec. Allows a dict of metadata to be added to these types"""
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_field(
-            "metadata", "Dict of metadata for the model element", dict
-        )
-
-        super().__init__(**kwargs)
-
-
+@modelspec.define(eq=False)
 class MdfBase(Base):
-    """Override Base from modelspec"""
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_field(
-            "metadata", "Dict of metadata for the model element", dict
-        )
-
-        super().__init__(**kwargs)
-
-
-class Model(MdfBaseWithId):
-    r"""The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
-
-    Args:
-        id: A unique identifier for this Model
-        format: Information on the version of MDF used in this file
-        generating_application: Information on what application generated/saved this file
     """
-    _definition = "The top level Model containing _Graph_s consisting of _Node_s connected via _Edge_s."
+    Base class for all MDF core classes that implements common functionality.
 
-    def __init__(self, **kwargs):
+    Attributes:
+        metadata: Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
 
-        self.add_allowed_child("graphs", "The list of _Graph_s in this Model", Graph)
+    """
 
-        self.add_allowed_field(
-            "format", "Information on the version of MDF used in this file", str
-        )
-        self.add_allowed_field(
-            "generating_application",
-            "Information on what application generated/saved this file",
-            str,
-        )
+    metadata: Optional[Dict[str, Any]] = field(
+        kw_only=True, default=None, validator=optional(instance_of(dict))
+    )
 
-        # Removed for now...
+
+@modelspec.define(eq=False)
+class Function(MdfBase):
+    r"""
+    A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
+
+    Attributes:
+        id: The unique (for this Node) id of the function, which will be used in other :class:`~Function`s and
+            the :class:`~OutputPort`s for its value
+        function: Which of the in-build MDF functions (:code:`linear`, etc.). See supported functions:
+            https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
+        args: Dictionary of values for each of the arguments for the Function, e.g. if the in-built function
+              is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
+        value: If the function is a value expression, this attribute will contain the expression and the function
+            and args attributes will be None.
+    """
+    id: str = field(validator=instance_of(str))
+    function: Optional[str] = field(default=None, validator=optional(instance_of(str)))
+    args: Optional[Dict[str, Any]] = field(default=None)
+    value: Optional[ValueExprType] = field(
+        default=None, validator=optional(instance_of(value_expr_types))
+    )
+
+    @classmethod
+    def _structure(cls, o: Dict[str, Any], t: Any) -> "Function":
         """
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs = {}
-        kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
+        A custom structuring hook for Functions that handle the "translated" case when function is specified as
+        a dictionary
+        """
 
-        super().__init__(**kwargs)
+        # This structure function creates function objects without id as empty strings if it is not specified.
+        if "id" not in o:
+            id = ""
+        else:
+            id = o["id"]
+
+        if "function" in o.keys() and isinstance(o["function"], dict):
+            func_name = list(o["function"].keys())[0]
+            args = o["function"][func_name]
+            return cls(id=id, function=func_name, args=args)
+        elif "function" in o.keys() and isinstance(o["function"], str):
+            return cls(id=id, function=o["function"], args=o["args"])
+        elif "value" in o.keys():
+            return cls(id=id, value=o["value"])
+        else:
+            raise ValueError(f"Could not parse function specification: {o}")
+
+
+@modelspec.define(eq=False)
+class InputPort(MdfBase):
+    r"""
+    The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node
+
+    Attributes:
+        id: The unique (for this Node) id of the input port,
+        shape: The shape of the input port. This uses the same syntax as numpy ndarray shapes
+            (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
+        type: The data type of the input received at a port.
+
+    """
+    id: str = field(validator=instance_of(str))
+    shape: Optional[Tuple[int, ...]] = field(
+        validator=optional(instance_of(tuple)),
+        default=None,
+        converter=lambda x: make_tuple(x) if type(x) == str else x,
+    )
+    type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+
+
+@modelspec.define(eq=False)
+class OutputPort(MdfBase):
+    r"""
+    The :class:`OutputPort` is an attribute of a :class:`Node` which exports information to another :class:`Node`
+    connected by an :class:`Edge`
+
+    Attributes:
+        id: Unique identifier for the output port.
+        value: The value of the :class:`OutputPort` in terms of the :class:`InputPort`, :class:`Function` values, and
+            :class:`Parameter` values.
+        shape: The shape of the output port. This uses the same syntax as numpy ndarray shapes
+            (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
+        type: The data type of the output sent by a port.
+    """
+    id: str = field(validator=instance_of(str))
+    value: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+    shape: Optional[Tuple[int, ...]] = field(
+        validator=optional(instance_of(tuple)),
+        default=None,
+        converter=lambda x: make_tuple(x) if type(x) == str else x,
+    )
+    type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+
+
+@modelspec.define(eq=False)
+class ParameterCondition(Base):
+    r"""
+    A condition to test on a Node's parameters, which if true, sets the value of this Parameter
+
+    Attributes:
+        id: A unique identifier for the ParameterCondition
+        test: The boolean expression to evaluate
+        value: The new value of the Parameter if the test is true
+    """
+    id: str = field(validator=instance_of(str))
+    test: Optional[ValueExprType] = field(default=None)
+    value: Optional[ValueExprType] = field(default=None)
+
+
+@modelspec.define(eq=False)
+class Parameter(MdfBase):
+    r"""
+    A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
+    referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function with args, or change from a
+    :code:`default_initial_value` with a :code:`time_derivative`.
+
+    Attributes:
+        value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
+        default_initial_value: The initial value of the parameter, only used when parameter is stateful.
+        time_derivative: How the parameter changes with time, i.e. ds/dt. Units of time are seconds.
+        function: Which of the in-build MDF functions (linear etc.) this uses, See
+        https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
+        args: Dictionary of values for each of the arguments for the function of the parameter,
+            e.g. if the in-build function is :code:`linear(slope)`, the args here could be :code:`{"slope": 3}` or
+            :code:`{"slope": "input_port_0 + 2"}`
+        conditions: Parameter specific conditions
+    """
+
+    id: str = field(validator=instance_of(str))
+    value: Optional[ValueExprType] = field(default=None)
+    default_initial_value: Optional[ValueExprType] = field(default=None)
+    time_derivative: Optional[str] = field(
+        validator=optional(instance_of(str)), default=None
+    )
+    function: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+    args: Optional[Dict[str, Any]] = field(
+        validator=optional(instance_of(dict)), default=None
+    )
+    conditions: List[ParameterCondition] = field(
+        factory=list, validator=instance_of(list)
+    )
+
+    def is_stateful(self) -> bool:
+        """
+        Is the parameter stateful?
+
+        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`defualt_initial_value`, or it's
+        id is referenced in its value expression.
+
+        Returns:
+            :code:`True` if stateful, `False` if not.
+        """
+        from modeci_mdf.execution_engine import parse_str_as_list
+
+        if self.time_derivative is not None:
+            return True
+        if self.default_initial_value is not None:
+            return True
+        if self.value is not None and type(self.value) == str:
+            # If we are dealing with a list of symbols, each must treated separately
+            if self.value[0] == "[" and self.value[-1] == "]":
+                # Use the Python interpreter to parse this into a List[str]
+                arg_expr_list = parse_str_as_list(self.value)
+            else:
+                arg_expr_list = [self.value]
+
+            req_vars = []
+
+            for e in arg_expr_list:
+                param_expr = sympy.simplify(e)
+                req_vars.extend([str(s) for s in param_expr.free_symbols])
+            sf = self.id in req_vars
+            print(
+                "Checking whether %s is stateful, %s: %s"
+                % (self, param_expr.free_symbols, sf)
+            )
+            return sf
+
+        return False
+
+    @staticmethod
+    def _unstructure(o: "Parameter"):
+        """A custom unstructuring hook for parameters that removes default values of None from the output."""
+
+        # Unstructure the parameter and any value expressions it contains.
+        d = value_expr_converter.unstructure(o)
+
+        # Remove any fields that are None by default
+        d = {
+            name: val
+            for name, val in d.items()
+            if not ((val is None) or (type(val) == list and len(val) == 0))
+        }
+
+        return d
+
+
+@modelspec.define(eq=False)
+class Node(MdfBase):
+    r"""
+    A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\(s).
+    The values from these are processed via a number of :class:`Function`\(s) and one or more final values
+    are calculated on the :class:`OutputPort`\(s)
+
+    Attributes:
+        id: A unique identifier for the node.
+        input_ports: Dictionary of the :class:`InputPort` objects in the Node
+        parameters: Dictionary of :class:`Parameter`\(s) for the node
+        functions: The :class:`Function`\(s) for computation the node
+        output_ports: The :class:`OutputPort`\(s) containing evaluated quantities from the node
+    """
+
+    id: str = field(validator=instance_of(str))
+    input_ports: List[InputPort] = field(factory=list, validator=instance_of(list))
+    functions: List[Function] = field(factory=list, validator=instance_of(list))
+    parameters: List[Parameter] = field(factory=list, validator=instance_of(list))
+    output_ports: List[OutputPort] = field(factory=list, validator=instance_of(list))
+
+    def get_parameter(self, id: str) -> Union[Parameter, None]:
+        r"""Get a parameter by its string :code:`id`
+
+        Args:
+            id: The unique string id of the :class:`Parameter`
+
+        Returns:
+            The :class:`Parameter` object stored on this node. :code:`None` if not found.
+        """
+        for p in self.parameters:
+            if p.id == id:
+                return p
+
+        return None
+
+    def get_input_port(self, id: str) -> "InputPort":
+        """Retrieve :class:`InputPort` object corresponding to the given id
+        Args:
+            id: Unique identifier of class:`InputPort` object
+        Returns:
+            class:`InputPort` object if the entered id matches with the id of class:`InputPort` present in the class:`Node`
+        """
+        for ip in self.input_ports:
+            if id == ip.id:
+                return ip
+
+    def get_output_port(self, id: str) -> "OutputPort":
+        """Retrieve :class:`OutputPort` object corresponding to the given id
+        Args:
+            id: Unique identifier of class:`OutputPort` object
+        Returns:
+            class:`OutputPort` object if the entered id matches with the id of class:`OutputPort` present in the class:`Node`
+        """
+        for op in self.output_ports:
+            if id == op.id:
+                return op
+
+
+@modelspec.define(eq=False)
+class Edge(MdfBase):
+    r"""
+    An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's
+    :class:`OutputPort` to a receiver's :class:`InputPort`.
+
+    Attributes:
+        id: A unique string identifier for this edge.
+        sender: The :code:`id` of the :class:`~Node` which is the source of the edge.
+        receiver: The :code:`id` of the :class:`~Node` which is the target of the edge.
+        sender_port: The id of the :class:`~OutputPort` on the sender :class:`~Node`, whose value should be sent to the
+            :code:`receiver_port`
+        receiver_port: The id of the InputPort on the receiver :class:`~Node`
+        parameters: Dictionary of parameters for the edge.
+    """
+    id: str = field(validator=instance_of(str))
+    sender: str = field(validator=instance_of(str))
+    receiver: str = field(validator=instance_of(str))
+    sender_port: str = field(validator=instance_of(str))
+    receiver_port: str = field(validator=instance_of(str))
+    parameters: Optional[Dict[str, Any]] = field(
+        validator=optional(instance_of(dict)), default=None
+    )
+
+
+@modelspec.define(eq=False)
+class Condition(MdfBase):
+    r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
+
+    Attributes:
+        type: The type of :class:`Condition` from the library
+        kwargs: The dictionary of keyword arguments needed to evaluate the :class:`Condition`
+
+    """
+    type: str = field(validator=instance_of(str))
+    kwargs: Optional[Dict[str, Any]] = field(
+        validator=optional(instance_of(dict)), default=None
+    )
+
+    def __init__(
+        self,
+        type: Optional[str] = None,
+        **kwargs: Optional[Dict[str, Any]],
+    ):
+        # We need to right our own __init__ in this case because the current API for Condition requires saving
+        # kwargs. This code is very attrs specific and hacky. Wish there was a better way to do this.
+
+        # Remove any field from kwargs that is pre-defined field on the MDF Condition class.
+        for a in self.__attrs_attrs__:
+            if a.name != "kwargs":
+                kwargs.pop(a.name, None)
+
+        # If there is a kwargs argument inside the kwargs argument (this happens when loading MDF from JSON because)
+        # kwargs is stored in JSON as a simple dict in a field called kwargs.
+        kwargs.update(kwargs.pop("kwargs", {}))
+
+        self.__attrs_init__(type, kwargs)
+
+
+@modelspec.define(eq=False)
+class ConditionSet(MdfBase):
+    r"""
+    Specifies the non-default pattern of execution of Nodes
+
+    Attributes:
+        node_specific: A dictionary mapping nodes to any non-default run conditions
+        termination: A dictionary mapping time scales of model execution to conditions indicating when they end
+    """
+    node_specific: Optional[Dict[str, Condition]] = field(
+        validator=optional(instance_of(dict)), default=None
+    )
+    termination: Optional[Dict[str, Condition]] = field(
+        validator=optional(instance_of(dict)), default=None
+    )
+
+
+@modelspec.define(eq=False)
+class Graph(MdfBase):
+    r"""
+    A directed graph consisting of Node(s) connected via Edge(s)
+
+    Attributes:
+        id: A unique identifier for this Graph
+        nodes: One or more :class:`Node`\(s) present in the graph
+        edges: Zero or more :class:`Edge`\(s) present in the graph
+        parameters: Dictionary of global parameters for the Graph
+        conditions: The ConditionSet stored as dictionary for scheduling of the Graph
+    """
+    id: str = field(validator=instance_of(str))
+    nodes: List[Node] = field(factory=list)
+    edges: List[Edge] = field(factory=list)
+    parameters: Optional[Dict[str, Any]] = None
+    conditions: Optional[ConditionSet] = None
+
+    def get_node(self, id: str) -> Union[Node, None]:
+        """Retrieve Node object corresponding to the given id
+
+        Args:
+            id: Unique identifier of Node object
+
+        Returns:
+            :class:`Node` object if the entered :code:`id` matches with the :code:`id` of node present in the
+            :class:`~Graph`. :code:`None` if a node is not found with that id .
+        """
+        for node in self.nodes:
+            if id == node.id:
+                return node
+
+        return None
 
     @property
-    def graphs(self) -> List["Graph"]:
-        """The graphs present in the model"""
-        return self.__getattr__("graphs")
+    def dependency_dict(self) -> Dict[Node, Set[Node]]:
+        """Returns the dependency among nodes as dictionary
 
-    def _include_version_data(self):
-        """Information on the version of ModECI MDF & package"""
+        Key: receiver, Value: Set of senders imparting information to the receiver
 
-        from modeci_mdf import MODECI_MDF_VERSION
-        from modeci_mdf import __version__
-
-        self.format = "ModECI MDF v%s" % MODECI_MDF_VERSION
-        self.generating_application = "Python modeci-mdf v%s" % __version__
-
-    # Overrides BaseWithId.to_json_file
-    def to_json_file(self, filename: str, include_version_data: bool = True) -> str:
-        """Convert the file in MDF format to JSON format
-
-         .. note::
-            JSON is standard file format uses human-readable text to store and transmit data objects consisting of attribute–value pairs and arrays
-
-        Args:
-            filename: file in MDF format (.mdf extension)
-            include_version_data: Add info on the version of MDF & generating application
         Returns:
-            The name of the generated JSON file
+            Returns the dependency dictionary
+        """
+        # assumes no cycles, need to develop a way to prune if cyclic
+        # graphs are to be supported
+        dependencies = {n: set() for n in self.nodes}
+
+        for edge in self.edges:
+            sender = self.get_node(edge.sender)
+            receiver = self.get_node(edge.receiver)
+
+            dependencies[receiver].add(sender)
+
+        return dependencies
+
+    @property
+    def inputs(self: "Graph") -> List[Tuple[Node, InputPort]]:
+        """
+        Enumerate all Node-InputPort pairs that specify no incoming edge.
+        These are input ports for the graph itself and must be provided values to evaluate
+
+        Returns:
+            A list of Node, InputPort tuples
         """
 
-        if include_version_data:
-            self._include_version_data()
+        # Get all input ports
+        all_ips = [(node.id, ip.id) for node in self.nodes for ip in node.input_ports]
 
-        new_file = super().to_json_file(filename)
+        # Get all receiver ports
+        all_receiver_ports = {(e.receiver, e.receiver_port) for e in self.edges}
 
-        return new_file
+        # Find any input ports that aren't receiving values from an edge
+        return list(filter(lambda x: x not in all_receiver_ports, all_ips))
 
-    # Overrides BaseWithId.to_yaml_file
-    def to_yaml_file(self, filename: str, include_version_data: bool = True) -> str:
-        """Convert file in MDF format to yaml format
 
-        Args:
-            filename: File in MDF format (Filename extension: .mdf )
-            include_version_data: Add info on the version of MDF & generating application
-        Returns:
-            The name of the generated yaml file
-        """
+@modelspec.define(eq=False)
+class Model(MdfBase):
+    r"""
+    The top level construct in MDF is Model, which may contain multiple :class:`Graph` objects and model attribute(s)
 
-        if include_version_data:
-            self._include_version_data()
+    Attributes:
+        id: A unique identifier for this Model
+        graphs: The collection of graphs that make up the MDF model.
+        format: Information on the version of MDF used in this file
+        generating_application: Information on what application generated/saved this file
+        onnx_opset_version: The ONNX opset used for any ONNX functions in this model.
 
-        new_file = super().to_yaml_file(filename)
-
-        return new_file
+    """
+    id: str = field(validator=instance_of(str))
+    graphs: List[Graph] = field(factory=list)
+    format: str = field(
+        default=f"ModECI MDF v{MODECI_MDF_VERSION}", metadata={"omit_if_default": False}
+    )
+    generating_application: str = field(
+        default=f"Python modeci-mdf v{__version__}", metadata={"omit_if_default": False}
+    )
+    onnx_opset_version: Optional[str] = field(default=None)
 
     def to_graph_image(
         self,
@@ -187,598 +525,6 @@ class Model(MdfBaseWithId):
                 raise (e)
 
 
-class Graph(MdfBaseWithId):
-    r"""A directed graph consisting of Node(s) connected via Edge(s)
-
-    Args:
-        id: A unique identifier for this Graph
-        parameters: Dictionary of global parameters for the Graph
-        conditions: The ConditionSet stored as dictionary for scheduling of the Graph
-    """
-    _definition = "A directed graph consisting of _Node_s connected via _Edge_s."
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_child("nodes", "The _Node_s present in the Graph", Node)
-        self.add_allowed_child(
-            "edges", "The _Edge_s between _Node_s in the Graph", Edge
-        )
-
-        self.add_allowed_field(
-            "parameters", "Dict of global parameters for the Graph", dict
-        )
-        self.add_allowed_field(
-            "conditions", "The _ConditionSet_ for scheduling of the Graph", ConditionSet
-        )
-
-        """The allowed fields for this type"""
-        """
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs = {}
-        #kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
-
-        super().__init__(**kwargs)
-
-    @property
-    def nodes(self) -> List["Node"]:
-        """Node(s) present in this graph"""
-        return self.__getattr__("nodes")
-
-    @property
-    def edges(self) -> List["Edge"]:
-        """Edge(s) present in this graph"""
-        return self.__getattr__("edges")
-
-    def get_node(self, id: str) -> "Node":
-        """Retrieve Node object corresponding to the given id
-
-        Args:
-            id: Unique identifier of Node object
-
-        Returns:
-            Node object if the entered id matches with the id of Node present in the Graph
-        """
-        for node in self.nodes:
-            if id == node.id:
-                return node
-
-    @property
-    def dependency_dict(self) -> Dict["Node", Set["Node"]]:
-        """Returns the dependency among nodes as dictionary
-
-        Key: receiver, Value: Set of senders imparting information to the receiver
-
-        Returns:
-            Returns the dependency dictionary
-        """
-        # assumes no cycles, need to develop a way to prune if cyclic
-        # graphs are to be supported
-        dependencies = {n: set() for n in self.nodes}
-
-        for edge in self.edges:
-            sender = self.get_node(edge.sender)
-            receiver = self.get_node(edge.receiver)
-
-            dependencies[receiver].add(sender)
-
-        return dependencies
-
-    @property
-    def inputs(self: "Graph") -> List[Tuple["Node", "InputPort"]]:
-        """
-        Enumerate all Node-InputPort pairs that specify no incoming edge.
-        These are input ports for the graph itself and must be provided values to evaluate
-
-        Returns:
-            A list of Node, InputPort tuples
-        """
-
-        # Get all input ports
-        all_ips = [(node.id, ip.id) for node in self.nodes for ip in node.input_ports]
-
-        # Get all receiver ports
-        all_receiver_ports = {(e.receiver, e.receiver_port) for e in self.edges}
-
-        # Find any input ports that aren't receiving values from an edge
-        return list(filter(lambda x: x not in all_receiver_ports, all_ips))
-
-
-class Node(MdfBaseWithId):
-    r"""
-    A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\(s).
-    The values from these are processed via a number of :class:`Function`\(s) and one or more final values
-    are calculated on the :class:`OutputPort`\(s)
-
-    Args:
-        input_ports: Dictionary of the :class:`InputPort` objects in the Node
-        parameters: Dictionary of :class:`Parameter`\(s) for the node
-        functions: The :class:`Function`\(s) for computation the node
-        output_ports: The :class:`OutputPort`\(s) containing evaluated quantities from the node
-    """
-
-    _definition = (
-        "A self contained unit of evaluation receiving input from other Nodes on _InputPort_s. "
-        + "The values from these are processed via a number of Functions and one or more final values "
-        "are calculated on the _OutputPort_s "
-    )
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_child(
-            "input_ports", "The _InputPort_s into the Node", InputPort
-        )
-        self.add_allowed_child("functions", "The _Function_s for the Node", Function)
-        self.add_allowed_child("parameters", "The _Parameter_s of the Node", Parameter)
-        self.add_allowed_child(
-            "output_ports",
-            "The _OutputPort_s containing evaluated quantities from the Node",
-            OutputPort,
-        )
-
-        """The allowed fields for this type"""
-
-        """
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs = {}
-        kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
-
-        super().__init__(**kwargs)
-
-    def get_parameter(self, id: str) -> "Parameter":
-        r"""Get a parameter by its string :code:`id`
-
-        Args:
-            id: The unique string id of the :class:`Parameter`
-
-        Returns:
-            The :class:`Parameter` object stored on this node.
-        """
-        for p in self.parameters:
-            if p.id == id:
-                return p
-        return None
-
-    def get_input_port(self, id: str) -> "InputPort":
-        """Retrieve :class:`InputPort` object corresponding to the given id
-
-        Args:
-            id: Unique identifier of class:`InputPort` object
-
-        Returns:
-            class:`InputPort` object if the entered id matches with the id of class:`InputPort` present in the class:`Node`
-        """
-        for ip in self.input_ports:
-            if id == ip.id:
-                return ip
-
-    def get_output_port(self, id: str) -> "OutputPort":
-        """Retrieve :class:`OutputPort` object corresponding to the given id
-
-        Args:
-            id: Unique identifier of class:`OutputPort` object
-
-        Returns:
-            class:`OutputPort` object if the entered id matches with the id of class:`OutputPort` present in the class:`Node`
-        """
-        for op in self.output_ports:
-            if id == op.id:
-                return op
-
-    @property
-    def input_ports(self) -> List["InputPort"]:
-        r"""
-        The InputPort(s) present in the Node
-
-        Returns:
-            A list of InputPort(s) at the given Node
-        """
-        return self.__getattr__("input_ports")
-
-    @property
-    def functions(self) -> List["Function"]:
-        r"""
-        The :class:`Function`\(s) define computation at the :class:`Node`.
-
-        Returns:
-            A list of :class:`Function`\ s at the given Node
-        """
-        return self.__getattr__("functions")
-
-    @property
-    def output_ports(self) -> List["OutputPort"]:
-        r"""
-        The :class:`OutputPort`\(s) present at the Node
-
-        Returns:
-            A list of OutputPorts at the given Node
-        """
-        return self.__getattr__("output_ports")
-
-
-class Function(MdfBaseWithId):
-    r"""A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
-
-    Args:
-        id: The unique (for this Node) id of the function, which will be used in other Functions and the _OutputPort_s
-            for its value
-        function: Which of the in-build MDF functions (linear etc.) this uses
-        args: Dictionary of values for each of the arguments for the Function, e.g. if the in-build function
-              is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-    """
-    _definition = "A single value which is evaluated as a function of values on _InputPort_s and other Functions"
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_field(
-            "function",
-            "Which of the in-build MDF functions (linear etc.) this uses",
-            dict,
-        )
-        self.add_allowed_field(
-            "value",
-            "evaluable expression",
-            str,
-        )
-        self.add_allowed_field(
-            "args",
-            'Dictionary of values for each of the arguments for the Function, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
-            dict,
-        )
-        self.add_allowed_field(
-            "id",
-            "The unique (for this _Node_) id of the function, which will be used in other Functions and the _OutputPort_s for its value",
-            str,
-        )
-
-        """The allowed fields for this type"""
-
-        """
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs = {}
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
-
-        super().__init__(**kwargs)
-
-
-class InputPort(MdfBaseWithId):
-    r"""The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node
-
-    Args:
-        shape: The shape of the input or output of a port. This uses the same syntax as numpy ndarray shapes (e.g., numpy.zeros(<shape>) would produce an array with the correct shape
-        type: The data type of the input received at a port or the output sent by a port
-    """
-    _definition = "The InputPort is an attribute of a _Node_ which allows external information to be input to the _Node_"
-
-    def __init__(
-        self,
-        id: Optional[str] = None,
-        shape: Optional[str] = None,
-        type: Optional[str] = None,
-        **kwargs,
-    ):
-
-        self.add_allowed_field(
-            "shape",
-            "The shape of the variable (note: there is limited support for this so far...)",
-            str,
-        )
-        self.add_allowed_field(
-            "type",
-            "The type of the variable (note: there is limited support for this so far ",
-            str,
-        )
-
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass
-
-        super().__init__(**kwargs)
-
-
-class OutputPort(MdfBaseWithId):
-    r"""The OutputPort is an attribute of a Node which exports information to another Node connected by an Edge
-
-    Args:
-        id: Unique indentifier for the element
-        value: The value of the :class:`OutputPort` in terms of the :class:`InputPort` and :class:`Function` values
-    """
-    _definition = "The OutputPort is an attribute of a _Node_ which exports information to another _Node_ connected by an _Edge_"
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_field(
-            "value",
-            "The value of the OutputPort in terms of the _InputPort_ and _Function_ values",
-            str,
-        )
-        """The allowed fields for this type"""
-
-        """
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs = {}
-        kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
-
-        super().__init__(**kwargs)
-
-
-class Parameter(MdfBaseWithId):
-    r"""A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
-    referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function with args, or change from a
-    :code:`default_initial_value` with a :code:`time_derivative`.
-
-    Args:
-        default_initial_value: The initial value of the parameter
-        value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
-        time_derivative: How the parameter with time, i.e. ds/dt. Units of time are seconds.
-        function: Which of the in-build MDF functions (linear etc.) this uses
-        args: Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-    """
-    _definition = "A Parameter of the _Node_, which can have a specific value (a constant or a string expression referencing other Parameters), be evaluated by an inbuilt function with args, or change from a default_initial_value with a time_derivative"
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_field(
-            "default_initial_value",
-            "The initial value of the parameter",
-            EvaluableExpression,
-        )
-        self.add_allowed_field(
-            "value",
-            "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values",
-            EvaluableExpression,
-        )
-        self.add_allowed_field(
-            "time_derivative",
-            "How the parameter with time, i.e. ds/dt. Units of time are seconds.",
-            str,
-        )
-        self.add_allowed_field(
-            "function",
-            "Which of the in-build MDF functions (linear etc.) this uses",
-            str,
-        )
-        self.add_allowed_field(
-            "args",
-            'Dictionary of values for each of the arguments for the function of the parameter, e.g. if the in-build function is linear(slope), the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}',
-            dict,
-        )
-
-        self.add_allowed_child(
-            "conditions",
-            "Parameter specific conditions",
-            ParameterCondition,
-        )
-
-        super().__init__(**kwargs)
-
-    def is_stateful(self) -> bool:
-        """
-        Is the parameter stateful?
-
-        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`defualt_initial_value`, or it's
-        id is referenced in its value expression.
-
-        Returns:
-            :code:`True` if stateful, `False` if not.
-        """
-        from modeci_mdf.execution_engine import parse_str_as_list
-
-        if self.time_derivative is not None:
-            return True
-        if self.default_initial_value is not None:
-            return True
-        if self.value is not None and type(self.value) == str:
-            # If we are dealing with a list of symbols, each must treated separately
-            if self.value[0] == "[" and self.value[-1] == "]":
-                # Use the Python interpreter to parse this into a List[str]
-                arg_expr_list = parse_str_as_list(self.value)
-            else:
-                arg_expr_list = [self.value]
-
-            req_vars = []
-
-            for e in arg_expr_list:
-                param_expr = sympy.simplify(e)
-                req_vars.extend([str(s) for s in param_expr.free_symbols])
-            sf = self.id in req_vars
-            """
-            print(
-                "Checking whether %s is stateful, %s: %s"
-                % (self, param_expr.free_symbols, sf)
-            )"""
-            return sf
-        return False
-
-
-class Edge(MdfBaseWithId):
-    r"""An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's
-    :class:`OutputPort` to a receiver's :class:`InputPort`.
-
-    Args:
-        parameters: Dictionary of parameters for the Edge
-        sender: The id of the Node which is the source of the Edge
-        receiver: The id of the Node which is the target of the Edge
-        sender_port: The id of the OutputPort on the sender Node, whose value should be sent to the receiver_port
-        receiver_port: The id of the InputPort on the receiver Node
-    """
-    _definition = "An Edge is an attribute of a _Graph_ that transmits computational results from a sender's _OutputPort_ to a receiver's _InputPort_"
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_field("parameters", "Dict of parameters for the Edge", dict)
-        self.add_allowed_field(
-            "sender", "The id of the _Node_ which is the source of the Edge", str
-        )
-        self.add_allowed_field(
-            "receiver", "The id of the _Node_ which is the target of the Edge", str
-        )
-        self.add_allowed_field(
-            "sender_port",
-            "The id of the _OutputPort_ on the sender _Node_, whose value should be sent to the receiver_port",
-            str,
-        )
-        self.add_allowed_field(
-            "receiver_port", "The id of the _InputPort_ on the receiver _Node_", str
-        )
-
-        """The allowed fields for this type"""
-
-        """
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs = {}
-        kwargs["id"] = id
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass"""
-
-        super().__init__(**kwargs)
-
-
-class ConditionSet(MdfBase):
-    r"""Specifies the non-default pattern of execution of Nodes
-
-    Args:
-        node_specific: A dictionary mapping nodes to any non-default run conditions
-        termination: A dictionary mapping time scales of model execution to conditions indicating when they end
-    """
-    _definition = "Specifies the non-default pattern of execution of _Node_s"
-
-    def __init__(
-        self,
-        node_specific: Optional[Dict[str, "Condition"]] = None,
-        termination: Optional[Dict["str", "Condition"]] = None,
-    ):
-
-        self.add_allowed_field(
-            "node_specific", "The _Condition_s corresponding to each _Node_", dict
-        )
-        self.add_allowed_field(
-            "termination",
-            "The _Condition_s that indicate when model execution ends",
-            dict,
-        )
-
-        """The allowed fields for this type"""
-
-        # FIXME: Reconstruct kwargs as modelspec expects them
-        kwargs = {}
-        for f in self.allowed_fields:
-            try:
-                val = locals()[f]
-                if val is not None:
-                    kwargs[f] = val
-            except KeyError:
-                pass
-
-        super().__init__(**kwargs)
-
-
-class Condition(MdfBase):
-    r"""A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
-
-    Args:
-        type: The type of :class:`Condition` from the library
-        args: The dictionary of arguments needed to evaluate the :class:`Condition`
-
-    """
-    _definition = "A set of descriptors which specify conditional execution of _Node_s to meet complex execution requirements"
-
-    def __init__(
-        self,
-        type: Optional[str] = None,
-        **args: Optional[Any],
-    ):
-
-        self.add_allowed_field("type", "The type of _Condition_ from the library", str)
-        self.add_allowed_field(
-            "args",
-            "The dictionary of arguments needed to evaluate the _Condition_",
-            dict,
-        )
-
-        super().__init__(type=type, args=args)
-
-
-class ParameterCondition(MdfBaseWithId):
-    r"""A condition to test on a Node's parameters, which if true, sets the vaue of this Parameter
-
-    Args:
-        test: The boolean expression to evaluate
-        value: The new value of the Parameter if the test is true
-
-    """
-    _definition = "A condition to test on a _Node_'s parameters, which if true, sets the vaue of this _Parameter_"
-
-    def __init__(self, **kwargs):
-
-        self.add_allowed_field(
-            "test", "The boolean expression to evaluate", EvaluableExpression
-        )
-        self.add_allowed_field(
-            "value",
-            "The new value of the Parameter if the test is true",
-            EvaluableExpression,
-        )
-
-        super().__init__(**kwargs)
-
-
-if __name__ == "__main__":
-    model = Model(id="MyModel")
-    mod_graph0 = Graph(id="Test", parameters={"speed": 4})
-    model.graphs.append(mod_graph0)
-
-    node = Node(id="N0")
-    node.parameters.append(Parameter(id="rate", value=5))
-
-    mod_graph0.nodes.append(node)
-
-    print(mod_graph0)
-    print("------------------")
-    print(mod_graph0.to_json())
-    print("==================")
-    model.to_graph_image(
-        engine="dot",
-        output_format="png",
-        view_on_render=False,
-        level=3,
-        filename_root="test",
-        only_warn_on_fail=True,
-    )
+# Add a special hook for handling unstructuring of Parameters and Functions
+converter.register_unstructure_hook(Parameter, Parameter._unstructure)
+converter.register_structure_hook(Function, Function._structure)

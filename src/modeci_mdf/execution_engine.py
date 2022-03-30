@@ -16,9 +16,9 @@ import inspect
 import os
 import re
 import sys
+import math
 import sympy
 import numpy as np
-
 
 import graph_scheduler
 import onnxruntime
@@ -303,15 +303,11 @@ class EvaluableFunction:
         # func_val  = self.function.value
 
         if self.function.function:
-
             for f in mdf_functions:
-
-                if f in self.function.function.keys():
-
+                if f == self.function.function:
                     expr = create_python_expression(
                         mdf_functions[f]["expression_string"]
                     )
-
                     break
 
         if expr is None:
@@ -329,15 +325,11 @@ class EvaluableFunction:
                 % (self.function, _params_info(func_params), expr)
             )
         if self.function.function:
-
             for f in mdf_functions:
-
-                if f in self.function.function.keys():
-
-                    for arg in self.function.function[f].keys():
-
+                if f == self.function.function:
+                    for arg in self.function.args.keys():
                         func_params[arg] = evaluate_expr(
-                            self.function.function[f][arg],
+                            self.function.args[arg],
                             func_params,
                             verbose=False,
                             array_format=array_format,
@@ -421,7 +413,7 @@ class EvaluableParameter:
         Get the current value of the parameter; evaluates the expression if needed.
 
         Args:
-            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+            parameters: a dictionary of parameters and their values that may or may not be needed to evaluate this
                 parameter.
             array_format: The array format to use (either :code:`'numpy'` or :code:`tensorflow'`).
 
@@ -476,7 +468,7 @@ class EvaluableParameter:
         Evaluate the parameter and store the result in the :code:`curr_value` attribute.
 
         Args:
-            parameters: a dictionary  of parameters and their values that may or may not be needed to evaluate this
+            parameters: a dictionary of parameters and their values that may or may not be needed to evaluate this
                 parameter.
             time_increment: a floating point value specifying the timestep size, only used for :code:`time_derivative`
                 parameters
@@ -885,14 +877,19 @@ class EvaluableNode:
             rop = EvaluableOutput(op, self.verbose)
             self.evaluable_outputs[op.id] = rop
 
-    def initialize(self):
-        pass
-
     def evaluate(
         self,
         time_increment: Union[int, float] = None,
         array_format: str = FORMAT_DEFAULT,
     ):
+        """
+        Evaluate the Node for one time-step
+
+        Args:
+            time_increment: The time-increment to use for this evaluation.
+            array_format: The format to use for arrays.
+
+        """
 
         if self.verbose:
             print(
@@ -1112,7 +1109,7 @@ class EvaluableGraph:
         post_node.evaluable_inputs[edge.receiver_port].set_input_value(input_value)
 
     def parse_condition(
-        self, condition: Union[Condition, dict]
+        self, condition: Union[Condition, Dict]
     ) -> graph_scheduler.Condition:
         """Convert the condition in a specific format
 
@@ -1132,16 +1129,16 @@ class EvaluableGraph:
 
             for preferred, actual in combined_condition_arguments.items():
                 if (
-                    preferred in condition.args
+                    preferred in condition.kwargs
                     and preferred not in sig.parameters
                     and actual in sig.parameters
                 ):
-                    condition.args[actual] = condition.args[preferred]
-                    del condition.args[preferred]
+                    condition.kwargs[actual] = condition.kwargs[preferred]
+                    del condition.kwargs[preferred]
 
         # if specified as dict
         try:
-            args = condition["args"]
+            args = condition["kwargs"]
         except (TypeError, KeyError):
             args = {}
 
@@ -1151,7 +1148,7 @@ class EvaluableGraph:
             pass
 
         cond_type = condition.type
-        cond_args = condition.args
+        cond_args = condition.kwargs
 
         try:
             typ = getattr(graph_scheduler.condition, cond_type)
@@ -1217,9 +1214,6 @@ class EvaluableGraph:
                             if k != var_positional_arg
                         },
                     )
-
-
-from modelspec.utils import FORMAT_NUMPY
 
 
 def main(example_file: str, array_format: str = FORMAT_NUMPY, verbose: bool = False):

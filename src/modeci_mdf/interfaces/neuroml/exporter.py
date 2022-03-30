@@ -196,28 +196,28 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
         duration=simtime,
         dt=dt,
         seed=123,
-        recordVariables={"OUTPUT": {"all": "*"}},
+        record_variables={"OUTPUT": {"all": "*"}},
     )
 
-    recordVariables = {}
+    record_variables = {}
     for node in graph.nodes:
         for ip in node.input_ports:
-            if not ip.id in recordVariables:
-                recordVariables[ip.id] = {}
-            recordVariables[ip.id][node.id] = 0
+            if not ip.id in record_variables:
+                record_variables[ip.id] = {}
+            record_variables[ip.id][node.id] = 0
 
         for p in node.parameters:
             if p.is_stateful():
-                if not p.id in recordVariables:
-                    recordVariables[p.id] = {}
-                recordVariables[p.id][node.id] = 0
+                if not p.id in record_variables:
+                    record_variables[p.id] = {}
+                record_variables[p.id][node.id] = 0
 
         for op in node.output_ports:
-            if not op.id in recordVariables:
-                recordVariables[op.id] = {}
-            recordVariables[op.id][node.id] = 0
+            if not op.id in record_variables:
+                record_variables[op.id] = {}
+            record_variables[op.id][node.id] = 0
 
-    sim.recordVariables = recordVariables
+    sim.record_variables = record_variables
     if save_to:
         sf = sim.to_json_file()
 

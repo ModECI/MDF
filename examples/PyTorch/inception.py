@@ -291,7 +291,7 @@ def main():
 
     print("Evaluated the graph in PyTorch, output: %s" % (_val_info(output_mdf)))
 
-    # Make sure the results are the same betweeen PyTorch and MDF
+    # Make sure the results are the same between PyTorch and MDF
     assert np.allclose(
         output,
         output_mdf,

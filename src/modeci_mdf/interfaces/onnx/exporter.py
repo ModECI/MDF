@@ -177,9 +177,8 @@ def generate_onnx_node(node, graph):
     if input_ports_without_edge:
         # Create ONNX graph input ports
         for input_port in input_ports_without_edge:
-            shape = literal_eval(input_port.shape)
             value_info = helper.make_tensor_value_info(
-                input_port.id, TensorProto.FLOAT, shape
+                input_port.id, TensorProto.FLOAT, input_port.shape
             )
             onnx_graph_inputs.append(value_info)
 

@@ -282,9 +282,9 @@ def mdf_to_graphviz(
                 info += "<tr><td>{}{}={} ".format(
                     format_label(" "),
                     format_condition("condition"),
-                    ns["type"] if "type" in ns else ns.type,
+                    ns.type,
                 )
-                args = ns["args"] if "args" in ns else ns.args
+                args = ns.kwargs
                 if args:
                     for con in args:
                         nn = format_num(args[con])

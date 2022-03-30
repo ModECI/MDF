@@ -14,6 +14,11 @@ import copy
 from distutils.dir_util import copy_tree
 from pathlib import Path
 
+# Set this to True if you want for example scripts to be run from their current location in the repo rather than
+# copied to a pytest temp directory. WARNING: setting this to True will cause files that these scripts generate to be
+# re-generated.
+run_example_scripts_in_repo = True
+
 example_scripts = glob.glob("examples/**/*.py", recursive=True)
 example_mdf_scripts = {
     Path(f) for f in glob.glob("examples/MDF/**/*.py", recursive=True)
@@ -69,7 +74,7 @@ def chdir_back_to_root(mocker):
     mocker.patch("matplotlib.pyplot.figure")
 
     # Cache the path so we can reset it after the test, the examples/MDF tests require
-    # setting the paht
+    # setting the path
     old_sys_path = copy.copy(sys.path)
 
     yield

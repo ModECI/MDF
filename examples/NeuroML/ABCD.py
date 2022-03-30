@@ -187,7 +187,7 @@ def generate():
         duration=simtime,
         dt=dt,
         seed=123,
-        recordVariables={"OUTPUT": {"all": "*"}},
+        record_variables={"OUTPUT": {"all": "*"}},
     )  # ,'INPUT':{'all':'*'}
 
     sim.to_json_file()

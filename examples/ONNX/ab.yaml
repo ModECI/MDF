@@ -7,7 +7,9 @@ ONNX Model:
                 Add_1:
                     input_ports:
                         input:
-                            shape: (2, 3)
+                            shape:
+                            - 2
+                            - 3
                     parameters:
                         B:
                             value: 1.0
@@ -22,7 +24,9 @@ ONNX Model:
                 Mul_3:
                     input_ports:
                         _2:
-                            shape: (2, 3)
+                            shape:
+                            - 2
+                            - 3
                     parameters:
                         B:
                             value: 5.0

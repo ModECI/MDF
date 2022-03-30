@@ -103,6 +103,10 @@ RNNs:
                             value: zi
             edges:
                 input_edge:
+                    sender: input_node
+                    receiver: rnn_node
+                    sender_port: out_port
+                    receiver_port: ext_input
                     parameters:
                         weight:
                         - 1.0
@@ -110,14 +114,10 @@ RNNs:
                         - 0.0
                         - 0.0
                         - 0.0
-                    sender: input_node
-                    receiver: rnn_node
-                    sender_port: out_port
-                    receiver_port: ext_input
                 readout_edge:
-                    parameters:
-                        weight: 1
                     sender: rnn_node
                     receiver: readout_node
                     sender_port: out_port_r
                     receiver_port: input
+                    parameters:
+                        weight: 1

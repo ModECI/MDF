@@ -8,7 +8,7 @@
                     "Sin_0": {
                         "input_ports": {
                             "input": {
-                                "shape": "(2, 3)"
+                                "shape": [2, 3]
                             }
                         },
                         "parameters": {
@@ -28,7 +28,7 @@
                     "Sin_1": {
                         "input_ports": {
                             "_1": {
-                                "shape": "(2, 3)"
+                                "shape": [2, 3]
                             }
                         },
                         "parameters": {
@@ -48,7 +48,7 @@
                     "Cos_2": {
                         "input_ports": {
                             "_2": {
-                                "shape": "(2, 3)"
+                                "shape": [2, 3]
                             }
                         },
                         "parameters": {

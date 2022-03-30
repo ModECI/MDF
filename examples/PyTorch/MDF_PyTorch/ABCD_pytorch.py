@@ -9,7 +9,7 @@ from math import *
 class input0(nn.Module):
     def __init__(
         self,
-        input_level=torch.tensor(0.0),
+        input_level=torch.tensor(0.0),  # orig type: <class 'float'>
     ):
         super().__init__()
         self.input_level = input_level
@@ -25,8 +25,8 @@ class input0(nn.Module):
 class A(nn.Module):
     def __init__(
         self,
-        slope=torch.tensor(1.1),
-        intercept=torch.tensor(1.2),
+        slope=torch.tensor(1.1),  # orig type: <class 'float'>
+        intercept=torch.tensor(1.2),  # orig type: <class 'float'>
     ):
         super().__init__()
         self.slope = slope
@@ -45,9 +45,9 @@ class A(nn.Module):
 class B(nn.Module):
     def __init__(
         self,
-        gain=torch.tensor(2.1),
-        bias=torch.tensor(2.2),
-        offset=torch.tensor(2.3),
+        gain=torch.tensor(2.1),  # orig type: <class 'float'>
+        bias=torch.tensor(2.2),  # orig type: <class 'float'>
+        offset=torch.tensor(2.3),  # orig type: <class 'float'>
     ):
         super().__init__()
         self.gain = gain
@@ -69,10 +69,10 @@ class B(nn.Module):
 class C(nn.Module):
     def __init__(
         self,
-        scale=torch.tensor(3.1),
-        rate=torch.tensor(3.2),
-        bias=torch.tensor(3.3),
-        offset=torch.tensor(3.4),
+        scale=torch.tensor(3.1),  # orig type: <class 'float'>
+        rate=torch.tensor(3.2),  # orig type: <class 'float'>
+        bias=torch.tensor(3.3),  # orig type: <class 'float'>
+        offset=torch.tensor(3.4),  # orig type: <class 'float'>
     ):
         super().__init__()
         self.scale = scale
@@ -95,7 +95,7 @@ class C(nn.Module):
 class D(nn.Module):
     def __init__(
         self,
-        scale=torch.tensor(4.0),
+        scale=torch.tensor(4.0),  # orig type: <class 'float'>
     ):
         super().__init__()
         self.scale = scale

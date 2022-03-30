@@ -381,10 +381,12 @@ def _generate_scripts_from_model(mdf_model: "Model", version: str) -> str:
     Helper function to parse MDF objects from MDF json representation. Uses MDF scheduler to
     determine proper ordering of nodes, and calls `build_script`.
 
-    Args: mdf_model: MDF model to be exported to PyTorch
+    Args:
+        mdf_model: MDF model to be exported to PyTorch
 
-    Returns: Returns dictionary of scripts where key = name of mdf model, value is string
-    representation of script.
+    Returns:
+        Returns dictionary of scripts where key = name of mdf model, value is string
+        representation of script.
 
     """
     scripts = {}

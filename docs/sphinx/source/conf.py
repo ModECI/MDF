@@ -70,7 +70,7 @@ autodoc_mock_imports = [
 # See: https://github.com/JamesALeedham/Sphinx-Autosummary-Recursion
 def autodoc_skip_member_callback(app, what, name, obj, skip, options):
     # Classes and functions to exclude
-    exclusions = ("MdfBaseWithId", "MdfBase", "allowed_fields", "allowed_children")
+    exclusions = "MdfBase"
 
     # Things to reinclude
     inclusions = ()

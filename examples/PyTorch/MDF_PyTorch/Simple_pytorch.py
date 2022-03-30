@@ -9,7 +9,7 @@ from math import *
 class input_node(nn.Module):
     def __init__(
         self,
-        input_level=torch.tensor(0.5),
+        input_level=torch.tensor(0.5),  # orig type: <class 'float'>
     ):
         super().__init__()
         self.input_level = input_level
@@ -25,9 +25,9 @@ class input_node(nn.Module):
 class processing_node(nn.Module):
     def __init__(
         self,
-        lin_slope=torch.tensor(0.5),
-        lin_intercept=torch.tensor(0),
-        log_gain=torch.tensor(3),
+        lin_slope=torch.tensor(0.5),  # orig type: <class 'float'>
+        lin_intercept=torch.tensor(0),  # orig type: <class 'int'>
+        log_gain=torch.tensor(3),  # orig type: <class 'int'>
     ):
         super().__init__()
         self.lin_slope = lin_slope

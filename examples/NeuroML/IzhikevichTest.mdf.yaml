@@ -53,13 +53,14 @@ IzhikevichTest:
                             value: u
                         iMemb:
                             value: iMemb
-                    notes: "Cell: [Cell (izhCell), neuroml2_cell = izhikevich2007Cell,\
-                        \ parameters = {'v0': 'v0', 'C': 'C', 'k': 'k', 'vr': 'vr',\
-                        \ 'vt': 'vt', 'vpeak': 'vpeak', 'a': 'a', 'b': 'b', 'c': 'c',\
-                        \ 'd': 'd'}] is defined in None and in Lems is: Component,\
-                        \ id: izhCell, type: izhikevich2007Cell,\n   parameters: {'v0':\
-                        \ '-60mV', 'C': '100 pF', 'k': '0.7 nS_per_mV', 'vr': '-60\
-                        \ mV', 'vt': '-40 mV', 'vpeak': '35 mV', 'a': '0.03 per_ms',\
-                        \ 'b': '-2 nS', 'c': '-50 mV', 'd': '100 pA'}\n   parent:\
-                        \ None\n"
+                    notes: "Cell: [Cell(notes=None, id='izhCell', parameters={'v0':\
+                        \ 'v0', 'C': 'C', 'k': 'k', 'vr': 'vr', 'vt': 'vt', 'vpeak':\
+                        \ 'vpeak', 'a': 'a', 'b': 'b', 'c': 'c', 'd': 'd'}, neuroml2_source_file=None,\
+                        \ lems_source_file=None, neuroml2_cell='izhikevich2007Cell',\
+                        \ pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is\
+                        \ defined in None and in Lems is: Component, id: izhCell,\
+                        \ type: izhikevich2007Cell,\n   parameters: {'v0': '-60mV',\
+                        \ 'C': '100 pF', 'k': '0.7 nS_per_mV', 'vr': '-60 mV', 'vt':\
+                        \ '-40 mV', 'vpeak': '35 mV', 'a': '0.03 per_ms', 'b': '-2\
+                        \ nS', 'c': '-50 mV', 'd': '100 pA'}\n   parent: None\n"
             edges: {}
