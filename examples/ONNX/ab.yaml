@@ -1,6 +1,6 @@
 ONNX Model:
-    format: ModECI MDF v0.3
-    generating_application: Python modeci-mdf v0.3.3
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.0
     graphs:
         torch-jit-export:
             nodes:
