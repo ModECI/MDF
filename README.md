@@ -54,7 +54,24 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 <p align="center"><img src="docs/images/MDFgraph2.png" width="700px"><br/><sup><i><b>Fig 3:</b> This graph illustrates the ability to specify behavior that extends beyond the directed flow through the graph. Here, Node 1 generates a random number and transmits that number to Node 2. Node 2 will only run if the number it receives from Node 1 is greater than 10.</i></sup></p>
 
+## Installation
+
+### Requirements
+Python >= 3.7
+
+### Steps
+***
+```
+$ git clone https://github.com/ModECI/MDF.git
+$ cd path/to/repo/MDF
+$ pip install .
+```
+
+
 ## Examples
+
+To get started follow simple example [here](https://github.com/ModECI/MDF/blob/main/examples/SimpleExample.ipynb)
+
 
 Multiple examples of serialized MDF files, the Python scripts used to generate them, as well as mappings to target environments can be found [here](https://github.com/ModECI/MDF/blob/main/examples/README.md).
 
