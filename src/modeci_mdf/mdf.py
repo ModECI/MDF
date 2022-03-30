@@ -322,7 +322,7 @@ class Edge(MdfBase):
         receiver: The :code:`id` of the :class:`~Node` which is the target of the edge.
         sender_port: The id of the :class:`~OutputPort` on the sender :class:`~Node`, whose value should be sent to the
             :code:`receiver_port`
-        receiver_port: The id of the InputPort on the receiver :class:`~Node'
+        receiver_port: The id of the InputPort on the receiver :class:`~Node`
         parameters: Dictionary of parameters for the edge.
     """
     id: str = field(validator=instance_of(str))
@@ -462,7 +462,7 @@ class Graph(MdfBase):
 @modelspec.define(eq=False)
 class Model(MdfBase):
     r"""
-    The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
+    The top level construct in MDF is Model, which may contain multiple :class:`Graph` objects and model attribute(s)
 
     Attributes:
         id: A unique identifier for this Model

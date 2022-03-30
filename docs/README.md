@@ -1,7 +1,7 @@
 # Specification of ModECI v0.3
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.
 ## Model
-The top level construct in MDF is Model, which may contain multiple :class:`.Graph` objects and model attribute(s)
+The top level construct in MDF is Model, which may contain multiple <a href="#graph">Graph</a> objects and model attribute(s)
 
 ### Allowed parameters
 <table>
@@ -107,8 +107,8 @@ A directed graph consisting of Node(s) connected via Edge(s)
 </table>
 
 ## Node
-The values from these are processed via a number of :class:`Function`\(s) and one or more final values
-are calculated on the :class:`OutputPort`\(s)
+The values from these are processed via a number of <a href="#function">Function</a>\(s) and one or more final values
+are calculated on the <a href="#outputport">OutputPort</a>\(s)
 
 ### Allowed parameters
 <table>
@@ -133,35 +133,35 @@ are calculated on the :class:`OutputPort`\(s)
   <tr>
     <td><b>input_ports</b></td>
     <td><a href="#inputport">InputPort</a></td>
-    <td><i>Dictionary of the :class:`InputPort` objects in the Node</i></td>
+    <td><i>Dictionary of the <a href="#inputport">InputPort</a> objects in the Node</i></td>
   </tr>
 
 
   <tr>
     <td><b>functions</b></td>
     <td><a href="#function">Function</a></td>
-    <td><i>The :class:`Function`\(s) for computation the node</i></td>
+    <td><i>The <a href="#function">Function</a>\(s) for computation the node</i></td>
   </tr>
 
 
   <tr>
     <td><b>parameters</b></td>
     <td><a href="#parameter">Parameter</a></td>
-    <td><i>Dictionary of :class:`Parameter`\(s) for the node</i></td>
+    <td><i>Dictionary of <a href="#parameter">Parameter</a>\(s) for the node</i></td>
   </tr>
 
 
   <tr>
     <td><b>output_ports</b></td>
     <td><a href="#outputport">OutputPort</a></td>
-    <td><i>The :class:`OutputPort`\(s) containing evaluated quantities from the node</i></td>
+    <td><i>The <a href="#outputport">OutputPort</a>\(s) containing evaluated quantities from the node</i></td>
   </tr>
 
 
 </table>
 
 ## InputPort
-The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node
+The <a href="#inputport">InputPort</a> is an attribute of a Node which allows external information to be input to the Node
 
 ### Allowed parameters
 <table>
@@ -183,7 +183,7 @@ The :class:`InputPort` is an attribute of a Node which allows external informati
     <td><b>shape</b></td>
     <td>Union[Tuple[int, ...], NoneType]</td>
     <td><i>The shape of the input port. This uses the same syntax as numpy ndarray shapes
-(e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape</i></td>
+(e.g., <b>numpy.zeros(shape)</b> would produce an array with the correct shape</i></td>
  </tr>
 
 
@@ -197,7 +197,7 @@ The :class:`InputPort` is an attribute of a Node which allows external informati
 </table>
 
 ## Function
-A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
+A single value which is evaluated as a function of values on <a href="#inputport">InputPort</a>\(s) and other Functions
 
 ### Allowed parameters
 <table>
@@ -211,15 +211,15 @@ A single value which is evaluated as a function of values on :class:`InputPort`\
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>The unique (for this Node) id of the function, which will be used in other :class:`~Function`s and
-the :class:`~OutputPort`s for its value</i></td>
+    <td><i>The unique (for this Node) id of the function, which will be used in other <a href="#function">Function</a>s and
+the <a href="#outputport">OutputPort</a>s for its value</i></td>
  </tr>
 
 
   <tr>
     <td><b>function</b></td>
     <td>Union[str, NoneType]</td>
-    <td><i>Which of the in-build MDF functions (:code:`linear`, etc.). See supported functions:
+    <td><i>Which of the in-build MDF functions (<b>linear</b>, etc.). See supported functions:
 https://mdf.readthedocs.io/en/latest/api/MDF<a href="#function">function</a>specifications.html</i></td>
  </tr>
 
@@ -243,8 +243,8 @@ and args attributes will be None.</i></td>
 </table>
 
 ## Parameter
-referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function with args, or change from a
-:code:`default<a href="#initial">initial</a>value` with a :code:`time<a href="#derivative`.">derivative`.</a>
+referencing other <a href="#parameter">Parameter</a>\(s)), be evaluated by an inbuilt function with args, or change from a
+<b>default_initial_value</b> with a <b>time_derivative</b>.
 
 ### Allowed parameters
 <table>
@@ -294,8 +294,8 @@ referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function w
     <td><b>args</b></td>
     <td>Union[Any, NoneType]</td>
     <td><i>Dictionary of values for each of the arguments for the function of the parameter,
-e.g. if the in-build function is :code:`linear(slope)`, the args here could be :code:`{"slope": 3}` or
-:code:`{"slope": "input_port_0 + 2"}`</i></td>
+e.g. if the in-build function is <b>linear(slope)</b>, the args here could be <b>{"slope": 3}</b> or
+<b>{"slope": "input_port_0 + 2"}</b></i></td>
  </tr>
 
 
@@ -341,7 +341,7 @@ A condition to test on a Node's parameters, which if true, sets the value of thi
 </table>
 
 ## OutputPort
-connected by an :class:`Edge`
+connected by an <a href="#edge">Edge</a>
 
 ### Allowed parameters
 <table>
@@ -362,8 +362,8 @@ connected by an :class:`Edge`
   <tr>
     <td><b>value</b></td>
     <td>Union[str, NoneType]</td>
-    <td><i>The value of the :class:`OutputPort` in terms of the :class:`InputPort`, :class:`Function` values, and
-:class:`Parameter` values.</i></td>
+    <td><i>The value of the <a href="#outputport">OutputPort</a> in terms of the <a href="#inputport">InputPort</a>, <a href="#function">Function</a> values, and
+<a href="#parameter">Parameter</a> values.</i></td>
  </tr>
 
 
@@ -371,7 +371,7 @@ connected by an :class:`Edge`
     <td><b>shape</b></td>
     <td>Union[Tuple[int, ...], NoneType]</td>
     <td><i>The shape of the output port. This uses the same syntax as numpy ndarray shapes
-(e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape</i></td>
+(e.g., <b>numpy.zeros(shape)</b> would produce an array with the correct shape</i></td>
  </tr>
 
 
@@ -385,7 +385,7 @@ connected by an :class:`Edge`
 </table>
 
 ## Edge
-:class:`OutputPort` to a receiver's :class:`InputPort`.
+<a href="#outputport">OutputPort</a> to a receiver's <a href="#inputport">InputPort</a>.
 
 ### Allowed parameters
 <table>
@@ -406,29 +406,29 @@ connected by an :class:`Edge`
   <tr>
     <td><b>sender</b></td>
     <td>str</td>
-    <td><i>The :code:`id` of the :class:`~Node` which is the source of the edge.</i></td>
+    <td><i>The <b>id</b> of the <a href="#node">Node</a> which is the source of the edge.</i></td>
  </tr>
 
 
   <tr>
     <td><b>receiver</b></td>
     <td>str</td>
-    <td><i>The :code:`id` of the :class:`~Node` which is the target of the edge.</i></td>
+    <td><i>The <b>id</b> of the <a href="#node">Node</a> which is the target of the edge.</i></td>
  </tr>
 
 
   <tr>
     <td><b>sender_port</b></td>
     <td>str</td>
-    <td><i>The id of the :class:`~OutputPort` on the sender :class:`~Node`, whose value should be sent to the
-:code:`receiver<a href="#port`">port`</a></i></td>
+    <td><i>The id of the <a href="#outputport">OutputPort</a> on the sender <a href="#node">Node</a>, whose value should be sent to the
+<b>receiver_port</b></i></td>
  </tr>
 
 
   <tr>
     <td><b>receiver_port</b></td>
     <td>str</td>
-    <td><i>The id of the InputPort on the receiver :class:`~Node'</i></td>
+    <td><i>The id of the InputPort on the receiver <a href="#node">Node</a></i></td>
  </tr>
 
 
