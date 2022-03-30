@@ -59,6 +59,9 @@ jobs:
         python -m pytest -ra tests/interfaces/pytorch/test_export.py
         python -m pytest -ra tests/interfaces/pytorch/test_import.py # inception taking v long
 
+    - name: Final version info for installed packages
+      run: |
+          pip list
 
   dist:
     name: Distribution build
