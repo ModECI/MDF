@@ -254,8 +254,8 @@ def test_graph_in_graphs(tmpdir):
 
     #Error while deserialization of 'Graph' inside nodes:
 
-    # mod_graph_loaded = load_mdf_json(out_filename)
-    # assert mod.to_json() == mod_graph_loaded.to_json()
+    mod_graph_loaded = load_mdf_json(out_filename)
+    assert mod.to_json() == mod_graph_loaded.to_json()
 
 
 
