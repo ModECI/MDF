@@ -99,6 +99,8 @@ def load_mdf_yaml(filename):
     print(f"Loaded a graph from {filename}, Root(s): {data.keys()}")
     if data.keys() == "graphs":
         data = {"UNSPECIFIED": data}
+    elif data.keys == "nodes" and isinstance(data.value, Graph):
+        data = {"UNSPECIFIED": data}
     model = Model()
     model = _parse_element(data, model)
 
