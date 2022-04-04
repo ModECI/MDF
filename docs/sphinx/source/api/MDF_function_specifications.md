@@ -1,4 +1,4 @@
-# Specification of standard functions in ModECI v0.3
+# Specification of standard functions in ModECI v0.4
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.
 These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py
 ## All functions:

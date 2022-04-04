@@ -1,12 +1,19 @@
-version: ModECI MDF v0.3
+version: ModECI MDF v0.4
 comment: '**Note: the ModECI MDF specification is still in development! Subject to
     change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification)
     for ongoing discussions.'
 specification:
     Model:
-        definition: The top level Model containing _Graph_s consisting of _Node_s
-            connected via _Edge_s.
+        definition: The top level construct in MDF is Model, which may contain multiple
+            :class:`Graph` objects and model attribute(s)
         allowed_parameters:
+            metadata:
+                type: Union[Any, NoneType]
+                description: Optional metadata field, an arbitrary dictionary of string
+                    keys and JSON serializable values.
+            id:
+                type: str
+                description: A unique identifier for this Model
             format:
                 type: str
                 description: Information on the version of MDF used in this file
@@ -14,232 +21,10 @@ specification:
                 type: str
                 description: Information on what application generated/saved this
                     file
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
+            onnx_opset_version:
+                type: Union[str, NoneType]
+                description: The ONNX opset used for any ONNX functions in this model.
         allowed_children:
             graphs:
                 type: Graph
-                description: The list of _Graph_s in this Model
-    Graph:
-        definition: A directed graph consisting of _Node_s connected via _Edge_s.
-        allowed_parameters:
-            parameters:
-                type: dict
-                description: Dict of global parameters for the Graph
-            conditions:
-                type: ConditionSet
-                description: The _ConditionSet_ for scheduling of the Graph
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
-        allowed_children:
-            nodes:
-                type: Node
-                description: The _Node_s present in the Graph
-            edges:
-                type: Edge
-                description: The _Edge_s between _Node_s in the Graph
-    ConditionSet:
-        definition: Specifies the non-default pattern of execution of _Node_s
-        allowed_parameters:
-            node_specific:
-                type: dict
-                description: The _Condition_s corresponding to each _Node_
-            termination:
-                type: dict
-                description: The _Condition_s that indicate when model execution ends
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-    Node:
-        definition: 'A self contained unit of evaluation receiving input from other
-            Nodes on _InputPort_s. The values from these are processed via a number
-            of Functions and one or more final values are calculated on the _OutputPort_s '
-        allowed_parameters:
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
-        allowed_children:
-            input_ports:
-                type: InputPort
-                description: The _InputPort_s into the Node
-            functions:
-                type: Function
-                description: The _Function_s for the Node
-            parameters:
-                type: Parameter
-                description: The _Parameter_s of the Node
-            output_ports:
-                type: OutputPort
-                description: The _OutputPort_s containing evaluated quantities from
-                    the Node
-    InputPort:
-        definition: The InputPort is an attribute of a _Node_ which allows external
-            information to be input to the _Node_
-        allowed_parameters:
-            shape:
-                type: str
-                description: 'The shape of the variable (note: there is limited support
-                    for this so far...)'
-            type:
-                type: str
-                description: 'The type of the variable (note: there is limited support
-                    for this so far '
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
-    Function:
-        definition: A single value which is evaluated as a function of values on _InputPort_s
-            and other Functions
-        allowed_parameters:
-            function:
-                type: dict
-                description: Which of the in-build MDF functions (linear etc.) this
-                    uses
-            value:
-                type: str
-                description: evaluable expression
-            args:
-                type: dict
-                description: Dictionary of values for each of the arguments for the
-                    Function, e.g. if the in-build function is linear(slope), the
-                    args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-            id:
-                type: str
-                description: Unique ID of element
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            notes:
-                type: str
-                description: Human readable notes
-    Parameter:
-        definition: A Parameter of the _Node_, which can have a specific value (a
-            constant or a string expression referencing other Parameters), be evaluated
-            by an inbuilt function with args, or change from a default_initial_value
-            with a time_derivative
-        allowed_parameters:
-            default_initial_value:
-                type: EvaluableExpression
-                description: The initial value of the parameter
-            value:
-                type: EvaluableExpression
-                description: The next value of the parameter, in terms of the inputs,
-                    functions and PREVIOUS parameter values
-            time_derivative:
-                type: str
-                description: How the parameter with time, i.e. ds/dt. Units of time
-                    are seconds.
-            function:
-                type: str
-                description: Which of the in-build MDF functions (linear etc.) this
-                    uses
-            args:
-                type: dict
-                description: Dictionary of values for each of the arguments for the
-                    function of the parameter, e.g. if the in-build function is linear(slope),
-                    the args here could be {"slope":3} or {"slope":"input_port_0 +
-                    2"}
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
-        allowed_children:
-            conditions:
-                type: ParameterCondition
-                description: Parameter specific conditions
-    ParameterCondition:
-        definition: A condition to test on a _Node_'s parameters, which if true, sets
-            the vaue of this _Parameter_
-        allowed_parameters:
-            test:
-                type: EvaluableExpression
-                description: The boolean expression to evaluate
-            value:
-                type: EvaluableExpression
-                description: The new value of the Parameter if the test is true
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
-    OutputPort:
-        definition: The OutputPort is an attribute of a _Node_ which exports information
-            to another _Node_ connected by an _Edge_
-        allowed_parameters:
-            value:
-                type: str
-                description: The value of the OutputPort in terms of the _InputPort_
-                    and _Function_ values
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
-    Edge:
-        definition: An Edge is an attribute of a _Graph_ that transmits computational
-            results from a sender's _OutputPort_ to a receiver's _InputPort_
-        allowed_parameters:
-            parameters:
-                type: dict
-                description: Dict of parameters for the Edge
-            sender:
-                type: str
-                description: The id of the _Node_ which is the source of the Edge
-            receiver:
-                type: str
-                description: The id of the _Node_ which is the target of the Edge
-            sender_port:
-                type: str
-                description: The id of the _OutputPort_ on the sender _Node_, whose
-                    value should be sent to the receiver_port
-            receiver_port:
-                type: str
-                description: The id of the _InputPort_ on the receiver _Node_
-            metadata:
-                type: dict
-                description: Dict of metadata for the model element
-            id:
-                type: str
-                description: Unique ID of element
-            notes:
-                type: str
-                description: Human readable notes
+                description: The collection of graphs that make up the MDF model.

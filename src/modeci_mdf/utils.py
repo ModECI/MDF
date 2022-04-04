@@ -109,7 +109,7 @@ def color_rgb_to_hex(rgb):
 
 
 def is_number(s):
-    """Return :code:`True` if cast to :code:`float` does not throw ValueError, :code:`False` otherwise. """
+    """Return :code:`True` if cast to :code:`float` does not throw ValueError, :code:`False` otherwise."""
     try:
         float(s)
         return True
