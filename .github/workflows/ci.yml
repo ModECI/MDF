@@ -18,7 +18,7 @@ jobs:
 
     - name: Install specific version of click
       # See https://github.com/dask/distributed/issues/6013
-      run: pip install --upgrade click==8.0.2
+      run: pip install black==21.5b1 click==7.1.2
 
     - uses: pre-commit/action@v2.0.0
       with:
