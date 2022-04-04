@@ -32,6 +32,228 @@
                     "description": "The collection of graphs that make up the MDF model."
                 }
             }
+        },
+        "Graph": {
+            "definition": "A directed graph consisting of Node(s) connected via Edge(s)",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values."
+                },
+                "id": {
+                    "type": "str",
+                    "description": "A unique identifier for this Graph"
+                },
+                "parameters": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Dictionary of global parameters for the Graph"
+                },
+                "conditions": {
+                    "type": "Union[ConditionSet, NoneType]",
+                    "description": "The ConditionSet stored as dictionary for scheduling of the Graph"
+                }
+            },
+            "allowed_children": {
+                "nodes": {
+                    "type": "Node",
+                    "description": "One or more :class:`Node`\\(s) present in the graph"
+                },
+                "edges": {
+                    "type": "Edge",
+                    "description": "Zero or more :class:`Edge`\\(s) present in the graph"
+                }
+            }
+        },
+        "Node": {
+            "definition": "The values from these are processed via a number of :class:`Function`\\(s) and one or more final values\nare calculated on the :class:`OutputPort`\\(s)",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values."
+                },
+                "id": {
+                    "type": "str",
+                    "description": "A unique identifier for the node."
+                }
+            },
+            "allowed_children": {
+                "input_ports": {
+                    "type": "InputPort",
+                    "description": "Dictionary of the :class:`InputPort` objects in the Node"
+                },
+                "functions": {
+                    "type": "Function",
+                    "description": "The :class:`Function`\\(s) for computation the node"
+                },
+                "parameters": {
+                    "type": "Parameter",
+                    "description": "Dictionary of :class:`Parameter`\\(s) for the node"
+                },
+                "output_ports": {
+                    "type": "OutputPort",
+                    "description": "The :class:`OutputPort`\\(s) containing evaluated quantities from the node"
+                }
+            }
+        },
+        "InputPort": {
+            "definition": "The :class:`InputPort` is an attribute of a Node which allows external information to be input to the Node",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values."
+                },
+                "id": {
+                    "type": "str",
+                    "description": "The unique (for this Node) id of the input port,"
+                },
+                "shape": {
+                    "type": "Union[Tuple[int, ...], NoneType]",
+                    "description": "The shape of the input port. This uses the same syntax as numpy ndarray shapes\n(e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape"
+                },
+                "type": {
+                    "type": "Union[str, NoneType]",
+                    "description": "The data type of the input received at a port."
+                }
+            }
+        },
+        "Function": {
+            "definition": "A single value which is evaluated as a function of values on :class:`InputPort`\\(s) and other Functions",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values."
+                },
+                "id": {
+                    "type": "str",
+                    "description": "The unique (for this Node) id of the function, which will be used in other :class:`~Function`s and\nthe :class:`~OutputPort`s for its value"
+                },
+                "function": {
+                    "type": "Union[str, NoneType]",
+                    "description": "Which of the in-build MDF functions (:code:`linear`, etc.). See supported functions:\nhttps://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html"
+                },
+                "args": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Dictionary of values for each of the arguments for the Function, e.g. if the in-built function\nis linear(slope),the args here could be {\"slope\":3} or {\"slope\":\"input_port_0 + 2\"}"
+                },
+                "value": {
+                    "type": "Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]",
+                    "description": "If the function is a value expression, this attribute will contain the expression and the function\nand args attributes will be None."
+                }
+            }
+        },
+        "Parameter": {
+            "definition": "referencing other :class:`Parameter`\\(s)), be evaluated by an inbuilt function with args, or change from a\n:code:`default_initial_value` with a :code:`time_derivative`.",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values."
+                },
+                "id": {
+                    "type": "str",
+                    "description": ""
+                },
+                "value": {
+                    "type": "Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]",
+                    "description": "The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values"
+                },
+                "default_initial_value": {
+                    "type": "Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]",
+                    "description": "The initial value of the parameter, only used when parameter is stateful."
+                },
+                "time_derivative": {
+                    "type": "Union[str, NoneType]",
+                    "description": "How the parameter changes with time, i.e. ds/dt. Units of time are seconds."
+                },
+                "function": {
+                    "type": "Union[str, NoneType]",
+                    "description": "Which of the in-build MDF functions (linear etc.) this uses, See"
+                },
+                "args": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Dictionary of values for each of the arguments for the function of the parameter,\ne.g. if the in-build function is :code:`linear(slope)`, the args here could be :code:`{\"slope\": 3}` or\n:code:`{\"slope\": \"input_port_0 + 2\"}`"
+                }
+            },
+            "allowed_children": {
+                "conditions": {
+                    "type": "ParameterCondition",
+                    "description": "Parameter specific conditions"
+                }
+            }
+        },
+        "ParameterCondition": {
+            "definition": "A condition to test on a Node's parameters, which if true, sets the value of this Parameter",
+            "allowed_parameters": {
+                "id": {
+                    "type": "str",
+                    "description": "A unique identifier for the ParameterCondition"
+                },
+                "test": {
+                    "type": "Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]",
+                    "description": "The boolean expression to evaluate"
+                },
+                "value": {
+                    "type": "Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]",
+                    "description": "The new value of the Parameter if the test is true"
+                }
+            }
+        },
+        "OutputPort": {
+            "definition": "connected by an :class:`Edge`",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values."
+                },
+                "id": {
+                    "type": "str",
+                    "description": "Unique identifier for the output port."
+                },
+                "value": {
+                    "type": "Union[str, NoneType]",
+                    "description": "The value of the :class:`OutputPort` in terms of the :class:`InputPort`, :class:`Function` values, and\n:class:`Parameter` values."
+                },
+                "shape": {
+                    "type": "Union[Tuple[int, ...], NoneType]",
+                    "description": "The shape of the output port. This uses the same syntax as numpy ndarray shapes\n(e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape"
+                },
+                "type": {
+                    "type": "Union[str, NoneType]",
+                    "description": "The data type of the output sent by a port."
+                }
+            }
+        },
+        "Edge": {
+            "definition": ":class:`OutputPort` to a receiver's :class:`InputPort`.",
+            "allowed_parameters": {
+                "metadata": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values."
+                },
+                "id": {
+                    "type": "str",
+                    "description": "A unique string identifier for this edge."
+                },
+                "sender": {
+                    "type": "str",
+                    "description": "The :code:`id` of the :class:`~Node` which is the source of the edge."
+                },
+                "receiver": {
+                    "type": "str",
+                    "description": "The :code:`id` of the :class:`~Node` which is the target of the edge."
+                },
+                "sender_port": {
+                    "type": "str",
+                    "description": "The id of the :class:`~OutputPort` on the sender :class:`~Node`, whose value should be sent to the\n:code:`receiver_port`"
+                },
+                "receiver_port": {
+                    "type": "str",
+                    "description": "The id of the InputPort on the receiver :class:`~Node`"
+                },
+                "parameters": {
+                    "type": "Union[Any, NoneType]",
+                    "description": "Dictionary of parameters for the edge."
+                }
+            }
         }
     }
 }
