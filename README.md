@@ -56,6 +56,10 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 ## Installation
 
+### Requirements
+Requires Python >= 3.7
+
+### Installation steps
 To install the MDF package and run it locally:
 
 1. Clone this repository
@@ -81,6 +85,9 @@ pip install .
 ```
 
 ## Examples
+
+To get started, follow the simple example in a Jupyter notebook [here](https://github.com/ModECI/MDF/blob/main/examples/SimpleExample.ipynb)
+
 
 Multiple examples of serialized MDF files, the Python scripts used to generate them, as well as mappings to target environments can be found [here](https://github.com/ModECI/MDF/blob/main/examples/README.md).
 
