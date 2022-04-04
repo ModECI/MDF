@@ -56,24 +56,24 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 ## Installation
 
-To install the package and run it locally:
+To install the MDF package and run it locally:
 
-1. Clone the repository
+1. Clone this repository
 ```
 git clone https://github.com/ModECI/MDF.git
 ```
-2. Change the directory
+2. Change to the directory
 ```
 cd MDF
 ```
-3. Create a virtual environment
+3. Create a virtual environment (e.g. called `mdf-env`)
 ```
 pip install virtualenv
 virtualenv mdf-env
 ```
 4. Activate the virtual environment
 ```
-source MDF-env/bin/activate)
+source MDF-env/bin/activate
 ```
 5. Install the package
 ```
