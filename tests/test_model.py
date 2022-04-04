@@ -94,7 +94,7 @@ def test_ConditionSet_init_kwargs():
 
 
 def test_Condition_init_kwargs():
-    """ Check the working of Condition"""
+    """Check the working of Condition"""
     C = Condition(type="test_type", n="test_n", dependency="test_dependency")
     assert C.type == "test_type"
     assert C.args == {"n": "test_n", "dependency": "test_dependency"}
