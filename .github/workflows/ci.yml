@@ -15,11 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-python@v2
-
-    - name: Install specific version of black
-      # See https://github.com/dask/distributed/issues/6013
-      run: pip install black==22.3.0
-
     - uses: pre-commit/action@v2.0.0
       with:
         extra_args: --hook-stage manual --all-files
