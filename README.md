@@ -54,6 +54,32 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 <p align="center"><img src="docs/images/MDFgraph2.png" width="700px"><br/><sup><i><b>Fig 3:</b> This graph illustrates the ability to specify behavior that extends beyond the directed flow through the graph. Here, Node 1 generates a random number and transmits that number to Node 2. Node 2 will only run if the number it receives from Node 1 is greater than 10.</i></sup></p>
 
+## Installation
+
+To install the package and run it locally:
+
+1. Clone the repository
+```
+git clone https://github.com/ModECI/MDF.git
+```
+2. Change the directory
+```
+cd MDF
+```
+3. Create a virtual environment
+```
+pip install virtualenv
+virtualenv mdf-env
+```
+4. Activate the virtual environment
+```
+source MDF-env/bin/activate)
+```
+5. Install the package
+```
+pip install .
+```
+
 ## Examples
 
 Multiple examples of serialized MDF files, the Python scripts used to generate them, as well as mappings to target environments can be found [here](https://github.com/ModECI/MDF/blob/main/examples/README.md).
