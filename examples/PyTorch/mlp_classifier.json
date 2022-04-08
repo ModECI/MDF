@@ -21,12 +21,12 @@
                },
             "input_ports": {
               "in_1": {
-                "shape": "(196,)"
+                "shape": [196]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(128,)",
+                "shape": [128],
                 "value":"Linear_1"
               }
             }
@@ -48,12 +48,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(128,)"
+                "shape": [128]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(128,)",
+                "shape": [128],
                 "value":"Bias_Add_1"
               }
             }
@@ -69,12 +69,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(128,)"
+                "shape": [128]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(128,)",
+                "shape": [128],
                 "value":"Relu_1"
               }
             }
@@ -97,12 +97,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(128,)"
+                "shape": [128]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(128,)",
+                "shape": [128],
                 "value":"Linear_2"
               }
             }
@@ -124,12 +124,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(128,)"
+                "shape": [128]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(128,)",
+                "shape": [128],
                 "value":"Bias_Add_2"
               }
             }
@@ -145,12 +145,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(128,)"
+                "shape": [128]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(128,)",
+                "shape": [128],
                 "value":"Relu_2"
               }
             }
@@ -173,12 +173,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(128,)"
+                "shape": [128]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(10,)",
+                "shape": [10],
                 "value":"Linear_3"
               }
             }
@@ -200,12 +200,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(10,)"
+                "shape": [10]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(10,)",
+                "shape": [10],
                 "value":"Bias_Add_3"
               }
             }
@@ -222,12 +222,12 @@
               },
             "input_ports": {
               "in_1": {
-                "shape": "(10,)"
+                "shape": [10]
               }
             },
             "output_ports": {
               "out_1": {
-                "shape": "(1,)",
+                "shape": [1],
                 "value":"argmax_1"
               }
             }

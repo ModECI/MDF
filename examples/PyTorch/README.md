@@ -8,7 +8,7 @@ several working examples of this functionality.
 
 ### Inception Blocks Model
 
-![Inception](inception.svg?raw=1)
+![Inception from PyTorch](inception.svg?raw=1)
 
 To run an example of converting a PyTorch InceptionV3 like model written in PyTorch
 to its MDF representation simply run:
@@ -22,20 +22,47 @@ convert the underlying IR representation of the model to MDF. The MDF for this
 model is the written to [inception.json](inception.json). The model is then executed
 via the MDF scheduler and the results are compared to the native execution in PyTorch.
 
-### Drift Diffusion Model
-
-A simple example of a Drift Diffusion Model implemented in PyTorch and converted to
-MDF can be executed with:
+The graph representation of the MDF model can be generated with:
 
 ```bash
-python pytorch_ddm.python
+python inception.py -graph
 ```
 
-This will generate the MDF representation in [ddm.json](ddm.json)
+<img alt="Inception MDF" height="500" src="inception.png"/>
 
 ### Multi-Layer Perceptron MDF to PyTorch Conversion
-To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification is translated to a PyTorch model and executed using sample digit-recognition data, run:
+
+To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification and executed using sample digit-recognition data, run:
 
 ```bash
-python mlp.py
+python mlp_pure_mdf.py
 ```
+
+A graph of the network can be created with `python mlp_pure_mdf.py -graph`:
+
+<p align="center"><img src="mlp_pure_mdf.png" alt="mlp_pure_mdf.png" height="400"></p>
+
+The network can be run against images from the MNIST database with: `python mlp_pure_mdf.py -run`, and produce 98% accuracy. The image below shows the results of 300 images:
+
+<p align="center"><img src="mlp_pure_mdf.results.png" alt="mlp_pure_mdf.results.png"></p>
+
+Conversion to PyTorch: TODO...
+
+
+### MDF to PyTorch Conversion
+
+To perform an MDF to PyTorch conversion, provide an MDF model as an input to the `mdf_to_pytorch` function
+which is available in [exporter.py](https://github.com/ModECI/MDF/blob/development/src/modeci_mdf/interfaces/pytorch/exporter.py). The output of `mdf_to_pytorch`
+are PyTorch models.  Below are some working examples of this functionality. The converted
+models are available in folder: [MDF_PyTorch](https://github.com/ModECI/MDF/tree/development/examples/PyTorch/MDF_PyTorch).
+
+The demo to convert an MDF model to PyTorch is at [MDF_to_PyTorch.py](https://github.com/ModECI/MDF/blob/development/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py).
+
+Any model created using the MDF specification is translated to a PyTorch model, run:
+
+```bash
+python MDF_to_PyTorch
+```
+
+One of sample MDF examples [ABCD.json](../MDF/ABCD.json) is converted PyTorch [ABCD_pytorch.py](MDF_PyTorch/ABCD_pytorch.py)
+The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx) and the results are compared in all three environments.

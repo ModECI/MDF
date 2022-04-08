@@ -319,9 +319,9 @@ def torchnode_to_mdfnode(
             # Try to get the shape and type of the input port
             inp_type = node.inputsAt(inp_i).type()
             try:
-                shape = str(inp_type.sizes()) if inp_type.sizes() else "(?)"
+                shape = tuple(inp_type.sizes()) if inp_type.sizes() else None
             except RuntimeError:
-                shape = "(?)"
+                shape = None
 
             mdf_node.input_ports.append(
                 InputPort(id=ip_name, shape=shape, type=str(inp_type))
@@ -464,9 +464,8 @@ def pytorch_to_mdf(
         model=jit_model if graph else model,
         args=args,
         example_outputs=example_outputs,
-        do_constant_folding=False,
+        do_constant_folding=True,
         training=TrainingMode.EVAL,
-        _retain_param_name=True,
         operator_export_type=operator_export_type,
         dynamic_axes={},
     )

@@ -1,6 +1,6 @@
 Arrays:
-    format: ModECI MDF v0.3
-    generating_application: Python modeci-mdf v0.3.3
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.0
     graphs:
         array_example:
             nodes:
@@ -38,13 +38,13 @@ Arrays:
                             value: linear_1
             edges:
                 input_edge:
+                    sender: input_node
+                    receiver: middle_node
+                    sender_port: out_port
+                    receiver_port: input_port1
                     parameters:
                         weight:
                         -   - 1
                             - 0
                         -   - 0
                             - 1
-                    sender: input_node
-                    receiver: middle_node
-                    sender_port: out_port
-                    receiver_port: input_port1

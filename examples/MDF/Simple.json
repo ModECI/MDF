@@ -1,7 +1,7 @@
 {
     "Simple": {
-        "format": "ModECI MDF v0.3",
-        "generating_application": "Python modeci-mdf v0.3.3",
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.0",
         "graphs": {
             "simple_example": {
                 "nodes": {
@@ -58,13 +58,13 @@
                 },
                 "edges": {
                     "input_edge": {
-                        "parameters": {
-                            "weight": 0.55
-                        },
                         "sender": "input_node",
                         "receiver": "processing_node",
                         "sender_port": "out_port",
-                        "receiver_port": "input_port1"
+                        "receiver_port": "input_port1",
+                        "parameters": {
+                            "weight": 0.55
+                        }
                     }
                 }
             }

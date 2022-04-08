@@ -64,14 +64,18 @@ def create_python_expression(expression_string: str = None) -> str:
         function expression in python
     """
 
-    for func in ["exp", "sin", "cos"]:
-        if "math." + func not in expression_string:
+    for func in ["exp", "sin", "cos", "tan", "sinh", "cosh", "tanh"]:
+        if "numpy." + func not in expression_string:
 
             expression_string = expression_string.replace(
-                "%s(" % func, "math.%s(" % func
+                "%s(" % func, "numpy.%s(" % func
             )
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
+    """for func in ["max"]:
+        expression_string = expression_string.replace(
+            "%s(" % func, "numpy.%simum(" % func
+        )"""
 
     return expression_string
 
@@ -164,6 +168,34 @@ if len(mdf_functions) == 0:
     )
 
     add_mdf_function(
+        "tan",
+        description="Tangent function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * tan(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "sinh",
+        description="Hyperbolic sine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * sinh(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "cosh",
+        description="Hyperbolic cosine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * cosh(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "tanh",
+        description="Hyperbolic tangent function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * tanh(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
         "MatMul",
         description="Matrix multiplication (work in progress...)",
         arguments=["A", "B"],
@@ -174,7 +206,7 @@ if len(mdf_functions) == 0:
         "Relu",
         description="Rectified linear function (work in progress...)",
         arguments=["A"],
-        expression_string="maximum(A,0)",
+        expression_string="A * (A > 0)",
     )
 
     # Enumerate all available ONNX operators and add them as MDF functions.

@@ -4,8 +4,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
 import json
 
 
-data = json.loads(
-    """{
+data = """{
         "Simple": {
             "format": "ModECI MDF v0.2",
             "generating_application": "Python modeci-mdf v0.2.1",
@@ -78,9 +77,8 @@ data = json.loads(
             }
         }
     }"""
-)
-model = Model()
-model = _parse_element(data, model)
+
+model = Model.from_json(data)
 print("----")
 print(model)
 graph = model.graphs[0]

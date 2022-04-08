@@ -31,6 +31,7 @@ re-used in other environments.
    :caption: Contents:
 
    api/Introduction
+   api/Installation
 
 .. toctree::
    :maxdepth: 2
