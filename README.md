@@ -44,7 +44,7 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 **[Edges](https://github.com/ModECI/MDF/blob/main/docs/README.md#edge)**  These transmit information from the output port of one node to the input port of another, collectively defining a graph’s topography. Edges may contain weights that can operate on the information they carry.
 
-**[Input Ports](https://github.com/ModECI/MDF/blob/main/docs/README.md#inputport)**  An input port is the endpoint of the data transmission process. It receives the information transmitted through an edge and inputs it to the next node for further processing. 
+**[Input Ports](https://github.com/ModECI/MDF/blob/main/docs/README.md#inputport)**  An input port is the endpoint of the data transmission process. It receives the information transmitted through an edge and inputs it to the next node for further processing.
 
 **[Conditions](https://github.com/ModECI/MDF/blob/main/docs/README.md#condition)** These are a core and distinctive element of the MDF specification, that complement other computational graph-based formats by providing a high-level set of descriptors for specifying conditional execution of nodes. This allows models with relatively complex execution requirements (e.g., containing cycles, branches, and/or temporal dependencies) to be expressed as graphs in a sufficiently abstract form that facilities exchange among high-level modeling environments without requiring that they be “lowered” to and then recovered from more elaborated procedural descriptions.
 
