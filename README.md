@@ -81,7 +81,7 @@ virtualenv mdf-env
 ```
 4. Activate the virtual environment
 ```
-source MDF-env/bin/activate
+source mdf-env/bin/activate
 ```
 5. Install the package
 ```
