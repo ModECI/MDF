@@ -53,15 +53,29 @@ Following are the steps to guide you:
 
 ### ⚙ MDF Installation Guide
 
+The installation requires Python >= 3.7 (You can install it by the command ```sudo apt-get install python3.8```)
+
 * Step 1: Fork the repo and Go to your Git terminal and clone it on your machine (If done already go directly to next step)
     ```
     git clone https://github.com/ModECI/MDF
     ```
-* Step 2 : Go to local path of repo
+* Step 2 : Install virtualenv(if not installed) for creating virtual environment and installing all the dependencies in it.
+    ```
+    pip install virtualenv
+    ```
+* Step 3 : Go to local path of repository
     ```
     cd MDF
     ```
-* Step 3 : Install
+* Step 4 : Create a virtual environment(eg mdf-env)
+    ```
+    virtualenv mdf-env
+    ```
+* Step 5 : Activate the virtual environment
+    ```
+    source mdf-env/bin/activate
+    ```
+* Step 6 : Install
     ```
     pip install .
     ```
