@@ -1,6 +1,3 @@
-Google Colab link of my notebook for Outreachy task 1 -> [Notebook link](https://colab.research.google.com/drive/1ufjzIOctutTJW0Mco5i5Gb6XhCybs9Wb#scrollTo=24aeb1e4)<br>
-Adding the link here so that the I can make changes in the notebook after submitting the final application and mentors can see the updates made in the notebook later on.
-
 <p align="center">
   <img alt="mdf logo" width="402" src="https://raw.githubusercontent.com/ModECI/MDF/main/docs/sphinx/images/logo_light_bg.png"/>
 </p>
