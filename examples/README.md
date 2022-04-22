@@ -10,8 +10,3 @@
 - [WebGME](WebGME): Examples of interactions between WebGME and MDF.
 - [ACT-R](ACT-R): Examples of interactions between ACT-R and MDF.
 - [Quantum](Quantum): Examples of interactions between MDF and Quantum computing technologies.
-
-# Examples of cross-environment conversions using MDF
-
-- [PyTorch to WebGME](WebGME/examples): Conversion of a PyTorch Inception model to WebGME using MDF.
-- [NeuroML to PsyNeuLink](): Conversion of NeuroML models to PsyNeuLink models using MDF.
