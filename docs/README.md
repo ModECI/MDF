@@ -2,7 +2,7 @@
 **Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.
 ## Model
 
-The top level Model containing <a href="#graph">Graph</a>s consisting of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
+The top-level Model containing <a href="#graph">Graph</a>s that consist of <a href="#node">Node</a>s connected via <a href="#edge">Edge</a>s.
 
 ### Allowed parameters
 <table>
@@ -27,7 +27,7 @@ The top level Model containing <a href="#graph">Graph</a>s consisting of <a href
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
@@ -64,7 +64,7 @@ A directed graph consisting of <a href="#node">Node</a>s connected via <a href="
   <tr>
     <td><b>conditions</b></td>
     <td><a href="#conditionset">ConditionSet</a></td>
-    <td><i>The <a href="#conditionset">ConditionSet</a> for scheduling of the Graph</i></td>
+    <td><i>The <a href="#conditionset">ConditionSet</a> for scheduling the Graph</i></td>
   </tr>
 
   <tr>
@@ -76,7 +76,7 @@ A directed graph consisting of <a href="#node">Node</a>s connected via <a href="
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
@@ -132,7 +132,7 @@ Specifies the non-default pattern of execution of <a href="#node">Node</a>s
 
 ## Node
 
-A self contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via a number of Functions and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s
+A self-contained unit of evaluation receiving input from other Nodes on <a href="#inputport">InputPort</a>s. The values from these are processed via several functions and one or more final values are calculated on the <a href="#outputport">OutputPort</a>s
 
 ### Allowed parameters
 <table>
@@ -145,7 +145,7 @@ A self contained unit of evaluation receiving input from other Nodes on <a href=
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
@@ -187,7 +187,7 @@ A self contained unit of evaluation receiving input from other Nodes on <a href=
 
 ## InputPort
 
-The InputPort is an attribute of a <a href="#node">Node</a> which allows external information to be input to the <a href="#node">Node</a>
+The InputPort is an attribute of a <a href="#node">Node</a> that allows external information to be input to the <a href="#node">Node</a>
 
 ### Allowed parameters
 <table>
@@ -212,7 +212,7 @@ The InputPort is an attribute of a <a href="#node">Node</a> which allows externa
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
@@ -250,7 +250,7 @@ A single value which is evaluated as a function of values on <a href="#inputport
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
@@ -312,7 +312,7 @@ A Parameter of the <a href="#node">Node</a>, which can have a specific value (a 
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
@@ -325,7 +325,7 @@ A Parameter of the <a href="#node">Node</a>, which can have a specific value (a 
 
 ## OutputPort
 
-The OutputPort is an attribute of a <a href="#node">Node</a> which exports information to another <a href="#node">Node</a> connected by an <a href="#edge">Edge</a>
+The OutputPort is an attribute of a <a href="#node">Node</a> that exports information to another <a href="#node">Node</a> connected by an <a href="#edge">Edge</a>
 
 ### Allowed parameters
 <table>
@@ -344,7 +344,7 @@ The OutputPort is an attribute of a <a href="#node">Node</a> which exports infor
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
@@ -400,7 +400,7 @@ An Edge is an attribute of a <a href="#graph">Graph</a> that transmits computati
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>Unique ID of element</i></td>
+    <td><i>Unique ID of the element</i></td>
   </tr>
 
   <tr>
