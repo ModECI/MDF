@@ -370,6 +370,43 @@ class Condition(MdfBase):
 
         self.__attrs_init__(type, kwargs)
 
+    @classmethod
+    def _parse_cattr_structure(cls, o):
+        def _parse_as_condition(arg):
+            try:
+                return Condition(**cls._parse_cattr_structure(arg))
+            except (TypeError, ValueError):
+                return arg
+
+        if "kwargs" in o:
+            for k in o["kwargs"]:
+                if isinstance(o["kwargs"][k], list):
+                    o["kwargs"][k] = [_parse_as_condition(a) for a in o["kwargs"][k]]
+                else:
+                    try:
+                        # read Model object as just object id
+                        o["kwargs"][k] = o["kwargs"][k]["id"]
+                    except (KeyError, TypeError):
+                        o["kwargs"][k] = _parse_as_condition(o["kwargs"][k])
+
+        return o
+
+    @classmethod
+    def _parse_cattr_unstructure(cls, o):
+        def _clean_nested_Condition_objects(cond):
+            res = copy.copy(cond)
+
+            for k, v in res.kwargs.items():
+                if isinstance(v, Condition):
+                    res.kwargs[k] = _clean_nested_Condition_objects(v)
+                elif isinstance(v, Base):
+                    # replace mdf objects with their id to avoid making duplicates
+                    res.kwargs[k] = v.id
+
+            return res
+
+        return _clean_nested_Condition_objects(o)
+
 
 @modelspec.define(eq=False)
 class ConditionSet(MdfBase):

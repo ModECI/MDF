@@ -444,7 +444,7 @@ def inception_model_pytorch():
 
 @pytest.fixture
 def create_model():
-    def _create_model(nodes=None, edges=None):
+    def _create_model(nodes=None, edges=None, conditions=None):
         if nodes is None:
             nodes = []
 
@@ -458,6 +458,7 @@ def create_model():
                     id="G",
                     nodes=nodes,
                     edges=edges,
+                    conditions=conditions,
                 )
             ],
         )
