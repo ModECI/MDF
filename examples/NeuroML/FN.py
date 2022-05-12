@@ -81,7 +81,7 @@ def generate():
         duration=simtime,
         dt=dt,
         seed=123,
-        recordVariables={"V": {"all": "*"}, "W": {"all": "*"}},
+        record_variables={"V": {"all": "*"}, "W": {"all": "*"}},
         plots2D={
             "VW": {"x_axis": "%s/0/fn/V" % pop.id, "y_axis": "%s/0/fn/W" % pop.id}
         },

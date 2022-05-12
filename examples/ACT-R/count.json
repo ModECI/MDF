@@ -1,87 +1,9 @@
 {
     "count": {
-        "format": "ModECI MDF v0.3",
-        "generating_application": "Python modeci-mdf v0.3.3",
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.0",
         "graphs": {
             "count_graph": {
-                "conditions": {
-                    "node_specific": {
-                        "declarative_memory": {
-                            "type": "Always",
-                            "args": {}
-                        },
-                        "retrieval_buffer": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "declarative_memory"
-                            }
-                        },
-                        "goal_buffer": {
-                            "type": "Always",
-                            "args": {}
-                        },
-                        "procedural_memory": {
-                            "type": "Always",
-                            "args": {}
-                        },
-                        "pattern_matching": {
-                            "type": "And",
-                            "args": {
-                                "dependencies": [
-                                    {
-                                        "type": "EveryNCalls",
-                                        "args": {
-                                            "dependencies": "retrieval_buffer",
-                                            "n": 1
-                                        }
-                                    },
-                                    {
-                                        "type": "EveryNCalls",
-                                        "args": {
-                                            "dependencies": "goal_buffer",
-                                            "n": 1
-                                        }
-                                    },
-                                    {
-                                        "type": "EveryNCalls",
-                                        "args": {
-                                            "dependencies": "declarative_memory",
-                                            "n": 1
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        "conflict_resolution": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "pattern_matching"
-                            }
-                        },
-                        "fire_production": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "conflict_resolution"
-                            }
-                        },
-                        "check_termination": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": "conflict_resolution"
-                            }
-                        }
-                    },
-                    "termination": {
-                        "check_term_true": {
-                            "type": "JustRan",
-                            "args": {
-                                "dependencies": [
-                                    "check_termination"
-                                ]
-                            }
-                        }
-                    }
-                },
                 "nodes": {
                     "declarative_memory": {
                         "input_ports": {
@@ -188,8 +110,8 @@
                                 }
                             },
                             "goal_state": {
-                                "default_initial_value": "first_goal",
-                                "value": "first_goal if goal_input == {} else change_goal"
+                                "value": "first_goal if goal_input == {} else change_goal",
+                                "default_initial_value": "first_goal"
                             }
                         },
                         "output_ports": {
@@ -419,6 +341,84 @@
                         "receiver": "check_termination",
                         "sender_port": "conflict_output_to_fire_prod",
                         "receiver_port": "check_input"
+                    }
+                },
+                "conditions": {
+                    "node_specific": {
+                        "declarative_memory": {
+                            "type": "Always",
+                            "kwargs": {}
+                        },
+                        "retrieval_buffer": {
+                            "type": "JustRan",
+                            "kwargs": {
+                                "dependencies": "declarative_memory"
+                            }
+                        },
+                        "goal_buffer": {
+                            "type": "Always",
+                            "kwargs": {}
+                        },
+                        "procedural_memory": {
+                            "type": "Always",
+                            "kwargs": {}
+                        },
+                        "pattern_matching": {
+                            "type": "And",
+                            "kwargs": {
+                                "dependencies": [
+                                    {
+                                        "type": "EveryNCalls",
+                                        "kwargs": {
+                                            "dependencies": "retrieval_buffer",
+                                            "n": 1
+                                        }
+                                    },
+                                    {
+                                        "type": "EveryNCalls",
+                                        "kwargs": {
+                                            "dependencies": "goal_buffer",
+                                            "n": 1
+                                        }
+                                    },
+                                    {
+                                        "type": "EveryNCalls",
+                                        "kwargs": {
+                                            "dependencies": "declarative_memory",
+                                            "n": 1
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        "conflict_resolution": {
+                            "type": "JustRan",
+                            "kwargs": {
+                                "dependencies": "pattern_matching"
+                            }
+                        },
+                        "fire_production": {
+                            "type": "JustRan",
+                            "kwargs": {
+                                "dependencies": "conflict_resolution"
+                            }
+                        },
+                        "check_termination": {
+                            "type": "JustRan",
+                            "kwargs": {
+                                "dependencies": "conflict_resolution"
+                            }
+                        }
+                    },
+                    "termination": {
+                        "check_term_true": {
+                            "type": "JustRan",
+                            "kwargs": {
+                                "dependencies": [
+                                    "check_termination"
+                                ]
+                            }
+                        }
                     }
                 }
             }

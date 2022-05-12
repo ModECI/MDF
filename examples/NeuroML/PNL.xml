@@ -70,6 +70,8 @@
 
             <!--<DerivedVariable name="INPUT" dimension="none" exposure="INPUT" value="variable"/>-->
 
+            <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" value="0"/>
+
             <!-- Set V to zero for now - note some NML pipelines will require some kind of "voltage"... -->
             <DerivedVariable name="V" dimension="none" exposure="V" value="0"/>
 
@@ -212,7 +214,7 @@
 
         <Dynamics>
             <DerivedVariable name="rpeer" dimension="none" select="peer/OUTPUT"/>
-            <DerivedVariable name="I" exposure="I" dimension="none" value="weight * SEC * rpeer"/>
+            <DerivedVariable name="I" exposure="I" dimension="none" value="weight * rpeer"/>
         </Dynamics>
 
     </ComponentType>

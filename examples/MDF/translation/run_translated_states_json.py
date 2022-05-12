@@ -23,7 +23,7 @@ def main():
 
     if "-run" in sys.argv:
 
-        verbose = True
+        verbose = False
 
         mod_graph = load_mdf("Translated_%s" % file_path).graphs[0]
         eg = EvaluableGraph(mod_graph, verbose)
@@ -37,36 +37,41 @@ def main():
         times = []
         s = []
         s_old = []
+
         while t <= duration:
 
-            print("======   Evaluating at t = %s  ======" % (t))
+            if t == 0:
+                eg_old.evaluate()  # replace with initialize?
+                eg.evaluate()  # replace with initialize?
 
             # levels.append(eg.enodes['sine_node'].evaluable_stateful_parameters['level'].curr_value)
             # t+=args.dt
 
             # print("time first>>>",type(t))
             t = float(eg.enodes["sine_node"].evaluable_parameters["time"].curr_value)
+            print("======   Evaluating at t = %s  ======" % (t))
 
             # times.append(float(eg.enodes['sine_node'].evaluable_parameters['time'].curr_value))
 
             times.append(t)
 
-            if t == 0:
-                eg_old.evaluate()  # replace with initialize?
-            else:
-                eg_old.evaluate(time_increment=dt)
+            eg_old.evaluate(time_increment=dt)
+
             s_old.append(
                 eg_old.enodes["sine_node"].evaluable_outputs["out_port"].curr_value
             )
-            eg.evaluate()
 
+            eg.evaluate()
             s.append(eg.enodes["sine_node"].evaluable_outputs["out_port"].curr_value)
             # t+=dt
 
         print(s_old[:10], s[:10], times[:10])
+
         import matplotlib.pyplot as plt
 
-        plt.plot(times, s)
+        plt.plot(times, s, label="translated", linewidth=2.5)
+        plt.plot(times, s_old, label="original", linewidth=1)
+        plt.legend()
 
         plt.show()
         plt.savefig("translated_levelratesineplot.jpg")

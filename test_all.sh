@@ -6,8 +6,10 @@ pip install .
 # Note this:
 #    1) runs examples to regenerate yaml/json...
 #    2) tests examples with simple_scheduler
-pytest -v -ra tests/interfaces/pytorch/*py
-pytest -v -ra tests/*py
+python -m pytest -ra tests/*.py
+python -m pytest -ra tests/interfaces/onnx/*.py
+python -m pytest -ra tests/interfaces/pytorch/test_export.py
+#python -m pytest -ra tests/interfaces/pytorch/test_import.py # inception taking v long
 
 cd examples/MDF
 
@@ -45,19 +47,25 @@ mv abc_conditions_example.gv.png images/abc_conditions.png
 
 ## Test regenerating NeuroML
 
-cd ../../examples/NeuroML
+cd RNN
+./regenerate.sh
+
+
+## Test regenerating NeuroML
+
+cd ../../NeuroML
 ./regenerateAndTest.sh -nogui
 
 ## Test ONNX examples
 
-cd ../../examples/ONNX
+cd ../ONNX
 python simple_ab.py -run
 python simple_abc.py
 python simple_abcd.py
 
 ## Test ACT-R examples
 
-cd ../../examples/ACT-R
+cd ../ACT-R
 python count.py
 python addition.py
 
@@ -65,4 +73,4 @@ python addition.py
 
 cd ../../docs
 python generate.py
-cd -
+cd ..

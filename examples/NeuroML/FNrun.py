@@ -1,5 +1,5 @@
 from modeci_mdf.utils import load_mdf, print_summary
-from modeci_mdf.mdf import Node, Edge, OutputPort
+from modeci_mdf.mdf import Node, Edge, OutputPort, Parameter
 
 from modeci_mdf.execution_engine import EvaluableGraph
 
@@ -27,11 +27,16 @@ def execute(multi=False):
         input = np.array([0])
 
     else:
-        size = 15
+
+        dt = 0.00025
+        size = 5
         max_amp = 0.5
-        input = np.array([max_amp * (-1 + 2 * i / size) for i in range(size + 1)])
+        input = np.array([max_amp * (-1 + 2 * i / (size - 1)) for i in range(size)])
         # input = [-0.4,-0.2, 0.,0.2,0.4]
-        input_node = Node(id="input_node", parameters={"input_level": input})
+        print("Inputs to be applied: %s" % input)
+        input_node = Node(id="input_node")
+
+        input_node.parameters.append(Parameter(id="input_level", value=input))
 
         op1 = OutputPort(id="out_port", value="input_level")
         input_node.output_ports.append(op1)
@@ -103,6 +108,8 @@ def execute(multi=False):
 
     if not multi:
         plt.savefig("MDFFNrun.png", bbox_inches="tight")
+    else:
+        plt.savefig("MDFFNrun.multi.png", bbox_inches="tight")
 
     if not "-nogui" in sys.argv:
         plt.show()

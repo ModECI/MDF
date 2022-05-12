@@ -1,6 +1,7 @@
 {
     "FN": {
-        "version": "NeuroMLlite v0.4.3",
+        "version": "NeuroMLlite v0.5.0",
+        "notes": "FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS",
         "parameters": {
             "initial_w": 0.0,
             "initial_v": -1,
@@ -20,10 +21,8 @@
             "uncorrelated_activity": 0.0,
             "Iext": 0
         },
-        "notes": "FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS",
         "cells": {
             "fn": {
-                "lems_source_file": "FN_Definitions.xml",
                 "parameters": {
                     "initial_w": "initial_w",
                     "initial_v": "initial_v",
@@ -42,7 +41,8 @@
                     "mode": "mode",
                     "uncorrelated_activity": "uncorrelated_activity",
                     "Iext": "Iext"
-                }
+                },
+                "lems_source_file": "FN_Definitions.xml"
             }
         },
         "regions": {

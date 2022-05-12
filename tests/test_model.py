@@ -1,3 +1,5 @@
+import numpy as np
+
 from modeci_mdf.mdf import (
     Model,
     Graph,
@@ -12,6 +14,8 @@ from modeci_mdf.mdf import (
 )
 
 from modeci_mdf.utils import load_mdf
+
+import os
 import pytest
 
 
@@ -43,23 +47,23 @@ def test_Node_init_kwargs():
     assert n.id == "test_node"
 
 
-# def test_Function_init_kwargs():
-#     f = Function(id="Test_Function", function="Test_function", args={"Test_arg": 1})
-#     assert f.function == "Test_function"
-#     assert f.args == {"Test_arg": 1}
-
-
 def test_Function_init_kwargs():
-    f = Function(
-        id="Test_Function", function={"Test_function": "Linear"}, args={"Test_arg": 1}
-    )
-    assert f.function == {"Test_function": "Linear"}
-    # assert f.args == {"Test_arg": 1}
+    f = Function(id="Test_Function", function="Test_function", args={"Test_arg": 1})
+    assert f.function == "Test_function"
+    assert f.args == {"Test_arg": 1}
+
+
+# def test_Function_init_kwargs():
+#     f = Function(
+#         id="Test_Function", function={"Test_function": "Linear"}, args={"Test_arg": 1}
+#     )
+#     assert f.function == {"Test_function": "Linear"}
+#     # assert f.args == {"Test_arg": 1}
 
 
 def test_InputPort_init_kwargs():
-    ip = InputPort(id="Test_InputPort", shape="Test_shape", type="Test_type")
-    assert ip.shape == "Test_shape"
+    ip = InputPort(id="Test_InputPort", shape=(1, 2), type="Test_type")
+    assert ip.shape == (1, 2)
     assert ip.type == "Test_type"
 
 
@@ -97,13 +101,13 @@ def test_Condition_init_kwargs():
     """Check the working of Condition"""
     C = Condition(type="test_type", n="test_n", dependency="test_dependency")
     assert C.type == "test_type"
-    assert C.args == {"n": "test_n", "dependency": "test_dependency"}
+    assert C.kwargs == {"n": "test_n", "dependency": "test_dependency"}
 
 
 def test_Condition_init_kwargs():
     C = Condition(type="test_type", n="test_n", dependencies="test_dependencies")
     assert C.type == "test_type"
-    assert C.args == {"n": "test_n", "dependencies": "test_dependencies"}
+    assert C.kwargs == {"n": "test_n", "dependencies": "test_dependencies"}
 
 
 def test_model_graph_to_json():
@@ -150,25 +154,9 @@ def test_no_input_ports_to_json(tmpdir):
     tmpfile = f"{tmpdir}/test.json"
     mod.to_json_file(tmpfile)
 
-    # FIXME: Doesn't seem like we have any methods for deserialization. Just do some quick and dirty checks
-    # This should really be something like assert mod_graph == deserialized_mod_graph
-    import json
+    lmod = load_mdf(tmpfile)
 
-    with open(tmpfile) as f:
-        data = json.load(f)
-    print(data)
-
-    assert (
-        data["ABCD"]["graphs"]["abcd_example"]["nodes"]["input0"]["parameters"][
-            "input_level"
-        ]["value"]
-        == 10.0
-    )
-
-    mod_graph2 = load_mdf(tmpfile)
-
-    print(mod_graph2)
-    assert mod_graph2.graphs[0].nodes[0].parameters[0].value == 10.0
+    assert lmod.graphs[0].nodes[0].parameters[0].value == 10.0
 
 
 def test_include_metadata_to_json(tmpdir):
@@ -190,36 +178,24 @@ def test_include_metadata_to_json(tmpdir):
     mod_graph.nodes.append(input_node)
 
     tmpfile = f"{tmpdir}/test.json"
-    mod_graph.to_json_file(tmpfile)
+    mod.to_json_file(tmpfile)
 
-    # FIXME: Doesn't seem like we have any methods for deserialization. Just do some quick and dirty checks
-    # This should really be something like assert mod_graph == deserialized_mod_graph
-    import json
+    lmod = load_mdf(tmpfile)
+    lmod.graphs[0].metadata
 
-    with open(tmpfile) as f:
-        data = json.load(f)
-
-    assert data["abcd_example"]["metadata"] == {
-        "info": {"graph_test": {"environment_x": "xyz"}}
+    assert lmod.graphs[0].metadata == {"info": {"graph_test": {"environment_x": "xyz"}}}
+    assert lmod.graphs[0].get_node("input0").metadata == {"color": ".8 0 .8"}
+    assert lmod.graphs[0].get_node("input0").output_ports[0].metadata == {
+        "info": "value at OutputPort"
     }
-    assert data["abcd_example"]["nodes"]["input0"]["metadata"] == {"color": ".8 0 .8"}
-    assert data["abcd_example"]["nodes"]["input0"]["output_ports"]["out_port"][
-        "metadata"
-    ] == {"info": "value at OutputPort"}
 
 
-def test_node_params_empty_dict():
+def test_node_params_empty():
     """
-    Test whether we get a serialization error when passing empty dicts to Node parameters
+    Test whether we get a TypeError when passing no id for a node
     """
-    Node().to_json()
-
-
-def test_node_metadata_empty_dict():
-    """
-    Check for serialization error when passing empty dicts to Node metadata
-    """
-    Node(id="n0", metadata={}).to_json()
+    with pytest.raises(TypeError):
+        Node()
 
 
 def test_metadata_dict():
@@ -303,6 +279,69 @@ def test_graph_types(tmpdir):
         # Type will be same for tuple containing dict, but tuple will have been converetd to dict...
         if not p == "p_dict_tuple":
             assert new_node0.get_parameter(p).value == eval(p)
+
+
+def test_arrays(tmpdir):
+    """Test whether arrays are serialized and deserialized properly."""
+
+    mod = Model(id="Arrays")
+    mod_graph = Graph(id="array_example")
+    mod.graphs.append(mod_graph)
+
+    input_node = Node(id="input_node")
+
+    input_node.parameters.append(Parameter(id="input_level", value=[[1, 2.0], [3, 4]]))
+
+    op1 = OutputPort(id="out_port", value="input_level")
+    input_node.output_ports.append(op1)
+    mod_graph.nodes.append(input_node)
+
+    middle_node = Node(id="middle_node")
+    middle_node.parameters.append(Parameter(id="slope", value=0.5))
+    middle_node.parameters.append(
+        Parameter(id="intercept", value=np.array([[0, 1.0], [2, 2]]))
+    )
+
+    ip1 = InputPort(id="input_port1")
+    middle_node.input_ports.append(ip1)
+    mod_graph.nodes.append(middle_node)
+
+    f1 = Parameter(
+        id="linear_1",
+        function="linear",
+        args={"variable0": ip1.id, "slope": "slope", "intercept": "intercept"},
+    )
+    middle_node.parameters.append(f1)
+
+    middle_node.output_ports.append(OutputPort(id="output_1", value="linear_1"))
+
+    e1 = Edge(
+        id="input_edge",
+        parameters={"weight": [[1, 0], [0, 1]]},
+        sender=input_node.id,
+        sender_port=op1.id,
+        receiver=middle_node.id,
+        receiver_port=ip1.id,
+    )
+
+    mod_graph.edges.append(e1)
+
+    json_file = mod.to_json_file(os.path.join(tmpdir, f"{mod.id}.json"))
+    yaml_file = mod.to_yaml_file(os.path.join(tmpdir, f"{mod.id}.yaml"))
+
+    json_mod = load_mdf(json_file)
+    yaml_mod = load_mdf(yaml_file)
+
+    # Check both the YAML and JSON loaded versions of the model
+    for mod in [json_mod, yaml_mod]:
+        assert (
+            mod.graphs[0].edges[0].parameters["weight"] == np.array([[1, 0], [0, 1]])
+        ).all()
+
+
+def test_ndarray_json_metadata():
+    model = Node(id="a", metadata={"b": np.array([0])})
+    model.to_json()
 
 
 if __name__ == "__main__":

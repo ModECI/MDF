@@ -40,10 +40,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install modelspec
-      run: python -m pip install modelspec==0.1.5
+      run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
 
     - name: Install NeuroMLlite
-      run: python -m pip install NeuroMLlite==0.4.3
+      run: python -m pip install NeuroMLlite>=0.5.0
 
     - name: Install GPy (py3.9)
       if: ${{ matrix.python-version == '3.9' }}
@@ -53,8 +53,15 @@ jobs:
       run: python -m pip install .[test]
 
     - name: Test package
-      run: python -m pytest -ra
+      run: |
+        python -m pytest -ra tests/*.py
+        python -m pytest -ra tests/interfaces/onnx/*.py
+        python -m pytest -ra tests/interfaces/pytorch/test_export.py
+        python -m pytest -ra tests/interfaces/pytorch/test_import.py # inception taking v long
 
+    - name: Final version info for installed packages
+      run: |
+          pip list
 
   dist:
     name: Distribution build
