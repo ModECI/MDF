@@ -754,28 +754,28 @@ class EvaluableNode:
                     % (f.id, f.args, all_known_vars)
                 )
             all_req_vars = []
-            if f.args:
-                for arg in f.args:
-                    arg_expr = f.args[arg]
 
-                    # some non-expression/str types will crash in sympy.simplify
-                    if not isinstance(arg_expr, (sympy.Expr, str)):
-                        continue
+            if f.args is None:
+                all_exprs = {}
+            else:
+                all_exprs = f.args
+            all_exprs["value"] = f.value
 
-                    # If we are dealing with a list of symbols, each must treated separately
-                    if (
-                        type(arg_expr) == str
-                        and arg_expr[0] == "["
-                        and arg_expr[-1] == "]"
-                    ):
-                        # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = parse_str_as_list(arg_expr)
-                    else:
-                        arg_expr_list = [arg_expr]
+            for arg, arg_expr in all_exprs.items():
+                # some non-expression/str types will crash in sympy.simplify
+                if not isinstance(arg_expr, (sympy.Expr, str)):
+                    continue
 
-                    for e in arg_expr_list:
-                        func_expr = sympy.simplify(e)
-                        all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+                # If we are dealing with a list of symbols, each must treated separately
+                if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # Use the Python interpreter to parse this into a List[str]
+                    arg_expr_list = parse_str_as_list(arg_expr)
+                else:
+                    arg_expr_list = [arg_expr]
+
+                for e in arg_expr_list:
+                    func_expr = sympy.simplify(e)
+                    all_req_vars.extend([str(s) for s in func_expr.free_symbols])
 
             all_present = [v in all_known_vars for v in all_req_vars]
 
