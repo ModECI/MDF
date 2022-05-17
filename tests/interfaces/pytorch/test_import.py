@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
+import pytest
 
 torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
@@ -90,5 +91,92 @@ def test_inception(inception_model_pytorch):
     )
 
 
+def test_simple_convolution(simple_convolution_pytorch):
+    """Test a simple convolution neural network model"""
+    x = torch.zeros((1, 1, 28, 28))
+    ebv_output = torch.zeros((10,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = simple_convolution_pytorch(x).detach().numpy()
+
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=simple_convolution_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(output, eg.enodes["Gemm_18"].evaluable_outputs["_18"].curr_value)
+
+
+def test_convolution(convolution_pytorch):
+    """Test a convolution neural network with more layers"""
+    x = torch.zeros((1, 1, 28, 28))
+    ebv_output = torch.zeros((10,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = convolution_pytorch(x).detach().numpy()
+
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=convolution_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(output, eg.enodes["Gemm_23"].evaluable_outputs["_23"].curr_value)
+
+
+@pytest.mark.xfail
+def test_vgg16(vgg16_pytorch):
+    # changed import call
+    from modeci_mdf.execution_engine import EvaluableGraph
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = vgg16_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=vgg16_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(output, eg.enodes["Gemm_78"].evaluable_outputs["_78"].curr_value)
+
+
 if __name__ == "__main__":
     test_simple_module()
+    test_simple_function()
+    test_inception()
+    test_simple_convolution()
+    test_convolution()

@@ -57,7 +57,7 @@ def main():
     model.eval()
 
     # Run the model once to get some ground truth outpot (from PyTorch)
-    output = model(x)
+    output = model(x).detach().numpy()
 
     # Convert to MDF
     mdf_model, params_dict = pytorch_to_mdf(
@@ -69,7 +69,7 @@ def main():
     # Get the graph
     mdf_graph = mdf_model.graphs[0]
     # Output the model to JSON
-    mdf_model.to_json_file("Convolution.json")
+    mdf_model.to_json_file("convolution.json")
 
 
 if __name__ == "__main__":

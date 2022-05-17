@@ -1,0 +1,37 @@
+{
+    "function": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.0",
+        "graphs": {
+            "functionGraph": {
+                "nodes": {
+                    "Add_2": {
+                        "input_ports": {
+                            "input1": {
+                                "type": "Tensor"
+                            },
+                            "input2": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Add_1": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "input1",
+                                    "B": "input2"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_2": {
+                                "value": "onnx::Add_1"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "onnx_opset_version": 9
+    }
+}

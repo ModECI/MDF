@@ -315,7 +315,6 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
                 )
 
         output_names = [out.name for out in schema.outputs]
-
         out_dict = run_onnx_op(
             op_name=schema.name, inputs=inputs_dict, output_names=output_names, **kwargs
         )

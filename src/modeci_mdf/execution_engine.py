@@ -558,6 +558,7 @@ class EvaluableParameter:
                 if "onnx_ops." in expr:
                     if self.verbose:
                         print(f"{self.parameter.id} is evaluating ONNX function {expr}")
+
                     self.curr_value = evaluate_onnx_expr(
                         expr,
                         # parameters get overridden by self.parameter.args
@@ -565,6 +566,7 @@ class EvaluableParameter:
                         func_params,
                         self.verbose,
                     )
+
                 elif "actr." in expr:
                     actr_function = getattr(
                         actr_funcs, expr.split("(")[0].split(".")[-1]
@@ -918,9 +920,16 @@ class EvaluableNode:
 
         # Now evaluate and set params to new parameter values for use in output...
         for ep in self.evaluable_parameters:
+            if ep == "onnx::Reshape_1":
+                # flatten the shape
+                shape_ = list(curr_params.keys())[1]
+                curr_params[shape_] = curr_params[shape_].flatten()
+
             curr_params[ep] = self.evaluable_parameters[ep].evaluate(
                 curr_params, time_increment=time_increment, array_format=array_format
             )
+        if ep == "onnx::MaxPool_1":
+            curr_params[ep] = curr_params[ep][0]
 
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
@@ -952,7 +961,7 @@ class EvaluableGraph:
 
     def __init__(self, graph: Graph, verbose: Optional[bool] = False):
         self.verbose = verbose
-        print("\nInit graph: %s" % graph.id)
+        # print("\nInit graph: %s" % graph.id)
         self.graph = graph
         self.enodes = {}
         self.root_nodes = []
@@ -1062,6 +1071,7 @@ class EvaluableGraph:
                     self.evaluate_edge(
                         edge, time_increment=time_increment, array_format=array_format
                     )
+                # print('nodeid',node.id)
                 self.enodes[node.id].evaluate(
                     time_increment=time_increment, array_format=array_format
                 )

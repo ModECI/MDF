@@ -6,6 +6,7 @@ worked on. There could be broken operators.
 """
 import numpy as np
 import modeci_mdf.functions.onnx as onnx_ops
+import pytest
 
 
 def test_conv():
@@ -106,3 +107,12 @@ def test_maxpool():
         np.ones((1, 3, 32, 32)).astype(np.float32), kernel_shape=[2, 2]
     )
     assert True
+
+
+@pytest.mark.xfail
+def test_gather_single():
+    """Test ONNX gather function returns a scalar (0-dim nparray) when indices are scalar"""
+    res = onnx_ops.gather(
+        data=np.array([1, 16, 7, 7], dtype=np.int64), axis=0, indices=0
+    )
+    assert res == np.array(1, dtype=np.int64) and res.ndim == 0
