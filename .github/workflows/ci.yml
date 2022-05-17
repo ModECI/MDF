@@ -51,6 +51,10 @@ jobs:
 
     - name: Install package
       run: python -m pip install .[test]
+      
+    - name: Version info for installed packages
+      run: |
+          pip list
 
     - name: Test package
       run: |
