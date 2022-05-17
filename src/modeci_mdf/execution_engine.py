@@ -928,8 +928,8 @@ class EvaluableNode:
             curr_params[ep] = self.evaluable_parameters[ep].evaluate(
                 curr_params, time_increment=time_increment, array_format=array_format
             )
-        if ep == "onnx::MaxPool_1":
-            curr_params[ep] = curr_params[ep][0]
+            if ep == "onnx::MaxPool_1":
+                curr_params[ep] = curr_params[ep][0]
 
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
