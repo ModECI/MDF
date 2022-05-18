@@ -258,3 +258,6 @@ Thumbs.db #thumbnail cache on Windows
 *.onnx
 /examples/AB.json
 /examples/AB.yaml
+/examples/MDF/params_funcs_example
+/examples/MDF/params_funcs_example_3
+/examples/MDF/params_funcs_example_3.png
