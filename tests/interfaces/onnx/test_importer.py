@@ -11,7 +11,6 @@ import numpy as np
 import pytest
 
 
-@pytest.mark.xfail
 def test_ab():
     base_path = Path(__file__).parent
 
@@ -49,7 +48,6 @@ def test_ab():
     assert np.array_equal(onnx_res_output, mdf_output)
 
 
-@pytest.mark.xfail
 def test_abc():
     base_path = Path(__file__).parent
 
