@@ -16,23 +16,31 @@ def main():
 
     node0 = Node(id="node0", metadata={"color": ".8 .8 .8"})
 
-    node0.parameters.append(Parameter(id="param_fixed_int", value=1, metadata={"description": "A fixed integer value"}))
+    node0.parameters.append(
+        Parameter(
+            id="param_fixed_int",
+            value=1,
+            metadata={"description": "A fixed integer value"},
+        )
+    )
     node0.parameters.append(Parameter(id="param_fixed_float", value=2.0))
-    node0.parameters.append(Parameter(id="param_array_list", value=[3,4.0]))
-    node0.parameters.append(Parameter(id="param_expression", value='param_fixed_int + param_fixed_float'))
-    node0.parameters.append(Parameter(id="param_stateful", value='param_stateful + 1'))
-    node0.parameters.append(Parameter(id="param_time_deriv", default_initial_value=0, time_derivative="1"))
-
+    node0.parameters.append(Parameter(id="param_array_list", value=[3, 4.0]))
+    node0.parameters.append(
+        Parameter(id="param_expression", value="param_fixed_int + param_fixed_float")
+    )
+    node0.parameters.append(Parameter(id="param_stateful", value="param_stateful + 1"))
+    node0.parameters.append(
+        Parameter(id="param_time_deriv", default_initial_value=0, time_derivative="1")
+    )
 
     mod_graph.nodes.append(node0)
-
 
     print("------------------")
     print(mod.to_yaml())
     new_file = mod.to_json_file("%s.json" % mod.id)
     new_file = mod.to_yaml_file("%s.yaml" % mod.id)
 
-    #print_summary(mod_graph)
+    # print_summary(mod_graph)
 
     import sys
 
@@ -52,7 +60,7 @@ def main():
             output_format="png",
             view_on_render=False,
             level=3,
-            filename_root="%s"%mod_graph.id,
+            filename_root="%s" % mod_graph.id,
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
