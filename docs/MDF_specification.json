@@ -142,7 +142,7 @@
             }
         },
         "Parameter": {
-            "definition": "referencing other :class:`Parameter`\\(s)), be evaluated by an inbuilt function with args, or change from a\n:code:`default_initial_value` with a :code:`time_derivative`.",
+            "definition": "referencing other named :class:`Parameter`\\(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an\ninbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value` with a :code:`time_derivative`.",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",

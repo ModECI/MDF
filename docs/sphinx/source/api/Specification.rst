@@ -121,8 +121,8 @@ Allowed field    Data Type                                                      
 =========
 Parameter
 =========
-referencing other <a href="#parameter">Parameter</a>\(s)), be evaluated by an inbuilt function with args, or change from a
-<b>default_initial_value</b> with a <b>time_derivative</b>.
+referencing other named <a href="#parameter">Parameter</a>\(s). which may be stateful (i.e. can change value over multiple executions of the <a href="#node">Node</a>); 3) be evaluated by an
+inbuilt <b>function</b> with <b>args</b>; 4) or change from a <b>default_initial_value</b> with a <b>time_derivative</b>.
 
 **Allowed parameters**
 

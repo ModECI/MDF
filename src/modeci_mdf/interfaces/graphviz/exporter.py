@@ -284,7 +284,7 @@ def mdf_to_graphviz(
                         argstr = "("
                         if f.args:
                             for a in f.args:
-                                argstr += "%s=%s, " % (a, f.args[a])
+                                argstr += "{}={}, ".format(a, f.args[a])
                         else:
                             argstr += " - no args -  "
                         argstr = argstr[:-2] + ")"

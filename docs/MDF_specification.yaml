@@ -135,10 +135,12 @@ specification:
 
                     and args attributes will be None.'
     Parameter:
-        definition: 'referencing other :class:`Parameter`\(s)), be evaluated by an
-            inbuilt function with args, or change from a
+        definition: 'referencing other named :class:`Parameter`\(s). which may be
+            stateful (i.e. can change value over multiple executions of the :class:`Node`);
+            3) be evaluated by an
 
-            :code:`default_initial_value` with a :code:`time_derivative`.'
+            inbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value`
+            with a :code:`time_derivative`.'
         allowed_parameters:
             metadata:
                 type: Union[Any, NoneType]
