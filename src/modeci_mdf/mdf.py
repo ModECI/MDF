@@ -91,6 +91,11 @@ class Function(MdfBase):
         else:
             id = o["id"]
 
+        try:
+            args = o["args"]
+        except KeyError:
+            args = {}
+
         if "function" in o.keys() and isinstance(o["function"], dict):
             func_name = list(o["function"].keys())[0]
             args = o["function"][func_name]
@@ -98,7 +103,7 @@ class Function(MdfBase):
         elif "function" in o.keys() and isinstance(o["function"], str):
             return cls(id=id, function=o["function"], args=o["args"])
         elif "value" in o.keys():
-            return cls(id=id, value=o["value"])
+            return cls(id=id, value=o["value"], args=args)
         else:
             raise ValueError(f"Could not parse function specification: {o}")
 
