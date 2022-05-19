@@ -20,7 +20,6 @@ def main():
         Parameter(
             id="param_fixed_int",
             value=1,
-            metadata={"description": "A fixed integer value"},
         )
     )
     node0.parameters.append(Parameter(id="param_fixed_float", value=2.0))
@@ -30,16 +29,36 @@ def main():
     )
     node0.parameters.append(Parameter(id="param_stateful", value="param_stateful + 1"))
 
-    f1 = Parameter(
+    param_func1 = Parameter(
         id="param_function",
         function="linear",
         args={"variable0": 1, "slope": 2, "intercept": 3},
     )
-    node0.parameters.append(f1)
+    node0.parameters.append(param_func1)
 
     node0.parameters.append(
         Parameter(id="param_time_deriv", default_initial_value=0, time_derivative="1")
     )
+
+    func_func1 = Function(
+        id="function_inbuilt_with_args",
+        function="linear",
+        args={"variable0": 1, "slope": 2, "intercept": 3},
+    )
+    node0.functions.append(func_func1)
+
+    func_func1 = Function(
+        id="function_with_value_args",
+        value="A + B + C",
+        args={"A": 1, "B": 2, "C": 3},
+    )
+    node0.functions.append(func_func1)
+
+    func_func2 = Function(
+        id="function_with_deep_args",
+        function="linear",
+    )
+    # node0.functions.append(func_func2)
 
     mod_graph.nodes.append(node0)
 

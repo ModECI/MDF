@@ -254,28 +254,46 @@ def mdf_to_graphviz(
 
             if node.functions and len(node.functions) > 0:
                 for f in node.functions:
-                    argstr = (
-                        ", ".join([match_in_expr(str(f.args[a]), node) for a in f.args])
-                        if f.args
-                        else "???"
-                    )
-                    info += "<tr><td>{}{} = {}({})</td></tr>".format(
-                        format_label("FUNC"),
-                        format_function(f.id),
-                        format_standard_func(f.function),
-                        argstr,
-                    )
-                    if level >= LEVEL_3:
-                        func_info = mdf_functions[f.function]
-                        info += '<tr><td colspan="2">%s</td></tr>' % (
-                            format_standard_func_long(
-                                "%s(%s) = %s"
-                                % (
-                                    f.function,
-                                    ", ".join([a for a in f.args]),
-                                    func_info["expression_string"],
+                    if f.function is not None:
+                        argstr = (
+                            ", ".join(
+                                [match_in_expr(str(f.args[a]), node) for a in f.args]
+                            )
+                            if f.args
+                            else "???"
+                        )
+                        info += "<tr><td>{}{} = {}({})</td></tr>".format(
+                            format_label("FUNC"),
+                            format_function(f.id),
+                            format_standard_func(f.function),
+                            argstr,
+                        )
+                        if level >= LEVEL_3:
+                            func_info = mdf_functions[f.function]
+                            info += '<tr><td colspan="2">%s</td></tr>' % (
+                                format_standard_func_long(
+                                    "%s(%s) = %s"
+                                    % (
+                                        f.function,
+                                        ", ".join([a for a in f.args]),
+                                        func_info["expression_string"],
+                                    )
                                 )
                             )
+                    elif f.value is not None:
+                        argstr = "("
+                        if f.args:
+                            for a in f.args:
+                                argstr += "%s=%s, " % (a, f.args[a])
+                        else:
+                            argstr += " - no args -  "
+                        argstr = argstr[:-2] + ")"
+
+                        info += "<tr><td>{}{} = {} {}</td></tr>".format(
+                            format_label("FUNC"),
+                            format_function(f.id),
+                            format_standard_func(f.value),
+                            argstr,
                         )
             if mdf_graph.conditions and mdf_graph.conditions.node_specific:
                 ns = mdf_graph.conditions.node_specific[node.id]

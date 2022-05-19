@@ -205,7 +205,7 @@ class Parameter(MdfBase):
         """
         Short summary of Parameter...
         """
-        info = "Parameter: %s = %s (stateful: %s)" % (
+        info = "Parameter: {} = {} (stateful: {})".format(
             self.id,
             self.value,
             self.is_stateful(),
