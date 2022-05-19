@@ -7,6 +7,13 @@ ParametersFunctions:
                 node0:
                     metadata:
                         color: .8 .8 .8
+                    functions:
+                        function_with_args:
+                            function: linear
+                            args:
+                                variable0: 1
+                                slope: 2
+                                intercept: 3
                     parameters:
                         param_fixed_int:
                             metadata:

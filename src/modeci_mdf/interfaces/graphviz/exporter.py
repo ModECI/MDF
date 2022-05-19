@@ -37,7 +37,7 @@ COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
 COLOR_PARAM = "#1666ff"
 COLOR_INPUT = "#188855"
-COLOR_FUNC = "#111199"
+COLOR_FUNC = "#441199"
 COLOR_OUTPUT = "#cc3355"
 COLOR_COND = "#ffa1d"
 
@@ -69,7 +69,7 @@ def format_input(s):
     return f'<font color="{COLOR_INPUT}">{s}</font>'
 
 
-def format_func(s):
+def format_function(s):
     return f'<font color="{COLOR_FUNC}">{s}</font>'
 
 
@@ -261,7 +261,7 @@ def mdf_to_graphviz(
                     )
                     info += "<tr><td>{}{} = {}({})</td></tr>".format(
                         format_label("FUNC"),
-                        format_func(f.id),
+                        format_function(f.id),
                         format_standard_func(f.function),
                         argstr,
                     )

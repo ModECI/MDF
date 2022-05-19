@@ -201,6 +201,18 @@ class Parameter(MdfBase):
         factory=list, validator=instance_of(list)
     )
 
+    def summary(self):
+        """
+        Short summary of Parameter...
+        """
+        info = "Parameter: %s = %s (stateful: %s)" % (
+            self.id,
+            self.value,
+            self.is_stateful(),
+        )
+
+        return info
+
     def is_stateful(self) -> bool:
         """
         Is the parameter stateful?
@@ -231,10 +243,11 @@ class Parameter(MdfBase):
                 param_expr = sympy.simplify(e)
                 req_vars.extend([str(s) for s in param_expr.free_symbols])
             sf = self.id in req_vars
+            """
             print(
                 "Checking whether %s is stateful, %s: %s"
                 % (self, param_expr.free_symbols, sf)
-            )
+            )"""
             return sf
 
         return False
