@@ -29,6 +29,14 @@ def main():
         Parameter(id="param_expression", value="param_fixed_int + param_fixed_float")
     )
     node0.parameters.append(Parameter(id="param_stateful", value="param_stateful + 1"))
+
+    f1 = Parameter(
+        id="param_function",
+        function="linear",
+        args={"variable0": 1, "slope": 2, "intercept": 3},
+    )
+    node0.parameters.append(f1)
+
     node0.parameters.append(
         Parameter(id="param_time_deriv", default_initial_value=0, time_derivative="1")
     )

@@ -31,6 +31,14 @@
                             "param_stateful": {
                                 "value": "param_stateful + 1"
                             },
+                            "param_function": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": 1,
+                                    "slope": 2,
+                                    "intercept": 3
+                                }
+                            },
                             "param_time_deriv": {
                                 "default_initial_value": 0,
                                 "time_derivative": "1"

@@ -166,9 +166,9 @@ class ParameterCondition(Base):
 @modelspec.define(eq=False)
 class Parameter(MdfBase):
     r"""
-    A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
-    referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function with args, or change from a
-    :code:`default_initial_value` with a :code:`time_derivative`.
+    A parameter of the :class:`Node`, which can be: 1) a specific fixed :code:`value` (a constant (int/float) or an array) 2) a string expression for the :code:`value`
+    referencing other named :class:`Parameter`\(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an
+    inbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value` with a :code:`time_derivative`.
 
     Attributes:
         value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
