@@ -72,35 +72,23 @@ class Function(MdfBase):
             and args attributes will be None.
     """
     id: str = field(validator=instance_of(str))
-    function: Optional[str] = field(default=None, validator=optional(instance_of(str)))
+    function: Optional[str] = field(
+        default=None, validator=optional(instance_of((str, dict)))
+    )
     args: Optional[Dict[str, Any]] = field(default=None)
     value: Optional[ValueExprType] = field(
         default=None, validator=optional(instance_of(value_expr_types))
     )
 
     @classmethod
-    def _structure(cls, o: Dict[str, Any], t: Any) -> "Function":
-        """
-        A custom structuring hook for Functions that handle the "translated" case when function is specified as
-        a dictionary
-        """
-
-        # This structure function creates function objects without id as empty strings if it is not specified.
-        if "id" not in o:
-            id = ""
-        else:
-            id = o["id"]
-
-        if "function" in o.keys() and isinstance(o["function"], dict):
-            func_name = list(o["function"].keys())[0]
-            args = o["function"][func_name]
-            return cls(id=id, function=func_name, args=args)
-        elif "function" in o.keys() and isinstance(o["function"], str):
-            return cls(id=id, function=o["function"], args=o["args"])
-        elif "value" in o.keys():
-            return cls(id=id, value=o["value"])
-        else:
-            raise ValueError(f"Could not parse function specification: {o}")
+    def _parse_cattr_structure(cls, o):
+        if "function" in o:
+            if isinstance(o["function"], dict):
+                # TODO: handle args already present and conflicting?
+                func_name = list(o["function"].keys())[0]
+                o["args"] = o["function"][func_name]
+                o["function"] = func_name
+        return o
 
 
 @modelspec.define(eq=False)
@@ -527,4 +515,23 @@ class Model(MdfBase):
 
 # Add a special hook for handling unstructuring of Parameters and Functions
 converter.register_unstructure_hook(Parameter, Parameter._unstructure)
-converter.register_structure_hook(Function, Function._structure)
+
+
+def parsed_structure_factory(cl):
+    base_structure = modelspec.base_types._base_struct_hook_factory(cl)
+
+    def new_structure(obj, t):
+        obj = cl._parse_cattr_structure(obj)
+        return base_structure(obj, t)
+
+    return new_structure
+
+
+# add structure hook for MdfBase classes where present
+for k, v in list(locals().items()):
+    try:
+        v._parse_cattr_structure
+    except AttributeError:
+        pass
+    else:
+        converter.register_structure_hook(v, parsed_structure_factory(v))
