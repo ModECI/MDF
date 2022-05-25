@@ -3,6 +3,7 @@ import pytest
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import torchvision.models as models
 
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Parameter
 
@@ -587,9 +588,7 @@ def vgg16_pytorch():
             x = self.maxpool(x)
             x = x.reshape(x.shape[0], -1)
             x = F.relu(self.fc1(x))
-            x = F.dropout(x, 0.5)  # dropout was included to combat overfitting
             x = F.relu(self.fc2(x))
-            x = F.dropout(x, 0.5)
             x = self.fc3(x)
             return x
 
@@ -599,3 +598,22 @@ def vgg16_pytorch():
 
     model = VGG16()
     return model
+
+
+@pytest.fixture()
+def resnet18_pytorch():
+    resnet18 = models.resnet18(pretrained=False)
+    return resnet18
+
+
+@pytest.fixture()
+def mobilenetv2_pytorch():
+    mobilenet_v2 = models.mobilenet_v2(pretrained=False)
+    return mobilenet_v2
+
+
+@pytest.fixture()
+def segmentation_pytorch():
+    seg_mod = models.segmentation.deeplabv3_resnet50(pretrained=False)
+    seg_mod.classifier[4] = torch.nn.Conv2d(256, 3, kernel_size=(1, 1), stride=(1, 1))
+    return seg_mod

@@ -1593,6 +1593,22 @@
                             }
                         }
                     },
+                    "Constant_67": {
+                        "parameters": {
+                            "value": {
+                                "value": -1
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_67": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
                     "Constant_68": {
                         "parameters": {
                             "value": {
@@ -1635,15 +1651,54 @@
                             }
                         }
                     },
+                    "Constant_70": {
+                        "parameters": {
+                            "value": {
+                                "value": [
+                                    0
+                                ]
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_70": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Unsqueeze_71": {
+                        "input_ports": {
+                            "_67": {
+                                "type": "Tensor"
+                            },
+                            "_70": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Unsqueeze_1": {
+                                "function": "onnx::Unsqueeze",
+                                "args": {
+                                    "data": "_67",
+                                    "axes": "_70"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_71": {
+                                "value": "onnx::Unsqueeze_1"
+                            }
+                        }
+                    },
                     "Concat_72": {
                         "input_ports": {
                             "_69": {
                                 "type": "Tensor"
                             },
-                            "_79": {
-                                "shape": [
-                                    1
-                                ],
+                            "_71": {
                                 "type": "Tensor"
                             }
                         },
@@ -1654,7 +1709,7 @@
                             "onnx::Concat_1": {
                                 "function": "onnx::Concat",
                                 "args": {
-                                    "inputs": "['_69', '_79']"
+                                    "inputs": "['_69', '_71']"
                                 }
                             }
                         },
@@ -2098,6 +2153,12 @@
                         "sender_port": "_66",
                         "receiver_port": "_66"
                     },
+                    "Constant_67_Unsqueeze_71": {
+                        "sender": "Constant_67",
+                        "receiver": "Unsqueeze_71",
+                        "sender_port": "_67",
+                        "receiver_port": "_67"
+                    },
                     "Constant_68_Unsqueeze_69": {
                         "sender": "Constant_68",
                         "receiver": "Unsqueeze_69",
@@ -2109,6 +2170,18 @@
                         "receiver": "Concat_72",
                         "sender_port": "_69",
                         "receiver_port": "_69"
+                    },
+                    "Constant_70_Unsqueeze_71": {
+                        "sender": "Constant_70",
+                        "receiver": "Unsqueeze_71",
+                        "sender_port": "_70",
+                        "receiver_port": "_70"
+                    },
+                    "Unsqueeze_71_Concat_72": {
+                        "sender": "Unsqueeze_71",
+                        "receiver": "Concat_72",
+                        "sender_port": "_71",
+                        "receiver_port": "_71"
                     },
                     "Concat_72_Reshape_73": {
                         "sender": "Concat_72",

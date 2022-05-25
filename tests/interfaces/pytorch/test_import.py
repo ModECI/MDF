@@ -143,8 +143,8 @@ def test_convolution(convolution_pytorch):
     assert np.allclose(output, eg.enodes["Gemm_23"].evaluable_outputs["_23"].curr_value)
 
 
-@pytest.mark.xfail
 def test_vgg16(vgg16_pytorch):
+    """Test a dummy vgg16 model"""
     # changed import call
     from modeci_mdf.execution_engine import EvaluableGraph
 
@@ -174,9 +174,79 @@ def test_vgg16(vgg16_pytorch):
     assert np.allclose(output, eg.enodes["Gemm_78"].evaluable_outputs["_78"].curr_value)
 
 
+def test_resnet18(resnet18_pytorch):
+    """Test a standard resnet model imported from PyTorch"""
+    # changed import call
+    from modeci_mdf.execution_engine import EvaluableGraph
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = resnet18_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=resnet18_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(
+        output, eg.enodes["Gemm_191"].evaluable_outputs["_191"].curr_value
+    )
+
+
+@pytest.mark.xfail
+def test_mobilenetv2(mobilenetv2_pytorch):
+    """Test a standard mobilenetv2 model"""
+    # changed import call
+    from modeci_mdf.execution_engine import EvaluableGraph
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = mobilenetv2_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=mobilenetv2_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(
+        output, eg.enodes["Gemm_536"].evaluable_outputs["_536"].curr_value
+    )
+
+
 if __name__ == "__main__":
     test_simple_module()
     test_simple_function()
     test_inception()
     test_simple_convolution()
     test_convolution()
+    test_vgg16()
+    test_resnet18()
+    test_mobilenetv2()

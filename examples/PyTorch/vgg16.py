@@ -1,8 +1,8 @@
 import numpy as np
 import torch
-import torchvision  # torch package for vision related things
-import torch.nn.functional as F  # Parameterless functions, like (some) activation functions
-from torch import nn  # All neural network modules
+
+import torch.nn.functional as F
+from torch import nn
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
 
