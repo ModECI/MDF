@@ -344,5 +344,12 @@ def test_ndarray_json_metadata():
     model.to_json()
 
 
+def test_serialization_function_metadata():
+    model = Function(id="a", metadata={"b": 0}, value="0")
+    new_model = model.from_dict(model.to_dict())
+
+    assert new_model.metadata == model.metadata
+
+
 if __name__ == "__main__":
     test_graph_types("/tmp")

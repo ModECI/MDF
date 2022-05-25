@@ -364,7 +364,7 @@ def build_script(
     else:
         script += f"\ndummy_input =torch.tensor(0.0)"
     script += "\noutput = model(dummy_input)"
-    script += f"\ntorch.onnx.export(model,dummy_input,'{model_id}',verbose=True,input_names=[],example_outputs=output,opset_version=9)"
+    script += f"\ntorch.onnx.export(model,dummy_input,'{model_id}',verbose=True,input_names=[],opset_version=9)"
     script += f"\nonnx_model = onnx.load('{model_id}')"
     script += "\nonnx.checker.check_model(onnx_model)"
     script += f"\nsess = rt.InferenceSession('{model_id}')"

@@ -79,7 +79,6 @@ torch.onnx.export(
     "Arrays.onnx",
     verbose=True,
     input_names=[],
-    example_outputs=output,
     opset_version=9,
 )
 onnx_model = onnx.load("Arrays.onnx")

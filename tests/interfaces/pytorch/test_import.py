@@ -33,7 +33,6 @@ def test_simple_module():
     mdf_model, param_dict = pytorch_to_mdf(
         model=Simple(),
         args=(torch.tensor(0.0), torch.tensor(0.0)),
-        example_outputs=(torch.tensor(0.0)),
         use_onnx_ops=True,
     )
 
@@ -49,7 +48,6 @@ def test_simple_function():
     mdf_model, param_dict = pytorch_to_mdf(
         model=simple,
         args=(torch.tensor(0.0), torch.tensor(0.0)),
-        example_outputs=(torch.tensor(0.0)),
         use_onnx_ops=True,
     )
 
@@ -68,7 +66,6 @@ def test_inception(inception_model_pytorch):
     mdf_model, params_dict = pytorch_to_mdf(
         model=inception_model_pytorch,
         args=(galaxy_images_output, ebv_output),
-        example_outputs=output,
         trace=True,
     )
 
