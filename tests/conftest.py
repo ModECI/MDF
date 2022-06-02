@@ -440,3 +440,26 @@ def inception_model_pytorch():
     model.eval()
 
     return model
+
+
+@pytest.fixture
+def create_model():
+    def _create_model(nodes=None, edges=None):
+        if nodes is None:
+            nodes = []
+
+        if edges is None:
+            edges = []
+
+        return Model(
+            id="M",
+            graphs=[
+                Graph(
+                    id="G",
+                    nodes=nodes,
+                    edges=edges,
+                )
+            ],
+        )
+
+    return _create_model

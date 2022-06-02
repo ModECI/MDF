@@ -4,25 +4,6 @@ import modeci_mdf.mdf as mdf
 from modeci_mdf.execution_engine import EvaluableGraph
 
 
-def create_model(nodes=None, edges=None):
-    if nodes is None:
-        nodes = []
-
-    if edges is None:
-        edges = []
-
-    return mdf.Model(
-        id="M",
-        graphs=[
-            mdf.Graph(
-                id="G",
-                nodes=nodes,
-                edges=edges,
-            )
-        ],
-    )
-
-
 @pytest.mark.parametrize(
     "function, value, result",
     [
@@ -47,7 +28,7 @@ def create_model(nodes=None, edges=None):
         ),
     ],
 )
-def test_single_function_variations(args, function, value, result):
+def test_single_function_variations(create_model, args, function, value, result):
     m = create_model(
         [
             mdf.Node(
