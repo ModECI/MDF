@@ -328,12 +328,14 @@ def test_arrays(tmpdir):
 
     json_file = mod.to_json_file(os.path.join(tmpdir, f"{mod.id}.json"))
     yaml_file = mod.to_yaml_file(os.path.join(tmpdir, f"{mod.id}.yaml"))
+    bson_file = mod.to_bson_file(os.path.join(tmpdir, f"{mod.id}.bson"))
 
     json_mod = load_mdf(json_file)
     yaml_mod = load_mdf(yaml_file)
+    bson_mod = load_mdf(bson_file)
 
-    # Check both the YAML and JSON loaded versions of the model
-    for mod in [json_mod, yaml_mod]:
+    # Check both the YAML, JSON and BSON loaded versions of the model
+    for mod in [json_mod, yaml_mod, bson_mod]:
         assert (
             mod.graphs[0].edges[0].parameters["weight"] == np.array([[1, 0], [0, 1]])
         ).all()
