@@ -540,11 +540,29 @@ def parsed_structure_factory(cl):
     return new_structure
 
 
-# add structure hook for MdfBase classes where present
+def parsed_unstructure_factory(cl):
+    base_unstructure = converter._unstructure_func.dispatch(cl)
+
+    def new_unstructure(obj):
+        obj = cl._parse_cattr_unstructure(obj)
+        return base_unstructure(obj)
+
+    return new_unstructure
+
+
 for k, v in list(locals().items()):
+    # add structure hook for MdfBase classes where present
     try:
         v._parse_cattr_structure
     except AttributeError:
         pass
     else:
         converter.register_structure_hook(v, parsed_structure_factory(v))
+
+    # add unstructure hook for MdfBase classes where present
+    try:
+        v._parse_cattr_unstructure
+    except AttributeError:
+        pass
+    else:
+        converter.register_unstructure_hook(v, parsed_unstructure_factory(v))
