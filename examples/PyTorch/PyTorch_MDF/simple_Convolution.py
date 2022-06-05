@@ -58,7 +58,7 @@ def main():
     # Get the graph
     mdf_graph = mdf_model.graphs[0]
     # Output the model to JSON
-    mdf_model.to_json_file("Simple_Convolution.json")
+    mdf_model.to_json_file("simple_convolution.json")
 
 
 if __name__ == "__main__":

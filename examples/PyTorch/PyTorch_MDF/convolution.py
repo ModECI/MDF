@@ -41,7 +41,7 @@ num_classes = 10
 
 model = CNN(in_channels=in_channels, num_classes=num_classes)
 
-print(model)
+# print(model)
 
 
 def main():

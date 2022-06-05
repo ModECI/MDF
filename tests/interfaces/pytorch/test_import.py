@@ -146,7 +146,6 @@ def test_convolution(convolution_pytorch):
 def test_vgg16(vgg16_pytorch):
     """Test a dummy vgg16 model"""
     # changed import call
-    from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
     x = torch.zeros((1, 3, 224, 224))
@@ -174,10 +173,39 @@ def test_vgg16(vgg16_pytorch):
     assert np.allclose(output, eg.enodes["Gemm_78"].evaluable_outputs["_78"].curr_value)
 
 
+def test_vgg19(vgg19_pytorch):
+    """Test a dummy vgg19 model"""
+    # changed import call
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = vgg19_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=vgg19_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(output, eg.enodes["Gemm_82"].evaluable_outputs["_82"].curr_value)
+
+
 def test_resnet18(resnet18_pytorch):
     """Test a standard resnet model imported from PyTorch"""
     # changed import call
-    from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
     x = torch.zeros((1, 3, 224, 224))
@@ -207,11 +235,8 @@ def test_resnet18(resnet18_pytorch):
     )
 
 
-@pytest.mark.xfail
 def test_mobilenetv2(mobilenetv2_pytorch):
     """Test a standard mobilenetv2 model"""
-    # changed import call
-    from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
     x = torch.zeros((1, 3, 224, 224))
@@ -241,6 +266,165 @@ def test_mobilenetv2(mobilenetv2_pytorch):
     )
 
 
+def test_shufflenetv2(shufflenetv2_pytorch):
+    """Test a standard shufflenet_v2 model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = shufflenetv2_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=shufflenetv2_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(
+        output, eg.enodes["Gemm_1344"].evaluable_outputs["_1344"].curr_value
+    )
+
+
+def test_resNext(resNext_pytorch):
+    """Test a standard ResNext model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = resNext_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=resNext_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(
+        output, eg.enodes["Gemm_495"].evaluable_outputs["_495"].curr_value
+    )
+
+
+def test_squeezeNet(squeezeNet_pytorch):
+    """Test a standard SqueezeNet model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = squeezeNet_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=squeezeNet_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(
+        output, eg.enodes["Flatten_117"].evaluable_outputs["_117"].curr_value
+    )
+
+
+def test_mnasNet(mnasNet_pytorch):
+    """Test a standard MNASNet model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1,))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = mnasNet_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=mnasNet_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(
+        output, eg.enodes["Gemm_465"].evaluable_outputs["_465"].curr_value
+    )
+
+
+@pytest.mark.xfail
+def test_seg_deepLabV3_ResNet50(segmentation_pytorch):
+    """Test a standard Segmentation_deepLabV3_ResNet50 model"""
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    ebv_output = torch.zeros((1, 3, 224, 224))
+
+    # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
+    segmentation_pytorch.eval()
+
+    # Run the model once to get some ground truth outpot (from PyTorch)
+    output = segmentation_pytorch(x)
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=segmentation_pytorch,
+        args=(x),
+        example_outputs=output,
+        trace=True,
+    )
+
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    assert np.allclose(
+        output, eg.enodes["Resize_600"].evaluable_outputs["_600"].curr_value
+    )
+
+
 if __name__ == "__main__":
     test_simple_module()
     test_simple_function()
@@ -248,5 +432,11 @@ if __name__ == "__main__":
     test_simple_convolution()
     test_convolution()
     test_vgg16()
+    test_vgg19()
     test_resnet18()
     test_mobilenetv2()
+    test_resNext()
+    test_squeezeNet()
+    test_mnasNet()
+    test_shufflenetv2()
+    test_seg_deepLabV3_ResNet50()

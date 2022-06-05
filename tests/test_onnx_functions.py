@@ -7,6 +7,7 @@ worked on. There could be broken operators.
 import numpy as np
 import modeci_mdf.functions.onnx as onnx_ops
 import pytest
+import torch
 
 
 def test_conv():
@@ -106,6 +107,15 @@ def test_maxpool():
     out = onnx_ops.maxpool(
         np.ones((1, 3, 32, 32)).astype(np.float32), kernel_shape=[2, 2]
     )
+    assert True
+
+
+def test_clip():
+    input = torch.tensor([[1.0, -1.0], [1.0, -1.0]])
+    min_clip = torch.tensor(0, dtype=torch.float)
+    max_clip = torch.tensor(1, dtype=torch.float)
+
+    out = onnx_ops.clip(input, min_clip, max_clip)
     assert True
 
 

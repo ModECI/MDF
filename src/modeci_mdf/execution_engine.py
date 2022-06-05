@@ -19,6 +19,7 @@ import sys
 import math
 import sympy
 import numpy as np
+import torch
 
 import graph_scheduler
 import onnxruntime
@@ -920,6 +921,17 @@ class EvaluableNode:
 
         # Now evaluate and set params to new parameter values for use in output...
         for ep in self.evaluable_parameters:
+
+            if ep == "onnx::Clip_1":
+                clip_min = list(curr_params.keys())[1]
+                curr_params[clip_min] = torch.tensor(
+                    curr_params[clip_min], dtype=torch.float
+                )
+                clip_max = list(curr_params.keys())[2]
+                curr_params[clip_max] = torch.tensor(
+                    curr_params[clip_max], dtype=torch.float
+                )
+
             if ep == "onnx::Reshape_1":
                 # flatten the shape
                 shape_ = list(curr_params.keys())[1]
@@ -1071,7 +1083,7 @@ class EvaluableGraph:
                     self.evaluate_edge(
                         edge, time_increment=time_increment, array_format=array_format
                     )
-                # print('nodeid',node.id)
+
                 self.enodes[node.id].evaluate(
                     time_increment=time_increment, array_format=array_format
                 )

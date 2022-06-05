@@ -601,6 +601,12 @@ def vgg16_pytorch():
 
 
 @pytest.fixture()
+def vgg19_pytorch():
+    vgg19 = models.vgg19(pretrained=False)
+    return vgg19
+
+
+@pytest.fixture()
 def resnet18_pytorch():
     resnet18 = models.resnet18(pretrained=False)
     return resnet18
@@ -610,6 +616,30 @@ def resnet18_pytorch():
 def mobilenetv2_pytorch():
     mobilenet_v2 = models.mobilenet_v2(pretrained=False)
     return mobilenet_v2
+
+
+@pytest.fixture()
+def shufflenetv2_pytorch():
+    shufflenet_v2 = models.shufflenet_v2_x0_5(pretrained=False)
+    return shufflenet_v2
+
+
+@pytest.fixture()
+def resNext_pytorch():
+    resNext_v2 = models.resnext50_32x4d(pretrained=False)
+    return resNext_v2
+
+
+@pytest.fixture()
+def squeezeNet_pytorch():
+    squeezeNet_v2 = models.squeezenet1_1(pretrained=False)
+    return squeezeNet_v2
+
+
+@pytest.fixture()
+def mnasNet_pytorch():
+    mnasNet = models.mnasnet1_3(pretrained=False)
+    return mnasNet
 
 
 @pytest.fixture()
