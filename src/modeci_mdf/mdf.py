@@ -5,6 +5,7 @@ r"""
     executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
     environments using the :mod:`~modeci_mdf.interfaces` module.
 """
+import copy
 import sympy
 import numpy as np
 
@@ -385,6 +386,14 @@ class ConditionSet(MdfBase):
     termination: Optional[Dict[str, Condition]] = field(
         validator=optional(instance_of(dict)), default=None
     )
+
+    @classmethod
+    def _parse_cattr_unstructure(cls, o):
+        res = copy.copy(o)
+        if res.termination is not None:
+            res.termination = {str(k): v for k, v in res.termination.items()}
+
+        return res
 
 
 @modelspec.define(eq=False)

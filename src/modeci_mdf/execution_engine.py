@@ -53,6 +53,9 @@ FORMAT_DEFAULT = FORMAT_NUMPY
 KNOWN_PARAMETERS = ["constant"]
 
 
+time_scale_str_regex = r"(TimeScale)?\.(.*)"
+
+
 def evaluate_expr(
     expr: Union[str, List[str], np.ndarray, "tf.tensor"] = None,
     func_params: Dict[str, Any] = None,
@@ -994,10 +997,20 @@ class EvaluableGraph:
                 for node, cond in self.graph.conditions.node_specific.items()
             }
 
-            termination_conds = {
-                scale: self.parse_condition(cond)
-                for scale, cond in self.graph.conditions.termination.items()
-            }
+            termination_conds = {}
+            for scale, cond in self.graph.conditions.termination.items():
+                cond = self.parse_condition(cond)
+
+                # check for TimeScale in form of enum or equivalent unambiguous strings
+                try:
+                    scale = re.match(time_scale_str_regex, scale).groups()[1]
+                except (AttributeError, IndexError, TypeError):
+                    pass
+
+                try:
+                    termination_conds[graph_scheduler.TimeScale[scale]] = cond
+                except KeyError:
+                    termination_conds[scale] = cond
         else:
             conditions = {}
             termination_conds = {}
@@ -1180,7 +1193,7 @@ class EvaluableGraph:
                     # value may be a string representing a TimeScale
                     cond_args[k] = getattr(
                         graph_scheduler.TimeScale,
-                        re.match(r"TimeScale\.(.*)", v).groups()[0],
+                        re.match(time_scale_str_regex, v).groups()[1],
                     )
                 except (AttributeError, IndexError, TypeError):
                     pass
