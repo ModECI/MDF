@@ -531,7 +531,7 @@ converter.register_unstructure_hook(Parameter, Parameter._unstructure)
 
 
 def parsed_structure_factory(cl):
-    base_structure = modelspec.base_types._base_struct_hook_factory(cl)
+    base_structure = converter._structure_func.dispatch(cl)
 
     def new_structure(obj, t):
         obj = cl._parse_cattr_structure(obj)
