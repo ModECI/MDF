@@ -346,5 +346,27 @@ def test_ndarray_json_metadata():
     model.to_json()
 
 
+def test_serialization_Function_metadata():
+    model = Function(id="a", metadata={"b": 0}, value="0")
+    new_model = model.from_dict(model.to_dict())
+
+    assert new_model.metadata == model.metadata
+
+
+@pytest.mark.parametrize(
+    "function, args",
+    [
+        ("linear", {"slope": 1, "intercept": 1}),
+        ({"linear": {"slope": 1, "intercept": 1}}, None),
+    ],
+)
+def test_serialization_Function_function_args_formats(function, args):
+    model = Function("a", function=function, args=args)
+    new_model = model.from_dict(model.to_dict())
+
+    assert new_model.function == "linear"
+    assert new_model.args == {"slope": 1, "intercept": 1}
+
+
 if __name__ == "__main__":
     test_graph_types("/tmp")
