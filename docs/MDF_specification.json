@@ -65,7 +65,7 @@
             }
         },
         "Node": {
-            "definition": "The values from these are processed via a number of :class:`Function`\\(s) and one or more final values\nare calculated on the :class:`OutputPort`\\(s)",
+            "definition": "A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\\(s). The values from these are processed via a number of :class:`Function`\\(s) and one or more final values\nare calculated on the :class:`OutputPort`\\(s)",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -142,7 +142,7 @@
             }
         },
         "Parameter": {
-            "definition": "referencing other named :class:`Parameter`\\(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an\ninbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value` with a :code:`time_derivative`.",
+            "definition": "A parameter of the :class:`Node`, which can be: 1) a specific fixed :code:`value` (a constant (int/float) or an array) 2) a string expression for the :code:`value` referencing other named :class:`Parameter`\\(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an\ninbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value` with a :code:`time_derivative`.",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -198,7 +198,7 @@
             }
         },
         "OutputPort": {
-            "definition": "connected by an :class:`Edge`",
+            "definition": "The :class:`OutputPort` is an attribute of a :class:`Node` which exports information to another :class:`Node` connected by an :class:`Edge`",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -223,7 +223,7 @@
             }
         },
         "Edge": {
-            "definition": ":class:`OutputPort` to a receiver's :class:`InputPort`.",
+            "definition": "An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's :class:`OutputPort` to a receiver's :class:`InputPort`.",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
