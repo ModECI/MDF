@@ -426,7 +426,7 @@ class EvaluableParameter:
             ):
                 if self.parameter.is_stateful():
                     if self.verbose:
-                        print(f"    Initial eval of <{self.parameter}>  ")
+                        print(f"    Initial eval of <{self.parameter.summary()}>  ")
 
                     if self.parameter.default_initial_value is not None:
                         return evaluate_expr(
@@ -478,7 +478,7 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluating {} with {} ".format(
-                    self.parameter, _params_info(parameters)
+                    self.parameter.summary(), _params_info(parameters)
                 )
             )
 
@@ -600,7 +600,11 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.parameter, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.parameter.summary(),
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
 
         return self.curr_value
