@@ -107,7 +107,7 @@ A directed graph consisting of Node(s) connected via Edge(s)
 </table>
 
 ## Node
-The values from these are processed via a number of <a href="#function">Function</a>\(s) and one or more final values
+A self contained unit of evaluation receiving input from other nodes on <a href="#inputport">InputPort</a>\(s). The values from these are processed via a number of <a href="#function">Function</a>\(s) and one or more final values
 are calculated on the <a href="#outputport">OutputPort</a>\(s)
 
 ### Allowed parameters
@@ -243,8 +243,8 @@ and args attributes will be None.</i></td>
 </table>
 
 ## Parameter
-referencing other <a href="#parameter">Parameter</a>\(s)), be evaluated by an inbuilt function with args, or change from a
-<b>default_initial_value</b> with a <b>time_derivative</b>.
+A parameter of the <a href="#node">Node</a>, which can be: 1) a specific fixed <b>value</b> (a constant (int/float) or an array) 2) a string expression for the <b>value</b> referencing other named <a href="#parameter">Parameter</a>\(s). which may be stateful (i.e. can change value over multiple executions of the <a href="#node">Node</a>); 3) be evaluated by an
+inbuilt <b>function</b> with <b>args</b>; 4) or change from a <b>default_initial_value</b> with a <b>time_derivative</b>.
 
 ### Allowed parameters
 <table>
@@ -341,7 +341,7 @@ A condition to test on a Node's parameters, which if true, sets the value of thi
 </table>
 
 ## OutputPort
-connected by an <a href="#edge">Edge</a>
+The <a href="#outputport">OutputPort</a> is an attribute of a <a href="#node">Node</a> which exports information to another <a href="#node">Node</a> connected by an <a href="#edge">Edge</a>
 
 ### Allowed parameters
 <table>
@@ -385,7 +385,7 @@ connected by an <a href="#edge">Edge</a>
 </table>
 
 ## Edge
-<a href="#outputport">OutputPort</a> to a receiver's <a href="#inputport">InputPort</a>.
+An <a href="#edge">Edge</a> is an attribute of a <a href="#graph">Graph</a> that transmits computational results from a sender's <a href="#outputport">OutputPort</a> to a receiver's <a href="#inputport">InputPort</a>.
 
 ### Allowed parameters
 <table>

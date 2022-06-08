@@ -1,0 +1,67 @@
+{
+    "ParametersFunctions": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.0",
+        "graphs": {
+            "params_funcs_example": {
+                "nodes": {
+                    "node0": {
+                        "metadata": {
+                            "color": ".8 .8 .8"
+                        },
+                        "functions": {
+                            "function_inbuilt_with_args": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": 1,
+                                    "slope": 2,
+                                    "intercept": 3
+                                }
+                            },
+                            "function_with_value_args": {
+                                "args": {
+                                    "A": 1,
+                                    "B": 2,
+                                    "C": 3
+                                },
+                                "value": "A + B + C"
+                            }
+                        },
+                        "parameters": {
+                            "param_fixed_int": {
+                                "value": 1
+                            },
+                            "param_fixed_float": {
+                                "value": 2.0
+                            },
+                            "param_array_list": {
+                                "value": [
+                                    3,
+                                    4.0
+                                ]
+                            },
+                            "param_expression": {
+                                "value": "param_fixed_int + param_fixed_float"
+                            },
+                            "param_stateful": {
+                                "value": "param_stateful + 1"
+                            },
+                            "param_function": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": 1,
+                                    "slope": 2,
+                                    "intercept": 3
+                                }
+                            },
+                            "param_time_deriv": {
+                                "default_initial_value": 0,
+                                "time_derivative": "1"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
