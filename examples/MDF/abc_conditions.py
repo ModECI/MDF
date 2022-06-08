@@ -24,7 +24,6 @@ def main():
     mod_graph = Graph(id="abc_conditions_example")
     mod.graphs.append(mod_graph)
 
-
     def create_simple_node(graph, id_, sender=None):
         n = Node(id=id_)
         graph.nodes.append(n)
