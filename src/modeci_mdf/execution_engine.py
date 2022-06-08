@@ -324,23 +324,21 @@ class EvaluableFunction:
                 "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
-        if self.function.function:
-            for f in mdf_functions:
-                if f == self.function.function:
-                    for arg in self.function.args.keys():
-                        func_params[arg] = evaluate_expr(
-                            self.function.args[arg],
-                            func_params,
-                            verbose=False,
-                            array_format=array_format,
+
+        if self.function.args is not None:
+            for arg in self.function.args:
+                func_params[arg] = evaluate_expr(
+                    self.function.args[arg],
+                    func_params,
+                    verbose=False,
+                    array_format=array_format,
+                )
+                if self.verbose:
+                    print(
+                        "      Arg: {} became: {}".format(
+                            arg, _val_info(func_params[arg])
                         )
-                        if self.verbose:
-                            print(
-                                "      Arg: {} became: {}".format(
-                                    arg, _val_info(func_params[arg])
-                                )
-                            )
-                    break
+                    )
 
         # If this is an ONNX operation, evaluate it without modelspec.
 
@@ -428,7 +426,7 @@ class EvaluableParameter:
             ):
                 if self.parameter.is_stateful():
                     if self.verbose:
-                        print(f"    Initial eval of <{self.parameter}>  ")
+                        print(f"    Initial eval of <{self.parameter.summary()}>  ")
 
                     if self.parameter.default_initial_value is not None:
                         return evaluate_expr(
@@ -480,7 +478,7 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluating {} with {} ".format(
-                    self.parameter, _params_info(parameters)
+                    self.parameter.summary(), _params_info(parameters)
                 )
             )
 
@@ -602,7 +600,11 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.parameter, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.parameter.summary(),
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
 
         return self.curr_value

@@ -24,14 +24,6 @@ def main():
     mod_graph = Graph(id="abc_conditions_example")
     mod.graphs.append(mod_graph)
 
-    input_node = Node(id="input0")
-    input_node.parameters.append(Parameter(id="input_level", value=0.0))
-    input_node.parameters.append(Parameter(id="count_0", value="count_0 + 1"))
-    op1 = OutputPort(id="out_port")
-    op1.value = "input_level"
-    input_node.output_ports.append(op1)
-    mod_graph.nodes.append(input_node)
-
     def create_simple_node(graph, id_, sender=None):
         n = Node(id=id_)
         graph.nodes.append(n)
@@ -46,7 +38,7 @@ def main():
 
         return n
 
-    a = create_simple_node(mod_graph, "A", input_node)
+    a = create_simple_node(mod_graph, "A", sender=None)
     a.parameters.append(Parameter(id="count_A", value="count_A + 1"))
 
     b = create_simple_node(mod_graph, "B", a)
@@ -56,7 +48,6 @@ def main():
 
     c.parameters.append(Parameter(id="count_C", value="count_C+ 1"))
 
-    cond_i = Condition(type="BeforeNCalls", dependencies=input_node.id, n=1)
     cond_a = Condition(type="Always")
     cond_b = Condition(type="EveryNCalls", dependencies=a.id, n=2)
     cond_c = Condition(type="EveryNCalls", dependencies=a.id, n=3)
@@ -69,7 +60,7 @@ def main():
     )
 
     mod_graph.conditions = ConditionSet(
-        node_specific={input_node.id: cond_i, a.id: cond_a, b.id: cond_b, c.id: cond_c},
+        node_specific={a.id: cond_a, b.id: cond_b, c.id: cond_c},
         termination={"environment_state_update": cond_term},
     )
 
