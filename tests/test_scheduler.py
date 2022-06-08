@@ -70,7 +70,6 @@ def test_execution_engine_onnx(tmpdir):
 
 
 _abc_conditions_expected_output = [
-    {"input0"},
     {"A"},
     {"A"},
     {"B"},
