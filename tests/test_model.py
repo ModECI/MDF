@@ -368,5 +368,43 @@ def test_serialization_Function_function_args_formats(function, args):
     assert new_model.args == {"slope": 1, "intercept": 1}
 
 
+def test_serialization_nested_Conditions():
+    model = Condition(
+        type="All",
+        kwargs={
+            "args": [
+                Condition(
+                    type="Not",
+                    kwargs={
+                        "condition": Condition(
+                            type="BeforeNCalls",
+                            kwargs={
+                                "dependency": "B",
+                                "n": 5,
+                                "time_scale": "TimeScale.ENVIRONMENT_STATE_UPDATE",
+                            },
+                        )
+                    },
+                )
+            ]
+        },
+    )
+    new_model = model.from_dict(model.to_dict())
+
+    cond_not = new_model.kwargs["args"][0]
+    assert isinstance(cond_not, Condition)
+
+    cond_beforencalls = cond_not.kwargs["condition"]
+    assert isinstance(cond_beforencalls, Condition)
+
+    assert cond_beforencalls.kwargs["dependency"] == "B"
+    assert cond_beforencalls.kwargs["n"] == 5
+    assert (
+        cond_beforencalls.kwargs["time_scale"] == "TimeScale.ENVIRONMENT_STATE_UPDATE"
+    )
+
+    assert new_model.to_dict() == model.to_dict()
+
+
 if __name__ == "__main__":
     test_graph_types("/tmp")
