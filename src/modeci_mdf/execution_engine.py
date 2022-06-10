@@ -627,6 +627,7 @@ class EvaluableOutput:
     def __init__(self, output_port: OutputPort, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.output_port = output_port
+        self.curr_value = None
 
     def evaluate(
         self,
