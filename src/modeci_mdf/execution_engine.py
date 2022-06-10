@@ -11,6 +11,7 @@ of the :class:`EvaluableGraph` class. The external library `graph-scheduler
 conditional constraints.
 
 """
+import copy
 import functools
 import inspect
 import os
@@ -51,6 +52,9 @@ import modeci_mdf.functions.actr as actr_funcs
 FORMAT_DEFAULT = FORMAT_NUMPY
 
 KNOWN_PARAMETERS = ["constant"]
+
+
+time_scale_str_regex = r"(TimeScale)?\.(.*)"
 
 
 def evaluate_expr(
@@ -325,23 +329,21 @@ class EvaluableFunction:
                 "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
-        if self.function.function:
-            for f in mdf_functions:
-                if f == self.function.function:
-                    for arg in self.function.args.keys():
-                        func_params[arg] = evaluate_expr(
-                            self.function.args[arg],
-                            func_params,
-                            verbose=False,
-                            array_format=array_format,
+
+        if self.function.args is not None:
+            for arg in self.function.args:
+                func_params[arg] = evaluate_expr(
+                    self.function.args[arg],
+                    func_params,
+                    verbose=False,
+                    array_format=array_format,
+                )
+                if self.verbose:
+                    print(
+                        "      Arg: {} became: {}".format(
+                            arg, _val_info(func_params[arg])
                         )
-                        if self.verbose:
-                            print(
-                                "      Arg: {} became: {}".format(
-                                    arg, _val_info(func_params[arg])
-                                )
-                            )
-                    break
+                    )
 
         # If this is an ONNX operation, evaluate it without modelspec.
 
@@ -429,7 +431,7 @@ class EvaluableParameter:
             ):
                 if self.parameter.is_stateful():
                     if self.verbose:
-                        print(f"    Initial eval of <{self.parameter}>  ")
+                        print(f"    Initial eval of <{self.parameter.summary()}>  ")
 
                     if self.parameter.default_initial_value is not None:
                         return evaluate_expr(
@@ -481,7 +483,7 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluating {} with {} ".format(
-                    self.parameter, _params_info(parameters)
+                    self.parameter.summary(), _params_info(parameters)
                 )
             )
 
@@ -605,7 +607,11 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.parameter, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.parameter.summary(),
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
 
         return self.curr_value
@@ -1012,10 +1018,20 @@ class EvaluableGraph:
                 for node, cond in self.graph.conditions.node_specific.items()
             }
 
-            termination_conds = {
-                scale: self.parse_condition(cond)
-                for scale, cond in self.graph.conditions.termination.items()
-            }
+            termination_conds = {}
+            for scale, cond in self.graph.conditions.termination.items():
+                cond = self.parse_condition(cond)
+
+                # check for TimeScale in form of enum or equivalent unambiguous strings
+                try:
+                    scale = re.match(time_scale_str_regex, scale).groups()[1]
+                except (AttributeError, IndexError, TypeError):
+                    pass
+
+                try:
+                    termination_conds[graph_scheduler.TimeScale[scale]] = cond
+                except KeyError:
+                    termination_conds[scale] = cond
         else:
             conditions = {}
             termination_conds = {}
@@ -1143,7 +1159,7 @@ class EvaluableGraph:
 
         """
 
-        def substitute_condition_arguments(condition, condition_type):
+        def substitute_condition_arguments(args, condition_type):
             # mdf format prefers the key name for all conditions that use it or
             # its value as an __init__ argument
             combined_condition_arguments = {"dependencies": "dependency"}
@@ -1155,8 +1171,10 @@ class EvaluableGraph:
                     and preferred not in sig.parameters
                     and actual in sig.parameters
                 ):
-                    condition.kwargs[actual] = condition.kwargs[preferred]
-                    del condition.kwargs[preferred]
+                    args[actual] = args[preferred]
+                    del args[preferred]
+
+            return args
 
         # if specified as dict
         try:
@@ -1170,7 +1188,7 @@ class EvaluableGraph:
             pass
 
         cond_type = condition.type
-        cond_args = condition.kwargs
+        cond_args = copy.copy(condition.kwargs)
 
         try:
             typ = getattr(graph_scheduler.condition, cond_type)
@@ -1197,14 +1215,14 @@ class EvaluableGraph:
                     # value may be a string representing a TimeScale
                     cond_args[k] = getattr(
                         graph_scheduler.TimeScale,
-                        re.match(r"TimeScale\.(.*)", v).groups()[0],
+                        re.match(time_scale_str_regex, v).groups()[1],
                     )
                 except (AttributeError, IndexError, TypeError):
                     pass
             else:
                 cond_args[k] = new_v
 
-        substitute_condition_arguments(condition, typ)
+        cond_args = substitute_condition_arguments(cond_args, typ)
 
         try:
             return typ(**cond_args)
