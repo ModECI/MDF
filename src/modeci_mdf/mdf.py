@@ -60,7 +60,7 @@ class MdfBase(Base):
 @modelspec.define(eq=False)
 class Function(MdfBase):
     r"""
-    A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
+    A single value which is evaluated as a function of values on :class:`InputPort`(s) and other Functions
 
     Attributes:
         id: The unique (for this Node) id of the function, which will be used in other :class:`~Function`s and
@@ -156,7 +156,7 @@ class ParameterCondition(Base):
 class Parameter(MdfBase):
     r"""
     A parameter of the :class:`Node`, which can be: 1) a specific fixed :code:`value` (a constant (int/float) or an array) 2) a string expression for the :code:`value`
-    referencing other named :class:`Parameter`\(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an
+    referencing other named :class:`Parameter`(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an
     inbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value` with a :code:`time_derivative`.
 
     Attributes:
@@ -256,16 +256,16 @@ class Parameter(MdfBase):
 @modelspec.define(eq=False)
 class Node(MdfBase):
     r"""
-    A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\(s).
-    The values from these are processed via a number of :class:`Function`\(s) and one or more final values
-    are calculated on the :class:`OutputPort`\(s)
+    A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`(s).
+    The values from these are processed via a number of :class:`Function`(s) and one or more final values
+    are calculated on the :class:`OutputPort`(s)
 
     Attributes:
         id: A unique identifier for the node.
         input_ports: Dictionary of the :class:`InputPort` objects in the Node
-        parameters: Dictionary of :class:`Parameter`\(s) for the node
-        functions: The :class:`Function`\(s) for computation the node
-        output_ports: The :class:`OutputPort`\(s) containing evaluated quantities from the node
+        parameters: Dictionary of :class:`Parameter`(s) for the node
+        functions: The :class:`Function`(s) for computation the node
+        output_ports: The :class:`OutputPort`(s) containing evaluated quantities from the node
     """
 
     id: str = field(validator=instance_of(str))
@@ -440,8 +440,8 @@ class Graph(MdfBase):
 
     Attributes:
         id: A unique identifier for this Graph
-        nodes: One or more :class:`Node`\(s) present in the graph
-        edges: Zero or more :class:`Edge`\(s) present in the graph
+        nodes: One or more :class:`Node`(s) present in the graph
+        edges: Zero or more :class:`Edge`(s) present in the graph
         parameters: Dictionary of global parameters for the Graph
         conditions: The ConditionSet stored as dictionary for scheduling of the Graph
     """
