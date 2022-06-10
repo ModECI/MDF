@@ -68,7 +68,16 @@ def main():
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
 
     print_summary(mod_graph)
-
+    print(
+        mod.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="abc_conditions",
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
+    )
     import sys
 
     if "-run" in sys.argv:
