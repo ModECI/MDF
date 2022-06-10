@@ -5,6 +5,7 @@ r"""
     executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
     environments using the :mod:`~modeci_mdf.interfaces` module.
 """
+import copy
 import sympy
 import numpy as np
 
@@ -369,6 +370,43 @@ class Condition(MdfBase):
 
         self.__attrs_init__(type, kwargs)
 
+    @classmethod
+    def _parse_cattr_structure(cls, o):
+        def _parse_as_condition(arg):
+            try:
+                return Condition(**cls._parse_cattr_structure(arg))
+            except (TypeError, ValueError):
+                return arg
+
+        if "kwargs" in o:
+            for k in o["kwargs"]:
+                if isinstance(o["kwargs"][k], list):
+                    o["kwargs"][k] = [_parse_as_condition(a) for a in o["kwargs"][k]]
+                else:
+                    try:
+                        # read Model object as just object id
+                        o["kwargs"][k] = o["kwargs"][k]["id"]
+                    except (KeyError, TypeError):
+                        o["kwargs"][k] = _parse_as_condition(o["kwargs"][k])
+
+        return o
+
+    @classmethod
+    def _parse_cattr_unstructure(cls, o):
+        def _clean_nested_Condition_objects(cond):
+            res = copy.copy(cond)
+
+            for k, v in res.kwargs.items():
+                if isinstance(v, Condition):
+                    res.kwargs[k] = _clean_nested_Condition_objects(v)
+                elif isinstance(v, Base):
+                    # replace mdf objects with their id to avoid making duplicates
+                    res.kwargs[k] = v.id
+
+            return res
+
+        return _clean_nested_Condition_objects(o)
+
 
 @modelspec.define(eq=False)
 class ConditionSet(MdfBase):
@@ -385,6 +423,14 @@ class ConditionSet(MdfBase):
     termination: Optional[Dict[str, Condition]] = field(
         validator=optional(instance_of(dict)), default=None
     )
+
+    @classmethod
+    def _parse_cattr_unstructure(cls, o):
+        res = copy.copy(o)
+        if res.termination is not None:
+            res.termination = {str(k): v for k, v in res.termination.items()}
+
+        return res
 
 
 @modelspec.define(eq=False)
@@ -531,7 +577,7 @@ converter.register_unstructure_hook(Parameter, Parameter._unstructure)
 
 
 def parsed_structure_factory(cl):
-    base_structure = modelspec.base_types._base_struct_hook_factory(cl)
+    base_structure = converter._structure_func.dispatch(cl)
 
     def new_structure(obj, t):
         obj = cl._parse_cattr_structure(obj)
@@ -540,11 +586,29 @@ def parsed_structure_factory(cl):
     return new_structure
 
 
-# add structure hook for MdfBase classes where present
+def parsed_unstructure_factory(cl):
+    base_unstructure = converter._unstructure_func.dispatch(cl)
+
+    def new_unstructure(obj):
+        obj = cl._parse_cattr_unstructure(obj)
+        return base_unstructure(obj)
+
+    return new_unstructure
+
+
 for k, v in list(locals().items()):
+    # add structure hook for MdfBase classes where present
     try:
         v._parse_cattr_structure
     except AttributeError:
         pass
     else:
         converter.register_structure_hook(v, parsed_structure_factory(v))
+
+    # add unstructure hook for MdfBase classes where present
+    try:
+        v._parse_cattr_unstructure
+    except AttributeError:
+        pass
+    else:
+        converter.register_unstructure_hook(v, parsed_unstructure_factory(v))
