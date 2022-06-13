@@ -1,16 +1,13 @@
 import torch
-import torch.nn as nn
 import numpy as np
 
 torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
 
-from modeci_mdf.utils import load_mdf_json
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 from modeci_mdf.execution_engine import EvaluableGraph
 
 from modeci_mdf.utils import load_mdf_json
-import json
 
 
 def _check_model(mdf_model):
