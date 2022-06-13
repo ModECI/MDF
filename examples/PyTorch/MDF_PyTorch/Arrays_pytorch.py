@@ -87,6 +87,7 @@ torch.onnx.export(
 onnx_model = onnx.load("Arrays.onnx")
 onnx.checker.check_model(onnx_model)
 sess = rt.InferenceSession("Arrays.onnx")
-# res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+
 if __name__ == "__main__":
     print("Exported to PyTorch and ONNX")
