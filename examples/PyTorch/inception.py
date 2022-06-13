@@ -286,7 +286,7 @@ def main():
     # Evaluate the model via the MDF scheduler
     eg = EvaluableGraph(graph=mdf_graph, verbose=False)
     eg.evaluate(initializer=params_dict)
-    output_mdf = eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value
+    output_mdf = eg.output_enodes[0].get_output()
 
     print("Evaluated the graph in PyTorch, output: %s" % (_val_info(output_mdf)))
 

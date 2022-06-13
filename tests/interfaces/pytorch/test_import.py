@@ -77,10 +77,11 @@ def test_inception(inception_model_pytorch):
     eg = EvaluableGraph(graph=mdf_graph, verbose=False)
 
     eg.evaluate(initializer=params_dict)
+    output_mdf = eg.output_enodes[0].get_output()
 
     assert np.allclose(
         output,
-        eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
+        output_mdf,
     )
 
 

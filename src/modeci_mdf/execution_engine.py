@@ -17,6 +17,8 @@ import os
 import re
 import sys
 import math
+
+import attr
 import sympy
 import numpy as np
 
@@ -31,7 +33,7 @@ from modelspec.utils import _params_info, _val_info
 from modelspec.utils import FORMAT_NUMPY
 
 from collections import OrderedDict
-from typing import Union, List, Dict, Optional, Any
+from typing import Union, List, Dict, Optional, Any, Tuple
 from modeci_mdf.mdf import (
     Function,
     Graph,
@@ -923,19 +925,29 @@ class EvaluableNode:
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
 
-    def get_output(self, id: str) -> Union[int, np.ndarray]:
+    def get_output(self, id: str = None) -> Union[int, np.ndarray, Tuple]:
         """Get value at output port for given output port's id
 
         Args:
-            id: Unique identifier of the output port
+            id: Unique identifier of the output port. If None, return a tuple for all output ports.
 
         Returns:
-            value at the output port
+            value at the output port. If id is None, return all outputs as a tuple. If there is only
+            one output, return just its value.
 
         """
-        for rop in self.evaluable_outputs:
-            if rop == id:
-                return self.evaluable_outputs[rop].curr_value
+        if id is not None:
+            for rop in self.evaluable_outputs:
+                if rop == id:
+                    return self.evaluable_outputs[rop].curr_value
+        else:
+            outputs = tuple(
+                self.evaluable_outputs[rop].curr_value for rop in self.evaluable_outputs
+            )
+            if len(outputs) == 1:
+                return outputs[0]
+            else:
+                return outputs
 
 
 class EvaluableGraph:
@@ -954,7 +966,10 @@ class EvaluableGraph:
         self.graph = graph
         self.enodes = {}
         self.root_nodes = []
+        self.output_nodes = []
 
+        # Get the root (input nodes) of the graph. We will assume all are root nodes
+        # and then remove those that have edges to them.
         for node in graph.nodes:
             if self.verbose:
                 print("\n  Init node: %s" % node.id)
@@ -1002,6 +1017,16 @@ class EvaluableGraph:
             conditions=conditions,
             termination_conds=termination_conds,
         )
+
+        # We also need to get the output nodes
+        self.output_nodes = [
+            n
+            for n in self.graph.nodes
+            if n.id not in (e.sender for e in self.graph.edges)
+        ]
+
+        # Lets also get the corresponding EvaluableNode for outputs
+        self.output_enodes = [self.enodes[n.id] for n in self.output_nodes]
 
     def evaluate(
         self,
