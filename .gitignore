@@ -1,3 +1,6 @@
+# No BSON in the repo
+*.bson
+
 examples/ONNX/data
 examples/ONNX/*.onnx
 
