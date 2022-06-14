@@ -1,5 +1,8 @@
+import graph_scheduler
 import pytest
-from graph_scheduler import *
+
+import modeci_mdf.mdf as mdf
+from modeci_mdf.execution_engine import EvaluableGraph
 
 
 def test_execution_engine_main(tmpdir):
@@ -70,7 +73,6 @@ def test_execution_engine_onnx(tmpdir):
 
 
 _abc_conditions_expected_output = [
-    {"input0"},
     {"A"},
     {"A"},
     {"B"},
@@ -102,3 +104,71 @@ def test_condition_scheduler_main(fi, expected_output):
 
     assert eg.enodes["A"].evaluable_parameters["count_A"].curr_value == 7
     assert eg.enodes["B"].evaluable_parameters["count_B"].curr_value == 3
+
+
+def test_nested_conditions(create_model):
+    A = mdf.Node(
+        id="A",
+        input_ports=[mdf.InputPort(id="A_input")],
+        parameters=[
+            mdf.Parameter(id="A_param", value="A_param + 1", default_initial_value=0)
+        ],
+        output_ports=[mdf.OutputPort(id="A_output", value="A_param")],
+    )
+    B = mdf.Node(
+        id="B",
+        input_ports=[mdf.InputPort(id="B_input")],
+        parameters=[
+            mdf.Parameter(id="B_param", value="B_param + 1", default_initial_value=0)
+        ],
+        output_ports=[mdf.OutputPort(id="B_output", value="B_param")],
+    )
+    C = mdf.Node(
+        id="C",
+        input_ports=[mdf.InputPort(id="C_input")],
+        parameters=[
+            mdf.Parameter(id="C_param", value="C_param + 1", default_initial_value=0)
+        ],
+        output_ports=[mdf.OutputPort(id="C_output", value="C_param")],
+    )
+
+    m = create_model(
+        nodes=[A, B, C],
+        conditions=mdf.ConditionSet(
+            node_specific={
+                "B": mdf.Condition(
+                    type="EveryNCalls", kwargs={"dependency": A, "n": 2}
+                ),
+                # condition is simple EveryNCalls(B, 2) within two Not conditions
+                "C": mdf.Condition(
+                    type="Not",
+                    kwargs={
+                        "condition": mdf.Condition(
+                            type="Not",
+                            kwargs={
+                                "condition": mdf.Condition(
+                                    type="EveryNCalls", kwargs={"dependency": B, "n": 2}
+                                )
+                            },
+                        )
+                    },
+                ),
+            },
+            termination={
+                graph_scheduler.TimeScale.ENVIRONMENT_STATE_UPDATE: mdf.Condition(
+                    type="AfterNCalls", kwargs={"dependency": C, "n": 2}
+                )
+            },
+        ),
+    )
+
+    m2 = mdf.Model.from_dict(m.to_dict())
+    m3 = mdf.Model.from_dict(m2.to_dict())
+
+    for model in [m, m2, m3]:
+        eg = EvaluableGraph(model.graphs[0])
+        eg.evaluate(initializer={"A_input": 0})
+
+        assert eg.enodes["A"].evaluable_outputs["A_output"].curr_value == 8
+        assert eg.enodes["B"].evaluable_outputs["B_output"].curr_value == 4
+        assert eg.enodes["C"].evaluable_outputs["C_output"].curr_value == 2

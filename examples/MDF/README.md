@@ -51,6 +51,15 @@ A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions]
 <p align="center"><img src="images/abc_conditions.png" alt="simple"/></p>
 
 
+## Parameters and Functions example
+
+[Python source](params_funcs.py) | [JSON](ParametersFunctions.json) | [YAML](ParametersFunctions.yaml)
+
+A simple [Node](../../docs/README.md#node) with a number of different types of [Parameters](../../docs/README.md#parameter) (e.g. fixed and stateful) and [Functions](../../docs/README.md#function) (e.g. built in, ONNX based).
+
+<p align="center"><img src="images/params_funcs.png" alt="params_funcs"/></p>
+
+
 ## More examples
 
 There are further examples under development, including of a Recurrent Neural Network (RNN), and an Integrate and Fire (IaF) neuron model in [this directory](RNN).

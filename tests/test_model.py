@@ -328,12 +328,14 @@ def test_arrays(tmpdir):
 
     json_file = mod.to_json_file(os.path.join(tmpdir, f"{mod.id}.json"))
     yaml_file = mod.to_yaml_file(os.path.join(tmpdir, f"{mod.id}.yaml"))
+    bson_file = mod.to_bson_file(os.path.join(tmpdir, f"{mod.id}.bson"))
 
     json_mod = load_mdf(json_file)
     yaml_mod = load_mdf(yaml_file)
+    bson_mod = load_mdf(bson_file)
 
-    # Check both the YAML and JSON loaded versions of the model
-    for mod in [json_mod, yaml_mod]:
+    # Check both the YAML, JSON and BSON loaded versions of the model
+    for mod in [json_mod, yaml_mod, bson_mod]:
         assert (
             mod.graphs[0].edges[0].parameters["weight"] == np.array([[1, 0], [0, 1]])
         ).all()
@@ -364,6 +366,44 @@ def test_serialization_Function_function_args_formats(function, args):
 
     assert new_model.function == "linear"
     assert new_model.args == {"slope": 1, "intercept": 1}
+
+
+def test_serialization_nested_Conditions():
+    model = Condition(
+        type="All",
+        kwargs={
+            "args": [
+                Condition(
+                    type="Not",
+                    kwargs={
+                        "condition": Condition(
+                            type="BeforeNCalls",
+                            kwargs={
+                                "dependency": "B",
+                                "n": 5,
+                                "time_scale": "TimeScale.ENVIRONMENT_STATE_UPDATE",
+                            },
+                        )
+                    },
+                )
+            ]
+        },
+    )
+    new_model = model.from_dict(model.to_dict())
+
+    cond_not = new_model.kwargs["args"][0]
+    assert isinstance(cond_not, Condition)
+
+    cond_beforencalls = cond_not.kwargs["condition"]
+    assert isinstance(cond_beforencalls, Condition)
+
+    assert cond_beforencalls.kwargs["dependency"] == "B"
+    assert cond_beforencalls.kwargs["n"] == 5
+    assert (
+        cond_beforencalls.kwargs["time_scale"] == "TimeScale.ENVIRONMENT_STATE_UPDATE"
+    )
+
+    assert new_model.to_dict() == model.to_dict()
 
 
 if __name__ == "__main__":
