@@ -1007,25 +1007,29 @@ class EvaluableGraph:
                 evaluated_nodes.append(edge.receiver)
 
         if self.graph.conditions is not None:
-            conditions = {
-                self.graph.get_node(node): self.parse_condition(cond)
-                for node, cond in self.graph.conditions.node_specific.items()
-            }
+            if self.graph.conditions.node_specific is None:
+                conditions = {}
+            else:
+                conditions = {
+                    self.graph.get_node(node): self.parse_condition(cond)
+                    for node, cond in self.graph.conditions.node_specific.items()
+                }
 
             termination_conds = {}
-            for scale, cond in self.graph.conditions.termination.items():
-                cond = self.parse_condition(cond)
+            if self.graph.conditions.termination is not None:
+                for scale, cond in self.graph.conditions.termination.items():
+                    cond = self.parse_condition(cond)
 
-                # check for TimeScale in form of enum or equivalent unambiguous strings
-                try:
-                    scale = re.match(time_scale_str_regex, scale).groups()[1]
-                except (AttributeError, IndexError, TypeError):
-                    pass
+                    # check for TimeScale in form of enum or equivalent unambiguous strings
+                    try:
+                        scale = re.match(time_scale_str_regex, scale).groups()[1]
+                    except (AttributeError, IndexError, TypeError):
+                        pass
 
-                try:
-                    termination_conds[graph_scheduler.TimeScale[scale]] = cond
-                except KeyError:
-                    termination_conds[scale] = cond
+                    try:
+                        termination_conds[graph_scheduler.TimeScale[scale]] = cond
+                    except KeyError:
+                        termination_conds[scale] = cond
         else:
             conditions = {}
             termination_conds = {}

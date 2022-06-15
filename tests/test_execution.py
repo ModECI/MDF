@@ -1,3 +1,4 @@
+import graph_scheduler
 import pytest
 
 import modeci_mdf.mdf as mdf
@@ -46,3 +47,41 @@ def test_single_function_variations(create_model, args, function, value, result)
     eg.evaluate(initializer={"input": 1})
 
     assert eg.enodes["N"].evaluable_outputs["output"].curr_value == result
+
+
+@pytest.mark.parametrize(
+    "node_specific, termination, result",
+    [
+        ({"A": mdf.Condition(type="Always")}, None, 1),
+        (
+            None,
+            {
+                graph_scheduler.TimeScale.ENVIRONMENT_STATE_UPDATE: mdf.Condition(
+                    type="AfterNCalls", dependency="A", n=5
+                )
+            },
+            5,
+        ),
+    ],
+)
+def test_condition_variations(create_model, node_specific, termination, result):
+    A = mdf.Node(
+        id="A",
+        input_ports=[mdf.InputPort(id="A_input")],
+        parameters=[
+            mdf.Parameter(id="A_param", value="A_param + 1", default_initial_value=0)
+        ],
+        output_ports=[mdf.OutputPort(id="A_output", value="A_param")],
+    )
+
+    model = create_model(
+        nodes=[A],
+        conditions=mdf.ConditionSet(
+            node_specific=node_specific, termination=termination
+        ),
+    )
+
+    eg = EvaluableGraph(model.graphs[0])
+    eg.evaluate(initializer={"A_input": 0})
+
+    assert eg.enodes["A"].evaluable_outputs["A_output"].curr_value == result
