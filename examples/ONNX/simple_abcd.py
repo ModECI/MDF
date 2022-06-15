@@ -102,7 +102,6 @@ def main():
         "abcd.onnx",
         verbose=True,
         input_names=["input"],
-        example_outputs=output,
         opset_version=9,
     )
 

@@ -75,7 +75,6 @@ def main():
     mdf_model, param_dict = pytorch_to_mdf(
         model=ddm,
         args=tuple(ddm_params.values()),
-        example_outputs=(rt, decision),
         use_onnx_ops=True,
     )
 
