@@ -123,6 +123,18 @@ def run_onnx_op(
             if cval.dtype != data.dtype:
                 inputs["constant_value"] = cval.astype(data.dtype)
 
+    # SkLearn ONNX doesn't seem to support ConcatFromSequence, see
+    # https://github.com/onnx/sklearn-onnx/issues/710
+    # Let us just use this implemetation I found in ONNX backend test.
+    if op_name == "ConcatFromSequence":
+        from onnx.backend.test.case.model.sequence import ConcatFromSequenceImpl
+
+        return {
+            "concat_result": ConcatFromSequenceImpl(
+                inputs["input_sequence"], **attributes
+            )
+        }
+
     op_class = import_class(f"skl2onnx.algebra.onnx_ops.Onnx{op_name}")
     input_names = list(inputs.keys())
     input_vals = list(inputs.values())
