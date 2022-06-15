@@ -1,16 +1,13 @@
 import torch
-import torch.nn as nn
 import numpy as np
 
 torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
 
-from modeci_mdf.utils import load_mdf_json
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 from modeci_mdf.execution_engine import EvaluableGraph
 
 from modeci_mdf.utils import load_mdf_json
-import json
 
 
 def _check_model(mdf_model):
@@ -33,7 +30,6 @@ def test_simple_module():
     mdf_model, param_dict = pytorch_to_mdf(
         model=Simple(),
         args=(torch.tensor(0.0), torch.tensor(0.0)),
-        example_outputs=(torch.tensor(0.0)),
         use_onnx_ops=True,
     )
 
@@ -49,7 +45,6 @@ def test_simple_function():
     mdf_model, param_dict = pytorch_to_mdf(
         model=simple,
         args=(torch.tensor(0.0), torch.tensor(0.0)),
-        example_outputs=(torch.tensor(0.0)),
         use_onnx_ops=True,
     )
 
@@ -68,7 +63,6 @@ def test_inception(inception_model_pytorch):
     mdf_model, params_dict = pytorch_to_mdf(
         model=inception_model_pytorch,
         args=(galaxy_images_output, ebv_output),
-        example_outputs=output,
         trace=True,
     )
 
@@ -83,10 +77,11 @@ def test_inception(inception_model_pytorch):
     eg = EvaluableGraph(graph=mdf_graph, verbose=False)
 
     eg.evaluate(initializer=params_dict)
+    output_mdf = eg.output_enodes[0].get_output()
 
     assert np.allclose(
         output,
-        eg.enodes["Add_381"].evaluable_outputs["_381"].curr_value,
+        output_mdf,
     )
 
 
