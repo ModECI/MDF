@@ -187,7 +187,7 @@ def mdf_to_graphviz(
                     info += "<tr><td>{}{} {}</td></tr>".format(
                         format_label("IN"),
                         format_input(ip.id),
-                        "(shape: %s)" % ip.shape
+                        "(shape: %s)" % str(ip.shape)
                         if level >= LEVEL_2 and ip.shape is not None
                         else "",
                     )
