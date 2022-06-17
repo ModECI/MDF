@@ -94,7 +94,7 @@
                             "type": "EveryNCalls",
                             "kwargs": {
                                 "dependencies": "A",
-                                "n": 3
+                                "n": 2
                             }
                         }
                     },
