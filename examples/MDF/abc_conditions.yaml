@@ -62,7 +62,7 @@ abc_conditions:
                         type: EveryNCalls
                         kwargs:
                             dependencies: A
-                            n: 2
+                            n: 3
                 termination:
                     environment_state_update:
                         type: And
