@@ -1033,7 +1033,6 @@ class EvaluableGraph:
         else:
             conditions = {}
             termination_conds = {}
-
         self.scheduler = graph_scheduler.Scheduler(
             graph=self.graph.dependency_dict,
             conditions=conditions,
@@ -1112,7 +1111,9 @@ class EvaluableGraph:
                 )
 
         if self.verbose:
-            print("Trial terminated")
+            print("Order of execution of nodes\n")
+            print(list(self.scheduler.run()))
+            print("\n Trial terminated")
 
     def evaluate_edge(
         self,

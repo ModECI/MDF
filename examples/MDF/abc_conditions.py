@@ -67,7 +67,7 @@ def main():
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
 
-    #print_summary(mod_graph)
+    # print_summary(mod_graph)
     import sys
 
     if "-run" in sys.argv:
@@ -79,10 +79,16 @@ def main():
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
         eg.evaluate(array_format=format)
-        #evaluating the current state of the graph's parameters
-        print('Output of A: %s'%eg.enodes["A"].evaluable_outputs["output_1"].curr_value)
-        print('Output of B: %s'%eg.enodes["B"].evaluable_outputs["output_1"].curr_value)
-        print('Output of C: %s'%eg.enodes["C"].evaluable_outputs["output_1"].curr_value)
+        # evaluating the current state of the graph's parameters
+        print(
+            "Output of A: %s" % eg.enodes["A"].evaluable_outputs["output_1"].curr_value
+        )
+        print(
+            "Output of B: %s" % eg.enodes["B"].evaluable_outputs["output_1"].curr_value
+        )
+        print(
+            "Output of C: %s" % eg.enodes["C"].evaluable_outputs["output_1"].curr_value
+        )
     if "-graph" in sys.argv:
         mod.to_graph_image(
             engine="dot",
