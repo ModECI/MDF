@@ -54,9 +54,11 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 **[Model metadata](https://github.com/ModECI/MDF/blob/main/docs/README.md#model)** There is the ability to add “metadata” to the **model**, **graph**, **nodes** and many of their sub elements which provide additional information about that element. While the metadata should not be essential to the mathematical description of the behavior/structure of the element, it could be useful for human interpretability of its function/purpose, or used when it is mapped to a specific application for simulation/visualization. Metadata can be added to the top level model to specify contact information, citations, acknowledgements, pointers to sample data and benchmark results, and environments in which the specified model was originally implemented and any that have been validated to support its execution.
 
-<p align="center"><img src="docs/images/MDFgraph1.png" width="700px"><br/><sup><i><b>Fig 2:</b> A simple graph with 3 nodes and 2 edges expressed in MDF.</i></sup></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/raw/main/docs/images/MDFgraph1.png" width="700px"><br/>
+<sup><i><b>Fig 2:</b> A simple graph with 3 nodes and 2 edges expressed in MDF.</i></sup></p>
 
-<p align="center"><img src="docs/images/MDFgraph2.png" width="700px"><br/><sup><i><b>Fig 3:</b> This graph illustrates the ability to specify behavior that extends beyond the directed flow through the graph. Here, Node 1 generates a random number and transmits that number to Node 2. Node 2 will only run if the number it receives from Node 1 is greater than 10.</i></sup></p>
+<p align="center"><img src="https://github.com/ModECI/MDF/raw/main/docs/images/MDFgraph2.png" width="700px"><br/>
+<sup><i><b>Fig 3:</b> This graph illustrates the ability to specify behavior that extends beyond the directed flow through the graph. Here, Node 1 generates a random number and transmits that number to Node 2. Node 2 will only run if the number it receives from Node 1 is greater than 10.</i></sup></p>
 
 ## Installation
 
