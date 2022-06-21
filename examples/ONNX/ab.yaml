@@ -1,6 +1,6 @@
 ONNX Model:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.0
+    generating_application: Python modeci-mdf v0.4.1
     graphs:
         torch-jit-export:
             nodes:
@@ -19,11 +19,11 @@ ONNX Model:
                                 A: input
                                 B: B
                     output_ports:
-                        _2:
+                        onnx_Mul_2:
                             value: Add_1
                 Mul_3:
                     input_ports:
-                        _2:
+                        onnx_Mul_2:
                             shape:
                             - 2
                             - 3
@@ -33,14 +33,14 @@ ONNX Model:
                         Mul_3:
                             function: onnx::Mul
                             args:
-                                A: _2
+                                A: onnx_Mul_2
                                 B: B
                     output_ports:
                         _4:
                             value: Mul_3
             edges:
-                Add_1._2_Mul_3._2:
+                Add_1.onnx_Mul_2_Mul_3.onnx_Mul_2:
                     sender: Add_1
                     receiver: Mul_3
-                    sender_port: _2
-                    receiver_port: _2
+                    sender_port: onnx_Mul_2
+                    receiver_port: onnx_Mul_2

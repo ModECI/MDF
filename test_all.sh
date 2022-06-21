@@ -20,6 +20,7 @@ python abcd.py -run
 python arrays.py -run
 python states.py -run -nogui
 python abc_conditions.py -run
+python params_funcs.py -run
 
 ## Test exporting to NeuroML
 
@@ -44,6 +45,8 @@ python -m modeci_mdf.interfaces.graphviz.exporter States.yaml 3 -noview
 mv state_example.gv.png images/states.png
 python -m modeci_mdf.interfaces.graphviz.exporter abc_conditions.yaml 3 -noview
 mv abc_conditions_example.gv.png images/abc_conditions.png
+python -m modeci_mdf.interfaces.graphviz.exporter ParametersFunctions.yaml 3 -noview
+mv params_funcs_example.gv.png images/params_funcs.png
 
 ## Test regenerating NeuroML
 
