@@ -6,7 +6,7 @@
 ## MDF to PyTorch
 
 To perform an MDF to PyTorch conversion, provide an MDF model as an input to the `mdf_to_pytorch` function
-which is available in [exporter.py](https://github.com/ModECI/MDF/blob/development/src/modeci_mdf/interfaces/pytorch/exporterhtml.py). The output of `mdf_to_pytorch` is a PyTorch model.  
+which is available in [exporter.py](/src/modeci_mdf/interfaces/pytorch/exporter.py). The output of `mdf_to_pytorch` is a PyTorch model.  
 
 ```
 mdf_to_pytorch(
@@ -44,14 +44,14 @@ The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx
 
   Conversion to PyTorch: TODO...
 
-The demo to convert an MDF model to PyTorch is at [MDF_to_PyTorch.py](https://github.com/ModECI/MDF/blob/development/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py). This converts all the available MDF models to their respective Pytorch Models.
+The demo to convert an MDF model to PyTorch is at [MDF_to_PyTorch.py](/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py). This converts all the available MDF models to their respective Pytorch Models.
 Any model created using the MDF specification is translated to a PyTorch model, run:
 
 ```bash
 python MDF_to_PyTorch
 ```
 
-**NOTE:** The converted models are available in folder: [MDF_PyTorch](https://github.com/ModECI/MDF/tree/development/examples/PyTorch/MDF_PyTorch).
+**NOTE:** The converted models are available in folder: [MDF_PyTorch](/examples/PyTorch/MDF_PyTorch).
 
 
 ## PyTorch to MDF
@@ -63,7 +63,7 @@ then be able to be converted to their MDF representation automatically. Below ar
 several working examples of this functionality.
 
 To perform an PyTorch to MDF conversion, provide a PyTorch model as an input to the `pytorch_to_mdf` function
-which is available in [importer.py](https://github.com/ModECI/MDF/blob/development/src/modeci_mdf/interfaces/pytorch/importerhtml.py). The output of `pytorch_to_mdf` is an MDF model.
+which is available in [importer.py](/src/modeci_mdf/interfaces/pytorch/importer.py). The output of `pytorch_to_mdf` is an MDF model.
 
 ```
 pytorch_to_mdf(
