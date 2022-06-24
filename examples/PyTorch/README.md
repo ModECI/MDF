@@ -6,7 +6,7 @@
 ## MDF to PyTorch
 
 To perform an MDF to PyTorch conversion, provide an MDF model as an input to the `mdf_to_pytorch` function
-which is available in [exporter.py](/src/modeci_mdf/interfaces/pytorch/exporter.py). The output of `mdf_to_pytorch` is a PyTorch model.  
+which is available in [exporter.py](/src/modeci_mdf/interfaces/pytorch/exporter.py). The output of `mdf_to_pytorch` is a PyTorch model.
 
 ```
 mdf_to_pytorch(
