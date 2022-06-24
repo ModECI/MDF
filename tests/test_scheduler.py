@@ -172,3 +172,41 @@ def test_nested_conditions(create_model):
         assert eg.enodes["A"].evaluable_outputs["A_output"].curr_value == 8
         assert eg.enodes["B"].evaluable_outputs["B_output"].curr_value == 4
         assert eg.enodes["C"].evaluable_outputs["C_output"].curr_value == 2
+
+
+@pytest.mark.skipif(
+    graph_scheduler.__version__ < "1.1.0", reason="Threshold added in 1.1.0"
+)
+def test_threshold(create_model):
+    A = mdf.Node(
+        id="A",
+        input_ports=[mdf.InputPort(id="A_input")],
+        parameters=[
+            mdf.Parameter(id="A_param", value="A_param + 1", default_initial_value=0)
+        ],
+        output_ports=[mdf.OutputPort(id="A_output", value="A_param")],
+    )
+
+    m = create_model(
+        nodes=[A],
+        conditions=mdf.ConditionSet(
+            termination={
+                graph_scheduler.TimeScale.ENVIRONMENT_STATE_UPDATE: mdf.Condition(
+                    type="Threshold",
+                    dependency=A,
+                    parameter="A_param",
+                    threshold=5,
+                    comparator=">=",
+                )
+            },
+        ),
+    )
+
+    m2 = mdf.Model.from_dict(m.to_dict())
+    m3 = mdf.Model.from_dict(m2.to_dict())
+
+    for model in [m, m2, m3]:
+        eg = EvaluableGraph(model.graphs[0])
+        eg.evaluate(initializer={"A_input": 0})
+
+        assert eg.enodes["A"].evaluable_outputs["A_output"].curr_value == 5
