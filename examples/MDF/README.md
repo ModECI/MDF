@@ -2,7 +2,7 @@
 
 Examples of Python, JSON and YAML files to illustrate the structure and usage of MDF.
 
-[Simple](#simple) | [ABCD](#abcd) | [Arrays](#arrays) | [States](#states) | [Conditions](#conditions)
+[Simple](#simple-example) | [ABCD](#abcd) | [Arrays](#arrays) | [States](#states) | [Conditions](#conditions) | [Parameters and Functions](#parameters-and-functions)
 
 ## Simple example
 
@@ -42,7 +42,7 @@ An example with [Nodes](../../docs/README.md#node) containing persistent [States
 <p align="center"><img src="images/states.png" alt="simple"/></p>
 
 
-## Conditions example
+## Conditions
 
 [Python source](abc_conditions.py) | [JSON](abc_conditions.json) | [YAML](abc_conditions.yaml)
 
@@ -51,7 +51,7 @@ A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions]
 <p align="center"><img src="images/abc_conditions.png" alt="simple"/></p>
 
 
-## Parameters and Functions example
+## Parameters and Functions
 
 [Python source](params_funcs.py) | [JSON](ParametersFunctions.json) | [YAML](ParametersFunctions.yaml)
 
