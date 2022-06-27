@@ -1,13 +1,34 @@
+import sys
+import pytest
+import copy
 import numpy as np
 import modeci_mdf.execution_engine
 import modeci_mdf.interfaces.pytorch.exporter
+
+
 from pathlib import Path
-from examples.PyTorch.MDF_PyTorch import ABCD_pytorch
-from examples.PyTorch.MDF_PyTorch import Arrays_pytorch
-from examples.PyTorch.MDF_PyTorch import Simple_pytorch
+
+
+@pytest.fixture(autouse=True)
+def add_repo_root_to_syspath():
+    """
+    This fixture sets up and tears down state before each test is run. These tests import from
+    examples. Make sure syspath is set properly with the repo root.
+    """
+
+    # Get the current directory before running the test
+    repo_root = Path(__file__).parent.parent.parent.parent
+    old_sys_path = copy.copy(sys.path)
+    sys.path.append(str(repo_root))
+
+    yield
+
+    sys.path = old_sys_path
 
 
 def test_ABCD():
+    from examples.PyTorch.MDF_PyTorch import ABCD_pytorch
+
     base_path = Path(__file__).parent
 
     filename = "examples/MDF/ABCD.json"
@@ -25,6 +46,8 @@ def test_ABCD():
 
 
 def test_Arrays():
+    from examples.PyTorch.MDF_PyTorch import Arrays_pytorch
+
     base_path = Path(__file__).parent
 
     filename = "examples/MDF/Arrays.json"
@@ -41,6 +64,8 @@ def test_Arrays():
 
 
 def test_Simple():
+    from examples.PyTorch.MDF_PyTorch import Simple_pytorch
+
     base_path = Path(__file__).parent
 
     filename = "examples/MDF/Simple.json"

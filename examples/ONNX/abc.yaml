@@ -1,6 +1,6 @@
 ONNX Model:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.0
+    generating_application: Python modeci-mdf v0.4.1
     graphs:
         torch-jit-export:
             nodes:
@@ -19,16 +19,14 @@ ONNX Model:
                                 A: input
                                 B: B
                     output_ports:
-                        _3:
+                        onnx_Loop_3:
                             value: Add_1
-                Loop_4:
+                Loop_3:
                     input_ports:
-                        B_loop_count_1:
+                        B_loop_count:
                             shape:
                             - 1
-                        _16:
-                            shape: []
-                        _3:
+                        onnx_Loop_3:
                             shape:
                             - 2
                             - 3
@@ -38,89 +36,69 @@ ONNX Model:
                                 graph_torch-jit-export1:
                                     id: torch-jit-export1
                                     nodes:
-                                        Cast_5:
-                                            parameters:
-                                                to:
-                                                    value: 1
-                                                input:
-                                                    value: 10
-                                                Cast_5:
-                                                    function: onnx::Cast
-                                                    args:
-                                                        input: input
-                                            output_ports:
-                                                _11:
-                                                    value: Cast_5
-                                        Div_6:
+                                        Div_5:
                                             input_ports:
-                                                x_6:
+                                                x_11:
                                                     shape:
                                                     - 2
                                                     - 3
-                                                _11:
-                                                    shape:
-                                                    - 1
                                             parameters:
-                                                Div_6:
+                                                B:
+                                                    value: 10.0
+                                                Div_5:
                                                     function: onnx::Div
                                                     args:
-                                                        A: x_6
-                                                        B: _11
+                                                        A: x_11
+                                                        B: B
                                             output_ports:
-                                                _12:
-                                                    value: Div_6
-                                        Cast_7:
+                                                x:
+                                                    value: Div_5
+                                        Identity_6:
                                             parameters:
-                                                to:
-                                                    value: 9
                                                 input:
-                                                    value: 1
-                                                Cast_7:
-                                                    function: onnx::Cast
+                                                    value: true
+                                                Identity_6:
+                                                    function: onnx::Identity
                                                     args:
                                                         input: input
                                             output_ports:
-                                                _13:
-                                                    value: Cast_7
-                                    edges:
-                                        Cast_5._11_Div_6._11:
-                                            sender: Cast_5
-                                            receiver: Div_6
-                                            sender_port: _11
-                                            receiver_port: _11
-                        Loop_4:
+                                                _11:
+                                                    value: Identity_6
+                        cond:
+                            value: true
+                        Loop_3:
                             function: onnx::Loop
                             args:
-                                M: B_loop_count_1
-                                cond: _16
-                                v_initial: _3
+                                M: B_loop_count
+                                cond: cond
+                                v_initial: onnx_Loop_3
                     output_ports:
-                        _7:
-                            value: Loop_4
-                Mul_9:
+                        x_3:
+                            value: Loop_3
+                Mul_8:
                     input_ports:
-                        _7:
+                        x_3:
                             shape:
                             - 1
                     parameters:
                         B:
                             value: 100.0
-                        Mul_9:
+                        Mul_8:
                             function: onnx::Mul
                             args:
-                                A: _7
+                                A: x_3
                                 B: B
                     output_ports:
-                        _15:
-                            value: Mul_9
+                        _13:
+                            value: Mul_8
             edges:
-                Add_1._3_Loop_4._3:
+                Add_1.onnx_Loop_3_Loop_3.onnx_Loop_3:
                     sender: Add_1
-                    receiver: Loop_4
-                    sender_port: _3
-                    receiver_port: _3
-                Loop_4._7_Mul_9._7:
-                    sender: Loop_4
-                    receiver: Mul_9
-                    sender_port: _7
-                    receiver_port: _7
+                    receiver: Loop_3
+                    sender_port: onnx_Loop_3
+                    receiver_port: onnx_Loop_3
+                Loop_3.x_3_Mul_8.x_3:
+                    sender: Loop_3
+                    receiver: Mul_8
+                    sender_port: x_3
+                    receiver_port: x_3

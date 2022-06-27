@@ -23,9 +23,12 @@ Welcome to [ModECI/MDF](https://github.com/ModECI/MDF)! Before opening pull requ
 
 ### 🔖 Steps to Contribute
 
-Following are the steps to guide you:
+Following are the steps to guide you to making your own fork of the MDF repository, making changes and submitting them as contributions:
 
-* Step 1: Fork the repo and Go to your Git terminal and clone it on your machine.
+* Step 1: [Fork the MDF repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo), go to your terminal and clone it on your machine.
+    ```
+    git clone https://github.com/<your fork>/MDF
+    ```
 
 * Step 2: Add a upstream link to main branch in your cloned repo
     ```
@@ -41,27 +44,41 @@ Following are the steps to guide you:
     ```
 * Step 5: Commit all the changes
     ```
-    git commit -m "Write a meaningful but small commit message"
+    git commit -m "A meaningful but small commit message"
     ```
-* Step 6: Push the changes for review
+* Step 6: Push the changes to your fork
     ```
     git push origin <branch-name>
     ```
 * Step 7: Create a PR on Github.
      - Don't just hit the create a pull request button, you should write a PR message to clarify why and what are you contributing.
-     - Put the hashtag of issue in a commit message for the pull request, and it will show up in the issue itself which will make easy for developers to review your PR based on issue.
+     - Put the hashtag of a relevant issue in a commit message for the pull request, and it will show up in the issue itself which will make easy for developers to review your PR based on the issue.
 
 ### ⚙ MDF Installation Guide
 
-* Step 1: Fork the repo and Go to your Git terminal and clone it on your machine (If done already go directly to next step)
+The installation requires Python >= 3.7. See installation instructions at https://www.python.org.
+
+* Step 1: Go to your terminal and clone it on your machine. Replace the URL below if you have [forked your own copy of the repository](https://docs.github.com/en/get-started/quickstart/fork-a-repo).
     ```
     git clone https://github.com/ModECI/MDF
     ```
-* Step 2 : Go to local path of repo
+* Step 2 : Install virtualenv (if not already installed) for creating a virtual environment and installing all the dependencies in it.
+    ```
+    pip install virtualenv
+    ```
+* Step 3 : Go to local path of repository
     ```
     cd MDF
     ```
-* Step 3 : Install
+* Step 4 : Create a virtual environment (e.g. named mdf-env)
+    ```
+    virtualenv mdf-env
+    ```
+* Step 5 : Activate the virtual environment
+    ```
+    source mdf-env/bin/activate
+    ```
+* Step 6 : Install MDF
     ```
     pip install .
     ```

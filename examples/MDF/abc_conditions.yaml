@@ -1,18 +1,9 @@
 abc_conditions:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.0
+    generating_application: Python modeci-mdf v0.4.1
     graphs:
         abc_conditions_example:
             nodes:
-                input0:
-                    parameters:
-                        input_level:
-                            value: 0.0
-                        count_0:
-                            value: count_0 + 1
-                    output_ports:
-                        out_port:
-                            value: input_level
                 A:
                     input_ports:
                         input_port1:
@@ -47,11 +38,6 @@ abc_conditions:
                         output_1:
                             value: input_port1
             edges:
-                edge_input0_A:
-                    sender: input0
-                    receiver: A
-                    sender_port: out_port
-                    receiver_port: input_port1
                 edge_A_B:
                     sender: A
                     receiver: B
@@ -64,11 +50,6 @@ abc_conditions:
                     receiver_port: input_port1
             conditions:
                 node_specific:
-                    input0:
-                        type: BeforeNCalls
-                        kwargs:
-                            dependencies: input0
-                            n: 1
                     A:
                         type: Always
                         kwargs: {}

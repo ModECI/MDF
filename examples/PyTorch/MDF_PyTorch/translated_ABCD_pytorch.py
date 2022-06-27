@@ -154,7 +154,6 @@ torch.onnx.export(
     "ABCD.onnx",
     verbose=True,
     input_names=[],
-    example_outputs=output,
     opset_version=9,
 )
 onnx_model = onnx.load("ABCD.onnx")

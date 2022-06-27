@@ -23,6 +23,9 @@ def id_to_port(id: str):
 
     new_name = str(id).replace(".", "_")
 
+    # Get rid of double colon in id names, this causes issues with execution engine.
+    new_name = new_name.replace("::", "_")
+
     # If the first character is a digit, precede with an underscore so this can never be interpreted
     # as number down the line.
     if new_name[0].isdigit():

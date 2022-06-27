@@ -48,15 +48,16 @@ specification:
         allowed_children:
             nodes:
                 type: Node
-                description: One or more :class:`Node`\(s) present in the graph
+                description: One or more :class:`Node`(s) present in the graph
             edges:
                 type: Edge
-                description: Zero or more :class:`Edge`\(s) present in the graph
+                description: Zero or more :class:`Edge`(s) present in the graph
     Node:
-        definition: 'The values from these are processed via a number of :class:`Function`\(s)
-            and one or more final values
+        definition: 'A self contained unit of evaluation receiving input from other
+            nodes on :class:`InputPort`(s). The values from these are processed via
+            a number of :class:`Function`(s) and one or more final values
 
-            are calculated on the :class:`OutputPort`\(s)'
+            are calculated on the :class:`OutputPort`(s)'
         allowed_parameters:
             metadata:
                 type: Union[Any, NoneType]
@@ -71,13 +72,13 @@ specification:
                 description: Dictionary of the :class:`InputPort` objects in the Node
             functions:
                 type: Function
-                description: The :class:`Function`\(s) for computation the node
+                description: The :class:`Function`(s) for computation the node
             parameters:
                 type: Parameter
-                description: Dictionary of :class:`Parameter`\(s) for the node
+                description: Dictionary of :class:`Parameter`(s) for the node
             output_ports:
                 type: OutputPort
-                description: The :class:`OutputPort`\(s) containing evaluated quantities
+                description: The :class:`OutputPort`(s) containing evaluated quantities
                     from the node
     InputPort:
         definition: The :class:`InputPort` is an attribute of a Node which allows
@@ -101,7 +102,7 @@ specification:
                 type: Union[str, NoneType]
                 description: The data type of the input received at a port.
     Function:
-        definition: A single value which is evaluated as a function of values on :class:`InputPort`\(s)
+        definition: A single value which is evaluated as a function of values on :class:`InputPort`(s)
             and other Functions
         allowed_parameters:
             metadata:
@@ -135,10 +136,14 @@ specification:
 
                     and args attributes will be None.'
     Parameter:
-        definition: 'referencing other :class:`Parameter`\(s)), be evaluated by an
-            inbuilt function with args, or change from a
+        definition: 'A parameter of the :class:`Node`, which can be: 1) a specific
+            fixed :code:`value` (a constant (int/float) or an array) 2) a string expression
+            for the :code:`value` referencing other named :class:`Parameter`(s). which
+            may be stateful (i.e. can change value over multiple executions of the
+            :class:`Node`); 3) be evaluated by an
 
-            :code:`default_initial_value` with a :code:`time_derivative`.'
+            inbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value`
+            with a :code:`time_derivative`.'
         allowed_parameters:
             metadata:
                 type: Union[Any, NoneType]
@@ -194,7 +199,8 @@ specification:
                     str, NoneType]
                 description: The new value of the Parameter if the test is true
     OutputPort:
-        definition: connected by an :class:`Edge`
+        definition: The :class:`OutputPort` is an attribute of a :class:`Node` which
+            exports information to another :class:`Node` connected by an :class:`Edge`
         allowed_parameters:
             metadata:
                 type: Union[Any, NoneType]
@@ -220,7 +226,9 @@ specification:
                 type: Union[str, NoneType]
                 description: The data type of the output sent by a port.
     Edge:
-        definition: :class:`OutputPort` to a receiver's :class:`InputPort`.
+        definition: An :class:`Edge` is an attribute of a :class:`Graph` that transmits
+            computational results from a sender's :class:`OutputPort` to a receiver's
+            :class:`InputPort`.
         allowed_parameters:
             metadata:
                 type: Union[Any, NoneType]
