@@ -315,6 +315,15 @@ def mdf_to_graphviz(
                     info = info[:-5]
 
                 info += "</td></tr>"
+                if ns.type == "Always" or ns.type == "Never":
+                    info += "<tr><td>Summarized condition: {} {} executes".format(
+                        node.id, ns.type
+                    )
+                else:
+                    info += "<tr><td>Summarized condition: {} executes {} of {}".format(
+                        node.id, ns.type, args.get("dependencies")
+                    )
+                info += "</td></tr>"
 
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
