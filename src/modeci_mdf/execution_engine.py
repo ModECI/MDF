@@ -1227,6 +1227,7 @@ class EvaluableGraph:
                         args["custom_parameter_getter"] = get_custom_parameter_getter(
                             obj
                         )
+                        break
                 else:
                     raise ValueError(
                         f"No {parameter} evaluable object for {dependency}, options: {list(valid_parameters)}"
