@@ -207,7 +207,7 @@ class Parameter(MdfBase):
         Returns:
             :code:`True` if stateful, `False` if not.
         """
-        from modeci_mdf.execution_engine import parse_str_as_list
+        from modeci_mdf.execution_engine import get_required_variables_from_expression
 
         if self.time_derivative is not None:
             return True
@@ -215,11 +215,7 @@ class Parameter(MdfBase):
             return True
         if self.value is not None and type(self.value) == str:
             # If we are dealing with a list of symbols, each must treated separately
-            if self.value[0] == "[" and self.value[-1] == "]":
-                # Use the Python interpreter to parse this into a List[str]
-                arg_expr_list = parse_str_as_list(self.value)
-            else:
-                arg_expr_list = [self.value]
+            arg_expr_list = get_required_variables_from_expression(self.value)
 
             req_vars = []
 

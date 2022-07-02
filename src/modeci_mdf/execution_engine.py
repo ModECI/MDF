@@ -274,6 +274,56 @@ def parse_str_as_list(s: str) -> list:
         return res
 
 
+def get_required_variables_from_expression(expr: str) -> List[str]:
+    """Produces a list containing sympy free symbols in **expr**"""
+
+    def recursively_extract_subscripted_values(s):
+        res = []
+        subscript_indices = []
+        depth = 0
+
+        len_s = len(s)
+        for i in range(len_s):
+            if s[i] == "[":
+                if depth == 0:
+                    subscript_indices.append([i, None])
+                depth += 1
+
+            if s[i] == "]":
+                depth -= 1
+
+                if depth == 0:
+                    subscript_indices[-1][1] = i
+
+        # s contains no subscripts, so it won't be added in below loop
+        if len(subscript_indices) == 0 and len_s > 0:
+            res.append(s)
+
+        last = 0
+        for start, end in subscript_indices:
+            if end is None:
+                end = len_s
+
+            res.extend(recursively_extract_subscripted_values(s[start + 1 : end]))
+
+            # add expression being subscripted
+            if last != start:
+                res.append(s[last:start])
+
+            last = end + 1
+
+        return res
+
+    if not isinstance(expr, str):
+        return []
+
+    result = []
+
+    for e in recursively_extract_subscripted_values(expr):
+        result.extend([str(s) for s in sympy.simplify(e).free_symbols])
+    return result
+
+
 class EvaluableFunction:
     """Evaluates a :class:`~modeci_mdf.mdf.Function` value during MDF graph execution.
 
@@ -773,19 +823,9 @@ class EvaluableNode:
                         continue
 
                     # If we are dealing with a list of symbols, each must treated separately
-                    if (
-                        type(arg_expr) == str
-                        and arg_expr[0] == "["
-                        and arg_expr[-1] == "]"
-                    ):
-                        # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = parse_str_as_list(arg_expr)
-                    else:
-                        arg_expr_list = [arg_expr]
-
-                    for e in arg_expr_list:
-                        func_expr = sympy.simplify(e)
-                        all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+                    all_req_vars.extend(
+                        get_required_variables_from_expression(arg_expr)
+                    )
 
             all_present = [v in all_known_vars for v in all_req_vars]
 
@@ -827,34 +867,15 @@ class EvaluableNode:
             all_req_vars = []
 
             if p.value is not None and type(p.value) == str:
-                if p.value[0] == "[" and p.value[-1] == "]":
-                    # Use the Python interpreter to parse this into a List[str]
-                    arg_expr_list = parse_str_as_list(p.value)
-                else:
-                    arg_expr_list = [p.value]
-
-                for e in arg_expr_list:
-                    param_expr = sympy.simplify(e)
-                    all_req_vars.extend([str(s) for s in param_expr.free_symbols])
+                all_req_vars.extend(get_required_variables_from_expression(p.value))
 
             if p.args is not None:
                 for arg in p.args:
                     arg_expr = p.args[arg]
-
-                    # If we are dealing with a list of symbols, each must treated separately
-                    if (
-                        type(arg_expr) == str
-                        and arg_expr[0] == "["
-                        and arg_expr[-1] == "]"
-                    ):
-                        # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = parse_str_as_list(arg_expr)
-                    else:
-                        arg_expr_list = [arg_expr]
-
-                    for e in arg_expr_list:
-                        param_expr = sympy.simplify(e)
-                        all_req_vars.extend([str(s) for s in param_expr.free_symbols])
+                    if isinstance(arg_expr, str):
+                        all_req_vars.extend(
+                            get_required_variables_from_expression(arg_expr)
+                        )
 
             all_known_vars_plus_this = all_known_vars + [p.id]
             all_present = [v in all_known_vars_plus_this for v in all_req_vars]
