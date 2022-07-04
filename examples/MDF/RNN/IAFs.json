@@ -1,7 +1,7 @@
 {
     "IAFs": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.1",
+        "generating_application": "Python modeci-mdf v0.4.1.1",
         "graphs": {
             "iaf_example": {
                 "nodes": {
