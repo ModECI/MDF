@@ -24,6 +24,8 @@ Below are some working examples of this functionality.
 
 1. One of sample MDF examples [ABCD.json](../MDF/ABCD.json) is converted to PyTorch [ABCD_pytorch.py](MDF_PyTorch/ABCD_pytorch.py).
 The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx) and the results are compared in all three environments.
+<p align="center"><img alt="ABCD" height="100" src="ABCD.svg"/></p>
+<!-- this representation was produced from https://netron.app/ by uploading the ONNX model and exporting the svg-->
 
 2. Multi-Layer Perceptron MDF to PyTorch Conversion:
 
@@ -81,23 +83,34 @@ Returns a translated MDF model
 
 Below are some working examples of this functionality.
 
-1. A DDM A model that simulates a simple noisy drift diffusion model using Euler-Maruyama integration. This is implemented without performance in mind. [pytorch_ddm.py](pytorch_ddm.py) is converted to [ddm.json](ddm.json)
-```bash
-python pytorch_ddm.py -graph
-```
+1. Simple Pytorch To MDF:
+  <p align="center"><img alt="simple_pytorch_to_mdf" height="70" src="simple_pytorch_to_mdf.svg"/></p>
+  This is a simple fully-connected neural network model consisting of input image of 224 * 224 * 3 and resulting in two classes as the output
+  To run an example of converting a PyTorch model written in PyTorch to its MDF representation simply run:
 
-<p align="center"><img alt="DDM mdf" src="ddm.png"/></p>
+  ```bash
+  python simple_pytorch_to_mdf.py
+  ```
+  Code is present in [simple_pytorch_to_mdf.py](simple_pytorch_to_mdf.py)
+  The graph representation of the MDF model can be generated with:
 
+  ```bash
+  python simple_pytorch_to_mdf.py -graph
+  ```
+
+  <p align="center"><img alt="simple_pytorch_to_mdf" height="250" src="simple_pytorch_to_mdf.png"/></p>
+
+  The MDF for this model is the written to [simple_pytorch_to_mdf.json](simple_pytorch_to_mdf.json). The model is then executed
+  via the MDF scheduler and the results are compared to the native execution in PyTorch.
 
 2. Inception Blocks Model:
-
-  To run an example of converting a PyTorch InceptionV3 like model written in PyTorch
-  to its MDF representation simply run:
+  <p align="center"><img alt="Inception MDF" height="100" src="inception.svg"/></p>
+  To run an example of converting a PyTorch InceptionV3 like model written in PyTorch to its MDF representation simply run:
 
   ```bash
   python inception.py
   ```
-
+  Code is present in [inception.py](inception.py)
   This will define the model in PyTorch, invoke the TorchScript tracing compiler,
   convert the underlying IR representation of the model to MDF. The MDF for this
   model is the written to [inception.json](inception.json). The model is then executed
@@ -110,3 +123,8 @@ python pytorch_ddm.py -graph
   ```
 
   <p align="center"><img alt="Inception MDF" height="600" src="inception.png"/></p>
+
+3. A DDM A model that simulates a simple noisy drift diffusion model using Euler-Maruyama integration. This is implemented without performance in mind. [pytorch_ddm.py](pytorch_ddm.py) is converted to [ddm.json](ddm.json)
+
+    <p align="center"><img alt="DDM mdf" src="ddm.png"/></p>
+    Conversion to MDF: TODO...
