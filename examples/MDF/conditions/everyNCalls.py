@@ -1,4 +1,4 @@
-""" 
+"""
 Example of ModECI MDF- A simple 3 Node graph satisfying the EveryNCalls Condition
 
 """
@@ -15,6 +15,7 @@ from modeci_mdf.mdf import (
     OutputPort,
 )
 from modeci_mdf.utils import print_summary, simple_connect
+
 
 def main():
     mod = Model(id="everyncalls_condition")
@@ -33,7 +34,8 @@ def main():
         if sender is not None:
             simple_connect(sender, n, graph)
 
-        return n  
+        return n
+
     a = create_simple_node(mod_graph, "A", sender=None)
     a.parameters.append(Parameter(id="param_A", value="param_A + 1"))
 
@@ -44,15 +46,18 @@ def main():
 
     c.parameters.append(Parameter(id="param_C", value="param_C+ 1"))
 
-    cond_a = Condition(type="Always") #A is always executed
-    cond_b = Condition(type="EveryNCalls", dependencies=a.id, n=2) #B executes every 2 calls of A
-    cond_c = Condition(type="EveryNCalls", dependencies=b.id, n=3) #C executes every 3 calls of B
-    
+    cond_a = Condition(type="Always")  # A is always executed
+    cond_b = Condition(
+        type="EveryNCalls", dependencies=a.id, n=2
+    )  # B executes every 2 calls of A
+    cond_c = Condition(
+        type="EveryNCalls", dependencies=b.id, n=3
+    )  # C executes every 3 calls of B
 
     mod_graph.conditions = ConditionSet(
         node_specific={a.id: cond_a, b.id: cond_b, c.id: cond_c},
-        #implicit AllHaveRun Termination Condition
-        #You may explicitly have your own termination condition as in abc_conditions.py
+        # implicit AllHaveRun Termination Condition
+        # You may explicitly have your own termination condition as in abc_conditions.py
     )
     print_summary(mod_graph)
     import sys
@@ -80,4 +85,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-      
