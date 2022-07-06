@@ -26,27 +26,25 @@ def main():
             simple_connect(sender, n, graph)
 
         return n
+
     # node A
     a = create_simple_node(mod_graph, "A", sender=None)
     a.parameters.append(Parameter(id="param_A", value="param_A + 1"))
     # node B
     b = create_simple_node(mod_graph, "B", a)
     b.parameters.append(Parameter(id="param_B", value="param_B + 1"))
-    
-    #See documentation: https://kmantel.github.io/graph-scheduler/Condition.html#graph_scheduler.condition.TimeInterval for more arguments you can add to the Time Interval condition
-    
-    #A starts executing after 5ms while B after 10ms
-    cond_a = Condition(type="TimeInterval", start = 5)
-    cond_b = Condition(
-        type="TimeInterval", start = 10
-    )
+
+    # See documentation: https://kmantel.github.io/graph-scheduler/Condition.html#graph_scheduler.condition.TimeInterval for more arguments you can add to the Time Interval condition
+
+    # A starts executing after 5ms while B after 10ms
+    cond_a = Condition(type="TimeInterval", start=5)
+    cond_b = Condition(type="TimeInterval", start=10)
     mod_graph.conditions = ConditionSet(
-    node_specific={a.id: cond_a, b.id: cond_b},
+        node_specific={a.id: cond_a, b.id: cond_b},
     )
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
     print_summary(mod_graph)
-    
 
     if "-run" in sys.argv:
         verbose = True
@@ -57,11 +55,11 @@ def main():
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
 
-        #Using a time series to execute the graph 5 times
-        dt = 1 
+        # Using a time series to execute the graph 5 times
+        dt = 1
         duration = 5
         t = 0
-        times = [] 
+        times = []
         while t <= duration:
             times.append(t)
             print("===== Evaluating at t = %s  ======" % (t))
@@ -69,7 +67,7 @@ def main():
                 eg.evaluate(array_format=format)
             else:
                 eg.evaluate(time_increment=dt)
-            t += dt        
+            t += dt
     if "-graph" in sys.argv:
         mod.to_graph_image(
             engine="dot",
@@ -80,6 +78,7 @@ def main():
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
     return mod_graph
+
 
 if __name__ == "__main__":
     main()
