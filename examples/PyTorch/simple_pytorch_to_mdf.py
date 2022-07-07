@@ -107,8 +107,8 @@ def main():
     print("Exported to MDF and ONNX")
 
     # visualize onnx_model
-    if "-graph-onnx" in sys.argv:
-        netron.start("simple_pytorch_to_mdf.onnx")
+    # if "-graph-onnx" in sys.argv:
+    #     netron.start("simple_pytorch_to_mdf.onnx")
 
 
 if __name__ == "__main__":
