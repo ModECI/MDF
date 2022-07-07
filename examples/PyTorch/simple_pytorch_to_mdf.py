@@ -42,7 +42,7 @@ def main():
     # Run the model once to get some ground truth outpot (from PyTorch)
     output = model(input_images)
     make_dot(output, params=dict(list(model.named_parameters()))).render(
-        "simple_pytorch_to_mdf-torchviz", format="png"
+        "simple_pytorch_to_mdf_torchviz", format="png"
     )
 
     from modelspec.utils import _val_info
@@ -86,7 +86,7 @@ def main():
             engine="dot",
             output_format="png",
             view_on_render=False,
-            level=1,
+            level=3,
             filename_root="simple_pytorch_to_mdf",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
