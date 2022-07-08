@@ -41,9 +41,6 @@ def main():
     model.eval()
     # Run the model once to get some ground truth outpot (from PyTorch)
     output = model(input_images)
-    make_dot(output, params=dict(list(model.named_parameters()))).render(
-        "simple_pytorch_to_mdf_torchviz", format="png"
-    )
 
     from modelspec.utils import _val_info
 
@@ -81,16 +78,6 @@ def main():
 
     import sys
 
-    if "-graph" in sys.argv:
-        mdf_model.to_graph_image(
-            engine="dot",
-            output_format="png",
-            view_on_render=False,
-            level=3,
-            filename_root="simple_pytorch_to_mdf",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
-        )
-
     # Exporting as onnx model
     torch.onnx.export(
         model,
@@ -106,9 +93,24 @@ def main():
     res = sess.run(None, {sess.get_inputs()[0].name: input_images.numpy()})
     print("Exported to MDF and ONNX")
 
-    # visualize onnx_model
-    # if "-graph-onnx" in sys.argv:
-    #     netron.start("simple_pytorch_to_mdf.onnx")
+    # export to mdf graph
+    if "-graph" in sys.argv:
+        mdf_model.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="simple_pytorch_to_mdf",
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
+    # export to PyTorch graph
+    if "-graph-torch" in sys.argv:
+        make_dot(output, params=dict(list(model.named_parameters()))).render(
+            "simple_pytorch_to_mdf_torchviz", format="png"
+        )
+    # export to onnx graph
+    if "-graph-onnx" in sys.argv:
+        netron.start("simple_pytorch_to_mdf.onnx")
 
 
 if __name__ == "__main__":

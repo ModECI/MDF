@@ -84,21 +84,35 @@ Returns a translated MDF model
 Below are some working examples of this functionality.
 
 1. Simple Pytorch To MDF:
-  <p align="center"><img alt="simple_pytorch_to_mdf" height="70" src="simple_pytorch_to_mdf.svg"/></p>
-  This is a simple fully-connected neural network model consisting of input image of 224 * 224 * 3 and resulting in two classes as the output
+    This is a simple fully-connected neural network model example consisting of input image of 224 * 224 * 3 and resulting in two classes as the output
   To run an example of converting a PyTorch model written in PyTorch to its MDF representation simply run:
 
   ```bash
   python simple_pytorch_to_mdf.py
   ```
   Code is present in [simple_pytorch_to_mdf.py](simple_pytorch_to_mdf.py)
-  The graph representation of the MDF model can be generated with:
+  The graph representation of the ONNX model can be generated with:
+  ```bash
+  python simple_pytorch_to_mdf.py -graph-onnx
+  ```
+  <p align="center"><img alt="simple_pytorch_to_mdf" height="70" src="simple_pytorch_to_mdf.svg"/></p>
 
+
+  **NOTE**: This command will run the netron python server on the local host where we can export the graph as svg/png
+
+  The graph representation of the MDF model can be generated with:
   ```bash
   python simple_pytorch_to_mdf.py -graph
   ```
 
-  <p align="center"><img alt="simple_pytorch_to_mdf" height="250" src="simple_pytorch_to_mdf.png"/></p>
+  <p align="center"><img alt="simple_pytorch_to_mdf" height="450" src="simple_pytorch_to_mdf.png"/></p>
+
+  To Visualize the PyTorch model
+  ```bash
+  python simple_pytorch_to_mdf.py -graph-torch
+  ```
+
+  <p align="center"><img alt="simple_pytorch_to_mdf" height="250" src="simple_pytorch_to_mdf_torchviz.png"/></p>
 
   The MDF for this model is the written to [simple_pytorch_to_mdf.json](simple_pytorch_to_mdf.json). The model is then executed
   via the MDF scheduler and the results are compared to the native execution in PyTorch.
