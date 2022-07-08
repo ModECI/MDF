@@ -4,6 +4,7 @@ Example of ModECI MDF- A simple 1 Node graph satisfying the Threshold Condition
 """
 
 import graph_scheduler
+import os
 from modeci_mdf.mdf import (
     Condition,
     ConditionSet,
@@ -40,9 +41,6 @@ def main():
     a.parameters.append(
         Parameter(id="param_A", value="param_A + 1", default_initial_value=0)
     )
-    # b = create_simple_node(mod_graph, "B", a)
-    # b.parameters.append(Parameter(id="count_B", value="count_B + 1"))
-    cond_c = Condition(type="AfterNCalls", dependencies=a.id, n=3)
     cond_term = Condition(
         type="Threshold",
         dependency=a,
@@ -50,9 +48,15 @@ def main():
         threshold=5,
         comparator=">=",
     )
+    # The threshold condition is satisfied when the comparison btwn the value of the parameter
+    # and threshold using the comparator evaluates to true
     mod_graph.conditions = ConditionSet(
-        termination={"environment_state_update": cond_term},
+        termination={
+            "environment_state_update": cond_term
+        },  # the graph terminates when the parameter >= 5 (Executing 5 times in this example)
     )
+    mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
+    mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
     print_summary(mod_graph)
     import sys
 
