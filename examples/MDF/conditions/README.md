@@ -29,5 +29,3 @@ Another simple example with 3 [Nodes](https://github.com/ModECI/MDF/tree/conditi
 A simple 2 [Nodes](https://github.com/ModECI/MDF/tree/conditions_example/docs#node) graph satisfying the [ Time Interval Conditions](https://kmantel.github.io/graph-scheduler/Condition.html#graph_scheduler.condition.TimeInterval)
 
 <p align="center"><img src="" alt="time interval"/></p>
-
-
