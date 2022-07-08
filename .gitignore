@@ -1,6 +1,5 @@
 # No BSON in the repo
 *.bson
-
 /abc_conditions
 examples/ONNX/data
 examples/ONNX/*.onnx
