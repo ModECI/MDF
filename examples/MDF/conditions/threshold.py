@@ -57,7 +57,7 @@ def main():
     )
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
-    #print_summary(mod_graph)
+    # print_summary(mod_graph)
     import sys
 
     if "-run" in sys.argv:
