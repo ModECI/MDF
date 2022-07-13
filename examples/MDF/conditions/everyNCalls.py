@@ -36,7 +36,7 @@ def main():
 
         return n
 
-    a = create_simple_node(mod_graph, "A", sender=None)
+    a = create_simple_node(mod_graph, "A", sender= None)
     a.parameters.append(Parameter(id="param_A", value="param_A + 1"))
 
     b = create_simple_node(mod_graph, "B", a)
@@ -48,10 +48,10 @@ def main():
 
     cond_a = Condition(type="Always")  # A is always executed
     cond_b = Condition(
-        type="EveryNCalls", dependency=a.id, n=2
+        type="EveryNCalls", dependencies = a.id, n=2
     )  # B executes every 2 calls of A
     cond_c = Condition(
-        type="EveryNCalls", dependency=b.id, n=3
+        type="EveryNCalls", dependencies = b.id, n=3
     )  # C executes every 3 calls of B
 
     mod_graph.conditions = ConditionSet(
@@ -61,7 +61,6 @@ def main():
     )
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
-
     print_summary(mod_graph)
     import sys
 

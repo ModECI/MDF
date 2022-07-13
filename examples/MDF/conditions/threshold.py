@@ -27,7 +27,7 @@ def main():
         n = Node(id=id_)
         graph.nodes.append(n)
 
-        ip1 = InputPort(id="input_port1")
+        ip1 = InputPort(id="input_port1", shape="(1,)")
         n.input_ports.append(ip1)
 
         n.output_ports.append(OutputPort(id="output_1", value="param_A"))
@@ -57,7 +57,7 @@ def main():
     )
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
-    print_summary(mod_graph)
+    #print_summary(mod_graph)
     import sys
 
     if "-run" in sys.argv:
@@ -80,7 +80,7 @@ def main():
             output_format="png",
             view_on_render=False,
             level=3,
-            filename_root="abc_conditions",
+            filename_root="threshold",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 

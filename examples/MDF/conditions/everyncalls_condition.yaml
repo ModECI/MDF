@@ -1,6 +1,6 @@
 everyncalls_condition:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.1
+    generating_application: Python modeci-mdf v0.4.1.1
     graphs:
         everyncalls_example:
             nodes:
@@ -56,10 +56,10 @@ everyncalls_condition:
                     B:
                         type: EveryNCalls
                         kwargs:
-                            dependency: A
+                            dependencies: A
                             n: 2
                     C:
                         type: EveryNCalls
                         kwargs:
-                            dependency: B
+                            dependencies: B
                             n: 3

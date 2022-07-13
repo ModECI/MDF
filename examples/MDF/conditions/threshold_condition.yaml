@@ -6,7 +6,9 @@ threshold_condition:
             nodes:
                 A:
                     input_ports:
-                        input_port1: {}
+                        input_port1:
+                            shape:
+                            - 1
                     parameters:
                         param_A:
                             value: param_A + 1
