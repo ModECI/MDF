@@ -26,6 +26,6 @@ Another simple example with 3 [Nodes](../../../docs/README.md#node).
 
 [Python source](timeInterval.py) | [JSON](timeinterval_condition.json) | [YAML](timeinterval_condition.yaml)
 
-A simple 2 [Nodes](h../../../docs/README.md#node) graph satisfying the [ Time Interval Conditions](https://kmantel.github.io/graph-scheduler/Condition.html#graph_scheduler.condition.TimeInterval)
+A simple 2 [Nodes](../../../docs/README.md#node) graph satisfying the [ Time Interval Conditions](https://kmantel.github.io/graph-scheduler/Condition.html#graph_scheduler.condition.TimeInterval)
 
 <p align="center"><img src="images/timeinterval.png" alt="time interval"/></p>
