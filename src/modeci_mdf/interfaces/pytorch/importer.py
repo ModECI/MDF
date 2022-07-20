@@ -200,6 +200,9 @@ class PortMapper:
 
         new_name = str(id).replace(".", "_")
 
+        # Remove :: from ids, these cause issues with parsing in the execution engine
+        new_name = new_name.replace("::", "_")
+
         # If the first character is a digit, precede with an underscore so this can never be interpreted
         # as number down the line.
         if new_name[0].isdigit():
@@ -405,7 +408,6 @@ def translate_graph(
 def pytorch_to_mdf(
     model: Union[Callable, torch.nn.Module, torch.ScriptFunction, torch.ScriptModule],
     args: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
-    example_outputs: Union[None, torch.Tensor, Tuple[torch.Tensor]] = None,
     trace: bool = False,
     use_onnx_ops: bool = True,
 ) -> Union[Model, Graph]:
@@ -419,7 +421,6 @@ def pytorch_to_mdf(
         model: The model to translate into MDF.
         args: The input arguments for this model. If a nn.Module is passed then the model will be traced with these
             inputs. If a ScriptModule is passed, they are still needed to deterimine input shapes.
-        example_outputs: Example outputs from the model for determing output shapes.
         trace: Force the use of tracing to compile the model. The default is to use torch.jit.script
         use_onnx_ops: Use ONNX ops when possible, fallback to ATEN ops when not available. Default is True. If False,
             use only ATEN ops.
@@ -463,7 +464,6 @@ def pytorch_to_mdf(
     graph, params_dict, torch_out = _model_to_graph(
         model=jit_model if graph else model,
         args=args,
-        example_outputs=example_outputs,
         do_constant_folding=True,
         training=TrainingMode.EVAL,
         operator_export_type=operator_export_type,
@@ -509,5 +509,4 @@ if __name__ == "__main__":
     mdf_model, param_dict = pytorch_to_mdf(
         simple,
         args=(torch.tensor(1.0), torch.tensor(2.0)),
-        example_outputs=torch.tensor(0.0),
     )

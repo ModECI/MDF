@@ -37,7 +37,7 @@ COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
 COLOR_PARAM = "#1666ff"
 COLOR_INPUT = "#188855"
-COLOR_FUNC = "#111199"
+COLOR_FUNC = "#441199"
 COLOR_OUTPUT = "#cc3355"
 COLOR_COND = "#ffa1d"
 
@@ -69,7 +69,7 @@ def format_input(s):
     return f'<font color="{COLOR_INPUT}">{s}</font>'
 
 
-def format_func(s):
+def format_function(s):
     return f'<font color="{COLOR_FUNC}">{s}</font>'
 
 
@@ -187,7 +187,7 @@ def mdf_to_graphviz(
                     info += "<tr><td>{}{} {}</td></tr>".format(
                         format_label("IN"),
                         format_input(ip.id),
-                        "(shape: %s)" % ip.shape
+                        "(shape: %s)" % str(ip.shape)
                         if level >= LEVEL_2 and ip.shape is not None
                         else "",
                     )
@@ -254,28 +254,46 @@ def mdf_to_graphviz(
 
             if node.functions and len(node.functions) > 0:
                 for f in node.functions:
-                    argstr = (
-                        ", ".join([match_in_expr(str(f.args[a]), node) for a in f.args])
-                        if f.args
-                        else "???"
-                    )
-                    info += "<tr><td>{}{} = {}({})</td></tr>".format(
-                        format_label("FUNC"),
-                        format_func(f.id),
-                        format_standard_func(f.function),
-                        argstr,
-                    )
-                    if level >= LEVEL_3:
-                        func_info = mdf_functions[f.function]
-                        info += '<tr><td colspan="2">%s</td></tr>' % (
-                            format_standard_func_long(
-                                "%s(%s) = %s"
-                                % (
-                                    f.function,
-                                    ", ".join([a for a in f.args]),
-                                    func_info["expression_string"],
+                    if f.function is not None:
+                        argstr = (
+                            ", ".join(
+                                [match_in_expr(str(f.args[a]), node) for a in f.args]
+                            )
+                            if f.args
+                            else "???"
+                        )
+                        info += "<tr><td>{}{} = {}({})</td></tr>".format(
+                            format_label("FUNC"),
+                            format_function(f.id),
+                            format_standard_func(f.function),
+                            argstr,
+                        )
+                        if level >= LEVEL_3:
+                            func_info = mdf_functions[f.function]
+                            info += '<tr><td colspan="2">%s</td></tr>' % (
+                                format_standard_func_long(
+                                    "%s(%s) = %s"
+                                    % (
+                                        f.function,
+                                        ", ".join([a for a in f.args]),
+                                        func_info["expression_string"],
+                                    )
                                 )
                             )
+                    elif f.value is not None:
+                        argstr = "("
+                        if f.args:
+                            for a in f.args:
+                                argstr += "{}={}, ".format(a, f.args[a])
+                        else:
+                            argstr += " - no args -  "
+                        argstr = argstr[:-2] + ")"
+
+                        info += "<tr><td>{}{} = {} {}</td></tr>".format(
+                            format_label("FUNC"),
+                            format_function(f.id),
+                            format_standard_func(f.value),
+                            argstr,
                         )
             if mdf_graph.conditions and mdf_graph.conditions.node_specific:
                 ns = mdf_graph.conditions.node_specific[node.id]

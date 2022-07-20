@@ -22,6 +22,7 @@ extras = {
         "sphinx-autoapi",
         "pytorch-sphinx-theme==0.0.19",
         "sphinxcontrib-versioning",
+        "Jinja2<3.1",
     ],
     "dev": [],
 }

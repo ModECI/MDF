@@ -11,12 +11,16 @@ of the :class:`EvaluableGraph` class. The external library `graph-scheduler
 conditional constraints.
 
 """
+import copy
 import functools
 import inspect
+import itertools
 import os
 import re
 import sys
 import math
+
+import attr
 import sympy
 import numpy as np
 
@@ -31,7 +35,7 @@ from modelspec.utils import _params_info, _val_info
 from modelspec.utils import FORMAT_NUMPY
 
 from collections import OrderedDict
-from typing import Union, List, Dict, Optional, Any
+from typing import Union, List, Dict, Optional, Any, Tuple
 from modeci_mdf.mdf import (
     Function,
     Graph,
@@ -50,6 +54,9 @@ import modeci_mdf.functions.actr as actr_funcs
 FORMAT_DEFAULT = FORMAT_NUMPY
 
 KNOWN_PARAMETERS = ["constant"]
+
+
+time_scale_str_regex = r"(TimeScale)?\.(.*)"
 
 
 def evaluate_expr(
@@ -324,23 +331,21 @@ class EvaluableFunction:
                 "    Evaluating %s with %s, i.e. [%s]"
                 % (self.function, _params_info(func_params), expr)
             )
-        if self.function.function:
-            for f in mdf_functions:
-                if f == self.function.function:
-                    for arg in self.function.args.keys():
-                        func_params[arg] = evaluate_expr(
-                            self.function.args[arg],
-                            func_params,
-                            verbose=False,
-                            array_format=array_format,
+
+        if self.function.args is not None:
+            for arg in self.function.args:
+                func_params[arg] = evaluate_expr(
+                    self.function.args[arg],
+                    func_params,
+                    verbose=False,
+                    array_format=array_format,
+                )
+                if self.verbose:
+                    print(
+                        "      Arg: {} became: {}".format(
+                            arg, _val_info(func_params[arg])
                         )
-                        if self.verbose:
-                            print(
-                                "      Arg: {} became: {}".format(
-                                    arg, _val_info(func_params[arg])
-                                )
-                            )
-                    break
+                    )
 
         # If this is an ONNX operation, evaluate it without modelspec.
 
@@ -428,7 +433,7 @@ class EvaluableParameter:
             ):
                 if self.parameter.is_stateful():
                     if self.verbose:
-                        print(f"    Initial eval of <{self.parameter}>  ")
+                        print(f"    Initial eval of <{self.parameter.summary()}>  ")
 
                     if self.parameter.default_initial_value is not None:
                         return evaluate_expr(
@@ -480,7 +485,7 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluating {} with {} ".format(
-                    self.parameter, _params_info(parameters)
+                    self.parameter.summary(), _params_info(parameters)
                 )
             )
 
@@ -602,7 +607,11 @@ class EvaluableParameter:
         if self.verbose:
             print(
                 "    Evaluated %s with %s \n       =\t%s"
-                % (self.parameter, _params_info(parameters), _val_info(self.curr_value))
+                % (
+                    self.parameter.summary(),
+                    _params_info(parameters),
+                    _val_info(self.curr_value),
+                )
             )
 
         return self.curr_value
@@ -619,6 +628,7 @@ class EvaluableOutput:
     def __init__(self, output_port: OutputPort, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.output_port = output_port
+        self.curr_value = None
 
     def evaluate(
         self,
@@ -925,19 +935,29 @@ class EvaluableNode:
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)
 
-    def get_output(self, id: str) -> Union[int, np.ndarray]:
+    def get_output(self, id: str = None) -> Union[int, np.ndarray, Tuple]:
         """Get value at output port for given output port's id
 
         Args:
-            id: Unique identifier of the output port
+            id: Unique identifier of the output port. If None, return a tuple for all output ports.
 
         Returns:
-            value at the output port
+            value at the output port. If id is None, return all outputs as a tuple. If there is only
+            one output, return just its value.
 
         """
-        for rop in self.evaluable_outputs:
-            if rop == id:
-                return self.evaluable_outputs[rop].curr_value
+        if id is not None:
+            for rop in self.evaluable_outputs:
+                if rop == id:
+                    return self.evaluable_outputs[rop].curr_value
+        else:
+            outputs = tuple(
+                self.evaluable_outputs[rop].curr_value for rop in self.evaluable_outputs
+            )
+            if len(outputs) == 1:
+                return outputs[0]
+            else:
+                return outputs
 
 
 class EvaluableGraph:
@@ -956,7 +976,10 @@ class EvaluableGraph:
         self.graph = graph
         self.enodes = {}
         self.root_nodes = []
+        self.output_nodes = []
 
+        # Get the root (input nodes) of the graph. We will assume all are root nodes
+        # and then remove those that have edges to them.
         for node in graph.nodes:
             if self.verbose:
                 print("\n  Init node: %s" % node.id)
@@ -986,24 +1009,47 @@ class EvaluableGraph:
                 evaluated_nodes.append(edge.receiver)
 
         if self.graph.conditions is not None:
-            conditions = {
-                self.graph.get_node(node): self.parse_condition(cond)
-                for node, cond in self.graph.conditions.node_specific.items()
-            }
+            if self.graph.conditions.node_specific is None:
+                conditions = {}
+            else:
+                conditions = {
+                    self.graph.get_node(node): self.parse_condition(cond)
+                    for node, cond in self.graph.conditions.node_specific.items()
+                }
 
-            termination_conds = {
-                scale: self.parse_condition(cond)
-                for scale, cond in self.graph.conditions.termination.items()
-            }
+            termination_conds = {}
+            if self.graph.conditions.termination is not None:
+                for scale, cond in self.graph.conditions.termination.items():
+                    cond = self.parse_condition(cond)
+
+                    # check for TimeScale in form of enum or equivalent unambiguous strings
+                    try:
+                        scale = re.match(time_scale_str_regex, scale).groups()[1]
+                    except (AttributeError, IndexError, TypeError):
+                        pass
+
+                    try:
+                        termination_conds[graph_scheduler.TimeScale[scale]] = cond
+                    except KeyError:
+                        termination_conds[scale] = cond
         else:
             conditions = {}
             termination_conds = {}
-
         self.scheduler = graph_scheduler.Scheduler(
             graph=self.graph.dependency_dict,
             conditions=conditions,
             termination_conds=termination_conds,
         )
+
+        # We also need to get the output nodes
+        self.output_nodes = [
+            n
+            for n in self.graph.nodes
+            if n.id not in (e.sender for e in self.graph.edges)
+        ]
+
+        # Lets also get the corresponding EvaluableNode for outputs
+        self.output_enodes = [self.enodes[n.id] for n in self.output_nodes]
 
     def evaluate(
         self,
@@ -1067,7 +1113,9 @@ class EvaluableGraph:
                 )
 
         if self.verbose:
-            print("Trial terminated")
+            print("Order of execution of nodes\n")
+            print(list(self.scheduler.run()))
+            print("\n Trial terminated")
 
     def evaluate_edge(
         self,
@@ -1121,7 +1169,17 @@ class EvaluableGraph:
 
         """
 
-        def substitute_condition_arguments(condition, condition_type):
+        def get_custom_parameter_getter(eobj):
+            def getter(dependency, parameter):
+                res = eobj.curr_value
+                if res is None:
+                    return 0
+                else:
+                    return res
+
+            return getter
+
+        def update_condition_arguments(args, condition_type):
             # mdf format prefers the key name for all conditions that use it or
             # its value as an __init__ argument
             combined_condition_arguments = {"dependencies": "dependency"}
@@ -1133,8 +1191,50 @@ class EvaluableGraph:
                     and preferred not in sig.parameters
                     and actual in sig.parameters
                 ):
-                    condition.kwargs[actual] = condition.kwargs[preferred]
-                    del condition.kwargs[preferred]
+                    args[actual] = args[preferred]
+                    del args[preferred]
+
+            if "custom_parameter_getter" in sig.parameters:
+                try:
+                    dependency = args["dependency"]
+                    parameter = args["parameter"]
+                except KeyError as e:
+                    raise ValueError(
+                        "Threshold condition did not specify dependency or parameter"
+                    ) from e
+
+                # self is EvaluableGraph condition is running under,
+                enode = self.enodes[dependency.id]
+                evaluable_objects = [
+                    enode.evaluable_inputs,
+                    enode.evaluable_parameters,
+                    enode.evaluable_functions,
+                    enode.evaluable_outputs,
+                ]
+                valid_parameters = itertools.chain.from_iterable(
+                    [obj for obj in evaluable_objects]
+                )
+                args["custom_parameter_validator"] = (
+                    lambda dependency, parameter: parameter in valid_parameters
+                )
+                # assumes a unique parameter id among evaluable objects for
+                # dependency, or will resolve in favor of first with that id
+                for obj in evaluable_objects:
+                    try:
+                        obj = obj[parameter]
+                    except KeyError:
+                        pass
+                    else:
+                        args["custom_parameter_getter"] = get_custom_parameter_getter(
+                            obj
+                        )
+                        break
+                else:
+                    raise ValueError(
+                        f"No {parameter} evaluable object for {dependency}, options: {list(valid_parameters)}"
+                    )
+
+            return args
 
         # if specified as dict
         try:
@@ -1148,7 +1248,7 @@ class EvaluableGraph:
             pass
 
         cond_type = condition.type
-        cond_args = condition.kwargs
+        cond_args = copy.copy(condition.kwargs)
 
         try:
             typ = getattr(graph_scheduler.condition, cond_type)
@@ -1175,14 +1275,14 @@ class EvaluableGraph:
                     # value may be a string representing a TimeScale
                     cond_args[k] = getattr(
                         graph_scheduler.TimeScale,
-                        re.match(r"TimeScale\.(.*)", v).groups()[0],
+                        re.match(time_scale_str_regex, v).groups()[1],
                     )
                 except (AttributeError, IndexError, TypeError):
                     pass
             else:
                 cond_args[k] = new_v
 
-        substitute_condition_arguments(condition, typ)
+        cond_args = update_condition_arguments(cond_args, typ)
 
         try:
             return typ(**cond_args)
