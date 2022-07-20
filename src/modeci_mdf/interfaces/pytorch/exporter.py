@@ -468,7 +468,8 @@ def mdf_to_pytorch(
     mdf_model: "Model", model_input: str, eval_models: bool, version: str
 ):
     """Function loads and returns a pytorch model for all models specified in an
-    mdf file
+    mdf file.
+
     Args:
         mdf_model: model in MDF format
         eval_models: Set Evaluation of model to True or False
