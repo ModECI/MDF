@@ -40,6 +40,7 @@ COLOR_INPUT = "#188855"
 COLOR_FUNC = "#441199"
 COLOR_OUTPUT = "#cc3355"
 COLOR_COND = "#ffa1d"
+COLOR_TERM = "#2017CC"
 
 
 def format_label(s):
@@ -87,6 +88,10 @@ def format_output(s):
 
 def format_condition(s):
     return f'<font color="{COLOR_COND}">{s}</font>'
+
+
+def format_term_condition(s):
+    return f'<font color="{COLOR_TERM}">{s}</font>'
 
 
 def match_in_expr(expr, node):
@@ -148,6 +153,40 @@ def mdf_to_graphviz(
         engine=engine,
         format=output_format,
     )
+    # graph termination condition(s) added globally
+    if mdf_graph.conditions and mdf_graph.conditions.termination:
+        color = COLOR_MAIN
+        penwidth = "2"
+        graph.attr(
+            "node",
+            color="#2017CC",
+            style="rounded",
+            shape="box",
+            fontcolor=COLOR_MAIN,
+            penwidth=penwidth,
+        )
+        info = '<table border="0" cellborder="0">'
+        info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (
+            "Applies to All Nodes in the Graph"
+        )
+        nt = mdf_graph.conditions.termination["environment_state_update"]
+        args = nt.kwargs
+        if nt.type == "Threshold":
+            info += "<tr><td>{}{}= Satisfied when the comparison between {} and {} evaluates to true".format(
+                format_label(" "),
+                format_term_condition("termination condition"),
+                args.get("parameter"),
+                args.get("threshold"),
+            )
+            info += "</td></tr>"
+        if nt.type == "And":
+            info += "<tr><td>{}{}= Satisfied when all of the conditions in the Graph are satisfied".format(
+                format_label(" "),
+                format_term_condition("termination condition"),
+            )
+            info += "</td></tr>"
+        info += "</table>"
+        graph.node("termination condition", label="<%s>" % info)
 
     for node in mdf_graph.nodes:
         print("    Node: %s" % node.id)
@@ -298,9 +337,7 @@ def mdf_to_graphviz(
 
             # node specific conditions
 
-            if (
-                mdf_graph.conditions and mdf_graph.conditions.node_specific != None
-            ):  # come to this ...
+            if mdf_graph.conditions and mdf_graph.conditions.node_specific != None:
                 ns = mdf_graph.conditions.node_specific[node.id]
                 args = ns.kwargs
                 if ns.type == "EveryNCalls":
@@ -346,16 +383,6 @@ def mdf_to_graphviz(
                         ns.type,
                     )
                     info += "</td></tr>"
-                """ if args:
-                    for con in args:
-                        nn = format_num(args[con])
-                        breaker = "<br/>"
-                        info += "{} = {}{}".format(
-                            format_condition(con),
-                            nn,
-                            breaker if len(info.split(breaker)[-1]) > 500 else ";    ",
-                        )
-                    info = info[:-5] """
 
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
@@ -373,23 +400,8 @@ def mdf_to_graphviz(
         info += "</table>"
 
         graph.node(node.id, label="<%s>" % info)
+        graph.edge("termination condition", node.id, style="invis")
 
-    # termination condition added to
-    if mdf_graph.conditions and mdf_graph.conditions.termination:
-        nt = mdf_graph.conditions.termination["environment_state_update"]
-        args = nt.kwargs
-        print(args)
-        if nt.type == "Threshold":
-            info += "<tr><td>{}{}= {} condition satisfied when the comparison between {} and {} evaluates to true".format(
-                format_label(" "),
-                format_condition("condition"),
-                nt.type,  # threshold
-                args.get("parameter"),
-                args.get("threshold"),
-            )
-            info += "</td></tr>"
-    # how to add termination condition to graph
-    mdf_graph.conditions()
     for edge in mdf_graph.edges:
         print(f"    Edge: {edge.id} connects {edge.sender} to {edge.receiver}")
 
