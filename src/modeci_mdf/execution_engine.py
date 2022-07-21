@@ -137,14 +137,22 @@ def evaluate_onnx_expr(
     # kwargs. Lets construct this.
     kwargs_for_onnx = {}
     for kw, arg_expr in base_parameters.items():
+        if isinstance(arg_expr, str):
+            arg_expr_list = get_required_variables_from_expression(arg_expr)
+            for a in arg_expr_list:
+                try:
+                    kwargs_for_onnx[a] = evaluated_parameters[a]
+                except KeyError:
+                    pass
 
-        # If this arg is a list of args, we are dealing with a variadic argument. Expand these
-        if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
-            # Use the Python interpreter to parse this into a List[str]
-            arg_expr_list = parse_str_as_list(arg_expr[1:-1])
-            kwargs_for_onnx.update({a: evaluated_parameters[a] for a in arg_expr_list})
-        else:
-            kwargs_for_onnx[kw] = evaluated_parameters[kw]
+            try:
+                if arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # matches previous behavior
+                    continue
+            except IndexError:
+                pass
+
+        kwargs_for_onnx[kw] = evaluated_parameters[kw]
 
     kwargs_for_onnx = {
         k: v
@@ -206,72 +214,6 @@ def evaluate_onnx_expr(
         pass
 
     return result
-
-
-def parse_str_as_list(s: str) -> list:
-    """Produces a list from its string representation. Runs `eval` on
-    non-list elements within
-
-    Args:
-        s (str): a string representing a list
-
-    Returns:
-        list: a list containing elements from **s**
-    """
-
-    def try_eval_str(t):
-        try:
-            return eval(t)
-        except (NameError, SyntaxError):
-            return t
-
-    def _parse_str_as_list(t):
-        res = []
-        i = 0
-        j = 0
-        depth = 0
-
-        t = t.replace(" ", "")
-
-        while j < len(t):
-            if t[j] == "[":
-                depth += 1
-
-            if t[j] == "]":
-                depth -= 1
-
-                if depth == 0:
-                    res.append(_parse_str_as_list(t[i + 1 : j]))
-                    # also passes this check if at end of string
-                    if t[j : j + 1] not in ",]":
-                        raise ValueError(f"Malformed input at index {j} of {t} {t[j]}")
-                    i = j + 1
-
-            if t[j] == ",":
-                if depth == 0:
-                    if j > i:
-                        res.append(try_eval_str(t[i:j]))
-                    i = j + 1
-
-            j = j + 1
-
-        if depth > 0:
-            raise ValueError(f"Unmatched opening bracket in {t}")
-        elif depth < 0:
-            raise ValueError(f"Unmatched closing bracket in {t}")
-
-        if j > i:
-            res.append(try_eval_str(t[i:j]))
-
-        return res
-
-    res = _parse_str_as_list(s)
-
-    # avoid adding extra unnecessary list
-    if len(res) == 1:
-        return res[0]
-    else:
-        return res
 
 
 def get_required_variables_from_expression(expr: str) -> List[str]:
