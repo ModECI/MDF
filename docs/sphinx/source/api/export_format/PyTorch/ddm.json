@@ -1,0 +1,529 @@
+{
+    "function": {
+        "format": "ModECI MDF v0.2",
+        "generating_application": "Python modeci-mdf v0.2.1",
+        "graphs": {
+            "functionGraph": {
+                "nodes": {
+                    "Constant_7": {
+                        "parameters": {
+                            "value": {
+                                "value": 9223372036854775807
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_7": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Constant_8": {
+                        "parameters": {
+                            "value": {
+                                "value": 0.0
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_8": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Abs_9": {
+                        "input_ports": {
+                            "input1": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Abs_1": {
+                                "function": "onnx::Abs",
+                                "args": {
+                                    "X": "input1"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_9": {
+                                "value": "onnx::Abs_1"
+                            }
+                        }
+                    },
+                    "Less_10": {
+                        "input_ports": {
+                            "_9": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            },
+                            "input4": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Less_1": {
+                                "function": "onnx::Less",
+                                "args": {
+                                    "A": "_9",
+                                    "B": "input4"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_10": {
+                                "value": "onnx::Less_1"
+                            }
+                        }
+                    },
+                    "Cast_11": {
+                        "input_ports": {
+                            "_10": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "to": {
+                                "value": 9
+                            },
+                            "onnx::Cast_1": {
+                                "function": "onnx::Cast",
+                                "args": {
+                                    "input": "_10"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_11": {
+                                "value": "onnx::Cast_1"
+                            }
+                        }
+                    },
+                    "LoopSubgraphLoop_12_13": {
+                        "nodes": {
+                            "Mul_18": {
+                                "input_ports": {
+                                    "input2": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    },
+                                    "input6": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "onnx::Mul_1": {
+                                        "function": "onnx::Mul",
+                                        "args": {
+                                            "A": "input2",
+                                            "B": "input6"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_18": {
+                                        "value": "onnx::Mul_1"
+                                    }
+                                }
+                            },
+                            "ATen_19": {
+                                "input_ports": {
+                                    "_18": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    },
+                                    "input5": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "arg2": {
+                                        "value": null
+                                    },
+                                    "aten::ATen_1": {
+                                        "function": "aten::ATen",
+                                        "args": {
+                                            "arguments": [
+                                                "arg0",
+                                                "arg1",
+                                                "arg2"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_19": {
+                                        "value": "aten::ATen_1"
+                                    }
+                                }
+                            },
+                            "Sqrt_20": {
+                                "input_ports": {
+                                    "input6": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "onnx::Sqrt_1": {
+                                        "function": "onnx::Sqrt",
+                                        "args": {
+                                            "X": "input6"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_20": {
+                                        "value": "onnx::Sqrt_1"
+                                    }
+                                }
+                            },
+                            "Mul_21": {
+                                "input_ports": {
+                                    "_19": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    },
+                                    "_20": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "onnx::Mul_1": {
+                                        "function": "onnx::Mul",
+                                        "args": {
+                                            "A": "_19",
+                                            "B": "_20"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_21": {
+                                        "value": "onnx::Mul_1"
+                                    }
+                                }
+                            },
+                            "Add_22": {
+                                "input_ports": {
+                                    "_17": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    },
+                                    "_21": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "onnx::Add_1": {
+                                        "function": "onnx::Add",
+                                        "args": {
+                                            "A": "_17",
+                                            "B": "_21"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_22": {
+                                        "value": "onnx::Add_1"
+                                    }
+                                }
+                            },
+                            "Constant_23": {
+                                "parameters": {
+                                    "value": {
+                                        "value": 1.0
+                                    },
+                                    "onnx::Constant_1": {
+                                        "function": "onnx::Constant",
+                                        "args": {}
+                                    }
+                                },
+                                "output_ports": {
+                                    "_23": {
+                                        "value": "onnx::Constant_1"
+                                    }
+                                }
+                            },
+                            "Add_24": {
+                                "input_ports": {
+                                    "_16": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    },
+                                    "_23": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "onnx::Add_1": {
+                                        "function": "onnx::Add",
+                                        "args": {
+                                            "A": "_16",
+                                            "B": "_23"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_24": {
+                                        "value": "onnx::Add_1"
+                                    }
+                                }
+                            },
+                            "Abs_25": {
+                                "input_ports": {
+                                    "_22": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "onnx::Abs_1": {
+                                        "function": "onnx::Abs",
+                                        "args": {
+                                            "X": "_22"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_25": {
+                                        "value": "onnx::Abs_1"
+                                    }
+                                }
+                            },
+                            "Less_26": {
+                                "input_ports": {
+                                    "_25": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    },
+                                    "input4": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "onnx::Less_1": {
+                                        "function": "onnx::Less",
+                                        "args": {
+                                            "A": "_25",
+                                            "B": "input4"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_26": {
+                                        "value": "onnx::Less_1"
+                                    }
+                                }
+                            },
+                            "Cast_27": {
+                                "input_ports": {
+                                    "_26": {
+                                        "shape": "(?)",
+                                        "type": "Tensor"
+                                    }
+                                },
+                                "parameters": {
+                                    "to": {
+                                        "value": 9
+                                    },
+                                    "onnx::Cast_1": {
+                                        "function": "onnx::Cast",
+                                        "args": {
+                                            "input": "_26"
+                                        }
+                                    }
+                                },
+                                "output_ports": {
+                                    "_27": {
+                                        "value": "onnx::Cast_1"
+                                    }
+                                }
+                            }
+                        },
+                        "edges": {
+                            "Mul_18_ATen_19": {
+                                "sender": "Mul_18",
+                                "receiver": "ATen_19",
+                                "sender_port": "_18",
+                                "receiver_port": "_18"
+                            },
+                            "ATen_19_Mul_21": {
+                                "sender": "ATen_19",
+                                "receiver": "Mul_21",
+                                "sender_port": "_19",
+                                "receiver_port": "_19"
+                            },
+                            "Sqrt_20_Mul_21": {
+                                "sender": "Sqrt_20",
+                                "receiver": "Mul_21",
+                                "sender_port": "_20",
+                                "receiver_port": "_20"
+                            },
+                            "Mul_21_Add_22": {
+                                "sender": "Mul_21",
+                                "receiver": "Add_22",
+                                "sender_port": "_21",
+                                "receiver_port": "_21"
+                            },
+                            "Add_22_Abs_25": {
+                                "sender": "Add_22",
+                                "receiver": "Abs_25",
+                                "sender_port": "_22",
+                                "receiver_port": "_22"
+                            },
+                            "Constant_23_Add_24": {
+                                "sender": "Constant_23",
+                                "receiver": "Add_24",
+                                "sender_port": "_23",
+                                "receiver_port": "_23"
+                            },
+                            "Abs_25_Less_26": {
+                                "sender": "Abs_25",
+                                "receiver": "Less_26",
+                                "sender_port": "_25",
+                                "receiver_port": "_25"
+                            },
+                            "Less_26_Cast_27": {
+                                "sender": "Less_26",
+                                "receiver": "Cast_27",
+                                "sender_port": "_26",
+                                "receiver_port": "_26"
+                            }
+                        }
+                    },
+                    "Mul_28": {
+                        "input_ports": {
+                            "_12": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            },
+                            "input6": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Mul_1": {
+                                "function": "onnx::Mul",
+                                "args": {
+                                    "A": "_12",
+                                    "B": "input6"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_28": {
+                                "value": "onnx::Mul_1"
+                            }
+                        }
+                    },
+                    "Add_29": {
+                        "input_ports": {
+                            "input3": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            },
+                            "_28": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Add_1": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "input3",
+                                    "B": "_28"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_29": {
+                                "value": "onnx::Add_1"
+                            }
+                        }
+                    },
+                    "GreaterOrEqual_30": {
+                        "input_ports": {
+                            "_13": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            },
+                            "input4": {
+                                "shape": "(?)",
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::GreaterOrEqual_1": {
+                                "function": "onnx::GreaterOrEqual",
+                                "args": {
+                                    "A": "_13",
+                                    "B": "input4"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_30": {
+                                "value": "onnx::GreaterOrEqual_1"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Constant_7_Loop_12_13": {
+                        "sender": "Constant_7",
+                        "receiver": "Loop_12_13",
+                        "sender_port": "_7",
+                        "receiver_port": "_7"
+                    },
+                    "Constant_8_Loop_12_13": {
+                        "sender": "Constant_8",
+                        "receiver": "Loop_12_13",
+                        "sender_port": "_8",
+                        "receiver_port": "_8"
+                    },
+                    "Abs_9_Less_10": {
+                        "sender": "Abs_9",
+                        "receiver": "Less_10",
+                        "sender_port": "_9",
+                        "receiver_port": "_9"
+                    },
+                    "Less_10_Cast_11": {
+                        "sender": "Less_10",
+                        "receiver": "Cast_11",
+                        "sender_port": "_10",
+                        "receiver_port": "_10"
+                    },
+                    "Cast_11_Loop_12_13": {
+                        "sender": "Cast_11",
+                        "receiver": "Loop_12_13",
+                        "sender_port": "_11",
+                        "receiver_port": "_11"
+                    },
+                    "Mul_28_Add_29": {
+                        "sender": "Mul_28",
+                        "receiver": "Add_29",
+                        "sender_port": "_28",
+                        "receiver_port": "_28"
+                    }
+                }
+            }
+        }
+    }
+}

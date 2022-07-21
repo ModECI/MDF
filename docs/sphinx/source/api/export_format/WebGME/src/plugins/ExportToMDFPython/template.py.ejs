@@ -1,0 +1,11 @@
+from neuromllite.utils import _parse_element
+from modeci_mdf.mdf import Model
+from modeci_mdf.simple_scheduler import EvaluableGraph
+import json
+
+data = json.loads("""<%= JSON.stringify(mdfJson) %>""")
+model = Model()
+model = _parse_element(data, model)
+graph = model.graphs[0]
+egraph = EvaluableGraph(graph, False)
+result = graph  # DeepForge requires the concept of interest to be available as "result"

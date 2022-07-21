@@ -1,0 +1,166 @@
+{
+    "ONNX Model": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.1.1",
+        "graphs": {
+            "torch-jit-export": {
+                "nodes": {
+                    "Add_1": {
+                        "input_ports": {
+                            "input": {
+                                "shape": [
+                                    2,
+                                    3
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "B": {
+                                "value": 1.0
+                            },
+                            "Add_1": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "input",
+                                    "B": "B"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Loop_3": {
+                                "value": "Add_1"
+                            }
+                        }
+                    },
+                    "Loop_3": {
+                        "input_ports": {
+                            "B_loop_count": {
+                                "shape": [
+                                    1
+                                ]
+                            },
+                            "onnx_Loop_3": {
+                                "shape": [
+                                    2,
+                                    3
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "body": {
+                                "value": {
+                                    "graph_torch-jit-export1": {
+                                        "id": "torch-jit-export1",
+                                        "nodes": {
+                                            "Div_5": {
+                                                "input_ports": {
+                                                    "x_11": {
+                                                        "shape": [
+                                                            2,
+                                                            3
+                                                        ]
+                                                    }
+                                                },
+                                                "parameters": {
+                                                    "B": {
+                                                        "value": 10.0
+                                                    },
+                                                    "Div_5": {
+                                                        "function": "onnx::Div",
+                                                        "args": {
+                                                            "A": "x_11",
+                                                            "B": "B"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "x": {
+                                                        "value": "Div_5"
+                                                    }
+                                                }
+                                            },
+                                            "Identity_6": {
+                                                "parameters": {
+                                                    "input": {
+                                                        "value": true
+                                                    },
+                                                    "Identity_6": {
+                                                        "function": "onnx::Identity",
+                                                        "args": {
+                                                            "input": "input"
+                                                        }
+                                                    }
+                                                },
+                                                "output_ports": {
+                                                    "_11": {
+                                                        "value": "Identity_6"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "cond": {
+                                "value": true
+                            },
+                            "Loop_3": {
+                                "function": "onnx::Loop",
+                                "args": {
+                                    "M": "B_loop_count",
+                                    "cond": "cond",
+                                    "v_initial": "onnx_Loop_3"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "x_3": {
+                                "value": "Loop_3"
+                            }
+                        }
+                    },
+                    "Mul_8": {
+                        "input_ports": {
+                            "x_3": {
+                                "shape": [
+                                    1
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "B": {
+                                "value": 100.0
+                            },
+                            "Mul_8": {
+                                "function": "onnx::Mul",
+                                "args": {
+                                    "A": "x_3",
+                                    "B": "B"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_13": {
+                                "value": "Mul_8"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Add_1.onnx_Loop_3_Loop_3.onnx_Loop_3": {
+                        "sender": "Add_1",
+                        "receiver": "Loop_3",
+                        "sender_port": "onnx_Loop_3",
+                        "receiver_port": "onnx_Loop_3"
+                    },
+                    "Loop_3.x_3_Mul_8.x_3": {
+                        "sender": "Loop_3",
+                        "receiver": "Mul_8",
+                        "sender_port": "x_3",
+                        "receiver_port": "x_3"
+                    }
+                }
+            }
+        }
+    }
+}

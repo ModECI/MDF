@@ -1,0 +1,72 @@
+{
+    "FN": {
+        "version": "NeuroMLlite v0.5.1",
+        "notes": "FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS",
+        "parameters": {
+            "initial_w": 0.0,
+            "initial_v": -1,
+            "a_v": -0.3333333333333333,
+            "b_v": 0.0,
+            "c_v": 1.0,
+            "d_v": 1,
+            "e_v": -1.0,
+            "f_v": 1.0,
+            "time_constant_v": 1.0,
+            "a_w": 1.0,
+            "b_w": -0.8,
+            "c_w": 0.7,
+            "time_constant_w": 12.5,
+            "threshold": -1.0,
+            "mode": 1.0,
+            "uncorrelated_activity": 0.0,
+            "Iext": 0
+        },
+        "cells": {
+            "fn": {
+                "parameters": {
+                    "initial_w": "initial_w",
+                    "initial_v": "initial_v",
+                    "a_v": "a_v",
+                    "b_v": "b_v",
+                    "c_v": "c_v",
+                    "d_v": "d_v",
+                    "e_v": "e_v",
+                    "f_v": "f_v",
+                    "time_constant_v": "time_constant_v",
+                    "a_w": "a_w",
+                    "b_w": "b_w",
+                    "c_w": "c_w",
+                    "time_constant_w": "time_constant_w",
+                    "threshold": "threshold",
+                    "mode": "mode",
+                    "uncorrelated_activity": "uncorrelated_activity",
+                    "Iext": "Iext"
+                },
+                "lems_source_file": "FN_Definitions.xml"
+            }
+        },
+        "regions": {
+            "region1": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "width": 1000.0,
+                "height": 100.0,
+                "depth": 1000.0
+            }
+        },
+        "populations": {
+            "FNpop": {
+                "size": "1",
+                "component": "fn",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                },
+                "random_layout": {
+                    "region": "region1"
+                }
+            }
+        }
+    }
+}

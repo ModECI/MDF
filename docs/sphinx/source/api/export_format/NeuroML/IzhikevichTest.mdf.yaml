@@ -1,0 +1,66 @@
+IzhikevichTest:
+    format: ModECI MDF v0.3
+    graphs:
+        IzhikevichTest:
+            notes: Example Izhikevich
+            nodes:
+                izhPop_0:
+                    parameters:
+                        v0:
+                            value: -0.06
+                        C:
+                            value: 1.0e-10
+                        k:
+                            value: 7.0e-07
+                        vr:
+                            value: -0.06
+                        vt:
+                            value: -0.04
+                        vpeak:
+                            value: 0.035
+                        a:
+                            value: 30.0
+                        b:
+                            value: -2.0e-09
+                        c:
+                            value: -0.05
+                        d:
+                            value: 1.0e-10
+                        v:
+                            default_initial_value: v0
+                            conditions:
+                                condition_0:
+                                    test: v > vpeak
+                                    value: c
+                            time_derivative: iMemb / C
+                        u:
+                            default_initial_value: '0'
+                            conditions:
+                                condition_0:
+                                    test: v > vpeak
+                                    value: u + d
+                            time_derivative: a * (b * (v-vr) - u)
+                        iSyn:
+                            value: synapses_i
+                        iMemb:
+                            value: k * (v-vr) * (v-vt) + iSyn - u
+                    input_ports:
+                        synapses_i: {}
+                    output_ports:
+                        v:
+                            value: v
+                        u:
+                            value: u
+                        iMemb:
+                            value: iMemb
+                    notes: "Cell: [Cell(notes=None, id='izhCell', parameters={'v0':\
+                        \ 'v0', 'C': 'C', 'k': 'k', 'vr': 'vr', 'vt': 'vt', 'vpeak':\
+                        \ 'vpeak', 'a': 'a', 'b': 'b', 'c': 'c', 'd': 'd'}, neuroml2_source_file=None,\
+                        \ lems_source_file=None, neuroml2_cell='izhikevich2007Cell',\
+                        \ pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is\
+                        \ defined in None and in Lems is: Component, id: izhCell,\
+                        \ type: izhikevich2007Cell,\n   parameters: {'v0': '-60mV',\
+                        \ 'C': '100 pF', 'k': '0.7 nS_per_mV', 'vr': '-60 mV', 'vt':\
+                        \ '-40 mV', 'vpeak': '35 mV', 'a': '0.03 per_ms', 'b': '-2\
+                        \ nS', 'c': '-50 mV', 'd': '100 pA'}\n   parent: None\n"
+            edges: {}

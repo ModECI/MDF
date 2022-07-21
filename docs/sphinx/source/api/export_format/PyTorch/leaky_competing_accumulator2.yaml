@@ -1,0 +1,157 @@
+LeakyCompetingAccumulator:
+  format: ModECI MDF v0.1
+  generating_application: Python modeci-mdf v0.1.2
+
+  graphs:
+    lca_2:
+      nodes:
+        input_node1:
+          input_ports:
+            input:
+              shape: (1,)
+          output_ports:
+            out_port:
+              value: input
+
+        input_node2:
+          input_ports:
+            input:
+              shape: (1,)
+          output_ports:
+            out_port:
+              value: input
+
+        accumulator_node1:
+          parameters:
+            leak: 0.2
+            competition: 0.4
+            self_excitation: 0.0
+            noise_std: 1.0
+            time_step_size: 0.001
+            starting_value: 0.0
+
+          input_ports:
+            input:
+              shape: (1,)
+
+            prev_activity:
+              shape: (1,)
+              initializer: starting_value
+
+            comp_activity:
+              shape: (1,)
+              initializer: starting_value
+
+          functions:
+            lca_integrate_timestep:
+              function: lca_timestep
+                # dx = input - (leak-self_excitation)*activity - competition*comp_activity
+                # dW = np.random.normal(loc=0.0, scale=noise_std*sqrt(time_step_size))
+                # output = activity + dx + dW
+                # output = max(0.0, output)
+                # return output
+              args:
+                input: input
+                activity: prev_activity
+                comp_activity: comp_activity
+
+          output_ports:
+            output:
+              value: lca_timestep
+              shape: (1,)
+
+        accumulator_node2:
+          parameters:
+            leak: 0.2
+            competition: 0.4
+            self_excitation: 0.0
+            noise_std: 1.0
+            time_step_size: 0.001
+            starting_value: 0.0
+
+          input_ports:
+            input:
+              shape: (1,)
+
+            prev_activity:
+              shape: (1,)
+              initializer: starting_value
+
+            comp_activity:
+              shape: (1,)
+              initializer: starting_value
+
+          functions:
+            lca_integrate_timestep:
+              function: lca_timestep
+                # dx = input - (leak-self_excitation)*activity - competition*comp_activity
+                # dW = np.random.normal(loc=0.0, scale=noise_std*sqrt(time_step_size))
+                # output = activity + dx + dW
+              # output = max(0.0, output)
+              # return output
+              args:
+                input: input
+                activity: prev_activity
+                comp_activity: comp_activity
+
+          output_ports:
+            output:
+              value: lca_timestep
+              shape: (1,)
+
+      edges:
+        input1_to_accumulator1:
+          sender: input_node1
+          sender_port: out_port
+          receiver: accumulator_node1
+          receiver_port: input
+
+        input2_to_accumulator2:
+          sender: input_node2
+          sender_port: out_port
+          receiver: accumulator_node2
+          receiver_port: input
+
+        recurrent_activity1:
+          sender: accumulator_node1
+          sender_port: output
+          receiver: accumulator_node1
+          receiver_port: prev_activity
+
+        recurrent_activity2:
+          sender: accumulator_node2
+          sender_port: output
+          receiver: accumulator_node2
+          receiver_port: prev_activity
+
+        comp_activity1:
+          sender: accumulator_node1
+          sender_port: output
+          receiver: accumulator_node2
+          receiver_port: comp_activity
+
+        comp_activity2:
+          sender: accumulator_node3
+          sender_port: output
+          receiver: accumulator_node1
+          receiver_port: comp_activity
+
+
+
+      conditions:
+        node_specific:
+          accumulator_node1:
+            type: or
+            args:
+            - type: TimeInterval
+              args: []
+              kwargs:
+                end: 3000
+                interval: 1
+                unit: ms
+            - type: Threshold
+              args: []
+              kwargs:
+                parameter: output[i]
+                threshold: 0.8
+                direction: ">="
