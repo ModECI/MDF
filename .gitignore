@@ -1,6 +1,8 @@
 # No BSON in the repo
 *.bson
-
+/examples/MDF/conditions/everyncalls
+/examples/MDF/conditions/threshold
+/examples/MDF/conditions/timeinterval
 /abc_conditions
 examples/ONNX/data
 examples/ONNX/*.onnx
