@@ -4,7 +4,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import onnx
 import onnxruntime as rt
-
+from torchviz import make_dot
+import netron
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
 
@@ -30,7 +31,7 @@ def main():
     from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
-    input_images = torch.zeros((1, 3, 224, 224))
+    input_images = torch.zeros((1, 3, 224, 224), requires_grad=False)
 
     # Seed the random number generator to get deterministic behavior for weight initialization
     torch.manual_seed(0)
@@ -39,7 +40,7 @@ def main():
 
     model.eval()
     # Run the model once to get some ground truth outpot (from PyTorch)
-    output = model(input_images).detach().numpy()
+    output = model(input_images)
 
     from modelspec.utils import _val_info
 
@@ -67,7 +68,7 @@ def main():
 
     # Make sure the results are the same between PyTorch and MDF
     assert np.allclose(
-        output,
+        output.detach().numpy(),
         output_mdf,
     )
     print("Passed all comparison tests!")
@@ -76,16 +77,6 @@ def main():
     mdf_model.to_json_file("simple_pytorch_to_mdf.json")
 
     import sys
-
-    if "-graph" in sys.argv:
-        mdf_model.to_graph_image(
-            engine="dot",
-            output_format="png",
-            view_on_render=False,
-            level=1,
-            filename_root="simple_pytorch_to_mdf",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
-        )
 
     # Exporting as onnx model
     torch.onnx.export(
@@ -101,6 +92,25 @@ def main():
     sess = rt.InferenceSession("simple_pytorch_to_mdf.onnx")
     res = sess.run(None, {sess.get_inputs()[0].name: input_images.numpy()})
     print("Exported to MDF and ONNX")
+
+    # export to mdf graph
+    if "-graph" in sys.argv:
+        mdf_model.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="simple_pytorch_to_mdf",
+            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
+    # export to PyTorch graph
+    if "-graph-torch" in sys.argv:
+        make_dot(output, params=dict(list(model.named_parameters()))).render(
+            "simple_pytorch_to_mdf_torchviz", format="png"
+        )
+    # export to onnx graph
+    if "-graph-onnx" in sys.argv:
+        netron.start("simple_pytorch_to_mdf.onnx")
 
 
 if __name__ == "__main__":

@@ -63,14 +63,14 @@
                                 ],
                                 "type": "Tensor"
                             },
-                            "_1": {
+                            "fc1_weight": {
                                 "shape": [
                                     240,
                                     150528
                                 ],
                                 "type": "Tensor"
                             },
-                            "_2": {
+                            "fc1_bias": {
                                 "shape": [
                                     240
                                 ],
@@ -91,8 +91,8 @@
                                 "function": "onnx::Gemm",
                                 "args": {
                                     "A": "_10",
-                                    "B": "_1",
-                                    "C": "_2"
+                                    "B": "fc1_weight",
+                                    "C": "fc1_bias"
                                 }
                             }
                         },
@@ -135,14 +135,14 @@
                                 ],
                                 "type": "Tensor"
                             },
-                            "_3": {
+                            "fc2_weight": {
                                 "shape": [
                                     120,
                                     240
                                 ],
                                 "type": "Tensor"
                             },
-                            "_4": {
+                            "fc2_bias": {
                                 "shape": [
                                     120
                                 ],
@@ -163,8 +163,8 @@
                                 "function": "onnx::Gemm",
                                 "args": {
                                     "A": "_12",
-                                    "B": "_3",
-                                    "C": "_4"
+                                    "B": "fc2_weight",
+                                    "C": "fc2_bias"
                                 }
                             }
                         },
@@ -207,14 +207,14 @@
                                 ],
                                 "type": "Tensor"
                             },
-                            "_5": {
+                            "fc3_weight": {
                                 "shape": [
                                     50,
                                     120
                                 ],
                                 "type": "Tensor"
                             },
-                            "_6": {
+                            "fc3_bias": {
                                 "shape": [
                                     50
                                 ],
@@ -235,8 +235,8 @@
                                 "function": "onnx::Gemm",
                                 "args": {
                                     "A": "_14",
-                                    "B": "_5",
-                                    "C": "_6"
+                                    "B": "fc3_weight",
+                                    "C": "fc3_bias"
                                 }
                             }
                         },
@@ -279,14 +279,14 @@
                                 ],
                                 "type": "Tensor"
                             },
-                            "_7": {
+                            "fc4_weight": {
                                 "shape": [
                                     2,
                                     50
                                 ],
                                 "type": "Tensor"
                             },
-                            "_8": {
+                            "fc4_bias": {
                                 "shape": [
                                     2
                                 ],
@@ -307,8 +307,8 @@
                                 "function": "onnx::Gemm",
                                 "args": {
                                     "A": "_16",
-                                    "B": "_7",
-                                    "C": "_8"
+                                    "B": "fc4_weight",
+                                    "C": "fc4_bias"
                                 }
                             }
                         },
