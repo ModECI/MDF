@@ -6,7 +6,6 @@ import pytest
 import glob
 import runpy
 import os
-import psyneulink
 import sys
 import copy
 
@@ -19,42 +18,72 @@ from pathlib import Path
 # re-generated.
 run_example_scripts_in_repo = True
 
-example_scripts = glob.glob("examples/**/*.py", recursive=True)
-example_mdf_scripts = {
-    Path(f) for f in glob.glob("examples/MDF/**/*.py", recursive=True)
-}
-example_pnl_scripts = {
-    Path(f) for f in glob.glob("examples/PsyNeuLink/**/*.py", recursive=True)
-}
 example_exclusion_strings = [".reconstructed.py", "generate_json_and_scripts.py"]
 
-# NOTE: xfail mark can be removed if/when a full TimeInterval or
-# placeholder class reaches main psyneulink branch. This is only a
-# concern for local/non-github-actions installations.
-example_scripts = [
-    pytest.param(
-        script,
-        marks=pytest.mark.xfail(
-            reason="psyneulink currently must be installed on its 'mdf' branch to work with MDF examples",
-            strict=False,
-        ),
+
+class TestExamples:
+    example_scripts = []
+
+    # Core MDF tests
+    @pytest.mark.coremdf
+    def test_core(self):
+        example_core_scripts = (
+            glob.glob("examples/MDF/**/*.py")
+            + glob.glob("examples/ACT-R/*.py")
+            + glob.glob("examples/ONNX/*.py")
+            + glob.glob("examples/PyTorch/*.py")
+            + glob.glob("examples/WebGME/*.py")
+        )
+        self.example_scripts = [
+            pytest.param(script) if (Path(script) in example_core_scripts) else script
+            for script in example_core_scripts
+            if all(e not in script for e in example_exclusion_strings)
+        ]
+        print(self.example_scripts)
+
+    # NeuroML tests
+    @pytest.mark.neuromltest
+    def test_neuroml(self):
+        example_neuroml_scripts = glob.glob("examples/NeuroML/*.py")
+        self.example_scripts = [
+            pytest.param(script)
+            if (Path(script) in example_neuroml_scripts)
+            else script
+            for script in example_neuroml_scripts
+            if all(e not in script for e in example_exclusion_strings)
+        ]
+        print(self.example_scripts)
+
+    # PsyNeuLink tests
+    @pytest.mark.psyneulinktest
+    @pytest.mark.skipif(
+        "psyneulink" not in sys.modules, reason="requires the psyneulink library"
     )
-    if (Path(script) in example_pnl_scripts and not hasattr(psyneulink, "TimeInterval"))
-    else script
-    for script in example_scripts
-    if all(e not in script for e in example_exclusion_strings)
-]
+    def test_pnl(self):
+        import psyneulink
 
+        example_pnl_scripts = glob.glob("examples/PsyNeuLink/*.py")
+        self.example_scripts = [
+            pytest.param(script)
+            if (
+                Path(script) in example_pnl_scripts
+                and not hasattr(psyneulink, "TimeInterval")
+            )
+            else script
+            for script in example_pnl_scripts
+            if all(e not in script for e in example_exclusion_strings)
+        ]
+        print(self.example_scripts)
 
-@pytest.fixture(scope="session")
-def example_tmp_dir(tmpdir_factory):
-    """
-    Create a temporary directory to run all example scripts from.
-    This is a session scoped fixture so it is shared for all tests.
-    """
-    tmpdir = tmpdir_factory.mktemp("examples", numbered=False)
-    copy_tree("examples", tmpdir.strpath)
-    return tmpdir
+    @pytest.fixture(scope="session")
+    def example_tmp_dir(tmpdir_factory):
+        """
+        Create a temporary directory to run all example scripts from.
+        This is a session scoped fixture so it is shared for all tests.
+        """
+        tmpdir = tmpdir_factory.mktemp("examples", numbered=False)
+        copy_tree("examples", tmpdir.strpath)
+        return tmpdir
 
 
 @pytest.fixture(autouse=True)
@@ -85,7 +114,7 @@ def chdir_back_to_root(mocker):
     os.chdir(cwd)
 
 
-@pytest.mark.parametrize("script", example_scripts)
+@pytest.mark.parametrize("script", TestExamples.example_scripts)
 @pytest.mark.parametrize("additional_args", [["-run"]])
 def test_example(script, example_tmp_dir, additional_args):
     """
