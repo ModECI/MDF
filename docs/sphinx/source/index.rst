@@ -28,32 +28,38 @@ re-used in other environments.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   :caption: Contents
 
    api/Introduction
    api/Installation
 
 .. toctree::
    :maxdepth: 2
-   :caption: Specification:
+   :caption: Specification
 
    api/Specification
 
 .. toctree::
    :maxdepth: 1
-   :caption: Export Formats:
+   :caption: Examples
 
-   api/export_format/ACT-R.md
-   api/export_format/NeuroML.md
-   api/export_format/ONNX.md
-   api/export_format/PsyNeuLink.md
-   api/export_format/PyTorch.md
-   api/export_format/Quantum.md
-   api/export_format/WebGME.md
+   api/export_format/MDF/MDF.md
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Export Formats
+
+   api/export_format/ACT-R/ACT-R.md
+   api/export_format/NeuroML/NeuroML.md
+   api/export_format/ONNX/ONNX.md
+   api/export_format/PsyNeuLink/PsyNeuLink.md
+   api/export_format/PyTorch/PyTorch.md
+   api/export_format/Quantum/Quantum.md
+   api/export_format/WebGME/WebGME.md
 
 .. toctree::
    :maxdepth: 2
-   :caption: Functions:
+   :caption: Functions
 
    api/MDF_function_specifications
 

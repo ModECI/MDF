@@ -1,7 +1,7 @@
 # Interactions between MDF and ACT-R
 
 This directory contains examples of ACT-R models converted to MDF. The ACT-R
-models [count.lisp](count.lisp) and [addition.lisp](addition.lisp) are based on
+models [count.lisp](./count.lisp) and [addition.lisp](addition.lisp) are based on
 the [ACT-R tutorial](http://act-r.psy.cmu.edu/software/).
 
 The scripts [count.py](count.py) and [addition.py](addition.py) can be run
@@ -9,7 +9,7 @@ to create the MDF .json and .yaml files for the given example and execute it
 using the MDF scheduler.
 
 The below graph represents the basic structure of all ACT-R models in MDF:
-<p align="center"><img src="actr.png" alt="actr"/></p>
+![actr.png](actr.png)
 
 There are also more detailed graphs [count.png](count.png) and
 [addition.png](addition.png) for each example.
@@ -17,6 +17,8 @@ There are also more detailed graphs [count.png](count.png) and
 ### Count Model
 
 [ACT-R](count.lisp) | [JSON](count.json) | [YAML](count.yaml) | [Python Script](count.py) | [Graph](count.png)
+
+![count.png](count.png)
 
 The count model counts from a start value to an end value. The script
 [count.py](count.py) first reads the original ACT-R model file
@@ -40,6 +42,8 @@ The [count](count.png) graph represents this example.
 ### Addition Model
 
 [ACT-R](addition.lisp) | [JSON](addition.json) | [YAML](addition.yaml) | [Python Script](addition.py) | [Graph](addition.png)
+
+![addition.png](addition.png)
 
 The addition model computes the sum of two numbers. The script
 [addition.py](addition.py) functions identically to the previous example, but

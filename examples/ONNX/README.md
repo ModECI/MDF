@@ -1,5 +1,7 @@
 # ONNX MDF Converter
 
+## ONNX to MDF
+
 ### LeNet5 CNN Model
 
 ![LeNet5 ONNX IR](examples/convnet.png)
@@ -15,11 +17,12 @@ $ onnx-to-mdf examples/convnet.onnx
 
 You can see the converted MDF models in [JSON](examples/convnet-mdf.json) and [YAML](examples/convnet-mdf.yml):
 
+
 ### AB Sequential Model - 2 node_specific
 
 [Python source](simple_ab.py) | [JSON](ab.json) | [YAML](ab.yaml)
 
-This is an example of a PyTorch model with 2 nodes.
+This is an example of a PyTorch model with 2 nodes. First, the [script](simple_ab.py) saves the PyTorch model as ONNX and then converts this to MDF. The graphical view of the generated MDF is shown below.
 
 ![AB](ab.png)
 

@@ -51,6 +51,7 @@ print("Written main documentation")
 
 # Generate export formats documentation
 export_formats_list = [
+    "MDF",
     "ACT-R",
     "NeuroML",
     "ONNX",
@@ -61,12 +62,10 @@ export_formats_list = [
 ]
 for format in export_formats_list:
     with open("../examples/" + format + "/README.md") as readfile, open(
-        "sphinx/source/api/export_format/" + format + ".md", "w"
+        "sphinx/source/api/export_format/" + format + "/" + format + ".md", "w"
     ) as writefile:
-
         # read content from first file
         for line in readfile:
-
             # append content to second file
             writefile.write(line)
 

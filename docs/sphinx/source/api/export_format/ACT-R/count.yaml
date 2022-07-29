@@ -1,0 +1,275 @@
+count:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.1.1
+    graphs:
+        count_graph:
+            nodes:
+                declarative_memory:
+                    input_ports:
+                        dm_input: {}
+                    parameters:
+                        chunks:
+                            value:
+                            -   name: one
+                                ISA: number
+                                number: one
+                                next: two
+                            -   name: two
+                                ISA: number
+                                number: two
+                                next: three
+                            -   name: three
+                                ISA: number
+                                number: three
+                                next: four
+                            -   name: four
+                                ISA: number
+                                number: four
+                                next: five
+                            -   name: five
+                                ISA: number
+                                number: five
+                            -   name: first-goal
+                                ISA: count-from
+                                start: two
+                                end: four
+                                count: nil
+                        chunk_types:
+                            value:
+                                number:
+                                - number
+                                - next
+                                count-from:
+                                - start
+                                - end
+                                - count
+                        retrieve_chunk:
+                            function: retrieve_chunk
+                            args:
+                                pattern: dm_input
+                                dm_chunks: chunks
+                                types: chunk_types
+                    output_ports:
+                        dm_output:
+                            value: retrieve_chunk
+                retrieval_buffer:
+                    input_ports:
+                        retrieval_input: {}
+                    output_ports:
+                        retrieval_output:
+                            value: retrieval_input
+                goal_buffer:
+                    input_ports:
+                        goal_input: {}
+                    parameters:
+                        first_goal:
+                            value:
+                                name: first-goal
+                                ISA: count-from
+                                start: two
+                                end: four
+                                count: nil
+                        change_goal:
+                            function: change_goal
+                            args:
+                                pattern: goal_input
+                                curr_goal: goal_state
+                        goal_state:
+                            value: first_goal if goal_input == {} else change_goal
+                            default_initial_value: first_goal
+                    output_ports:
+                        goal_output:
+                            value: goal_state
+                procedural_memory:
+                    parameters:
+                        productions:
+                            value:
+                            -   name: start
+                                lhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    start: =num1
+                                    end: =end
+                                    count: nil
+                                rhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    count: =num1
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num1
+                            -   name: increment
+                                lhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    start: =start
+                                    end: -=num1
+                                    count: =num1
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num1
+                                    next: =num2
+                                rhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    count: =num2
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num2
+                            -   name: stop
+                                lhs:
+                                -   buffer: goal
+                                    ISA: count-from
+                                    start: =start
+                                    end: =num
+                                    count: =num
+                                -   buffer: retrieval
+                                    ISA: number
+                                    number: =num
+                                    next: =next
+                                rhs:
+                                -   buffer: goal
+                    output_ports:
+                        pm_output:
+                            value: productions
+                pattern_matching:
+                    input_ports:
+                        pattern_input_from_pm: {}
+                        pattern_input_from_goal: {}
+                        pattern_input_from_retrieval: {}
+                    parameters:
+                        pattern_matching_function:
+                            function: pattern_matching_function
+                            args:
+                                productions: pattern_input_from_pm
+                                goal: pattern_input_from_goal
+                                retrieval: pattern_input_from_retrieval
+                    output_ports:
+                        pattern_output:
+                            value: pattern_matching_function
+                conflict_resolution:
+                    input_ports:
+                        conflict_input: {}
+                    parameters:
+                        conflict_resolution_function:
+                            function: conflict_resolution_function
+                            args:
+                                productions: conflict_input
+                    output_ports:
+                        conflict_output_to_fire_prod:
+                            value: conflict_resolution_function
+                        conflict_output_to_check:
+                            value: conflict_resolution_function
+                fire_production:
+                    input_ports:
+                        fire_prod_input: {}
+                    parameters:
+                        update_goal:
+                            function: update_goal
+                            args:
+                                production: fire_prod_input
+                        update_retrieval:
+                            function: update_retrieval
+                            args:
+                                production: fire_prod_input
+                    output_ports:
+                        fire_prod_output_to_goal:
+                            value: update_goal
+                        fire_prod_output_to_retrieval:
+                            value: update_retrieval
+                check_termination:
+                    input_ports:
+                        check_input: {}
+                    parameters:
+                        check_termination:
+                            function: check_termination
+                            args:
+                                production: check_input
+                    output_ports:
+                        check_output:
+                            value: check_termination
+            edges:
+                dm_to_pattern_edge:
+                    sender: declarative_memory
+                    receiver: retrieval_buffer
+                    sender_port: dm_output
+                    receiver_port: retrieval_input
+                retrieval_to_pattern_edge:
+                    sender: retrieval_buffer
+                    receiver: pattern_matching
+                    sender_port: retrieval_output
+                    receiver_port: pattern_input_from_retrieval
+                goal_to_pattern_edge:
+                    sender: goal_buffer
+                    receiver: pattern_matching
+                    sender_port: goal_output
+                    receiver_port: pattern_input_from_goal
+                pm_to_pattern_edge:
+                    sender: procedural_memory
+                    receiver: pattern_matching
+                    sender_port: pm_output
+                    receiver_port: pattern_input_from_pm
+                pattern_to_conflict_edge:
+                    sender: pattern_matching
+                    receiver: conflict_resolution
+                    sender_port: pattern_output
+                    receiver_port: conflict_input
+                conflict_to_fire_prod_edge:
+                    sender: conflict_resolution
+                    receiver: fire_production
+                    sender_port: conflict_output_to_fire_prod
+                    receiver_port: fire_prod_input
+                conflict_to_check_edge:
+                    sender: conflict_resolution
+                    receiver: check_termination
+                    sender_port: conflict_output_to_fire_prod
+                    receiver_port: check_input
+            conditions:
+                node_specific:
+                    declarative_memory:
+                        type: Always
+                        kwargs: {}
+                    retrieval_buffer:
+                        type: JustRan
+                        kwargs:
+                            dependencies: declarative_memory
+                    goal_buffer:
+                        type: Always
+                        kwargs: {}
+                    procedural_memory:
+                        type: Always
+                        kwargs: {}
+                    pattern_matching:
+                        type: And
+                        kwargs:
+                            dependencies:
+                            -   type: EveryNCalls
+                                kwargs:
+                                    dependencies: retrieval_buffer
+                                    n: 1
+                            -   type: EveryNCalls
+                                kwargs:
+                                    dependencies: goal_buffer
+                                    n: 1
+                            -   type: EveryNCalls
+                                kwargs:
+                                    dependencies: declarative_memory
+                                    n: 1
+                    conflict_resolution:
+                        type: JustRan
+                        kwargs:
+                            dependencies: pattern_matching
+                    fire_production:
+                        type: JustRan
+                        kwargs:
+                            dependencies: conflict_resolution
+                    check_termination:
+                        type: JustRan
+                        kwargs:
+                            dependencies: conflict_resolution
+                termination:
+                    check_term_true:
+                        type: JustRan
+                        kwargs:
+                            dependencies:
+                            - check_termination
