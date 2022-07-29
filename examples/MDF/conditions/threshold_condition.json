@@ -1,0 +1,45 @@
+{
+    "threshold_condition": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.1.1",
+        "graphs": {
+            "threshold_example": {
+                "nodes": {
+                    "A": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": [
+                                    1
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "param_A": {
+                                "value": "param_A + 1",
+                                "default_initial_value": 0
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "param_A"
+                            }
+                        }
+                    }
+                },
+                "conditions": {
+                    "termination": {
+                        "environment_state_update": {
+                            "type": "Threshold",
+                            "kwargs": {
+                                "dependency": "A",
+                                "parameter": "param_A",
+                                "threshold": 5,
+                                "comparator": ">="
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

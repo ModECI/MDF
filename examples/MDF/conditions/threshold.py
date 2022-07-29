@@ -1,11 +1,10 @@
 """
-    Example of ModECI MDF - A simple 3 node graph with scheduling conditions
+Example of ModECI MDF- A simple 1 Node graph satisfying the Threshold Condition
+
 """
 
-import os
-
-import abcd_python as abcd
 import graph_scheduler
+import os
 from modeci_mdf.mdf import (
     Condition,
     ConditionSet,
@@ -20,8 +19,8 @@ from modeci_mdf.utils import print_summary, simple_connect
 
 
 def main():
-    mod = Model(id="abc_conditions")
-    mod_graph = Graph(id="abc_conditions_example")
+    mod = Model(id="threshold_condition")
+    mod_graph = Graph(id="threshold_example")
     mod.graphs.append(mod_graph)
 
     def create_simple_node(graph, id_, sender=None):
@@ -31,7 +30,7 @@ def main():
         ip1 = InputPort(id="input_port1", shape="(1,)")
         n.input_ports.append(ip1)
 
-        n.output_ports.append(OutputPort(id="output_1", value=ip1.id))
+        n.output_ports.append(OutputPort(id="output_1", value="param_A"))
 
         if sender is not None:
             simple_connect(sender, n, graph)
@@ -39,35 +38,26 @@ def main():
         return n
 
     a = create_simple_node(mod_graph, "A", sender=None)
-    a.parameters.append(Parameter(id="count_A", value="count_A + 1"))
-
-    b = create_simple_node(mod_graph, "B", a)
-    b.parameters.append(Parameter(id="count_B", value="count_B + 1"))
-
-    c = create_simple_node(mod_graph, "C", a)
-
-    c.parameters.append(Parameter(id="count_C", value="count_C+ 1"))
-
-    cond_a = Condition(type="Always")
-    cond_b = Condition(type="EveryNCalls", dependencies=a.id, n=2)
-    cond_c = Condition(type="EveryNCalls", dependencies=a.id, n=3)
+    a.parameters.append(
+        Parameter(id="param_A", value="param_A + 1", default_initial_value=0)
+    )
     cond_term = Condition(
-        type="And",
-        dependencies=[
-            Condition(type="AfterNCalls", dependencies=c.id, n=2),
-            Condition(type="JustRan", dependencies=a.id),
-        ],
+        type="Threshold",
+        dependency=a,
+        parameter="param_A",
+        threshold=5,
+        comparator=">=",
     )
-
+    # The threshold condition is satisfied when the comparison btwn the value of the parameter
+    # and threshold using the comparator evaluates to true
     mod_graph.conditions = ConditionSet(
-        node_specific={a.id: cond_a, b.id: cond_b, c.id: cond_c},
-        termination={"environment_state_update": cond_term},
+        termination={
+            "environment_state_update": cond_term
+        },  # the graph terminates when the parameter >= 5 (Executing 5 times in this example)
     )
-
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
-
-    print_summary(mod_graph)
+    # print_summary(mod_graph)
     import sys
 
     if "-run" in sys.argv:
@@ -84,21 +74,13 @@ def main():
             "\n Output of A: %s"
             % eg.enodes["A"].evaluable_outputs["output_1"].curr_value
         )
-        print(
-            "\n Output of B: %s"
-            % eg.enodes["B"].evaluable_outputs["output_1"].curr_value
-        )
-        print(
-            "\n Output of C: %s"
-            % eg.enodes["C"].evaluable_outputs["output_1"].curr_value
-        )
     if "-graph" in sys.argv:
         mod.to_graph_image(
             engine="dot",
             output_format="png",
             view_on_render=False,
             level=3,
-            filename_root="abc_conditions",
+            filename_root="threshold",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
