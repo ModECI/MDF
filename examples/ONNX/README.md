@@ -2,6 +2,7 @@
 
 ## ONNX to MDF
 
+<!---   This example is not included here...
 ### LeNet5 CNN Model
 
 ![LeNet5 ONNX IR](examples/convnet.png)
@@ -16,9 +17,9 @@ $ onnx-to-mdf examples/convnet.onnx
 ```
 
 You can see the converted MDF models in [JSON](examples/convnet-mdf.json) and [YAML](examples/convnet-mdf.yml):
+-->
 
-
-### AB Sequential Model - 2 node_specific
+### AB Sequential Model - 2 nodes
 
 [Python source](simple_ab.py) | [JSON](ab.json) | [YAML](ab.yaml)
 
