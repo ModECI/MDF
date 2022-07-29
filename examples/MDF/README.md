@@ -12,8 +12,7 @@ A simple example with 2 [Nodes](../../docs/README.md#node) connected by an [Edge
 
 <p align="center"><img src="images/simple.png" alt="simple"/></p>
 
-With more detail on [Nodes](../../docs/README.md#node) (showing [Parameters](../../docs/README.md#parameter),
- [Functions](../../docs/README.md#function), [Input Ports](../../docs/README.md#inputport) and [Output Ports](../../docs/README.md#output_port)) and [Edges](../../docs/README.md#edge):
+With more detail on [Nodes](../../docs/README.md#node) (showing [Input Ports](../../docs/README.md#inputport) (green), [Parameters](../../docs/README.md#parameter) (blue) and [Output Ports](../../docs/README.md#output_port)) (red) and [Edges](../../docs/README.md#edge):
 
 <p align="center"><img src="images/simple_3.png" alt="simple"/></p>
 
@@ -23,7 +22,7 @@ With more detail on [Nodes](../../docs/README.md#node) (showing [Parameters](../
 
 Another simple example with more [Nodes](../../docs/README.md#node).
 
-<p align="center"><img src="images/abcd.png" alt="abcd"/><img width="400" src="images/abcd_3.png" alt="abcd3"/></p>
+<p align="center"><img src="images/abcd.png" alt="abcd"/>&nbsp;&nbsp;&nbsp;<img width="400" src="images/abcd_3.png" alt="abcd3"/></p>
 
 ## Arrays
 
@@ -46,7 +45,7 @@ An example with [Nodes](../../docs/README.md#node) containing persistent [States
 
 [Python source](abc_conditions.py) | [JSON](abc_conditions.json) | [YAML](abc_conditions.yaml)
 
-A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions](../../docs/README.md#condition)
+A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions](../../docs/README.md#condition). For more examples of conditions see [here](conditions/README.md).
 
 <p align="center"><img src="images/abc_conditions.png" alt="simple"/></p>
 
@@ -55,7 +54,7 @@ A simple 3 [Nodes](../../docs/README.md#node) graph with scheduling [Conditions]
 
 [Python source](params_funcs.py) | [JSON](ParametersFunctions.json) | [YAML](ParametersFunctions.yaml)
 
-A simple [Node](../../docs/README.md#node) with a number of different types of [Parameters](../../docs/README.md#parameter) (e.g. fixed and stateful) and [Functions](../../docs/README.md#function) (e.g. built in, ONNX based).
+A simple [Node](../../docs/README.md#node) with a number of different types of [Parameters](../../docs/README.md#parameter) (in blue; fixed and **stateful**) and [Functions](../../docs/README.md#function) (in purple; can be built in or ONNX based).
 
 <p align="center"><img src="images/params_funcs.png" alt="params_funcs"/></p>
 
