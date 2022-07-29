@@ -30,4 +30,3 @@ Finally, import the JSON into WebGME just like the
 ```
 node bin/instance_converter path/to/MDForGME/instance.json
 ```
-# Interactions between NeuroML and WebGME

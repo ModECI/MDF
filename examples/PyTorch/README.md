@@ -24,7 +24,8 @@ Below are some working examples of this functionality.
 
 1. One of sample MDF examples [ABCD.json](../MDF/ABCD.json) is converted to PyTorch [ABCD_pytorch.py](MDF_PyTorch/ABCD_pytorch.py).
 The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx) and the results are compared in all three environments.
-<p align="center"><img alt="ABCD" height="100" src="ABCD.svg"/></p>
+
+![ABCD.svg](ABCD.svg)
 <!-- this representation was produced from https://netron.app/ by uploading the ONNX model and exporting the svg-->
 
 2. Multi-Layer Perceptron MDF to PyTorch Conversion:
@@ -38,11 +39,13 @@ The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx
   A graph of the network can be created with `python mlp_pure_mdf.py -graph`:
 
   **MDF graph**
-  <p align="center"><img src="mlp_pure_mdf.png" alt="mlp_pure_mdf.png" height="400"></p>
+
+  ![mlp_pure_mdf.png](mlp_pure_mdf.png)
 
   The network can be run against images from the MNIST database with: `python mlp_pure_mdf.py -run`, and produce 98% accuracy. The image below shows the results of 300 images:
 
-  <p align="center"><img src="mlp_pure_mdf.results.png" alt="mlp_pure_mdf.results.png" height="250"></p>
+  ![mlp_pure_mdf.results.png](mlp_pure_mdf.results.png)
+
 
   Conversion to PyTorch: TODO...
 
@@ -95,7 +98,8 @@ Below are some working examples of this functionality.
   ```bash
   python simple_pytorch_to_mdf.py -graph-onnx
   ```
-  <p align="center"><img alt="simple_pytorch_to_mdf" height="70" src="simple_pytorch_to_mdf.svg"/></p>
+
+  ![simple_pytorch_to_mdf.svg](simple_pytorch_to_mdf.svg)
 
 
   **NOTE**: This command will run the netron python server on the local host where we can export the graph as svg/png
@@ -105,20 +109,21 @@ Below are some working examples of this functionality.
   python simple_pytorch_to_mdf.py -graph
   ```
 
-  <p align="center"><img alt="simple_pytorch_to_mdf" height="450" src="simple_pytorch_to_mdf.png"/></p>
+  ![simple_pytorch_to_mdf.png](simple_pytorch_to_mdf.png)
 
   To Visualize the PyTorch model
   ```bash
   python simple_pytorch_to_mdf.py -graph-torch
   ```
 
-  <p align="center"><img alt="simple_pytorch_to_mdf" height="250" src="simple_pytorch_to_mdf_torchviz.png"/></p>
+  ![simple_pytorch_to_mdf_torchviz.png](simple_pytorch_to_mdf_torchviz.png)
 
   The MDF for this model is the written to [simple_pytorch_to_mdf.json](simple_pytorch_to_mdf.json). The model is then executed
   via the MDF scheduler and the results are compared to the native execution in PyTorch.
 
 2. Inception Blocks Model:
-  <p align="center"><img alt="Inception MDF" height="100" src="inception.svg"/></p>
+
+  ![inception.svg](inception.svg)
   To run an example of converting a PyTorch InceptionV3 like model written in PyTorch to its MDF representation simply run:
 
   ```bash
@@ -136,9 +141,11 @@ Below are some working examples of this functionality.
   python inception.py -graph
   ```
 
-  <p align="center"><img alt="Inception MDF" height="600" src="inception.png"/></p>
+![inception.png](inception.png)
 
+<!--  Not yet working !
 3. A DDM A model that simulates a simple noisy drift diffusion model using Euler-Maruyama integration. This is implemented without performance in mind. [pytorch_ddm.py](pytorch_ddm.py) is converted to [ddm.json](ddm.json)
 
     <p align="center"><img alt="DDM mdf" src="ddm.png"/></p>
     Conversion to MDF: TODO...
+-->
