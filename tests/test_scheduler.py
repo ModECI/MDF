@@ -69,7 +69,7 @@ def test_execution_engine_onnx(tmpdir):
             "examples/ONNX/ab.%s" % mdf_format, array_format=array_format
         )
         output = eg.enodes["Mul_3"].evaluable_outputs["_4"].curr_value
-        assert output == 5
+        assert np.array_equal(output, np.full((2, 3), 5))
 
 
 _abc_conditions_expected_output = [
