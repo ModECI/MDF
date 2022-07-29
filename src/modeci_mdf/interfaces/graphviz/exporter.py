@@ -154,7 +154,10 @@ def mdf_to_graphviz(
         format=output_format,
     )
     # graph termination condition(s) added globally
-    if mdf_graph.conditions and mdf_graph.conditions.termination:
+    global_term_cond_present = False
+
+    if mdf_graph.conditions is not None and mdf_graph.conditions.termination:
+        global_term_cond_present = True
         color = COLOR_MAIN
         penwidth = "2"
         graph.attr(
@@ -400,7 +403,9 @@ def mdf_to_graphviz(
         info += "</table>"
 
         graph.node(node.id, label="<%s>" % info)
-        graph.edge("termination condition", node.id, style="invis")
+
+        if global_term_cond_present:
+            graph.edge("termination condition", node.id, style="invis")
 
     for edge in mdf_graph.edges:
         print(f"    Edge: {edge.id} connects {edge.sender} to {edge.receiver}")
@@ -439,7 +444,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 3:
         print(
-            "Usage:\n\n  python graphviz.py MDF_JSON_FILE level [%s]\n\n" % NO_VIEW
+            "Usage:\n\n  python exporter.py MDF_JSON_FILE level [%s]\n\n" % NO_VIEW
             + "where level = 1, 2 or 3. Include %s to supress viewing generated graph on render\n"
             % NO_VIEW
         )
