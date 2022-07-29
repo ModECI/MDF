@@ -10,22 +10,23 @@
 
 [ABCD.py](ABCD.py) is a script using the [NeuroMLlite](https://docs.neuroml.org/Userdocs/Software/NeuroMLlite.html) package to create a simple network with 4 connected elements. The network built can be seen below (this can be generated with `python ABCD.py -graph2`):
 
-<p align="center"><img src="ABCD.nmllite.png" alt="ABCD.nmllite.png" height="300"></p>
+![ABCD.nmllite.png](ABCD.nmllite.png)
 
 A version of the network in NeuroML 2 can be generated with `python ABCD.py -nml`, or generated and executed with jNeuroML with `python ABCD.py -nml`.
 This will produce the NeuroML file: [ABCD.net.nml](ABCD.net.nml) (note though this is not valid, as not all the elements included are pure NeuroML). A [LEMS Simulation file](https://docs.neuroml.org/Userdocs/LEMSSimulation.html) is generated for running the model in jNeuroML or pyNeuroML: [LEMS_SimABCD.xml](LEMS_SimABCD.xml)
 
 The definitions of the components used for A, B, etc. can be found in [PNL.xml](PNL.xml). This is a set of definitions of component types based on those present in PsyNeuLink. A graph depicting the definitions of the network elements can be generated with `pynml LEMS_SimABCD.xml -lems-graph`:
 
-<p align="center"><img src="LEMS_SimABCD.png" alt="LEMS_SimABCD.png" height="400"></p>
+
+![LEMS_SimABCD.png](LEMS_SimABCD.png)
 
 
 A version of the network in MDF can be generated from NeuroMLlite definition with: `python ABCD.py -mdf` producing [ABCD.mdf.yaml](ABCD.mdf.yaml) and [ABCD.mdf.json](ABCD.mdf.json).
 
 A graph of the structure of the MDF model can be generated with: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 1` (left below), or with more detail: `python -m modeci_mdf.interfaces.graphviz.exporter ABCD.mdf.yaml 3` (right below.)
 
-<p align="center"><img src="ABCD.1.mdf.png" alt="ABCD.1.mdf.png" height="300">
-<img src="ABCD.mdf.png" alt="ABCD.mdf.png" height="400"></p>
+![ABCD.1.mdf.png](ABCD.1.mdf.png)
+![ABCD.mdf.png](ABCD.mdf.png)
 
 
 
@@ -37,7 +38,7 @@ A version of the FitzHugh Nagumo neuron model has been created using NeuroMLlite
 
 A graphical representation of the LEMS is below:
 
-<p align="center"><img src="LEMS_SimFN.png" alt="LEMS_SimFN.png" height="400"></p>
+![LEMS_SimFN.png](LEMS_SimFN.png)
 
 It can be run with:
 ```
@@ -63,7 +64,7 @@ These can be seen here: [FN.mdf.json](FN.mdf.json), [FN.mdf.yaml](FN.mdf.yaml), 
 python -m modeci_mdf.interfaces.graphviz.importer FN.mdf.yaml 3    #  Generate graph from MDF version
 ```
 
-<p align="center"><img src="FN.gv.png" alt="FN.gv.png"></p>
+![FN.gv.png](FN.gv.png)
 
 
 ### Execute model using MDF
@@ -74,7 +75,7 @@ A script has been created ([FNrun.py](FNrun.py)) where the model is loaded, run 
 python FNrun.py    # Load FN model and run with MDF scheduler
 ```
 
-<p align="center"><img src="MDFFNrun.png" alt="MDFFNrun.png" height="400"></p>
+![MDFFNrun.png](MDFFNrun.png)
 
 
 Adding the option `-multi` to the Python script for running the FN example, modifies the graph to add an input node with an array of values, meaning multiple instances of the FN neuron will be simulated:
@@ -83,7 +84,8 @@ Adding the option `-multi` to the Python script for running the FN example, modi
 python FN.py -multi
 ```
 
-<p align="center"><img src="FNmulti.png" alt="FNmulti.png" height="300"> <img src="MDFFNrun.multi.png" alt="MDFFNrun.multi.png" height="300"></p>
+![FNmulti.png](FNmulti.png)
+![MDFFNrun.multi.png](MDFFNrun.multi.png)
 
 ## 2) Converting MDF to NeuroML/LEMS
 
