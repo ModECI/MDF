@@ -40,7 +40,7 @@ COLOR_INPUT = "#188855"
 COLOR_FUNC = "#441199"
 COLOR_OUTPUT = "#cc3355"
 COLOR_COND = "#ffa1d"
-COLOR_TERM = "#2017CC"
+COLOR_TERM = COLOR_COND  # same as conditions
 
 
 def format_label(s):
@@ -131,6 +131,10 @@ def match_in_expr(expr, node):
         return expr.strip()
 
 
+def safe_comparitor(comp):
+    return comp.replace("<", "&lt;").replace(">", "&gt;")
+
+
 def mdf_to_graphviz(
     mdf_graph,
     engine="dot",
@@ -162,7 +166,7 @@ def mdf_to_graphviz(
         penwidth = "2"
         graph.attr(
             "node",
-            color="#2017CC",
+            color=COLOR_TERM,
             style="rounded",
             shape="box",
             fontcolor=COLOR_MAIN,
@@ -175,17 +179,20 @@ def mdf_to_graphviz(
         nt = mdf_graph.conditions.termination["environment_state_update"]
         args = nt.kwargs
         if nt.type == "Threshold":
-            info += "<tr><td>{}{}= Satisfied when the comparison between {} and {} evaluates to true".format(
-                format_label(" "),
-                format_term_condition("termination condition"),
-                args.get("parameter"),
-                args.get("threshold"),
+            info += (
+                "<tr><td>{}{} = Satisfied when <b>{}</b> <b>{}</b> <b>{}</b>".format(
+                    format_label(" "),
+                    format_term_condition("Termination cond"),
+                    args.get("parameter"),
+                    safe_comparitor(args.get("comparator")),
+                    args.get("threshold"),
+                )
             )
             info += "</td></tr>"
         if nt.type == "And":
-            info += "<tr><td>{}{}= Satisfied when all of the conditions in the Graph are satisfied".format(
+            info += "<tr><td>{}{} = All conditions in the Graph are satisfied".format(
                 format_label(" "),
-                format_term_condition("termination condition"),
+                format_term_condition("Termination cond"),
             )
             info += "</td></tr>"
         info += "</table>"
@@ -344,7 +351,7 @@ def mdf_to_graphviz(
                 ns = mdf_graph.conditions.node_specific[node.id]
                 args = ns.kwargs
                 if ns.type == "EveryNCalls":
-                    info += "<tr><td>{}{}= {} will run every {} calls of {}".format(
+                    info += "<tr><td>{}{} = <b>{}</b> will run every <b>{}</b> calls of <b>{}</b>".format(
                         format_label(" "),
                         format_condition("condition"),
                         node.id,
@@ -353,7 +360,7 @@ def mdf_to_graphviz(
                     )
                     info += "</td></tr>"
                 elif ns.type == "AfterNCalls":
-                    info += "<tr><td>{}{}= {} will run after {} calls of {}".format(
+                    info += "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> calls of <b>{}</b>".format(
                         format_label(" "),
                         format_condition("condition"),
                         node.id,
@@ -362,24 +369,27 @@ def mdf_to_graphviz(
                     )
                     info += "</td></tr>"
                 elif ns.type == "TimeInterval":
-                    info += "<tr><td>{}{}= {} will run after {} ms".format(
-                        format_label(" "),
-                        format_condition("condition"),
-                        node.id,
-                        args.get("start"),
+                    info += (
+                        "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> ms".format(
+                            format_label(" "),
+                            format_condition("condition"),
+                            node.id,
+                            args.get("start"),
+                        )
                     )
                     info += "</td></tr>"
                 elif ns.type == "Threshold":
-                    info += "<tr><td>{}{}= {} satisfied when the comparison between {} and {} is true".format(
+                    info += "<tr><td>{}{} = <b>{}</b> satisfied <b>{}</b> <b>{}</b> <b>{}</b>".format(
                         format_label(" "),
                         format_condition("condition"),
                         ns.type,
                         args.get("parameter"),
+                        safe_comparitor(args.get("comparator")),
                         args.get("threshold"),
                     )
                     info += "</td></tr>"
                 else:
-                    info += "<tr><td>{}{}= {} will {} run".format(
+                    info += "<tr><td>{}{} = <b>{}</b> will <b>{}</b> run".format(
                         format_label(" "),
                         format_condition("condition"),
                         node.id,
