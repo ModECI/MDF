@@ -31,6 +31,15 @@ def pytest_collection_modifyitems(items):
                 item.add_marker(pytest.mark.__getattr__(marker))
                 break
 
+        # These are a couple examples that should probably be under PyTorch but are in the MDF folder
+        if "abcd_torch.py" in item.nodeid or "rnn_pytorch.py" in item.nodeid:
+            item.add_marker(pytest.mark.pytorch)
+
+        # For some reason there are a bunch of examples in examples/ONNX that require pytorch. These
+        # should probably be rewritten to not use ONNX or moved to examples/PyTorch/ONNX or something.
+        if "tests/test_examples.py" in item.nodeid and "ONNX" in item.nodeid:
+            item.add_marker(pytest.mark.pytorch)
+
         # All other tests should be marked core MDF by default if they don't have another backend marker.
         # Remember, some tests could be marked manually and not above.
         if (
