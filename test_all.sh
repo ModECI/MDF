@@ -47,6 +47,14 @@ python -m modeci_mdf.interfaces.graphviz.exporter abc_conditions.yaml 3 -noview
 mv abc_conditions_example.gv.png images/abc_conditions.png
 python -m modeci_mdf.interfaces.graphviz.exporter ParametersFunctions.yaml 3 -noview
 mv params_funcs_example.gv.png images/params_funcs.png
+cd conditions
+python -m modeci_mdf.interfaces.graphviz.exporter everyncalls_condition.yaml 3 -noview
+mv everyncalls_example.gv.png images/everyncalls.png
+python -m modeci_mdf.interfaces.graphviz.exporter timeinterval_condition.yaml 3 -noview
+mv timeinterval_example.gv.png images/timeinterval.png
+python -m modeci_mdf.interfaces.graphviz.exporter threshold_condition.yaml 3 -noview
+mv threshold_example.gv.png images/threshold.png
+cd ..
 
 ## Test regenerating NeuroML
 

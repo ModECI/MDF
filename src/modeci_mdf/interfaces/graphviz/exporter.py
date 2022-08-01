@@ -40,6 +40,7 @@ COLOR_INPUT = "#188855"
 COLOR_FUNC = "#441199"
 COLOR_OUTPUT = "#cc3355"
 COLOR_COND = "#ffa1d"
+COLOR_TERM = COLOR_COND  # same as conditions
 
 
 def format_label(s):
@@ -89,6 +90,10 @@ def format_condition(s):
     return f'<font color="{COLOR_COND}">{s}</font>'
 
 
+def format_term_condition(s):
+    return f'<font color="{COLOR_TERM}">{s}</font>'
+
+
 def match_in_expr(expr, node):
 
     if type(expr) != str:
@@ -126,6 +131,10 @@ def match_in_expr(expr, node):
         return expr.strip()
 
 
+def safe_comparitor(comp):
+    return comp.replace("<", "&lt;").replace(">", "&gt;")
+
+
 def mdf_to_graphviz(
     mdf_graph,
     engine="dot",
@@ -148,6 +157,46 @@ def mdf_to_graphviz(
         engine=engine,
         format=output_format,
     )
+    # graph termination condition(s) added globally
+    global_term_cond_present = False
+
+    if mdf_graph.conditions is not None and mdf_graph.conditions.termination:
+        global_term_cond_present = True
+        color = COLOR_MAIN
+        penwidth = "2"
+        graph.attr(
+            "node",
+            color=COLOR_TERM,
+            style="rounded",
+            shape="box",
+            fontcolor=COLOR_MAIN,
+            penwidth=penwidth,
+        )
+        info = '<table border="0" cellborder="0">'
+        info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (
+            "Applies to All Nodes in the Graph"
+        )
+        nt = mdf_graph.conditions.termination["environment_state_update"]
+        args = nt.kwargs
+        if nt.type == "Threshold":
+            info += (
+                "<tr><td>{}{} = Satisfied when <b>{}</b> <b>{}</b> <b>{}</b>".format(
+                    format_label(" "),
+                    format_term_condition("Termination cond"),
+                    args.get("parameter"),
+                    safe_comparitor(args.get("comparator")),
+                    args.get("threshold"),
+                )
+            )
+            info += "</td></tr>"
+        if nt.type == "And":
+            info += "<tr><td>{}{} = All conditions in the Graph are satisfied".format(
+                format_label(" "),
+                format_term_condition("Termination cond"),
+            )
+            info += "</td></tr>"
+        info += "</table>"
+        graph.node("termination condition", label="<%s>" % info)
 
     for node in mdf_graph.nodes:
         print("    Node: %s" % node.id)
@@ -295,26 +344,58 @@ def mdf_to_graphviz(
                             format_standard_func(f.value),
                             argstr,
                         )
-            if mdf_graph.conditions and mdf_graph.conditions.node_specific:
-                ns = mdf_graph.conditions.node_specific[node.id]
-                info += "<tr><td>{}{}={} ".format(
-                    format_label(" "),
-                    format_condition("condition"),
-                    ns.type,
-                )
-                args = ns.kwargs
-                if args:
-                    for con in args:
-                        nn = format_num(args[con])
-                        breaker = "<br/>"
-                        info += "{} = {}{}".format(
-                            format_condition(con),
-                            nn,
-                            breaker if len(info.split(breaker)[-1]) > 500 else ";    ",
-                        )
-                    info = info[:-5]
 
-                info += "</td></tr>"
+            # node specific conditions
+
+            if mdf_graph.conditions and mdf_graph.conditions.node_specific != None:
+                ns = mdf_graph.conditions.node_specific[node.id]
+                args = ns.kwargs
+                if ns.type == "EveryNCalls":
+                    info += "<tr><td>{}{} = <b>{}</b> will run every <b>{}</b> calls of <b>{}</b>".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        node.id,
+                        args.get("n"),
+                        args.get("dependencies"),
+                    )
+                    info += "</td></tr>"
+                elif ns.type == "AfterNCalls":
+                    info += "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> calls of <b>{}</b>".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        node.id,
+                        args.get("n"),
+                        args.get("dependencies"),
+                    )
+                    info += "</td></tr>"
+                elif ns.type == "TimeInterval":
+                    info += (
+                        "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> ms".format(
+                            format_label(" "),
+                            format_condition("condition"),
+                            node.id,
+                            args.get("start"),
+                        )
+                    )
+                    info += "</td></tr>"
+                elif ns.type == "Threshold":
+                    info += "<tr><td>{}{} = <b>{}</b> satisfied <b>{}</b> <b>{}</b> <b>{}</b>".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        ns.type,
+                        args.get("parameter"),
+                        safe_comparitor(args.get("comparator")),
+                        args.get("threshold"),
+                    )
+                    info += "</td></tr>"
+                else:
+                    info += "<tr><td>{}{} = <b>{}</b> will <b>{}</b> run".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        node.id,
+                        ns.type,
+                    )
+                    info += "</td></tr>"
 
             if node.output_ports and len(node.output_ports) > 0:
                 for op in node.output_ports:
@@ -332,6 +413,9 @@ def mdf_to_graphviz(
         info += "</table>"
 
         graph.node(node.id, label="<%s>" % info)
+
+        if global_term_cond_present:
+            graph.edge("termination condition", node.id, style="invis")
 
     for edge in mdf_graph.edges:
         print(f"    Edge: {edge.id} connects {edge.sender} to {edge.receiver}")
@@ -370,7 +454,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) < 3:
         print(
-            "Usage:\n\n  python graphviz.py MDF_JSON_FILE level [%s]\n\n" % NO_VIEW
+            "Usage:\n\n  python exporter.py MDF_JSON_FILE level [%s]\n\n" % NO_VIEW
             + "where level = 1, 2 or 3. Include %s to supress viewing generated graph on render\n"
             % NO_VIEW
         )

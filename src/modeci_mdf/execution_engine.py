@@ -940,6 +940,7 @@ class EvaluableGraph:
         self.enodes = {}
         self.root_nodes = []
         self.output_nodes = []
+        self.order_of_execution = []
 
         # Get the root (input nodes) of the graph. We will assume all are root nodes
         # and then remove those that have edges to them.
@@ -1067,6 +1068,7 @@ class EvaluableGraph:
                     % self.scheduler.get_clock(None).simple_time
                 )
             for node in ts:
+                self.order_of_execution.append(node.id)
                 for edge in incoming_edges[node]:
                     self.evaluate_edge(
                         edge, time_increment=time_increment, array_format=array_format
@@ -1076,8 +1078,7 @@ class EvaluableGraph:
                 )
 
         if self.verbose:
-            print("Order of execution of nodes\n")
-            print(list(self.scheduler.run()))
+            print("> Order of execution of nodes: %s" % self.order_of_execution)
             print("\n Trial terminated")
 
     def evaluate_edge(
