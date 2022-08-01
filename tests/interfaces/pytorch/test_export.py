@@ -3,8 +3,13 @@ import pytest
 import copy
 import numpy as np
 import modeci_mdf.execution_engine
-import modeci_mdf.interfaces.pytorch.exporter
 
+try:
+    import modeci_mdf.interfaces.pytorch.exporter
+except ModuleNotFoundError:
+    pytest.mark.skip(
+        "Skipping PyTorch interface tests because pytorch is not installed."
+    )
 
 from pathlib import Path
 
