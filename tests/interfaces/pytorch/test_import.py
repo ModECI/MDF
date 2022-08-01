@@ -1,10 +1,21 @@
 import torch
 import numpy as np
 
-torch.use_deterministic_algorithms(True)
-torch.backends.cudnn.deterministic = True
+try:
+    import torch
+    import torch.nn as nn
 
-from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
+    torch.use_deterministic_algorithms(True)
+    torch.backends.cudnn.deterministic = True
+
+    from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
+
+except ModuleNotFoundError:
+    pytest.mark.skip(
+        "Skipping PyTorch interface tests because pytorch is not installed."
+    )
+
+
 from modeci_mdf.execution_engine import EvaluableGraph
 
 from modeci_mdf.utils import load_mdf_json

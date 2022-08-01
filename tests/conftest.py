@@ -12,6 +12,46 @@ from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Para
 #         excinfo.traceback = excinfo.traceback.cut(path=node.funcargs["script"])
 #     report.longrepr = node.repr_failure(excinfo)
 
+backend_markers = {
+    "ACT-R": "actr",
+    "PyTorch": "pytorch",
+    "NeuroML": "neuroml",
+    "PsyNeuLink": "psyneulink",
+}
+
+
+def pytest_collection_modifyitems(items):
+    """Mark tests into whether they are core-mdf or they require specific backends to be installed."""
+    for item in items:
+        for pattern, marker in backend_markers.items():
+
+            # Mark any test of an example that is in a backend folder as requiring that backend.
+            if "tests/test_examples.py" in item.nodeid and pattern in item.nodeid:
+                item.add_marker(pytest.mark.__getattr__(marker))
+                break
+
+            # Mark any test that is under interfaces with the appropriate backend.
+            elif "tests/interfaces" in item.nodeid and marker in item.nodeid:
+                item.add_marker(pytest.mark.__getattr__(marker))
+                break
+
+        # These are a couple examples that should probably be under PyTorch but are in the MDF folder
+        if "abcd_torch.py" in item.nodeid or "rnn_pytorch.py" in item.nodeid:
+            item.add_marker(pytest.mark.pytorch)
+
+        # For some reason there are a bunch of examples in examples/ONNX that require pytorch. These
+        # should probably be rewritten to not use ONNX or moved to examples/PyTorch/ONNX or something.
+        if "tests/test_examples.py" in item.nodeid and "ONNX" in item.nodeid:
+            item.add_marker(pytest.mark.pytorch)
+
+        # All other tests should be marked core MDF by default if they don't have another backend marker.
+        # Remember, some tests could be marked manually and not above.
+        if (
+            len([m for m in item.iter_markers() if m.name in backend_markers.values()])
+            == 0
+        ):
+            item.add_marker(pytest.mark.coremdf)
+
 
 @pytest.fixture
 def simple_model_mdf():
