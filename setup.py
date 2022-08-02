@@ -11,7 +11,7 @@ extras = {
         "pytest-mock",
         "typing_extensions; python_version<'3.8'",
     ],
-    "docs": [
+    "optional": [
         "Sphinx~=3.0",
         "recommonmark>=0.5.0",
         "nbsphinx",
@@ -23,6 +23,12 @@ extras = {
         "pytorch-sphinx-theme==0.0.19",
         "sphinxcontrib-versioning",
         "Jinja2<3.1",
+        "neuromllite>=0.5.1",
+        "pyNeuroML>=0.5.20",
+        "psyneulink>=0.12.0.0",
+        "torchviz",
+        "netron",
+        "torch<=1.11.0",
     ],
     "dev": [],
 }
