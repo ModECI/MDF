@@ -756,7 +756,11 @@ class EvaluableNode:
             all_known_vars.append(p.id)
             # params_init[s] = s.curr_value"""
 
+        # TODO: the below checks for evaluability of functions and
+        # parameters using known variables are very similar and could be
+        # simplified with a function
         all_funcs = [f for f in node.functions]
+        num_funcs_remaining = {f.id: None for f in node.functions}
 
         # Order the functions into the correct sequence
         while len(all_funcs) > 0:
@@ -791,15 +795,22 @@ class EvaluableNode:
             #     params_init, array_format=FORMAT_DEFAULT
             # )
             else:
-                if len(all_funcs) == 0:
+                # track the number of remaining functions each time f
+                # is examined. If it's the same as last time, we know
+                # every function was examined and nothing changed, so
+                # we can stop because otherwise it will just infinitely
+                # loop
+                if num_funcs_remaining[f.id] == len(all_funcs):
                     raise Exception(
                         "Error! Could not evaluate function: %s with args %s using known vars %s"
                         % (f.id, f.args, all_known_vars)
                     )
                 else:
+                    num_funcs_remaining[f.id] = len(all_funcs)
                     all_funcs.append(f)
 
         all_params_to_check = [p for p in node.parameters]
+        num_params_remaining = {p.id: None for p in node.parameters}
 
         if self.verbose:
             print("all_params_to_check: %s" % all_params_to_check)
@@ -845,12 +856,13 @@ class EvaluableNode:
                 all_known_vars.append(p.id)
 
             else:
-                if len(all_params_to_check) == 0:
+                if num_params_remaining[p.id] == len(all_params_to_check):
                     raise Exception(
                         "Error! Could not evaluate parameter: %s with args %s using known vars %s"
                         % (p.id, p.args, all_known_vars_plus_this)
                     )
                 else:
+                    num_params_remaining[p.id] = len(all_params_to_check)
                     all_params_to_check.append(p)  # Add back to end of list...
 
         for op in node.output_ports:
