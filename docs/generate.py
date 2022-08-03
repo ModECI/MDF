@@ -49,6 +49,29 @@ with open("MDF_specification.yaml", "w") as d:
 
 print("Written main documentation")
 
+# Generate export formats documentation
+export_formats_list = [
+    "MDF",
+    "ACT-R",
+    "NeuroML",
+    "ONNX",
+    "PsyNeuLink",
+    "PyTorch",
+    "Quantum",
+    "WebGME",
+]
+for format in export_formats_list:
+    with open("../examples/" + format + "/README.md") as readfile, open(
+        "sphinx/source/api/export_format/" + format + "/" + format + ".md", "w"
+    ) as writefile:
+        # read content from first file
+        for line in readfile:
+            # append content to second file
+            writefile.write(line)
+
+
+print("Written Export format documentation")
+
 # Generate standard function generate_documentation
 
 from modeci_mdf.functions.standard import mdf_functions, create_python_expression
