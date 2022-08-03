@@ -5,6 +5,8 @@ from setuptools import setup
 # Most of this packages settings are defined in setup.cfg
 # FIXME: Not sure of the best way to setup extras_require from setup.cfg
 extras = {
+    "psyneulink": ["psyneulink>=0.11.0.0"],
+    "neuroml": ["pyNeuroML>=0.5.20", "neuromllite>=0.5.1"],
     "test": [
         "pytest",
         "pytest-benchmark",
@@ -23,9 +25,6 @@ extras = {
         "pytorch-sphinx-theme==0.0.19",
         "sphinxcontrib-versioning",
         "Jinja2<3.1",
-        "neuromllite>=0.5.1",
-        "pyNeuroML>=0.5.20",
-        "psyneulink>=0.11.0.0",
         "torchviz",
         "netron",
         "torch<=1.11.0",
