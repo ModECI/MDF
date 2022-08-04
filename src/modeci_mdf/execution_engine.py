@@ -1134,10 +1134,26 @@ class EvaluableGraph:
         """
 
         def get_custom_parameter_getter(eobj):
+            # try to pick a default based on expected shape of the
+            # evaluable object before it has ever been executed
+            for d in [
+                lambda: np.zeros(eobj.input_port.shape),
+                lambda: np.zeros(eobj.output_port.shape),
+                lambda: eobj.parameter.default_initial_value,
+            ]:
+                try:
+                    default = d()
+                except AttributeError:
+                    pass
+                else:
+                    break
+            else:
+                default = 0
+
             def getter(dependency, parameter):
                 res = eobj.curr_value
                 if res is None:
-                    return 0
+                    return default
                 else:
                     return res
 

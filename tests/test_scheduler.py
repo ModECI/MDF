@@ -1,4 +1,5 @@
 import graph_scheduler
+import numpy as np
 import pytest
 
 import modeci_mdf.mdf as mdf
@@ -210,3 +211,87 @@ def test_threshold(create_model):
         eg.evaluate(initializer={"A_input": 0})
 
         assert eg.enodes["A"].evaluable_outputs["A_output"].curr_value == 5
+
+
+@pytest.mark.skipif(
+    graph_scheduler.__version__ < "1.1.0", reason="Threshold added in 1.1.0"
+)
+@pytest.mark.parametrize(
+    "threshold_dependency, threshold_parameter",
+    [
+        ("A", "A_output"),
+        ("A", "A_param_2"),
+        ("B", "B_input"),
+    ],
+)
+@pytest.mark.parametrize(
+    "threshold_indices, result",
+    [
+        ((0,), np.array([5, 6])),
+        ((1,), np.array([4, 5])),
+    ],
+)
+def test_threshold_nonscalar_values(
+    create_model, threshold_dependency, threshold_parameter, threshold_indices, result
+):
+    A = mdf.Node(
+        id="A",
+        input_ports=[mdf.InputPort(id="A_input")],
+        parameters=[
+            mdf.Parameter(id="A_param", value="A_param + 1", default_initial_value=0),
+            mdf.Parameter(
+                id="A_param_2",
+                value="[A_param_2[0] + 1, A_param_2[1] + 1]",
+                default_initial_value=np.array([0, 1]),
+            ),
+        ],
+        output_ports=[mdf.OutputPort(id="A_output", value="A_param_2", shape=(2,))],
+    )
+    B = mdf.Node(
+        id="B",
+        input_ports=[mdf.InputPort(id="B_input", shape=(2,))],
+        output_ports=[mdf.OutputPort(id="B_output", value="B_input", shape=(2,))],
+    )
+
+    m = create_model(
+        nodes=[A, B],
+        edges=[
+            mdf.Edge(
+                id="A->B",
+                sender="A",
+                receiver="B",
+                sender_port="A_output",
+                receiver_port="B_input",
+            )
+        ],
+        conditions=mdf.ConditionSet(
+            termination={
+                # include JustRan condition so that
+                # ENVIRONMENT_STATE_UPDATE isn't terminated immediately
+                # after A reaches threshold when it is the condition's
+                # dependency since we are testing B's output. This
+                # ensures B will have its input and output updated
+                graph_scheduler.TimeScale.ENVIRONMENT_STATE_UPDATE: mdf.Condition(
+                    type="And",
+                    dependencies=[
+                        mdf.Condition(
+                            type="Threshold",
+                            dependency=threshold_dependency,
+                            parameter=threshold_parameter,
+                            threshold=5,
+                            comparator=">=",
+                            indices=threshold_indices,
+                        ),
+                        mdf.Condition(type="JustRan", dependency="B"),
+                    ],
+                )
+            },
+        ),
+    )
+
+    eg = EvaluableGraph(m.graphs[0])
+    eg.evaluate(initializer={"A_input": 0})
+
+    assert np.array_equal(
+        eg.enodes["B"].evaluable_outputs["B_output"].curr_value, result
+    )
