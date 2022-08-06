@@ -778,7 +778,11 @@ class EvaluableNode:
 
                     # If we are dealing with a list of symbols, each must treated separately
                     all_req_vars.extend(
-                        get_required_variables_from_expression(arg_expr)
+                        [
+                            v
+                            for v in get_required_variables_from_expression(arg_expr)
+                            if v not in f.args
+                        ]
                     )
 
             all_present = [v in all_known_vars for v in all_req_vars]
@@ -839,14 +843,26 @@ class EvaluableNode:
             all_req_vars = []
 
             if p.value is not None and type(p.value) == str:
-                all_req_vars.extend(get_required_variables_from_expression(p.value))
+                all_req_vars.extend(
+                    [
+                        v
+                        for v in get_required_variables_from_expression(p.value)
+                        if p.args is None or v not in p.args
+                    ]
+                )
 
             if p.args is not None:
                 for arg in p.args:
                     arg_expr = p.args[arg]
                     if isinstance(arg_expr, str):
                         all_req_vars.extend(
-                            get_required_variables_from_expression(arg_expr)
+                            [
+                                v
+                                for v in get_required_variables_from_expression(
+                                    arg_expr
+                                )
+                                if v not in p.args
+                            ]
                         )
 
             all_known_vars_plus_this = all_known_vars + [p.id]

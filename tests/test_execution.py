@@ -22,11 +22,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
         {"slope": 2, "intercept": 4, "variable0": "input"},
         {"slope": 2, "intercept": 4, "variable0": "input"},
         {"slope": "2 * input", "intercept": 4, "variable0": "input"},
-        # expressions as arg values referencing other args is not currently supported
-        pytest.param(
-            {"slope": 2, "intercept": "2 * slope", "variable0": "input"},
-            marks=pytest.mark.xfail,
-        ),
+        {"slope": 2, "intercept": "2 * slope", "variable0": "input"},
     ],
 )
 def test_single_function_variations(create_model, args, function, value, result):
