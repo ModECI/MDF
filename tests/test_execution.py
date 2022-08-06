@@ -83,3 +83,42 @@ def test_condition_variations(create_model, node_specific, termination, result):
     eg.evaluate(initializer={"A_input": 0})
 
     assert eg.enodes["A"].evaluable_outputs["A_output"].curr_value == result
+
+
+def test_dependency_in_function_value(create_model):
+    m = create_model(
+        [
+            mdf.Node(
+                id="N",
+                input_ports=[mdf.InputPort(id="input")],
+                functions=[
+                    mdf.Function(id="f", value="g"),
+                    mdf.Function(id="g", value="1"),
+                ],
+                output_ports=[mdf.OutputPort(id="output", value="f")],
+            )
+        ]
+    )
+
+    eg = EvaluableGraph(m.graphs[0])
+    eg.evaluate(initializer={"input": 1})
+
+
+# NOTE: this is enabled by "don't include known args in required variable"
+# but could not be tested until dependency checking for value
+def test_available_arg_in_function_value(create_model):
+    m = create_model(
+        [
+            mdf.Node(
+                id="N",
+                input_ports=[mdf.InputPort(id="input")],
+                functions=[
+                    mdf.Function(id="f", args={"g": 1}, value="g"),
+                ],
+                output_ports=[mdf.OutputPort(id="output", value="f")],
+            )
+        ]
+    )
+
+    eg = EvaluableGraph(m.graphs[0])
+    eg.evaluate(initializer={"input": 1})

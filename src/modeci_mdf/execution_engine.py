@@ -785,6 +785,14 @@ class EvaluableNode:
                             if v not in f.args
                         ]
                     )
+            if f.value is not None:
+                all_req_vars.extend(
+                    [
+                        v
+                        for v in get_required_variables_from_expression(f.value)
+                        if f.args is None or v not in f.args
+                    ]
+                )
 
             all_present = [v in all_known_vars for v in all_req_vars]
             func_missing_vars[f.id] = {
