@@ -263,6 +263,8 @@ Thumbs.db #thumbnail cache on Windows
 /examples/AB.png
 /examples/states
 /examples/states.png
+/examples/conditions
+/examples/conditions.png
 *.onnx
 /examples/AB.json
 /examples/AB.yaml
