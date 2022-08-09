@@ -9,3 +9,12 @@ build-backend = "setuptools.build_meta"
 
 #[tool.setuptools_scm]
 #write_to = "src/modeci_mdf/version.py"
+
+[tool.pytest.ini_options]
+    markers = [
+        "coremdf: marks tests which are core to the MDF specification",
+        "actr: marks tests which require ACT-R to be installed.",
+        "pytorch: marks test which require PyTorch to be installed.')",
+        "psyneulink: marks tests which require PsyNueLink to be installed.",
+        "neuroml: marks tests which require NeuroML to be installed."
+    ]
