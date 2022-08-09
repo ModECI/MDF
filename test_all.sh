@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-pip install .
+pip install .[all]
 
 # Note this:
 #    1) runs examples to regenerate yaml/json...

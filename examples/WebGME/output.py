@@ -1,7 +1,5 @@
-from neuromllite.utils import _parse_element
 from modeci_mdf.mdf import Model
 from modeci_mdf.execution_engine import EvaluableGraph
-import json
 
 
 data = """{
