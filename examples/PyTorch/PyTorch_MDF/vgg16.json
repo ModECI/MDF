@@ -1,0 +1,2397 @@
+{
+    "VGG16": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.1.1",
+        "graphs": {
+            "VGG16Graph": {
+                "nodes": {
+                    "Conv_33": {
+                        "input_ports": {
+                            "input1": {
+                                "shape": [
+                                    1,
+                                    3,
+                                    224,
+                                    224
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv1_1_weight": {
+                                "shape": [
+                                    64,
+                                    3,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv1_1_bias": {
+                                "shape": [
+                                    64
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "input1",
+                                    "W": "conv1_1_weight",
+                                    "B": "conv1_1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_33": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_34": {
+                        "input_ports": {
+                            "_33": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_33"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_34": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_35": {
+                        "input_ports": {
+                            "_34": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv1_2_weight": {
+                                "shape": [
+                                    64,
+                                    64,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv1_2_bias": {
+                                "shape": [
+                                    64
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_34",
+                                    "W": "conv1_2_weight",
+                                    "B": "conv1_2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_35": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_36": {
+                        "input_ports": {
+                            "_35": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_35"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_36": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_37": {
+                        "input_ports": {
+                            "_36": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx::MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_36"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_37": {
+                                "value": "onnx::MaxPool_1"
+                            }
+                        }
+                    },
+                    "Conv_38": {
+                        "input_ports": {
+                            "_37": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    112,
+                                    112
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv2_1_weight": {
+                                "shape": [
+                                    128,
+                                    64,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv2_1_bias": {
+                                "shape": [
+                                    128
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_37",
+                                    "W": "conv2_1_weight",
+                                    "B": "conv2_1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_38": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_39": {
+                        "input_ports": {
+                            "_38": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_38"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_39": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_40": {
+                        "input_ports": {
+                            "_39": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv2_2_weight": {
+                                "shape": [
+                                    128,
+                                    128,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv2_2_bias": {
+                                "shape": [
+                                    128
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_39",
+                                    "W": "conv2_2_weight",
+                                    "B": "conv2_2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_40": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_41": {
+                        "input_ports": {
+                            "_40": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_40"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_41": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_42": {
+                        "input_ports": {
+                            "_41": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx::MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_41"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_42": {
+                                "value": "onnx::MaxPool_1"
+                            }
+                        }
+                    },
+                    "Conv_43": {
+                        "input_ports": {
+                            "_42": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    56,
+                                    56
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv3_1_weight": {
+                                "shape": [
+                                    256,
+                                    128,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv3_1_bias": {
+                                "shape": [
+                                    256
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_42",
+                                    "W": "conv3_1_weight",
+                                    "B": "conv3_1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_43": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_44": {
+                        "input_ports": {
+                            "_43": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_43"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_44": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_45": {
+                        "input_ports": {
+                            "_44": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv3_2_weight": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv3_2_bias": {
+                                "shape": [
+                                    256
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_44",
+                                    "W": "conv3_2_weight",
+                                    "B": "conv3_2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_45": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_46": {
+                        "input_ports": {
+                            "_45": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_45"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_46": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_47": {
+                        "input_ports": {
+                            "_46": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv3_3_weight": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv3_3_bias": {
+                                "shape": [
+                                    256
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_46",
+                                    "W": "conv3_3_weight",
+                                    "B": "conv3_3_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_47": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_48": {
+                        "input_ports": {
+                            "_47": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_47"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_48": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_49": {
+                        "input_ports": {
+                            "_48": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx::MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_48"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_49": {
+                                "value": "onnx::MaxPool_1"
+                            }
+                        }
+                    },
+                    "Conv_50": {
+                        "input_ports": {
+                            "_49": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    28,
+                                    28
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv4_1_weight": {
+                                "shape": [
+                                    512,
+                                    256,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv4_1_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_49",
+                                    "W": "conv4_1_weight",
+                                    "B": "conv4_1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_50": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_51": {
+                        "input_ports": {
+                            "_50": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_50"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_51": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_52": {
+                        "input_ports": {
+                            "_51": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv4_2_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv4_2_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_51",
+                                    "W": "conv4_2_weight",
+                                    "B": "conv4_2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_52": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_53": {
+                        "input_ports": {
+                            "_52": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_52"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_53": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_54": {
+                        "input_ports": {
+                            "_53": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv4_3_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv4_3_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_53",
+                                    "W": "conv4_3_weight",
+                                    "B": "conv4_3_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_54": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_55": {
+                        "input_ports": {
+                            "_54": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_54"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_55": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_56": {
+                        "input_ports": {
+                            "_55": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx::MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_55"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_56": {
+                                "value": "onnx::MaxPool_1"
+                            }
+                        }
+                    },
+                    "Conv_57": {
+                        "input_ports": {
+                            "_56": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv5_1_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv5_1_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_56",
+                                    "W": "conv5_1_weight",
+                                    "B": "conv5_1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_57": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_58": {
+                        "input_ports": {
+                            "_57": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_57"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_58": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_59": {
+                        "input_ports": {
+                            "_58": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv5_2_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv5_2_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_58",
+                                    "W": "conv5_2_weight",
+                                    "B": "conv5_2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_59": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_60": {
+                        "input_ports": {
+                            "_59": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_59"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_60": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_61": {
+                        "input_ports": {
+                            "_60": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv5_3_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "Tensor"
+                            },
+                            "conv5_3_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx::Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_60",
+                                    "W": "conv5_3_weight",
+                                    "B": "conv5_3_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_61": {
+                                "value": "onnx::Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_62": {
+                        "input_ports": {
+                            "_61": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_61"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_62": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_63": {
+                        "input_ports": {
+                            "_62": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx::MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_62"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_63": {
+                                "value": "onnx::MaxPool_1"
+                            }
+                        }
+                    },
+                    "Shape_64": {
+                        "input_ports": {
+                            "_63": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Shape_1": {
+                                "function": "onnx::Shape",
+                                "args": {
+                                    "data": "_63"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_64": {
+                                "value": "onnx::Shape_1"
+                            }
+                        }
+                    },
+                    "Constant_65": {
+                        "parameters": {
+                            "value": {
+                                "value": 0
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_65": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Gather_66": {
+                        "input_ports": {
+                            "_64": {
+                                "type": "Tensor"
+                            },
+                            "_65": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "axis": {
+                                "value": 0
+                            },
+                            "onnx::Gather_1": {
+                                "function": "onnx::Gather",
+                                "args": {
+                                    "data": "_64",
+                                    "indices": "_65"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_66": {
+                                "value": "onnx::Gather_1"
+                            }
+                        }
+                    },
+                    "Constant_67": {
+                        "parameters": {
+                            "value": {
+                                "value": -1
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_67": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Constant_68": {
+                        "parameters": {
+                            "value": {
+                                "value": [
+                                    0
+                                ]
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_68": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Unsqueeze_69": {
+                        "input_ports": {
+                            "_66": {
+                                "type": "Tensor"
+                            },
+                            "_68": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Unsqueeze_1": {
+                                "function": "onnx::Unsqueeze",
+                                "args": {
+                                    "data": "_66",
+                                    "axes": "_68"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_69": {
+                                "value": "onnx::Unsqueeze_1"
+                            }
+                        }
+                    },
+                    "Constant_70": {
+                        "parameters": {
+                            "value": {
+                                "value": [
+                                    0
+                                ]
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_70": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Unsqueeze_71": {
+                        "input_ports": {
+                            "_67": {
+                                "type": "Tensor"
+                            },
+                            "_70": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Unsqueeze_1": {
+                                "function": "onnx::Unsqueeze",
+                                "args": {
+                                    "data": "_67",
+                                    "axes": "_70"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_71": {
+                                "value": "onnx::Unsqueeze_1"
+                            }
+                        }
+                    },
+                    "Concat_72": {
+                        "input_ports": {
+                            "_69": {
+                                "type": "Tensor"
+                            },
+                            "_71": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "axis": {
+                                "value": 0
+                            },
+                            "onnx::Concat_1": {
+                                "function": "onnx::Concat",
+                                "args": {
+                                    "inputs": "['_69', '_71']"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_72": {
+                                "value": "onnx::Concat_1"
+                            }
+                        }
+                    },
+                    "Reshape_73": {
+                        "input_ports": {
+                            "_63": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ],
+                                "type": "Tensor"
+                            },
+                            "_72": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Reshape_1": {
+                                "function": "onnx::Reshape",
+                                "args": {
+                                    "data": "_63",
+                                    "shape": "_72"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_73": {
+                                "value": "onnx::Reshape_1"
+                            }
+                        }
+                    },
+                    "Gemm_74": {
+                        "input_ports": {
+                            "_73": {
+                                "shape": [
+                                    1,
+                                    25088
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc1_weight": {
+                                "shape": [
+                                    4096,
+                                    25088
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc1_bias": {
+                                "shape": [
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx::Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_73",
+                                    "B": "fc1_weight",
+                                    "C": "fc1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_74": {
+                                "value": "onnx::Gemm_1"
+                            }
+                        }
+                    },
+                    "Relu_75": {
+                        "input_ports": {
+                            "_74": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_74"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_75": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Constant_76": {
+                        "parameters": {
+                            "value": {
+                                "value": 0.5
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_76": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Constant_77": {
+                        "parameters": {
+                            "value": {
+                                "value": true
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_77": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Dropout_78_79": {
+                        "input_ports": {
+                            "_75": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            },
+                            "_76": {
+                                "type": "Tensor"
+                            },
+                            "_77": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Dropout_1": {
+                                "function": "onnx::Dropout",
+                                "args": {
+                                    "data": "_75",
+                                    "ratio": "_76",
+                                    "training_mode": "_77"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_78": {
+                                "value": "onnx::Dropout_1"
+                            },
+                            "_79": {
+                                "value": "onnx::Dropout_1"
+                            }
+                        }
+                    },
+                    "Gemm_80": {
+                        "input_ports": {
+                            "_78": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc2_weight": {
+                                "shape": [
+                                    4096,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc2_bias": {
+                                "shape": [
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx::Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_78",
+                                    "B": "fc2_weight",
+                                    "C": "fc2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_80": {
+                                "value": "onnx::Gemm_1"
+                            }
+                        }
+                    },
+                    "Relu_81": {
+                        "input_ports": {
+                            "_80": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_80"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_81": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Constant_82": {
+                        "parameters": {
+                            "value": {
+                                "value": 0.5
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_82": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Constant_83": {
+                        "parameters": {
+                            "value": {
+                                "value": true
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_83": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Dropout_84_85": {
+                        "input_ports": {
+                            "_81": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            },
+                            "_82": {
+                                "type": "Tensor"
+                            },
+                            "_83": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Dropout_1": {
+                                "function": "onnx::Dropout",
+                                "args": {
+                                    "data": "_81",
+                                    "ratio": "_82",
+                                    "training_mode": "_83"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_84": {
+                                "value": "onnx::Dropout_1"
+                            },
+                            "_85": {
+                                "value": "onnx::Dropout_1"
+                            }
+                        }
+                    },
+                    "Gemm_86": {
+                        "input_ports": {
+                            "_84": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc3_weight": {
+                                "shape": [
+                                    10,
+                                    4096
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc3_bias": {
+                                "shape": [
+                                    10
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx::Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_84",
+                                    "B": "fc3_weight",
+                                    "C": "fc3_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_86": {
+                                "value": "onnx::Gemm_1"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Conv_33_Relu_34": {
+                        "sender": "Conv_33",
+                        "receiver": "Relu_34",
+                        "sender_port": "_33",
+                        "receiver_port": "_33"
+                    },
+                    "Relu_34_Conv_35": {
+                        "sender": "Relu_34",
+                        "receiver": "Conv_35",
+                        "sender_port": "_34",
+                        "receiver_port": "_34"
+                    },
+                    "Conv_35_Relu_36": {
+                        "sender": "Conv_35",
+                        "receiver": "Relu_36",
+                        "sender_port": "_35",
+                        "receiver_port": "_35"
+                    },
+                    "Relu_36_MaxPool_37": {
+                        "sender": "Relu_36",
+                        "receiver": "MaxPool_37",
+                        "sender_port": "_36",
+                        "receiver_port": "_36"
+                    },
+                    "MaxPool_37_Conv_38": {
+                        "sender": "MaxPool_37",
+                        "receiver": "Conv_38",
+                        "sender_port": "_37",
+                        "receiver_port": "_37"
+                    },
+                    "Conv_38_Relu_39": {
+                        "sender": "Conv_38",
+                        "receiver": "Relu_39",
+                        "sender_port": "_38",
+                        "receiver_port": "_38"
+                    },
+                    "Relu_39_Conv_40": {
+                        "sender": "Relu_39",
+                        "receiver": "Conv_40",
+                        "sender_port": "_39",
+                        "receiver_port": "_39"
+                    },
+                    "Conv_40_Relu_41": {
+                        "sender": "Conv_40",
+                        "receiver": "Relu_41",
+                        "sender_port": "_40",
+                        "receiver_port": "_40"
+                    },
+                    "Relu_41_MaxPool_42": {
+                        "sender": "Relu_41",
+                        "receiver": "MaxPool_42",
+                        "sender_port": "_41",
+                        "receiver_port": "_41"
+                    },
+                    "MaxPool_42_Conv_43": {
+                        "sender": "MaxPool_42",
+                        "receiver": "Conv_43",
+                        "sender_port": "_42",
+                        "receiver_port": "_42"
+                    },
+                    "Conv_43_Relu_44": {
+                        "sender": "Conv_43",
+                        "receiver": "Relu_44",
+                        "sender_port": "_43",
+                        "receiver_port": "_43"
+                    },
+                    "Relu_44_Conv_45": {
+                        "sender": "Relu_44",
+                        "receiver": "Conv_45",
+                        "sender_port": "_44",
+                        "receiver_port": "_44"
+                    },
+                    "Conv_45_Relu_46": {
+                        "sender": "Conv_45",
+                        "receiver": "Relu_46",
+                        "sender_port": "_45",
+                        "receiver_port": "_45"
+                    },
+                    "Relu_46_Conv_47": {
+                        "sender": "Relu_46",
+                        "receiver": "Conv_47",
+                        "sender_port": "_46",
+                        "receiver_port": "_46"
+                    },
+                    "Conv_47_Relu_48": {
+                        "sender": "Conv_47",
+                        "receiver": "Relu_48",
+                        "sender_port": "_47",
+                        "receiver_port": "_47"
+                    },
+                    "Relu_48_MaxPool_49": {
+                        "sender": "Relu_48",
+                        "receiver": "MaxPool_49",
+                        "sender_port": "_48",
+                        "receiver_port": "_48"
+                    },
+                    "MaxPool_49_Conv_50": {
+                        "sender": "MaxPool_49",
+                        "receiver": "Conv_50",
+                        "sender_port": "_49",
+                        "receiver_port": "_49"
+                    },
+                    "Conv_50_Relu_51": {
+                        "sender": "Conv_50",
+                        "receiver": "Relu_51",
+                        "sender_port": "_50",
+                        "receiver_port": "_50"
+                    },
+                    "Relu_51_Conv_52": {
+                        "sender": "Relu_51",
+                        "receiver": "Conv_52",
+                        "sender_port": "_51",
+                        "receiver_port": "_51"
+                    },
+                    "Conv_52_Relu_53": {
+                        "sender": "Conv_52",
+                        "receiver": "Relu_53",
+                        "sender_port": "_52",
+                        "receiver_port": "_52"
+                    },
+                    "Relu_53_Conv_54": {
+                        "sender": "Relu_53",
+                        "receiver": "Conv_54",
+                        "sender_port": "_53",
+                        "receiver_port": "_53"
+                    },
+                    "Conv_54_Relu_55": {
+                        "sender": "Conv_54",
+                        "receiver": "Relu_55",
+                        "sender_port": "_54",
+                        "receiver_port": "_54"
+                    },
+                    "Relu_55_MaxPool_56": {
+                        "sender": "Relu_55",
+                        "receiver": "MaxPool_56",
+                        "sender_port": "_55",
+                        "receiver_port": "_55"
+                    },
+                    "MaxPool_56_Conv_57": {
+                        "sender": "MaxPool_56",
+                        "receiver": "Conv_57",
+                        "sender_port": "_56",
+                        "receiver_port": "_56"
+                    },
+                    "Conv_57_Relu_58": {
+                        "sender": "Conv_57",
+                        "receiver": "Relu_58",
+                        "sender_port": "_57",
+                        "receiver_port": "_57"
+                    },
+                    "Relu_58_Conv_59": {
+                        "sender": "Relu_58",
+                        "receiver": "Conv_59",
+                        "sender_port": "_58",
+                        "receiver_port": "_58"
+                    },
+                    "Conv_59_Relu_60": {
+                        "sender": "Conv_59",
+                        "receiver": "Relu_60",
+                        "sender_port": "_59",
+                        "receiver_port": "_59"
+                    },
+                    "Relu_60_Conv_61": {
+                        "sender": "Relu_60",
+                        "receiver": "Conv_61",
+                        "sender_port": "_60",
+                        "receiver_port": "_60"
+                    },
+                    "Conv_61_Relu_62": {
+                        "sender": "Conv_61",
+                        "receiver": "Relu_62",
+                        "sender_port": "_61",
+                        "receiver_port": "_61"
+                    },
+                    "Relu_62_MaxPool_63": {
+                        "sender": "Relu_62",
+                        "receiver": "MaxPool_63",
+                        "sender_port": "_62",
+                        "receiver_port": "_62"
+                    },
+                    "MaxPool_63_Shape_64": {
+                        "sender": "MaxPool_63",
+                        "receiver": "Shape_64",
+                        "sender_port": "_63",
+                        "receiver_port": "_63"
+                    },
+                    "MaxPool_63_Reshape_73": {
+                        "sender": "MaxPool_63",
+                        "receiver": "Reshape_73",
+                        "sender_port": "_63",
+                        "receiver_port": "_63"
+                    },
+                    "Shape_64_Gather_66": {
+                        "sender": "Shape_64",
+                        "receiver": "Gather_66",
+                        "sender_port": "_64",
+                        "receiver_port": "_64"
+                    },
+                    "Constant_65_Gather_66": {
+                        "sender": "Constant_65",
+                        "receiver": "Gather_66",
+                        "sender_port": "_65",
+                        "receiver_port": "_65"
+                    },
+                    "Gather_66_Unsqueeze_69": {
+                        "sender": "Gather_66",
+                        "receiver": "Unsqueeze_69",
+                        "sender_port": "_66",
+                        "receiver_port": "_66"
+                    },
+                    "Constant_67_Unsqueeze_71": {
+                        "sender": "Constant_67",
+                        "receiver": "Unsqueeze_71",
+                        "sender_port": "_67",
+                        "receiver_port": "_67"
+                    },
+                    "Constant_68_Unsqueeze_69": {
+                        "sender": "Constant_68",
+                        "receiver": "Unsqueeze_69",
+                        "sender_port": "_68",
+                        "receiver_port": "_68"
+                    },
+                    "Unsqueeze_69_Concat_72": {
+                        "sender": "Unsqueeze_69",
+                        "receiver": "Concat_72",
+                        "sender_port": "_69",
+                        "receiver_port": "_69"
+                    },
+                    "Constant_70_Unsqueeze_71": {
+                        "sender": "Constant_70",
+                        "receiver": "Unsqueeze_71",
+                        "sender_port": "_70",
+                        "receiver_port": "_70"
+                    },
+                    "Unsqueeze_71_Concat_72": {
+                        "sender": "Unsqueeze_71",
+                        "receiver": "Concat_72",
+                        "sender_port": "_71",
+                        "receiver_port": "_71"
+                    },
+                    "Concat_72_Reshape_73": {
+                        "sender": "Concat_72",
+                        "receiver": "Reshape_73",
+                        "sender_port": "_72",
+                        "receiver_port": "_72"
+                    },
+                    "Reshape_73_Gemm_74": {
+                        "sender": "Reshape_73",
+                        "receiver": "Gemm_74",
+                        "sender_port": "_73",
+                        "receiver_port": "_73"
+                    },
+                    "Gemm_74_Relu_75": {
+                        "sender": "Gemm_74",
+                        "receiver": "Relu_75",
+                        "sender_port": "_74",
+                        "receiver_port": "_74"
+                    },
+                    "Relu_75_Dropout_78_79": {
+                        "sender": "Relu_75",
+                        "receiver": "Dropout_78_79",
+                        "sender_port": "_75",
+                        "receiver_port": "_75"
+                    },
+                    "Constant_76_Dropout_78_79": {
+                        "sender": "Constant_76",
+                        "receiver": "Dropout_78_79",
+                        "sender_port": "_76",
+                        "receiver_port": "_76"
+                    },
+                    "Constant_77_Dropout_78_79": {
+                        "sender": "Constant_77",
+                        "receiver": "Dropout_78_79",
+                        "sender_port": "_77",
+                        "receiver_port": "_77"
+                    },
+                    "Dropout_78_79_Gemm_80": {
+                        "sender": "Dropout_78_79",
+                        "receiver": "Gemm_80",
+                        "sender_port": "_78",
+                        "receiver_port": "_78"
+                    },
+                    "Gemm_80_Relu_81": {
+                        "sender": "Gemm_80",
+                        "receiver": "Relu_81",
+                        "sender_port": "_80",
+                        "receiver_port": "_80"
+                    },
+                    "Relu_81_Dropout_84_85": {
+                        "sender": "Relu_81",
+                        "receiver": "Dropout_84_85",
+                        "sender_port": "_81",
+                        "receiver_port": "_81"
+                    },
+                    "Constant_82_Dropout_84_85": {
+                        "sender": "Constant_82",
+                        "receiver": "Dropout_84_85",
+                        "sender_port": "_82",
+                        "receiver_port": "_82"
+                    },
+                    "Constant_83_Dropout_84_85": {
+                        "sender": "Constant_83",
+                        "receiver": "Dropout_84_85",
+                        "sender_port": "_83",
+                        "receiver_port": "_83"
+                    },
+                    "Dropout_84_85_Gemm_86": {
+                        "sender": "Dropout_84_85",
+                        "receiver": "Gemm_86",
+                        "sender_port": "_84",
+                        "receiver_port": "_84"
+                    }
+                }
+            }
+        },
+        "onnx_opset_version": 9
+    }
+}

@@ -464,7 +464,7 @@ def pytorch_to_mdf(
     graph, params_dict, torch_out = _model_to_graph(
         model=jit_model if graph else model,
         args=args,
-        do_constant_folding=True,
+        do_constant_folding=False,
         training=TrainingMode.EVAL,
         operator_export_type=operator_export_type,
         dynamic_axes={},
