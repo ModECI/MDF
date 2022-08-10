@@ -11,6 +11,7 @@ of the :class:`EvaluableGraph` class. The external library `graph-scheduler
 conditional constraints.
 
 """
+import ast
 import copy
 import functools
 import inspect
@@ -21,7 +22,6 @@ import sys
 import math
 
 import attr
-import sympy
 import numpy as np
 
 import graph_scheduler
@@ -217,7 +217,7 @@ def evaluate_onnx_expr(
 
 
 def get_required_variables_from_expression(expr: str) -> List[str]:
-    """Produces a list containing sympy free symbols in **expr**"""
+    """Produces a list containing variable symbols in **expr**"""
 
     def recursively_extract_subscripted_values(s):
         res = []
@@ -262,7 +262,15 @@ def get_required_variables_from_expression(expr: str) -> List[str]:
     result = []
 
     for e in recursively_extract_subscripted_values(expr):
-        result.extend([str(s) for s in sympy.simplify(e).free_symbols])
+        result.extend(
+            [
+                str(elem.id)
+                for elem in ast.walk(
+                    ast.parse(e.strip(" ,+-*/%^&").lstrip("])").rstrip("[("))
+                )
+                if isinstance(elem, ast.Name)
+            ]
+        )
     return result
 
 
@@ -759,10 +767,6 @@ class EvaluableNode:
             if f.args:
                 for arg in f.args:
                     arg_expr = f.args[arg]
-
-                    # some non-expression/str types will crash in sympy.simplify
-                    if not isinstance(arg_expr, (sympy.Expr, str)):
-                        continue
 
                     # If we are dealing with a list of symbols, each must treated separately
                     all_req_vars.extend(

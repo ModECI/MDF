@@ -9,6 +9,7 @@ from modeci_mdf.execution_engine import get_required_variables_from_expression
         ((), []),
         ("", []),
         ("x", ["x"]),
+        ("x.y", ["x"]),
         ("3*x + y", ["x", "y"]),
         ("x[y]", ["x", "y"]),
         ("x[y[z]]", ["x", "y", "z"]),
