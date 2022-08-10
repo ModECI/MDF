@@ -485,6 +485,46 @@ def test_vgg16(vgg16_pytorch):
     )
 
 
+def test_resnet18(resnet18_pytorch):
+    """Test a standard resnet model imported from PyTorch"""
+    # changed import call
+
+    # Create some test inputs for the model
+    from torchvision import datasets, transforms
+
+    transform = transforms.Compose(
+        [transforms.Resize(255), transforms.CenterCrop(224), transforms.ToTensor()]
+    )
+    images = datasets.ImageFolder("pytorch_example_images/", transform=transform)
+    dataloader = torch.utils.data.DataLoader(images, batch_size=5)
+    x = next(iter(dataloader))[0]
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    with torch.no_grad():
+        output = resnet18_pytorch(x)
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=resnet18_pytorch,
+        args=(x),
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+    # params_dict["input2"] = ebv_output.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    output_mdf = eg.output_enodes[0].get_output()
+    assert np.allclose(
+        output,
+        output_mdf,
+    )
+
+
 def _check_model(mdf_model):
     """A helper function to JIT compile a function or torch.nn.Module into Torchscript and convert to MDF and check it"""
 

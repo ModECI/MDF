@@ -12,6 +12,7 @@ try:
     import torch
     import torch.nn as nn
     import torch.nn.functional as F
+    import torchvision.models as models
 
     # torch.use_deterministic_algorithms(True)
     # torch.backends.cudnn.deterministic = True
@@ -273,6 +274,12 @@ def vgg16_pytorch():
 
     model = VGG16()
     return model
+
+
+@pytest.fixture()
+def resnet18_pytorch():
+    resnet18 = models.resnet18(pretrained=False)
+    return resnet18
 
 
 @pytest.fixture
