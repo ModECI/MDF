@@ -11,16 +11,7 @@ def main():
     from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
-    from torchvision import datasets, transforms
-    from torchvision.io import read_image
-
-    transform = transforms.Compose(
-        [transforms.Resize(255), transforms.CenterCrop(224), transforms.ToTensor()]
-    )
-
-    images = datasets.ImageFolder("pytorch_example_images/", transform=transform)
-    dataloader = torch.utils.data.DataLoader(images, batch_size=5)
-    x = next(iter(dataloader))[0]  # discard the lable
+    x = torch.rand((5, 3, 224, 224))
 
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
     resnet18.eval()

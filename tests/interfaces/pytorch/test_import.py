@@ -489,15 +489,7 @@ def test_resnet18(resnet18_pytorch):
     """Test a standard resnet model imported from PyTorch"""
     # changed import call
 
-    # Create some test inputs for the model
-    from torchvision import datasets, transforms
-
-    transform = transforms.Compose(
-        [transforms.Resize(255), transforms.CenterCrop(224), transforms.ToTensor()]
-    )
-    images = datasets.ImageFolder("pytorch_example_images/", transform=transform)
-    dataloader = torch.utils.data.DataLoader(images, batch_size=5)
-    x = next(iter(dataloader))[0]
+    x = torch.rand((5, 3, 224, 224))
 
     # Run the model once to get some ground truth output (from PyTorch)
     with torch.no_grad():
