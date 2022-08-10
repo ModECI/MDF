@@ -454,10 +454,16 @@ def pytorch_to_mdf(
     # Call out to a part of the ONNX exporter that simiplifies the graph before ONNX export.
     from torch.onnx.utils import _model_to_graph
     from torch.onnx import TrainingMode
-    from torch.onnx.symbolic_helper import (
-        _export_onnx_opset_version,
-        _set_opset_version,
-    )
+    from torch.onnx.symbolic_helper import _set_opset_version
+
+    try:
+        from torch.onnx.symbolic_helper import _export_onnx_opset_version
+    except ImportError:
+
+        # This is need for PyTorch 1.12
+        from torch.onnx._globals import GLOBALS
+
+        _export_onnx_opset_version = GLOBALS.export_onnx_opset_version
 
     previous_opset_version = _export_onnx_opset_version
     _set_opset_version(modeci_onnx_opset_version)
