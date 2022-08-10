@@ -321,13 +321,14 @@ def torchnode_to_mdfnode(
 
             # Try to get the shape and type of the input port
             inp_type = node.inputsAt(inp_i).type()
+            inp_dtype = str(inp_type.dtype()).replace("torch.", "")
             try:
                 shape = tuple(inp_type.sizes()) if inp_type.sizes() else None
             except RuntimeError:
                 shape = None
 
             mdf_node.input_ports.append(
-                InputPort(id=ip_name, shape=shape, type=str(inp_type))
+                InputPort(id=ip_name, shape=shape, type=inp_dtype)
             )
 
     # Add Parameter
