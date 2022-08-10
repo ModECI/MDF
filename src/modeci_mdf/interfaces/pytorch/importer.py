@@ -420,7 +420,7 @@ def pytorch_to_mdf(
     Args:
         model: The model to translate into MDF.
         args: The input arguments for this model. If a nn.Module is passed then the model will be traced with these
-            inputs. If a ScriptModule is passed, they are still needed to deterimine input shapes.
+            inputs. If a ScriptModule is passed, they are still needed to determine input shapes.
         trace: Force the use of tracing to compile the model. The default is to use torch.jit.script
         use_onnx_ops: Use ONNX ops when possible, fallback to ATEN ops when not available. Default is True. If False,
             use only ATEN ops.
@@ -428,6 +428,10 @@ def pytorch_to_mdf(
     Returns:
         The translated MDF model
     """
+
+    # Special case for common case of passing a single Tensor
+    if isinstance(args, (torch.Tensor, int, float, bool)):
+        args = (args,)
 
     # Get the graph and nodes from the TorchScript model
     try:

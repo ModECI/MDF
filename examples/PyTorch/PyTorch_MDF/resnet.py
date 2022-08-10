@@ -16,7 +16,7 @@ def main():
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
     resnet18.eval()
 
-    # Run the model once to get some ground truth outpot (from PyTorch)
+    # Run the model once to get some ground truth output (from PyTorch)
     # with torch.no_grad():
     output = resnet18(x).detach().numpy()
     # print(output)
