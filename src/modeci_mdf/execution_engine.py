@@ -12,6 +12,7 @@ conditional constraints.
 
 """
 import ast
+import builtins
 import copy
 import functools
 import inspect
@@ -53,7 +54,7 @@ import modeci_mdf.functions.actr as actr_funcs
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
-KNOWN_PARAMETERS = ["constant"]
+KNOWN_PARAMETERS = ["constant", "math", "numpy"] + dir(builtins)
 
 
 time_scale_str_regex = r"(TimeScale)?\.(.*)"
