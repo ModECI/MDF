@@ -8,6 +8,22 @@ from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Para
 #         excinfo.traceback = excinfo.traceback.cut(path=node.funcargs["script"])
 #     report.longrepr = node.repr_failure(excinfo)
 
+try:
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+    import torchvision.models as models
+
+    # torch.use_deterministic_algorithms(True)
+    # torch.backends.cudnn.deterministic = True
+
+    # from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
+
+except ModuleNotFoundError:
+    pytest.mark.skip(
+        "Skipping PyTorch interface tests because pytorch is not installed."
+    )
+
 backend_markers = {
     "ACT-R": "actr",
     "PyTorch": "pytorch",
@@ -102,6 +118,168 @@ def simple_model_mdf():
     mod_graph.edges.append(e1)
 
     return mod
+
+
+@pytest.fixture
+def simple_convolution_pytorch():
+    class CNN(nn.Module):
+        def __init__(self, in_channels=1, num_classes=10):
+            super().__init__()
+            self.conv1 = nn.Conv2d(
+                in_channels=in_channels,
+                out_channels=8,
+                kernel_size=(3, 3),
+            )
+            self.pool = nn.MaxPool2d(kernel_size=(2, 2), stride=(1, 1))
+
+            self.fc1 = nn.Linear(8 * 25 * 25, num_classes)
+
+        def forward(self, x):
+            x = F.relu(self.conv1(x))
+            x = self.pool(x)
+            x = x.reshape(x.shape[0], -1)
+            x = self.fc1(x)
+            return x
+
+    # Hyperparameters
+    in_channels = 1
+    num_classes = 10
+
+    model = CNN(in_channels=in_channels, num_classes=num_classes)
+    return model
+
+
+@pytest.fixture
+def convolution_pytorch():
+    class CNN(nn.Module):
+        def __init__(self, in_channels=1, num_classes=10):
+            super().__init__()
+            self.conv1 = nn.Conv2d(
+                in_channels=in_channels,
+                out_channels=8,
+                kernel_size=(3, 3),
+                stride=(1, 1),
+                padding=(1, 1),
+            )
+            self.pool = nn.MaxPool2d(kernel_size=(2, 2), stride=(2, 2))
+            self.conv2 = nn.Conv2d(
+                in_channels=8,
+                out_channels=16,
+                kernel_size=(3, 3),
+                stride=(1, 1),
+                padding=(1, 1),
+            )
+            self.fc1 = nn.Linear(16 * 7 * 7, num_classes)
+
+        def forward(self, x):
+            x = F.relu(self.conv1(x))
+            x = self.pool(x)
+            x = F.relu(self.conv2(x))
+            x = self.pool(x)
+            x = x.reshape(x.shape[0], -1)
+            x = self.fc1(x)
+            return x
+
+    # Hyperparameters
+    in_channels = 1
+    num_classes = 10
+
+    model = CNN(in_channels=in_channels, num_classes=num_classes)
+    return model
+
+
+@pytest.fixture
+def vgg16_pytorch():
+    class VGG16(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.conv1_1 = nn.Conv2d(
+                in_channels=3, out_channels=64, kernel_size=3, padding=1
+            )
+            self.conv1_2 = nn.Conv2d(
+                in_channels=64, out_channels=64, kernel_size=3, padding=1
+            )
+
+            self.conv2_1 = nn.Conv2d(
+                in_channels=64, out_channels=128, kernel_size=3, padding=1
+            )
+            self.conv2_2 = nn.Conv2d(
+                in_channels=128, out_channels=128, kernel_size=3, padding=1
+            )
+
+            self.conv3_1 = nn.Conv2d(
+                in_channels=128, out_channels=256, kernel_size=3, padding=1
+            )
+            self.conv3_2 = nn.Conv2d(
+                in_channels=256, out_channels=256, kernel_size=3, padding=1
+            )
+            self.conv3_3 = nn.Conv2d(
+                in_channels=256, out_channels=256, kernel_size=3, padding=1
+            )
+
+            self.conv4_1 = nn.Conv2d(
+                in_channels=256, out_channels=512, kernel_size=3, padding=1
+            )
+            self.conv4_2 = nn.Conv2d(
+                in_channels=512, out_channels=512, kernel_size=3, padding=1
+            )
+            self.conv4_3 = nn.Conv2d(
+                in_channels=512, out_channels=512, kernel_size=3, padding=1
+            )
+
+            self.conv5_1 = nn.Conv2d(
+                in_channels=512, out_channels=512, kernel_size=3, padding=1
+            )
+            self.conv5_2 = nn.Conv2d(
+                in_channels=512, out_channels=512, kernel_size=3, padding=1
+            )
+            self.conv5_3 = nn.Conv2d(
+                in_channels=512, out_channels=512, kernel_size=3, padding=1
+            )
+
+            self.maxpool = nn.MaxPool2d(kernel_size=2, stride=2)
+
+            self.fc1 = nn.Linear(25088, 4096)
+            self.fc2 = nn.Linear(4096, 4096)
+            self.fc3 = nn.Linear(4096, 10)
+
+        def forward(self, x):
+            x = F.relu(self.conv1_1(x))
+            x = F.relu(self.conv1_2(x))
+            x = self.maxpool(x)
+            x = F.relu(self.conv2_1(x))
+            x = F.relu(self.conv2_2(x))
+            x = self.maxpool(x)
+            x = F.relu(self.conv3_1(x))
+            x = F.relu(self.conv3_2(x))
+            x = F.relu(self.conv3_3(x))
+            x = self.maxpool(x)
+            x = F.relu(self.conv4_1(x))
+            x = F.relu(self.conv4_2(x))
+            x = F.relu(self.conv4_3(x))
+            x = self.maxpool(x)
+            x = F.relu(self.conv5_1(x))
+            x = F.relu(self.conv5_2(x))
+            x = F.relu(self.conv5_3(x))
+            x = self.maxpool(x)
+            x = x.reshape(x.shape[0], -1)
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+            return x
+
+    # Hyperparameters
+    in_channels = 3
+    num_classes = 1
+
+    model = VGG16()
+    return model
+
+
+@pytest.fixture()
+def resnet18_pytorch():
+    resnet18 = models.resnet18(pretrained=False)
+    return resnet18
 
 
 @pytest.fixture
