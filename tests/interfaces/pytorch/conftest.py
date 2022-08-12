@@ -12,6 +12,16 @@ try:
 
     from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
+    # New API for specifying pretrained=False is weughts=None. pretrained keyword
+    # will be removed soon. This handles that for all models depending on PyTorch
+    # version.
+    import inspect
+
+    is_new_weights_api = "weights" in inspect.signature(models.resnet18).parameters
+    model_weights_spec = (
+        {"weights": None} if is_new_weights_api else {"pretrained": False}
+    )
+
 except ModuleNotFoundError:
     pytest.mark.skip(
         "Skipping PyTorch interface tests because pytorch is not installed."
@@ -176,43 +186,43 @@ def vgg16_pytorch():
 
 @pytest.fixture()
 def vgg19_pytorch():
-    vgg19 = models.vgg19(pretrained=False)
+    vgg19 = models.vgg19(**model_weights_spec)
     return vgg19
 
 
 @pytest.fixture()
 def resnet18_pytorch():
-    resnet18 = models.resnet18(pretrained=False)
+    resnet18 = models.resnet18(**model_weights_spec)
     return resnet18
 
 
 @pytest.fixture()
 def mobilenetv2_pytorch():
-    mobilenet_v2 = models.mobilenet_v2(pretrained=False)
+    mobilenet_v2 = models.mobilenet_v2(**model_weights_spec)
     return mobilenet_v2
 
 
 @pytest.fixture()
 def squeezeNet_pytorch():
-    squeezeNet_v2 = models.squeezenet1_1(pretrained=False)
+    squeezeNet_v2 = models.squeezenet1_1(**model_weights_spec)
     return squeezeNet_v2
 
 
 @pytest.fixture()
 def mnasNet_pytorch():
-    mnasNet = models.mnasnet1_3(pretrained=False)
+    mnasNet = models.mnasnet1_3(**model_weights_spec)
     return mnasNet
 
 
 @pytest.fixture()
 def shufflenetv2_pytorch():
-    shufflenet_v2 = models.shufflenet_v2_x0_5(pretrained=False)
+    shufflenet_v2 = models.shufflenet_v2_x0_5(**model_weights_spec)
     return shufflenet_v2
 
 
 @pytest.fixture()
 def resNext_pytorch():
-    resNext_v2 = models.resnext50_32x4d(pretrained=False)
+    resNext_v2 = models.resnext50_32x4d(**model_weights_spec)
     return resNext_v2
 
 
