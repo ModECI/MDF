@@ -891,16 +891,6 @@ class EvaluableNode:
 
         # Now evaluate and set params to new parameter values for use in output...
         for ep in self.evaluable_parameters:
-            if ep == "onnx::Clip_1":
-                clip_min = list(curr_params.keys())[1]
-                curr_params[clip_min] = torch.tensor(
-                    curr_params[clip_min], dtype=torch.float
-                )
-                clip_max = list(curr_params.keys())[2]
-                curr_params[clip_max] = torch.tensor(
-                    curr_params[clip_max], dtype=torch.float
-                )
-
             curr_params[ep] = self.evaluable_parameters[ep].evaluate(
                 curr_params, time_increment=time_increment, array_format=array_format
             )
