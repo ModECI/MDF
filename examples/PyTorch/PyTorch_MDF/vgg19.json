@@ -1,0 +1,2345 @@
+{
+    "VGG": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.2",
+        "graphs": {
+            "VGGGraph": {
+                "nodes": {
+                    "Conv_39": {
+                        "input_ports": {
+                            "input1": {
+                                "shape": [
+                                    1,
+                                    3,
+                                    224,
+                                    224
+                                ],
+                                "type": "float32"
+                            },
+                            "features_0_weight": {
+                                "shape": [
+                                    64,
+                                    3,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_0_bias": {
+                                "shape": [
+                                    64
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "input1",
+                                    "W": "features_0_weight",
+                                    "B": "features_0_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_39": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_40": {
+                        "input_ports": {
+                            "_39": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_39"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_40": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_41": {
+                        "input_ports": {
+                            "_40": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "float32"
+                            },
+                            "features_2_weight": {
+                                "shape": [
+                                    64,
+                                    64,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_2_bias": {
+                                "shape": [
+                                    64
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_40",
+                                    "W": "features_2_weight",
+                                    "B": "features_2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_41": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_42": {
+                        "input_ports": {
+                            "_41": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_41"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_42": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_43": {
+                        "input_ports": {
+                            "_42": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    224,
+                                    224
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx_MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_42"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_43": {
+                                "value": "onnx_MaxPool_1[0]"
+                            }
+                        }
+                    },
+                    "Conv_44": {
+                        "input_ports": {
+                            "_43": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    112,
+                                    112
+                                ],
+                                "type": "float32"
+                            },
+                            "features_5_weight": {
+                                "shape": [
+                                    128,
+                                    64,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_5_bias": {
+                                "shape": [
+                                    128
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_43",
+                                    "W": "features_5_weight",
+                                    "B": "features_5_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_44": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_45": {
+                        "input_ports": {
+                            "_44": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_44"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_45": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_46": {
+                        "input_ports": {
+                            "_45": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "float32"
+                            },
+                            "features_7_weight": {
+                                "shape": [
+                                    128,
+                                    128,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_7_bias": {
+                                "shape": [
+                                    128
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_45",
+                                    "W": "features_7_weight",
+                                    "B": "features_7_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_46": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_47": {
+                        "input_ports": {
+                            "_46": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_46"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_47": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_48": {
+                        "input_ports": {
+                            "_47": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    112,
+                                    112
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx_MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_47"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_48": {
+                                "value": "onnx_MaxPool_1[0]"
+                            }
+                        }
+                    },
+                    "Conv_49": {
+                        "input_ports": {
+                            "_48": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            },
+                            "features_10_weight": {
+                                "shape": [
+                                    256,
+                                    128,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_10_bias": {
+                                "shape": [
+                                    256
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_48",
+                                    "W": "features_10_weight",
+                                    "B": "features_10_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_49": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_50": {
+                        "input_ports": {
+                            "_49": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_49"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_50": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_51": {
+                        "input_ports": {
+                            "_50": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            },
+                            "features_12_weight": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_12_bias": {
+                                "shape": [
+                                    256
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_50",
+                                    "W": "features_12_weight",
+                                    "B": "features_12_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_51": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_52": {
+                        "input_ports": {
+                            "_51": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_51"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_52": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_53": {
+                        "input_ports": {
+                            "_52": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            },
+                            "features_14_weight": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_14_bias": {
+                                "shape": [
+                                    256
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_52",
+                                    "W": "features_14_weight",
+                                    "B": "features_14_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_53": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_54": {
+                        "input_ports": {
+                            "_53": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_53"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_54": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_55": {
+                        "input_ports": {
+                            "_54": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            },
+                            "features_16_weight": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_16_bias": {
+                                "shape": [
+                                    256
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_54",
+                                    "W": "features_16_weight",
+                                    "B": "features_16_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_55": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_56": {
+                        "input_ports": {
+                            "_55": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_55"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_56": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_57": {
+                        "input_ports": {
+                            "_56": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    56,
+                                    56
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx_MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_56"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_57": {
+                                "value": "onnx_MaxPool_1[0]"
+                            }
+                        }
+                    },
+                    "Conv_58": {
+                        "input_ports": {
+                            "_57": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            },
+                            "features_19_weight": {
+                                "shape": [
+                                    512,
+                                    256,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_19_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_57",
+                                    "W": "features_19_weight",
+                                    "B": "features_19_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_58": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_59": {
+                        "input_ports": {
+                            "_58": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_58"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_59": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_60": {
+                        "input_ports": {
+                            "_59": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            },
+                            "features_21_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_21_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_59",
+                                    "W": "features_21_weight",
+                                    "B": "features_21_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_60": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_61": {
+                        "input_ports": {
+                            "_60": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_60"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_61": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_62": {
+                        "input_ports": {
+                            "_61": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            },
+                            "features_23_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_23_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_61",
+                                    "W": "features_23_weight",
+                                    "B": "features_23_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_62": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_63": {
+                        "input_ports": {
+                            "_62": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_62"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_63": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_64": {
+                        "input_ports": {
+                            "_63": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            },
+                            "features_25_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_25_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_63",
+                                    "W": "features_25_weight",
+                                    "B": "features_25_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_64": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_65": {
+                        "input_ports": {
+                            "_64": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_64"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_65": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_66": {
+                        "input_ports": {
+                            "_65": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    28,
+                                    28
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx_MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_65"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_66": {
+                                "value": "onnx_MaxPool_1[0]"
+                            }
+                        }
+                    },
+                    "Conv_67": {
+                        "input_ports": {
+                            "_66": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            },
+                            "features_28_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_28_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_66",
+                                    "W": "features_28_weight",
+                                    "B": "features_28_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_67": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_68": {
+                        "input_ports": {
+                            "_67": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_67"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_68": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_69": {
+                        "input_ports": {
+                            "_68": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            },
+                            "features_30_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_30_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_68",
+                                    "W": "features_30_weight",
+                                    "B": "features_30_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_69": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_70": {
+                        "input_ports": {
+                            "_69": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_69"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_70": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_71": {
+                        "input_ports": {
+                            "_70": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            },
+                            "features_32_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_32_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_70",
+                                    "W": "features_32_weight",
+                                    "B": "features_32_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_71": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_72": {
+                        "input_ports": {
+                            "_71": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_71"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_72": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Conv_73": {
+                        "input_ports": {
+                            "_72": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            },
+                            "features_34_weight": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ],
+                                "type": "float32"
+                            },
+                            "features_34_bias": {
+                                "shape": [
+                                    512
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "_72",
+                                    "W": "features_34_weight",
+                                    "B": "features_34_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_73": {
+                                "value": "onnx_Conv_1"
+                            }
+                        }
+                    },
+                    "Relu_74": {
+                        "input_ports": {
+                            "_73": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_73"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_74": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "MaxPool_75": {
+                        "input_ports": {
+                            "_74": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    14,
+                                    14
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "ceil_mode": {
+                                "value": 0
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "onnx_MaxPool_1": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "_74"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_75": {
+                                "value": "onnx_MaxPool_1[0]"
+                            }
+                        }
+                    },
+                    "AveragePool_76": {
+                        "input_ports": {
+                            "_75": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "kernel_shape": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_AveragePool_1": {
+                                "function": "onnx::AveragePool",
+                                "args": {
+                                    "X": "_75"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_76": {
+                                "value": "onnx_AveragePool_1"
+                            }
+                        }
+                    },
+                    "Flatten_77": {
+                        "input_ports": {
+                            "_76": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "axis": {
+                                "value": 1
+                            },
+                            "onnx_Flatten_1": {
+                                "function": "onnx::Flatten",
+                                "args": {
+                                    "input": "_76"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_77": {
+                                "value": "onnx_Flatten_1"
+                            }
+                        }
+                    },
+                    "Gemm_78": {
+                        "input_ports": {
+                            "_77": {
+                                "shape": [
+                                    1,
+                                    25088
+                                ],
+                                "type": "float32"
+                            },
+                            "classifier_0_weight": {
+                                "shape": [
+                                    4096,
+                                    25088
+                                ],
+                                "type": "float32"
+                            },
+                            "classifier_0_bias": {
+                                "shape": [
+                                    4096
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx_Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_77",
+                                    "B": "classifier_0_weight",
+                                    "C": "classifier_0_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_78": {
+                                "value": "onnx_Gemm_1"
+                            }
+                        }
+                    },
+                    "Relu_79": {
+                        "input_ports": {
+                            "_78": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_78"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_79": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Gemm_80": {
+                        "input_ports": {
+                            "_79": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "float32"
+                            },
+                            "classifier_3_weight": {
+                                "shape": [
+                                    4096,
+                                    4096
+                                ],
+                                "type": "float32"
+                            },
+                            "classifier_3_bias": {
+                                "shape": [
+                                    4096
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx_Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_79",
+                                    "B": "classifier_3_weight",
+                                    "C": "classifier_3_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_80": {
+                                "value": "onnx_Gemm_1"
+                            }
+                        }
+                    },
+                    "Relu_81": {
+                        "input_ports": {
+                            "_80": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_80"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_81": {
+                                "value": "onnx_Relu_1"
+                            }
+                        }
+                    },
+                    "Gemm_82": {
+                        "input_ports": {
+                            "_81": {
+                                "shape": [
+                                    1,
+                                    4096
+                                ],
+                                "type": "float32"
+                            },
+                            "classifier_6_weight": {
+                                "shape": [
+                                    1000,
+                                    4096
+                                ],
+                                "type": "float32"
+                            },
+                            "classifier_6_bias": {
+                                "shape": [
+                                    1000
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx_Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_81",
+                                    "B": "classifier_6_weight",
+                                    "C": "classifier_6_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_82": {
+                                "value": "onnx_Gemm_1"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Conv_39_Relu_40": {
+                        "sender": "Conv_39",
+                        "receiver": "Relu_40",
+                        "sender_port": "_39",
+                        "receiver_port": "_39"
+                    },
+                    "Relu_40_Conv_41": {
+                        "sender": "Relu_40",
+                        "receiver": "Conv_41",
+                        "sender_port": "_40",
+                        "receiver_port": "_40"
+                    },
+                    "Conv_41_Relu_42": {
+                        "sender": "Conv_41",
+                        "receiver": "Relu_42",
+                        "sender_port": "_41",
+                        "receiver_port": "_41"
+                    },
+                    "Relu_42_MaxPool_43": {
+                        "sender": "Relu_42",
+                        "receiver": "MaxPool_43",
+                        "sender_port": "_42",
+                        "receiver_port": "_42"
+                    },
+                    "MaxPool_43_Conv_44": {
+                        "sender": "MaxPool_43",
+                        "receiver": "Conv_44",
+                        "sender_port": "_43",
+                        "receiver_port": "_43"
+                    },
+                    "Conv_44_Relu_45": {
+                        "sender": "Conv_44",
+                        "receiver": "Relu_45",
+                        "sender_port": "_44",
+                        "receiver_port": "_44"
+                    },
+                    "Relu_45_Conv_46": {
+                        "sender": "Relu_45",
+                        "receiver": "Conv_46",
+                        "sender_port": "_45",
+                        "receiver_port": "_45"
+                    },
+                    "Conv_46_Relu_47": {
+                        "sender": "Conv_46",
+                        "receiver": "Relu_47",
+                        "sender_port": "_46",
+                        "receiver_port": "_46"
+                    },
+                    "Relu_47_MaxPool_48": {
+                        "sender": "Relu_47",
+                        "receiver": "MaxPool_48",
+                        "sender_port": "_47",
+                        "receiver_port": "_47"
+                    },
+                    "MaxPool_48_Conv_49": {
+                        "sender": "MaxPool_48",
+                        "receiver": "Conv_49",
+                        "sender_port": "_48",
+                        "receiver_port": "_48"
+                    },
+                    "Conv_49_Relu_50": {
+                        "sender": "Conv_49",
+                        "receiver": "Relu_50",
+                        "sender_port": "_49",
+                        "receiver_port": "_49"
+                    },
+                    "Relu_50_Conv_51": {
+                        "sender": "Relu_50",
+                        "receiver": "Conv_51",
+                        "sender_port": "_50",
+                        "receiver_port": "_50"
+                    },
+                    "Conv_51_Relu_52": {
+                        "sender": "Conv_51",
+                        "receiver": "Relu_52",
+                        "sender_port": "_51",
+                        "receiver_port": "_51"
+                    },
+                    "Relu_52_Conv_53": {
+                        "sender": "Relu_52",
+                        "receiver": "Conv_53",
+                        "sender_port": "_52",
+                        "receiver_port": "_52"
+                    },
+                    "Conv_53_Relu_54": {
+                        "sender": "Conv_53",
+                        "receiver": "Relu_54",
+                        "sender_port": "_53",
+                        "receiver_port": "_53"
+                    },
+                    "Relu_54_Conv_55": {
+                        "sender": "Relu_54",
+                        "receiver": "Conv_55",
+                        "sender_port": "_54",
+                        "receiver_port": "_54"
+                    },
+                    "Conv_55_Relu_56": {
+                        "sender": "Conv_55",
+                        "receiver": "Relu_56",
+                        "sender_port": "_55",
+                        "receiver_port": "_55"
+                    },
+                    "Relu_56_MaxPool_57": {
+                        "sender": "Relu_56",
+                        "receiver": "MaxPool_57",
+                        "sender_port": "_56",
+                        "receiver_port": "_56"
+                    },
+                    "MaxPool_57_Conv_58": {
+                        "sender": "MaxPool_57",
+                        "receiver": "Conv_58",
+                        "sender_port": "_57",
+                        "receiver_port": "_57"
+                    },
+                    "Conv_58_Relu_59": {
+                        "sender": "Conv_58",
+                        "receiver": "Relu_59",
+                        "sender_port": "_58",
+                        "receiver_port": "_58"
+                    },
+                    "Relu_59_Conv_60": {
+                        "sender": "Relu_59",
+                        "receiver": "Conv_60",
+                        "sender_port": "_59",
+                        "receiver_port": "_59"
+                    },
+                    "Conv_60_Relu_61": {
+                        "sender": "Conv_60",
+                        "receiver": "Relu_61",
+                        "sender_port": "_60",
+                        "receiver_port": "_60"
+                    },
+                    "Relu_61_Conv_62": {
+                        "sender": "Relu_61",
+                        "receiver": "Conv_62",
+                        "sender_port": "_61",
+                        "receiver_port": "_61"
+                    },
+                    "Conv_62_Relu_63": {
+                        "sender": "Conv_62",
+                        "receiver": "Relu_63",
+                        "sender_port": "_62",
+                        "receiver_port": "_62"
+                    },
+                    "Relu_63_Conv_64": {
+                        "sender": "Relu_63",
+                        "receiver": "Conv_64",
+                        "sender_port": "_63",
+                        "receiver_port": "_63"
+                    },
+                    "Conv_64_Relu_65": {
+                        "sender": "Conv_64",
+                        "receiver": "Relu_65",
+                        "sender_port": "_64",
+                        "receiver_port": "_64"
+                    },
+                    "Relu_65_MaxPool_66": {
+                        "sender": "Relu_65",
+                        "receiver": "MaxPool_66",
+                        "sender_port": "_65",
+                        "receiver_port": "_65"
+                    },
+                    "MaxPool_66_Conv_67": {
+                        "sender": "MaxPool_66",
+                        "receiver": "Conv_67",
+                        "sender_port": "_66",
+                        "receiver_port": "_66"
+                    },
+                    "Conv_67_Relu_68": {
+                        "sender": "Conv_67",
+                        "receiver": "Relu_68",
+                        "sender_port": "_67",
+                        "receiver_port": "_67"
+                    },
+                    "Relu_68_Conv_69": {
+                        "sender": "Relu_68",
+                        "receiver": "Conv_69",
+                        "sender_port": "_68",
+                        "receiver_port": "_68"
+                    },
+                    "Conv_69_Relu_70": {
+                        "sender": "Conv_69",
+                        "receiver": "Relu_70",
+                        "sender_port": "_69",
+                        "receiver_port": "_69"
+                    },
+                    "Relu_70_Conv_71": {
+                        "sender": "Relu_70",
+                        "receiver": "Conv_71",
+                        "sender_port": "_70",
+                        "receiver_port": "_70"
+                    },
+                    "Conv_71_Relu_72": {
+                        "sender": "Conv_71",
+                        "receiver": "Relu_72",
+                        "sender_port": "_71",
+                        "receiver_port": "_71"
+                    },
+                    "Relu_72_Conv_73": {
+                        "sender": "Relu_72",
+                        "receiver": "Conv_73",
+                        "sender_port": "_72",
+                        "receiver_port": "_72"
+                    },
+                    "Conv_73_Relu_74": {
+                        "sender": "Conv_73",
+                        "receiver": "Relu_74",
+                        "sender_port": "_73",
+                        "receiver_port": "_73"
+                    },
+                    "Relu_74_MaxPool_75": {
+                        "sender": "Relu_74",
+                        "receiver": "MaxPool_75",
+                        "sender_port": "_74",
+                        "receiver_port": "_74"
+                    },
+                    "MaxPool_75_AveragePool_76": {
+                        "sender": "MaxPool_75",
+                        "receiver": "AveragePool_76",
+                        "sender_port": "_75",
+                        "receiver_port": "_75"
+                    },
+                    "AveragePool_76_Flatten_77": {
+                        "sender": "AveragePool_76",
+                        "receiver": "Flatten_77",
+                        "sender_port": "_76",
+                        "receiver_port": "_76"
+                    },
+                    "Flatten_77_Gemm_78": {
+                        "sender": "Flatten_77",
+                        "receiver": "Gemm_78",
+                        "sender_port": "_77",
+                        "receiver_port": "_77"
+                    },
+                    "Gemm_78_Relu_79": {
+                        "sender": "Gemm_78",
+                        "receiver": "Relu_79",
+                        "sender_port": "_78",
+                        "receiver_port": "_78"
+                    },
+                    "Relu_79_Gemm_80": {
+                        "sender": "Relu_79",
+                        "receiver": "Gemm_80",
+                        "sender_port": "_79",
+                        "receiver_port": "_79"
+                    },
+                    "Gemm_80_Relu_81": {
+                        "sender": "Gemm_80",
+                        "receiver": "Relu_81",
+                        "sender_port": "_80",
+                        "receiver_port": "_80"
+                    },
+                    "Relu_81_Gemm_82": {
+                        "sender": "Relu_81",
+                        "receiver": "Gemm_82",
+                        "sender_port": "_81",
+                        "receiver_port": "_81"
+                    }
+                }
+            }
+        },
+        "onnx_opset_version": 9
+    }
+}

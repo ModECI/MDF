@@ -482,6 +482,38 @@ def test_vgg16(vgg16_pytorch):
     )
 
 
+def test_vgg19(vgg19_pytorch):
+    """Test a dummy vgg19 model"""
+    # changed import call
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    # Get rid of randomization due to Dropout
+    vgg19_pytorch.eval()
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = vgg19_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=vgg19_pytorch,
+        args=(x),
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    output_mdf = eg.output_enodes[0].get_output()
+    assert np.allclose(
+        output,
+        output_mdf,
+    )
+
+
 def test_resnet18(resnet18_pytorch):
     """Test a standard resnet model imported from PyTorch"""
     # changed import call
@@ -515,6 +547,164 @@ def test_resnet18(resnet18_pytorch):
         #    Warning: ONNX Preprocess - Removing mutation from node aten::add_ on block input:
         #    'bn1.num_batches_tracked'. This changes graph semantics.
         atol=1e-5,
+    )
+
+
+def test_mobilenetv2(mobilenetv2_pytorch):
+    """Test a standard mobilenetv2 model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = mobilenetv2_pytorch(x)
+    # with torch.no_grad():
+    #     output = mobilenetv2_pytorch(x)
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=mobilenetv2_pytorch,
+        args=(x),
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    output_mdf = eg.output_enodes[0].get_output()
+    assert np.allclose(
+        output,
+        output_mdf,
+        # We need to compare results with an epsilon, I think this is related to some ONNX warnings:
+        #    Warning: ONNX Preprocess - Removing mutation from node aten::add_ on block input:
+        #    'bn1.num_batches_tracked'. This changes graph semantics.
+        atol=1e-5,
+    )
+
+
+def test_shufflenetv2(shufflenetv2_pytorch):
+    """Test a standard shufflenet_v2 model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = shufflenetv2_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=shufflenetv2_pytorch,
+        args=(x),
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    output_mdf = eg.output_enodes[0].get_output()
+    assert np.allclose(
+        output,
+        output_mdf,
+    )
+
+
+def test_resNext(resNext_pytorch):
+    """Test a standard ResNext model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = resNext_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=resNext_pytorch,
+        args=(x),
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    output_mdf = eg.output_enodes[0].get_output()
+    assert np.allclose(
+        output,
+        output_mdf,
+    )
+
+
+def test_squeezeNet(squeezeNet_pytorch):
+    """Test a standard SqueezeNet model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    # Get rid of randomization due to Dropout
+    squeezeNet_pytorch.eval()
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = squeezeNet_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=squeezeNet_pytorch,
+        args=(x),
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    output_mdf = eg.output_enodes[0].get_output()
+    assert np.allclose(
+        output,
+        output_mdf,
+    )
+
+
+def test_mnasNet(mnasNet_pytorch):
+    """Test a standard MNASNet model"""
+
+    # Create some test inputs for the model
+    x = torch.zeros((1, 3, 224, 224))
+    # Get rid of randomization due to Dropout
+    mnasNet_pytorch.eval()
+    # Run the model once to get some ground truth output (from PyTorch)
+    output = mnasNet_pytorch(x).detach().numpy()
+
+    # Convert to MDF
+    mdf_model, params_dict = pytorch_to_mdf(
+        model=mnasNet_pytorch,
+        args=(x),
+        trace=True,
+    )
+    # Get the graph
+    mdf_graph = mdf_model.graphs[0]
+    params_dict["input1"] = x.numpy()
+
+    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    eg.evaluate(initializer=params_dict)
+
+    output_mdf = eg.output_enodes[0].get_output()
+    assert np.allclose(
+        output,
+        output_mdf,
     )
 
 
