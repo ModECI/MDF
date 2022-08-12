@@ -40,7 +40,7 @@ def make_node_id(node: torch.Node) -> str:
 
 def make_func_id(node: torch.Node) -> str:
     """Helper function to get a unique name (used in MDF as id) for a TorchScript node's op/function."""
-    return f"{node.kind()}_1"
+    return node.kind().replace("::", "_") + "_1"
 
 
 def make_model_graph_name(
@@ -124,7 +124,9 @@ def process_onnx_schema(
     # If this is an ONNX op, we need to get the schema from ONNX
     if "onnx::" in node.kind():
         try:
-            schema = onnx.defs.get_schema(node.kind().split("::")[-1])
+            schema = onnx.defs.get_schema(
+                node.kind().split("::")[-1], modeci_onnx_opset_version
+            )
 
             schema_args = {}
             if len(schema.inputs) > 0:
@@ -278,6 +280,10 @@ def torchnode_to_mdfnode(
     """
     op = node.kind()
 
+    # Lookup the schema. For some reason we cannot just call node.schema(), it returns "(no schema)", huh?
+    # We need to do this the hard way.
+    schema = onnx.defs.get_schema(op.replace("onnx::", ""), modeci_onnx_opset_version)
+
     # Exclude constants (as nodes) from the MDF graph. We will instead insert them as parameters to the nodes that
     # they project to.
     if op == "prim::Constant":
@@ -309,9 +315,13 @@ def torchnode_to_mdfnode(
         mdf_node.parameters.append(Parameter(id=p, value=parameters[p]))
 
     # Add any output ports
-    for o in outputs:
+    subscript = lambda x: "" if len(schema.outputs) <= 1 else f"[{x}]"
+    for out_num, o in enumerate(outputs):
         mdf_node.output_ports.append(
-            OutputPort(id=port_mapper.id_to_port(o), value=make_func_id(node))
+            OutputPort(
+                id=port_mapper.id_to_port(o),
+                value=make_func_id(node) + subscript(out_num),
+            )
         )
 
     # Add any input ports to the node, exclude inputs from constant nodes, these are parameters now
@@ -321,7 +331,11 @@ def torchnode_to_mdfnode(
 
             # Try to get the shape and type of the input port
             inp_type = node.inputsAt(inp_i).type()
-            inp_dtype = str(inp_type.dtype()).replace("torch.", "")
+            try:
+                inp_dtype = str(inp_type.dtype()).replace("torch.", "")
+            except RuntimeError:
+                inp_dtype = str(inp_type.getElementType())
+
             try:
                 shape = tuple(inp_type.sizes()) if inp_type.sizes() else None
             except RuntimeError:

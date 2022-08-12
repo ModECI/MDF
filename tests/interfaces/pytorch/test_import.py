@@ -514,6 +514,10 @@ def test_resnet18(resnet18_pytorch):
     assert np.allclose(
         output,
         output_mdf,
+        # We need to compare results with an epsilon, I think this is related to some ONNX warnings:
+        #    Warning: ONNX Preprocess - Removing mutation from node aten::add_ on block input:
+        #    'bn1.num_batches_tracked'. This changes graph semantics.
+        atol=1e-5,
     )
 
 

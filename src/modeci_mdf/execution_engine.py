@@ -159,7 +159,7 @@ def evaluate_onnx_expr(
         for k, v in kwargs_for_onnx.items()
         if (
             (k in onnx_arguments or has_variadic)
-            and "onnx::" not in k  # filter Evaluable__ class names
+            and "onnx_" not in k  # filter Evaluable__ class names
         )
     }
 
@@ -908,9 +908,6 @@ class EvaluableNode:
             curr_params[ep] = self.evaluable_parameters[ep].evaluate(
                 curr_params, time_increment=time_increment, array_format=array_format
             )
-
-            if ep == "onnx::MaxPool_1":
-                curr_params[ep] = curr_params[ep][0]
 
         for eop in self.evaluable_outputs:
             self.evaluable_outputs[eop].evaluate(curr_params, array_format=array_format)

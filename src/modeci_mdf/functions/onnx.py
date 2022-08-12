@@ -28,7 +28,7 @@ FormalParameterOption = OpSchema.FormalParameterOption
 
 # Use the same ONNX opset version that torch is using for defaults now
 # from torch.onnx.symbolic_helper import _default_onnx_opset_version as onnx_opset_version
-onnx_opset_version = 13
+onnx_opset_version = 15
 
 __all__ = [
     "predict_with_onnxruntime",
@@ -329,8 +329,12 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
         for kw in kwargs:
             if kw not in schema.attributes:
                 raise ValueError(
-                    f"Passed unkown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
+                    f"Passed unknown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
                 )
+
+        # For some reason ONNX models are getting shape arguments that are 2D when they need to be 1D
+        if schema.name == "Reshape" and len(inputs_dict["shape"]) > 1:
+            inputs_dict["shape"] = np.squeeze(inputs_dict["shape"])
 
         output_names = [out.name for out in schema.outputs]
 
