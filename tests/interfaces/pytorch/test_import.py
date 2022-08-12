@@ -417,10 +417,7 @@ def test_simple_convolution(simple_convolution_pytorch):
     eg.evaluate(initializer=params_dict)
 
     output_mdf = eg.output_enodes[0].get_output()
-    assert np.allclose(
-        output,
-        output_mdf,
-    )
+    assert np.allclose(output, output_mdf, atol=1e-7)
 
 
 def test_convolution(convolution_pytorch):
