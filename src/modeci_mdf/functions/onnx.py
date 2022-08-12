@@ -333,8 +333,8 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
                 )
 
         # For some reason ONNX models are getting shape arguments that are 2D when they need to be 1D
-        if schema.name == "Reshape" and len(inputs_dict["shape"]) > 1:
-            inputs_dict["shape"] = np.squeeze(inputs_dict["shape"])
+        if schema.name == "Reshape":
+            inputs_dict["shape"] = inputs_dict["shape"].flatten()
 
         output_names = [out.name for out in schema.outputs]
 

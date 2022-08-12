@@ -900,10 +900,6 @@ class EvaluableNode:
                 curr_params[clip_max] = torch.tensor(
                     curr_params[clip_max], dtype=torch.float
                 )
-            if ep == "onnx::Reshape_1":
-                # flatten the shape
-                shape_ = list(curr_params.keys())[1]
-                curr_params[shape_] = curr_params[shape_].flatten()
 
             curr_params[ep] = self.evaluable_parameters[ep].evaluate(
                 curr_params, time_increment=time_increment, array_format=array_format
