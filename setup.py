@@ -27,7 +27,7 @@ extras = {
         "Jinja2<3.1",
         "torchviz",
         "netron",
-        "torch>=1.12.0",
+        "torch>=1.11.0",
         "torchvision",
     ],
     "dev": [],
