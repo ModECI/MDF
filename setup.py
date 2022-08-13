@@ -29,6 +29,7 @@ extras = {
         "netron",
         "torch>=1.11.0",
         "torchvision",
+        "h5py",
     ],
     "dev": [],
 }
