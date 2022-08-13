@@ -15,6 +15,7 @@ try:
     import torchvision.models as models
 
 except ModuleNotFoundError:
+    models = None
     pytest.mark.skip(
         "Skipping PyTorch interface tests because pytorch is not installed."
     )
@@ -24,6 +25,10 @@ def _get_torchvision_models():
     """
     Get all the backbone models in torch vision, suprised there is no function to do this in torchvision.
     """
+
+    if models is None:
+        return []
+
     models_to_test = []
     model_classes = set()
     for model_name, model in models.__dict__.items():
@@ -100,7 +105,6 @@ def _run_and_check_model(model, input=None):
     mdf_model2 = Model.from_json(mdf_model.to_json())
 
 
-@pytest.importorskip("torch")
 @pytest.mark.parametrize("model_init, model", _get_torchvision_models())
 def test_torchvision_models(model_init, model):
     """Test importing the PyTorch model into MDF, executing in execution engine"""
