@@ -53,11 +53,11 @@ jobs:
       run: |
         python -m pytest -m coremdf tests/
 
+    - name: Pre-install PsyNeuLink (from development branch on github)
+      run: python -m pip install git+https://github.com/ModECI/PsyNeuLink@devel
+
     - name: Install optional dependencies
       run: python -m pip install .[all]
-
-    - name: Re-install PsyNeuLink (from development branch on github)
-      run: python -m pip install git+https://github.com/ModECI/PsyNeuLink@devel
 
     - name: Version info for optional installed packages
       run: |
