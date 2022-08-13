@@ -7,10 +7,17 @@ import numpy as np
 
 from modeci_mdf.mdf import Model
 from modeci_mdf.execution_engine import EvaluableGraph
-from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
-import torch
-import torchvision.models as models
+try:
+    from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
+
+    import torch
+    import torchvision.models as models
+
+except ModuleNotFoundError:
+    pytest.mark.skip(
+        "Skipping PyTorch interface tests because pytorch is not installed."
+    )
 
 
 def _get_torchvision_models():
