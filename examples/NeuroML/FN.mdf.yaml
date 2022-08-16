@@ -36,7 +36,7 @@ FN:
                             value: 0.7
                         time_constant_w:
                             value: 12.5
-                        threshold:
+                        threshold_exc:
                             value: -1.0
                         mode:
                             value: 1.0
@@ -48,9 +48,9 @@ FN:
                             value: 0.001
                         V:
                             default_initial_value: initial_v
-                            time_derivative: (a_v*V*V*V + (1+threshold)*b_v*V*V +
-                                (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT)
-                                / (time_constant_v*MSEC)
+                            time_derivative: (a_v*V*V*V + (1+threshold_exc)*b_v*V*V
+                                + (-1*threshold_exc)*c_v*V + d_v + e_v*W + f_v*Iext
+                                + INPUT) / (time_constant_v*MSEC)
                         W:
                             default_initial_value: initial_w
                             time_derivative: (mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity)
@@ -76,7 +76,7 @@ FN:
                         \ 'initial_v': '-1', 'a_v': '-0.3333333333333333', 'b_v':\
                         \ '0.0', 'c_v': '1.0', 'd_v': '1', 'e_v': '-1.0', 'f_v': '1.0',\
                         \ 'time_constant_v': '1.0', 'a_w': '1.0', 'b_w': '-0.8', 'c_w':\
-                        \ '0.7', 'time_constant_w': '12.5', 'threshold': '-1.0', 'mode':\
-                        \ '1.0', 'uncorrelated_activity': '0.0', 'Iext': '0'}\n  \
-                        \ parent: None\n"
+                        \ '0.7', 'time_constant_w': '12.5', 'threshold_exc': '-1.0',\
+                        \ 'mode': '1.0', 'uncorrelated_activity': '0.0', 'Iext': '0'}\n\
+                        \   parent: None\n"
             edges: {}
