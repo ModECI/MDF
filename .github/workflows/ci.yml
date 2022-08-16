@@ -39,8 +39,9 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install modelspec
-      run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
+    # Rely on latest release of modelspec...
+    #- name: Install modelspec
+    #  run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
 
     # - name: Install NeuroMLlite
     #   run: python -m pip install NeuroMLlite>=0.5.0
