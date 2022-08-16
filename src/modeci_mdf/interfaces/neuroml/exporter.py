@@ -14,7 +14,9 @@ from modeci_mdf.functions.standard import mdf_functions, substitute_args
 from modeci_mdf.execution_engine import evaluate_expr
 
 
-def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
+def mdf_to_neuroml(
+    graph, save_to=None, format=None, run_duration_sec=2, run_dt_sec=0.01
+):
 
     print("Converting graph: %s to NeuroML" % (graph.id))
 
@@ -74,23 +76,26 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
         on_start = None
 
         for p in node.parameters:
-            print("Converting %s" % p)
+            print(" - Converting %s" % p)
             if p.value is not None:
-                try:
-                    v_num = float(p.value)
-                    ct.add(lems.Parameter(p.id, "none"))
-                    comp.parameters[p.id] = v_num
-                    print(comp.parameters[p.id])
-                except Exception as e:
-
-                    ct.add(lems.Exposure(p.id, "none"))
-                    dv = lems.DerivedVariable(
-                        name=p.id,
-                        dimension="none",
-                        value="%s" % (p.value),
-                        exposure=p.id,
-                    )
-                    ct.dynamics.add(dv)
+                if len(p.conditions) == 0:
+                    try:
+                        v_num = float(p.value)
+                        ct.add(lems.Parameter(p.id, "none"))
+                        comp.parameters[p.id] = v_num
+                        print(
+                            "   Standard parameter: %s = %s"
+                            % (p.id, comp.parameters[p.id])
+                        )
+                    except Exception as e:
+                        ct.add(lems.Exposure(p.id, "none"))
+                        dv = lems.DerivedVariable(
+                            name=p.id,
+                            dimension="none",
+                            value="%s" % (p.value),
+                            exposure=p.id,
+                        )
+                        ct.dynamics.add(dv)
 
             elif p.function is not None:
                 ct.add(lems.Exposure(p.id, "none"))
@@ -120,6 +125,39 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
                 if p.time_derivative:
                     td = lems.TimeDerivative(variable=p.id, value=p.time_derivative)
                     ct.dynamics.add(td)
+
+            if p.conditions:
+                sv_exists = False
+
+                ct.dynamics.add(
+                    lems.StateVariable(name=p.id, dimension="none", exposure=p.id)
+                )
+                ct.add(lems.Exposure(p.id, "none"))
+                if p.value:
+                    on_start = lems.OnStart()
+                    ct.dynamics.add(on_start)
+                    sa = lems.StateAssignment(
+                        variable=p.id, value=str(evaluate_expr(p.value))
+                    )
+                    on_start.actions.append(sa)
+
+                for c in p.conditions:
+                    test = c.test if hasattr(c, "test") else c["test"]
+                    value = c.value if hasattr(c, "value") else c["value"]
+                    test = (
+                        test.replace(">=", ".geq.")
+                        .replace(">", ".gt.")
+                        .replace("<", ".lt.")
+                        .replace(">=", ".leq.")
+                        .replace("=", ".eq.")
+                        .replace(" and ", " .and. ")
+                    )
+                    print(f"IF ({test}) THEN {p.id} = {value}")
+
+                    oc = lems.OnCondition(test=test)
+                    sa = lems.StateAssignment(variable=p.id, value=str(value))
+                    oc.actions.append(sa)
+                    ct.dynamics.add(oc)
 
         if len(node.output_ports) > 1:
             raise Exception("Currently only max 1 output port supported in NeuroML...")
@@ -189,7 +227,7 @@ def mdf_to_neuroml(graph, save_to=None, format=None, run_duration_sec=2):
     ###   Build Simulation object & save as JSON
 
     simtime = 1000 * run_duration_sec
-    dt = 0.1
+    dt = 1000 * run_dt_sec
     sim = neuromllite.Simulation(
         id="Sim%s" % net.id,
         network=new_file,

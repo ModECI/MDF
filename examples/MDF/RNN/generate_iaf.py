@@ -14,7 +14,7 @@ def main():
     ## Counter node
     input_node = Node(id="input_node")
 
-    t_param = Parameter(id="t", default_initial_value=0, time_derivative="1")
+    t_param = Parameter(id="time", default_initial_value=0, time_derivative="1")
     input_node.parameters.append(t_param)
 
     start = Parameter(id="start", value=20)
@@ -30,11 +30,11 @@ def main():
 
     level.conditions.append(
         ParameterCondition(
-            id="on", test="t > start and t < start + duration", value=amp.id
+            id="on", test="time > start and time < start + duration", value=amp.id
         )
     )
     level.conditions.append(
-        ParameterCondition(id="off", test="t > start + duration", value=0)
+        ParameterCondition(id="off", test="time > start + duration", value=0)
     )
 
     input_node.parameters.append(level)
@@ -42,8 +42,8 @@ def main():
     op1 = OutputPort(id="out_port", value=level.id)
     input_node.output_ports.append(op1)
 
-    op2 = OutputPort(id="t_out_port", value=t_param.id)
-    input_node.output_ports.append(op2)
+    # op2 = OutputPort(id="t_out_port", value=t_param.id)
+    # input_node.output_ports.append(op2)
 
     mod_graph.nodes.append(input_node)
 
@@ -118,7 +118,7 @@ def main():
                 eg.evaluate(time_increment=dt)
 
             i.append(eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value)
-            t.append(eg.enodes["input_node"].evaluable_outputs["t_out_port"].curr_value)
+            t.append(eg.enodes["input_node"].evaluable_parameters["time"].curr_value)
             s.append(eg.enodes["iaf_node"].evaluable_outputs["out_port"].curr_value)
             t_ext += dt
 
@@ -143,6 +143,17 @@ def main():
             filename_root="iaf",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
+
+    if "-neuroml" in sys.argv:
+        from modeci_mdf.interfaces.neuroml.exporter import mdf_to_neuroml
+
+        net, sim = mdf_to_neuroml(
+            mod_graph, save_to="%s.nmllite.json" % mod.id, run_duration_sec=100
+        )
+
+        from neuromllite.NetworkGenerator import generate_and_run
+
+        generate_and_run(sim, simulator="jNeuroML")
 
     return mod_graph
 
