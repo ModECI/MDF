@@ -6,7 +6,6 @@ r"""
     environments using the :mod:`~modeci_mdf.interfaces` module.
 """
 import copy
-import sympy
 import numpy as np
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
@@ -214,15 +213,7 @@ class Parameter(MdfBase):
         if self.default_initial_value is not None:
             return True
         if self.value is not None and type(self.value) == str:
-            # If we are dealing with a list of symbols, each must treated separately
-            arg_expr_list = get_required_variables_from_expression(self.value)
-
-            req_vars = []
-
-            for e in arg_expr_list:
-                param_expr = sympy.simplify(e)
-                req_vars.extend([str(s) for s in param_expr.free_symbols])
-            sf = self.id in req_vars
+            sf = self.id in get_required_variables_from_expression(self.value)
             """
             print(
                 "Checking whether %s is stateful, %s: %s"

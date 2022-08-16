@@ -10,7 +10,6 @@ from collections import defaultdict
 from inspect import getmembers, signature, getsource, isclass
 import modeci_mdf
 import numpy as np
-import sympy
 import torch
 from typing import Union, Dict, Any, Tuple, List, Callable
 import torch.nn as nn
