@@ -4,9 +4,11 @@ from modeci_mdf import MODECI_MDF_VERSION
 import json
 import types
 import yaml
+import shutil
+
+shutil.copy("../README.md", "sphinx/source/api/Introduction.md")
 
 mod = Model(id="Simple")
-
 
 doc = mod.generate_documentation(format="markdown")
 

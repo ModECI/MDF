@@ -9,13 +9,15 @@
 # ModECI Model Description Format (MDF)
 [**Click here for full documentation**](https://mdf.readthedocs.io)
 
-**Note: MDF is still in development! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](http://modeci.org/#aboutPage) to get in contact regarding MDF.**
+**Note: MDF is still in development! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](http://modeci.org/#contactPage) to get in contact regarding MDF.**
 *The MDF format was first proposed following a meeting organised at Princeton in July 2019 by Russ Poldrack of the Center for Reproducible Neuroscience (CRN) at Stanford and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative. For more on the previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF).*
 
 
 ## Overview
 
-MDF is intended to be an open source, community-supported standard and associated library of tools for expressing computational models in a form that allows them to be exchanged between diverse programming languages and execution environments. It consists of a specification for expressing models in serialized formats (currently equivalent JSON and YAML representations are supported, though others such as HDF5 are planned) and a set of Python tools for implementing a model described using MDF. The serialized formats can be used when importing a model into a supported target environment to execute it; and, conversely, when exporting a model built in a supported environment so that it can be re-used in other environments.
+MDF is intended to be an open source, community-supported standard and associated library of tools for expressing computational models in a form that allows them to be exchanged between diverse programming languages and execution environments. The overarching aim is to provide a common format for models across computational neuroscience, cognitive science and machine learning.
+
+It consists of a specification for expressing models in serialized formats (currently JSON, YAML and BSON representations are supported, though others such as HDF5 are planned) and a set of Python tools for implementing a model described using MDF. The serialized formats can be used when importing a model into a supported target environment to execute it; and, conversely, when exporting a model built in a supported environment so that it can be re-used in other environments.
 
 The MDF Python API can be used to create or load an MDF model for inspection and validation. It also includes a basic [execution engine](https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/execution_engine.py) for simulating models in the format. However, this is not intended as a general-purpose simulation environment, nor is MDF intended as a programming language. Rather, the primary purpose of the Python API is to facilitate and validate the exchange of models between existing environments that serve different communities. Accordingly, these Python tools include bi-directional support for importing to and exporting from widely-used programming environments in a range of disciplines, and for easily extending these to other environments.
 
@@ -65,8 +67,13 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 ### Requirements
 Requires Python >= 3.7
 
-### Installation steps
-To install the MDF package and run it locally:
+### Quick start
+```
+pip install modeci-mdf
+```
+
+### Installation from source
+To install the MDF package from source and run it locally:
 
 1. Clone this repository
 ```
