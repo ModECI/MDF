@@ -67,9 +67,21 @@ jobs:
       run: |
           pip list
 
-    - name: Test optional dependencies examples
+    - name: Test interface ACT-R
       run: |
-        python -m pytest -m "not coremdf" tests/
+        python -m pytest -m -v "actr" tests/
+
+    - name: Test interface PyTorch
+      run: |
+        python -m pytest -m -v "pytorch" tests/
+
+    - name: Test interface NeuroML
+      run: |
+        python -m pytest -m -v "neuroml" tests/
+
+    - name: Test interface PsyNeuLink
+      run: |
+        python -m pytest -m -v "psyneulink" tests/
 
     - name: Final version info for optional installed packages
       run: |
