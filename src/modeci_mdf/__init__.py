@@ -13,4 +13,4 @@ widely-used programming environments in a range of disciplines, and for easily e
 MODECI_MDF_VERSION = "0.4"
 
 # Version of the Python module.
-__version__ = "0.4.1"
+__version__ = "0.4.2"

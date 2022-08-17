@@ -6,10 +6,16 @@ the future, the MDF should probably just compile to ONNX (or some other IR) for 
 """
 import functools
 
-import torch
 import numpy as np
 import onnxruntime as ort
 import onnx.defs
+
+try:
+    import torch
+
+    torch_is_available = True
+except ModuleNotFoundError:
+    torch_is_available = False
 
 # Currently using sklearn2onnx API to define ONNX operations. This dependency can probably be removed pretty easily.
 # Do not remove this import even though it appears unused.
@@ -76,7 +82,7 @@ def convert_type(v):
     if hasattr(v, "dtype") and v.dtype == np.float64:
         v = v.astype(np.float32)
 
-    if isinstance(v, torch.Tensor):
+    if torch_is_available and isinstance(v, torch.Tensor):
         v = v.detach().cpu().numpy()
 
     return v

@@ -1,0 +1,376 @@
+{
+    "SimpleNet": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.1",
+        "graphs": {
+            "SimpleNetGraph": {
+                "nodes": {
+                    "Constant_9": {
+                        "parameters": {
+                            "value": {
+                                "value": [
+                                    -1,
+                                    150528
+                                ]
+                            },
+                            "onnx::Constant_1": {
+                                "function": "onnx::Constant",
+                                "args": {}
+                            }
+                        },
+                        "output_ports": {
+                            "_9": {
+                                "value": "onnx::Constant_1"
+                            }
+                        }
+                    },
+                    "Reshape_10": {
+                        "input_ports": {
+                            "input1": {
+                                "shape": [
+                                    1,
+                                    3,
+                                    224,
+                                    224
+                                ],
+                                "type": "Tensor"
+                            },
+                            "_9": {
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Reshape_1": {
+                                "function": "onnx::Reshape",
+                                "args": {
+                                    "data": "input1",
+                                    "shape": "_9"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_10": {
+                                "value": "onnx::Reshape_1"
+                            }
+                        }
+                    },
+                    "Gemm_11": {
+                        "input_ports": {
+                            "_10": {
+                                "shape": [
+                                    1,
+                                    150528
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc1_weight": {
+                                "shape": [
+                                    240,
+                                    150528
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc1_bias": {
+                                "shape": [
+                                    240
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx::Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_10",
+                                    "B": "fc1_weight",
+                                    "C": "fc1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_11": {
+                                "value": "onnx::Gemm_1"
+                            }
+                        }
+                    },
+                    "Relu_12": {
+                        "input_ports": {
+                            "_11": {
+                                "shape": [
+                                    1,
+                                    240
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_11"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_12": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Gemm_13": {
+                        "input_ports": {
+                            "_12": {
+                                "shape": [
+                                    1,
+                                    240
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc2_weight": {
+                                "shape": [
+                                    120,
+                                    240
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc2_bias": {
+                                "shape": [
+                                    120
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx::Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_12",
+                                    "B": "fc2_weight",
+                                    "C": "fc2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_13": {
+                                "value": "onnx::Gemm_1"
+                            }
+                        }
+                    },
+                    "Relu_14": {
+                        "input_ports": {
+                            "_13": {
+                                "shape": [
+                                    1,
+                                    120
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_13"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_14": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Gemm_15": {
+                        "input_ports": {
+                            "_14": {
+                                "shape": [
+                                    1,
+                                    120
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc3_weight": {
+                                "shape": [
+                                    50,
+                                    120
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc3_bias": {
+                                "shape": [
+                                    50
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx::Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_14",
+                                    "B": "fc3_weight",
+                                    "C": "fc3_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_15": {
+                                "value": "onnx::Gemm_1"
+                            }
+                        }
+                    },
+                    "Relu_16": {
+                        "input_ports": {
+                            "_15": {
+                                "shape": [
+                                    1,
+                                    50
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "onnx::Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_15"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_16": {
+                                "value": "onnx::Relu_1"
+                            }
+                        }
+                    },
+                    "Gemm_17": {
+                        "input_ports": {
+                            "_16": {
+                                "shape": [
+                                    1,
+                                    50
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc4_weight": {
+                                "shape": [
+                                    2,
+                                    50
+                                ],
+                                "type": "Tensor"
+                            },
+                            "fc4_bias": {
+                                "shape": [
+                                    2
+                                ],
+                                "type": "Tensor"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx::Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_16",
+                                    "B": "fc4_weight",
+                                    "C": "fc4_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_17": {
+                                "value": "onnx::Gemm_1"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Constant_9_Reshape_10": {
+                        "sender": "Constant_9",
+                        "receiver": "Reshape_10",
+                        "sender_port": "_9",
+                        "receiver_port": "_9"
+                    },
+                    "Reshape_10_Gemm_11": {
+                        "sender": "Reshape_10",
+                        "receiver": "Gemm_11",
+                        "sender_port": "_10",
+                        "receiver_port": "_10"
+                    },
+                    "Gemm_11_Relu_12": {
+                        "sender": "Gemm_11",
+                        "receiver": "Relu_12",
+                        "sender_port": "_11",
+                        "receiver_port": "_11"
+                    },
+                    "Relu_12_Gemm_13": {
+                        "sender": "Relu_12",
+                        "receiver": "Gemm_13",
+                        "sender_port": "_12",
+                        "receiver_port": "_12"
+                    },
+                    "Gemm_13_Relu_14": {
+                        "sender": "Gemm_13",
+                        "receiver": "Relu_14",
+                        "sender_port": "_13",
+                        "receiver_port": "_13"
+                    },
+                    "Relu_14_Gemm_15": {
+                        "sender": "Relu_14",
+                        "receiver": "Gemm_15",
+                        "sender_port": "_14",
+                        "receiver_port": "_14"
+                    },
+                    "Gemm_15_Relu_16": {
+                        "sender": "Gemm_15",
+                        "receiver": "Relu_16",
+                        "sender_port": "_15",
+                        "receiver_port": "_15"
+                    },
+                    "Relu_16_Gemm_17": {
+                        "sender": "Relu_16",
+                        "receiver": "Gemm_17",
+                        "sender_port": "_16",
+                        "receiver_port": "_16"
+                    }
+                }
+            }
+        },
+        "onnx_opset_version": 9
+    }
+}

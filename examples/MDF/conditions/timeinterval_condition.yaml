@@ -1,0 +1,44 @@
+timeinterval_condition:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.1.1
+    graphs:
+        timeinterval_example:
+            nodes:
+                A:
+                    input_ports:
+                        input_port1:
+                            shape:
+                            - 1
+                    parameters:
+                        param_A:
+                            value: param_A + 1
+                    output_ports:
+                        output_1:
+                            value: input_port1
+                B:
+                    input_ports:
+                        input_port1:
+                            shape:
+                            - 1
+                    parameters:
+                        param_B:
+                            value: param_B + 1
+                    output_ports:
+                        output_1:
+                            value: input_port1
+            edges:
+                edge_A_B:
+                    sender: A
+                    receiver: B
+                    sender_port: output_1
+                    receiver_port: input_port1
+            conditions:
+                node_specific:
+                    A:
+                        type: TimeInterval
+                        kwargs:
+                            start: 5
+                    B:
+                        type: TimeInterval
+                        kwargs:
+                            start: 10

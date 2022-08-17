@@ -11,6 +11,7 @@ of the :class:`EvaluableGraph` class. The external library `graph-scheduler
 conditional constraints.
 
 """
+import ast
 import copy
 import functools
 import inspect
@@ -21,7 +22,6 @@ import sys
 import math
 
 import attr
-import sympy
 import numpy as np
 
 import graph_scheduler
@@ -137,14 +137,22 @@ def evaluate_onnx_expr(
     # kwargs. Lets construct this.
     kwargs_for_onnx = {}
     for kw, arg_expr in base_parameters.items():
+        if isinstance(arg_expr, str):
+            arg_expr_list = get_required_variables_from_expression(arg_expr)
+            for a in arg_expr_list:
+                try:
+                    kwargs_for_onnx[a] = evaluated_parameters[a]
+                except KeyError:
+                    pass
 
-        # If this arg is a list of args, we are dealing with a variadic argument. Expand these
-        if type(arg_expr) == str and arg_expr[0] == "[" and arg_expr[-1] == "]":
-            # Use the Python interpreter to parse this into a List[str]
-            arg_expr_list = parse_str_as_list(arg_expr[1:-1])
-            kwargs_for_onnx.update({a: evaluated_parameters[a] for a in arg_expr_list})
-        else:
-            kwargs_for_onnx[kw] = evaluated_parameters[kw]
+            try:
+                if arg_expr[0] == "[" and arg_expr[-1] == "]":
+                    # matches previous behavior
+                    continue
+            except IndexError:
+                pass
+
+        kwargs_for_onnx[kw] = evaluated_parameters[kw]
 
     kwargs_for_onnx = {
         k: v
@@ -208,70 +216,62 @@ def evaluate_onnx_expr(
     return result
 
 
-def parse_str_as_list(s: str) -> list:
-    """Produces a list from its string representation. Runs `eval` on
-    non-list elements within
+def get_required_variables_from_expression(expr: str) -> List[str]:
+    """Produces a list containing variable symbols in **expr**"""
 
-    Args:
-        s (str): a string representing a list
-
-    Returns:
-        list: a list containing elements from **s**
-    """
-
-    def try_eval_str(t):
-        try:
-            return eval(t)
-        except (NameError, SyntaxError):
-            return t
-
-    def _parse_str_as_list(t):
+    def recursively_extract_subscripted_values(s):
         res = []
-        i = 0
-        j = 0
+        subscript_indices = []
         depth = 0
 
-        t = t.replace(" ", "")
-
-        while j < len(t):
-            if t[j] == "[":
+        len_s = len(s)
+        for i in range(len_s):
+            if s[i] == "[":
+                if depth == 0:
+                    subscript_indices.append([i, None])
                 depth += 1
 
-            if t[j] == "]":
+            if s[i] == "]":
                 depth -= 1
 
                 if depth == 0:
-                    res.append(_parse_str_as_list(t[i + 1 : j]))
-                    # also passes this check if at end of string
-                    if t[j : j + 1] not in ",]":
-                        raise ValueError(f"Malformed input at index {j} of {t} {t[j]}")
-                    i = j + 1
+                    subscript_indices[-1][1] = i
 
-            if t[j] == ",":
-                if depth == 0:
-                    if j > i:
-                        res.append(try_eval_str(t[i:j]))
-                    i = j + 1
+        # s contains no subscripts, so it won't be added in below loop
+        if len(subscript_indices) == 0 and len_s > 0:
+            res.append(s)
 
-            j = j + 1
+        last = 0
+        for start, end in subscript_indices:
+            if end is None:
+                end = len_s
 
-        if depth > 0:
-            raise ValueError(f"Unmatched opening bracket in {t}")
-        elif depth < 0:
-            raise ValueError(f"Unmatched closing bracket in {t}")
+            res.extend(recursively_extract_subscripted_values(s[start + 1 : end]))
 
-        if j > i:
-            res.append(try_eval_str(t[i:j]))
+            # add expression being subscripted
+            if last != start:
+                res.append(s[last:start])
+
+            last = end + 1
 
         return res
 
-    res = _parse_str_as_list(s)
+    if not isinstance(expr, str):
+        return []
 
-    # avoid adding extra unnecessary list
-    if len(res) == 1:
-        return res[0]
-    else:
-        return res
+    result = []
+
+    for e in recursively_extract_subscripted_values(expr):
+        result.extend(
+            [
+                str(elem.id)
+                for elem in ast.walk(
+                    ast.parse(e.strip(" ,+-*/%^&").lstrip("])").rstrip("[("))
+                )
+                if isinstance(elem, ast.Name)
+            ]
+        )
+    return result
 
 
 class EvaluableFunction:
@@ -678,7 +678,7 @@ class EvaluableInput:
     def __init__(self, input_port: InputPort, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.input_port = input_port
-        self.curr_value = 0
+        self.curr_value = np.full(input_port.shape, 0)
 
     def set_input_value(self, value: Union[str, int, np.ndarray]):
         """Set a new value at input port
@@ -768,24 +768,10 @@ class EvaluableNode:
                 for arg in f.args:
                     arg_expr = f.args[arg]
 
-                    # some non-expression/str types will crash in sympy.simplify
-                    if not isinstance(arg_expr, (sympy.Expr, str)):
-                        continue
-
                     # If we are dealing with a list of symbols, each must treated separately
-                    if (
-                        type(arg_expr) == str
-                        and arg_expr[0] == "["
-                        and arg_expr[-1] == "]"
-                    ):
-                        # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = parse_str_as_list(arg_expr)
-                    else:
-                        arg_expr_list = [arg_expr]
-
-                    for e in arg_expr_list:
-                        func_expr = sympy.simplify(e)
-                        all_req_vars.extend([str(s) for s in func_expr.free_symbols])
+                    all_req_vars.extend(
+                        get_required_variables_from_expression(arg_expr)
+                    )
 
             all_present = [v in all_known_vars for v in all_req_vars]
 
@@ -827,34 +813,15 @@ class EvaluableNode:
             all_req_vars = []
 
             if p.value is not None and type(p.value) == str:
-                if p.value[0] == "[" and p.value[-1] == "]":
-                    # Use the Python interpreter to parse this into a List[str]
-                    arg_expr_list = parse_str_as_list(p.value)
-                else:
-                    arg_expr_list = [p.value]
-
-                for e in arg_expr_list:
-                    param_expr = sympy.simplify(e)
-                    all_req_vars.extend([str(s) for s in param_expr.free_symbols])
+                all_req_vars.extend(get_required_variables_from_expression(p.value))
 
             if p.args is not None:
                 for arg in p.args:
                     arg_expr = p.args[arg]
-
-                    # If we are dealing with a list of symbols, each must treated separately
-                    if (
-                        type(arg_expr) == str
-                        and arg_expr[0] == "["
-                        and arg_expr[-1] == "]"
-                    ):
-                        # Use the Python interpreter to parse this into a List[str]
-                        arg_expr_list = parse_str_as_list(arg_expr)
-                    else:
-                        arg_expr_list = [arg_expr]
-
-                    for e in arg_expr_list:
-                        param_expr = sympy.simplify(e)
-                        all_req_vars.extend([str(s) for s in param_expr.free_symbols])
+                    if isinstance(arg_expr, str):
+                        all_req_vars.extend(
+                            get_required_variables_from_expression(arg_expr)
+                        )
 
             all_known_vars_plus_this = all_known_vars + [p.id]
             all_present = [v in all_known_vars_plus_this for v in all_req_vars]
@@ -977,6 +944,7 @@ class EvaluableGraph:
         self.enodes = {}
         self.root_nodes = []
         self.output_nodes = []
+        self.order_of_execution = []
 
         # Get the root (input nodes) of the graph. We will assume all are root nodes
         # and then remove those that have edges to them.
@@ -1104,6 +1072,7 @@ class EvaluableGraph:
                     % self.scheduler.get_clock(None).simple_time
                 )
             for node in ts:
+                self.order_of_execution.append(node.id)
                 for edge in incoming_edges[node]:
                     self.evaluate_edge(
                         edge, time_increment=time_increment, array_format=array_format
@@ -1113,8 +1082,7 @@ class EvaluableGraph:
                 )
 
         if self.verbose:
-            print("Order of execution of nodes\n")
-            print(list(self.scheduler.run()))
+            print("> Order of execution of nodes: %s" % self.order_of_execution)
             print("\n Trial terminated")
 
     def evaluate_edge(
@@ -1170,10 +1138,26 @@ class EvaluableGraph:
         """
 
         def get_custom_parameter_getter(eobj):
+            # try to pick a default based on expected shape of the
+            # evaluable object before it has ever been executed
+            for d in [
+                lambda: np.zeros(eobj.input_port.shape),
+                lambda: np.zeros(eobj.output_port.shape),
+                lambda: eobj.parameter.default_initial_value,
+            ]:
+                try:
+                    default = d()
+                except AttributeError:
+                    pass
+                else:
+                    break
+            else:
+                default = 0
+
             def getter(dependency, parameter):
                 res = eobj.curr_value
                 if res is None:
-                    return 0
+                    return default
                 else:
                     return res
 
@@ -1228,6 +1212,7 @@ class EvaluableGraph:
                         args["custom_parameter_getter"] = get_custom_parameter_getter(
                             obj
                         )
+                        break
                 else:
                     raise ValueError(
                         f"No {parameter} evaluable object for {dependency}, options: {list(valid_parameters)}"
