@@ -72,6 +72,7 @@ jobs:
         python -m pytest -v -m "actr" tests/
 
     - name: Test interface PyTorch
+      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
       run: |
         python -m pytest -v -m "pytorch" tests/
 
