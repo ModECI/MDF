@@ -69,19 +69,19 @@ jobs:
 
     - name: Test interface ACT-R
       run: |
-        python -m pytest -m -v "actr" tests/
+        python -m pytest -v -m "actr" tests/
 
     - name: Test interface PyTorch
       run: |
-        python -m pytest -m -v "pytorch" tests/
+        python -m pytest -v -m "pytorch" tests/
 
     - name: Test interface NeuroML
       run: |
-        python -m pytest -m -v "neuroml" tests/
+        python -m pytest -v -m "neuroml" tests/
 
     - name: Test interface PsyNeuLink
       run: |
-        python -m pytest -m -v "psyneulink" tests/
+        python -m pytest -v -m "psyneulink" tests/
 
     - name: Final version info for optional installed packages
       run: |
