@@ -1,6 +1,6 @@
 {
     "Simiaf_example": {
-        "version": "NeuroMLlite v0.5.1",
+        "version": "NeuroMLlite v0.5.2",
         "network": "IAFs.nmllite.json",
         "duration": 100000.0,
         "dt": 10.0,
