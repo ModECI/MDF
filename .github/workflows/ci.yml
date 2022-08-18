@@ -35,19 +35,17 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    # Rely on latest release of modelspec...
+    # Rely on version of modelspec from PyPI as set by setup.cfg...
     #- name: Install modelspec
     #  run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
 
+    # Rely on version of NeuroMLlite from PyPI as set by setup.py...
     # - name: Install NeuroMLlite
     #   run: python -m pip install NeuroMLlite>=0.5.0
 
-    - name: Install GPy (py3.9)
-      if: ${{ matrix.python-version == '3.9' }}
-      run: python -m pip install git+https://github.com/SheffieldML/GPy.git@devel
-
-    - name: Install specific PsyNeuLink branch
-      run: python -m pip install git+https://github.com/ModECI/PsyNeuLink@devel
+    # Rely on version of PsyNeuLink from PyPI as set by setup.py...
+    #- name: Install specific PsyNeuLink branch
+    #  run: python -m pip install git+https://github.com/ModECI/PsyNeuLink@devel
 
     - name: Install core package
       run: python -m pip install .[dev]
