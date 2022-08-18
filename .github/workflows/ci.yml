@@ -25,12 +25,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.7, 3.9]
+        python-version: [ "3.7", "3.9", "3.10"]
         runs-on: [ubuntu-latest, macos-latest, windows-latest]
-        exclude:
-          # excludes Python 3.9 windows for now on account of PsyNeuLink
-          - python-version: 3.9
-            runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -71,9 +67,23 @@ jobs:
       run: |
           pip list
 
-    - name: Test optional dependencies examples
+    - name: Test interface ACT-R
       run: |
-        python -m pytest -m "not coremdf" tests/
+        python -m pytest -v -m "actr" tests/
+
+    - name: Test interface PyTorch
+      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
+      run: |
+        python -m pytest -v -m "pytorch" tests/
+
+    - name: Test interface NeuroML
+      run: |
+        python -m pytest -v -m "neuroml" tests/
+
+    - name: Test interface PsyNeuLink
+      if: ${{ matrix.python-version != '3.10' }}
+      run: |
+        python -m pytest -v -m "psyneulink" tests/
 
     - name: Final version info for optional installed packages
       run: |
