@@ -6,7 +6,7 @@ IAFs:
             nodes:
                 input_node:
                     parameters:
-                        t:
+                        time:
                             default_initial_value: 0
                             time_derivative: '1'
                         start:
@@ -19,16 +19,14 @@ IAFs:
                             value: 0
                             conditions:
                             -   id: 'on'
-                                test: t > start and t < start + duration
+                                test: time > start and time < start + duration
                                 value: amplitude
                             -   id: 'off'
-                                test: t > start + duration
+                                test: time > start + duration
                                 value: 0
                     output_ports:
                         out_port:
                             value: level
-                        t_out_port:
-                            value: t
                 iaf_node:
                     input_ports:
                         input: {}

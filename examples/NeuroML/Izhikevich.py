@@ -15,7 +15,7 @@ if not "-iaf" in sys.argv:  # for testing...
     cell.parameters = {}
 
     params = {
-        "v0": "-60mV",
+        "v0": "-80mV",
         "C": "100 pF",
         "k": "0.7 nS_per_mV",
         "vr": "-60 mV",
@@ -32,11 +32,13 @@ else:
     cell.parameters = {}
 
     params = {
-        "leakReversal": "-50mV",
+        "leak_reversal": "-50mV",
+        "leakReversal": "leak_reversal",
         "thresh": "-55mV",
         "reset": "-70mV",
         "C": "0.2nF",
-        "leakConductance": "0.01uS",
+        "leak_conductance": "0.01uS",
+        "leak_conductance": "leakConductance",
     }
 
 for p in params:
@@ -56,13 +58,19 @@ net.parameters["stim_amp"] = "100pA"
 net.parameters["duration"] = "500ms"
 input_source = InputSource(
     id="iclamp_0",
-    neuroml2_input="PulseGenerator",
+    neuroml2_input="pulseGenerator",
     parameters={"amplitude": "stim_amp", "delay": "delay", "duration": "duration"},
 )
 net.input_sources.append(input_source)
 
 net.inputs.append(
-    Input(id="stim", input_source=input_source.id, population=pop.id, percentage=100)
+    Input(
+        id="stim",
+        input_source=input_source.id,
+        population=pop.id,
+        percentage=100,
+        weight=1,
+    )
 )
 
 print(net)

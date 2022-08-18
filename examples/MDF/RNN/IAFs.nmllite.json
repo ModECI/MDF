@@ -1,0 +1,53 @@
+{
+    "iaf_example": {
+        "version": "NeuroMLlite v0.5.2",
+        "notes": "NeuroMLlite export of MDF graph: iaf_example",
+        "cells": {
+            "input_node__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "iaf_node__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            }
+        },
+        "synapses": {
+            "rsDL": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "silentSyn_proj_input_edge": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            }
+        },
+        "populations": {
+            "input_node": {
+                "size": 1,
+                "component": "input_node__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            },
+            "iaf_node": {
+                "size": 1,
+                "component": "iaf_node__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            }
+        },
+        "projections": {
+            "proj_input_edge": {
+                "presynaptic": "input_node",
+                "postsynaptic": "iaf_node",
+                "synapse": "rsDL",
+                "pre_synapse": "silentSyn_proj_input_edge",
+                "type": "continuousProjection",
+                "weight": 1,
+                "random_connectivity": {
+                    "probability": 1
+                }
+            }
+        }
+    }
+}
