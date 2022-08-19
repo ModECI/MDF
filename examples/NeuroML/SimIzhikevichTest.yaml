@@ -1,0 +1,10 @@
+SimIzhikevichTest:
+    version: NeuroMLlite v0.5.2
+    network: IzhikevichTest.nmllite.yaml
+    duration: 700.0
+    dt: 0.025
+    record_variables:
+        v:
+            all: '*'
+        u:
+            all: '*'

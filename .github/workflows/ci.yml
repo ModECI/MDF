@@ -25,12 +25,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.7, 3.9]
+        python-version: [ "3.7", "3.9", "3.10"]
         runs-on: [ubuntu-latest, macos-latest, windows-latest]
-        exclude:
-          # excludes Python 3.9 windows for now on account of PsyNeuLink
-          - python-version: 3.9
-            runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -39,31 +35,55 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install modelspec
-      run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
+    # Rely on version of modelspec from PyPI as set by setup.cfg...
+    #- name: Install modelspec
+    #  run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
 
-    - name: Install NeuroMLlite
-      run: python -m pip install NeuroMLlite>=0.5.0
+    # Rely on version of NeuroMLlite from PyPI as set by setup.py...
+    # - name: Install NeuroMLlite
+    #   run: python -m pip install NeuroMLlite>=0.5.0
 
-    - name: Install GPy (py3.9)
-      if: ${{ matrix.python-version == '3.9' }}
-      run: python -m pip install git+https://github.com/SheffieldML/GPy.git@devel
+    # Rely on version of PsyNeuLink from PyPI as set by setup.py...
+    #- name: Install specific PsyNeuLink branch
+    #  run: python -m pip install git+https://github.com/ModECI/PsyNeuLink@devel
 
-    - name: Install package
-      run: python -m pip install .[test]
+    - name: Install core package
+      run: python -m pip install .[dev]
 
     - name: Version info for installed packages
       run: |
           pip list
 
-    - name: Test package
+    - name: Test core package
       run: |
-        python -m pytest -ra tests/*.py
-        python -m pytest -ra tests/interfaces/onnx/*.py
-        python -m pytest -ra tests/interfaces/pytorch/test_export.py
-        python -m pytest -ra tests/interfaces/pytorch/test_import.py # inception taking v long
+        python -m pytest -m coremdf tests/
 
-    - name: Final version info for installed packages
+    - name: Install optional dependencies
+      run: python -m pip install .[all]
+
+    - name: Version info for optional installed packages
+      run: |
+          pip list
+
+    - name: Test interface ACT-R
+      run: |
+        python -m pytest -v -m "actr" tests/
+
+    - name: Test interface PyTorch
+      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
+      run: |
+        python -m pytest -v -m "pytorch" tests/
+
+    - name: Test interface NeuroML
+      run: |
+        python -m pytest -v -m "neuroml" tests/
+
+    - name: Test interface PsyNeuLink
+      if: ${{ matrix.python-version != '3.10' }}
+      run: |
+        python -m pytest -v -m "psyneulink" tests/
+
+    - name: Final version info for optional installed packages
       run: |
           pip list
 

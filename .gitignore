@@ -1,6 +1,8 @@
 # No BSON in the repo
 *.bson
-
+/examples/MDF/conditions/everyncalls
+/examples/MDF/conditions/threshold
+/examples/MDF/conditions/timeinterval
 /abc_conditions
 examples/ONNX/data
 examples/ONNX/*.onnx
@@ -250,15 +252,16 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/Izh.png
 /examples/NeuroML/Izh_multi
 /examples/NeuroML/Izh_multi.png
-/examples/NeuroML/Izh_run.png
 /examples/NeuroML/IzhikevichTest.mdf.json
 /examples/NeuroML/IzhikevichTest.net.nml
-/examples/NeuroML/IzhikevichTest.nmllite.yaml
 /examples/NeuroML/LEMS_SimIzhikevichTest.xml
 /examples/NeuroML/SimIzhikevichTest.json
-/examples/NeuroML/SimIzhikevichTest.yaml
 /examples/AB
 /examples/AB.png
+/examples/states
+/examples/states.png
+/examples/conditions
+/examples/conditions.png
 *.onnx
 /examples/AB.json
 /examples/AB.yaml
@@ -266,3 +269,10 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/params_funcs_example_3
 /examples/MDF/params_funcs_example_3.png
 /examples/MDF/params_funcs_example.png
+/examples/NeuroML/LEMS_SimFN_nrn.py
+/examples/MDF/RNN/*.gv.png
+/examples/MDF/RNN/*.dat
+/examples/MDF/RNN/LEMS_Simiaf_example.xml
+/examples/MDF/RNN/iaf_example.net.nml
+/examples/MDF/RNN/iaf_example__lems.xml
+/examples/MDF/RNN/iaf_example_lems_definitions.xml
