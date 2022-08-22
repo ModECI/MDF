@@ -5,8 +5,9 @@
 
 ## MDF to PyTorch
 
-To perform an MDF to PyTorch conversion, provide an MDF model as an input to the `mdf_to_pytorch` function
-which is available in [exporter.py](/src/modeci_mdf/interfaces/pytorch/exporter.py). The output of `mdf_to_pytorch` is a PyTorch model.
+To export an MDF mode to PyTorch, provide an MDF model as an input to the [mdf_to_pytorch](https://mdf.readthedocs.io/en/latest/api/_autosummary/modeci_mdf.interfaces.pytorch.exporter.mdf_to_pytorch.html#modeci_mdf.interfaces.pytorch.exporter.mdf_to_pytorch) function.
+
+The output of `mdf_to_pytorch` is a PyTorch model.
 
 ```
 mdf_to_pytorch(
@@ -16,9 +17,10 @@ mdf_to_pytorch(
       model_input: input file name
 )
 ```
-Returns a dictionary where **key** = **model name**, **value** = **pytorch model object**
 
-### Implementation
+It returns a dictionary where `key` = `model name` and `value` = `pytorch model object`.
+
+### Examples
 
 Below are some working examples of this functionality.
 
