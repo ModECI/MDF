@@ -379,11 +379,12 @@ class EvaluableFunction:
 
 class EvaluableParameter:
     """
-    Evaluates the current value of a :class:`~modeci_mdf.mdf.Parameter` during MDF graph execution.
+    Evaluates the current value of a :class:`~modeci_mdf.mdf.Parameter` during the MDF graph execution.
 
     Args:
         parameter: The parameter to evaluate during execution.
         verbose: Whether to print output of parameter calculations.
+
     """
 
     DEFAULT_INIT_VALUE = 0  # Temporary!
@@ -424,6 +425,7 @@ class EvaluableParameter:
 
         Returns:
             The evaluated value of the parameter.
+
         """
         # FIXME: Shouldn't this just call self.evaluate, seems like there is redundant code here?
         if self.curr_value is None:
@@ -481,6 +483,7 @@ class EvaluableParameter:
 
         Returns:
             The current value of the parameter.
+
         """
         if self.verbose:
             print(

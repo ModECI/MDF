@@ -42,7 +42,7 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 
 **[Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node)** These define the core elements of computation in a **graph**, that receive and transmit information via their **input and output ports**. In general, ports represent points of contact between a **node** and the **edges**that connect it to other nodes.
 
-**[Output Ports](https://github.com/ModECI/MDF/blob/main/docs/README.md#outputport)** An output port is the starting point of the data transmission process. After processing the information in a **node**, an output port is used to begin the transmission of information to the next **node** through **edges**.
+**[Output Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#outputport)** An output port is the starting point of the data transmission process. After processing the information in a **node**, an output port is used to begin the transmission of information to the next **node** through **edges**.
 
 **[Edges](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge)** These transmit information from the **output port** of one **node** to the **input port** of another, collectively defining a **graph’s** topography. Edges may contain weights that can operate on the information they carry.
 
