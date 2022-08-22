@@ -32,7 +32,7 @@ Allowed child    Data Type           Description
 =====
 Graph
 =====
-A directed graph consisting of Node(s) connected via Edge(s)
+A directed graph consisting of `Nodes <#node>`__ (with `Parameters <#parameter>`__ and `Functions <#function>`__ evaluated internally) connected via `Edges <#edge>`__.
 
 **Allowed parameters**
 

@@ -11,13 +11,16 @@
     :width: 15%
     :target: http://modeci.org
 
-|logo| ModECI_MDF
-====================
+|logo| ModECI Model Description Format (MDF)
+============================================
 
 MDF is an open source, community-supported standard and associated library
 of tools for expressing computational models in a form that allows them to be exchanged
-between diverse programming languages and execution environments. It consists of a
-specification for expressing models in serialized form (currently JSON or YAML
+between diverse programming languages and execution environments. The overarching aim is
+to provide a common format for models across **computational neuroscience, cognitive science and machine learning**.
+
+It consists of a
+specification for expressing models in serialized form (currently JSON, YAML or BSON
 representations, though others such as HDF5 are planned) and a set of Python
 tools for implementing a model described using MDF. The serialized formats can be used
 when importing a model into a supported target environment to execute it; and,

@@ -54,7 +54,7 @@ The top level construct in MDF is Model, which may contain multiple <a href="#gr
 </table>
 
 ## Graph
-A directed graph consisting of Node(s) connected via Edge(s)
+A directed graph consisting of <a href="#node">Node</a>s (with <a href="#parameter">Parameter</a>s and <a href="#function">Function</a>s evaluated internally) connected via <a href="#edge">Edge</a>s.
 
 ### Allowed parameters
 <table>

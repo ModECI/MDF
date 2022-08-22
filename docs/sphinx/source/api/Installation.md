@@ -4,12 +4,45 @@
 
 Python (>=3.7)
 
-## Installation
+## Quick start
 
 ```
 pip install modeci_mdf
 ```
-## Additionally
+
+## Installation from source
+To install the MDF package from source and run it locally:
+
+### 1) Clone this repository
+```
+git clone https://github.com/ModECI/MDF.git
+```
+### 2) Change to the directory
+```
+cd MDF
+```
+### 3) Create a virtual environment (e.g. called `mdf-env`)
+```
+pip install virtualenv
+virtualenv mdf-env
+```
+### 4) Activate the virtual environment
+```
+source mdf-env/bin/activate
+```
+### 5) Install the package
+```
+pip install .
+```
+
+Alternatively, to install MDF plus all of the modules required for the export/import interfaces (e.g. PsyNeuLink, NeuroML):
+
+```
+pip install .[all]
+```
+
+
+## Additional dependencies
 
 To generate generate Graph images in MDF you require Graphviz which uses dot.
 
