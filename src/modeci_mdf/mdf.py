@@ -200,7 +200,7 @@ class Parameter(MdfBase):
         """
         Is the parameter stateful?
 
-        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`defualt_initial_value`, or it's
+        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`default_initial_value`, or its
         id is referenced in its value expression.
 
         Returns:
@@ -423,7 +423,7 @@ class ConditionSet(MdfBase):
 @modelspec.define(eq=False)
 class Graph(MdfBase):
     r"""
-    A directed graph consisting of Node(s) connected via Edge(s)
+    A directed graph consisting of :class:`~Node`s (with :class:`~Parameter`s and :class:`~Function`s evaluated internally) connected via :class:`~Edge`s.
 
     Attributes:
         id: A unique identifier for this Graph

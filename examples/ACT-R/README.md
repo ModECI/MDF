@@ -14,7 +14,7 @@ The below graph represents the basic structure of all ACT-R models in MDF:
 There are also more detailed graphs [count.png](count.png) and
 [addition.png](addition.png) for each example.
 
-### Count Model
+## Count Model
 
 [ACT-R](count.lisp) | [JSON](count.json) | [YAML](count.yaml) | [Python Script](count.py) | [Graph](count.png)
 
@@ -39,7 +39,7 @@ The script can use any values specified in [count.lisp](count.lisp), so the
 model can be modified and run multiple times in order to test different values.
 The [count](count.png) graph represents this example.
 
-### Addition Model
+## Addition Model
 
 [ACT-R](addition.lisp) | [JSON](addition.json) | [YAML](addition.yaml) | [Python Script](addition.py) | [Graph](addition.png)
 
