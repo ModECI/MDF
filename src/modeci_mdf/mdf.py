@@ -551,6 +551,9 @@ class Model(MdfBase):
 
         except Exception as e:
             if only_warn_on_fail:
+                import traceback
+
+                print(traceback.format_exc())
                 print(
                     "Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"
                     % e
