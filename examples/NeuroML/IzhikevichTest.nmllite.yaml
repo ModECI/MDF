@@ -1,0 +1,51 @@
+IzhikevichTest:
+    version: NeuroMLlite v0.5.2
+    notes: Example Izhikevich
+    parameters:
+        N: 1
+        v0: -80mV
+        C: 100 pF
+        k: 0.7 nS_per_mV
+        vr: -60 mV
+        vt: -40 mV
+        vpeak: 35 mV
+        a: 0.03 per_ms
+        b: -2 nS
+        c: -50 mV
+        d: 100 pA
+        delay: 100ms
+        stim_amp: 100pA
+        duration: 500ms
+    cells:
+        izhCell:
+            parameters:
+                v0: v0
+                C: C
+                k: k
+                vr: vr
+                vt: vt
+                vpeak: vpeak
+                a: a
+                b: b
+                c: c
+                d: d
+            neuroml2_cell: izhikevich2007Cell
+    input_sources:
+        iclamp_0:
+            parameters:
+                amplitude: stim_amp
+                delay: delay
+                duration: duration
+            neuroml2_input: pulseGenerator
+    populations:
+        izhPop:
+            size: '1'
+            component: izhCell
+            properties:
+                color: .7 0 0
+    inputs:
+        stim:
+            input_source: iclamp_0
+            population: izhPop
+            percentage: 100.0
+            weight: 1

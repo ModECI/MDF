@@ -498,7 +498,7 @@ class EvaluableParameter:
                     verbose=False,
                     array_format=array_format,
                 )
-                if test == True:
+                if np.all(test):
                     self.curr_value = evaluate_expr(
                         condition.value,
                         parameters,

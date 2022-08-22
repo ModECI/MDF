@@ -16,7 +16,7 @@
         <Parameter name="b_w" dimension="none"/>
         <Parameter name="c_w" dimension="none"/>
         <Parameter name="time_constant_w" dimension="none"/>
-        <Parameter name="threshold" dimension="none"/>
+        <Parameter name="threshold_exc" dimension="none" description="Note: renamed temporarily from threshold to allow testing in NEURON, where threshold is reserved word"/>
         <Parameter name="mode" dimension="none"/>
         <Parameter name="uncorrelated_activity" dimension="none"/>
         <!-- Initial Conditions -->
@@ -46,7 +46,7 @@
 
             <DerivedVariable name="INPUT" dimension="none" exposure="INPUT" select="synapses[*]/I" reduce="add" />
 
-            <TimeDerivative variable="V" value="(a_v*V*V*V + (1+threshold)*b_v*V*V + (-1*threshold)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT) / (time_constant_v*MSEC)"/>
+            <TimeDerivative variable="V" value="(a_v*V*V*V + (1+threshold_exc)*b_v*V*V + (-1*threshold_exc)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT) / (time_constant_v*MSEC)"/>
             <TimeDerivative variable="W" value="(mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity) / (time_constant_w*MSEC)"/>
 
             <OnStart>
@@ -64,14 +64,14 @@
     <fnCell id="fn0" initial_w="-0.62" initial_v="-1.2" a_v="-0.3333333333333333" b_v="0.0"
             c_v="1.0" d_v="0" e_v="-1.0" f_v="1.0"
             time_constant_v="1.0" a_w="1.0" b_w="-0.8" c_w="0.7"
-            time_constant_w="12.5" threshold="-1.0"
+            time_constant_w="12.5" threshold_exc="-1.0"
             mode="1.0" uncorrelated_activity="0.0"
             Iext="0" />
 
     <fnCell id="fn" initial_w="0.0" initial_v="-1" a_v="-0.3333333333333333" b_v="0.0"
             c_v="1.0" d_v="1" e_v="-1.0" f_v="1.0"
             time_constant_v="1.0" a_w="1.0" b_w="-0.8" c_w="0.7"
-            time_constant_w="12.5" threshold="-1.0"
+            time_constant_w="12.5" threshold_exc="-1.0"
             mode="1.0" uncorrelated_activity="0.0"
             Iext="0" />
 
