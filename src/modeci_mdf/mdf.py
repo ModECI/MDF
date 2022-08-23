@@ -526,6 +526,7 @@ class Model(MdfBase):
         level: int = 2,
         filename_root: Optional[str] = None,
         only_warn_on_fail: bool = False,
+        isHorizontal: bool = False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
 
@@ -547,6 +548,7 @@ class Model(MdfBase):
                 view_on_render=view_on_render,
                 level=level,
                 filename_root=filename_root,
+                isHorizontal=isHorizontal,
             )
 
         except Exception as e:
