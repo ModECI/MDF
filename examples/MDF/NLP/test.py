@@ -24,16 +24,14 @@ def main():
     input_node = Node(id="input_node")
     ip1 = InputPort(id="input_str")
     input_node.input_ports.append(ip1)
-    input_node.parameters.append(Parameter(id="inner_str", value='input_str'))
-    input_node.parameters.append(Parameter(id="mapping", value={1:'a', 2:'b'}))
+    input_node.parameters.append(Parameter(id="inner_str", value="input_str"))
+    input_node.parameters.append(Parameter(id="mapping", value={1: "a", 2: "b"}))
 
-
-    '''
+    """
     op1 = OutputPort(id="out_port")
     op1.value = "input_level"
-    input_node.output_ports.append(op1)'''
+    input_node.output_ports.append(op1)"""
     mod_graph.nodes.append(input_node)
-
 
     print(mod)
 
@@ -52,7 +50,7 @@ def main():
 
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
-        eg.evaluate(array_format=format, initializer={'input_port1':2})
+        eg.evaluate(array_format=format, initializer={"input_port1": 2})
 
     if "-graph" in sys.argv:
         mod.to_graph_image(
@@ -68,7 +66,7 @@ def main():
             output_format="png",
             view_on_render=False,
             level=3,
-            filename_root="%s_3"%mod.id,
+            filename_root="%s_3" % mod.id,
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
