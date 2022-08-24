@@ -162,10 +162,16 @@ def main():
 
     mod_graph = mod.graphs[0]
 
-    new_file = mod.to_yaml_file("%s.yaml" % mod.id)
-    new_file = mod.to_json_file("%s.json" % mod.id)
+    yaml_file = mod.to_yaml_file("%s.yaml" % mod.id)
+    json_file = mod.to_json_file("%s.json" % mod.id)
 
-    # mdf_to_graphviz(mod_graph,view_on_render=not test_all, level=3)
+    if "-mdf_to_pytorch" in sys.argv:
+        print("Exporting model to pure PyTorch")
+        from modeci_mdf.interfaces.pytorch import mdf_to_pytorch
+
+        pytorch_model = mdf_to_pytorch(
+            mod, yaml_file, eval_models=False, version="mdf.s"
+        )
 
     from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
@@ -188,10 +194,6 @@ def main():
     ]:
         out = _val_info(eg.enodes[n].evaluable_outputs["out_port"].curr_value)
         print(f"Final output value of node {n}:\t {out}")
-
-    from modeci_mdf.interfaces.pytorch import mdf_to_pytorch
-
-    ###pytorch_model = mdf_to_pytorch(mod, ".", eval_models=False, version="mdf.s")
 
     if "-graph" in sys.argv:
         mod.to_graph_image(
