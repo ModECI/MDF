@@ -29,7 +29,8 @@ specification:
                 type: Graph
                 description: The collection of graphs that make up the MDF model.
     Graph:
-        definition: A directed graph consisting of Node(s) connected via Edge(s)
+        definition: A directed graph consisting of :class:`~Node`s (with :class:`~Parameter`s
+            and :class:`~Function`s evaluated internally) connected via :class:`~Edge`s.
         allowed_parameters:
             metadata:
                 type: Union[Any, NoneType]

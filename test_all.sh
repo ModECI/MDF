@@ -31,11 +31,11 @@ python -m modeci_mdf.interfaces.neuroml.exporter States.json -run
 
 ## Test exporting to graphs via GraphViz
 
-python -m modeci_mdf.interfaces.graphviz.exporter Simple.json 1 -noview
+python -m modeci_mdf.interfaces.graphviz.exporter Simple.json 1 -noview -horizontal
 mv simple_example.gv.png images/simple.png
 python -m modeci_mdf.interfaces.graphviz.exporter Simple.json 3 -noview
 mv simple_example.gv.png images/simple_3.png
-python -m modeci_mdf.interfaces.graphviz.exporter ABCD.json 1 -noview
+python -m modeci_mdf.interfaces.graphviz.exporter ABCD.json 1 -noview -horizontal
 mv abcd_example.gv.png images/abcd.png
 python -m modeci_mdf.interfaces.graphviz.exporter ABCD.json 3 -noview
 mv abcd_example.gv.png images/abcd_3.png

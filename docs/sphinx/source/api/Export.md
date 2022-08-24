@@ -1,5 +1,6 @@
-## Supported export Models
-This is the list of currently supported models which MDF supports
+# Supported export and import formats
+
+This is the list of currently supported export/import formats which MDF supports
 
  - ACT-R [README](https://github.com/ModECI/MDF/tree/main/examples/ACT-R#readme)
  - NeuroML [README](https://github.com/ModECI/MDF/tree/main/examples/NeuroML#readme)

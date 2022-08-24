@@ -4,9 +4,27 @@ from modeci_mdf import MODECI_MDF_VERSION
 import json
 import types
 import yaml
+import shutil
+
+shutil.copy("../README.md", "sphinx/source/api/Introduction.md")
+
+for ex in [
+    "ACT-R",
+    "MDF",
+    "NeuroML",
+    "ONNX",
+    "PsyNeuLink",
+    "PyTorch",
+    "Quantum",
+    "WebGME",
+]:
+    shutil.copy(
+        "../examples/%s/README.md" % ex,
+        f"sphinx/source/api/export_format/{ex}/{ex}.md",
+    )
+
 
 mod = Model(id="Simple")
-
 
 doc = mod.generate_documentation(format="markdown")
 
