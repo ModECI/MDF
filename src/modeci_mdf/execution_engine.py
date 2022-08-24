@@ -756,7 +756,12 @@ class EvaluableNode:
             all_known_vars.append(p.id)
             # params_init[s] = s.curr_value"""
 
+        # TODO: the below checks for evaluability of functions and
+        # parameters using known variables are very similar and could be
+        # simplified with a function
         all_funcs = [f for f in node.functions]
+        num_funcs_remaining = {f.id: None for f in node.functions}
+        func_missing_vars = {f.id: [] for f in node.functions}
 
         # Order the functions into the correct sequence
         while len(all_funcs) > 0:
@@ -777,6 +782,9 @@ class EvaluableNode:
                     )
 
             all_present = [v in all_known_vars for v in all_req_vars]
+            func_missing_vars[f.id] = {
+                v for v in all_req_vars if v not in all_known_vars
+            }
 
             if verbose:
                 print(
@@ -791,15 +799,30 @@ class EvaluableNode:
             #     params_init, array_format=FORMAT_DEFAULT
             # )
             else:
-                if len(all_funcs) == 0:
-                    raise Exception(
-                        "Error! Could not evaluate function: %s with args %s using known vars %s"
-                        % (f.id, f.args, all_known_vars)
+                # track the number of remaining functions each time f
+                # is examined. If it's the same as last time, we know
+                # every function was examined and nothing changed, so
+                # we can stop because otherwise it will just infinitely
+                # loop
+                if num_funcs_remaining[f.id] == len(all_funcs):
+                    func_missing_vars = {
+                        f: ", ".join(v) for f, v in func_missing_vars.items()
+                    }
+                    raise ValueError(
+                        "Error! Could not evaluate functions using known vars. The following vars are missing:\n\t"
+                        + "\n\t".join(
+                            f"{f}: {v}"
+                            for f, v in func_missing_vars.items()
+                            if len(v) > 0
+                        )
                     )
                 else:
+                    num_funcs_remaining[f.id] = len(all_funcs)
                     all_funcs.append(f)
 
         all_params_to_check = [p for p in node.parameters]
+        num_params_remaining = {p.id: None for p in node.parameters}
+        param_missing_vars = {f.id: [] for f in node.parameters}
 
         if self.verbose:
             print("all_params_to_check: %s" % all_params_to_check)
@@ -828,6 +851,9 @@ class EvaluableNode:
 
             all_known_vars_plus_this = all_known_vars + [p.id]
             all_present = [v in all_known_vars_plus_this for v in all_req_vars]
+            param_missing_vars[p.id] = {
+                v for v in all_req_vars if v not in all_known_vars
+            }
 
             if verbose:
                 print(
@@ -845,12 +871,20 @@ class EvaluableNode:
                 all_known_vars.append(p.id)
 
             else:
-                if len(all_params_to_check) == 0:
-                    raise Exception(
-                        "Error! Could not evaluate parameter: %s with args %s using known vars %s"
-                        % (p.id, p.args, all_known_vars_plus_this)
+                if num_params_remaining[p.id] == len(all_params_to_check):
+                    param_missing_vars = {
+                        p: ", ".join(v) for p, v in param_missing_vars.items()
+                    }
+                    raise ValueError(
+                        "Error! Could not evaluate parameters using known vars. The following vars are missing:\n\t"
+                        + "\n\t".join(
+                            f"{p}: {v}"
+                            for p, v in param_missing_vars.items()
+                            if len(v) > 0
+                        )
                     )
                 else:
+                    num_params_remaining[p.id] = len(all_params_to_check)
                     all_params_to_check.append(p)  # Add back to end of list...
 
         for op in node.output_ports:
