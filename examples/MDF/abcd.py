@@ -132,6 +132,7 @@ def main():
             level=1,
             filename_root="abcd",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            is_horizontal=True,
         )
         mod.to_graph_image(
             engine="dot",

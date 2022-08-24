@@ -142,6 +142,7 @@ def mdf_to_graphviz(
     view_on_render=False,
     level=LEVEL_2,
     filename_root=None,
+    is_horizontal=False,
 ):
 
     DEFAULT_POP_SHAPE = "ellipse"
@@ -156,6 +157,9 @@ def mdf_to_graphviz(
         filename="%s.gv" % mdf_graph.id if not filename_root else filename_root,
         engine=engine,
         format=output_format,
+        graph_attr={"rankdir": "LR"}
+        if is_horizontal
+        else None,  # to make the graph horizontal
     )
     # graph termination condition(s) added globally
     global_term_cond_present = False
@@ -463,6 +467,8 @@ if __name__ == "__main__":
     example = sys.argv[1]
     view = NO_VIEW not in sys.argv
 
+    is_horizontal = "-horizontal" in sys.argv
+
     model = load_mdf(example)
 
     mod_graph = model.graphs[0]
@@ -474,5 +480,9 @@ if __name__ == "__main__":
     print("------------------")
     # nmllite_file = example.replace('.json','.nmllite.json')
     mdf_to_graphviz(
-        mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2])
+        mod_graph,
+        engine=engines["d"],
+        view_on_render=view,
+        level=int(sys.argv[2]),
+        is_horizontal=is_horizontal,
     )
