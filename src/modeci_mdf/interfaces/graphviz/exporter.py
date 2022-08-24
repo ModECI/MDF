@@ -142,6 +142,7 @@ def mdf_to_graphviz(
     view_on_render=False,
     level=LEVEL_2,
     filename_root=None,
+    isHorizontal=False,
 ):
 
     DEFAULT_POP_SHAPE = "ellipse"
@@ -156,6 +157,9 @@ def mdf_to_graphviz(
         filename="%s.gv" % mdf_graph.id if not filename_root else filename_root,
         engine=engine,
         format=output_format,
+        graph_attr={"rankdir": "LR"}
+        if isHorizontal
+        else None,  # to make the graph horizontal
     )
     # graph termination condition(s) added globally
     global_term_cond_present = False
