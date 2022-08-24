@@ -467,6 +467,8 @@ if __name__ == "__main__":
     example = sys.argv[1]
     view = NO_VIEW not in sys.argv
 
+    is_horizontal = "-horizontal" in sys.argv
+
     model = load_mdf(example)
 
     mod_graph = model.graphs[0]
@@ -478,5 +480,9 @@ if __name__ == "__main__":
     print("------------------")
     # nmllite_file = example.replace('.json','.nmllite.json')
     mdf_to_graphviz(
-        mod_graph, engine=engines["d"], view_on_render=view, level=int(sys.argv[2])
+        mod_graph,
+        engine=engines["d"],
+        view_on_render=view,
+        level=int(sys.argv[2]),
+        is_horizontal=is_horizontal,
     )

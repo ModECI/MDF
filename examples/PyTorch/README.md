@@ -5,7 +5,7 @@
 
 ## MDF to PyTorch
 
-To export an MDF mode to PyTorch, provide an MDF model as an input to the [mdf_to_pytorch](https://mdf.readthedocs.io/en/latest/api/_autosummary/modeci_mdf.interfaces.pytorch.exporter.mdf_to_pytorch.html#modeci_mdf.interfaces.pytorch.exporter.mdf_to_pytorch) function.
+To export an MDF model to PyTorch, provide an MDF model as an input to the [mdf_to_pytorch()](https://mdf.readthedocs.io/en/latest/api/_autosummary/modeci_mdf.interfaces.pytorch.exporter.mdf_to_pytorch.html#modeci_mdf.interfaces.pytorch.exporter.mdf_to_pytorch) function.
 
 The output of `mdf_to_pytorch` is a PyTorch model.
 
@@ -18,19 +18,28 @@ mdf_to_pytorch(
 )
 ```
 
-It returns a dictionary where `key` = `model name` and `value` = `pytorch model object`.
+It returns a dictionary where `key` = `model name` and `value` = `PyTorch model object`.
+
+A test script demonstrating conversion of MDF model to PyTorch is at [MDF_to_PyTorch.py](/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py). This converts multiple MDF models to their respective PyTorch models. The converted models are available in folder: [MDF_PyTorch](/examples/PyTorch/MDF_PyTorch).
 
 ### Examples
 
 Below are some working examples of this functionality.
 
-1. One of sample MDF examples [ABCD.json](../MDF/ABCD.json) is converted to PyTorch [ABCD_pytorch.py](MDF_PyTorch/ABCD_pytorch.py).
-The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx) and the results are compared in all three environments.
+#### 1) Simple ABCD example
+
+We convert one of the sample MDF examples [ABCD.json](../MDF/ABCD.json):
+
+![ABCD](../MDF/images/abcd.png)
+
+This is converted to PyTorch and can be seen here: [ABCD_pytorch.py](MDF_PyTorch/ABCD_pytorch.py).
+
+The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx). An image of the contents of the ONNX model (visualized using [NETRON](https://netron.app/)) is below.
 
 ![ABCD.svg](ABCD.svg)
 <!-- this representation was produced from https://netron.app/ by uploading the ONNX model and exporting the svg-->
 
-2. Multi-Layer Perceptron MDF to PyTorch Conversion:
+#### 2) Multi-Layer Perceptron MDF to PyTorch Conversion:
 
   To run an example where a simple Multi-Layer Perceptron (MLP) created using the MDF specification and executed using sample digit-recognition data, run:
 
@@ -38,27 +47,15 @@ The PyTorch model is further converted to ONNX [ABCD.onnx](MDF_PyTorch/ABCD.onnx
   python mlp_pure_mdf.py
   ```
 
-  A graph of the network can be created with `python mlp_pure_mdf.py -graph`:
-
-  **MDF graph**
+A graph of the network can be created with `python mlp_pure_mdf.py -graph`:
 
   ![mlp_pure_mdf.png](mlp_pure_mdf.png)
 
-  The network can be run against images from the MNIST database with: `python mlp_pure_mdf.py -run`, and produce 98% accuracy. The image below shows the results of 300 images:
+The network can be run against images from the MNIST database with: `python mlp_pure_mdf.py -run`, and produce 98% accuracy. The image below shows the results of 300 images:
 
   ![mlp_pure_mdf.results.png](mlp_pure_mdf.results.png)
 
 
-  Conversion to PyTorch: TODO...
-
-The demo to convert an MDF model to PyTorch is at [MDF_to_PyTorch.py](/examples/PyTorch/MDF_PyTorch/MDF_to_PyTorch.py). This converts all the available MDF models to their respective Pytorch Models.
-Any model created using the MDF specification is translated to a PyTorch model, run:
-
-```bash
-python MDF_to_PyTorch
-```
-
-**NOTE:** The converted models are available in folder: [MDF_PyTorch](/examples/PyTorch/MDF_PyTorch).
 
 
 ## PyTorch to MDF
@@ -69,8 +66,8 @@ can be translated to TorchScript (via `torch.jit.script` or `torch.jit.trace`) s
 then be able to be converted to their MDF representation automatically. Below are
 several working examples of this functionality.
 
-To perform an PyTorch to MDF conversion, provide a PyTorch model as an input to the `pytorch_to_mdf` function
-which is available in [importer.py](/src/modeci_mdf/interfaces/pytorch/importer.py). The output of `pytorch_to_mdf` is an MDF model.
+To perform an PyTorch to MDF conversion, provide a PyTorch model as an input to the [pytorch_to_mdf()](https://mdf.readthedocs.io/en/latest/api/_autosummary/modeci_mdf.interfaces.pytorch.importer.pytorch_to_mdf.html#modeci_mdf.interfaces.pytorch.importer.pytorch_to_mdf) function
+which is available in [importer.py](/src/modeci_mdf/interfaces/pytorch/importer.py). The output of `pytorch_to_mdf()` is an MDF model.
 
 ```
 pytorch_to_mdf(
@@ -82,14 +79,13 @@ pytorch_to_mdf(
           use only ATEN ops.
 )
 ```
-Returns a translated MDF model
+Returns a translated MDF model.
 
-### Implementation
+### Examples of usage
 
-Below are some working examples of this functionality.
+#### 1) Simple PyTorch To MDF
 
-1. Simple Pytorch To MDF:
-    This is a simple fully-connected neural network model example consisting of input image of 224 * 224 * 3 and resulting in two classes as the output
+This is a simple fully-connected neural network model example consisting of input image of 224 * 224 * 3 and resulting in two classes as the output
   To run an example of converting a PyTorch model written in PyTorch to its MDF representation simply run:
 
   ```bash
@@ -104,26 +100,32 @@ Below are some working examples of this functionality.
   ![simple_pytorch_to_mdf.svg](simple_pytorch_to_mdf.svg)
 
 
-  **NOTE**: This command will run the netron python server on the local host where we can export the graph as svg/png
+  **NOTE**: This command will run the NETRON python server on the local host where we can export the graph as svg/png
 
   The graph representation of the MDF model can be generated with:
   ```bash
   python simple_pytorch_to_mdf.py -graph
   ```
 
-  ![simple_pytorch_to_mdf.png](simple_pytorch_to_mdf.png)
+Graphical export from MDF level 1:
 
-  To Visualize the PyTorch model
+![simple_pytorch_to_mdf.1.png](simple_pytorch_to_mdf.1.png)
+
+Graphical export from MDF level 3:
+
+![simple_pytorch_to_mdf.png](simple_pytorch_to_mdf.png)
+
+To visualize the PyTorch model:
   ```bash
   python simple_pytorch_to_mdf.py -graph-torch
   ```
 
-  ![simple_pytorch_to_mdf_torchviz.png](simple_pytorch_to_mdf_torchviz.png)
+![simple_pytorch_to_mdf_torchviz.png](simple_pytorch_to_mdf_torchviz.png)
 
-  The MDF for this model is the written to [simple_pytorch_to_mdf.json](simple_pytorch_to_mdf.json). The model is then executed
-  via the MDF scheduler and the results are compared to the native execution in PyTorch.
+The MDF for this model is the written to [simple_pytorch_to_mdf.json](simple_pytorch_to_mdf.json). The model is then executed
+via the MDF scheduler and the results are compared to the native execution in PyTorch.
 
-2. Inception Blocks Model:
+#### 2) Inception Blocks Model
 
   ![inception.svg](inception.svg)
   To run an example of converting a PyTorch InceptionV3 like model written in PyTorch to its MDF representation simply run:

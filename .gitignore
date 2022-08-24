@@ -279,3 +279,6 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PyTorch/simple_pytorch_to_mdf
 /examples/PyTorch/simple_pytorch_to_mdf_torchviz
 /examples/PyTorch/Translated_mlp_pure_mdf.json
+/examples/PyTorch/simple_pytorch_to_mdf.1
+/examples/MDF/NLP/TestNLP_3
+/examples/MDF/NLP/TestNLP
