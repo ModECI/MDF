@@ -278,4 +278,5 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/RNN/iaf_example_lems_definitions.xml
 /examples/MDF/NLP/TestNLP
 /examples/MDF/NLP/TestNLP.png
-/examples/MDF/NLP/TestNLP_3
+/examples/MDF/NLP/TestNLP_3.png
+/examples/MDF/NLP/NLPTutorial/*.pt
