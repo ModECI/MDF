@@ -40,6 +40,10 @@ def pytest_collection_modifyitems(items):
         if "tests/test_examples.py" in item.nodeid and "ONNX" in item.nodeid:
             item.add_marker(pytest.mark.pytorch)
 
+        # NLP examples require pytorch
+        if "tests/test_examples.py" in item.nodeid and "NLP" in item.nodeid:
+            item.add_marker(pytest.mark.pytorch)
+
         # All other tests should be marked core MDF by default if they don't have another backend marker.
         # Remember, some tests could be marked manually and not above.
         if (
