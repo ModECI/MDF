@@ -31,6 +31,8 @@ This is an example of a PyTorch model with 2 nodes. First, the [script](simple_a
 
 [Python source](simple_abc.py) | [JSON](abc.json) | [YAML](abc.yaml)
 
+**Note: Example still in development!**
+
 This is an example of a PyTorch model that is implemented in `onnx_mdf/examples/simple_abc.py`. The model code
 is very simple:
 
@@ -72,22 +74,13 @@ inner `B` module has a loop construct.
 ![ABC](abc.png)
 
 
-It is exported to ONNX via a combination of tracing and scripting. The resulting ONNX model looks something
-like this:
-
-![ABC ONNX IR](examples/abc_ir.png)
-
-This ONNX IR representation can be converted to MDF. To run this full example, execute this command:
-
-```
-$ simple-abc-example
-```
-
-You can see the converted MDF models in [JSON](examples/abc-mdf.json) and [YAML](examples/abc-mdf.yml):
+It is exported to ONNX via a combination of tracing and scripting.
 
 ### ABCD Branching Conditional Model
 
 [Python source](simple_abcd.py) | [JSON](abcd.json) | [YAML](abcd.yaml)
+
+**Note: Example still in development!**
 
 This is an example of a PyTorch model that have four components (A, B, C, D). We loop over the whole
 model 10 iterations. A is executed only on the first iteration, B is executed every iteration, C is
@@ -153,13 +146,3 @@ class ABCD(torch.nn.Module):
 The ONNX IR representation of this model is shown below. The small computation sub-graphs
 contained in the if and else body attributes are not shown. These are either a simple multiplication and addition or
 an identity.
-
-![ABCD ONNX IR](examples/abcd/abcd_ir.svg)
-
-To run this example, execute the following command:
-
-```
-$ simple-abcd-example
-```
-
-You can see the converted MDF models in [JSON](examples/abcd/abc-mdf.json) and [YAML](examples/abcd/abcd-mdf.yml):

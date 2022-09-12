@@ -11,6 +11,8 @@ of the :class:`EvaluableGraph` class. The external library `graph-scheduler
 conditional constraints.
 
 """
+import ast
+import builtins
 import copy
 import functools
 import inspect
@@ -21,7 +23,6 @@ import sys
 import math
 
 import attr
-import sympy
 import numpy as np
 
 import graph_scheduler
@@ -53,7 +54,7 @@ import modeci_mdf.functions.actr as actr_funcs
 
 FORMAT_DEFAULT = FORMAT_NUMPY
 
-KNOWN_PARAMETERS = ["constant"]
+KNOWN_PARAMETERS = ["constant", "math", "numpy"] + dir(builtins)
 
 
 time_scale_str_regex = r"(TimeScale)?\.(.*)"
@@ -217,7 +218,7 @@ def evaluate_onnx_expr(
 
 
 def get_required_variables_from_expression(expr: str) -> List[str]:
-    """Produces a list containing sympy free symbols in **expr**"""
+    """Produces a list containing variable symbols in **expr**"""
 
     def recursively_extract_subscripted_values(s):
         res = []
@@ -262,7 +263,15 @@ def get_required_variables_from_expression(expr: str) -> List[str]:
     result = []
 
     for e in recursively_extract_subscripted_values(expr):
-        result.extend([str(s) for s in sympy.simplify(e).free_symbols])
+        result.extend(
+            [
+                str(elem.id)
+                for elem in ast.walk(
+                    ast.parse(e.strip(" ,+-*/%^&").lstrip("])").rstrip("[("))
+                )
+                if isinstance(elem, ast.Name)
+            ]
+        )
     return result
 
 
@@ -371,11 +380,12 @@ class EvaluableFunction:
 
 class EvaluableParameter:
     """
-    Evaluates the current value of a :class:`~modeci_mdf.mdf.Parameter` during MDF graph execution.
+    Evaluates the current value of a :class:`~modeci_mdf.mdf.Parameter` during the MDF graph execution.
 
     Args:
         parameter: The parameter to evaluate during execution.
         verbose: Whether to print output of parameter calculations.
+
     """
 
     DEFAULT_INIT_VALUE = 0  # Temporary!
@@ -416,6 +426,7 @@ class EvaluableParameter:
 
         Returns:
             The evaluated value of the parameter.
+
         """
         # FIXME: Shouldn't this just call self.evaluate, seems like there is redundant code here?
         if self.curr_value is None:
@@ -473,6 +484,7 @@ class EvaluableParameter:
 
         Returns:
             The current value of the parameter.
+
         """
         if self.verbose:
             print(
@@ -490,7 +502,7 @@ class EvaluableParameter:
                     verbose=False,
                     array_format=array_format,
                 )
-                if test == True:
+                if np.all(test):
                     self.curr_value = evaluate_expr(
                         condition.value,
                         parameters,
@@ -745,7 +757,12 @@ class EvaluableNode:
             all_known_vars.append(p.id)
             # params_init[s] = s.curr_value"""
 
+        # TODO: the below checks for evaluability of functions and
+        # parameters using known variables are very similar and could be
+        # simplified with a function
         all_funcs = [f for f in node.functions]
+        num_funcs_remaining = {f.id: None for f in node.functions}
+        func_missing_vars = {f.id: [] for f in node.functions}
 
         # Order the functions into the correct sequence
         while len(all_funcs) > 0:
@@ -760,16 +777,27 @@ class EvaluableNode:
                 for arg in f.args:
                     arg_expr = f.args[arg]
 
-                    # some non-expression/str types will crash in sympy.simplify
-                    if not isinstance(arg_expr, (sympy.Expr, str)):
-                        continue
-
                     # If we are dealing with a list of symbols, each must treated separately
                     all_req_vars.extend(
-                        get_required_variables_from_expression(arg_expr)
+                        [
+                            v
+                            for v in get_required_variables_from_expression(arg_expr)
+                            if v not in f.args
+                        ]
                     )
+            if f.value is not None:
+                all_req_vars.extend(
+                    [
+                        v
+                        for v in get_required_variables_from_expression(f.value)
+                        if f.args is None or v not in f.args
+                    ]
+                )
 
             all_present = [v in all_known_vars for v in all_req_vars]
+            func_missing_vars[f.id] = {
+                v for v in all_req_vars if v not in all_known_vars
+            }
 
             if verbose:
                 print(
@@ -784,15 +812,30 @@ class EvaluableNode:
             #     params_init, array_format=FORMAT_DEFAULT
             # )
             else:
-                if len(all_funcs) == 0:
-                    raise Exception(
-                        "Error! Could not evaluate function: %s with args %s using known vars %s"
-                        % (f.id, f.args, all_known_vars)
+                # track the number of remaining functions each time f
+                # is examined. If it's the same as last time, we know
+                # every function was examined and nothing changed, so
+                # we can stop because otherwise it will just infinitely
+                # loop
+                if num_funcs_remaining[f.id] == len(all_funcs):
+                    func_missing_vars = {
+                        f: ", ".join(v) for f, v in func_missing_vars.items()
+                    }
+                    raise ValueError(
+                        "Error! Could not evaluate functions using known vars. The following vars are missing:\n\t"
+                        + "\n\t".join(
+                            f"{f}: {v}"
+                            for f, v in func_missing_vars.items()
+                            if len(v) > 0
+                        )
                     )
                 else:
+                    num_funcs_remaining[f.id] = len(all_funcs)
                     all_funcs.append(f)
 
         all_params_to_check = [p for p in node.parameters]
+        num_params_remaining = {p.id: None for p in node.parameters}
+        param_missing_vars = {f.id: [] for f in node.parameters}
 
         if self.verbose:
             print("all_params_to_check: %s" % all_params_to_check)
@@ -809,18 +852,33 @@ class EvaluableNode:
             all_req_vars = []
 
             if p.value is not None and type(p.value) == str:
-                all_req_vars.extend(get_required_variables_from_expression(p.value))
+                all_req_vars.extend(
+                    [
+                        v
+                        for v in get_required_variables_from_expression(p.value)
+                        if p.args is None or v not in p.args
+                    ]
+                )
 
             if p.args is not None:
                 for arg in p.args:
                     arg_expr = p.args[arg]
                     if isinstance(arg_expr, str):
                         all_req_vars.extend(
-                            get_required_variables_from_expression(arg_expr)
+                            [
+                                v
+                                for v in get_required_variables_from_expression(
+                                    arg_expr
+                                )
+                                if v not in p.args
+                            ]
                         )
 
             all_known_vars_plus_this = all_known_vars + [p.id]
             all_present = [v in all_known_vars_plus_this for v in all_req_vars]
+            param_missing_vars[p.id] = {
+                v for v in all_req_vars if v not in all_known_vars
+            }
 
             if verbose:
                 print(
@@ -838,12 +896,20 @@ class EvaluableNode:
                 all_known_vars.append(p.id)
 
             else:
-                if len(all_params_to_check) == 0:
-                    raise Exception(
-                        "Error! Could not evaluate parameter: %s with args %s using known vars %s"
-                        % (p.id, p.args, all_known_vars_plus_this)
+                if num_params_remaining[p.id] == len(all_params_to_check):
+                    param_missing_vars = {
+                        p: ", ".join(v) for p, v in param_missing_vars.items()
+                    }
+                    raise ValueError(
+                        "Error! Could not evaluate parameters using known vars. The following vars are missing:\n\t"
+                        + "\n\t".join(
+                            f"{p}: {v}"
+                            for p, v in param_missing_vars.items()
+                            if len(v) > 0
+                        )
                     )
                 else:
+                    num_params_remaining[p.id] = len(all_params_to_check)
                     all_params_to_check.append(p)  # Add back to end of list...
 
         for op in node.output_ports:

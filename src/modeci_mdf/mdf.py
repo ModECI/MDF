@@ -6,7 +6,6 @@ r"""
     environments using the :mod:`~modeci_mdf.interfaces` module.
 """
 import copy
-import sympy
 import numpy as np
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
@@ -201,7 +200,7 @@ class Parameter(MdfBase):
         """
         Is the parameter stateful?
 
-        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`defualt_initial_value`, or it's
+        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`default_initial_value`, or its
         id is referenced in its value expression.
 
         Returns:
@@ -214,15 +213,7 @@ class Parameter(MdfBase):
         if self.default_initial_value is not None:
             return True
         if self.value is not None and type(self.value) == str:
-            # If we are dealing with a list of symbols, each must treated separately
-            arg_expr_list = get_required_variables_from_expression(self.value)
-
-            req_vars = []
-
-            for e in arg_expr_list:
-                param_expr = sympy.simplify(e)
-                req_vars.extend([str(s) for s in param_expr.free_symbols])
-            sf = self.id in req_vars
+            sf = self.id in get_required_variables_from_expression(self.value)
             """
             print(
                 "Checking whether %s is stateful, %s: %s"
@@ -432,7 +423,7 @@ class ConditionSet(MdfBase):
 @modelspec.define(eq=False)
 class Graph(MdfBase):
     r"""
-    A directed graph consisting of Node(s) connected via Edge(s)
+    A directed graph consisting of :class:`~Node`s (with :class:`~Parameter`s and :class:`~Function`s evaluated internally) connected via :class:`~Edge`s.
 
     Attributes:
         id: A unique identifier for this Graph
@@ -535,6 +526,7 @@ class Model(MdfBase):
         level: int = 2,
         filename_root: Optional[str] = None,
         only_warn_on_fail: bool = False,
+        is_horizontal: bool = False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
 
@@ -556,10 +548,14 @@ class Model(MdfBase):
                 view_on_render=view_on_render,
                 level=level,
                 filename_root=filename_root,
+                is_horizontal=is_horizontal,
             )
 
         except Exception as e:
             if only_warn_on_fail:
+                import traceback
+
+                print(traceback.format_exc())
                 print(
                     "Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"
                     % e

@@ -1,0 +1,24 @@
+{
+    "Simiaf_example": {
+        "version": "NeuroMLlite v0.5.2",
+        "network": "IAFs.nmllite.json",
+        "duration": 100000.0,
+        "dt": 10.0,
+        "seed": 123,
+        "record_variables": {
+            "time": {
+                "input_node": 0
+            },
+            "out_port": {
+                "input_node": 0,
+                "iaf_node": 0
+            },
+            "input": {
+                "iaf_node": 0
+            },
+            "v": {
+                "iaf_node": 0
+            }
+        }
+    }
+}
