@@ -205,6 +205,9 @@ class PortMapper:
         # Remove :: from ids, these cause issues with parsing in the execution engine
         new_name = new_name.replace("::", "_")
 
+        # Renive aby "-" from names, these cause issues with parsing in the execution engine
+        new_name = new_name.replace("-", "_")
+
         # If the first character is a digit, precede with an underscore so this can never be interpreted
         # as number down the line.
         if new_name[0].isdigit():

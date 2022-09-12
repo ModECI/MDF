@@ -72,7 +72,7 @@ def _run_and_check_model(model, input=None):
 
     # Create some test inputs for the model
     if input is None:
-        input = torch.zeros((1, 3, 224, 224))
+        input = torch.rand((1, 3, 224, 224))
 
     # Get rid of randomization due to Dropout
     model.eval()
@@ -99,6 +99,7 @@ def _run_and_check_model(model, input=None):
     assert np.allclose(
         output,
         output_mdf,
+        rtol=1e-03,
     )
 
     # Convert to JSON and back
