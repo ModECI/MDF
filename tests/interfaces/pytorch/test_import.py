@@ -51,7 +51,7 @@ def _get_torchvision_models():
         except TypeError:
             continue
 
-    # New API for specifying pretrained=False is weughts=None. pretrained keyword
+    # New API for specifying pretrained=False is weights=None. pretrained keyword
     # will be removed soon. This handles that for all models depending on PyTorch
     # version.
     is_new_weights_api = "weights" in inspect.signature(models.resnet18).parameters
