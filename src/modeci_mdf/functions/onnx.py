@@ -338,6 +338,20 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
 
         output_names = [out.name for out in schema.outputs]
 
+        # We need to handle BatchNormalization differently, it has 1 required output plus 2 optional outputs
+        # that are only allowed if training mode is set to 1.
+        if schema.name == "BatchNormalization" and kwargs["training_mode"] == 0:
+            output_names = ["Y"]
+
+            out_dict = run_onnx_op(
+                op_name=schema.name,
+                inputs=inputs_dict,
+                output_names=output_names,
+                **kwargs,
+            )
+
+            return tuple(out_dict.values())
+
         out_dict = run_onnx_op(
             op_name=schema.name, inputs=inputs_dict, output_names=output_names, **kwargs
         )
