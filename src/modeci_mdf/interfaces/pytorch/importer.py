@@ -103,7 +103,7 @@ def process_torch_schema(
 
 
 def process_onnx_schema(
-    node: torch.Node, port_mapper: "PortMapper"
+    node: torch.Node, consts: Dict, port_mapper: "PortMapper"
 ) -> Tuple[Dict[str, str], Dict[str, Any]]:
     """
     Retrieve the argument names and attributes (parameters in MDF) for this Operation.
@@ -156,10 +156,17 @@ def process_onnx_schema(
     else:
         raise ValueError(f"Cannot process ONNX schema for non ONNX node: {node}")
 
-    # ONNX attributes are equivalent to MDF parameters really
+    # Any inputs that are from constant nodes should be parameters in MDF
     parameters = {
-        aname: convert_to_serializable(node[aname]) for aname in node.attributeNames()
+        port_mapper.id_to_port(inp): consts[inp]
+        for i, inp in enumerate(inputs)
+        if inp in consts
     }
+
+    # ONNX attributes are equivalent to MDF parameters
+    parameters.update(
+        {aname: convert_to_serializable(node[aname]) for aname in node.attributeNames()}
+    )
 
     return schema_args, parameters
 
@@ -178,6 +185,10 @@ def get_graph_constants(graph: torch.Graph) -> Dict[str, Any]:
     for n in graph.findAllNodes("prim::Constant"):
         for o in n.outputs():
             consts[o.unique()] = convert_to_serializable(o.toIValue())
+
+    # Get the ONNX constant nodes too
+    for n in graph.findAllNodes("onnx::Constant"):
+        consts[list(n.outputs())[0].unique()] = n["value"].numpy()
 
     return consts
 
@@ -289,7 +300,7 @@ def torchnode_to_mdfnode(
 
     # Exclude constants (as nodes) from the MDF graph. We will instead insert them as parameters to the nodes that
     # they project to.
-    if op == "prim::Constant":
+    if op in ("prim::Constant", "onnx::Constant"):
         return None
 
     # If we are dealing with a loop node, we need to recursively create a sub-graph for the loop body
@@ -309,7 +320,7 @@ def torchnode_to_mdfnode(
 
     # Get the argument names and parameter names and values for this Node's operation
     if "onnx::" in op:
-        arguments, parameters = process_onnx_schema(node, port_mapper)
+        arguments, parameters = process_onnx_schema(node, consts, port_mapper)
     else:
         arguments, parameters = process_torch_schema(node, consts, port_mapper)
 
