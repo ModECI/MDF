@@ -99,8 +99,8 @@ def _run_and_check_model(model, input=None):
     assert np.allclose(
         output,
         output_mdf,
-        rtol=1e-03,
-    )
+        atol=1e-05,
+    ), f"Output from PyTorch and MDF do not match. MaxAbsError={np.max(np.abs(output - output_mdf))}"
 
     # Convert to JSON and back
     mdf_model2 = Model.from_json(mdf_model.to_json())
