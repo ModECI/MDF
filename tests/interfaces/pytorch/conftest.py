@@ -9,6 +9,7 @@ try:
     # Make PyTorch deterministic for testing.
     torch.use_deterministic_algorithms(True)
     torch.backends.cudnn.deterministic = True
+    torch.manual_seed(0)
 
     from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
