@@ -320,10 +320,25 @@ def torchnode_to_mdfnode(
     # Add any output ports
     subscript = lambda x: "" if len(schema.outputs) <= 1 else f"[{x}]"
     for out_num, o in enumerate(outputs):
+
+        # Try to get the shape and type of the out port
+        out_type = node.outputsAt(out_num).type()
+        try:
+            out_dtype = str(out_type.dtype()).replace("torch.", "")
+        except RuntimeError:
+            out_dtype = str(out_type.getElementType())
+
+        try:
+            shape = tuple(out_type.sizes()) if out_type.sizes() else None
+        except RuntimeError:
+            shape = None
+
         mdf_node.output_ports.append(
             OutputPort(
                 id=port_mapper.id_to_port(o),
                 value=make_func_id(node) + subscript(out_num),
+                shape=shape,
+                type=out_dtype,
             )
         )
 
