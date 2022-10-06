@@ -28,7 +28,7 @@ FormalParameterOption = OpSchema.FormalParameterOption
 
 # Use the same ONNX opset version that torch is using for defaults now
 # from torch.onnx.symbolic_helper import _default_onnx_opset_version as onnx_opset_version
-onnx_opset_version = 13
+onnx_opset_version = 15
 
 __all__ = [
     "predict_with_onnxruntime",
@@ -329,10 +329,28 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
         for kw in kwargs:
             if kw not in schema.attributes:
                 raise ValueError(
-                    f"Passed unkown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
+                    f"Passed unknown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
                 )
 
+        # For some reason ONNX models are getting shape arguments that are 2D when they need to be 1D
+        if schema.name == "Reshape":
+            inputs_dict["shape"] = inputs_dict["shape"].flatten()
+
         output_names = [out.name for out in schema.outputs]
+
+        # We need to handle BatchNormalization differently, it has 1 required output plus 2 optional outputs
+        # that are only allowed if training mode is set to 1.
+        if schema.name == "BatchNormalization" and kwargs["training_mode"] == 0:
+            output_names = ["Y"]
+
+            out_dict = run_onnx_op(
+                op_name=schema.name,
+                inputs=inputs_dict,
+                output_names=output_names,
+                **kwargs,
+            )
+
+            return tuple(out_dict.values())
 
         out_dict = run_onnx_op(
             op_name=schema.name, inputs=inputs_dict, output_names=output_names, **kwargs

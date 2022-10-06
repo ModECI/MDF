@@ -2,17 +2,11 @@
 Functions for converting from MDF models to PyTorch
 """
 import collections
-import os
-import sys
-import h5py
-import importlib
-from collections import defaultdict
-from inspect import getmembers, signature, getsource, isclass
-import modeci_mdf
 import numpy as np
 import torch
-from typing import Union, Dict, Any, Tuple, List, Callable
-import torch.nn as nn
+
+from typing import Dict, Any, List
+
 from modeci_mdf.functions.standard import mdf_functions
 from modeci_mdf.utils import load_mdf
 from modeci_mdf.execution_engine import EvaluableGraph
