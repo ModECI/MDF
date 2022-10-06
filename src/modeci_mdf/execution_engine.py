@@ -160,7 +160,7 @@ def evaluate_onnx_expr(
         for k, v in kwargs_for_onnx.items()
         if (
             (k in onnx_arguments or has_variadic)
-            and "onnx::" not in k  # filter Evaluable__ class names
+            and "onnx_" not in k  # filter Evaluable__ class names
         )
     }
 
