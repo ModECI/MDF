@@ -66,7 +66,6 @@ jobs:
           pip list
 
     - name: Test interface ACT-R
-      # Issue with numpy/scipy on W+py10: https://github.com/ModECI/MDF/actions/runs/3218359062
       if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
       run: |
         python -m pytest -v -m "actr" tests/
@@ -77,6 +76,7 @@ jobs:
         python -m pytest -v -m "pytorch" tests/
 
     - name: Test interface NeuroML
+      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
       run: |
         python -m pytest -v -m "neuroml" tests/
 
