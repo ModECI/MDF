@@ -66,6 +66,7 @@ jobs:
           pip list
 
     - name: Test interface ACT-R
+      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
       run: |
         python -m pytest -v -m "actr" tests/
 
@@ -75,6 +76,7 @@ jobs:
         python -m pytest -v -m "pytorch" tests/
 
     - name: Test interface NeuroML
+      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
       run: |
         python -m pytest -v -m "neuroml" tests/
 
