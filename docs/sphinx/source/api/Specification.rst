@@ -1,8 +1,8 @@
-================================
-Specification of ModECI v0.4 RST
-================================
+============================
+Specification of ModECI v0.4
+============================
 
-**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See `here <https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification>`_ for ongoing discussions.
+**Note: the ModECI MDF specification is still in development!** See `here <https://github.com/ModECI/MDF/issues>`_ for ongoing discussions.
 
 =====
 Model
