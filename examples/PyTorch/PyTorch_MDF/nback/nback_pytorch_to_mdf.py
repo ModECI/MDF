@@ -86,5 +86,7 @@ assert np.allclose(
     output_mdf,
 ), f"Output from PyTorch and MDF do not match. MaxAbsError={np.max(np.abs(output - output_mdf))}"
 
+mdf_model.to_json_file("nback_mdf.json")
+
 # Convert to JSON and back
 mdf_model2 = Model.from_json(mdf_model.to_json())

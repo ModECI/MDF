@@ -1,0 +1,375 @@
+{
+    "FFWM": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "FFWMGraph": {
+                "nodes": {
+                    "Transpose_5": {
+                        "input_ports": {
+                            "hid1_layer_weight": {
+                                "shape": [
+                                    90,
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "perm": {
+                                "value": [
+                                    1,
+                                    0
+                                ]
+                            },
+                            "onnx_Transpose_1": {
+                                "function": "onnx::Transpose",
+                                "args": {
+                                    "data": "hid1_layer_weight"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_5": {
+                                "value": "onnx_Transpose_1",
+                                "type": "None"
+                            }
+                        }
+                    },
+                    "MatMul_6": {
+                        "input_ports": {
+                            "input1": {
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            },
+                            "_5": {
+                                "type": "None"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_MatMul_1": {
+                                "function": "onnx::MatMul",
+                                "args": {
+                                    "A": "input1",
+                                    "B": "_5"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_6": {
+                                "value": "onnx_MatMul_1",
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Relu_7": {
+                        "input_ports": {
+                            "_6": {
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_6"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_7": {
+                                "value": "onnx_Relu_1",
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Gather_9": {
+                        "input_ports": {
+                            "embed_bias_weight": {
+                                "shape": [
+                                    10,
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "_8": {
+                                "value": 0
+                            },
+                            "onnx_Gather_1": {
+                                "function": "onnx::Gather",
+                                "args": {
+                                    "data": "embed_bias_weight",
+                                    "indices": "_8"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_9": {
+                                "value": "onnx_Gather_1",
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Add_10": {
+                        "input_ports": {
+                            "_7": {
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            },
+                            "_9": {
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Add_1": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "_7",
+                                    "B": "_9"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_10": {
+                                "value": "onnx_Add_1",
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Transpose_11": {
+                        "input_ports": {
+                            "hid2_layer_weight": {
+                                "shape": [
+                                    80,
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "perm": {
+                                "value": [
+                                    1,
+                                    0
+                                ]
+                            },
+                            "onnx_Transpose_1": {
+                                "function": "onnx::Transpose",
+                                "args": {
+                                    "data": "hid2_layer_weight"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_11": {
+                                "value": "onnx_Transpose_1",
+                                "type": "None"
+                            }
+                        }
+                    },
+                    "MatMul_12": {
+                        "input_ports": {
+                            "_10": {
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            },
+                            "_11": {
+                                "type": "None"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_MatMul_1": {
+                                "function": "onnx::MatMul",
+                                "args": {
+                                    "A": "_10",
+                                    "B": "_11"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_12": {
+                                "value": "onnx_MatMul_1",
+                                "shape": [
+                                    80
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Relu_13": {
+                        "input_ports": {
+                            "_12": {
+                                "shape": [
+                                    80
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_12"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_13": {
+                                "value": "onnx_Relu_1",
+                                "shape": [
+                                    80
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Transpose_14": {
+                        "input_ports": {
+                            "out_layer_weight": {
+                                "shape": [
+                                    2,
+                                    80
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "perm": {
+                                "value": [
+                                    1,
+                                    0
+                                ]
+                            },
+                            "onnx_Transpose_1": {
+                                "function": "onnx::Transpose",
+                                "args": {
+                                    "data": "out_layer_weight"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_14": {
+                                "value": "onnx_Transpose_1",
+                                "type": "None"
+                            }
+                        }
+                    },
+                    "MatMul_15": {
+                        "input_ports": {
+                            "_13": {
+                                "shape": [
+                                    80
+                                ],
+                                "type": "float32"
+                            },
+                            "_14": {
+                                "type": "None"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_MatMul_1": {
+                                "function": "onnx::MatMul",
+                                "args": {
+                                    "A": "_13",
+                                    "B": "_14"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_15": {
+                                "value": "onnx_MatMul_1",
+                                "shape": [
+                                    2
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Transpose_5_MatMul_6": {
+                        "sender": "Transpose_5",
+                        "receiver": "MatMul_6",
+                        "sender_port": "_5",
+                        "receiver_port": "_5"
+                    },
+                    "MatMul_6_Relu_7": {
+                        "sender": "MatMul_6",
+                        "receiver": "Relu_7",
+                        "sender_port": "_6",
+                        "receiver_port": "_6"
+                    },
+                    "Relu_7_Add_10": {
+                        "sender": "Relu_7",
+                        "receiver": "Add_10",
+                        "sender_port": "_7",
+                        "receiver_port": "_7"
+                    },
+                    "Gather_9_Add_10": {
+                        "sender": "Gather_9",
+                        "receiver": "Add_10",
+                        "sender_port": "_9",
+                        "receiver_port": "_9"
+                    },
+                    "Add_10_MatMul_12": {
+                        "sender": "Add_10",
+                        "receiver": "MatMul_12",
+                        "sender_port": "_10",
+                        "receiver_port": "_10"
+                    },
+                    "Transpose_11_MatMul_12": {
+                        "sender": "Transpose_11",
+                        "receiver": "MatMul_12",
+                        "sender_port": "_11",
+                        "receiver_port": "_11"
+                    },
+                    "MatMul_12_Relu_13": {
+                        "sender": "MatMul_12",
+                        "receiver": "Relu_13",
+                        "sender_port": "_12",
+                        "receiver_port": "_12"
+                    },
+                    "Relu_13_MatMul_15": {
+                        "sender": "Relu_13",
+                        "receiver": "MatMul_15",
+                        "sender_port": "_13",
+                        "receiver_port": "_13"
+                    },
+                    "Transpose_14_MatMul_15": {
+                        "sender": "Transpose_14",
+                        "receiver": "MatMul_15",
+                        "sender_port": "_14",
+                        "receiver_port": "_14"
+                    }
+                }
+            }
+        },
+        "onnx_opset_version": 9
+    }
+}
