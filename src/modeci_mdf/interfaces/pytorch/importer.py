@@ -502,7 +502,7 @@ def pytorch_to_mdf(
     # Call out to a part of the ONNX exporter that simiplifies the graph before ONNX export.
     from torch.onnx.utils import _model_to_graph
     from torch.onnx import TrainingMode
-    from torch.onnx.symbolic_helper import _set_opset_version
+    from torch.onnx.symbolic_helper import _set_opset_version, _set_onnx_shape_inference
 
     try:
         from torch.onnx.symbolic_helper import _export_onnx_opset_version
@@ -513,8 +513,19 @@ def pytorch_to_mdf(
 
         _export_onnx_opset_version = GLOBALS.export_onnx_opset_version
 
+    try:
+        from torch.onnx.symbolic_helper import _onnx_shape_inference
+    except ImportError:
+
+        # This is need for PyTorch 1.12
+        from torch.onnx._globals import GLOBALS
+
+        _onnx_shape_inference = GLOBALS.export_onnx_shape_inference
+
     previous_opset_version = _export_onnx_opset_version
     _set_opset_version(modeci_onnx_opset_version)
+    previous_onnx_shape_inference = _onnx_shape_inference
+    _set_onnx_shape_inference(True)
     graph, params_dict, torch_out = _model_to_graph(
         model=jit_model if graph else model,
         args=args,
@@ -523,6 +534,7 @@ def pytorch_to_mdf(
         operator_export_type=operator_export_type,
         dynamic_axes={},
     )
+    _set_onnx_shape_inference(previous_onnx_shape_inference)
     _set_opset_version(previous_opset_version)
 
     model_name, graph_name = make_model_graph_name(model)

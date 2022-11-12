@@ -32,7 +32,11 @@
                         "output_ports": {
                             "_5": {
                                 "value": "onnx_Transpose_1",
-                                "type": "None"
+                                "shape": [
+                                    90,
+                                    90
+                                ],
+                                "type": "float32"
                             }
                         }
                     },
@@ -45,7 +49,11 @@
                                 "type": "float32"
                             },
                             "_5": {
-                                "type": "None"
+                                "shape": [
+                                    90,
+                                    90
+                                ],
+                                "type": "float32"
                             }
                         },
                         "parameters": {
@@ -187,7 +195,11 @@
                         "output_ports": {
                             "_11": {
                                 "value": "onnx_Transpose_1",
-                                "type": "None"
+                                "shape": [
+                                    90,
+                                    80
+                                ],
+                                "type": "float32"
                             }
                         }
                     },
@@ -200,7 +212,11 @@
                                 "type": "float32"
                             },
                             "_11": {
-                                "type": "None"
+                                "shape": [
+                                    90,
+                                    80
+                                ],
+                                "type": "float32"
                             }
                         },
                         "parameters": {
@@ -276,7 +292,11 @@
                         "output_ports": {
                             "_14": {
                                 "value": "onnx_Transpose_1",
-                                "type": "None"
+                                "shape": [
+                                    80,
+                                    2
+                                ],
+                                "type": "float32"
                             }
                         }
                     },
@@ -289,7 +309,11 @@
                                 "type": "float32"
                             },
                             "_14": {
-                                "type": "None"
+                                "shape": [
+                                    80,
+                                    2
+                                ],
+                                "type": "float32"
                             }
                         },
                         "parameters": {
