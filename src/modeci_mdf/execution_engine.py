@@ -391,26 +391,10 @@ class EvaluableParameter:
     DEFAULT_INIT_VALUE = 0  # Temporary!
 
     def __init__(self, parameter: Parameter, verbose: bool = False):
+
         self.verbose = verbose
         self.parameter = parameter
 
-        """
-        if self.parameter.default_initial_value is not None:
-            if is_number(self.parameter.default_initial_value):
-
-                self.curr_value = float(self.parameter.default_initial_value)
-
-            else:
-                try:
-                    self.curr_value = evaluate_expr(
-                        self.parameter.default_initial_value,
-                        None,
-                    )
-                # evaluate_expr raises Exception
-                except Exception:
-                    self.curr_value = self.parameter.default_initial_value
-        else:
-            self.curr_value = None"""
         self.curr_value = None
 
     def get_current_value(
@@ -502,17 +486,19 @@ class EvaluableParameter:
                     verbose=False,
                     array_format=array_format,
                 )
+                if_true = self.curr_value = evaluate_expr(
+                    condition.value,
+                    parameters,
+                    verbose=False,
+                    array_format=array_format,
+                )
+
                 if np.all(test):
-                    self.curr_value = evaluate_expr(
-                        condition.value,
-                        parameters,
-                        verbose=False,
-                        array_format=array_format,
-                    )
+
                     continue_eval = False
                     break
 
-                if self.verbose:
+                if self.verbose or True:
                     print(
                         " --- %s: %s = %s (continuing: %s)"
                         % (condition.id, condition.test, test, continue_eval)
