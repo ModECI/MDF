@@ -566,9 +566,10 @@ class EvaluableParameter:
                     verbose=self.verbose,
                     array_format=array_format,
                 )
-                print(
-                    f"Incrementing {self.parameter.id} from {self.curr_value} by {td} over time {time_increment}"
-                )
+                if self.verbose:
+                    print(
+                        f"Incrementing {self.parameter.id} from {self.curr_value} by {td} over time {time_increment}"
+                    )
 
                 self.curr_value = np.add(
                     self.curr_value, td * time_increment, casting="safe"
@@ -679,7 +680,11 @@ class EvaluableInput:
     def __init__(self, input_port: InputPort, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.input_port = input_port
-        self.curr_value = np.full(input_port.shape, 0)
+
+        if self.input_port.default_value is not None:
+            self.curr_value = self.input_port.default_value
+        else:
+            self.curr_value = np.full(input_port.shape, 0)
 
     def set_input_value(self, value: Union[str, int, np.ndarray]):
         """Set a new value at input port
@@ -1020,6 +1025,14 @@ class EvaluableGraph:
             ):  # It could have been already removed...
                 self.root_nodes.remove(edge.receiver)
 
+        if len(self.root_nodes) == 0:
+            for node in graph.nodes:
+                for ip in node.input_ports:
+                    if ip.default_value is not None:
+                        self.root_nodes.append(node.id)
+
+        print("Root nodes evaluated as: %s" % (self.root_nodes))
+
         self.ordered_edges = []
         evaluated_nodes = []
         for rn in self.root_nodes:
@@ -1034,6 +1047,8 @@ class EvaluableGraph:
             else:
                 self.ordered_edges.append(edge)
                 evaluated_nodes.append(edge.receiver)
+
+        print("Ordered_edges as: %s" % (self.ordered_edges))
 
         if self.graph.conditions is not None:
             if self.graph.conditions.node_specific is None:
@@ -1062,6 +1077,7 @@ class EvaluableGraph:
         else:
             conditions = {}
             termination_conds = {}
+
         self.scheduler = graph_scheduler.Scheduler(
             graph=self.graph.dependency_dict,
             conditions=conditions,
@@ -1133,9 +1149,16 @@ class EvaluableGraph:
             for node in ts:
                 self.order_of_execution.append(node.id)
                 for edge in incoming_edges[node]:
-                    self.evaluate_edge(
-                        edge, time_increment=time_increment, array_format=array_format
-                    )
+                    if edge.sender in self.order_of_execution:
+                        self.evaluate_edge(
+                            edge,
+                            time_increment=time_increment,
+                            array_format=array_format,
+                        )
+                    else:
+                        print(
+                            "> Not evaluating edge: %s, as sender not run yet..." % edge
+                        )
                 self.enodes[node.id].evaluate(
                     time_increment=time_increment, array_format=array_format
                 )

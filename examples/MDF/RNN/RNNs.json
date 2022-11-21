@@ -41,7 +41,9 @@
                     "rnn_node": {
                         "input_ports": {
                             "ext_input": {},
-                            "fb_input": {}
+                            "fb_input": {
+                                "default_value": 0
+                            }
                         },
                         "parameters": {
                             "M": {
@@ -94,7 +96,7 @@
                                     0.10262953816578246,
                                     0.43893793957112615
                                 ],
-                                "time_derivative": "-x + g*int_fb + ext_input"
+                                "time_derivative": "-x + g*int_fb + ext_input + fb_input"
                             },
                             "r": {
                                 "function": "tanh",
@@ -172,6 +174,15 @@
                         "receiver_port": "input",
                         "parameters": {
                             "weight": 1
+                        }
+                    },
+                    "feedback_edge": {
+                        "sender": "readout_node",
+                        "receiver": "rnn_node",
+                        "sender_port": "z",
+                        "receiver_port": "fb_input",
+                        "parameters": {
+                            "weight": 0.3
                         }
                     }
                 }

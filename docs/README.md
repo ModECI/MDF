@@ -180,6 +180,13 @@ The <a href="#inputport">InputPort</a> is an attribute of a Node which allows ex
 
 
   <tr>
+    <td><b>default_value</b></td>
+    <td>Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]</td>
+    <td><i>Value to set at this input port if no edge connected to it.</i></td>
+ </tr>
+
+
+  <tr>
     <td><b>shape</b></td>
     <td>Union[Tuple[int, ...], NoneType]</td>
     <td><i>The shape of the input port. This uses the same syntax as numpy ndarray shapes

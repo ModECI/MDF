@@ -87,15 +87,16 @@ The `InputPort <#inputport>`__ is an attribute of a Node which allows external i
 
 **Allowed parameters**
 
-===============  ================================  =============================================================================================
-Allowed field    Data Type                         Description
-===============  ================================  =============================================================================================
-**metadata**     Union[Any, NoneType]              Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
-**id**           str                               The unique (for this Node) id of the input port,
-**shape**        Union[Tuple[int, ...], NoneType]  The shape of the input port. This uses the same syntax as numpy ndarray shapes
-                                                   (e.g., **numpy.zeros(shape)** would produce an array with the correct shape
-**type**         Union[str, NoneType]              The data type of the input received at a port.
-===============  ================================  =============================================================================================
+=================  ==========================================================================  =============================================================================================
+Allowed field      Data Type                                                                   Description
+=================  ==========================================================================  =============================================================================================
+**metadata**       Union[Any, NoneType]                                                        Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
+**id**             str                                                                         The unique (for this Node) id of the input port,
+**default_value**  Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]  Value to set at this input port if no edge connected to it.
+**shape**          Union[Tuple[int, ...], NoneType]                                            The shape of the input port. This uses the same syntax as numpy ndarray shapes
+                                                                                               (e.g., **numpy.zeros(shape)** would produce an array with the correct shape
+**type**           Union[str, NoneType]                                                        The data type of the input received at a port.
+=================  ==========================================================================  =============================================================================================
 
 ========
 Function
