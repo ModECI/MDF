@@ -4,10 +4,17 @@
 
 from modeci_mdf.mdf import *
 import sys
+import numpy
+import random
 
 
 def main():
     mod = Model(id="IAFs")
+
+    net = "-net" in sys.argv
+    if net:
+        mod.id = "IAF_net"
+
     mod_graph = Graph(id="iaf_example")
     mod.graphs.append(mod_graph)
 
@@ -34,7 +41,9 @@ def main():
         )
     )
     level.conditions.append(
-        ParameterCondition(id="off", test="time > start + duration", value=0)
+        ParameterCondition(
+            id="off", test="time > start + duration", value="amplitude*0"
+        )
     )
 
     input_node.parameters.append(level)
@@ -52,11 +61,15 @@ def main():
     ip1 = InputPort(id="input")
     iaf_node.input_ports.append(ip1)
 
+    v0 = Parameter(id="v0", value=-60)
+
+    iaf_node.parameters.append(v0)
+
     erev = Parameter(id="erev", value=-70)
     iaf_node.parameters.append(erev)
-    tau = Parameter(id="tau", value=10)
+    tau = Parameter(id="tau", value=10.0)
     iaf_node.parameters.append(tau)
-    thresh = Parameter(id="thresh", value=-20)
+    thresh = Parameter(id="thresh", value=-20.0)
     iaf_node.parameters.append(thresh)
 
     # v_init = Parameter(id="v_init", value=-30)
@@ -66,7 +79,7 @@ def main():
 
     v = Parameter(
         id="v",
-        default_initial_value="-50",
+        default_initial_value="v0",
         time_derivative="-1 * (v-erev)/tau + input",
     )
     v.conditions.append(pc)
@@ -86,6 +99,15 @@ def main():
         receiver_port=ip1.id,
     )
 
+    if net:
+        num = 8
+
+        v0.value = numpy.array([random.random() * 20 - 70 for r in range(num)])
+        erev.value = numpy.array([-70.0] * len(v0.value))
+        thresh.value = numpy.array([-20.0] * len(v0.value))
+        amp.value = numpy.array([random.random() * 20 for r in range(num)])
+        # e1.parameters['weight'] = [1,.5]
+
     mod_graph.edges.append(e1)
 
     new_file = mod.to_json_file("%s.json" % mod.id)
@@ -103,7 +125,8 @@ def main():
         dt = 0.1
 
         duration = 100
-        t_ext = 0
+
+        t_ext = 0.0
         recorded = {}
         times = []
         t = []
@@ -125,8 +148,24 @@ def main():
         import matplotlib.pyplot as plt
 
         plt.plot(times, t, label="time at input node")
-        plt.plot(times, i, label="state of input node")
-        plt.plot(times, s, label="IaF 0 state")
+        if type(i[0]) == numpy.ndarray and i[0].size > 1:
+            for ii in range(len(i[0])):
+                iii = []
+                for ti in range(len(t)):
+                    iii.append(i[ti][ii])
+                plt.plot(times, iii, label="Input node %s state" % ii)
+        else:
+            plt.plot(times, i, label="state of input node")
+
+        if type(s[0]) == numpy.ndarray and s[0].size > 1:
+            for si in range(len(s[0])):
+                ss = []
+                for ti in range(len(t)):
+                    ss.append(s[ti][si])
+                plt.plot(times, ss, label="IaF %s state" % si)
+        else:
+            plt.plot(times, s, label="IaF 0 state")
+
         plt.legend()
 
         plt.savefig("IaF.run.png", bbox_inches="tight")

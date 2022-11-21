@@ -118,7 +118,12 @@ def mdf_to_neuroml(
                         on_start = lems.OnStart()
                         ct.dynamics.add(on_start)
                     sa = lems.StateAssignment(
-                        variable=p.id, value=str(evaluate_expr(p.default_initial_value))
+                        variable=p.id,
+                        value=str(
+                            evaluate_expr(
+                                p.default_initial_value, allow_strings_returned=True
+                            )
+                        ),
                     )
                     on_start.actions.append(sa)
 
