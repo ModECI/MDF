@@ -59,6 +59,21 @@
                             "thresh": {
                                 "value": -20.0
                             },
+                            "spiking": {
+                                "default_initial_value": "0",
+                                "conditions": [
+                                    {
+                                        "id": "is_spiking",
+                                        "test": "v >= thresh",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "id": "not_spiking",
+                                        "test": "v < thresh",
+                                        "value": "0"
+                                    }
+                                ]
+                            },
                             "v": {
                                 "default_initial_value": "v0",
                                 "time_derivative": "-1 * (v-erev)/tau + input",
@@ -72,7 +87,7 @@
                             }
                         },
                         "output_ports": {
-                            "out_port": {
+                            "out_port_v": {
                                 "value": "v"
                             }
                         }

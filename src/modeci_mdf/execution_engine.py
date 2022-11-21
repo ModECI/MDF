@@ -566,9 +566,10 @@ class EvaluableParameter:
                     verbose=self.verbose,
                     array_format=array_format,
                 )
-                print(
-                    f"Incrementing {self.parameter.id} from {self.curr_value} by {td} over time {time_increment}"
-                )
+                if self.verbose:
+                    print(
+                        f"Incrementing {self.parameter.id} from {self.curr_value} by {td} over time {time_increment}"
+                    )
 
                 self.curr_value = np.add(
                     self.curr_value, td * time_increment, casting="safe"

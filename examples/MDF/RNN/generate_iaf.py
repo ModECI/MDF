@@ -75,6 +75,17 @@ def main():
     # v_init = Parameter(id="v_init", value=-30)
     # iaf_node.parameters.append(v_init)
 
+    pc1 = ParameterCondition(id="is_spiking", test="v >= thresh", value="1")
+    pc2 = ParameterCondition(id="not_spiking", test="v < thresh", value="0")
+
+    spiking = Parameter(
+        id="spiking",
+        default_initial_value="0",
+    )
+    spiking.conditions.append(pc1)
+    spiking.conditions.append(pc2)
+    iaf_node.parameters.append(spiking)
+
     pc = ParameterCondition(id="reset", test="v > thresh", value="erev")
 
     v = Parameter(
@@ -86,8 +97,9 @@ def main():
 
     iaf_node.parameters.append(v)
 
-    op1 = OutputPort(id="out_port", value="v")
-    iaf_node.output_ports.append(op1)
+    op_v = OutputPort(id="out_port_v", value="v")
+    iaf_node.output_ports.append(op_v)
+
     mod_graph.nodes.append(iaf_node)
 
     e1 = Edge(
@@ -101,7 +113,7 @@ def main():
 
     if net:
         num = 8
-
+        random.seed(123)
         v0.value = numpy.array([random.random() * 20 - 70 for r in range(num)])
         erev.value = numpy.array([-70.0] * len(v0.value))
         thresh.value = numpy.array([-20.0] * len(v0.value))
@@ -132,6 +144,7 @@ def main():
         t = []
         i = []
         s = []
+        sp = []
         while t_ext <= duration:
             times.append(t_ext)
             print("======   Evaluating at t = %s  ======" % (t_ext))
@@ -142,7 +155,8 @@ def main():
 
             i.append(eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value)
             t.append(eg.enodes["input_node"].evaluable_parameters["time"].curr_value)
-            s.append(eg.enodes["iaf_node"].evaluable_outputs["out_port"].curr_value)
+            s.append(eg.enodes["iaf_node"].evaluable_outputs["out_port_v"].curr_value)
+            sp.append(eg.enodes["iaf_node"].evaluable_parameters["spiking"].curr_value)
             t_ext += dt
 
         import matplotlib.pyplot as plt
@@ -166,9 +180,18 @@ def main():
         else:
             plt.plot(times, s, label="IaF 0 state")
 
+        if type(sp[0]) == numpy.ndarray and sp[0].size > 1:
+            for spi in range(len(sp[0])):
+                sps = []
+                for ti in range(len(t)):
+                    sps.append(sp[ti][spi])
+                plt.plot(times, sps, label="IaF %s spiking" % spi)
+        else:
+            plt.plot(times, sp, label="spiking")
+
         plt.legend()
 
-        plt.savefig("IaF.run.png", bbox_inches="tight")
+        plt.savefig("IaF%s.run.png" % (".net" if net else ""), bbox_inches="tight")
 
         if "-nogui" not in sys.argv:
             plt.show()
