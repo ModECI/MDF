@@ -27,10 +27,20 @@ IAFs:
                     output_ports:
                         out_port:
                             value: level
-                iaf_node:
+                pre:
                     input_ports:
-                        input: {}
+                        curr_input: {}
+                        syn_input: {}
                     parameters:
+                        syn_tau:
+                            value: 10
+                        syn_i:
+                            default_initial_value: '0'
+                            time_derivative: -1 * syn_i
+                            conditions:
+                            -   id: spike_detected
+                                test: syn_input > 0
+                                value: '1'
                         v0:
                             value: -60
                         erev:
@@ -39,21 +49,82 @@ IAFs:
                             value: 10.0
                         thresh:
                             value: -20.0
+                        spiking:
+                            default_initial_value: '0'
+                            conditions:
+                            -   id: is_spiking
+                                test: v >= thresh
+                                value: '1'
+                            -   id: not_spiking
+                                test: v < thresh
+                                value: '0'
                         v:
                             default_initial_value: v0
-                            time_derivative: -1 * (v-erev)/tau + input
+                            time_derivative: -1 * (v-erev)/tau + syn_input + curr_input
                             conditions:
                             -   id: reset
                                 test: v > thresh
                                 value: erev
                     output_ports:
-                        out_port:
+                        out_port_v:
                             value: v
+                        out_port_spiking:
+                            value: spiking
+                post:
+                    input_ports:
+                        curr_input: {}
+                        syn_input: {}
+                    parameters:
+                        syn_tau:
+                            value: 10
+                        syn_i:
+                            default_initial_value: '0'
+                            time_derivative: -1 * syn_i
+                            conditions:
+                            -   id: spike_detected
+                                test: syn_input > 0
+                                value: '1'
+                        v0:
+                            value: -60
+                        erev:
+                            value: -70
+                        tau:
+                            value: 10.0
+                        thresh:
+                            value: -20.0
+                        spiking:
+                            default_initial_value: '0'
+                            conditions:
+                            -   id: is_spiking
+                                test: v >= thresh
+                                value: '1'
+                            -   id: not_spiking
+                                test: v < thresh
+                                value: '0'
+                        v:
+                            default_initial_value: v0
+                            time_derivative: -1 * (v-erev)/tau + syn_input + curr_input
+                            conditions:
+                            -   id: reset
+                                test: v > thresh
+                                value: erev
+                    output_ports:
+                        out_port_v:
+                            value: v
+                        out_port_spiking:
+                            value: spiking
             edges:
                 input_edge:
                     sender: input_node
-                    receiver: iaf_node
+                    receiver: pre
                     sender_port: out_port
-                    receiver_port: input
+                    receiver_port: curr_input
                     parameters:
                         weight: 1
+                syn_edge:
+                    sender: pre
+                    receiver: post
+                    sender_port: out_port_spiking
+                    receiver_port: syn_input
+                    parameters:
+                        weight: 200

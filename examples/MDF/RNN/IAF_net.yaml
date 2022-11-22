@@ -15,14 +15,12 @@ IAF_net:
                             value: 60
                         amplitude:
                             value:
-                            - 4.171318573558529
-                            - 3.604099604234099
-                            - 6.6532604865810585
-                            - 12.655231000693323
-                            - 17.103856110270257
-                            - 9.87642920939857
-                            - 17.00454093845209
-                            - 5.92299677192047
+                            - 19.329070713842775
+                            - 8.814651983507053
+                            - 0.14982940117174381
+                            - 18.219519248982483
+                            - 18.78537994727528
+                            - 11.644551461178983
                         level:
                             value: 0
                             conditions:
@@ -35,24 +33,30 @@ IAF_net:
                     output_ports:
                         out_port:
                             value: level
-                iaf_node:
+                pre:
                     input_ports:
-                        input: {}
+                        curr_input: {}
+                        syn_input: {}
                     parameters:
+                        syn_tau:
+                            value: 10
+                        syn_i:
+                            default_initial_value: '0'
+                            time_derivative: -1 * syn_i
+                            conditions:
+                            -   id: spike_detected
+                                test: syn_input > 0
+                                value: '1'
                         v0:
                             value:
-                            - -56.305663213220306
-                            - -68.56066920209935
-                            - -51.742845641558425
-                            - -64.36474355945276
-                            - -66.7586156757788
-                            - -59.38506756066541
-                            - -51.505208328310495
-                            - -65.76553679278662
+                            - -56.5687303702403
+                            - -68.32123546325832
+                            - -54.67038134416407
+                            - -65.26380449273765
+                            - -69.3837195654678
+                            - -54.224545655274326
                         erev:
                             value:
-                            - -70.0
-                            - -70.0
                             - -70.0
                             - -70.0
                             - -70.0
@@ -69,23 +73,100 @@ IAF_net:
                             - -20.0
                             - -20.0
                             - -20.0
-                            - -20.0
-                            - -20.0
+                        spiking:
+                            default_initial_value: '0'
+                            conditions:
+                            -   id: is_spiking
+                                test: v >= thresh
+                                value: '1'
+                            -   id: not_spiking
+                                test: v < thresh
+                                value: '0'
                         v:
                             default_initial_value: v0
-                            time_derivative: -1 * (v-erev)/tau + input
+                            time_derivative: -1 * (v-erev)/tau + syn_input + curr_input
                             conditions:
                             -   id: reset
                                 test: v > thresh
                                 value: erev
                     output_ports:
-                        out_port:
+                        out_port_v:
                             value: v
+                        out_port_spiking:
+                            value: spiking
+                post:
+                    input_ports:
+                        curr_input: {}
+                        syn_input: {}
+                    parameters:
+                        syn_tau:
+                            value: 10
+                        syn_i:
+                            default_initial_value: '0'
+                            time_derivative: -1 * syn_i
+                            conditions:
+                            -   id: spike_detected
+                                test: syn_input > 0
+                                value: '1'
+                        v0:
+                            value:
+                            - -63.07822068805754
+                            - -57.53437049921663
+                            - -57.6836860979277
+                            - -67.02890722583425
+                            - -66.33818705180137
+                            - -67.71174060622624
+                        erev:
+                            value:
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                        tau:
+                            value: 10.0
+                        thresh:
+                            value:
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                        spiking:
+                            default_initial_value: '0'
+                            conditions:
+                            -   id: is_spiking
+                                test: v >= thresh
+                                value: '1'
+                            -   id: not_spiking
+                                test: v < thresh
+                                value: '0'
+                        v:
+                            default_initial_value: v0
+                            time_derivative: -1 * (v-erev)/tau + syn_input + curr_input
+                            conditions:
+                            -   id: reset
+                                test: v > thresh
+                                value: erev
+                    output_ports:
+                        out_port_v:
+                            value: v
+                        out_port_spiking:
+                            value: spiking
             edges:
                 input_edge:
                     sender: input_node
-                    receiver: iaf_node
+                    receiver: pre
                     sender_port: out_port
-                    receiver_port: input
+                    receiver_port: curr_input
                     parameters:
                         weight: 1
+                syn_edge:
+                    sender: pre
+                    receiver: post
+                    sender_port: out_port_spiking
+                    receiver_port: syn_input
+                    parameters:
+                        weight: 200

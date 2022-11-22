@@ -35,7 +35,7 @@ def test_execution_engine_main(tmpdir):
             eg = modeci_mdf.execution_engine.main(
                 "examples/MDF/ABCD.%s" % mdf_format, array_format=array_format
             )
-            output = eg.enodes["D"].evaluable_outputs["output_1"].curr_value
+            output = eg.enodes["D"].evaluable_outputs["out_port"].curr_value
             assert -1.7737500239216304 - output < 1e-9
 
             eg = modeci_mdf.execution_engine.main(
