@@ -12,17 +12,33 @@
             "out_port": {
                 "input_node": 0
             },
-            "input": {
-                "iaf_node": 0
+            "curr_input": {
+                "pre": 0,
+                "post": 0
+            },
+            "syn_input": {
+                "pre": 0,
+                "post": 0
+            },
+            "syn_i": {
+                "pre": 0,
+                "post": 0
             },
             "spiking": {
-                "iaf_node": 0
+                "pre": 0,
+                "post": 0
             },
             "v": {
-                "iaf_node": 0
+                "pre": 0,
+                "post": 0
             },
             "out_port_v": {
-                "iaf_node": 0
+                "pre": 0,
+                "post": 0
+            },
+            "out_port_spiking": {
+                "pre": 0,
+                "post": 0
             }
         }
     }

@@ -37,7 +37,12 @@ def mdf_to_neuroml(
 
         # Create the ComponentType which defines behaviour of the general class
         ct = lems.ComponentType(node_comp_type, extends="baseCellMembPotDL")
-        ct.add(lems.Attachments("only_input_port", "basePointCurrentDL"))
+
+        for ip in node.input_ports:
+            ct.add(lems.Attachments("ip_%s" % ip.id, "basePointCurrentDL"))
+        if len(node.input_ports) == 0:
+            ct.add(lems.Attachments("unused_attachments", "basePointCurrentDL"))
+
         ct.dynamics.add(
             lems.DerivedVariable(name="V", dimension="none", value="0", exposure="V")
         )
@@ -58,8 +63,8 @@ def mdf_to_neuroml(
         )
         net.populations.append(pop)
 
-        if len(node.input_ports) > 1:
-            raise Exception("Currently only max 1 input port supported in NeuroML...")
+        # if len(node.input_ports) > 2:
+        #    raise Exception("Currently only max 1 input port supported in NeuroML...")
 
         for ip in node.input_ports:
             ct.add(lems.Exposure(ip.id, "none"))
@@ -67,7 +72,7 @@ def mdf_to_neuroml(
                 lems.DerivedVariable(
                     name=ip.id,
                     dimension="none",
-                    select="only_input_port[*]/I",
+                    select="ip_%s[*]/I" % ip.id,
                     reduce="add",
                     exposure=ip.id,
                 )
@@ -164,8 +169,8 @@ def mdf_to_neuroml(
                     oc.actions.append(sa)
                     ct.dynamics.add(oc)
 
-        if len(node.output_ports) > 1:
-            raise Exception("Currently only max 1 output port supported in NeuroML...")
+        # if len(node.output_ports) > 1:
+        #    raise Exception("Currently only max 1 output port supported in NeuroML...")
 
         for op in node.output_ports:
             ct.add(lems.Exposure(op.id, "none"))
@@ -174,14 +179,14 @@ def mdf_to_neuroml(
                     name=op.id, dimension="none", value=op.value, exposure=op.id
                 )
             )
-            only_output_port = "only_output_port"
-            ct.add(lems.Exposure(only_output_port, "none"))
+            output_port = "op_%s" % op.id
+            ct.add(lems.Exposure(output_port, "none"))
             ct.dynamics.add(
                 lems.DerivedVariable(
-                    name=only_output_port,
+                    name=output_port,
                     dimension="none",
                     value=op.id,
-                    exposure=only_output_port,
+                    exposure=output_port,
                 )
             )
 
