@@ -12,11 +12,11 @@
             "out_port": {
                 "input_node": 0
             },
-            "curr_input": {
+            "current_input": {
                 "pre": 0,
                 "post": 0
             },
-            "syn_input": {
+            "spike_input": {
                 "pre": 0,
                 "post": 0
             },
