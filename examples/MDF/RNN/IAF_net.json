@@ -24,7 +24,9 @@
                                     0.14982940117174381,
                                     18.219519248982483,
                                     18.78537994727528,
-                                    11.644551461178983
+                                    11.644551461178983,
+                                    13.4312696297597,
+                                    1.6787645367416792
                                 ]
                             },
                             "level": {
@@ -51,36 +53,29 @@
                     },
                     "pre": {
                         "input_ports": {
-                            "curr_input": {},
-                            "syn_input": {}
+                            "current_input": {},
+                            "spike_input": {}
                         },
                         "parameters": {
                             "syn_tau": {
                                 "value": 10
                             },
-                            "syn_i": {
-                                "default_initial_value": "0",
-                                "time_derivative": "-1 * syn_i",
-                                "conditions": [
-                                    {
-                                        "id": "spike_detected",
-                                        "test": "syn_input > 0",
-                                        "value": "1"
-                                    }
-                                ]
-                            },
                             "v0": {
                                 "value": [
-                                    -56.5687303702403,
-                                    -68.32123546325832,
                                     -54.67038134416407,
                                     -65.26380449273765,
                                     -69.3837195654678,
-                                    -54.224545655274326
+                                    -54.224545655274326,
+                                    -63.07822068805754,
+                                    -57.53437049921663,
+                                    -57.6836860979277,
+                                    -67.02890722583425
                                 ]
                             },
                             "erev": {
                                 "value": [
+                                    -70.0,
+                                    -70.0,
                                     -70.0,
                                     -70.0,
                                     -70.0,
@@ -99,7 +94,20 @@
                                     -20.0,
                                     -20.0,
                                     -20.0,
+                                    -20.0,
+                                    -20.0,
                                     -20.0
+                                ]
+                            },
+                            "syn_i": {
+                                "default_initial_value": "0",
+                                "time_derivative": "-1 * syn_i",
+                                "conditions": [
+                                    {
+                                        "id": "spike_detected",
+                                        "test": "spike_input > 0",
+                                        "value": "spike_input"
+                                    }
                                 ]
                             },
                             "spiking": {
@@ -119,7 +127,7 @@
                             },
                             "v": {
                                 "default_initial_value": "v0",
-                                "time_derivative": "-1 * (v-erev)/tau + syn_input + curr_input",
+                                "time_derivative": "-1 * (v-erev)/tau + syn_i + current_input",
                                 "conditions": [
                                     {
                                         "id": "reset",
@@ -140,36 +148,29 @@
                     },
                     "post": {
                         "input_ports": {
-                            "curr_input": {},
-                            "syn_input": {}
+                            "current_input": {},
+                            "spike_input": {}
                         },
                         "parameters": {
                             "syn_tau": {
                                 "value": 10
                             },
-                            "syn_i": {
-                                "default_initial_value": "0",
-                                "time_derivative": "-1 * syn_i",
-                                "conditions": [
-                                    {
-                                        "id": "spike_detected",
-                                        "test": "syn_input > 0",
-                                        "value": "1"
-                                    }
-                                ]
-                            },
                             "v0": {
                                 "value": [
-                                    -63.07822068805754,
-                                    -57.53437049921663,
-                                    -57.6836860979277,
-                                    -67.02890722583425,
                                     -66.33818705180137,
-                                    -67.71174060622624
+                                    -67.71174060622624,
+                                    -69.70762439026181,
+                                    -60.26496918790483,
+                                    -50.70196878167569,
+                                    -68.70875438045628,
+                                    -59.178236288977395,
+                                    -60.68202881983381
                                 ]
                             },
                             "erev": {
                                 "value": [
+                                    -70.0,
+                                    -70.0,
                                     -70.0,
                                     -70.0,
                                     -70.0,
@@ -188,7 +189,20 @@
                                     -20.0,
                                     -20.0,
                                     -20.0,
+                                    -20.0,
+                                    -20.0,
                                     -20.0
+                                ]
+                            },
+                            "syn_i": {
+                                "default_initial_value": "0",
+                                "time_derivative": "-1 * syn_i",
+                                "conditions": [
+                                    {
+                                        "id": "spike_detected",
+                                        "test": "spike_input > 0",
+                                        "value": "spike_input"
+                                    }
                                 ]
                             },
                             "spiking": {
@@ -208,7 +222,7 @@
                             },
                             "v": {
                                 "default_initial_value": "v0",
-                                "time_derivative": "-1 * (v-erev)/tau + syn_input + curr_input",
+                                "time_derivative": "-1 * (v-erev)/tau + syn_i + current_input",
                                 "conditions": [
                                     {
                                         "id": "reset",
@@ -233,7 +247,7 @@
                         "sender": "input_node",
                         "receiver": "pre",
                         "sender_port": "out_port",
-                        "receiver_port": "curr_input",
+                        "receiver_port": "current_input",
                         "parameters": {
                             "weight": 1
                         }
@@ -242,9 +256,9 @@
                         "sender": "pre",
                         "receiver": "post",
                         "sender_port": "out_port_spiking",
-                        "receiver_port": "syn_input",
+                        "receiver_port": "spike_input",
                         "parameters": {
-                            "weight": 200
+                            "weight": 40
                         }
                     }
                 }

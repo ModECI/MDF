@@ -14,24 +14,14 @@ def create_iaf_node(id, num_cells=1):
 
     ## IAF node...
     iaf_node = Node(id)
-    ip1 = InputPort(id="curr_input")
-    iaf_node.input_ports.append(ip1)
+    ip_current = InputPort(id="current_input")
+    iaf_node.input_ports.append(ip_current)
 
-    ip_syn = InputPort(id="syn_input")
-    iaf_node.input_ports.append(ip_syn)
+    ip_spike = InputPort(id="spike_input")
+    iaf_node.input_ports.append(ip_spike)
 
     syn_tau = Parameter(id="syn_tau", value=10)
     iaf_node.parameters.append(syn_tau)
-
-    pc = ParameterCondition(id="spike_detected", test="%s > 0" % ip_syn.id, value="1")
-
-    i = Parameter(
-        id="syn_i",
-        default_initial_value="0",
-        time_derivative="-1 * syn_i",
-    )
-    i.conditions.append(pc)
-    iaf_node.parameters.append(i)
 
     v0 = Parameter(id="v0", value=-60)
 
@@ -46,6 +36,18 @@ def create_iaf_node(id, num_cells=1):
 
     # v_init = Parameter(id="v_init", value=-30)
     # iaf_node.parameters.append(v_init)
+
+    pc = ParameterCondition(
+        id="spike_detected", test="%s > 0" % ip_spike.id, value=ip_spike.id
+    )
+
+    syn_i = Parameter(
+        id="syn_i",
+        default_initial_value="0",
+        time_derivative="-1 * syn_i",
+    )
+    syn_i.conditions.append(pc)
+    iaf_node.parameters.append(syn_i)
 
     pc1 = ParameterCondition(id="is_spiking", test="v >= thresh", value="1")
     pc2 = ParameterCondition(id="not_spiking", test="v < thresh", value="0")
@@ -63,7 +65,7 @@ def create_iaf_node(id, num_cells=1):
     v = Parameter(
         id="v",
         default_initial_value="v0",
-        time_derivative="-1 * (v-erev)/tau + syn_input + curr_input",
+        time_derivative=f"-1 * (v-erev)/tau + {syn_i.id} + {ip_current.id}",
     )
     v.conditions.append(pc)
 
@@ -91,7 +93,7 @@ def main():
     if net:
         mod.id = "IAF_net"
 
-    num_cells = 6 if net else 1
+    num_cells = 8 if net else 1
 
     mod_graph = Graph(id="iaf_example")
     mod.graphs.append(mod_graph)
@@ -147,7 +149,7 @@ def main():
         sender=input_node.id,
         sender_port=input_node.get_output_port("out_port").id,
         receiver=iaf_node1.id,
-        receiver_port=iaf_node1.get_input_port("curr_input").id,
+        receiver_port=iaf_node1.get_input_port("current_input").id,
     )
 
     mod_graph.edges.append(e1)
@@ -158,11 +160,11 @@ def main():
 
     e2 = Edge(
         id="syn_edge",
-        parameters={"weight": 200},
+        parameters={"weight": 40},
         sender=iaf_node1.id,
         sender_port=iaf_node1.get_output_port("out_port_spiking").id,
         receiver=iaf_node2.id,
-        receiver_port=iaf_node2.get_input_port("syn_input").id,
+        receiver_port=iaf_node2.get_input_port("spike_input").id,
     )
 
     mod_graph.edges.append(e2)
@@ -211,42 +213,47 @@ def main():
 
         import matplotlib.pyplot as plt
 
-        plt.plot(times, t, label="time at input node")
+        figure, axis = plt.subplots(4, 1, figsize=(7, 7))
+
+        # axis[0].plot(times, t, label="time at input node")
+
         if type(i[0]) == numpy.ndarray and i[0].size > 1:
             for ii in range(len(i[0])):
                 iii = []
                 for ti in range(len(t)):
                     iii.append(i[ti][ii])
-                plt.plot(times, iii, label="Input node %s state" % ii)
+                axis[0].plot(
+                    times, iii, label="Input node %s current" % ii, linewidth="0.5"
+                )
         else:
-            plt.plot(times, i, label="state of input node")
+            axis[0].plot(times, i, label="Input node current", color="k")
+
+        if not net:
+            axis[0].legend()
 
         if type(s1[0]) == numpy.ndarray and s1[0].size > 1:
             for si in range(len(s1[0])):
                 ss = []
                 for ti in range(len(t)):
                     ss.append(s1[ti][si])
-                plt.plot(times, ss, label="IaF pre %s state" % si)
+                axis[1].plot(times, ss, label="IaF pre %s v" % si, linewidth="0.5")
         else:
-            plt.plot(times, s1, label="IaF pre 0 state")
+            axis[1].plot(times, s1, label="IaF pre v", color="r")
 
-        plt.legend()
-        plt.figure()
+        if not net:
+            axis[1].legend()
 
         if type(s2[0]) == numpy.ndarray and s2[0].size > 1:
             for si in range(len(s2[0])):
                 ss = []
                 for ti in range(len(t)):
                     ss.append(s2[ti][si])
-                plt.plot(times, ss, label="IaF post %s state" % si)
+                axis[2].plot(times, ss, label="IaF post %s v" % si, linewidth="0.5")
         else:
-            plt.plot(times, s2, label="IaF 1 0 state")
+            axis[2].plot(times, s2, label="IaF post v", color="b")
 
-        plt.legend()
-
-        plt.savefig("IaF%s.run.png" % (".net" if net else ""), bbox_inches="tight")
-
-        plt.figure()
+        if not net:
+            axis[2].legend()
 
         if type(sp1[0]) == numpy.ndarray and sp1[0].size > 1:
             for spi1 in range(len(sp1[0])):
@@ -254,14 +261,10 @@ def main():
                 for ti in range(len(t)):
                     sps1.append(sp1[ti][spi1])
 
-                nz = [t * dt for t in numpy.nonzero(sps1)]
+                nz = [t * dt for t in numpy.nonzero(sps1)][0]
                 print(nz)
-                plt.plot(
-                    nz,
-                    numpy.ones(len(nz)) * spi1,
-                    marker=".",
-                    label="IaF pre %s spiking" % spi1,
-                    color="k",
+                axis[3].plot(
+                    nz, numpy.ones(len(nz)) * spi1, marker=".", color="r", linewidth=0
                 )
 
             for spi in range(len(sp2[0])):
@@ -269,21 +272,44 @@ def main():
                 for ti in range(len(t)):
                     sps.append(sp2[ti][spi])
 
-                nz = [t * dt for t in numpy.nonzero(sps)]
+                nz = [t * dt for t in numpy.nonzero(sps)][0]
                 print(nz)
-                plt.plot(
+                axis[3].plot(
                     nz,
                     numpy.ones(len(nz)) * spi + num_cells,
                     marker=".",
-                    label="IaF post %s spiking" % spi,
                     color="b",
+                    linewidth=0,
                 )
         else:
-            nz = [t * dt for t in numpy.nonzero(sp1)]
-            print(nz)
-            plt.plot(nz, numpy.zeros(len(nz)), marker=".", label="spiking", color="k")
+            nz1 = [t * dt for t in numpy.nonzero(sp1)][0]
+            print(nz1)
+            axis[3].plot(
+                nz1,
+                numpy.zeros(len(nz1)),
+                marker=".",
+                linewidth=0,
+                label="pre",
+                color="r",
+            )
+            nz2 = [t * dt for t in numpy.nonzero(sp2)][0]
+            print(nz2)
+            axis[3].plot(
+                nz2,
+                numpy.ones(len(nz2)),
+                marker=".",
+                linewidth=0,
+                label="post",
+                color="b",
+            )
+            plt.ylim([-1, 2])
+
+            axis[3].legend()
 
         plt.xlim([0, duration])
+        plt.xlabel("Time")
+
+        plt.savefig("IaF%s.run.png" % (".net" if net else ""), bbox_inches="tight")
 
         if "-nogui" not in sys.argv:
             plt.show()
@@ -293,8 +319,9 @@ def main():
             engine="dot",
             output_format="png",
             view_on_render=False,
-            level=3,
+            level=2,
             filename_root="iaf",
+            is_horizontal=True,
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
