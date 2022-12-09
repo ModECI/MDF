@@ -10,6 +10,9 @@ Examples of Python, JSON and YAML files to illustrate the structure and usage of
 
 A simple example with 2 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) connected by an [Edge](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
 
+![1 resimple](https://user-images.githubusercontent.com/100205503/206758337-378bc376-cb06-4a06-87a3-025d2a025af9.png)
+
+
 ![simple](images/simple.png)
 
 With more detail on [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) (showing [Input Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#inputport) (green), [Parameters](https://mdf.readthedocs.io/en/latest/api/Specification.html#parameter) (blue) and [Output Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#output_port)) (red) and [Edges](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
