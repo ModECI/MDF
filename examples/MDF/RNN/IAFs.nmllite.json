@@ -1,12 +1,15 @@
 {
     "iaf_example": {
-        "version": "NeuroMLlite v0.5.2",
+        "version": "NeuroMLlite v0.5.3",
         "notes": "NeuroMLlite export of MDF graph: iaf_example",
         "cells": {
             "input_node__instance": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             },
-            "iaf_node__instance": {
+            "pre__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "post__instance": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             }
         },
@@ -15,6 +18,9 @@
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             },
             "silentSyn_proj_input_edge": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "silentSyn_proj_syn_edge": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             }
         },
@@ -27,9 +33,17 @@
                     "radius": 3
                 }
             },
-            "iaf_node": {
+            "pre": {
                 "size": 1,
-                "component": "iaf_node__instance",
+                "component": "pre__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            },
+            "post": {
+                "size": 1,
+                "component": "post__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
                     "radius": 3
@@ -39,9 +53,20 @@
         "projections": {
             "proj_input_edge": {
                 "presynaptic": "input_node",
-                "postsynaptic": "iaf_node",
+                "postsynaptic": "pre",
                 "synapse": "rsDL",
                 "pre_synapse": "silentSyn_proj_input_edge",
+                "type": "continuousProjection",
+                "weight": 1,
+                "random_connectivity": {
+                    "probability": 1
+                }
+            },
+            "proj_syn_edge": {
+                "presynaptic": "pre",
+                "postsynaptic": "post",
+                "synapse": "rsDL",
+                "pre_synapse": "silentSyn_proj_syn_edge",
                 "type": "continuousProjection",
                 "weight": 1,
                 "random_connectivity": {

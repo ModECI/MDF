@@ -1,0 +1,40 @@
+<Lems>
+
+    <!--
+
+        This LEMS file has been automatically generated using PyNeuroML v0.7.2 (libNeuroML v0.4.0)
+
+     -->
+
+    <!-- Specify which component to run -->
+    <Target component="SimIzhikevichTest" reportFile="report.SimIzhikevichTest.txt"/>
+
+    <!-- Include core NeuroML2 ComponentType definitions -->
+    <Include file="Cells.xml"/>
+    <Include file="Networks.xml"/>
+    <Include file="Simulation.xml"/>
+
+    <Include file="PyNN.xml"/>
+    <Include file="IzhikevichTest.net.nml"/>
+
+    <Simulation id="SimIzhikevichTest" length="700.0ms" step="0.025ms" target="IzhikevichTest" seed="5678">  <!-- Note seed: ensures same random numbers used every run -->
+
+        <Display id="izhPop_0_u" title="Plots of izhPop_0_u" timeScale="1ms" xmin="-70.0" xmax="770.0000000000001" ymin="-1" ymax="1">
+            <Line id="izhPop_0__u" quantity="izhPop[0]/u" scale="1" color="#d54f33" timeScale="1ms"/>
+        </Display>
+
+        <Display id="izhPop_0_v" title="Plots of izhPop_0_v" timeScale="1ms" xmin="-70.0" xmax="770.0000000000001" ymin="-80" ymax="40">
+            <Line id="izhPop_0__v" quantity="izhPop[0]/v" scale="1mV" color="#0534e4" timeScale="1ms"/>
+        </Display>
+
+        <OutputFile id="izhPop_0_u_dat" fileName="izhPop_0.u.dat">
+            <OutputColumn id="izhPop_0__u" quantity="izhPop[0]/u"/>
+        </OutputFile>
+
+        <OutputFile id="izhPop_0_v_dat" fileName="izhPop_0.v.dat">
+            <OutputColumn id="izhPop_0__v" quantity="izhPop[0]/v"/>
+        </OutputFile>
+
+    </Simulation>
+
+</Lems>
