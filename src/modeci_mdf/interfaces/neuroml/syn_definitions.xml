@@ -39,7 +39,7 @@
         <InstanceRequirement name="peer" type="baseSynapseDL"/>
 
         <Dynamics>
-            <DerivedVariable name="rpeer" dimension="none" select="peer/only_output_port"/>
+            <DerivedVariable name="rpeer" dimension="none" select="peer/op_out_port"/>
             <DerivedVariable name="I" exposure="I" dimension="none" value="weight * rpeer"/>
         </Dynamics>
 

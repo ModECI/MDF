@@ -1,6 +1,5 @@
 version: ModECI MDF v0.4
-comment: '**Note: the ModECI MDF specification is still in development! Subject to
-    change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification)
+comment: '**Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues)
     for ongoing discussions.'
 specification:
     Model:

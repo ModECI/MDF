@@ -38,12 +38,12 @@ def main():
 
         print(
             "New file output value>>>",
-            eg.enodes["D"].evaluable_outputs["output_1"].curr_value,
+            eg.enodes["D"].evaluable_outputs["out_port"].curr_value,
         )
 
         print(
             "Old file output value>>>",
-            eg_old.enodes["D"].evaluable_outputs["output_1"].curr_value,
+            eg_old.enodes["D"].evaluable_outputs["out_port"].curr_value,
         )
 
 
