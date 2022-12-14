@@ -71,7 +71,6 @@ jobs:
         python generate.py
         cd sphinx
         make html
-        ls -alth build/html
 
     - name: Test interface ACT-R
       if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
