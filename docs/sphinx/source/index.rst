@@ -67,6 +67,12 @@ re-used in other environments.
    api/MDF_function_specifications
 
 .. toctree::
+   :maxdepth: 1
+   :caption: ModECI Contributors
+
+   api/Contributors
+
+.. toctree::
    :caption: API Reference
 
    api/_autosummary/modeci_mdf
