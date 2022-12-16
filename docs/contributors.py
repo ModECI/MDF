@@ -18,6 +18,7 @@ html_url = df["html_url"]
 repo_url = dict(zip(repo_name, html_url))
 
 list_url = list(df["contributors_url"])
+list_url.remove("https://api.github.com/repos/ModECI/PsyNeuLink/contributors")
 list_range = len(list_url)
 
 empty_list = []
@@ -43,7 +44,7 @@ for i in range(len_per_info):
     empty_list.append(data.json())
 
 df2 = pd.DataFrame(empty_list)
-df2["name"] = df2["name"].fillna("Name Not Available")
+df2["name"] = df2["name"].fillna("")
 name = df2["name"]
 login = df2["login"]
 url_html = df2["html_url"]
@@ -65,7 +66,7 @@ with open(file, "w") as f:
 
         # ModECI contributors
 
-        This page list names and github profiles of contributors to the various ModECI repositories, listed in no particular order.
+        This page list names and Github profiles of contributors to the various ModECI repositories, listed in no particular order.
         This page is generated periodically, most recently on {}.""".format(
                 date.today()
             )
