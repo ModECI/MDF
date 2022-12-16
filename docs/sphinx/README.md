@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Specification of ModECI v0.4
 **Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues) for ongoing discussions.
 ## Model
@@ -440,3 +441,8 @@ An <a href="#edge">Edge</a> is an attribute of a <a href="#graph">Graph</a> that
 
 
 </table>
+=======
+This is the directory for the Sphinx based documentation which gets generated at https://mdf.readthedocs.io.
+
+See https://github.com/ModECI/MDF/issues/357 for details.
+>>>>>>> b9b60f4f00a286c530b4baac2c1567e7ad483bb0
