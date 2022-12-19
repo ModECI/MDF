@@ -63,7 +63,7 @@ dummy_input = torch.cat(
     [torch.rand(20), torch.rand(20), torch.rand(25), torch.rand(25)], -1
 )
 
-net.eval()
+# net.eval()
 output = net(dummy_input).detach().numpy()
 
 mdf_model, params_dict = pytorch_to_mdf(
@@ -80,13 +80,13 @@ eg = EvaluableGraph(graph=mdf_graph, verbose=False)
 
 eg.evaluate(initializer=params_dict)
 
+mdf_model.to_json_file("nback_mdf.json")
+
 output_mdf = eg.output_enodes[0].get_output()
 assert np.allclose(
     output,
     output_mdf,
 ), f"Output from PyTorch and MDF do not match. MaxAbsError={np.max(np.abs(output - output_mdf))}"
-
-mdf_model.to_json_file("nback_mdf.json")
 
 # Convert to JSON and back
 mdf_model2 = Model.from_json(mdf_model.to_json())

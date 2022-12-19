@@ -168,7 +168,49 @@
                             }
                         }
                     },
-                    "Transpose_11": {
+                    "Dropout_13_14": {
+                        "input_ports": {
+                            "_10": {
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "_11": {
+                                "value": 0.05000000074505806
+                            },
+                            "_12": {
+                                "value": true
+                            },
+                            "onnx_Dropout_1": {
+                                "function": "onnx::Dropout",
+                                "args": {
+                                    "data": "_10",
+                                    "ratio": "_11",
+                                    "training_mode": "_12"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_13": {
+                                "value": "onnx_Dropout_1[0]",
+                                "shape": [
+                                    90
+                                ],
+                                "type": "float32"
+                            },
+                            "_14": {
+                                "value": "onnx_Dropout_1[1]",
+                                "shape": [
+                                    90
+                                ],
+                                "type": "bool"
+                            }
+                        }
+                    },
+                    "Transpose_15": {
                         "input_ports": {
                             "hid2_layer_weight": {
                                 "shape": [
@@ -193,7 +235,7 @@
                             }
                         },
                         "output_ports": {
-                            "_11": {
+                            "_15": {
                                 "value": "onnx_Transpose_1",
                                 "shape": [
                                     90,
@@ -203,15 +245,15 @@
                             }
                         }
                     },
-                    "MatMul_12": {
+                    "MatMul_16": {
                         "input_ports": {
-                            "_10": {
+                            "_13": {
                                 "shape": [
                                     90
                                 ],
                                 "type": "float32"
                             },
-                            "_11": {
+                            "_15": {
                                 "shape": [
                                     90,
                                     80
@@ -223,13 +265,13 @@
                             "onnx_MatMul_1": {
                                 "function": "onnx::MatMul",
                                 "args": {
-                                    "A": "_10",
-                                    "B": "_11"
+                                    "A": "_13",
+                                    "B": "_15"
                                 }
                             }
                         },
                         "output_ports": {
-                            "_12": {
+                            "_16": {
                                 "value": "onnx_MatMul_1",
                                 "shape": [
                                     80
@@ -238,9 +280,9 @@
                             }
                         }
                     },
-                    "Relu_13": {
+                    "Relu_17": {
                         "input_ports": {
-                            "_12": {
+                            "_16": {
                                 "shape": [
                                     80
                                 ],
@@ -251,12 +293,12 @@
                             "onnx_Relu_1": {
                                 "function": "onnx::Relu",
                                 "args": {
-                                    "X": "_12"
+                                    "X": "_16"
                                 }
                             }
                         },
                         "output_ports": {
-                            "_13": {
+                            "_17": {
                                 "value": "onnx_Relu_1",
                                 "shape": [
                                     80
@@ -265,7 +307,7 @@
                             }
                         }
                     },
-                    "Transpose_14": {
+                    "Transpose_18": {
                         "input_ports": {
                             "out_layer_weight": {
                                 "shape": [
@@ -290,7 +332,7 @@
                             }
                         },
                         "output_ports": {
-                            "_14": {
+                            "_18": {
                                 "value": "onnx_Transpose_1",
                                 "shape": [
                                     80,
@@ -300,15 +342,15 @@
                             }
                         }
                     },
-                    "MatMul_15": {
+                    "MatMul_19": {
                         "input_ports": {
-                            "_13": {
+                            "_17": {
                                 "shape": [
                                     80
                                 ],
                                 "type": "float32"
                             },
-                            "_14": {
+                            "_18": {
                                 "shape": [
                                     80,
                                     2
@@ -320,13 +362,13 @@
                             "onnx_MatMul_1": {
                                 "function": "onnx::MatMul",
                                 "args": {
-                                    "A": "_13",
-                                    "B": "_14"
+                                    "A": "_17",
+                                    "B": "_18"
                                 }
                             }
                         },
                         "output_ports": {
-                            "_15": {
+                            "_19": {
                                 "value": "onnx_MatMul_1",
                                 "shape": [
                                     2
@@ -361,35 +403,41 @@
                         "sender_port": "_9",
                         "receiver_port": "_9"
                     },
-                    "Add_10_MatMul_12": {
+                    "Add_10_Dropout_13_14": {
                         "sender": "Add_10",
-                        "receiver": "MatMul_12",
+                        "receiver": "Dropout_13_14",
                         "sender_port": "_10",
                         "receiver_port": "_10"
                     },
-                    "Transpose_11_MatMul_12": {
-                        "sender": "Transpose_11",
-                        "receiver": "MatMul_12",
-                        "sender_port": "_11",
-                        "receiver_port": "_11"
-                    },
-                    "MatMul_12_Relu_13": {
-                        "sender": "MatMul_12",
-                        "receiver": "Relu_13",
-                        "sender_port": "_12",
-                        "receiver_port": "_12"
-                    },
-                    "Relu_13_MatMul_15": {
-                        "sender": "Relu_13",
-                        "receiver": "MatMul_15",
+                    "Dropout_13_14_MatMul_16": {
+                        "sender": "Dropout_13_14",
+                        "receiver": "MatMul_16",
                         "sender_port": "_13",
                         "receiver_port": "_13"
                     },
-                    "Transpose_14_MatMul_15": {
-                        "sender": "Transpose_14",
-                        "receiver": "MatMul_15",
-                        "sender_port": "_14",
-                        "receiver_port": "_14"
+                    "Transpose_15_MatMul_16": {
+                        "sender": "Transpose_15",
+                        "receiver": "MatMul_16",
+                        "sender_port": "_15",
+                        "receiver_port": "_15"
+                    },
+                    "MatMul_16_Relu_17": {
+                        "sender": "MatMul_16",
+                        "receiver": "Relu_17",
+                        "sender_port": "_16",
+                        "receiver_port": "_16"
+                    },
+                    "Relu_17_MatMul_19": {
+                        "sender": "Relu_17",
+                        "receiver": "MatMul_19",
+                        "sender_port": "_17",
+                        "receiver_port": "_17"
+                    },
+                    "Transpose_18_MatMul_19": {
+                        "sender": "Transpose_18",
+                        "receiver": "MatMul_19",
+                        "sender_port": "_18",
+                        "receiver_port": "_18"
                     }
                 }
             }
