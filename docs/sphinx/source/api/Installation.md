@@ -64,7 +64,7 @@ Make sure that the directory containing the dot executable is on your system's P
 The ModECI MDF Documentation can be found online [here](https://mdf.readthedocs.io/en/latest). If you are working on MDF documentation or you make changes to the documentation, it is good practice to see if it is working as expected before pushing to the Github repository.
 Here is a walkthrough on how to generate the ModECI MDF documentation offline
 
-## Requirements 
+## Requirements
 
 Python (3.9.0)
 
@@ -129,5 +129,3 @@ cd build\html
 ```
 index.html
 ```
-
-
