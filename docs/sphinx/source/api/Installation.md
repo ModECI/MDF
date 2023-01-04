@@ -33,7 +33,9 @@ source mdf-env/bin/activate
 ### 5) Install the package
 ```
 pip install .
+
 ```
+Hello world
 
 Alternatively, to install MDF plus all of the modules required for the export/import interfaces (e.g. PsyNeuLink, NeuroML):
 
