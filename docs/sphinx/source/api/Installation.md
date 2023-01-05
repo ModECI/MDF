@@ -59,34 +59,55 @@ Make sure that the directory containing the dot executable is on your system's P
 
 
 
-# Generating ModECI MDF documentation offline
+## Generating ModECI MDF documentation offline
 
 The ModECI MDF Documentation can be found online [here](https://mdf.readthedocs.io/en/latest). If you are working on MDF documentation or you make changes to the documentation, it is good practice to see if it is working as expected before pushing to the Github repository.
 Here is a walkthrough on how to generate the ModECI MDF documentation offline
 
 ## Requirements
 
-Python (3.9.0)
+Python (3.10)
 
-See Installation [here](https://www.python.org/downloads/release/python-390)
+Make library
 
-Add python version-3.9.0 to path
+**Python version-3.10 is ideally used for generating MDF documentation offline but if did not work, use python version-3.9. The steps are the same except in creating a virtual environment.**
 
-### 1). Create a virtual environment with python 3.9.0
+See Installation for python [here](https://www.python.org/downloads/)
+
+Ensure the python version you are using is added to path
+
+For **windows** installation of Make, see [here](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows)
+
+for **mac** installation of Make, see [here](https://formulae.brew.sh/formula/make)
+
+
+
+### 1). Create a virtual environment with python 
 ```
 # install virtual environment
 
 pip install virtualenv
 
-# create virtual environment using python 3.9.0
+# create virtual environment for python 3.9
 
 python3.9 -m virtualenv venv39
 
-# Activate virtual environment
+or
+
+# create virtual environment for python 3.10
+
+python3.10 -m virtualenv venv310
+
+# Activate virtual environment for python3.9
+
 venv39\Scripts\activate
+
+# Activate virtual environment for python3.10
+
+venv310\Scripts\activate
 ```
 
-### 2). Clone MDF repository from Github into the virtual environment
+### 2). Clone MDF repository from Github into your local machine
 ```
 git clone https://github.com/ModECI/MDF.git
 ```
@@ -96,22 +117,21 @@ git clone https://github.com/ModECI/MDF.git
 cd MDF
 ```
 
-### 4). Install MDF package
-```
-pip install .
-```
-
-### 5). Install all dependencies
+### 4). Install all MDF package into the virtual environment
 ```
 pip install .[all]
 ```
 
-### 6). Change directory into sphinx folder
+### 5). Change directory into sphinx folder
 ```
+# for windows 
 cd docs\sphinx
+
+# for mac
+cd docs/sphinx
 ```
 
-### 7). Create offline documentation in sphinx folder
+### 6). Create offline documentation in sphinx folder
 ```
 # To allow fresh start when making the documentation
 make clean
@@ -120,12 +140,16 @@ make clean
 make html
 ```
 
-### 8). change directory into html folder
+### 7). change directory into html folder and run the documentation offline
 ```
+# for windows
+Go into build\html folder and double click on the index.html file.
+or
 cd build\html
+index.html
+
+# for mac
+Go into build/html folder and double click on the index.html file
 ```
 
-### 9). Run the documentation offline
-```
-index.html
-```
+The documentation will open up in your browser automatically or right click on the file and open in any browser of your choice
