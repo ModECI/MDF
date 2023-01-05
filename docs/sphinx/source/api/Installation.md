@@ -70,7 +70,7 @@ Python (3.10)
 
 Make library
 
-**Python version-3.10 is ideally used for generating MDF documentation offline but if did not work, use python version-3.9. The steps are the same except in creating a virtual environment.**
+**Python version-3.10 is ideally used for generating MDF documentation offline but if not working, use python version-3.9. The steps are the same except in creating a virtual environment.**
 
 See Installation for python [here](https://www.python.org/downloads/)
 
@@ -82,7 +82,7 @@ for **mac** installation of Make, see [here](https://formulae.brew.sh/formula/ma
 
 
 
-### 1). Create a virtual environment with python 
+### 1). Create a virtual environment with python
 ```
 # install virtual environment
 
@@ -124,7 +124,7 @@ pip install .[all]
 
 ### 5). Change directory into sphinx folder
 ```
-# for windows 
+# for windows
 cd docs\sphinx
 
 # for mac
