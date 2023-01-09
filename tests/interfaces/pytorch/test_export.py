@@ -44,10 +44,10 @@ def test_ABCD():
 
     # Get the result of MDF execution
     eg = modeci_mdf.execution_engine.main(str(file_path))
-    assert eg.enodes["A"].evaluable_outputs["output_1"].curr_value == k[1]
-    assert round(eg.enodes["B"].evaluable_outputs["output_1"].curr_value, 3) == k[2]
-    assert round(eg.enodes["C"].evaluable_outputs["output_1"].curr_value, 3) == k[3]
-    assert round(eg.enodes["D"].evaluable_outputs["output_1"].curr_value, 3) == k[4]
+    assert eg.enodes["A"].evaluable_outputs["out_port"].curr_value == k[1]
+    assert round(eg.enodes["B"].evaluable_outputs["out_port"].curr_value, 3) == k[2]
+    assert round(eg.enodes["C"].evaluable_outputs["out_port"].curr_value, 3) == k[3]
+    assert round(eg.enodes["D"].evaluable_outputs["out_port"].curr_value, 3) == k[4]
 
 
 def test_Arrays():
