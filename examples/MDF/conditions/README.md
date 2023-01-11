@@ -2,11 +2,11 @@
 
 In MDF, Conditions are used to specify how many times and when individual nodes are allowed to be executed. There are different types of conditions which are categorized into five and they includes:
 
-**Generic Condition** - This is satisfied when a user-specified function and set of arguments evaluates to **True**, They are also used for calling [custom conditions](https://kmantel.github.io/graph-scheduler/Condition.html#condition-custom). Examples of Conditions that are categorized under Generic condition can be found [here](https://kmantel.github.io/graph-scheduler/Condition.html#conditions-generic). see [here](https://github.com/ModECI/MDF/blob/main/examples/MDF/conditions/threshold.py) for generic condition example in MDF. 
+**Generic Condition** - This is satisfied when a user-specified function and set of arguments evaluates to **True**, They are also used for calling [custom conditions](https://kmantel.github.io/graph-scheduler/Condition.html#condition-custom). Examples of Conditions that are categorized under Generic condition can be found [here](https://kmantel.github.io/graph-scheduler/Condition.html#conditions-generic). see [here](https://github.com/ModECI/MDF/blob/main/examples/MDF/conditions/threshold.py) for generic condition example in MDF.
 
 **Static Condition** - This condition is satisfied either always or never and they are independent of other Conditions, nodes or time. Example of the used of a static condition in MDF can be found [here](https://github.com/ModECI/MDF/blob/main/examples/MDF/conditions/everyNCalls.py). Conditions that are categorized as static can be found [here](https://kmantel.github.io/graph-scheduler/Condition.html#conditions-static)
 
-**Composite Condition** - This condition is dependent on another condition(s) and it is satisfied based on the condition it is dependent on. Conditions that are categorized as composite can be found [here](https://kmantel.github.io/graph-scheduler/Condition.html#conditions-composite) 
+**Composite Condition** - This condition is dependent on another condition(s) and it is satisfied based on the condition it is dependent on. Conditions that are categorized as composite can be found [here](https://kmantel.github.io/graph-scheduler/Condition.html#conditions-composite)
 
 **Time-based Condition** - This condition is satisfied based on the current count of units of time at a specified TimeScale. Conditions that are categorized as time based can be found [here](https://kmantel.github.io/graph-scheduler/Condition.html#conditions-time-based). See time-based condition use in MDF [here](https://github.com/ModECI/MDF/blob/main/examples/MDF/conditions/timeInterval.py)
 
