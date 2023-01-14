@@ -140,7 +140,7 @@ make clean
 make html
 ```
 
-### 7). change directory into html folder and run the documentation offline
+### 7). Change directory into html folder and run the documentation offline
 ```
 # for windows
 Go into build\html folder and double click on the index.html file.
