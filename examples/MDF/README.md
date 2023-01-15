@@ -1,7 +1,5 @@
 # MDF Examples
 
-Examples of Python, JSON and YAML files to illustrate the structure and usage of MDF.
-
 [Simple](#simple-example) | [ABCD](#abcd) | [Arrays](#arrays) | [States](#states) | [Conditions](#conditions) | [Parameters and Functions](#parameters-and-functions)
 
 ## Simple example
