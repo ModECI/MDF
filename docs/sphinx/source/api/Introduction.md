@@ -3,6 +3,7 @@
 </p>
 
 [![Actions Status][actions-badge]][actions-link]
+[![PyPI version](https://badge.fury.io/py/modeci-mdf.svg)](https://badge.fury.io/py/modeci-mdf)
 [![Documentation Status][rtd-badge]][rtd-link]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
