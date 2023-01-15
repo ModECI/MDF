@@ -193,6 +193,15 @@ class Parameter(MdfBase):
             self.value,
             self.is_stateful(),
         )
+        if self.default_initial_value:
+            info += f", def init: {self.default_initial_value}"
+
+        if self.time_derivative:
+            info += f", time deriv: {self.time_derivative}"
+
+        if self.conditions:
+            for c in self.conditions:
+                info += f", {c}"
 
         return info
 
