@@ -69,7 +69,7 @@ Here is a walkthrough on how to generate the ModECI MDF documentation offline
 
 **Python version-3.10 is ideally used for generating MDF documentation offline but if not working, use python version-3.9. The steps are the same except in creating a virtual environment.**
 
-Make is required. For **Windows** installation of Make, see [here](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows). For **Mac** installation of Make, see [here](https://formulae.brew.sh/formula/make)
+The documentation is generated using [Sphinx](https://www.sphinx-doc.org). Make is also required. For **Windows** installation of Make, see [here](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows). For **Mac** installation of Make, see [here](https://formulae.brew.sh/formula/make)
 
 
 
