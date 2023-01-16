@@ -5,7 +5,7 @@ from setuptools import setup
 # Most of this packages settings are defined in setup.cfg
 # FIXME: Not sure of the best way to setup extras_require from setup.cfg
 extras = {
-    "psyneulink": ["psyneulink>=0.12.0.0"],
+    "psyneulink": ["psyneulink==0.12.1.0"],
     "neuroml": ["pyNeuroML>=0.5.20", "neuromllite>=0.5.2"],
     "test": [
         "pytest",
