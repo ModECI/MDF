@@ -6,12 +6,13 @@ Python (>=3.7)
 
 ## Quick start
 
+Use pip to install the latest version of MDF (plus dependencies) from [PyPI](https://pypi.org/project/modeci-mdf):
 ```
 pip install modeci_mdf
 ```
 
 ## Installation from source
-To install the MDF package from source and run it locally:
+To install the MDF package from [source](https://github.com/ModECI/MDF) and run it locally:
 
 ### 1) Create a virtual environment (e.g. called `mdf-env`)
 ```
@@ -61,95 +62,77 @@ Make sure that the directory containing the dot executable is on your system's P
 
 ## Generating ModECI MDF documentation offline
 
-The ModECI MDF Documentation can be found online [here](https://mdf.readthedocs.io/en/latest). If you are working on MDF documentation or you make changes to the documentation, it is good practice to see if it is working as expected before pushing to the Github repository.
+The ModECI MDF Documentation can be found online [here](https://mdf.readthedocs.io/en/latest). If you are working on MDF documentation or you make changes to the documentation, it is good practice to see if it is working as expected before pushing to the GitHub repository.
 Here is a walkthrough on how to generate the ModECI MDF documentation offline
 
 ## Requirements
 
-Python (3.10)
-
-Make library
-
 **Python version-3.10 is ideally used for generating MDF documentation offline but if not working, use python version-3.9. The steps are the same except in creating a virtual environment.**
 
-See Installation for python [here](https://www.python.org/downloads/)
-
-Ensure the python version you are using is added to path
-
-For **windows** installation of Make, see [here](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows)
-
-for **mac** installation of Make, see [here](https://formulae.brew.sh/formula/make)
+The documentation is generated using [Sphinx](https://www.sphinx-doc.org). Make is also required. For **Windows** installation of Make, see [here](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows). For **Mac** installation of Make, see [here](https://formulae.brew.sh/formula/make)
 
 
 
-### 1). Create a virtual environment with python
+### 1) Create a virtual environment with python
 ```
 # install virtual environment
 
 pip install virtualenv
 
-# create virtual environment for python 3.9
+# create & activate virtual environment for python 3.9
 
 python3.9 -m virtualenv venv39
-
-or
-
-# create virtual environment for python 3.10
-
-python3.10 -m virtualenv venv310
-
-# Activate virtual environment for python3.9
-
 venv39\Scripts\activate
 
-# Activate virtual environment for python3.10
+# or create & activate virtual environment for python 3.10
 
+python3.10 -m virtualenv venv310
 venv310\Scripts\activate
 ```
 
-### 2). Clone MDF repository from Github into your local machine
+### 2) Clone MDF repository from GitHub into your local machine
 ```
 git clone https://github.com/ModECI/MDF.git
 ```
 
-### 3). Change into  the MDF directory
+### 3) Change into the MDF directory
 ```
 cd MDF
 ```
 
-### 4). Install all MDF package into the virtual environment
+### 4) Install all MDF package into the virtual environment
 ```
 pip install .[all]
 ```
 
-### 5). Change directory into sphinx folder
+### 5) Change directory into sphinx folder
 ```
 # for windows
 cd docs\sphinx
 
-# for mac
+# for Mac/Linux
 cd docs/sphinx
 ```
 
-### 6). Create offline documentation in sphinx folder
+### 6) Create offline documentation in sphinx folder
 ```
-# To allow fresh start when making the documentation
+# To allow a fresh start when making the documentation
 make clean
 
 # To make the documentation
 make html
 ```
 
-### 7). change directory into html folder and run the documentation offline
+### 7) Change directory into html folder and run the documentation offline
 ```
-# for windows
-Go into build\html folder and double click on the index.html file.
-or
+# for Windows go into build\html folder and double click on the index.html file, or:
+
 cd build\html
 index.html
 
-# for mac
-Go into build/html folder and double click on the index.html file
+# for Mac, go into build/html folder and double click on the index.html file or:
+cd build/html
+open index.html
 ```
 
-The documentation will open up in your browser automatically or right click on the file and open in any browser of your choice
+The documentation will open up in your browser automatically or right click on the file and open in any browser of your choice.
