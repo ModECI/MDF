@@ -35,6 +35,8 @@ re-used in other environments.
 
    api/Introduction
    api/Installation
+   api/Contributors
+
 
 .. toctree::
    :maxdepth: 2
@@ -65,6 +67,7 @@ re-used in other environments.
    :caption: Functions
 
    api/MDF_function_specifications
+
 
 .. toctree::
    :caption: API Reference
