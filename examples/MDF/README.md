@@ -12,7 +12,7 @@ Examples of [Python](https://fileinfo.com/extension/py), [JSON](https://develope
 
 A simple example with 2 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) connected by an [Edge](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
 
-<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple.png" width="200" height="135" />
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple.png" width="259" height="45" />
 
 
 With more detail on [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) (showing [Input Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#inputport) (green), [Parameters](https://mdf.readthedocs.io/en/latest/api/Specification.html#parameter) (blue) and [Output Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#output_port)) (red) and [Edges](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
@@ -27,8 +27,9 @@ With more detail on [Nodes](https://mdf.readthedocs.io/en/latest/api/Specificati
 
 Another simple example with more [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node).
 
-<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abcd.png" width="250" height="180SS" />
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abcd.png" width="437" height="45" />
 
+&nbsp;
 
 <img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abcd_3.png" width="360" height="800" />
 
