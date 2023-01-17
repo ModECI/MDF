@@ -12,12 +12,12 @@ Examples of [Python](https://fileinfo.com/extension/py), [JSON](https://develope
 
 A simple example with 2 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) connected by an [Edge](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
 
-<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple.png" width="259" height="45" />
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple.png" width="201" height="35" />
 
 
 With more detail on [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) (showing [Input Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#inputport) (green), [Parameters](https://mdf.readthedocs.io/en/latest/api/Specification.html#parameter) (blue) and [Output Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#output_port)) (red) and [Edges](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
 
-<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple_3.png" width="350" height="290" />
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple_3.png" width="335" height="236" />
 
 <p id="abcd"></p>
 
@@ -27,7 +27,7 @@ With more detail on [Nodes](https://mdf.readthedocs.io/en/latest/api/Specificati
 
 Another simple example with more [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node).
 
-<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abcd.png" width="437" height="45" />
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abcd.png" width="300" height="31" />
 
 &nbsp;
 
@@ -62,7 +62,7 @@ An example with [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.h
 
 A simple 3 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) graph with scheduling [Conditions](https://mdf.readthedocs.io/en/latest/api/Specification.html#condition). For more examples of conditions see [here](https://github.com/ModECI/MDF/blob/main/examples/MDF/conditions/README.md).
 
-<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abc_conditions.png" width="400" height="355" />
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abc_conditions.png" width="330" height="198" />
 
 <p id="parameters-and-functions"></p>
 
