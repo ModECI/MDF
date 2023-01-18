@@ -1,5 +1,5 @@
 """
-Example of ModECI MDF- A simple 3 Node graph satisfying the EveryNCalls Condition
+Example of ModECI MDF- A simple 3 Node graph where the first node is satisfying the Static condition and the second and third node is satisfying the Node based conditions
 
 """
 import os
@@ -44,7 +44,7 @@ def main():
 
     c = create_simple_node(mod_graph, "C", b)
 
-    c.parameters.append(Parameter(id="param_C", value="param_C+ 1"))
+    c.parameters.append(Parameter(id="param_C", value="param_C + 1"))
 
     cond_a = Condition(type="Always")  # A is always executed
     cond_b = Condition(
