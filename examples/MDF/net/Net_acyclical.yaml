@@ -1,0 +1,15 @@
+Net_acyclical:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        Net_acyclical:
+            nodes:
+                A:
+                    parameters:
+                        increment:
+                            value: 1
+                        count:
+                            value: count + increment
+                    output_ports:
+                        out_port:
+                            value: count
