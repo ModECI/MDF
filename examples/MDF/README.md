@@ -1,67 +1,78 @@
 # MDF Examples
 
-Examples of Python, JSON and YAML files to illustrate the structure and usage of MDF.
+Examples of [Python](https://fileinfo.com/extension/py), [JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON#:~:text=JavaScript%20Object%20Notation%20(JSON)%20is,page%2C%20or%20vice%20versa) and [YAML](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/) files to illustrate the structure and usage of MDF.
 
-[Simple](https://mdf.readthedocs.io/en/latest/api/export_format/MDF/MDF.html#simple-example) | [ABCD](https://mdf.readthedocs.io/en/latest/api/export_format/MDF/MDF.html#abcd) | [Arrays](https://mdf.readthedocs.io/en/latest/api/export_format/MDF/MDF.html#arrays) | [States](https://mdf.readthedocs.io/en/latest/api/export_format/MDF/MDF.html#states) | [Conditions](https://mdf.readthedocs.io/en/latest/api/export_format/MDF/MDF.html#conditions) | [Parameters and Functions](https://mdf.readthedocs.io/en/latest/api/export_format/MDF/MDF.html#parameters-and-functions)
+<a href="#simple"> Simple </a>| <a href="#abcd"> ABCD </a> | <a href="#arrays"> Arrays </a> | <a href="#st"> States </a> | <a href="#conditions"> Conditions </a> | <a href="#parameters-and-functions"> Parameters and Functions </a>
+
+<p id="simple"></p>
 
 ## Simple example
 
-[Python source](https://github.com/ModECI/MDF/blob/main/examples/MDF/simple.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/ABCD.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/ABCD.yaml)
+[Python Source](https://github.com/ModECI/MDF/blob/update_readme_links/examples/MDF/simple.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.yaml)
 
 A simple example with 2 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) connected by an [Edge](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
 
-![1 resimple](https://user-images.githubusercontent.com/100205503/206762808-949c1a33-f3e9-44e1-a1b5-92762b88b2ab.png)
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple.png" width="201" height="35" />
 
 
 With more detail on [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) (showing [Input Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#inputport) (green), [Parameters](https://mdf.readthedocs.io/en/latest/api/Specification.html#parameter) (blue) and [Output Ports](https://mdf.readthedocs.io/en/latest/api/Specification.html#output_port)) (red) and [Edges](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
 
- ![2 simple_3](https://user-images.githubusercontent.com/100205503/206763192-ba85d1e6-02d8-477b-961e-ebddf0447f66.png)
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/simple_3.png" width="335" height="236" />
 
-
+<p id="abcd"></p>
 
 ## ABCD
 
-[Python source](https://github.com/ModECI/MDF/blob/main/examples/MDF/abcd.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/ABCD.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/ABCD.yaml)
+[Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/abcd.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/ABCD.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/ABCD.yaml)
 
 Another simple example with more [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node).
 
-![2 abcd](https://user-images.githubusercontent.com/100205503/206763843-4d3051b5-dd06-4243-8f0c-dd092b1ce99e.png) &nbsp; ![2 abcd_3](https://user-images.githubusercontent.com/100205503/206764130-bfcd2adb-fbfd-4dc2-b933-7931f179370b.png)
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abcd.png" width="300" height="31" />
 
+&nbsp;
+
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abcd_3.png" width="360" height="800" />
+
+<p id="arrays"></p>
 
 ## Arrays
 
-[Python source](https://github.com/ModECI/MDF/blob/main/examples/MDF/arrays.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Arrays.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/Arrays.yaml)
+[Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/arrays.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Arrays.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/Arrays.yaml)
 
 An example using arrays for [Parameters](https://mdf.readthedocs.io/en/latest/api/Specification.html#parameter) and weights on [Edges](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge).
 
-![2 arrays](https://user-images.githubusercontent.com/100205503/206764818-3b82ea6f-ce66-4def-a059-7b11a9040a4f.png)
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/arrays.png" width="329" height="157" />
 
+
+<p id="st"></p>
 
 ## States
 
-[Python source](https://github.com/ModECI/MDF/blob/main/examples/MDF/states.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/States.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/States.yaml)
+[Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/states.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/States.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/States.yaml)
 
-An example with [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) containing persistent [States](https://github.com/ModECI/MDF/blob/main/examples/MDF/States.yaml).
+An example with [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) containing persistent [States](https://mdf.readthedocs.io/en/latest/api/Specification.html#state).
 
-![2 states](https://user-images.githubusercontent.com/100205503/206765361-6a75d5b0-8f32-4be8-ac3c-9a2011f482ca.png)
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/states.png" width="346" height="55" />
 
+<p id="conditions"></p>
 
 ## Conditions
 
-[Python source](https://github.com/ModECI/MDF/blob/main/examples/MDF/abc_conditions.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/abc_conditions.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/abc_conditions.yaml)
+[Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/abc_conditions.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/abc_conditions.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/abc_conditions.yaml)
 
 A simple 3 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) graph with scheduling [Conditions](https://mdf.readthedocs.io/en/latest/api/Specification.html#condition). For more examples of conditions see [here](https://github.com/ModECI/MDF/blob/main/examples/MDF/conditions/README.md).
 
-![2 abc_conditions](https://user-images.githubusercontent.com/100205503/206766574-f1afa28f-0e30-48bb-a582-bf7c03caba4b.png)
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/abc_conditions.png" width="330" height="198" />
 
+<p id="parameters-and-functions"></p>
 
 ## Parameters and Functions
 
-[Python source](https://github.com/ModECI/MDF/blob/main/examples/MDF/params_funcs.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/ParametersFunctions.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/ParametersFunctions.yaml)
+[Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/params_funcs.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/ParametersFunctions.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/ParametersFunctions.yaml)
 
 A simple [Node](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) with a number of different types of [Parameters](https://mdf.readthedocs.io/en/latest/api/Specification.html#parameter) (in blue; fixed and **stateful**) and [Functions](https://mdf.readthedocs.io/en/latest/api/Specification.html#function) (in purple; can be built in or ONNX based).
 
-![2params_funcs](https://user-images.githubusercontent.com/100205503/206767670-58828404-ea5b-4361-95b0-242dc5ecdffa.png)
+<img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/params_funcs.png" width="250" height="198" />
 
 
 ## More examples
