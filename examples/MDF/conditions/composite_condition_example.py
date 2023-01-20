@@ -3,34 +3,34 @@ Example of ModECI MDF - A simple three Node graph satisfying the composite - 'Al
 """
 
 
-from modeci_mdf.mdf import * 
-from IPython.display import Image 
+from modeci_mdf.mdf import *
+from IPython.display import Image
 import graph_scheduler
 import os
 from modeci_mdf.utils import print_summary, simple_connect
 
 
 def main():
-    mod= Model(id= 'Composite_mdf_condition')
-    mod_graph= Graph(id= 'Composite_mdf_condition_example')
+    mod = Model(id="Composite_mdf_condition")
+    mod_graph = Graph(id="Composite_mdf_condition_example")
     mod.graphs.append(mod_graph)
 
     def create_simple_node(graph, id_, sender=None):
-            n = Node(id=id_)
-            graph.nodes.append(n)
+        n = Node(id=id_)
+        graph.nodes.append(n)
 
-            ip1 = InputPort(id="input_port1", shape="(1,)")
-            n.input_ports.append(ip1)
+        ip1 = InputPort(id="input_port1", shape="(1,)")
+        n.input_ports.append(ip1)
 
-            n.output_ports.append(OutputPort(id="output_1", value=ip1.id))
+        n.output_ports.append(OutputPort(id="output_1", value=ip1.id))
 
-            if sender is not None:
-                simple_connect(sender, n, graph)
+        if sender is not None:
+            simple_connect(sender, n, graph)
 
-            return n
-        
+        return n
+
     # create node A
-    a=create_simple_node(mod_graph, "A", sender=None)
+    a = create_simple_node(mod_graph, "A", sender=None)
     a.parameters.append(Parameter(id="param_A", value="param_A + 1"))
 
     # create node B
@@ -42,19 +42,23 @@ def main():
     c.parameters.append(Parameter(id="param_C", value="param_C + 1"))
 
     # set conditions
-    new_node_cond= Condition( type="All", dependencies=[Condition(type="AfterCall", dependencies=a.id, n=2),
-                                                      Condition(type="AfterCall", dependencies=b.id, n=3)
-                                                     ]
-                          )
-    mod_graph.conditions= ConditionSet(termination={"environment_state_update": new_node_cond})
-
+    new_node_cond = Condition(
+        type="All",
+        dependencies=[
+            Condition(type="AfterCall", dependencies=a.id, n=2),
+            Condition(type="AfterCall", dependencies=b.id, n=3),
+        ],
+    )
+    mod_graph.conditions = ConditionSet(
+        termination={"environment_state_update": new_node_cond}
+    )
 
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
     print_summary(mod_graph)
-    
+
     import sys
-    
+
     if "-run" in sys.argv:
         verbose = True
         # verbose = False
@@ -78,8 +82,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
-
