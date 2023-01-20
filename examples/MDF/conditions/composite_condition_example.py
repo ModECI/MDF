@@ -4,8 +4,6 @@ Example of ModECI MDF - A simple three Node graph satisfying the composite - 'Al
 
 
 from modeci_mdf.mdf import *
-from IPython.display import Image
-import graph_scheduler
 import os
 from modeci_mdf.utils import print_summary, simple_connect
 
