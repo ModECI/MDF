@@ -85,6 +85,10 @@ jobs:
       run: |
         python -m pytest -v -m "psyneulink" tests/
 
+    - name: Test interface TensorFlow
+      run: |
+        python -m pytest -v -m "tensorflow" tests/
+
     - name: Final version info for optional installed packages
       run: |
           pip list
