@@ -7,6 +7,7 @@ from setuptools import setup
 extras = {
     "psyneulink": ["psyneulink==0.12.1.0"],
     "neuroml": ["pyNeuroML>=0.5.20", "neuromllite>=0.5.2"],
+    "keras": ["tensorflow"],
     "test": [
         "pytest",
         "pytest-benchmark",
