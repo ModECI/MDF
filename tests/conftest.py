@@ -13,6 +13,7 @@ backend_markers = {
     "PyTorch": "pytorch",
     "NeuroML": "neuroml",
     "PsyNeuLink": "psyneulink",
+    "Tensorflow": "tensorflow",
 }
 
 

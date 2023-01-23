@@ -7,7 +7,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random
 
-get_ipython().run_line_magic("matplotlib", "inline")
 import os
 import numpy as np
 
