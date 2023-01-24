@@ -1,0 +1,22 @@
+import tensorflow as tf
+import tensorflow.keras as keras
+import tensorflow.keras.layers as kl
+from sklearn.preprocessing import MinMaxScaler
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import random
+
+import os
+import numpy as np
+
+
+x_scaler = MinMaxScaler()
+y_scaler = MinMaxScaler()
+
+
+def download_dataset():
+    (x_train, y_train), (x_test, y_test) = tf.keras.datasets.boston_housing.load_data(
+        path="boston_housing.npz", test_split=0.2, seed=113
+    )
+    
