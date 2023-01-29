@@ -8,21 +8,31 @@
 - A simple feedforward model trained in Keras
 
 ## Steps
-1. First, you will need to install the keras.js library by running
-'pip install keras.js'.
+1. First, you will need to install the keras.js library by running .
+
+```Python
+pip install keras.js
+```
 
 2. Next, you will need to save your trained Keras model to a file by running model.save("model.h5").
 
 3. Now, you can convert the saved model to a model description format by running the following command:
 
-' from keras.js import model_to_json
-json_string = model_to_json(model) '
+```Python
+from keras.js import model_to_json
+json_string = model_to_json(model)
 
+```
 This will convert the model to a JSON format.
 
+
 4. To convert to YAML format use this command
-' from keras.js import model_to_yaml
-yaml_string = model_to_yaml(model) '
+
+```Python
+from keras.js import model_to_yaml
+yaml_string = model_to_yaml(model)
+```
+
 
 5. Save the json_string or yaml_string to a file
 
