@@ -44,8 +44,8 @@ def main():
     new_node_cond = Condition(
         type="All",
         dependencies=[
-            Condition(type="AfterCall", dependencies=a.id, n=2),
-            Condition(type="AfterCall", dependencies=b.id, n=3),
+            Condition(type="AfterCall", dependencies=b.id, n=2),
+            Condition(type="AfterCall", dependencies=c.id, n=3),
         ],
     )
     mod_graph.conditions = ConditionSet(

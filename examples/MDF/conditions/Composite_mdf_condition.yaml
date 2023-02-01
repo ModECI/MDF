@@ -56,9 +56,9 @@ Composite_mdf_condition:
                             dependencies:
                             -   type: AfterCall
                                 kwargs:
-                                    dependencies: A
+                                    dependencies: B
                                     n: 2
                             -   type: AfterCall
                                 kwargs:
-                                    dependencies: B
+                                    dependencies: C
                                     n: 3

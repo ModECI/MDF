@@ -31,16 +31,20 @@ def main():
     a = create_simple_node(mod_graph, "A", sender=None)
     a.parameters.append(Parameter(id="param_A", value="param_A + 1"))
     # node B
-    b = create_simple_node(mod_graph, "B", a)
+    b = create_simple_node(mod_graph, "B", sender=a)
     b.parameters.append(Parameter(id="param_B", value="param_B + 1"))
+    # node C
+    c = create_simple_node(mod_graph, "C", sender=b)
+    c.parameters.append(Parameter(id="param_C", value="param_C + 1"))
 
     # See documentation: https://kmantel.github.io/graph-scheduler/Condition.html#graph_scheduler.condition.TimeInterval for more arguments you can add to the Time Interval condition
 
-    # A starts executing after 5ms while B after 10ms
-    cond_a = Condition(type="TimeInterval", start=5)
-    cond_b = Condition(type="TimeInterval", start=10)
+    # A will always run, B starts executing after 5ms while B after 10ms
+    cond_a = Condition(type="Always")
+    cond_b = Condition(type="TimeInterval", start=5)
+    cond_c = Condition(type="TimeInterval", start=10)
     mod_graph.conditions = ConditionSet(
-        node_specific={a.id: cond_a, b.id: cond_b},
+        node_specific={a.id: cond_a, b.id: cond_b, c.id: cond_c},
     )
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
