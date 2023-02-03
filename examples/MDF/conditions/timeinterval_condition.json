@@ -20,7 +20,7 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "input_port1"
+                                "value": "param_A"
                             }
                         }
                     },
@@ -39,7 +39,7 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "input_port1"
+                                "value": "param_B"
                             }
                         }
                     },
@@ -58,7 +58,7 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "input_port1"
+                                "value": "param_C"
                             }
                         }
                     }
@@ -84,15 +84,15 @@
                             "kwargs": {}
                         },
                         "B": {
-                            "type": "TimeInterval",
+                            "type": "AfterPass",
                             "kwargs": {
-                                "start": 5
+                                "n": 1
                             }
                         },
                         "C": {
-                            "type": "TimeInterval",
+                            "type": "AfterPass",
                             "kwargs": {
-                                "start": 10
+                                "n": 4
                             }
                         }
                     }

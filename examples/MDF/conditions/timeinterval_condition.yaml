@@ -14,7 +14,7 @@ timeinterval_condition:
                             value: param_A + 1
                     output_ports:
                         output_1:
-                            value: input_port1
+                            value: param_A
                 B:
                     input_ports:
                         input_port1:
@@ -25,7 +25,7 @@ timeinterval_condition:
                             value: param_B + 1
                     output_ports:
                         output_1:
-                            value: input_port1
+                            value: param_B
                 C:
                     input_ports:
                         input_port1:
@@ -36,7 +36,7 @@ timeinterval_condition:
                             value: param_C + 1
                     output_ports:
                         output_1:
-                            value: input_port1
+                            value: param_C
             edges:
                 edge_A_B:
                     sender: A
@@ -54,10 +54,10 @@ timeinterval_condition:
                         type: Always
                         kwargs: {}
                     B:
-                        type: TimeInterval
+                        type: AfterPass
                         kwargs:
-                            start: 5
+                            n: 1
                     C:
-                        type: TimeInterval
+                        type: AfterPass
                         kwargs:
-                            start: 10
+                            n: 4
