@@ -61,7 +61,7 @@ A simple 2 [Nodes](../../../docs/README.md#node) graph satisfying the [ Time Int
 The Python script used for this example can be executed using `python timeInterval.py -run`.
 
 **NOTE:** This example lets the conditions fully specify how many times a node gets executed, so unlike the other examples there is just one call to `evaluate()` on the graph in [timeInterval.py](timeInterval.py). In the graph above, node **A** gets excuted **Always**.
-Node **B** has an **AfterPass** condition, specifying it will only run after the count of passes of the runnable nodels on the graph is greater than n=1.
+Node **B** has an **AfterPass** condition, specifying it will only run after the count of passes of the runnable nodes on the graph is greater than n=1.
 Note the number of the pass on the first time is 0. Node **C** has an **AfterPass** condition with n=4. The sequence of execution is **(A, A, A, B, A, B, A, B, A, B, C)**. This can be understood as:
 
 
