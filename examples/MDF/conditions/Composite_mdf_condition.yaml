@@ -1,8 +1,8 @@
-everyncalls_condition:
+Composite_mdf_condition:
     format: ModECI MDF v0.4
     generating_application: Python modeci-mdf v0.4.4
     graphs:
-        everyncalls_example:
+        Composite_mdf_condition_example:
             nodes:
                 A:
                     input_ports:
@@ -49,17 +49,16 @@ everyncalls_condition:
                     sender_port: output_1
                     receiver_port: input_port1
             conditions:
-                node_specific:
-                    A:
-                        type: Always
-                        kwargs: {}
-                    B:
-                        type: EveryNCalls
+                termination:
+                    environment_state_update:
+                        type: All
                         kwargs:
-                            dependencies: A
-                            n: 2
-                    C:
-                        type: EveryNCalls
-                        kwargs:
-                            dependencies: B
-                            n: 3
+                            dependencies:
+                            -   type: AfterCall
+                                kwargs:
+                                    dependencies: B
+                                    n: 2
+                            -   type: AfterCall
+                                kwargs:
+                                    dependencies: C
+                                    n: 3

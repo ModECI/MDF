@@ -1,16 +1,17 @@
 """
-    Example of ModECI MDF - A simple 2 Node Graph satisfying the Time Interval condition
+Example of ModECI MDF - A simple three Node graph satisfying the composite - 'All' condition
 """
-import sys
-import os
-import graph_scheduler
+
+
 from modeci_mdf.mdf import *
+import graph_scheduler
+import os
 from modeci_mdf.utils import print_summary, simple_connect
 
 
 def main():
-    mod = Model(id="timeinterval_condition")
-    mod_graph = Graph(id="timeinterval_example")
+    mod = Model(id="Composite_mdf_condition")
+    mod_graph = Graph(id="Composite_mdf_condition_example")
     mod.graphs.append(mod_graph)
 
     def create_simple_node(graph, id_, sender=None):
@@ -27,28 +28,35 @@ def main():
 
         return n
 
-    # node A
+    # create node A
     a = create_simple_node(mod_graph, "A", sender=None)
     a.parameters.append(Parameter(id="param_A", value="param_A + 1"))
-    # node B
-    b = create_simple_node(mod_graph, "B", sender=a)
+
+    # create node B
+    b = create_simple_node(mod_graph, "B", a)
     b.parameters.append(Parameter(id="param_B", value="param_B + 1"))
-    # node C
-    c = create_simple_node(mod_graph, "C", sender=b)
+
+    # create node C
+    c = create_simple_node(mod_graph, "C", b)
     c.parameters.append(Parameter(id="param_C", value="param_C + 1"))
 
-    # See documentation: https://kmantel.github.io/graph-scheduler/Condition.html#graph_scheduler.condition.TimeInterval for more arguments you can add to the Time Interval condition
-
-    # A will always run, B starts executing after 5ms while B after 10ms
-    cond_a = Condition(type="Always")
-    cond_b = Condition(type="TimeInterval", start=5)
-    cond_c = Condition(type="TimeInterval", start=10)
-    mod_graph.conditions = ConditionSet(
-        node_specific={a.id: cond_a, b.id: cond_b, c.id: cond_c},
+    # set conditions
+    new_node_cond = Condition(
+        type="All",
+        dependencies=[
+            Condition(type="AfterCall", dependencies=b.id, n=2),
+            Condition(type="AfterCall", dependencies=c.id, n=3),
+        ],
     )
+    mod_graph.conditions = ConditionSet(
+        termination={"environment_state_update": new_node_cond}
+    )
+
     mod.to_json_file(os.path.join(os.path.dirname(__file__), "%s.json" % mod.id))
     mod.to_yaml_file(os.path.join(os.path.dirname(__file__), "%s.yaml" % mod.id))
     print_summary(mod_graph)
+
+    import sys
 
     if "-run" in sys.argv:
         verbose = True
@@ -58,30 +66,17 @@ def main():
 
         format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
         eg = EvaluableGraph(mod_graph, verbose=verbose)
+        eg.evaluate(array_format=format)
 
-        # Using a time series to execute the graph 5 times
-        dt = 1
-        duration = 5
-        t = 0
-        times = []
-        while t <= duration:
-            times.append(t)
-            print("===== Evaluating at t = %s  ======" % (t))
-            if t == 0:
-                eg.evaluate(array_format=format)
-            else:
-                eg.evaluate(time_increment=dt)
-            t += dt
     if "-graph" in sys.argv:
         mod.to_graph_image(
             engine="dot",
             output_format="png",
             view_on_render=False,
             level=3,
-            filename_root="timeinterval",
+            filename_root="composite_example",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
-    return mod_graph
 
 
 if __name__ == "__main__":
