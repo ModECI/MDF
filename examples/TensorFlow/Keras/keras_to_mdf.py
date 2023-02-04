@@ -1,4 +1,5 @@
 import tensorflow as tf
+
 # tf.__version__
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,7 +56,7 @@ print("The actually number at index zero is (see the image below):")
 plt.imshow(x_test[0])
 plt.show()
 
-#To generate a YAML file from the model and Save the model architecture to a YAML file
+# To generate a YAML file from the model and Save the model architecture to a YAML file
 model_yaml = kr_model.to_yaml()
 with open("model.yaml", "w") as yaml_file:
     yaml_file.write(model_yaml)
@@ -63,7 +64,7 @@ with open("model.yaml", "w") as yaml_file:
 # Save the model weights to a HDF5 file
 kr_model.save_weights("model.h5")
 
-#To generate a Json file from the model and Save the model architecture to a json file
+# To generate a Json file from the model and Save the model architecture to a json file
 model_json = kr_model.to_json()
 with open("model.json", "w") as json_file:
     json_file.write(model_json)
