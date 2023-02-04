@@ -33,6 +33,11 @@ The MNIST images are 28x28 pixels in size, which is a relatively low dimensional
 ######  Clean and preprocessed:
 The MNIST dataset has already been preprocessed and cleaned, which saves time and reduces the amount of preprocessing required.
 
+## This Model
+#### MNIST Handwritten Digit Recognition
+
+This model uses the TensorFlow library to recognize handwritten digits from the MNIST dataset. The model is built using a Sequential model, with three dense layers and uses the Adam optimizer, sparse categorical crossentropy loss, and accuracy as evaluation metrics. The model is trained for 3 epochs and saved as "num_reader.model". The model is then evaluated on the test data, where its accuracy is reported. The model predicts the number for the first test data index, and the actual number is shown using a plot.
+
 
 ## Prerequisites
 
