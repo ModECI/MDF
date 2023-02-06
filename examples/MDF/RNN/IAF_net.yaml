@@ -1,0 +1,186 @@
+IAF_net:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        iaf_example:
+            nodes:
+                input_node:
+                    parameters:
+                        time:
+                            default_initial_value: 0
+                            time_derivative: '1'
+                        start:
+                            value: 20
+                        duration:
+                            value: 60
+                        amplitude:
+                            value:
+                            - 19.329070713842775
+                            - 8.814651983507053
+                            - 0.14982940117174381
+                            - 18.219519248982483
+                            - 18.78537994727528
+                            - 11.644551461178983
+                            - 13.4312696297597
+                            - 1.6787645367416792
+                        level:
+                            value: 0
+                            conditions:
+                            -   id: 'on'
+                                test: time > start and time < start + duration
+                                value: amplitude
+                            -   id: 'off'
+                                test: time > start + duration
+                                value: amplitude*0
+                    output_ports:
+                        out_port:
+                            value: level
+                pre:
+                    input_ports:
+                        current_input: {}
+                        spike_input: {}
+                    parameters:
+                        syn_tau:
+                            value: 10
+                        v0:
+                            value:
+                            - -54.67038134416407
+                            - -65.26380449273765
+                            - -69.3837195654678
+                            - -54.224545655274326
+                            - -63.07822068805754
+                            - -57.53437049921663
+                            - -57.6836860979277
+                            - -67.02890722583425
+                        erev:
+                            value:
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                        tau:
+                            value: 10.0
+                        thresh:
+                            value:
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                        syn_i:
+                            default_initial_value: '0'
+                            time_derivative: -1 * syn_i
+                            conditions:
+                            -   id: spike_detected
+                                test: spike_input > 0
+                                value: spike_input
+                        spiking:
+                            default_initial_value: '0'
+                            conditions:
+                            -   id: is_spiking
+                                test: v >= thresh
+                                value: '1'
+                            -   id: not_spiking
+                                test: v < thresh
+                                value: '0'
+                        v:
+                            default_initial_value: v0
+                            time_derivative: -1 * (v-erev)/tau + syn_i + current_input
+                            conditions:
+                            -   id: reset
+                                test: v > thresh
+                                value: erev
+                    output_ports:
+                        out_port_v:
+                            value: v
+                        out_port_spiking:
+                            value: spiking
+                post:
+                    input_ports:
+                        current_input: {}
+                        spike_input: {}
+                    parameters:
+                        syn_tau:
+                            value: 10
+                        v0:
+                            value:
+                            - -66.33818705180137
+                            - -67.71174060622624
+                            - -69.70762439026181
+                            - -60.26496918790483
+                            - -50.70196878167569
+                            - -68.70875438045628
+                            - -59.178236288977395
+                            - -60.68202881983381
+                        erev:
+                            value:
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                            - -70.0
+                        tau:
+                            value: 10.0
+                        thresh:
+                            value:
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                            - -20.0
+                        syn_i:
+                            default_initial_value: '0'
+                            time_derivative: -1 * syn_i
+                            conditions:
+                            -   id: spike_detected
+                                test: spike_input > 0
+                                value: spike_input
+                        spiking:
+                            default_initial_value: '0'
+                            conditions:
+                            -   id: is_spiking
+                                test: v >= thresh
+                                value: '1'
+                            -   id: not_spiking
+                                test: v < thresh
+                                value: '0'
+                        v:
+                            default_initial_value: v0
+                            time_derivative: -1 * (v-erev)/tau + syn_i + current_input
+                            conditions:
+                            -   id: reset
+                                test: v > thresh
+                                value: erev
+                    output_ports:
+                        out_port_v:
+                            value: v
+                        out_port_spiking:
+                            value: spiking
+            edges:
+                input_edge:
+                    sender: input_node
+                    receiver: pre
+                    sender_port: out_port
+                    receiver_port: current_input
+                    parameters:
+                        weight: 1
+                syn_edge:
+                    sender: pre
+                    receiver: post
+                    sender_port: out_port_spiking
+                    receiver_port: spike_input
+                    parameters:
+                        weight: 40

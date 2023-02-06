@@ -1,6 +1,6 @@
 {
     "Simiaf_example": {
-        "version": "NeuroMLlite v0.5.2",
+        "version": "NeuroMLlite v0.5.3",
         "network": "IAFs.nmllite.json",
         "duration": 100000.0,
         "dt": 10.0,
@@ -10,14 +10,35 @@
                 "input_node": 0
             },
             "out_port": {
-                "input_node": 0,
-                "iaf_node": 0
+                "input_node": 0
             },
-            "input": {
-                "iaf_node": 0
+            "current_input": {
+                "pre": 0,
+                "post": 0
+            },
+            "spike_input": {
+                "pre": 0,
+                "post": 0
+            },
+            "syn_i": {
+                "pre": 0,
+                "post": 0
+            },
+            "spiking": {
+                "pre": 0,
+                "post": 0
             },
             "v": {
-                "iaf_node": 0
+                "pre": 0,
+                "post": 0
+            },
+            "out_port_v": {
+                "pre": 0,
+                "post": 0
+            },
+            "out_port_spiking": {
+                "pre": 0,
+                "post": 0
             }
         }
     }

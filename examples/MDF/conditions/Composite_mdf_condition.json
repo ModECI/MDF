@@ -1,0 +1,108 @@
+{
+    "Composite_mdf_condition": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "Composite_mdf_condition_example": {
+                "nodes": {
+                    "A": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": [
+                                    1
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "param_A": {
+                                "value": "param_A + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "input_port1"
+                            }
+                        }
+                    },
+                    "B": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": [
+                                    1
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "param_B": {
+                                "value": "param_B + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "input_port1"
+                            }
+                        }
+                    },
+                    "C": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": [
+                                    1
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "param_C": {
+                                "value": "param_C + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "input_port1"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_A_B": {
+                        "sender": "A",
+                        "receiver": "B",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    },
+                    "edge_B_C": {
+                        "sender": "B",
+                        "receiver": "C",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
+                    }
+                },
+                "conditions": {
+                    "termination": {
+                        "environment_state_update": {
+                            "type": "All",
+                            "kwargs": {
+                                "dependencies": [
+                                    {
+                                        "type": "AfterCall",
+                                        "kwargs": {
+                                            "dependencies": "B",
+                                            "n": 2
+                                        }
+                                    },
+                                    {
+                                        "type": "AfterCall",
+                                        "kwargs": {
+                                            "dependencies": "C",
+                                            "n": 3
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
