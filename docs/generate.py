@@ -25,8 +25,12 @@ for ex in [
 
 
 mod = Model(id="Simple")
+condition = Condition("testing_condition")
+condition_set = ConditionSet()
 
 doc = mod.generate_documentation(format="markdown")
+doc_md_1 = condition.generate_documentation(format="markdown")
+doc_md_2 = condition_set.generate_documentation(format="markdown")
 
 comment = "**Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues) for ongoing discussions."
 comment_rst = "**Note: the ModECI MDF specification is still in development!** See `here <https://github.com/ModECI/MDF/issues>`_ for ongoing discussions."
@@ -35,6 +39,9 @@ with open("README.md", "w") as d:
     d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
     d.write("%s\n" % comment)
     d.write(doc)
+    d.write(doc_md_1)
+    d.write(doc_md_2)
+
 """
 with open("sphinx/source/api/Specification.md", "w") as d:
     d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
@@ -43,6 +50,8 @@ with open("sphinx/source/api/Specification.md", "w") as d:
 
 
 doc = mod.generate_documentation(format="rst")
+doc_rst_1 = condition.generate_documentation(format="rst")
+doc_rst_2 = condition_set.generate_documentation(format="rst")
 
 with open("sphinx/source/api/Specification.rst", "w") as d:
     ver = "Specification of ModECI v%s" % MODECI_MDF_VERSION
@@ -51,6 +60,8 @@ with open("sphinx/source/api/Specification.rst", "w") as d:
     d.write("%s\n\n" % ("=" * len(ver)))
     d.write("%s\n\n" % comment_rst)
     d.write(doc)
+    d.write(doc_rst_1)
+    d.write(doc_rst_2)
 
 doc = mod.generate_documentation(format="dict")
 

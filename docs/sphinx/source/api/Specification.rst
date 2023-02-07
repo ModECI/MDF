@@ -201,6 +201,7 @@ Allowed field      Data Type             Description
 **receiver_port**  str                   The id of the InputPort on the receiver `Node <#node>`__
 **parameters**     Union[Any, NoneType]  Dictionary of parameters for the edge.
 =================  ====================  ============================================================================================================
+
 =========
 Condition
 =========
