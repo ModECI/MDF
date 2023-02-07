@@ -68,7 +68,7 @@ class Function(MdfBase):
             https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
         args: Dictionary of values for each of the arguments for the Function, e.g. if the in-built function
               is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-        valuess: If the function is a value expression, this attribute will contain the expression and the function
+        value: If the function is a value expression, this attribute will contain the expression and the function
             and args attributes will be None.
     """
     id: str = field(validator=instance_of(str))
