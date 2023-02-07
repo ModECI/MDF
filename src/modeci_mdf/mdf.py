@@ -68,7 +68,7 @@ class Function(MdfBase):
             https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
         args: Dictionary of values for each of the arguments for the Function, e.g. if the in-built function
               is linear(slope),the args here could be {"slope":3} or {"slope":"input_port_0 + 2"}
-        value: If the function is a value expression, this attribute will contain the expression and the function
+        valuess: If the function is a value expression, this attribute will contain the expression and the function
             and args attributes will be None.
     """
     id: str = field(validator=instance_of(str))
@@ -613,3 +613,24 @@ for k, v in list(locals().items()):
         pass
     else:
         converter.register_unstructure_hook(v, parsed_unstructure_factory(v))
+
+model = Model(id="test")
+condition = Condition("testing_condition")
+condition_set = ConditionSet()
+
+
+doc_md_1 = condition.generate_documentation(format="markdown")
+with open("README.md", "a") as d:
+    d.write(doc_md_1)
+
+doc_md_2 = condition_set.generate_documentation(format="markdown")
+with open("README.md", "a") as d:
+    d.write(doc_md_2)
+
+doc_rst_1 = condition.generate_documentation(format="rst")
+with open("../../docs/sphinx/source/api/Specification.rst", "a") as d:
+    d.write(doc_rst_1)
+
+doc_rst_2 = condition_set.generate_documentation(format="rst")
+with open("../../docs/sphinx/source/api/Specification.rst", "a") as d:
+    d.write(doc_rst_2)
