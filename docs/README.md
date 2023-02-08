@@ -440,3 +440,59 @@ An <a href="#edge">Edge</a> is an attribute of a <a href="#graph">Graph</a> that
 
 
 </table>
+
+## Condition
+A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
+
+### Allowed parameters
+<table>
+  <tr>
+    <td><b>metadata</b></td>
+    <td>Union[Any, NoneType]</td>
+    <td><i>Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.</i></td>
+ </tr>
+
+
+  <tr>
+    <td><b>type</b></td>
+    <td>str</td>
+    <td><i>The type of <a href="#condition">Condition</a> from the library</i></td>
+ </tr>
+
+
+  <tr>
+    <td><b>kwargs</b></td>
+    <td>Union[Any, NoneType]</td>
+    <td><i>The dictionary of keyword arguments needed to evaluate the <a href="#condition">Condition</a></i></td>
+ </tr>
+
+
+</table>
+
+## ConditionSet
+Specifies the non-default pattern of execution of Nodes
+
+### Allowed parameters
+<table>
+  <tr>
+    <td><b>metadata</b></td>
+    <td>Union[Any, NoneType]</td>
+    <td><i>Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.</i></td>
+ </tr>
+
+
+  <tr>
+    <td><b>node_specific</b></td>
+    <td>Union[Condition, NoneType]</td>
+    <td><i>A dictionary mapping nodes to any non-default run conditions</i></td>
+ </tr>
+
+
+  <tr>
+    <td><b>termination</b></td>
+    <td>Union[Condition, NoneType]</td>
+    <td><i>A dictionary mapping time scales of model execution to conditions indicating when they end</i></td>
+ </tr>
+
+
+</table>
