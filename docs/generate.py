@@ -131,14 +131,14 @@ with open("MDF_function_specifications.md", "w") as d:
         "These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py\n"
     )
 
-    d.write("## All MDF functions:\n | ")
+    d.write("## All of MDF functions:\n | ")
     all_f = sorted(mdf_functions.keys())
     for f in all_f:
         c = ":"
         n = ""
         d.write(f'<a href="#{f.lower().replace(c,n)}">{f}</a> | ')
 
-    for f in mdf_functions:
+    for f in sorted(mdf_functions.keys()):
 
         d.write("\n## %s\n " % f)
         func = mdf_functions[f]
