@@ -1,6 +1,6 @@
 # MDF Examples
 
-Examples of [Python](https://fileinfo.com/extension/py), [JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON#:~:text=JavaScript%20Object%20Notation%20(JSON)%20is,page%2C%20or%20vice%20versa) and [YAML](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/) files to illustrate the structure and usage of MDF.
+Examples of [Python](https://python.org), [JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON#:~:text=JavaScript%20Object%20Notation%20(JSON)%20is,page%2C%20or%20vice%20versa) and [YAML](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/) files to illustrate the structure and usage of MDF.
 
 <a href="#simple"> Simple </a>| <a href="#abcd"> ABCD </a> | <a href="#arrays"> Arrays </a> | <a href="#st"> States </a> | <a href="#conditions"> Conditions </a> | <a href="#parameters-and-functions"> Parameters and Functions </a>
 
@@ -8,7 +8,7 @@ Examples of [Python](https://fileinfo.com/extension/py), [JSON](https://develope
 
 ## Simple example
 
-[Python Source](https://github.com/ModECI/MDF/blob/update_readme_links/examples/MDF/simple.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.yaml)
+[Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/simple.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.yaml)
 
 A simple example with 2 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) connected by an [Edge](https://mdf.readthedocs.io/en/latest/api/Specification.html#edge):
 

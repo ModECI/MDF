@@ -382,6 +382,14 @@ def mdf_to_graphviz(
                         )
                     )
                     info += "</td></tr>"
+                elif ns.type == "AfterPass":
+                    info += "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> passes".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        node.id,
+                        args.get("n"),
+                    )
+                    info += "</td></tr>"
                 elif ns.type == "Threshold":
                     info += "<tr><td>{}{} = <b>{}</b> satisfied <b>{}</b> <b>{}</b> <b>{}</b>".format(
                         format_label(" "),
