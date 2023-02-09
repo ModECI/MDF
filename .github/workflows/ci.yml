@@ -88,6 +88,9 @@ jobs:
     - name: Test interface TensorFlow
       if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
       run: |
+        if [[  ${{ matrix.runs-on }} == *"macos"* ]]; then brew install graphviz ; fi
+        if [[  ${{ matrix.runs-on }} == *"ubuntu"* ]]; then sudo apt install graphviz ; fi
+        dot -V
         python -m pytest -v -m "tensorflow" tests/
 
     - name: Final version info for optional installed packages
