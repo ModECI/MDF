@@ -5,9 +5,9 @@ from setuptools import setup
 # Most of this packages settings are defined in setup.cfg
 # FIXME: Not sure of the best way to setup extras_require from setup.cfg
 extras = {
-    "psyneulink": ["psyneulink==0.12.1.0"],
+    "psyneulink": ["psyneulink"],
     "neuroml": ["pyNeuroML>=0.5.20", "neuromllite>=0.5.2"],
-    "tensorflow": ["tensorflow"],
+    "tensorflow": ["tensorflow", "keras_visualizer", "pydot"],
     "test": [
         "pytest",
         "pytest-benchmark",
@@ -29,7 +29,7 @@ extras = {
         "torchviz",
         "netron",
         "torch>=1.11.0",
-        "torchvision",
+        "torchvision<=0.12.0",
         "h5py",
     ],
     "dev": [],
