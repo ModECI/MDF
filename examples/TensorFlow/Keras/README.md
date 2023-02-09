@@ -38,11 +38,52 @@ The MNIST dataset has already been preprocessed and cleaned, which saves time an
 
 This model uses the TensorFlow library to recognize handwritten digits from the MNIST dataset. The model is built using a Sequential model, with three dense layers and uses the Adam optimizer, sparse categorical crossentropy loss, and accuracy as evaluation metrics. The model is trained for 3 epochs and saved as "num_reader.model". The model is then evaluated on the test data, where its accuracy is reported. The model predicts the number for the first test data index, and the actual number is shown using a plot.
 
-
-## Prerequisites
+### Prerequisites
 
 ##### Get Keras installed
 Open your command prompt and enter the commands below
 ```Python
     pip install tensorflow
 ```
+
+### Summarize Model
+Keras provides a way to summarize a model.
+
+The summary is textual and includes information about:
+
+The layers and their order in the model.
+The output shape of each layer.
+The number of parameters (weights) in each layer.
+The total number of parameters (weights) in the model.
+The summary can be created by calling the 'summary()' function on the model that returns a string that in turn can be printed.
+
+Below is the Summary of this model, We can clearly see the output shape and number of weights in each layer:
+![summary](summary.png)
+
+
+### Visualize Model
+Keras also provides a function to create a plot of the network neural network graph that can make more complex models easier to understand.
+
+The plot_model() function in Keras will create a plot of your network. This function takes a few useful arguments:
+
+model: (required) The model that you wish to plot.
+to_file: (required) The name of the file to which to save the plot.
+show_shapes: (optional, defaults to False) Whether or not to show the output shapes of each layer.
+show_layer_names: (optional, defaults to True) Whether or not to show the name for each layer.
+
+To Get the visualization below, you will need to install the following packages
+```Python
+    pip install pydot
+```
+[Pydot](https://pypi.org/project/pydot/) is a Python library, also written in Python, that "serves as a graphical interface to Graphviz, an open source graph visualization software
+
+```Python
+    pip install pygraphviz
+```
+[Graphviz](https://graphviz.org/) is open source graph visualization software. Graph visualization is a way of representing structural information as diagrams of abstract graphs and networks
+
+![model_plot](model_plot.png)
+
+##### Neutron
+Below is the viasualizationof this model using neutron
+[layers_netron%20viz](layers_netron%20viz.png)

@@ -1,6 +1,16 @@
 import tensorflow as tf
-
 # tf.__version__
+
+from keras.layers import Dense
+from keras.utils.vis_utils import plot_model
+from keras.models import Sequential
+
+#from keras_visualizer import visualizer 
+from keras import layers 
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -45,6 +55,15 @@ kr_model.save("num_reader.model")
 print("Accuracy of our model is:")
 val_loss, val_acc = kr_model.evaluate(x_test, y_test)
 print(val_loss, val_acc)
+
+#plot the model
+print("Plotting the model")
+plot_model(kr_model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
+
+
+#Saving model in h5 for Ploting Nuetron visual
+kr_model.save("kr_N_model.h5")
+
 
 # predict example for index 0
 print("Predict value at index 0:")
