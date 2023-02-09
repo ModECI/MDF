@@ -1,12 +1,13 @@
 import tensorflow as tf
+
 # tf.__version__
 
 from keras.layers import Dense
 from keras.utils.vis_utils import plot_model
 from keras.models import Sequential
 
-#from keras_visualizer import visualizer 
-from keras import layers 
+# from keras_visualizer import visualizer
+from keras import layers
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -56,12 +57,12 @@ print("Accuracy of our model is:")
 val_loss, val_acc = kr_model.evaluate(x_test, y_test)
 print(val_loss, val_acc)
 
-#plot the model
+# plot the model
 print("Plotting the model")
-plot_model(kr_model, to_file='model_plot.png', show_shapes=True, show_layer_names=True)
+plot_model(kr_model, to_file="model_plot.png", show_shapes=True, show_layer_names=True)
 
 
-#Saving model in h5 for Ploting Nuetron visual
+# Saving model in h5 for Ploting Nuetron visual
 kr_model.save("kr_N_model.h5")
 
 
