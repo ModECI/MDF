@@ -364,6 +364,15 @@ def mdf_to_graphviz(
                     )
                     info += "</td></tr>"
                 elif ns.type == "AfterNCalls":
+                    info += "<tr><td>{}{} = <b>{}</b> will run when or after <b>{}</b> calls of <b>{}</b>".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        node.id,
+                        args.get("n"),
+                        args.get("dependencies"),
+                    )
+                    info += "</td></tr>"
+                elif ns.type == "AfterCall":
                     info += "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> calls of <b>{}</b>".format(
                         format_label(" "),
                         format_condition("condition"),
