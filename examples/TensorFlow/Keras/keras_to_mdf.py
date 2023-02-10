@@ -4,7 +4,7 @@ from keras.layers import Dense
 from keras.utils.vis_utils import plot_model
 from keras.models import Sequential
 
-from keras_visualizer import visualizer
+#from keras_visualizer import visualizer
 from keras import layers
 
 
