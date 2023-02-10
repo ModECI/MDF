@@ -111,7 +111,7 @@ mdf_dumpable = {
         for k, v in mdf_functions[name].items()
         if not isinstance(v, types.FunctionType)
     }
-    for name in mdf_functions
+    for name in sorted(mdf_functions.keys())
 }
 
 with open("MDF_function_specifications.json", "w") as d:
@@ -121,7 +121,7 @@ with open("MDF_function_specifications.yaml", "w") as d:
 
 
 func_doc = ""
-with open("sphinx/source/api/MDF_function_specifications.md", "w") as d:
+with open("MDF_function_specifications.md", "w") as d:
     d.write(
         "# Specification of standard functions in ModECI v%s\n" % MODECI_MDF_VERSION
     )
@@ -131,14 +131,14 @@ with open("sphinx/source/api/MDF_function_specifications.md", "w") as d:
         "These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py\n"
     )
 
-    d.write("## All functions:\n | ")
+    d.write("## All of MDF functions:\n | ")
     all_f = sorted(mdf_functions.keys())
     for f in all_f:
         c = ":"
         n = ""
         d.write(f'<a href="#{f.lower().replace(c,n)}">{f}</a> | ')
 
-    for f in mdf_functions:
+    for f in sorted(mdf_functions.keys()):
 
         d.write("\n## %s\n " % f)
         func = mdf_functions[f]
@@ -154,5 +154,8 @@ with open("sphinx/source/api/MDF_function_specifications.md", "w") as d:
             % (create_python_expression(func["expression_string"]))
         )
 
+shutil.copy(
+    "MDF_function_specifications.md", "sphinx/source/api/MDF_function_specifications.md"
+)
 
 print("Written function documentation")
