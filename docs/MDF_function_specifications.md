@@ -2,79 +2,79 @@
 **Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues) for ongoing discussions.
 These functions are defined in https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions
 ## All of MDF functions:
- | <a href="#matmul">MatMul</a> | <a href="#relu">Relu</a> | <a href="#change_goal">change_goal</a> | <a href="#check_termination">check_termination</a> | <a href="#conflict_resolution_function">conflict_resolution_function</a> | <a href="#cos">cos</a> | <a href="#cosh">cosh</a> | <a href="#exponential">exponential</a> | <a href="#linear">linear</a> | <a href="#logistic">logistic</a> | <a href="#onnxabs">onnx::Abs</a> | <a href="#onnxacos">onnx::Acos</a> | <a href="#onnxacosh">onnx::Acosh</a> | <a href="#onnxadd">onnx::Add</a> | <a href="#onnxand">onnx::And</a> | <a href="#onnxargmax">onnx::ArgMax</a> | <a href="#onnxargmin">onnx::ArgMin</a> | <a href="#onnxasin">onnx::Asin</a> | <a href="#onnxasinh">onnx::Asinh</a> | <a href="#onnxatan">onnx::Atan</a> | <a href="#onnxatanh">onnx::Atanh</a> | <a href="#onnxaveragepool">onnx::AveragePool</a> | <a href="#onnxbatchnormalization">onnx::BatchNormalization</a> | <a href="#onnxbernoulli">onnx::Bernoulli</a> | <a href="#onnxbitshift">onnx::BitShift</a> | <a href="#onnxcast">onnx::Cast</a> | <a href="#onnxcastlike">onnx::CastLike</a> | <a href="#onnxceil">onnx::Ceil</a> | <a href="#onnxcelu">onnx::Celu</a> | <a href="#onnxclip">onnx::Clip</a> | <a href="#onnxcompress">onnx::Compress</a> | <a href="#onnxconcat">onnx::Concat</a> | <a href="#onnxconcatfromsequence">onnx::ConcatFromSequence</a> | <a href="#onnxconstant">onnx::Constant</a> | <a href="#onnxconstantofshape">onnx::ConstantOfShape</a> | <a href="#onnxconv">onnx::Conv</a> | <a href="#onnxconvinteger">onnx::ConvInteger</a> | <a href="#onnxconvtranspose">onnx::ConvTranspose</a> | <a href="#onnxcos">onnx::Cos</a> | <a href="#onnxcosh">onnx::Cosh</a> | <a href="#onnxcumsum">onnx::CumSum</a> | <a href="#onnxdepthtospace">onnx::DepthToSpace</a> | <a href="#onnxdequantizelinear">onnx::DequantizeLinear</a> | <a href="#onnxdet">onnx::Det</a> | <a href="#onnxdiv">onnx::Div</a> | <a href="#onnxdropout">onnx::Dropout</a> | <a href="#onnxdynamicquantizelinear">onnx::DynamicQuantizeLinear</a> | <a href="#onnxeinsum">onnx::Einsum</a> | <a href="#onnxelu">onnx::Elu</a> | <a href="#onnxequal">onnx::Equal</a> | <a href="#onnxerf">onnx::Erf</a> | <a href="#onnxexp">onnx::Exp</a> | <a href="#onnxexpand">onnx::Expand</a> | <a href="#onnxeyelike">onnx::EyeLike</a> | <a href="#onnxflatten">onnx::Flatten</a> | <a href="#onnxfloor">onnx::Floor</a> | <a href="#onnxgru">onnx::GRU</a> | <a href="#onnxgather">onnx::Gather</a> | <a href="#onnxgatherelements">onnx::GatherElements</a> | <a href="#onnxgathernd">onnx::GatherND</a> | <a href="#onnxgemm">onnx::Gemm</a> | <a href="#onnxglobalaveragepool">onnx::GlobalAveragePool</a> | <a href="#onnxgloballppool">onnx::GlobalLpPool</a> | <a href="#onnxglobalmaxpool">onnx::GlobalMaxPool</a> | <a href="#onnxgreater">onnx::Greater</a> | <a href="#onnxgreaterorequal">onnx::GreaterOrEqual</a> | <a href="#onnxhardsigmoid">onnx::HardSigmoid</a> | <a href="#onnxhardswish">onnx::HardSwish</a> | <a href="#onnxhardmax">onnx::Hardmax</a> | <a href="#onnxidentity">onnx::Identity</a> | <a href="#onnxif">onnx::If</a> | <a href="#onnxinstancenormalization">onnx::InstanceNormalization</a> | <a href="#onnxisinf">onnx::IsInf</a> | <a href="#onnxisnan">onnx::IsNaN</a> | <a href="#onnxlrn">onnx::LRN</a> | <a href="#onnxlstm">onnx::LSTM</a> | <a href="#onnxleakyrelu">onnx::LeakyRelu</a> | <a href="#onnxless">onnx::Less</a> | <a href="#onnxlessorequal">onnx::LessOrEqual</a> | <a href="#onnxlog">onnx::Log</a> | <a href="#onnxlogsoftmax">onnx::LogSoftmax</a> | <a href="#onnxloop">onnx::Loop</a> | <a href="#onnxlpnormalization">onnx::LpNormalization</a> | <a href="#onnxlppool">onnx::LpPool</a> | <a href="#onnxmatmul">onnx::MatMul</a> | <a href="#onnxmatmulinteger">onnx::MatMulInteger</a> | <a href="#onnxmax">onnx::Max</a> | <a href="#onnxmaxpool">onnx::MaxPool</a> | <a href="#onnxmaxroipool">onnx::MaxRoiPool</a> | <a href="#onnxmaxunpool">onnx::MaxUnpool</a> | <a href="#onnxmean">onnx::Mean</a> | <a href="#onnxmeanvariancenormalization">onnx::MeanVarianceNormalization</a> | <a href="#onnxmin">onnx::Min</a> | <a href="#onnxmod">onnx::Mod</a> | <a href="#onnxmul">onnx::Mul</a> | <a href="#onnxmultinomial">onnx::Multinomial</a> | <a href="#onnxneg">onnx::Neg</a> | <a href="#onnxnegativeloglikelihoodloss">onnx::NegativeLogLikelihoodLoss</a> | <a href="#onnxnonmaxsuppression">onnx::NonMaxSuppression</a> | <a href="#onnxnonzero">onnx::NonZero</a> | <a href="#onnxnot">onnx::Not</a> | <a href="#onnxonehot">onnx::OneHot</a> | <a href="#onnxoptional">onnx::Optional</a> | <a href="#onnxoptionalgetelement">onnx::OptionalGetElement</a> | <a href="#onnxoptionalhaselement">onnx::OptionalHasElement</a> | <a href="#onnxor">onnx::Or</a> | <a href="#onnxprelu">onnx::PRelu</a> | <a href="#onnxpad">onnx::Pad</a> | <a href="#onnxpow">onnx::Pow</a> | <a href="#onnxqlinearconv">onnx::QLinearConv</a> | <a href="#onnxqlinearmatmul">onnx::QLinearMatMul</a> | <a href="#onnxquantizelinear">onnx::QuantizeLinear</a> | <a href="#onnxrnn">onnx::RNN</a> | <a href="#onnxrandomnormal">onnx::RandomNormal</a> | <a href="#onnxrandomnormallike">onnx::RandomNormalLike</a> | <a href="#onnxrandomuniform">onnx::RandomUniform</a> | <a href="#onnxrandomuniformlike">onnx::RandomUniformLike</a> | <a href="#onnxrange">onnx::Range</a> | <a href="#onnxreciprocal">onnx::Reciprocal</a> | <a href="#onnxreducel1">onnx::ReduceL1</a> | <a href="#onnxreducel2">onnx::ReduceL2</a> | <a href="#onnxreducelogsum">onnx::ReduceLogSum</a> | <a href="#onnxreducelogsumexp">onnx::ReduceLogSumExp</a> | <a href="#onnxreducemax">onnx::ReduceMax</a> | <a href="#onnxreducemean">onnx::ReduceMean</a> | <a href="#onnxreducemin">onnx::ReduceMin</a> | <a href="#onnxreduceprod">onnx::ReduceProd</a> | <a href="#onnxreducesum">onnx::ReduceSum</a> | <a href="#onnxreducesumsquare">onnx::ReduceSumSquare</a> | <a href="#onnxrelu">onnx::Relu</a> | <a href="#onnxreshape">onnx::Reshape</a> | <a href="#onnxresize">onnx::Resize</a> | <a href="#onnxreversesequence">onnx::ReverseSequence</a> | <a href="#onnxroialign">onnx::RoiAlign</a> | <a href="#onnxround">onnx::Round</a> | <a href="#onnxscan">onnx::Scan</a> | <a href="#onnxscatter">onnx::Scatter</a> | <a href="#onnxscatterelements">onnx::ScatterElements</a> | <a href="#onnxscatternd">onnx::ScatterND</a> | <a href="#onnxselu">onnx::Selu</a> | <a href="#onnxsequenceat">onnx::SequenceAt</a> | <a href="#onnxsequenceconstruct">onnx::SequenceConstruct</a> | <a href="#onnxsequenceempty">onnx::SequenceEmpty</a> | <a href="#onnxsequenceerase">onnx::SequenceErase</a> | <a href="#onnxsequenceinsert">onnx::SequenceInsert</a> | <a href="#onnxsequencelength">onnx::SequenceLength</a> | <a href="#onnxshape">onnx::Shape</a> | <a href="#onnxshrink">onnx::Shrink</a> | <a href="#onnxsigmoid">onnx::Sigmoid</a> | <a href="#onnxsign">onnx::Sign</a> | <a href="#onnxsin">onnx::Sin</a> | <a href="#onnxsinh">onnx::Sinh</a> | <a href="#onnxsize">onnx::Size</a> | <a href="#onnxslice">onnx::Slice</a> | <a href="#onnxsoftmax">onnx::Softmax</a> | <a href="#onnxsoftmaxcrossentropyloss">onnx::SoftmaxCrossEntropyLoss</a> | <a href="#onnxsoftplus">onnx::Softplus</a> | <a href="#onnxsoftsign">onnx::Softsign</a> | <a href="#onnxspacetodepth">onnx::SpaceToDepth</a> | <a href="#onnxsplit">onnx::Split</a> | <a href="#onnxsplittosequence">onnx::SplitToSequence</a> | <a href="#onnxsqrt">onnx::Sqrt</a> | <a href="#onnxsqueeze">onnx::Squeeze</a> | <a href="#onnxstringnormalizer">onnx::StringNormalizer</a> | <a href="#onnxsub">onnx::Sub</a> | <a href="#onnxsum">onnx::Sum</a> | <a href="#onnxtan">onnx::Tan</a> | <a href="#onnxtanh">onnx::Tanh</a> | <a href="#onnxtfidfvectorizer">onnx::TfIdfVectorizer</a> | <a href="#onnxthresholdedrelu">onnx::ThresholdedRelu</a> | <a href="#onnxtile">onnx::Tile</a> | <a href="#onnxtopk">onnx::TopK</a> | <a href="#onnxtranspose">onnx::Transpose</a> | <a href="#onnxtrilu">onnx::Trilu</a> | <a href="#onnxunique">onnx::Unique</a> | <a href="#onnxunsqueeze">onnx::Unsqueeze</a> | <a href="#onnxupsample">onnx::Upsample</a> | <a href="#onnxwhere">onnx::Where</a> | <a href="#onnxxor">onnx::Xor</a> | <a href="#pattern_matching_function">pattern_matching_function</a> | <a href="#retrieve_chunk">retrieve_chunk</a> | <a href="#sin">sin</a> | <a href="#sinh">sinh</a> | <a href="#tan">tan</a> | <a href="#tanh">tanh</a> | <a href="#update_goal">update_goal</a> | <a href="#update_retrieval">update_retrieval</a> | 
+ | <a href="#matmul">MatMul</a> | <a href="#relu">Relu</a> | <a href="#change_goal">change_goal</a> | <a href="#check_termination">check_termination</a> | <a href="#conflict_resolution_function">conflict_resolution_function</a> | <a href="#cos">cos</a> | <a href="#cosh">cosh</a> | <a href="#exponential">exponential</a> | <a href="#linear">linear</a> | <a href="#logistic">logistic</a> | <a href="#onnxabs">onnx::Abs</a> | <a href="#onnxacos">onnx::Acos</a> | <a href="#onnxacosh">onnx::Acosh</a> | <a href="#onnxadd">onnx::Add</a> | <a href="#onnxand">onnx::And</a> | <a href="#onnxargmax">onnx::ArgMax</a> | <a href="#onnxargmin">onnx::ArgMin</a> | <a href="#onnxasin">onnx::Asin</a> | <a href="#onnxasinh">onnx::Asinh</a> | <a href="#onnxatan">onnx::Atan</a> | <a href="#onnxatanh">onnx::Atanh</a> | <a href="#onnxaveragepool">onnx::AveragePool</a> | <a href="#onnxbatchnormalization">onnx::BatchNormalization</a> | <a href="#onnxbernoulli">onnx::Bernoulli</a> | <a href="#onnxbitshift">onnx::BitShift</a> | <a href="#onnxcast">onnx::Cast</a> | <a href="#onnxcastlike">onnx::CastLike</a> | <a href="#onnxceil">onnx::Ceil</a> | <a href="#onnxcelu">onnx::Celu</a> | <a href="#onnxclip">onnx::Clip</a> | <a href="#onnxcompress">onnx::Compress</a> | <a href="#onnxconcat">onnx::Concat</a> | <a href="#onnxconcatfromsequence">onnx::ConcatFromSequence</a> | <a href="#onnxconstant">onnx::Constant</a> | <a href="#onnxconstantofshape">onnx::ConstantOfShape</a> | <a href="#onnxconv">onnx::Conv</a> | <a href="#onnxconvinteger">onnx::ConvInteger</a> | <a href="#onnxconvtranspose">onnx::ConvTranspose</a> | <a href="#onnxcos">onnx::Cos</a> | <a href="#onnxcosh">onnx::Cosh</a> | <a href="#onnxcumsum">onnx::CumSum</a> | <a href="#onnxdepthtospace">onnx::DepthToSpace</a> | <a href="#onnxdequantizelinear">onnx::DequantizeLinear</a> | <a href="#onnxdet">onnx::Det</a> | <a href="#onnxdiv">onnx::Div</a> | <a href="#onnxdropout">onnx::Dropout</a> | <a href="#onnxdynamicquantizelinear">onnx::DynamicQuantizeLinear</a> | <a href="#onnxeinsum">onnx::Einsum</a> | <a href="#onnxelu">onnx::Elu</a> | <a href="#onnxequal">onnx::Equal</a> | <a href="#onnxerf">onnx::Erf</a> | <a href="#onnxexp">onnx::Exp</a> | <a href="#onnxexpand">onnx::Expand</a> | <a href="#onnxeyelike">onnx::EyeLike</a> | <a href="#onnxflatten">onnx::Flatten</a> | <a href="#onnxfloor">onnx::Floor</a> | <a href="#onnxgru">onnx::GRU</a> | <a href="#onnxgather">onnx::Gather</a> | <a href="#onnxgatherelements">onnx::GatherElements</a> | <a href="#onnxgathernd">onnx::GatherND</a> | <a href="#onnxgemm">onnx::Gemm</a> | <a href="#onnxglobalaveragepool">onnx::GlobalAveragePool</a> | <a href="#onnxgloballppool">onnx::GlobalLpPool</a> | <a href="#onnxglobalmaxpool">onnx::GlobalMaxPool</a> | <a href="#onnxgreater">onnx::Greater</a> | <a href="#onnxgreaterorequal">onnx::GreaterOrEqual</a> | <a href="#onnxhardsigmoid">onnx::HardSigmoid</a> | <a href="#onnxhardswish">onnx::HardSwish</a> | <a href="#onnxhardmax">onnx::Hardmax</a> | <a href="#onnxidentity">onnx::Identity</a> | <a href="#onnxif">onnx::If</a> | <a href="#onnxinstancenormalization">onnx::InstanceNormalization</a> | <a href="#onnxisinf">onnx::IsInf</a> | <a href="#onnxisnan">onnx::IsNaN</a> | <a href="#onnxlrn">onnx::LRN</a> | <a href="#onnxlstm">onnx::LSTM</a> | <a href="#onnxleakyrelu">onnx::LeakyRelu</a> | <a href="#onnxless">onnx::Less</a> | <a href="#onnxlessorequal">onnx::LessOrEqual</a> | <a href="#onnxlog">onnx::Log</a> | <a href="#onnxlogsoftmax">onnx::LogSoftmax</a> | <a href="#onnxloop">onnx::Loop</a> | <a href="#onnxlpnormalization">onnx::LpNormalization</a> | <a href="#onnxlppool">onnx::LpPool</a> | <a href="#onnxmatmul">onnx::MatMul</a> | <a href="#onnxmatmulinteger">onnx::MatMulInteger</a> | <a href="#onnxmax">onnx::Max</a> | <a href="#onnxmaxpool">onnx::MaxPool</a> | <a href="#onnxmaxroipool">onnx::MaxRoiPool</a> | <a href="#onnxmaxunpool">onnx::MaxUnpool</a> | <a href="#onnxmean">onnx::Mean</a> | <a href="#onnxmeanvariancenormalization">onnx::MeanVarianceNormalization</a> | <a href="#onnxmin">onnx::Min</a> | <a href="#onnxmod">onnx::Mod</a> | <a href="#onnxmul">onnx::Mul</a> | <a href="#onnxmultinomial">onnx::Multinomial</a> | <a href="#onnxneg">onnx::Neg</a> | <a href="#onnxnegativeloglikelihoodloss">onnx::NegativeLogLikelihoodLoss</a> | <a href="#onnxnonmaxsuppression">onnx::NonMaxSuppression</a> | <a href="#onnxnonzero">onnx::NonZero</a> | <a href="#onnxnot">onnx::Not</a> | <a href="#onnxonehot">onnx::OneHot</a> | <a href="#onnxoptional">onnx::Optional</a> | <a href="#onnxoptionalgetelement">onnx::OptionalGetElement</a> | <a href="#onnxoptionalhaselement">onnx::OptionalHasElement</a> | <a href="#onnxor">onnx::Or</a> | <a href="#onnxprelu">onnx::PRelu</a> | <a href="#onnxpad">onnx::Pad</a> | <a href="#onnxpow">onnx::Pow</a> | <a href="#onnxqlinearconv">onnx::QLinearConv</a> | <a href="#onnxqlinearmatmul">onnx::QLinearMatMul</a> | <a href="#onnxquantizelinear">onnx::QuantizeLinear</a> | <a href="#onnxrnn">onnx::RNN</a> | <a href="#onnxrandomnormal">onnx::RandomNormal</a> | <a href="#onnxrandomnormallike">onnx::RandomNormalLike</a> | <a href="#onnxrandomuniform">onnx::RandomUniform</a> | <a href="#onnxrandomuniformlike">onnx::RandomUniformLike</a> | <a href="#onnxrange">onnx::Range</a> | <a href="#onnxreciprocal">onnx::Reciprocal</a> | <a href="#onnxreducel1">onnx::ReduceL1</a> | <a href="#onnxreducel2">onnx::ReduceL2</a> | <a href="#onnxreducelogsum">onnx::ReduceLogSum</a> | <a href="#onnxreducelogsumexp">onnx::ReduceLogSumExp</a> | <a href="#onnxreducemax">onnx::ReduceMax</a> | <a href="#onnxreducemean">onnx::ReduceMean</a> | <a href="#onnxreducemin">onnx::ReduceMin</a> | <a href="#onnxreduceprod">onnx::ReduceProd</a> | <a href="#onnxreducesum">onnx::ReduceSum</a> | <a href="#onnxreducesumsquare">onnx::ReduceSumSquare</a> | <a href="#onnxrelu">onnx::Relu</a> | <a href="#onnxreshape">onnx::Reshape</a> | <a href="#onnxresize">onnx::Resize</a> | <a href="#onnxreversesequence">onnx::ReverseSequence</a> | <a href="#onnxroialign">onnx::RoiAlign</a> | <a href="#onnxround">onnx::Round</a> | <a href="#onnxscan">onnx::Scan</a> | <a href="#onnxscatter">onnx::Scatter</a> | <a href="#onnxscatterelements">onnx::ScatterElements</a> | <a href="#onnxscatternd">onnx::ScatterND</a> | <a href="#onnxselu">onnx::Selu</a> | <a href="#onnxsequenceat">onnx::SequenceAt</a> | <a href="#onnxsequenceconstruct">onnx::SequenceConstruct</a> | <a href="#onnxsequenceempty">onnx::SequenceEmpty</a> | <a href="#onnxsequenceerase">onnx::SequenceErase</a> | <a href="#onnxsequenceinsert">onnx::SequenceInsert</a> | <a href="#onnxsequencelength">onnx::SequenceLength</a> | <a href="#onnxshape">onnx::Shape</a> | <a href="#onnxshrink">onnx::Shrink</a> | <a href="#onnxsigmoid">onnx::Sigmoid</a> | <a href="#onnxsign">onnx::Sign</a> | <a href="#onnxsin">onnx::Sin</a> | <a href="#onnxsinh">onnx::Sinh</a> | <a href="#onnxsize">onnx::Size</a> | <a href="#onnxslice">onnx::Slice</a> | <a href="#onnxsoftmax">onnx::Softmax</a> | <a href="#onnxsoftmaxcrossentropyloss">onnx::SoftmaxCrossEntropyLoss</a> | <a href="#onnxsoftplus">onnx::Softplus</a> | <a href="#onnxsoftsign">onnx::Softsign</a> | <a href="#onnxspacetodepth">onnx::SpaceToDepth</a> | <a href="#onnxsplit">onnx::Split</a> | <a href="#onnxsplittosequence">onnx::SplitToSequence</a> | <a href="#onnxsqrt">onnx::Sqrt</a> | <a href="#onnxsqueeze">onnx::Squeeze</a> | <a href="#onnxstringnormalizer">onnx::StringNormalizer</a> | <a href="#onnxsub">onnx::Sub</a> | <a href="#onnxsum">onnx::Sum</a> | <a href="#onnxtan">onnx::Tan</a> | <a href="#onnxtanh">onnx::Tanh</a> | <a href="#onnxtfidfvectorizer">onnx::TfIdfVectorizer</a> | <a href="#onnxthresholdedrelu">onnx::ThresholdedRelu</a> | <a href="#onnxtile">onnx::Tile</a> | <a href="#onnxtopk">onnx::TopK</a> | <a href="#onnxtranspose">onnx::Transpose</a> | <a href="#onnxtrilu">onnx::Trilu</a> | <a href="#onnxunique">onnx::Unique</a> | <a href="#onnxunsqueeze">onnx::Unsqueeze</a> | <a href="#onnxupsample">onnx::Upsample</a> | <a href="#onnxwhere">onnx::Where</a> | <a href="#onnxxor">onnx::Xor</a> | <a href="#pattern_matching_function">pattern_matching_function</a> | <a href="#retrieve_chunk">retrieve_chunk</a> | <a href="#sin">sin</a> | <a href="#sinh">sinh</a> | <a href="#tan">tan</a> | <a href="#tanh">tanh</a> | <a href="#update_goal">update_goal</a> | <a href="#update_retrieval">update_retrieval</a> |
 ## MatMul
- <p><i>Matrix multiplication (work in progress...)</i></p> 
-<p><b>MatMul(A, B)</b> = A @ B</p> 
-<p>Python version: A @ B</p> 
+ <p><i>Matrix multiplication (work in progress...)</i></p>
+<p><b>MatMul(A, B)</b> = A @ B</p>
+<p>Python version: A @ B</p>
 
 ## Relu
- <p><i>Rectified linear function (work in progress...)</i></p> 
-<p><b>Relu(A)</b> = A * (A > 0)</p> 
-<p>Python version: A * (A > 0)</p> 
+ <p><i>Rectified linear function (work in progress...)</i></p>
+<p><b>Relu(A)</b> = A * (A > 0)</p>
+<p>Python version: A * (A > 0)</p>
 
 ## change_goal
- <p><i>ACT-R change goal buffer function</i></p> 
-<p><b>change_goal(pattern, curr_goal)</b> = actr.change_goal(pattern, curr_goal)</p> 
-<p>Python version: actr.change_goal(pattern, curr_goal)</p> 
+ <p><i>ACT-R change goal buffer function</i></p>
+<p><b>change_goal(pattern, curr_goal)</b> = actr.change_goal(pattern, curr_goal)</p>
+<p>Python version: actr.change_goal(pattern, curr_goal)</p>
 
 ## check_termination
- <p><i>check_termination</i></p> 
-<p><b>check_termination(production)</b> = actr.check_termination(production)</p> 
-<p>Python version: actr.check_termination(production)</p> 
+ <p><i>check_termination</i></p>
+<p><b>check_termination(production)</b> = actr.check_termination(production)</p>
+<p>Python version: actr.check_termination(production)</p>
 
 ## conflict_resolution_function
- <p><i>ACT-R conflict resolution function</i></p> 
-<p><b>conflict_resolution_function(productions)</b> = actr.conflict_resolution_function(productions)</p> 
-<p>Python version: actr.conflict_resolution_function(productions)</p> 
+ <p><i>ACT-R conflict resolution function</i></p>
+<p><b>conflict_resolution_function(productions)</b> = actr.conflict_resolution_function(productions)</p>
+<p>Python version: actr.conflict_resolution_function(productions)</p>
 
 ## cos
- <p><i>Cosine function</i></p> 
-<p><b>cos(variable0, scale)</b> = scale * cos(variable0)</p> 
-<p>Python version: scale * numpy.cos(variable0)</p> 
+ <p><i>Cosine function</i></p>
+<p><b>cos(variable0, scale)</b> = scale * cos(variable0)</p>
+<p>Python version: scale * numpy.cos(variable0)</p>
 
 ## cosh
- <p><i>Hyperbolic cosine function</i></p> 
-<p><b>cosh(variable0, scale)</b> = scale * cosh(variable0)</p> 
-<p>Python version: scale * numpy.cosh(variable0)</p> 
+ <p><i>Hyperbolic cosine function</i></p>
+<p><b>cosh(variable0, scale)</b> = scale * cosh(variable0)</p>
+<p>Python version: scale * numpy.cosh(variable0)</p>
 
 ## exponential
- <p><i>Exponential function</i></p> 
-<p><b>exponential(variable0, scale, rate, bias, offset)</b> = scale * exp((rate * variable0) + bias) + offset</p> 
-<p>Python version: scale * numpy.exp((rate * variable0) + bias) + offset</p> 
+ <p><i>Exponential function</i></p>
+<p><b>exponential(variable0, scale, rate, bias, offset)</b> = scale * exp((rate * variable0) + bias) + offset</p>
+<p>Python version: scale * numpy.exp((rate * variable0) + bias) + offset</p>
 
 ## linear
- <p><i>A linear function, calculated from a slope and an intercept</i></p> 
-<p><b>linear(variable0, slope, intercept)</b> = (variable0 * slope + intercept)</p> 
-<p>Python version: (variable0 * slope + intercept)</p> 
+ <p><i>A linear function, calculated from a slope and an intercept</i></p>
+<p><b>linear(variable0, slope, intercept)</b> = (variable0 * slope + intercept)</p>
+<p>Python version: (variable0 * slope + intercept)</p>
 
 ## logistic
- <p><i>Logistic function</i></p> 
-<p><b>logistic(variable0, gain, bias, offset)</b> = 1/(1 + exp(-1*gain*(variable0 + bias) + offset))</p> 
-<p>Python version: 1/(1 + numpy.exp(-1*gain*(variable0 + bias) + offset))</p> 
+ <p><i>Logistic function</i></p>
+<p><b>logistic(variable0, gain, bias, offset)</b> = 1/(1 + exp(-1*gain*(variable0 + bias) + offset))</p>
+<p>Python version: 1/(1 + numpy.exp(-1*gain*(variable0 + bias) + offset))</p>
 
 ## onnx::Abs
  <p><i>
 Absolute takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the absolute is, y = abs(x), is applied to
 the tensor elementwise.
-</i></p> 
-<p><b>onnx::Abs(X)</b> = onnx_ops.abs(X)</p> 
-<p>Python version: onnx_ops.abs(X)</p> 
+</i></p>
+<p><b>onnx::Abs(X)</b> = onnx_ops.abs(X)</p>
+<p>Python version: onnx_ops.abs(X)</p>
 
 ## onnx::Acos
  <p><i>
 Calculates the arccosine (inverse of cosine) of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Acos(input)</b> = onnx_ops.acos(input)</p> 
-<p>Python version: onnx_ops.anumpy.cos(input)</p> 
+</i></p>
+<p><b>onnx::Acos(input)</b> = onnx_ops.acos(input)</p>
+<p>Python version: onnx_ops.anumpy.cos(input)</p>
 
 ## onnx::Acosh
  <p><i>
 Calculates the hyperbolic arccosine of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Acosh(input)</b> = onnx_ops.acosh(input)</p> 
-<p>Python version: onnx_ops.anumpy.cosh(input)</p> 
+</i></p>
+<p><b>onnx::Acosh(input)</b> = onnx_ops.acosh(input)</p>
+<p>Python version: onnx_ops.anumpy.cosh(input)</p>
 
 ## onnx::Add
  <p><i>
@@ -83,9 +83,9 @@ Performs element-wise binary addition (with Numpy-style broadcasting support).
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
 
 (Opset 14 change): Extend supported types to include uint8, int8, uint16, and int16.
-</i></p> 
-<p><b>onnx::Add(A, B)</b> = onnx_ops.add(A, B)</p> 
-<p>Python version: onnx_ops.add(A, B)</p> 
+</i></p>
+<p><b>onnx::Add(A, B)</b> = onnx_ops.add(A, B)</p>
+<p>Python version: onnx_ops.add(A, B)</p>
 
 ## onnx::And
  <p><i>
@@ -93,9 +93,9 @@ Returns the tensor resulted from performing the `and` logical operation
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::And(A, B)</b> = onnx_ops.and(A, B)</p> 
-<p>Python version: onnx_ops.and(A, B)</p> 
+</i></p>
+<p><b>onnx::And(A, B)</b> = onnx_ops.and(A, B)</p>
+<p>Python version: onnx_ops.and(A, B)</p>
 
 ## onnx::ArgMax
  <p><i>
@@ -105,9 +105,9 @@ If keepdims equals 0, then the resulting tensor has the reduced dimension pruned
 If select_last_index is True (default False), the index of the last occurrence of the max
 is selected if the max appears more than once in the input. Otherwise the index of the
 first occurrence is selected.
-The type of the output tensor is integer.</i></p> 
-<p><b>onnx::ArgMax(data)</b> = onnx_ops.argmax(data, axis, keepdims, select_last_index)</p> 
-<p>Python version: onnx_ops.argmax(data, axis, keepdims, select_last_index)</p> 
+The type of the output tensor is integer.</i></p>
+<p><b>onnx::ArgMax(data)</b> = onnx_ops.argmax(data, axis, keepdims, select_last_index)</p>
+<p>Python version: onnx_ops.argmax(data, axis, keepdims, select_last_index)</p>
 
 ## onnx::ArgMin
  <p><i>
@@ -117,37 +117,37 @@ If keepdims equals 0, then the resulting tensor has the reduced dimension pruned
 If select_last_index is True (default False), the index of the last occurrence of the min
 is selected if the min appears more than once in the input. Otherwise the index of the
 first occurrence is selected.
-The type of the output tensor is integer.</i></p> 
-<p><b>onnx::ArgMin(data)</b> = onnx_ops.argmin(data, axis, keepdims, select_last_index)</p> 
-<p>Python version: onnx_ops.argmin(data, axis, keepdims, select_last_index)</p> 
+The type of the output tensor is integer.</i></p>
+<p><b>onnx::ArgMin(data)</b> = onnx_ops.argmin(data, axis, keepdims, select_last_index)</p>
+<p>Python version: onnx_ops.argmin(data, axis, keepdims, select_last_index)</p>
 
 ## onnx::Asin
  <p><i>
 Calculates the arcsine (inverse of sine) of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Asin(input)</b> = onnx_ops.asin(input)</p> 
-<p>Python version: onnx_ops.anumpy.sin(input)</p> 
+</i></p>
+<p><b>onnx::Asin(input)</b> = onnx_ops.asin(input)</p>
+<p>Python version: onnx_ops.anumpy.sin(input)</p>
 
 ## onnx::Asinh
  <p><i>
 Calculates the hyperbolic arcsine of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Asinh(input)</b> = onnx_ops.asinh(input)</p> 
-<p>Python version: onnx_ops.anumpy.sinh(input)</p> 
+</i></p>
+<p><b>onnx::Asinh(input)</b> = onnx_ops.asinh(input)</p>
+<p>Python version: onnx_ops.anumpy.sinh(input)</p>
 
 ## onnx::Atan
  <p><i>
 Calculates the arctangent (inverse of tangent) of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Atan(input)</b> = onnx_ops.atan(input)</p> 
-<p>Python version: onnx_ops.anumpy.tan(input)</p> 
+</i></p>
+<p><b>onnx::Atan(input)</b> = onnx_ops.atan(input)</p>
+<p>Python version: onnx_ops.anumpy.tan(input)</p>
 
 ## onnx::Atanh
  <p><i>
 Calculates the hyperbolic arctangent of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Atanh(input)</b> = onnx_ops.atanh(input)</p> 
-<p>Python version: onnx_ops.anumpy.tanh(input)</p> 
+</i></p>
+<p><b>onnx::Atanh(input)</b> = onnx_ops.atanh(input)</p>
+<p>Python version: onnx_ops.anumpy.tanh(input)</p>
 
 ## onnx::AveragePool
  <p><i>
@@ -179,9 +179,9 @@ Calculates the hyperbolic arctangent of the given input tensor element-wise.
  pad_shape[i] = (output_spatial_shape[i] - 1) * strides_spatial_shape[i] + kernel_spatial_shape[i] - input_spatial_shape[i]
  ```
  The output of each pooling window is divided by the number of elements (exclude pad when attribute count_include_pad is zero).
- </i></p> 
-<p><b>onnx::AveragePool(X)</b> = onnx_ops.averagepool(X, auto_pad, ceil_mode, count_include_pad, kernel_shape, pads, strides)</p> 
-<p>Python version: onnx_ops.averagepool(X, auto_pad, ceil_mode, count_include_pad, kernel_shape, pads, strides)</p> 
+ </i></p>
+<p><b>onnx::AveragePool(X)</b> = onnx_ops.averagepool(X, auto_pad, ceil_mode, count_include_pad, kernel_shape, pads, strides)</p>
+<p>Python version: onnx_ops.averagepool(X, auto_pad, ceil_mode, count_include_pad, kernel_shape, pads, strides)</p>
 
 ## onnx::BatchNormalization
  <p><i>
@@ -226,9 +226,9 @@ Y = (X - input_mean) / sqrt(input_var + epsilon) * scale + B
 For previous (depreciated) non-spatial cases, implementors are suggested
 to flatten the input shape to (N x C * D1 * D2 * ... * Dn) before a BatchNormalization Op.
 This operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.
-</i></p> 
-<p><b>onnx::BatchNormalization(X, scale, B, input_mean, input_var)</b> = onnx_ops.batchnormalization(X, scale, B, input_mean, input_var, epsilon, momentum, training_mode)</p> 
-<p>Python version: onnx_ops.batchnormalization(X, scale, B, input_mean, input_var, epsilon, momentum, training_mode)</p> 
+</i></p>
+<p><b>onnx::BatchNormalization(X, scale, B, input_mean, input_var)</b> = onnx_ops.batchnormalization(X, scale, B, input_mean, input_var, epsilon, momentum, training_mode)</p>
+<p>Python version: onnx_ops.batchnormalization(X, scale, B, input_mean, input_var, epsilon, momentum, training_mode)</p>
 
 ## onnx::Bernoulli
  <p><i>
@@ -238,9 +238,9 @@ where an output of 1 is produced with probability p and an output of 0 is produc
 
 This operator is non-deterministic and may not produce the same values in different
 implementations (even if a seed is specified).
-</i></p> 
-<p><b>onnx::Bernoulli(input)</b> = onnx_ops.bernoulli(input, dtype, seed)</p> 
-<p>Python version: onnx_ops.bernoulli(input, dtype, seed)</p> 
+</i></p>
+<p><b>onnx::Bernoulli(input)</b> = onnx_ops.bernoulli(input, dtype, seed)</p>
+<p>Python version: onnx_ops.bernoulli(input, dtype, seed)</p>
 
 ## onnx::BitShift
  <p><i>
@@ -255,9 +255,9 @@ Bitwise shift operator performs element-wise operation. For each input element, 
 
  Because this operator supports Numpy-style broadcasting, X's and Y's shapes are
  not necessarily identical.
-This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).</i></p> 
-<p><b>onnx::BitShift(X, Y)</b> = onnx_ops.bitshift(X, Y, direction)</p> 
-<p>Python version: onnx_ops.bitshift(X, Y, direction)</p> 
+This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).</i></p>
+<p><b>onnx::BitShift(X, Y)</b> = onnx_ops.bitshift(X, Y, direction)</p>
+<p>Python version: onnx_ops.bitshift(X, Y, direction)</p>
 
 ## onnx::Cast
  <p><i>
@@ -296,27 +296,27 @@ signed types). For example, 200 (int16) -> -56 (int8).
   * floating point: `{1.0, 0.0}`.
   * fixed point: `{1, 0}`.
   * bool: no change.
-</i></p> 
-<p><b>onnx::Cast(input)</b> = onnx_ops.cast(input, to)</p> 
-<p>Python version: onnx_ops.cast(input, to)</p> 
+</i></p>
+<p><b>onnx::Cast(input)</b> = onnx_ops.cast(input, to)</p>
+<p>Python version: onnx_ops.cast(input, to)</p>
 
 ## onnx::CastLike
  <p><i>
 The operator casts the elements of a given input tensor (the first input) to
 the same data type as the elements of the second input tensor.
 See documentation of the Cast operator for further details.
-</i></p> 
-<p><b>onnx::CastLike(input, target_type)</b> = onnx_ops.castlike(input, target_type)</p> 
-<p>Python version: onnx_ops.castlike(input, target_type)</p> 
+</i></p>
+<p><b>onnx::CastLike(input, target_type)</b> = onnx_ops.castlike(input, target_type)</p>
+<p>Python version: onnx_ops.castlike(input, target_type)</p>
 
 ## onnx::Ceil
  <p><i>
 Ceil takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the ceil is, y = ceil(x), is applied to
 the tensor elementwise.
-</i></p> 
-<p><b>onnx::Ceil(X)</b> = onnx_ops.ceil(X)</p> 
-<p>Python version: onnx_ops.ceil(X)</p> 
+</i></p>
+<p><b>onnx::Ceil(X)</b> = onnx_ops.ceil(X)</p>
+<p>Python version: onnx_ops.ceil(X)</p>
 
 ## onnx::Celu
  <p><i>
@@ -327,32 +327,32 @@ using formula:
 ```
 max(0,x) + min(0,alpha*(exp(x/alpha)-1))
 ```
-</i></p> 
-<p><b>onnx::Celu(X)</b> = onnx_ops.celu(X, alpha)</p> 
-<p>Python version: onnx_ops.celu(X, alpha)</p> 
+</i></p>
+<p><b>onnx::Celu(X)</b> = onnx_ops.celu(X, alpha)</p>
+<p>Python version: onnx_ops.celu(X, alpha)</p>
 
 ## onnx::Clip
  <p><i>
 Clip operator limits the given input within an interval. The interval is
 specified by the inputs 'min' and 'max'. They default to
 numeric_limits::lowest() and numeric_limits::max(), respectively.
-</i></p> 
-<p><b>onnx::Clip(input, min, max)</b> = onnx_ops.clip(input, min, max)</p> 
-<p>Python version: onnx_ops.clip(input, min, max)</p> 
+</i></p>
+<p><b>onnx::Clip(input, min, max)</b> = onnx_ops.clip(input, min, max)</p>
+<p>Python version: onnx_ops.clip(input, min, max)</p>
 
 ## onnx::Compress
  <p><i>
     Selects slices from an input tensor along a given axis where condition evaluates to True for each axis index.
     In case axis is not provided, input is flattened before elements are selected.
     Compress behaves like numpy.compress: https://docs.scipy.org/doc/numpy/reference/generated/numpy.compress.html
-    </i></p> 
-<p><b>onnx::Compress(input, condition)</b> = onnx_ops.compress(input, condition, axis)</p> 
-<p>Python version: onnx_ops.compress(input, condition, axis)</p> 
+    </i></p>
+<p><b>onnx::Compress(input, condition)</b> = onnx_ops.compress(input, condition, axis)</p>
+<p>Python version: onnx_ops.compress(input, condition, axis)</p>
 
 ## onnx::Concat
- <p><i>Concatenate a list of tensors into a single tensor. All input tensors must have the same shape, except for the dimension size of the axis to concatenate on.</i></p> 
-<p><b>onnx::Concat(inputs)</b> = onnx_ops.concat(inputs, axis)</p> 
-<p>Python version: onnx_ops.concat(inputs, axis)</p> 
+ <p><i>Concatenate a list of tensors into a single tensor. All input tensors must have the same shape, except for the dimension size of the axis to concatenate on.</i></p>
+<p><b>onnx::Concat(inputs)</b> = onnx_ops.concat(inputs, axis)</p>
+<p>Python version: onnx_ops.concat(inputs, axis)</p>
 
 ## onnx::ConcatFromSequence
  <p><i>
@@ -360,39 +360,39 @@ Concatenate a sequence of tensors into a single tensor.
 All input tensors must have the same shape, except for the dimension size of the axis to concatenate on.
 By default 'new_axis' is 0, the behavior is similar to numpy.concatenate.
 When 'new_axis' is 1, the behavior is similar to numpy.stack.
-</i></p> 
-<p><b>onnx::ConcatFromSequence(input_sequence)</b> = onnx_ops.concatfromsequence(input_sequence, axis, new_axis)</p> 
-<p>Python version: onnx_ops.concatfromsequence(input_sequence, axis, new_axis)</p> 
+</i></p>
+<p><b>onnx::ConcatFromSequence(input_sequence)</b> = onnx_ops.concatfromsequence(input_sequence, axis, new_axis)</p>
+<p>Python version: onnx_ops.concatfromsequence(input_sequence, axis, new_axis)</p>
 
 ## onnx::Constant
  <p><i>
 This operator produces a constant tensor. Exactly one of the provided attributes, either value, sparse_value,
 or value_* must be specified.
-</i></p> 
-<p><b>onnx::Constant()</b> = onnx_ops.constant(sparse_value, value, value_float, value_floats, value_int, value_ints, value_string, value_strings)</p> 
-<p>Python version: onnx_ops.constant(sparse_value, value, value_float, value_floats, value_int, value_ints, value_string, value_strings)</p> 
+</i></p>
+<p><b>onnx::Constant()</b> = onnx_ops.constant(sparse_value, value, value_float, value_floats, value_int, value_ints, value_string, value_strings)</p>
+<p>Python version: onnx_ops.constant(sparse_value, value, value_float, value_floats, value_int, value_ints, value_string, value_strings)</p>
 
 ## onnx::ConstantOfShape
  <p><i>
 Generate a tensor with given value and shape.
-</i></p> 
-<p><b>onnx::ConstantOfShape(input)</b> = onnx_ops.constantofshape(input, value)</p> 
-<p>Python version: onnx_ops.constantofshape(input, value)</p> 
+</i></p>
+<p><b>onnx::ConstantOfShape(input)</b> = onnx_ops.constantofshape(input, value)</p>
+<p>Python version: onnx_ops.constantofshape(input, value)</p>
 
 ## onnx::Conv
  <p><i>
 The convolution operator consumes an input tensor and a filter, and
-computes the output.</i></p> 
-<p><b>onnx::Conv(X, W, B)</b> = onnx_ops.conv(X, W, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p> 
-<p>Python version: onnx_ops.conv(X, W, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p> 
+computes the output.</i></p>
+<p><b>onnx::Conv(X, W, B)</b> = onnx_ops.conv(X, W, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p>
+<p>Python version: onnx_ops.conv(X, W, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p>
 
 ## onnx::ConvInteger
  <p><i>
 The integer convolution operator consumes an input tensor, its zero-point, a filter, and its zero-point,
 and computes the output. The production MUST never overflow. The accumulation may overflow if and only if in 32 bits.
-</i></p> 
-<p><b>onnx::ConvInteger(x, w, x_zero_point, w_zero_point)</b> = onnx_ops.convinteger(x, w, x_zero_point, w_zero_point, auto_pad, dilations, group, kernel_shape, pads, strides)</p> 
-<p>Python version: onnx_ops.convinteger(x, w, x_zero_point, w_zero_point, auto_pad, dilations, group, kernel_shape, pads, strides)</p> 
+</i></p>
+<p><b>onnx::ConvInteger(x, w, x_zero_point, w_zero_point)</b> = onnx_ops.convinteger(x, w, x_zero_point, w_zero_point, auto_pad, dilations, group, kernel_shape, pads, strides)</p>
+<p>Python version: onnx_ops.convinteger(x, w, x_zero_point, w_zero_point, auto_pad, dilations, group, kernel_shape, pads, strides)</p>
 
 ## onnx::ConvTranspose
  <p><i>
@@ -409,23 +409,23 @@ output_shape can also be explicitly specified in which case pads values are auto
   If (auto_pads == SAME_UPPER): pads[start_i] = total_padding[i]/2; pads[end_i] = total_padding[i] - (total_padding[i]/2)
   Else: pads[start_i] = total_padding[i] - (total_padding[i]/2); pads[end_i] = (total_padding[i]/2).
 
-    </i></p> 
-<p><b>onnx::ConvTranspose(X, W, B)</b> = onnx_ops.convtranspose(X, W, B, auto_pad, dilations, group, kernel_shape, output_padding, output_shape, pads, strides)</p> 
-<p>Python version: onnx_ops.convtranspose(X, W, B, auto_pad, dilations, group, kernel_shape, output_padding, output_shape, pads, strides)</p> 
+    </i></p>
+<p><b>onnx::ConvTranspose(X, W, B)</b> = onnx_ops.convtranspose(X, W, B, auto_pad, dilations, group, kernel_shape, output_padding, output_shape, pads, strides)</p>
+<p>Python version: onnx_ops.convtranspose(X, W, B, auto_pad, dilations, group, kernel_shape, output_padding, output_shape, pads, strides)</p>
 
 ## onnx::Cos
  <p><i>
 Calculates the cosine of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Cos(input)</b> = onnx_ops.cos(input)</p> 
-<p>Python version: onnx_ops.numpy.cos(input)</p> 
+</i></p>
+<p><b>onnx::Cos(input)</b> = onnx_ops.cos(input)</p>
+<p>Python version: onnx_ops.numpy.cos(input)</p>
 
 ## onnx::Cosh
  <p><i>
 Calculates the hyperbolic cosine of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Cosh(input)</b> = onnx_ops.cosh(input)</p> 
-<p>Python version: onnx_ops.numpy.cosh(input)</p> 
+</i></p>
+<p><b>onnx::Cosh(input)</b> = onnx_ops.cosh(input)</p>
+<p>Python version: onnx_ops.numpy.cosh(input)</p>
 
 ## onnx::CumSum
  <p><i>
@@ -448,9 +448,9 @@ exclusive=1
 reverse=1
 output = [5, 3, 0]
 ```
- </i></p> 
-<p><b>onnx::CumSum(x, axis)</b> = onnx_ops.cumsum(x, axis, exclusive, reverse)</p> 
-<p>Python version: onnx_ops.cumsum(x, axis, exclusive, reverse)</p> 
+ </i></p>
+<p><b>onnx::CumSum(x, axis)</b> = onnx_ops.cumsum(x, axis, exclusive, reverse)</p>
+<p>Python version: onnx_ops.cumsum(x, axis, exclusive, reverse)</p>
 
 ## onnx::DepthToSpace
  <p><i>DepthToSpace rearranges (permutes) data from depth into blocks of spatial data.
@@ -480,9 +480,9 @@ tmp = np.transpose(tmp, [0, 1, 4, 2, 5, 3])
 
 y = np.reshape(tmp, [b, c // (blocksize ** 2), h * blocksize, w * blocksize])
 
-</i></p> 
-<p><b>onnx::DepthToSpace(input)</b> = onnx_ops.depthtospace(input, blocksize, mode)</p> 
-<p>Python version: onnx_ops.depthtospace(input, blocksize, mode)</p> 
+</i></p>
+<p><b>onnx::DepthToSpace(input)</b> = onnx_ops.depthtospace(input, blocksize, mode)</p>
+<p>Python version: onnx_ops.depthtospace(input, blocksize, mode)</p>
 
 ## onnx::DequantizeLinear
  <p><i>
@@ -491,9 +491,9 @@ The dequantization formula is y = (x - x_zero_point) * x_scale. 'x_scale' and 'x
 for per-tensor / per layer quantization, or a 1-D tensor for per-axis quantization.
 'x_zero_point' and 'x' must have same type. 'x' and 'y' must have same shape. In the case of dequantizing int32,
 there's no zero point (zero point is supposed to be 0).
-</i></p> 
-<p><b>onnx::DequantizeLinear(x, x_scale, x_zero_point)</b> = onnx_ops.dequantizelinear(x, x_scale, x_zero_point, axis)</p> 
-<p>Python version: onnx_ops.dequantizelinear(x, x_scale, x_zero_point, axis)</p> 
+</i></p>
+<p><b>onnx::DequantizeLinear(x, x_scale, x_zero_point)</b> = onnx_ops.dequantizelinear(x, x_scale, x_zero_point, axis)</p>
+<p>Python version: onnx_ops.dequantizelinear(x, x_scale, x_zero_point, axis)</p>
 
 ## onnx::Det
  <p><i>
@@ -502,9 +502,9 @@ Det takes one input tensor of shape `[*, M, M]`, where `*` is zero or more batch
 and the inner-most 2 dimensions form square matrices.
 The output is a tensor of shape `[*]`, containing the determinants of all input submatrices.
 e.g., When the input is 2-D, the output is a scalar(shape is empty: `[]`).
-</i></p> 
-<p><b>onnx::Det(X)</b> = onnx_ops.det(X)</p> 
-<p>Python version: onnx_ops.det(X)</p> 
+</i></p>
+<p><b>onnx::Det(X)</b> = onnx_ops.det(X)</p>
+<p>Python version: onnx_ops.det(X)</p>
 
 ## onnx::Div
  <p><i>
@@ -513,9 +513,9 @@ Performs element-wise binary division (with Numpy-style broadcasting support).
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
 
 (Opset 14 change): Extend supported types to include uint8, int8, uint16, and int16.
-</i></p> 
-<p><b>onnx::Div(A, B)</b> = onnx_ops.div(A, B)</p> 
-<p>Python version: onnx_ops.div(A, B)</p> 
+</i></p>
+<p><b>onnx::Div(A, B)</b> = onnx_ops.div(A, B)</p>
+<p>Python version: onnx_ops.div(A, B)</p>
 
 ## onnx::Dropout
  <p><i>
@@ -531,9 +531,9 @@ where
 scale = 1. / (1. - ratio).
 ```
 This operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.
-</i></p> 
-<p><b>onnx::Dropout(data, ratio, training_mode)</b> = onnx_ops.dropout(data, ratio, training_mode, seed)</p> 
-<p>Python version: onnx_ops.dropout(data, ratio, training_mode, seed)</p> 
+</i></p>
+<p><b>onnx::Dropout(data, ratio, training_mode)</b> = onnx_ops.dropout(data, ratio, training_mode, seed)</p>
+<p>Python version: onnx_ops.dropout(data, ratio, training_mode, seed)</p>
 
 ## onnx::DynamicQuantizeLinear
  <p><i>
@@ -559,9 +559,9 @@ y = saturate (round (x / y_scale) + y_zero_point)
 * for saturation, it saturates to [0, 255] if it's uint8, or [-127, 127] if it's int8. Right now only uint8 is supported.
 * rounding to nearest ties to even.
 ```
-</i></p> 
-<p><b>onnx::DynamicQuantizeLinear(x)</b> = onnx_ops.dynamicquantizelinear(x)</p> 
-<p>Python version: onnx_ops.dynamicquantizelinear(x)</p> 
+</i></p>
+<p><b>onnx::DynamicQuantizeLinear(x)</b> = onnx_ops.dynamicquantizelinear(x)</p>
+<p>Python version: onnx_ops.dynamicquantizelinear(x)</p>
 
 ## onnx::Einsum
  <p><i>
@@ -588,9 +588,9 @@ The equation may contain ellipsis ("...") to enable broadcasting. Ellipsis must 
 Specifically, every occurrence of ellipsis in the equation must represent the same number of dimensions.
 The right-hand side may contain exactly one ellipsis. In implicit mode, the ellipsis dimensions are set to the
 beginning of the output. The equation string may contain space (U+0020) character.
-</i></p> 
-<p><b>onnx::Einsum(Inputs)</b> = onnx_ops.einsum(Inputs, equation)</p> 
-<p>Python version: onnx_ops.einsum(Inputs, equation)</p> 
+</i></p>
+<p><b>onnx::Einsum(Inputs)</b> = onnx_ops.einsum(Inputs, equation)</p>
+<p>Python version: onnx_ops.einsum(Inputs, equation)</p>
 
 ## onnx::Elu
  <p><i>
@@ -598,9 +598,9 @@ Elu takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the function `f(x) = alpha * (exp(x) - 1.) for x <
 0`, `f(x) = x for x >= 0`., is applied to the tensor elementwise.
 
-</i></p> 
-<p><b>onnx::Elu(X)</b> = onnx_ops.elu(X, alpha)</p> 
-<p>Python version: onnx_ops.elu(X, alpha)</p> 
+</i></p>
+<p><b>onnx::Elu(X)</b> = onnx_ops.elu(X, alpha)</p>
+<p>Python version: onnx_ops.elu(X, alpha)</p>
 
 ## onnx::Equal
  <p><i>
@@ -608,23 +608,23 @@ Returns the tensor resulted from performing the `equal` logical operation
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Equal(A, B)</b> = onnx_ops.equal(A, B)</p> 
-<p>Python version: onnx_ops.equal(A, B)</p> 
+</i></p>
+<p><b>onnx::Equal(A, B)</b> = onnx_ops.equal(A, B)</p>
+<p>Python version: onnx_ops.equal(A, B)</p>
 
 ## onnx::Erf
  <p><i>
 Computes the error function of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Erf(input)</b> = onnx_ops.erf(input)</p> 
-<p>Python version: onnx_ops.erf(input)</p> 
+</i></p>
+<p><b>onnx::Erf(input)</b> = onnx_ops.erf(input)</p>
+<p>Python version: onnx_ops.erf(input)</p>
 
 ## onnx::Exp
  <p><i>
 Calculates the exponential of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Exp(input)</b> = onnx_ops.exp(input)</p> 
-<p>Python version: onnx_ops.numpy.exp(input)</p> 
+</i></p>
+<p><b>onnx::Exp(input)</b> = onnx_ops.exp(input)</p>
+<p>Python version: onnx_ops.numpy.exp(input)</p>
 
 ## onnx::Expand
  <p><i>
@@ -636,9 +636,9 @@ Also, this operator is similar to numpy.broadcast_to(input, shape),
 but the major difference is numpy.broadcast_to() does not allow shape to be smaller than input.size().
 It is possible that the output.shape is not equal to shape, when some dimensions in shape is equal to 1,
 or the shape.ndim < input.shape.ndim.
-</i></p> 
-<p><b>onnx::Expand(input, shape)</b> = onnx_ops.expand(input, shape)</p> 
-<p>Python version: onnx_ops.expand(input, shape)</p> 
+</i></p>
+<p><b>onnx::Expand(input, shape)</b> = onnx_ops.expand(input, shape)</p>
+<p>Python version: onnx_ops.expand(input, shape)</p>
 
 ## onnx::EyeLike
  <p><i>
@@ -649,27 +649,27 @@ same as the input tensor. The data type can be specified by the 'dtype' argument
 is populated with ones, but attribute 'k' can be used to populate upper or lower diagonals.
 The 'dtype' argument must be one of the data types specified in the 'DataType' enum field in the
 TensorProto message and be valid as an output type.
-</i></p> 
-<p><b>onnx::EyeLike(input)</b> = onnx_ops.eyelike(input, dtype, k)</p> 
-<p>Python version: onnx_ops.eyelike(input, dtype, k)</p> 
+</i></p>
+<p><b>onnx::EyeLike(input)</b> = onnx_ops.eyelike(input, dtype, k)</p>
+<p>Python version: onnx_ops.eyelike(input, dtype, k)</p>
 
 ## onnx::Flatten
  <p><i>
 Flattens the input tensor into a 2D matrix. If input tensor has shape
 (d_0, d_1, ... d_n) then the output will have shape
 (d_0 X d_1 ... d_(axis-1), d_axis X d_(axis+1) ... X dn).
-</i></p> 
-<p><b>onnx::Flatten(input)</b> = onnx_ops.flatten(input, axis)</p> 
-<p>Python version: onnx_ops.flatten(input, axis)</p> 
+</i></p>
+<p><b>onnx::Flatten(input)</b> = onnx_ops.flatten(input, axis)</p>
+<p>Python version: onnx_ops.flatten(input, axis)</p>
 
 ## onnx::Floor
  <p><i>
 Floor takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the floor is, y = floor(x), is applied to
 the tensor elementwise.
-</i></p> 
-<p><b>onnx::Floor(X)</b> = onnx_ops.floor(X)</p> 
-<p>Python version: onnx_ops.floor(X)</p> 
+</i></p>
+<p><b>onnx::Floor(X)</b> = onnx_ops.floor(X)</p>
+<p>Python version: onnx_ops.floor(X)</p>
 
 ## onnx::GRU
  <p><i>
@@ -746,9 +746,9 @@ Equations (Default: f=Sigmoid, g=Tanh):
 
   - Ht = (1 - zt) (.) ht + zt (.) Ht-1
 This operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.
-</i></p> 
-<p><b>onnx::GRU(X, W, R, B, sequence_lens, initial_h)</b> = onnx_ops.gru(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout, linear_before_reset)</p> 
-<p>Python version: onnx_ops.gru(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout, linear_before_reset)</p> 
+</i></p>
+<p><b>onnx::GRU(X, W, R, B, sequence_lens, initial_h)</b> = onnx_ops.gru(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout, linear_before_reset)</p>
+<p>Python version: onnx_ops.gru(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout, linear_before_reset)</p>
 
 ## onnx::Gather
  <p><i>
@@ -807,9 +807,9 @@ output[j_{0}, i_{0}, ..., i_{q-1}, j_{1}, ..., j_{r-2}] = input[j_{0}, k, j_{1},
           [[4.5, 5.9]],
   ]
 ```
-</i></p> 
-<p><b>onnx::Gather(data, indices)</b> = onnx_ops.gather(data, indices, axis)</p> 
-<p>Python version: onnx_ops.gather(data, indices, axis)</p> 
+</i></p>
+<p><b>onnx::Gather(data, indices)</b> = onnx_ops.gather(data, indices, axis)</p>
+<p>Python version: onnx_ops.gather(data, indices, axis)</p>
 
 ## onnx::GatherElements
  <p><i>
@@ -865,9 +865,9 @@ Example 2:
       [7, 2, 3],
   ]
 ```
-</i></p> 
-<p><b>onnx::GatherElements(data, indices)</b> = onnx_ops.gatherelements(data, indices, axis)</p> 
-<p>Python version: onnx_ops.gatherelements(data, indices, axis)</p> 
+</i></p>
+<p><b>onnx::GatherElements(data, indices)</b> = onnx_ops.gatherelements(data, indices, axis)</p>
+<p>Python version: onnx_ops.gatherelements(data, indices, axis)</p>
 
 ## onnx::GatherND
  <p><i>
@@ -962,9 +962,9 @@ This operator is the inverse of `ScatterND`.
   output  = [[2,3],[4,5]]             # output_shape = [2, 2]
 
 
-</i></p> 
-<p><b>onnx::GatherND(data, indices)</b> = onnx_ops.gathernd(data, indices, batch_dims)</p> 
-<p>Python version: onnx_ops.gathernd(data, indices, batch_dims)</p> 
+</i></p>
+<p><b>onnx::GatherND(data, indices)</b> = onnx_ops.gathernd(data, indices, batch_dims)</p>
+<p>Python version: onnx_ops.gathernd(data, indices, batch_dims)</p>
 
 ## onnx::Gemm
  <p><i>General Matrix multiplication:
@@ -980,33 +980,33 @@ and output tensor Y has shape (M, N). A will be transposed before doing the
 computation if attribute transA is non-zero, same for B and transB.
 This operator supports **unidirectional broadcasting** (tensor C should be unidirectional broadcastable to tensor A * B); for more details please check [the doc](Broadcasting.md).
 This operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.
-</i></p> 
-<p><b>onnx::Gemm(A, B, C)</b> = onnx_ops.gemm(A, B, C, alpha, beta, transA, transB)</p> 
-<p>Python version: onnx_ops.gemm(A, B, C, alpha, beta, transA, transB)</p> 
+</i></p>
+<p><b>onnx::Gemm(A, B, C)</b> = onnx_ops.gemm(A, B, C, alpha, beta, transA, transB)</p>
+<p>Python version: onnx_ops.gemm(A, B, C, alpha, beta, transA, transB)</p>
 
 ## onnx::GlobalAveragePool
  <p><i>
  GlobalAveragePool consumes an input tensor X and applies average pooling across
  the values in the same channel. This is equivalent to AveragePool with kernel size
- equal to the spatial dimension of input tensor.</i></p> 
-<p><b>onnx::GlobalAveragePool(X)</b> = onnx_ops.globalaveragepool(X)</p> 
-<p>Python version: onnx_ops.globalaveragepool(X)</p> 
+ equal to the spatial dimension of input tensor.</i></p>
+<p><b>onnx::GlobalAveragePool(X)</b> = onnx_ops.globalaveragepool(X)</p>
+<p>Python version: onnx_ops.globalaveragepool(X)</p>
 
 ## onnx::GlobalLpPool
  <p><i>
  GlobalLpPool consumes an input tensor X and applies lp pool pooling across
  the values in the same channel. This is equivalent to LpPool with kernel size
- equal to the spatial dimension of input tensor.</i></p> 
-<p><b>onnx::GlobalLpPool(X)</b> = onnx_ops.globallppool(X, p)</p> 
-<p>Python version: onnx_ops.globallppool(X, p)</p> 
+ equal to the spatial dimension of input tensor.</i></p>
+<p><b>onnx::GlobalLpPool(X)</b> = onnx_ops.globallppool(X, p)</p>
+<p>Python version: onnx_ops.globallppool(X, p)</p>
 
 ## onnx::GlobalMaxPool
  <p><i>
  GlobalMaxPool consumes an input tensor X and applies max pooling across
  the values in the same channel. This is equivalent to MaxPool with kernel size
- equal to the spatial dimension of input tensor.</i></p> 
-<p><b>onnx::GlobalMaxPool(X)</b> = onnx_ops.globalmaxpool(X)</p> 
-<p>Python version: onnx_ops.globalmaxpool(X)</p> 
+ equal to the spatial dimension of input tensor.</i></p>
+<p><b>onnx::GlobalMaxPool(X)</b> = onnx_ops.globalmaxpool(X)</p>
+<p>Python version: onnx_ops.globalmaxpool(X)</p>
 
 ## onnx::Greater
  <p><i>
@@ -1014,9 +1014,9 @@ Returns the tensor resulted from performing the `greater` logical operation
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Greater(A, B)</b> = onnx_ops.greater(A, B)</p> 
-<p>Python version: onnx_ops.greater(A, B)</p> 
+</i></p>
+<p><b>onnx::Greater(A, B)</b> = onnx_ops.greater(A, B)</p>
+<p>Python version: onnx_ops.greater(A, B)</p>
 
 ## onnx::GreaterOrEqual
  <p><i>
@@ -1024,27 +1024,27 @@ Returns the tensor resulted from performing the `greater_equal` logical operatio
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::GreaterOrEqual(A, B)</b> = onnx_ops.greaterorequal(A, B)</p> 
-<p>Python version: onnx_ops.greaterorequal(A, B)</p> 
+</i></p>
+<p><b>onnx::GreaterOrEqual(A, B)</b> = onnx_ops.greaterorequal(A, B)</p>
+<p>Python version: onnx_ops.greaterorequal(A, B)</p>
 
 ## onnx::HardSigmoid
  <p><i>
 HardSigmoid takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the HardSigmoid function, y = max(0, min(1, alpha * x + beta)),
 is applied to the tensor elementwise.
-</i></p> 
-<p><b>onnx::HardSigmoid(X)</b> = onnx_ops.hardsigmoid(X, alpha, beta)</p> 
-<p>Python version: onnx_ops.hardsigmoid(X, alpha, beta)</p> 
+</i></p>
+<p><b>onnx::HardSigmoid(X)</b> = onnx_ops.hardsigmoid(X, alpha, beta)</p>
+<p>Python version: onnx_ops.hardsigmoid(X, alpha, beta)</p>
 
 ## onnx::HardSwish
  <p><i>
 HardSwish takes one input data (Tensor<T>) and produces one output data (Tensor<T>) where
 the HardSwish function, y = x * max(0, min(1, alpha * x + beta)) = x * HardSigmoid<alpha, beta>(x),
 where alpha = 1/6 and beta = 0.5, is applied to the tensor elementwise.
-</i></p> 
-<p><b>onnx::HardSwish(X)</b> = onnx_ops.hardswish(X)</p> 
-<p>Python version: onnx_ops.hardswish(X)</p> 
+</i></p>
+<p><b>onnx::HardSwish(X)</b> = onnx_ops.hardswish(X)</p>
+<p>Python version: onnx_ops.hardswish(X)</p>
 
 ## onnx::Hardmax
  <p><i>
@@ -1055,19 +1055,19 @@ The operator computes the hardmax values for the given input:
 The "axis" attribute indicates the dimension along which Hardmax
 will be performed. The output tensor has the same shape
 and contains the Hardmax values of the corresponding input.
-</i></p> 
-<p><b>onnx::Hardmax(input)</b> = onnx_ops.hardmax(input, axis)</p> 
-<p>Python version: onnx_ops.hardmax(input, axis)</p> 
+</i></p>
+<p><b>onnx::Hardmax(input)</b> = onnx_ops.hardmax(input, axis)</p>
+<p>Python version: onnx_ops.hardmax(input, axis)</p>
 
 ## onnx::Identity
- <p><i>Identity operator</i></p> 
-<p><b>onnx::Identity(input)</b> = onnx_ops.identity(input)</p> 
-<p>Python version: onnx_ops.identity(input)</p> 
+ <p><i>Identity operator</i></p>
+<p><b>onnx::Identity(input)</b> = onnx_ops.identity(input)</p>
+<p>Python version: onnx_ops.identity(input)</p>
 
 ## onnx::If
- <p><i>If conditional</i></p> 
-<p><b>onnx::If(cond)</b> = onnx_ops.if(cond, else_branch, then_branch)</p> 
-<p>Python version: onnx_ops.if(cond, else_branch, then_branch)</p> 
+ <p><i>If conditional</i></p>
+<p><b>onnx::If(cond)</b> = onnx_ops.if(cond, else_branch, then_branch)</p>
+<p>Python version: onnx_ops.if(cond, else_branch, then_branch)</p>
 
 ## onnx::InstanceNormalization
  <p><i>
@@ -1077,19 +1077,19 @@ https://arxiv.org/abs/1607.08022.
 y = scale * (x - mean) / sqrt(variance + epsilon) + B,
 where mean and variance are computed per instance per channel.
 
-</i></p> 
-<p><b>onnx::InstanceNormalization(input, scale, B)</b> = onnx_ops.instancenormalization(input, scale, B, epsilon)</p> 
-<p>Python version: onnx_ops.instancenormalization(input, scale, B, epsilon)</p> 
+</i></p>
+<p><b>onnx::InstanceNormalization(input, scale, B)</b> = onnx_ops.instancenormalization(input, scale, B, epsilon)</p>
+<p>Python version: onnx_ops.instancenormalization(input, scale, B, epsilon)</p>
 
 ## onnx::IsInf
- <p><i>Map infinity to true and other values to false.</i></p> 
-<p><b>onnx::IsInf(X)</b> = onnx_ops.isinf(X, detect_negative, detect_positive)</p> 
-<p>Python version: onnx_ops.isinf(X, detect_negative, detect_positive)</p> 
+ <p><i>Map infinity to true and other values to false.</i></p>
+<p><b>onnx::IsInf(X)</b> = onnx_ops.isinf(X, detect_negative, detect_positive)</p>
+<p>Python version: onnx_ops.isinf(X, detect_negative, detect_positive)</p>
 
 ## onnx::IsNaN
- <p><i>Returns which elements of the input are NaN.</i></p> 
-<p><b>onnx::IsNaN(X)</b> = onnx_ops.isnan(X)</p> 
-<p>Python version: onnx_ops.isnan(X)</p> 
+ <p><i>Returns which elements of the input are NaN.</i></p>
+<p><b>onnx::IsNaN(X)</b> = onnx_ops.isnan(X)</p>
+<p>Python version: onnx_ops.isnan(X)</p>
 
 ## onnx::LRN
  <p><i>
@@ -1103,9 +1103,9 @@ square_sum[n, c, d1, ..., dk] = sum(X[n, i, d1, ..., dk] ^ 2),
 where max(0, c - floor((size - 1) / 2)) <= i <= min(C - 1, c + ceil((size - 1) / 2)).
 
 Y[n, c, d1, ..., dk] = X[n, c, d1, ..., dk] / (bias + alpha / size * square_sum[n, c, d1, ..., dk] ) ^ beta
-</i></p> 
-<p><b>onnx::LRN(X)</b> = onnx_ops.lrn(X, alpha, beta, bias, size)</p> 
-<p>Python version: onnx_ops.lrn(X, alpha, beta, bias, size)</p> 
+</i></p>
+<p><b>onnx::LRN(X)</b> = onnx_ops.lrn(X, alpha, beta, bias, size)</p>
+<p>Python version: onnx_ops.lrn(X, alpha, beta, bias, size)</p>
 
 ## onnx::LSTM
  <p><i>
@@ -1190,18 +1190,18 @@ Equations (Default: f=Sigmoid, g=Tanh, h=Tanh):
 
   - Ht = ot (.) h(Ct)
 This operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.
-</i></p> 
-<p><b>onnx::LSTM(X, W, R, B, sequence_lens, initial_h, initial_c, P)</b> = onnx_ops.lstm(X, W, R, B, sequence_lens, initial_h, initial_c, P, activation_alpha, activation_beta, activations, clip, direction, hidden_size, input_forget, layout)</p> 
-<p>Python version: onnx_ops.lstm(X, W, R, B, sequence_lens, initial_h, initial_c, P, activation_alpha, activation_beta, activations, clip, direction, hidden_size, input_forget, layout)</p> 
+</i></p>
+<p><b>onnx::LSTM(X, W, R, B, sequence_lens, initial_h, initial_c, P)</b> = onnx_ops.lstm(X, W, R, B, sequence_lens, initial_h, initial_c, P, activation_alpha, activation_beta, activations, clip, direction, hidden_size, input_forget, layout)</p>
+<p>Python version: onnx_ops.lstm(X, W, R, B, sequence_lens, initial_h, initial_c, P, activation_alpha, activation_beta, activations, clip, direction, hidden_size, input_forget, layout)</p>
 
 ## onnx::LeakyRelu
  <p><i>
 LeakyRelu takes input data (Tensor<T>) and an argument alpha, and produces one
 output data (Tensor<T>) where the function `f(x) = alpha * x for x < 0`,
 `f(x) = x for x >= 0`, is applied to the data tensor elementwise.
-</i></p> 
-<p><b>onnx::LeakyRelu(X)</b> = onnx_ops.leakyrelu(X, alpha)</p> 
-<p>Python version: onnx_ops.leakyrelu(X, alpha)</p> 
+</i></p>
+<p><b>onnx::LeakyRelu(X)</b> = onnx_ops.leakyrelu(X, alpha)</p>
+<p>Python version: onnx_ops.leakyrelu(X, alpha)</p>
 
 ## onnx::Less
  <p><i>
@@ -1209,9 +1209,9 @@ Returns the tensor resulted from performing the `less` logical operation
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Less(A, B)</b> = onnx_ops.less(A, B)</p> 
-<p>Python version: onnx_ops.less(A, B)</p> 
+</i></p>
+<p><b>onnx::Less(A, B)</b> = onnx_ops.less(A, B)</p>
+<p>Python version: onnx_ops.less(A, B)</p>
 
 ## onnx::LessOrEqual
  <p><i>
@@ -1219,16 +1219,16 @@ Returns the tensor resulted from performing the `less_equal` logical operation
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::LessOrEqual(A, B)</b> = onnx_ops.lessorequal(A, B)</p> 
-<p>Python version: onnx_ops.lessorequal(A, B)</p> 
+</i></p>
+<p><b>onnx::LessOrEqual(A, B)</b> = onnx_ops.lessorequal(A, B)</p>
+<p>Python version: onnx_ops.lessorequal(A, B)</p>
 
 ## onnx::Log
  <p><i>
 Calculates the natural log of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Log(input)</b> = onnx_ops.log(input)</p> 
-<p>Python version: onnx_ops.log(input)</p> 
+</i></p>
+<p><b>onnx::Log(input)</b> = onnx_ops.log(input)</p>
+<p>Python version: onnx_ops.log(input)</p>
 
 ## onnx::LogSoftmax
  <p><i>
@@ -1239,9 +1239,9 @@ The operator computes the log of softmax values for the given input:
 The "axis" attribute indicates the dimension along which LogSoftmax
 will be performed. The output tensor has the same shape
 and contains the LogSoftmax values of the corresponding input.
-</i></p> 
-<p><b>onnx::LogSoftmax(input)</b> = onnx_ops.logsoftmax(input, axis)</p> 
-<p>Python version: onnx_ops.logsoftmax(input, axis)</p> 
+</i></p>
+<p><b>onnx::LogSoftmax(input)</b> = onnx_ops.logsoftmax(input, axis)</p>
+<p>Python version: onnx_ops.logsoftmax(input, axis)</p>
 
 ## onnx::Loop
  <p><i>
@@ -1380,16 +1380,16 @@ the scan_outputs from the previous layer, possibly going through several
 point-wise operators (e.g. dropout, residual connections, linear layer).
 
 The input/output of subgraph (produced by loop node) matching is based on order instead of name. The implementation will figure out the names based on this order.
-</i></p> 
-<p><b>onnx::Loop(M, cond, v_initial)</b> = onnx_ops.loop(M, cond, v_initial, body)</p> 
-<p>Python version: onnx_ops.loop(M, cond, v_initial, body)</p> 
+</i></p>
+<p><b>onnx::Loop(M, cond, v_initial)</b> = onnx_ops.loop(M, cond, v_initial, body)</p>
+<p>Python version: onnx_ops.loop(M, cond, v_initial, body)</p>
 
 ## onnx::LpNormalization
  <p><i>
 Given a matrix, apply Lp-normalization along the provided axis.
-</i></p> 
-<p><b>onnx::LpNormalization(input)</b> = onnx_ops.lpnormalization(input, axis, p)</p> 
-<p>Python version: onnx_ops.lpnormalization(input, axis, p)</p> 
+</i></p>
+<p><b>onnx::LpNormalization(input)</b> = onnx_ops.lpnormalization(input, axis, p)</p>
+<p>Python version: onnx_ops.lpnormalization(input, axis, p)</p>
 
 ## onnx::LpPool
  <p><i>
@@ -1397,33 +1397,33 @@ Given a matrix, apply Lp-normalization along the provided axis.
  the tensor according to kernel sizes, stride sizes, and pad lengths.
  Lp pooling consisting of computing the Lp norm on all values of a subset
  of the input tensor according to the kernel size and downsampling the
- data into the output tensor Y for further processing.</i></p> 
-<p><b>onnx::LpPool(X)</b> = onnx_ops.lppool(X, auto_pad, kernel_shape, p, pads, strides)</p> 
-<p>Python version: onnx_ops.lppool(X, auto_pad, kernel_shape, p, pads, strides)</p> 
+ data into the output tensor Y for further processing.</i></p>
+<p><b>onnx::LpPool(X)</b> = onnx_ops.lppool(X, auto_pad, kernel_shape, p, pads, strides)</p>
+<p>Python version: onnx_ops.lppool(X, auto_pad, kernel_shape, p, pads, strides)</p>
 
 ## onnx::MatMul
  <p><i>
 Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html
-</i></p> 
-<p><b>onnx::MatMul(A, B)</b> = onnx_ops.matmul(A, B)</p> 
-<p>Python version: onnx_ops.matmul(A, B)</p> 
+</i></p>
+<p><b>onnx::MatMul(A, B)</b> = onnx_ops.matmul(A, B)</p>
+<p>Python version: onnx_ops.matmul(A, B)</p>
 
 ## onnx::MatMulInteger
  <p><i>
 Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html.
 The production MUST never overflow. The accumulation may overflow if and only if in 32 bits.
-</i></p> 
-<p><b>onnx::MatMulInteger(A, B, a_zero_point, b_zero_point)</b> = onnx_ops.matmulinteger(A, B, a_zero_point, b_zero_point)</p> 
-<p>Python version: onnx_ops.matmulinteger(A, B, a_zero_point, b_zero_point)</p> 
+</i></p>
+<p><b>onnx::MatMulInteger(A, B, a_zero_point, b_zero_point)</b> = onnx_ops.matmulinteger(A, B, a_zero_point, b_zero_point)</p>
+<p>Python version: onnx_ops.matmulinteger(A, B, a_zero_point, b_zero_point)</p>
 
 ## onnx::Max
  <p><i>
 Element-wise max of each of the input tensors (with Numpy-style broadcasting support).
 All inputs and outputs must have the same data type.
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Max(data_0)</b> = onnx_ops.max(data_0)</p> 
-<p>Python version: onnx_ops.max(data_0)</p> 
+</i></p>
+<p><b>onnx::Max(data_0)</b> = onnx_ops.max(data_0)</p>
+<p>Python version: onnx_ops.max(data_0)</p>
 
 ## onnx::MaxPool
  <p><i>
@@ -1454,18 +1454,18 @@ This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; fo
  ```
  pad_shape[i] = (output_spatial_shape[i] - 1) * strides_spatial_shape[i] + ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) - input_spatial_shape[i]
  ```
- The output of each pooling window is maximum number of elements exclude pad. 
- </i></p> 
-<p><b>onnx::MaxPool(X)</b> = onnx_ops.maxpool(X, auto_pad, ceil_mode, dilations, kernel_shape, pads, storage_order, strides)</p> 
-<p>Python version: onnx_ops.maxpool(X, auto_pad, ceil_mode, dilations, kernel_shape, pads, storage_order, strides)</p> 
+ The output of each pooling window is maximum number of elements exclude pad.
+ </i></p>
+<p><b>onnx::MaxPool(X)</b> = onnx_ops.maxpool(X, auto_pad, ceil_mode, dilations, kernel_shape, pads, storage_order, strides)</p>
+<p>Python version: onnx_ops.maxpool(X, auto_pad, ceil_mode, dilations, kernel_shape, pads, storage_order, strides)</p>
 
 ## onnx::MaxRoiPool
  <p><i>
  ROI max pool consumes an input tensor X and region of interests (RoIs) to
  apply max pooling across each RoI, to produce output 4-D tensor of shape
- (num_rois, channels, pooled_shape[0], pooled_shape[1]).</i></p> 
-<p><b>onnx::MaxRoiPool(X, rois)</b> = onnx_ops.maxroipool(X, rois, pooled_shape, spatial_scale)</p> 
-<p>Python version: onnx_ops.maxroipool(X, rois, pooled_shape, spatial_scale)</p> 
+ (num_rois, channels, pooled_shape[0], pooled_shape[1]).</i></p>
+<p><b>onnx::MaxRoiPool(X, rois)</b> = onnx_ops.maxroipool(X, rois, pooled_shape, spatial_scale)</p>
+<p>Python version: onnx_ops.maxroipool(X, rois, pooled_shape, spatial_scale)</p>
 
 ## onnx::MaxUnpool
  <p><i>
@@ -1487,35 +1487,35 @@ MaxUnpool can produce the same output size for several input sizes, which makes 
 In addition to the inputs, MaxUnpool takes three attributes, namely kernel_shape, strides, and pads,
  which define the exact unpooling op. The attributes typically have the same values as the corrsponding
  pooling op that the unpooling op is trying to invert.
-</i></p> 
-<p><b>onnx::MaxUnpool(X, I, output_shape)</b> = onnx_ops.maxunpool(X, I, output_shape, kernel_shape, pads, strides)</p> 
-<p>Python version: onnx_ops.maxunpool(X, I, output_shape, kernel_shape, pads, strides)</p> 
+</i></p>
+<p><b>onnx::MaxUnpool(X, I, output_shape)</b> = onnx_ops.maxunpool(X, I, output_shape, kernel_shape, pads, strides)</p>
+<p>Python version: onnx_ops.maxunpool(X, I, output_shape, kernel_shape, pads, strides)</p>
 
 ## onnx::Mean
  <p><i>
 Element-wise mean of each of the input tensors (with Numpy-style broadcasting support).
 All inputs and outputs must have the same data type.
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Mean(data_0)</b> = onnx_ops.mean(data_0)</p> 
-<p>Python version: onnx_ops.mean(data_0)</p> 
+</i></p>
+<p><b>onnx::Mean(data_0)</b> = onnx_ops.mean(data_0)</p>
+<p>Python version: onnx_ops.mean(data_0)</p>
 
 ## onnx::MeanVarianceNormalization
  <p><i>
       A MeanVarianceNormalization Function: Perform mean variance normalization
       on the input tensor X using formula: <br/> ``` (X-EX)/sqrt(E(X-EX)^2) ```
-</i></p> 
-<p><b>onnx::MeanVarianceNormalization(X)</b> = onnx_ops.meanvariancenormalization(X, axes)</p> 
-<p>Python version: onnx_ops.meanvariancenormalization(X, axes)</p> 
+</i></p>
+<p><b>onnx::MeanVarianceNormalization(X)</b> = onnx_ops.meanvariancenormalization(X, axes)</p>
+<p>Python version: onnx_ops.meanvariancenormalization(X, axes)</p>
 
 ## onnx::Min
  <p><i>
 Element-wise min of each of the input tensors (with Numpy-style broadcasting support).
 All inputs and outputs must have the same data type.
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Min(data_0)</b> = onnx_ops.min(data_0)</p> 
-<p>Python version: onnx_ops.min(data_0)</p> 
+</i></p>
+<p><b>onnx::Min(data_0)</b> = onnx_ops.min(data_0)</p>
+<p>Python version: onnx_ops.min(data_0)</p>
 
 ## onnx::Mod
  <p><i>
@@ -1532,9 +1532,9 @@ This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; fo
     In case of dividend being zero, the results will be platform dependent.
 
   This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Mod(A, B)</b> = onnx_ops.mod(A, B, fmod)</p> 
-<p>Python version: onnx_ops.mod(A, B, fmod)</p> 
+</i></p>
+<p><b>onnx::Mod(A, B)</b> = onnx_ops.mod(A, B, fmod)</p>
+<p>Python version: onnx_ops.mod(A, B, fmod)</p>
 
 ## onnx::Mul
  <p><i>
@@ -1543,26 +1543,26 @@ Performs element-wise binary multiplication (with Numpy-style broadcasting suppo
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
 
 (Opset 14 change): Extend supported types to include uint8, int8, uint16, and int16.
-</i></p> 
-<p><b>onnx::Mul(A, B)</b> = onnx_ops.mul(A, B)</p> 
-<p>Python version: onnx_ops.mul(A, B)</p> 
+</i></p>
+<p><b>onnx::Mul(A, B)</b> = onnx_ops.mul(A, B)</p>
+<p>Python version: onnx_ops.mul(A, B)</p>
 
 ## onnx::Multinomial
  <p><i>
 Generate a tensor of samples from a multinomial distribution according to the probabilities
 of each of the possible outcomes.
-</i></p> 
-<p><b>onnx::Multinomial(input)</b> = onnx_ops.multinomial(input, dtype, sample_size, seed)</p> 
-<p>Python version: onnx_ops.multinomial(input, dtype, sample_size, seed)</p> 
+</i></p>
+<p><b>onnx::Multinomial(input)</b> = onnx_ops.multinomial(input, dtype, sample_size, seed)</p>
+<p>Python version: onnx_ops.multinomial(input, dtype, sample_size, seed)</p>
 
 ## onnx::Neg
  <p><i>
 Neg takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where each element flipped sign, y = -x, is applied to
 the tensor elementwise.
-</i></p> 
-<p><b>onnx::Neg(X)</b> = onnx_ops.neg(X)</p> 
-<p>Python version: onnx_ops.neg(X)</p> 
+</i></p>
+<p><b>onnx::Neg(X)</b> = onnx_ops.neg(X)</p>
+<p>Python version: onnx_ops.neg(X)</p>
 
 ## onnx::NegativeLogLikelihoodLoss
  <p><i>
@@ -1652,9 +1652,9 @@ Example 3:
     loss = np.sum(loss) / weight_total
     // print(loss)
     // -1.57
-</i></p> 
-<p><b>onnx::NegativeLogLikelihoodLoss(input, target, weight)</b> = onnx_ops.negativeloglikelihoodloss(input, target, weight, ignore_index, reduction)</p> 
-<p>Python version: onnx_ops.negativeloglikelihoodloss(input, target, weight, ignore_index, reduction)</p> 
+</i></p>
+<p><b>onnx::NegativeLogLikelihoodLoss(input, target, weight)</b> = onnx_ops.negativeloglikelihoodloss(input, target, weight, ignore_index, reduction)</p>
+<p>Python version: onnx_ops.negativeloglikelihoodloss(input, target, weight, ignore_index, reduction)</p>
 
 ## onnx::NonMaxSuppression
  <p><i>
@@ -1665,9 +1665,9 @@ orthogonal transformations and translations of the coordinate system; thus trans
 result in the same boxes being selected by the algorithm.
 The selected_indices output is a set of integers indexing into the input collection of bounding boxes representing the selected boxes.
 The bounding box coordinates corresponding to the selected indices can then be obtained using the Gather or GatherND operation.
-</i></p> 
-<p><b>onnx::NonMaxSuppression(boxes, scores, max_output_boxes_per_class, iou_threshold, score_threshold)</b> = onnx_ops.nonmaxsuppression(boxes, scores, max_output_boxes_per_class, iou_threshold, score_threshold, center_point_box)</p> 
-<p>Python version: onnx_ops.nonmaxsuppression(boxes, scores, max_output_boxes_per_class, iou_threshold, score_threshold, center_point_box)</p> 
+</i></p>
+<p><b>onnx::NonMaxSuppression(boxes, scores, max_output_boxes_per_class, iou_threshold, score_threshold)</b> = onnx_ops.nonmaxsuppression(boxes, scores, max_output_boxes_per_class, iou_threshold, score_threshold, center_point_box)</p>
+<p>Python version: onnx_ops.nonmaxsuppression(boxes, scores, max_output_boxes_per_class, iou_threshold, score_threshold, center_point_box)</p>
 
 ## onnx::NonZero
  <p><i>
@@ -1676,16 +1676,16 @@ The bounding box coordinates corresponding to the selected indices can then be o
     NonZero behaves similar to numpy.nonzero:
     https://docs.scipy.org/doc/numpy/reference/generated/numpy.nonzero.html,
     but for scalar input, NonZero produces output shape (0, N) instead of (1, N), which is different from Numpy's behavior.
-</i></p> 
-<p><b>onnx::NonZero(X)</b> = onnx_ops.nonzero(X)</p> 
-<p>Python version: onnx_ops.nonzero(X)</p> 
+</i></p>
+<p><b>onnx::NonZero(X)</b> = onnx_ops.nonzero(X)</p>
+<p>Python version: onnx_ops.nonzero(X)</p>
 
 ## onnx::Not
  <p><i>
 Returns the negation of the input tensor element-wise.
-</i></p> 
-<p><b>onnx::Not(X)</b> = onnx_ops.not(X)</p> 
-<p>Python version: onnx_ops.not(X)</p> 
+</i></p>
+<p><b>onnx::Not(X)</b> = onnx_ops.not(X)</p>
+<p>Python version: onnx_ops.not(X)</p>
 
 ## onnx::OneHot
  <p><i>
@@ -1708,32 +1708,32 @@ Returns the negation of the input tensor element-wise.
     when axis = -1:
     output[i, j, k, input[i, j, k]] = 1 for all i, j, k and 0 otherwise.
 
-</i></p> 
-<p><b>onnx::OneHot(indices, depth, values)</b> = onnx_ops.onehot(indices, depth, values, axis)</p> 
-<p>Python version: onnx_ops.onehot(indices, depth, values, axis)</p> 
+</i></p>
+<p><b>onnx::OneHot(indices, depth, values)</b> = onnx_ops.onehot(indices, depth, values, axis)</p>
+<p>Python version: onnx_ops.onehot(indices, depth, values, axis)</p>
 
 ## onnx::Optional
  <p><i>
 Constructs an optional-type value containing either an empty optional of a certain type specified by the attribute,
 or a non-empty value containing the input element.
-</i></p> 
-<p><b>onnx::Optional(input)</b> = onnx_ops.optional(input, type)</p> 
-<p>Python version: onnx_ops.optional(input, type)</p> 
+</i></p>
+<p><b>onnx::Optional(input)</b> = onnx_ops.optional(input, type)</p>
+<p>Python version: onnx_ops.optional(input, type)</p>
 
 ## onnx::OptionalGetElement
  <p><i>
 Outputs the element in the optional-type input. It is an error if the input value does not have an element
 and the behavior is undefined in this case.
-</i></p> 
-<p><b>onnx::OptionalGetElement(input)</b> = onnx_ops.optionalgetelement(input)</p> 
-<p>Python version: onnx_ops.optionalgetelement(input)</p> 
+</i></p>
+<p><b>onnx::OptionalGetElement(input)</b> = onnx_ops.optionalgetelement(input)</p>
+<p>Python version: onnx_ops.optionalgetelement(input)</p>
 
 ## onnx::OptionalHasElement
  <p><i>
 Returns true if the optional-type input contains an element. If it is an empty optional-type, this op returns false.
-</i></p> 
-<p><b>onnx::OptionalHasElement(input)</b> = onnx_ops.optionalhaselement(input)</p> 
-<p>Python version: onnx_ops.optionalhaselement(input)</p> 
+</i></p>
+<p><b>onnx::OptionalHasElement(input)</b> = onnx_ops.optionalhaselement(input)</p>
+<p>Python version: onnx_ops.optionalhaselement(input)</p>
 
 ## onnx::Or
  <p><i>
@@ -1741,18 +1741,18 @@ Returns the tensor resulted from performing the `or` logical operation
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Or(A, B)</b> = onnx_ops.or(A, B)</p> 
-<p>Python version: onnx_ops.or(A, B)</p> 
+</i></p>
+<p><b>onnx::Or(A, B)</b> = onnx_ops.or(A, B)</p>
+<p>Python version: onnx_ops.or(A, B)</p>
 
 ## onnx::PRelu
  <p><i>
 PRelu takes input data (Tensor<T>) and slope tensor as input, and produces one
 output data (Tensor<T>) where the function `f(x) = slope * x for x < 0`,
 `f(x) = x for x >= 0`., is applied to the data tensor elementwise.
-This operator supports **unidirectional broadcasting** (tensor slope should be unidirectional broadcastable to input tensor X); for more details please check [the doc](Broadcasting.md).</i></p> 
-<p><b>onnx::PRelu(X, slope)</b> = onnx_ops.prelu(X, slope)</p> 
-<p>Python version: onnx_ops.prelu(X, slope)</p> 
+This operator supports **unidirectional broadcasting** (tensor slope should be unidirectional broadcastable to input tensor X); for more details please check [the doc](Broadcasting.md).</i></p>
+<p><b>onnx::PRelu(X, slope)</b> = onnx_ops.prelu(X, slope)</p>
+<p>Python version: onnx_ops.prelu(X, slope)</p>
 
 ## onnx::Pad
  <p><i>
@@ -1831,18 +1831,18 @@ Example 3 (`edge` mode):
       [4.5, 4.5, 4.5, 5.7],
   ]
 
-</i></p> 
-<p><b>onnx::Pad(data, pads, constant_value)</b> = onnx_ops.pad(data, pads, constant_value, mode)</p> 
-<p>Python version: onnx_ops.pad(data, pads, constant_value, mode)</p> 
+</i></p>
+<p><b>onnx::Pad(data, pads, constant_value)</b> = onnx_ops.pad(data, pads, constant_value, mode)</p>
+<p>Python version: onnx_ops.pad(data, pads, constant_value, mode)</p>
 
 ## onnx::Pow
  <p><i>
 Pow takes input data (Tensor<T>) and exponent Tensor, and
 produces one output data (Tensor<T>) where the function `f(x) = x^exponent`,
 is applied to the data tensor elementwise.
-This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).</i></p> 
-<p><b>onnx::Pow(X, Y)</b> = onnx_ops.pow(X, Y)</p> 
-<p>Python version: onnx_ops.pow(X, Y)</p> 
+This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).</i></p>
+<p><b>onnx::Pow(X, Y)</b> = onnx_ops.pow(X, Y)</p>
+<p>Python version: onnx_ops.pow(X, Y)</p>
 
 ## onnx::QLinearConv
  <p><i>
@@ -1853,9 +1853,9 @@ It means they must be either scalars (per tensor) or 1-D tensors (per output cha
 Each input or output and its related zero point must have same type.
 When bias is present it must be quantized using scale = input scale * weight scale and
 zero point as 0.
-</i></p> 
-<p><b>onnx::QLinearConv(x, x_scale, x_zero_point, w, w_scale, w_zero_point, y_scale, y_zero_point, B)</b> = onnx_ops.qlinearconv(x, x_scale, x_zero_point, w, w_scale, w_zero_point, y_scale, y_zero_point, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p> 
-<p>Python version: onnx_ops.qlinearconv(x, x_scale, x_zero_point, w, w_scale, w_zero_point, y_scale, y_zero_point, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p> 
+</i></p>
+<p><b>onnx::QLinearConv(x, x_scale, x_zero_point, w, w_scale, w_zero_point, y_scale, y_zero_point, B)</b> = onnx_ops.qlinearconv(x, x_scale, x_zero_point, w, w_scale, w_zero_point, y_scale, y_zero_point, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p>
+<p>Python version: onnx_ops.qlinearconv(x, x_scale, x_zero_point, w, w_scale, w_zero_point, y_scale, y_zero_point, B, auto_pad, dilations, group, kernel_shape, pads, strides)</p>
 
 ## onnx::QLinearMatMul
  <p><i>
@@ -1870,9 +1870,9 @@ an M element vector [v_1, v_2, ..., v_M] for per row quantization and K element 
 for per column quantization. If the input is N-D tensor with shape [D1, D2, M, K] then zero point and scale tensor may
 have shape [D1, D2, M, 1] for per row quantization and shape [D1, D2, 1, K] for per column quantization.
 Production must never overflow, and accumulation may overflow if and only if in 32 bits.
-</i></p> 
-<p><b>onnx::QLinearMatMul(a, a_scale, a_zero_point, b, b_scale, b_zero_point, y_scale, y_zero_point)</b> = onnx_ops.qlinearmatmul(a, a_scale, a_zero_point, b, b_scale, b_zero_point, y_scale, y_zero_point)</p> 
-<p>Python version: onnx_ops.qlinearmatmul(a, a_scale, a_zero_point, b, b_scale, b_zero_point, y_scale, y_zero_point)</p> 
+</i></p>
+<p><b>onnx::QLinearMatMul(a, a_scale, a_zero_point, b, b_scale, b_zero_point, y_scale, y_zero_point)</b> = onnx_ops.qlinearmatmul(a, a_scale, a_zero_point, b, b_scale, b_zero_point, y_scale, y_zero_point)</p>
+<p>Python version: onnx_ops.qlinearmatmul(a, a_scale, a_zero_point, b, b_scale, b_zero_point, y_scale, y_zero_point)</p>
 
 ## onnx::QuantizeLinear
  <p><i>
@@ -1881,9 +1881,9 @@ The scale factor and zero point must have same shape, and can be either a scalar
 The quantization formula is y = saturate ((x / y_scale) + y_zero_point).
 For saturation, it saturates to [0, 255] if it's uint8, or [-128, 127] if it's int8.
 For (x / y_scale), it's rounding to nearest ties to even. Refer to https://en.wikipedia.org/wiki/Rounding for details. 'y_zero_point' and 'y' must have same type.
-</i></p> 
-<p><b>onnx::QuantizeLinear(x, y_scale, y_zero_point)</b> = onnx_ops.quantizelinear(x, y_scale, y_zero_point, axis)</p> 
-<p>Python version: onnx_ops.quantizelinear(x, y_scale, y_zero_point, axis)</p> 
+</i></p>
+<p><b>onnx::QuantizeLinear(x, y_scale, y_zero_point)</b> = onnx_ops.quantizelinear(x, y_scale, y_zero_point, axis)</p>
+<p>Python version: onnx_ops.quantizelinear(x, y_scale, y_zero_point, axis)</p>
 
 ## onnx::RNN
  <p><i>
@@ -1948,9 +1948,9 @@ Equations (Default: f=Tanh):
 
   - Ht = f(Xt*(Wi^T) + Ht-1*(Ri^T) + Wbi + Rbi)
 This operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.
-</i></p> 
-<p><b>onnx::RNN(X, W, R, B, sequence_lens, initial_h)</b> = onnx_ops.rnn(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout)</p> 
-<p>Python version: onnx_ops.rnn(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout)</p> 
+</i></p>
+<p><b>onnx::RNN(X, W, R, B, sequence_lens, initial_h)</b> = onnx_ops.rnn(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout)</p>
+<p>Python version: onnx_ops.rnn(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout)</p>
 
 ## onnx::RandomNormal
  <p><i>
@@ -1961,9 +1961,9 @@ specified by `mean` and `scale`.
 The data type is specified by the 'dtype' argument. The 'dtype' argument must
 be one of the data types specified in the 'DataType' enum field in the
 TensorProto message.
-</i></p> 
-<p><b>onnx::RandomNormal()</b> = onnx_ops.randomnormal(dtype, mean, scale, seed, shape)</p> 
-<p>Python version: onnx_ops.randomnormal(dtype, mean, scale, seed, shape)</p> 
+</i></p>
+<p><b>onnx::RandomNormal()</b> = onnx_ops.randomnormal(dtype, mean, scale, seed, shape)</p>
+<p>Python version: onnx_ops.randomnormal(dtype, mean, scale, seed, shape)</p>
 
 ## onnx::RandomNormalLike
  <p><i>
@@ -1974,9 +1974,9 @@ and the parameters of the normal distribution are specified by `mean` and `scale
 The data type is specified by the 'dtype' argument, or copied from the input tensor if not provided.
 The 'dtype' argument must be one of the data types specified in the 'DataType' enum field in the
 TensorProto message, and be valid as an output type.
-</i></p> 
-<p><b>onnx::RandomNormalLike(input)</b> = onnx_ops.randomnormallike(input, dtype, mean, scale, seed)</p> 
-<p>Python version: onnx_ops.randomnormallike(input, dtype, mean, scale, seed)</p> 
+</i></p>
+<p><b>onnx::RandomNormalLike(input)</b> = onnx_ops.randomnormallike(input, dtype, mean, scale, seed)</p>
+<p>Python version: onnx_ops.randomnormallike(input, dtype, mean, scale, seed)</p>
 
 ## onnx::RandomUniform
  <p><i>
@@ -1986,9 +1986,9 @@ of the tensor is specified by the `shape` argument and the range by `low` and `h
 The data type is specified by the 'dtype' argument. The 'dtype' argument must
 be one of the data types specified in the 'DataType' enum field in the
 TensorProto message.
-</i></p> 
-<p><b>onnx::RandomUniform()</b> = onnx_ops.randomuniform(dtype, high, low, seed, shape)</p> 
-<p>Python version: onnx_ops.randomuniform(dtype, high, low, seed, shape)</p> 
+</i></p>
+<p><b>onnx::RandomUniform()</b> = onnx_ops.randomuniform(dtype, high, low, seed, shape)</p>
+<p>Python version: onnx_ops.randomuniform(dtype, high, low, seed, shape)</p>
 
 ## onnx::RandomUniformLike
  <p><i>
@@ -1999,9 +1999,9 @@ and the parameters of the uniform distribution are specified by `low` and `high`
 The data type is specified by the 'dtype' argument, or copied from the input tensor if not provided.
 The 'dtype' argument must be one of the data types specified in the 'DataType' enum field in the
 TensorProto message and be valid as an output type.
-</i></p> 
-<p><b>onnx::RandomUniformLike(input)</b> = onnx_ops.randomuniformlike(input, dtype, high, low, seed)</p> 
-<p>Python version: onnx_ops.randomuniformlike(input, dtype, high, low, seed)</p> 
+</i></p>
+<p><b>onnx::RandomUniformLike(input)</b> = onnx_ops.randomuniformlike(input, dtype, high, low, seed)</p>
+<p>Python version: onnx_ops.randomuniformlike(input, dtype, high, low, seed)</p>
 
 ## onnx::Range
  <p><i>
@@ -2030,18 +2030,18 @@ Output: [3, 6]
 Inputs: start = 10, limit = 4, delta = -2
 Output: [10, 8, 6]
 
-</i></p> 
-<p><b>onnx::Range(start, limit, delta)</b> = onnx_ops.range(start, limit, delta)</p> 
-<p>Python version: onnx_ops.range(start, limit, delta)</p> 
+</i></p>
+<p><b>onnx::Range(start, limit, delta)</b> = onnx_ops.range(start, limit, delta)</p>
+<p>Python version: onnx_ops.range(start, limit, delta)</p>
 
 ## onnx::Reciprocal
  <p><i>
 Reciprocal takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the reciprocal is, y = 1/x, is applied to
 the tensor elementwise.
-</i></p> 
-<p><b>onnx::Reciprocal(X)</b> = onnx_ops.reciprocal(X)</p> 
-<p>Python version: onnx_ops.reciprocal(X)</p> 
+</i></p>
+<p><b>onnx::Reciprocal(X)</b> = onnx_ops.reciprocal(X)</p>
+<p>Python version: onnx_ops.reciprocal(X)</p>
 
 ## onnx::ReduceL1
  <p><i>
@@ -2050,9 +2050,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceL1(data)</b> = onnx_ops.reducel1(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducel1(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceL1(data)</b> = onnx_ops.reducel1(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducel1(data, axes, keepdims)</p>
 
 ## onnx::ReduceL2
  <p><i>
@@ -2061,9 +2061,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceL2(data)</b> = onnx_ops.reducel2(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducel2(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceL2(data)</b> = onnx_ops.reducel2(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducel2(data, axes, keepdims)</p>
 
 ## onnx::ReduceLogSum
  <p><i>
@@ -2072,9 +2072,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceLogSum(data)</b> = onnx_ops.reducelogsum(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducelogsum(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceLogSum(data)</b> = onnx_ops.reducelogsum(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducelogsum(data, axes, keepdims)</p>
 
 ## onnx::ReduceLogSumExp
  <p><i>
@@ -2083,9 +2083,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceLogSumExp(data)</b> = onnx_ops.reducelogsumexp(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducelogsumnumpy.exp(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceLogSumExp(data)</b> = onnx_ops.reducelogsumexp(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducelogsumnumpy.exp(data, axes, keepdims)</p>
 
 ## onnx::ReduceMax
  <p><i>
@@ -2094,9 +2094,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceMax(data)</b> = onnx_ops.reducemax(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducemax(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceMax(data)</b> = onnx_ops.reducemax(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducemax(data, axes, keepdims)</p>
 
 ## onnx::ReduceMean
  <p><i>
@@ -2105,9 +2105,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceMean(data)</b> = onnx_ops.reducemean(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducemean(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceMean(data)</b> = onnx_ops.reducemean(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducemean(data, axes, keepdims)</p>
 
 ## onnx::ReduceMin
  <p><i>
@@ -2116,9 +2116,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceMin(data)</b> = onnx_ops.reducemin(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducemin(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceMin(data)</b> = onnx_ops.reducemin(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducemin(data, axes, keepdims)</p>
 
 ## onnx::ReduceProd
  <p><i>
@@ -2127,9 +2127,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceProd(data)</b> = onnx_ops.reduceprod(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reduceprod(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceProd(data)</b> = onnx_ops.reduceprod(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reduceprod(data, axes, keepdims)</p>
 
 ## onnx::ReduceSum
  <p><i>
@@ -2138,9 +2138,9 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceSum(data, axes)</b> = onnx_ops.reducesum(data, axes, keepdims, noop_with_empty_axes)</p> 
-<p>Python version: onnx_ops.reducesum(data, axes, keepdims, noop_with_empty_axes)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceSum(data, axes)</b> = onnx_ops.reducesum(data, axes, keepdims, noop_with_empty_axes)</p>
+<p>Python version: onnx_ops.reducesum(data, axes, keepdims, noop_with_empty_axes)</p>
 
 ## onnx::ReduceSumSquare
  <p><i>
@@ -2149,18 +2149,18 @@ tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0
 the resulting tensor has the reduced dimension pruned.
 
 The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p> 
-<p><b>onnx::ReduceSumSquare(data)</b> = onnx_ops.reducesumsquare(data, axes, keepdims)</p> 
-<p>Python version: onnx_ops.reducesumsquare(data, axes, keepdims)</p> 
+False instead of True.</i></p>
+<p><b>onnx::ReduceSumSquare(data)</b> = onnx_ops.reducesumsquare(data, axes, keepdims)</p>
+<p>Python version: onnx_ops.reducesumsquare(data, axes, keepdims)</p>
 
 ## onnx::Relu
  <p><i>
 Relu takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the rectified linear function, y = max(0, x), is applied to
 the tensor elementwise.
-</i></p> 
-<p><b>onnx::Relu(X)</b> = onnx_ops.relu(X)</p> 
-<p>Python version: onnx_ops.relu(X)</p> 
+</i></p>
+<p><b>onnx::Relu(X)</b> = onnx_ops.relu(X)</p>
+<p>Python version: onnx_ops.relu(X)</p>
 
 ## onnx::Reshape
  <p><i>
@@ -2177,18 +2177,18 @@ The input tensor's shape and the output tensor's shape are required to have the 
 If the attribute 'allowzero' is set, it is invalid for the specified shape to
 contain both a zero value and -1, as the value of the dimension corresponding
 to -1 cannot be determined uniquely.
-</i></p> 
-<p><b>onnx::Reshape(data, shape)</b> = onnx_ops.reshape(data, shape, allowzero)</p> 
-<p>Python version: onnx_ops.reshape(data, shape, allowzero)</p> 
+</i></p>
+<p><b>onnx::Reshape(data, shape)</b> = onnx_ops.reshape(data, shape, allowzero)</p>
+<p>Python version: onnx_ops.reshape(data, shape, allowzero)</p>
 
 ## onnx::Resize
  <p><i>
 Resize the input tensor. In general, it calculates every value in the output tensor as a weighted average of neighborhood (a.k.a. sampling locations) in the input tensor.
 Each dimension value of the output tensor is:
   output_dimension = floor(input_dimension * (roi_end - roi_start) * scale) if input \"sizes\" is not specified.
-</i></p> 
-<p><b>onnx::Resize(X, roi, scales, sizes)</b> = onnx_ops.resize(X, roi, scales, sizes, coordinate_transformation_mode, cubic_coeff_a, exclude_outside, extrapolation_value, mode, nearest_mode)</p> 
-<p>Python version: onnx_ops.resize(X, roi, scales, sizes, coordinate_transformation_mode, cubic_coeff_a, exclude_outside, extrapolation_value, mode, nearest_mode)</p> 
+</i></p>
+<p><b>onnx::Resize(X, roi, scales, sizes)</b> = onnx_ops.resize(X, roi, scales, sizes, coordinate_transformation_mode, cubic_coeff_a, exclude_outside, extrapolation_value, mode, nearest_mode)</p>
+<p>Python version: onnx_ops.resize(X, roi, scales, sizes, coordinate_transformation_mode, cubic_coeff_a, exclude_outside, extrapolation_value, mode, nearest_mode)</p>
 
 ## onnx::ReverseSequence
  <p><i>
@@ -2225,9 +2225,9 @@ Example 2:
             [5.0,  4.0,  6.0,  7.0 ],
             [10.0, 9.0,  8.0,  11.0],
             [15.0, 14.0, 13.0, 12.0]]
-</i></p> 
-<p><b>onnx::ReverseSequence(input, sequence_lens)</b> = onnx_ops.reversesequence(input, sequence_lens, batch_axis, time_axis)</p> 
-<p>Python version: onnx_ops.reversesequence(input, sequence_lens, batch_axis, time_axis)</p> 
+</i></p>
+<p><b>onnx::ReverseSequence(input, sequence_lens)</b> = onnx_ops.reversesequence(input, sequence_lens, batch_axis, time_axis)</p>
+<p>Python version: onnx_ops.reversesequence(input, sequence_lens, batch_axis, time_axis)</p>
 
 ## onnx::RoiAlign
  <p><i>
@@ -2242,9 +2242,9 @@ quantizations while converting from original image into feature
 map and from feature map into RoI feature; in each ROI bin,
 the value of the sampled locations are computed directly
 through bilinear interpolation.
-</i></p> 
-<p><b>onnx::RoiAlign(X, rois, batch_indices)</b> = onnx_ops.roialign(X, rois, batch_indices, mode, output_height, output_width, sampling_ratio, spatial_scale)</p> 
-<p>Python version: onnx_ops.roialign(X, rois, batch_indices, mode, output_height, output_width, sampling_ratio, spatial_scale)</p> 
+</i></p>
+<p><b>onnx::RoiAlign(X, rois, batch_indices)</b> = onnx_ops.roialign(X, rois, batch_indices, mode, output_height, output_width, sampling_ratio, spatial_scale)</p>
+<p>Python version: onnx_ops.roialign(X, rois, batch_indices, mode, output_height, output_width, sampling_ratio, spatial_scale)</p>
 
 ## onnx::Round
  <p><i>
@@ -2261,9 +2261,9 @@ round([2.3]) = [2.0]
 round([1.5]) = [2.0]
 round([-4.5]) = [-4.0]
 ```
-</i></p> 
-<p><b>onnx::Round(X)</b> = onnx_ops.round(X)</p> 
-<p>Python version: onnx_ops.round(X)</p> 
+</i></p>
+<p><b>onnx::Round(X)</b> = onnx_ops.round(X)</p>
+<p>Python version: onnx_ops.round(X)</p>
 
 ## onnx::Scan
  <p><i>
@@ -2388,9 +2388,9 @@ values are computed in the outer graph, they need to be passed in as extra state
       return %Ht, %Accumulate
     }
 
-</i></p> 
-<p><b>onnx::Scan(initial_state_and_scan_inputs)</b> = onnx_ops.scan(initial_state_and_scan_inputs, body, num_scan_inputs, scan_input_axes, scan_input_directions, scan_output_axes, scan_output_directions)</p> 
-<p>Python version: onnx_ops.scan(initial_state_and_scan_inputs, body, num_scan_inputs, scan_input_axes, scan_input_directions, scan_output_axes, scan_output_directions)</p> 
+</i></p>
+<p><b>onnx::Scan(initial_state_and_scan_inputs)</b> = onnx_ops.scan(initial_state_and_scan_inputs, body, num_scan_inputs, scan_input_axes, scan_input_directions, scan_output_axes, scan_output_directions)</p>
+<p>Python version: onnx_ops.scan(initial_state_and_scan_inputs, body, num_scan_inputs, scan_input_axes, scan_input_directions, scan_output_axes, scan_output_directions)</p>
 
 ## onnx::Scatter
  <p><i>
@@ -2447,9 +2447,9 @@ Example 2:
   axis = 1
   output = [[1.0, 1.1, 3.0, 2.1, 5.0]]
 ```
-</i></p> 
-<p><b>onnx::Scatter(data, indices, updates)</b> = onnx_ops.scatter(data, indices, updates, axis)</p> 
-<p>Python version: onnx_ops.scatter(data, indices, updates, axis)</p> 
+</i></p>
+<p><b>onnx::Scatter(data, indices, updates)</b> = onnx_ops.scatter(data, indices, updates, axis)</p>
+<p>Python version: onnx_ops.scatter(data, indices, updates, axis)</p>
 
 ## onnx::ScatterElements
  <p><i>
@@ -2504,9 +2504,9 @@ Example 2:
   axis = 1
   output = [[1.0, 1.1, 3.0, 2.1, 5.0]]
 ```
-</i></p> 
-<p><b>onnx::ScatterElements(data, indices, updates)</b> = onnx_ops.scatterelements(data, indices, updates, axis)</p> 
-<p>Python version: onnx_ops.scatterelements(data, indices, updates, axis)</p> 
+</i></p>
+<p><b>onnx::ScatterElements(data, indices, updates)</b> = onnx_ops.scatterelements(data, indices, updates, axis)</p>
+<p>Python version: onnx_ops.scatterelements(data, indices, updates, axis)</p>
 
 ## onnx::ScatterND
  <p><i>
@@ -2567,9 +2567,9 @@ Example 2:
              [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3], [4, 4, 4, 4]],
              [[8, 7, 6, 5], [4, 3, 2, 1], [1, 2, 3, 4], [5, 6, 7, 8]]]
 ```
-</i></p> 
-<p><b>onnx::ScatterND(data, indices, updates)</b> = onnx_ops.scatternd(data, indices, updates)</p> 
-<p>Python version: onnx_ops.scatternd(data, indices, updates)</p> 
+</i></p>
+<p><b>onnx::ScatterND(data, indices, updates)</b> = onnx_ops.scatternd(data, indices, updates)</p>
+<p>Python version: onnx_ops.scatternd(data, indices, updates)</p>
 
 ## onnx::Selu
  <p><i>
@@ -2577,33 +2577,33 @@ Selu takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the scaled exponential linear unit function,
 `y = gamma * (alpha * e^x - alpha) for x <= 0`, `y = gamma * x for x > 0`,
 is applied to the tensor elementwise.
-</i></p> 
-<p><b>onnx::Selu(X)</b> = onnx_ops.selu(X, alpha, gamma)</p> 
-<p>Python version: onnx_ops.selu(X, alpha, gamma)</p> 
+</i></p>
+<p><b>onnx::Selu(X)</b> = onnx_ops.selu(X, alpha, gamma)</p>
+<p>Python version: onnx_ops.selu(X, alpha, gamma)</p>
 
 ## onnx::SequenceAt
  <p><i>
 Outputs a tensor copy from the tensor at 'position' in 'input_sequence'.
 Accepted range for 'position' is in `[-n, n - 1]`, where `n` is the number of tensors in 'input_sequence'.
 Negative value means counting positions from the back.
-</i></p> 
-<p><b>onnx::SequenceAt(input_sequence, position)</b> = onnx_ops.sequenceat(input_sequence, position)</p> 
-<p>Python version: onnx_ops.sequenceat(input_sequence, position)</p> 
+</i></p>
+<p><b>onnx::SequenceAt(input_sequence, position)</b> = onnx_ops.sequenceat(input_sequence, position)</p>
+<p>Python version: onnx_ops.sequenceat(input_sequence, position)</p>
 
 ## onnx::SequenceConstruct
  <p><i>
 Construct a tensor sequence containing 'inputs' tensors.
 All tensors in 'inputs' must have the same data type.
-</i></p> 
-<p><b>onnx::SequenceConstruct(inputs)</b> = onnx_ops.sequenceconstruct(inputs)</p> 
-<p>Python version: onnx_ops.sequenceconstruct(inputs)</p> 
+</i></p>
+<p><b>onnx::SequenceConstruct(inputs)</b> = onnx_ops.sequenceconstruct(inputs)</p>
+<p>Python version: onnx_ops.sequenceconstruct(inputs)</p>
 
 ## onnx::SequenceEmpty
  <p><i>
 Construct an empty tensor sequence, with given data type.
-</i></p> 
-<p><b>onnx::SequenceEmpty()</b> = onnx_ops.sequenceempty(dtype)</p> 
-<p>Python version: onnx_ops.sequenceempty(dtype)</p> 
+</i></p>
+<p><b>onnx::SequenceEmpty()</b> = onnx_ops.sequenceempty(dtype)</p>
+<p>Python version: onnx_ops.sequenceempty(dtype)</p>
 
 ## onnx::SequenceErase
  <p><i>
@@ -2611,9 +2611,9 @@ Outputs a tensor sequence that removes the tensor at 'position' from 'input_sequ
 Accepted range for 'position' is in `[-n, n - 1]`, where `n` is the number of tensors in 'input_sequence'.
 Negative value means counting positions from the back.
 'position' is optional, by default it erases the last tensor from 'input_sequence'.
-</i></p> 
-<p><b>onnx::SequenceErase(input_sequence, position)</b> = onnx_ops.sequenceerase(input_sequence, position)</p> 
-<p>Python version: onnx_ops.sequenceerase(input_sequence, position)</p> 
+</i></p>
+<p><b>onnx::SequenceErase(input_sequence, position)</b> = onnx_ops.sequenceerase(input_sequence, position)</p>
+<p>Python version: onnx_ops.sequenceerase(input_sequence, position)</p>
 
 ## onnx::SequenceInsert
  <p><i>
@@ -2622,16 +2622,16 @@ Outputs a tensor sequence that inserts 'tensor' into 'input_sequence' at 'positi
 Accepted range for 'position' is in `[-n, n]`, where `n` is the number of tensors in 'input_sequence'.
 Negative value means counting positions from the back.
 'position' is optional, by default it inserts 'tensor' to the back of 'input_sequence'.
-</i></p> 
-<p><b>onnx::SequenceInsert(input_sequence, tensor, position)</b> = onnx_ops.sequenceinsert(input_sequence, tensor, position)</p> 
-<p>Python version: onnx_ops.sequenceinsert(input_sequence, tensor, position)</p> 
+</i></p>
+<p><b>onnx::SequenceInsert(input_sequence, tensor, position)</b> = onnx_ops.sequenceinsert(input_sequence, tensor, position)</p>
+<p>Python version: onnx_ops.sequenceinsert(input_sequence, tensor, position)</p>
 
 ## onnx::SequenceLength
  <p><i>
 Produces a scalar(tensor of empty shape) containing the number of tensors in 'input_sequence'.
-</i></p> 
-<p><b>onnx::SequenceLength(input_sequence)</b> = onnx_ops.sequencelength(input_sequence)</p> 
-<p>Python version: onnx_ops.sequencelength(input_sequence)</p> 
+</i></p>
+<p><b>onnx::SequenceLength(input_sequence)</b> = onnx_ops.sequencelength(input_sequence)</p>
+<p>Python version: onnx_ops.sequencelength(input_sequence)</p>
 
 ## onnx::Shape
  <p><i>
@@ -2664,9 +2664,9 @@ Input tensor with shape: [2, 3, 4]
 start: 1
 end: 2
 Output: [3]
-</i></p> 
-<p><b>onnx::Shape(data)</b> = onnx_ops.shape(data, end, start)</p> 
-<p>Python version: onnx_ops.shape(data, end, start)</p> 
+</i></p>
+<p><b>onnx::Shape(data)</b> = onnx_ops.shape(data, end, start)</p>
+<p>Python version: onnx_ops.shape(data, end, start)</p>
 
 ## onnx::Shrink
  <p><i>
@@ -2674,47 +2674,47 @@ Shrink takes one input data (Tensor<numeric>) and produces one Tensor output,
 having same datatype and shape with input. It has two attributes, lambd and
 bias. The formula of this operator is: If x < -lambd, y = x + bias;
 If x > lambd, y = x - bias; Otherwise, y = 0.
-</i></p> 
-<p><b>onnx::Shrink(input)</b> = onnx_ops.shrink(input, bias, lambd)</p> 
-<p>Python version: onnx_ops.shrink(input, bias, lambd)</p> 
+</i></p>
+<p><b>onnx::Shrink(input)</b> = onnx_ops.shrink(input, bias, lambd)</p>
+<p>Python version: onnx_ops.shrink(input, bias, lambd)</p>
 
 ## onnx::Sigmoid
  <p><i>
 Sigmoid takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the sigmoid function, y = 1 / (1 + exp(-x)), is applied to the
 tensor elementwise.
-</i></p> 
-<p><b>onnx::Sigmoid(X)</b> = onnx_ops.sigmoid(X)</p> 
-<p>Python version: onnx_ops.sigmoid(X)</p> 
+</i></p>
+<p><b>onnx::Sigmoid(X)</b> = onnx_ops.sigmoid(X)</p>
+<p>Python version: onnx_ops.sigmoid(X)</p>
 
 ## onnx::Sign
  <p><i>
 Calculate the sign of the given input tensor element-wise.
 If input > 0, output 1. if input < 0, output -1. if input == 0, output 0.
-</i></p> 
-<p><b>onnx::Sign(input)</b> = onnx_ops.sign(input)</p> 
-<p>Python version: onnx_ops.sign(input)</p> 
+</i></p>
+<p><b>onnx::Sign(input)</b> = onnx_ops.sign(input)</p>
+<p>Python version: onnx_ops.sign(input)</p>
 
 ## onnx::Sin
  <p><i>
 Calculates the sine of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Sin(input)</b> = onnx_ops.sin(input)</p> 
-<p>Python version: onnx_ops.numpy.sin(input)</p> 
+</i></p>
+<p><b>onnx::Sin(input)</b> = onnx_ops.sin(input)</p>
+<p>Python version: onnx_ops.numpy.sin(input)</p>
 
 ## onnx::Sinh
  <p><i>
 Calculates the hyperbolic sine of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Sinh(input)</b> = onnx_ops.sinh(input)</p> 
-<p>Python version: onnx_ops.numpy.sinh(input)</p> 
+</i></p>
+<p><b>onnx::Sinh(input)</b> = onnx_ops.sinh(input)</p>
+<p>Python version: onnx_ops.numpy.sinh(input)</p>
 
 ## onnx::Size
  <p><i>
 Takes a tensor as input and outputs a int64 scalar that equals to the total number of elements of the input tensor.
-</i></p> 
-<p><b>onnx::Size(data)</b> = onnx_ops.size(data)</p> 
-<p>Python version: onnx_ops.size(data)</p> 
+</i></p>
+<p><b>onnx::Size(data)</b> = onnx_ops.size(data)</p>
+<p>Python version: onnx_ops.size(data)</p>
 
 ## onnx::Slice
  <p><i>
@@ -2773,22 +2773,22 @@ Example 2:
   result = [
       [2, 3, 4],
   ]
-</i></p> 
-<p><b>onnx::Slice(data, starts, ends, axes, steps)</b> = onnx_ops.slice(data, starts, ends, axes, steps)</p> 
-<p>Python version: onnx_ops.slice(data, starts, ends, axes, steps)</p> 
+</i></p>
+<p><b>onnx::Slice(data, starts, ends, axes, steps)</b> = onnx_ops.slice(data, starts, ends, axes, steps)</p>
+<p>Python version: onnx_ops.slice(data, starts, ends, axes, steps)</p>
 
 ## onnx::Softmax
  <p><i>
 The operator computes the normalized exponential values for the given input:
 
- Softmax(input, axis) = Exp(input) / ReduceSum(Exp(input), axis=axis, keepdims=1) 
+ Softmax(input, axis) = Exp(input) / ReduceSum(Exp(input), axis=axis, keepdims=1)
 
 The "axis" attribute indicates the dimension along which Softmax
 will be performed. The output tensor has the same shape
 and contains the Softmax values of the corresponding input.
-</i></p> 
-<p><b>onnx::Softmax(input)</b> = onnx_ops.softmax(input, axis)</p> 
-<p>Python version: onnx_ops.softmax(input, axis)</p> 
+</i></p>
+<p><b>onnx::Softmax(input)</b> = onnx_ops.softmax(input, axis)</p>
+<p>Python version: onnx_ops.softmax(input, axis)</p>
 
 ## onnx::SoftmaxCrossEntropyLoss
  <p><i>Loss function that measures the softmax cross entropy
@@ -2822,41 +2822,41 @@ If reduction = 'none', the output is L with shape (N, D1, D2, ..., Dk).
 If reduction = 'sum', the output is scalar: Sum(L).
 If reduction = 'mean', the output is scalar: ReduceMean(L), or if weight is provided: ReduceSum(L) / ReduceSum(W),
 where tensor W is of shape (N, D1, D2, ..., Dk) and W[n][d1][d2]...[dk] = weights[labels[i][d1][d2]...[dk]].
-</i></p> 
-<p><b>onnx::SoftmaxCrossEntropyLoss(scores, labels, weights)</b> = onnx_ops.softmaxcrossentropyloss(scores, labels, weights, ignore_index, reduction)</p> 
-<p>Python version: onnx_ops.softmaxcrossentropyloss(scores, labels, weights, ignore_index, reduction)</p> 
+</i></p>
+<p><b>onnx::SoftmaxCrossEntropyLoss(scores, labels, weights)</b> = onnx_ops.softmaxcrossentropyloss(scores, labels, weights, ignore_index, reduction)</p>
+<p>Python version: onnx_ops.softmaxcrossentropyloss(scores, labels, weights, ignore_index, reduction)</p>
 
 ## onnx::Softplus
  <p><i>
 Softplus takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the softplus function, y = ln(exp(x) + 1), is applied to
 the tensor elementwise.
-</i></p> 
-<p><b>onnx::Softplus(X)</b> = onnx_ops.softplus(X)</p> 
-<p>Python version: onnx_ops.softplus(X)</p> 
+</i></p>
+<p><b>onnx::Softplus(X)</b> = onnx_ops.softplus(X)</p>
+<p>Python version: onnx_ops.softplus(X)</p>
 
 ## onnx::Softsign
  <p><i>
 Calculates the softsign (x/(1+|x|)) of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Softsign(input)</b> = onnx_ops.softsign(input)</p> 
-<p>Python version: onnx_ops.softsign(input)</p> 
+</i></p>
+<p><b>onnx::Softsign(input)</b> = onnx_ops.softsign(input)</p>
+<p>Python version: onnx_ops.softsign(input)</p>
 
 ## onnx::SpaceToDepth
  <p><i>SpaceToDepth rearranges blocks of spatial data into depth. More specifically,
 this op outputs a copy of the input tensor where values from the height and width dimensions
 are moved to the depth dimension.
-</i></p> 
-<p><b>onnx::SpaceToDepth(input)</b> = onnx_ops.spacetodepth(input, blocksize)</p> 
-<p>Python version: onnx_ops.spacetodepth(input, blocksize)</p> 
+</i></p>
+<p><b>onnx::SpaceToDepth(input)</b> = onnx_ops.spacetodepth(input, blocksize)</p>
+<p>Python version: onnx_ops.spacetodepth(input, blocksize)</p>
 
 ## onnx::Split
  <p><i>Split a tensor into a list of tensors, along the specified
 'axis'. Lengths of the parts can be specified using input 'split'.
 Otherwise, the tensor is split to equal sized parts.
-</i></p> 
-<p><b>onnx::Split(input, split)</b> = onnx_ops.split(input, split, axis)</p> 
-<p>Python version: onnx_ops.split(input, split, axis)</p> 
+</i></p>
+<p><b>onnx::Split(input, split)</b> = onnx_ops.split(input, split, axis)</p>
+<p>Python version: onnx_ops.split(input, split, axis)</p>
 
 ## onnx::SplitToSequence
  <p><i>Split a tensor into a sequence of tensors, along the specified
@@ -2869,18 +2869,18 @@ by 'split'.
 Otherwise, the tensor is split into 'size(split)' chunks, with lengths of the parts on 'axis'
 specified in 'split'. In this scenario, the sum of entries in 'split' must be equal to the
 dimension size of input tensor on 'axis'.
-</i></p> 
-<p><b>onnx::SplitToSequence(input, split)</b> = onnx_ops.splittosequence(input, split, axis, keepdims)</p> 
-<p>Python version: onnx_ops.splittosequence(input, split, axis, keepdims)</p> 
+</i></p>
+<p><b>onnx::SplitToSequence(input, split)</b> = onnx_ops.splittosequence(input, split, axis, keepdims)</p>
+<p>Python version: onnx_ops.splittosequence(input, split, axis, keepdims)</p>
 
 ## onnx::Sqrt
  <p><i>
 Square root takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the square root is, y = x^0.5, is applied to
 the tensor elementwise. If x is negative, then it will return NaN.
-</i></p> 
-<p><b>onnx::Sqrt(X)</b> = onnx_ops.sqrt(X)</p> 
-<p>Python version: onnx_ops.sqrt(X)</p> 
+</i></p>
+<p><b>onnx::Sqrt(X)</b> = onnx_ops.sqrt(X)</p>
+<p>Python version: onnx_ops.sqrt(X)</p>
 
 ## onnx::Squeeze
  <p><i>
@@ -2888,9 +2888,9 @@ Remove single-dimensional entries from the shape of a tensor.
 Takes an input `axes` with a list of axes to squeeze.
 If `axes` is not provided, all the single dimensions will be removed from
 the shape. If an axis is selected with shape entry not equal to one, an error is raised.
-</i></p> 
-<p><b>onnx::Squeeze(data, axes)</b> = onnx_ops.squeeze(data, axes)</p> 
-<p>Python version: onnx_ops.squeeze(data, axes)</p> 
+</i></p>
+<p><b>onnx::Squeeze(data, axes)</b> = onnx_ops.squeeze(data, axes)</p>
+<p>Python version: onnx_ops.squeeze(data, axes)</p>
 
 ## onnx::StringNormalizer
  <p><i>
@@ -2903,9 +2903,9 @@ uppercased, or just returned depending the "case_change_action" attribute.
 This operator only accepts [C]- and [1, C]-tensor.
 If all elements in X are dropped, the output will be the empty value of string tensor with shape [1]
 if input shape is [C] and shape [1, 1] if input shape is [1, C].
-</i></p> 
-<p><b>onnx::StringNormalizer(X)</b> = onnx_ops.stringnormalizer(X, case_change_action, is_case_sensitive, locale, stopwords)</p> 
-<p>Python version: onnx_ops.stringnormalizer(X, case_change_action, is_case_sensitive, locale, stopwords)</p> 
+</i></p>
+<p><b>onnx::StringNormalizer(X)</b> = onnx_ops.stringnormalizer(X, case_change_action, is_case_sensitive, locale, stopwords)</p>
+<p>Python version: onnx_ops.stringnormalizer(X, case_change_action, is_case_sensitive, locale, stopwords)</p>
 
 ## onnx::Sub
  <p><i>
@@ -2914,32 +2914,32 @@ Performs element-wise binary subtraction (with Numpy-style broadcasting support)
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
 
 (Opset 14 change): Extend supported types to include uint8, int8, uint16, and int16.
-</i></p> 
-<p><b>onnx::Sub(A, B)</b> = onnx_ops.sub(A, B)</p> 
-<p>Python version: onnx_ops.sub(A, B)</p> 
+</i></p>
+<p><b>onnx::Sub(A, B)</b> = onnx_ops.sub(A, B)</p>
+<p>Python version: onnx_ops.sub(A, B)</p>
 
 ## onnx::Sum
  <p><i>
 Element-wise sum of each of the input tensors (with Numpy-style broadcasting support).
 All inputs and outputs must have the same data type.
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Sum(data_0)</b> = onnx_ops.sum(data_0)</p> 
-<p>Python version: onnx_ops.sum(data_0)</p> 
+</i></p>
+<p><b>onnx::Sum(data_0)</b> = onnx_ops.sum(data_0)</p>
+<p>Python version: onnx_ops.sum(data_0)</p>
 
 ## onnx::Tan
  <p><i>
 Calculates the tangent of the given input tensor, element-wise.
-</i></p> 
-<p><b>onnx::Tan(input)</b> = onnx_ops.tan(input)</p> 
-<p>Python version: onnx_ops.numpy.tan(input)</p> 
+</i></p>
+<p><b>onnx::Tan(input)</b> = onnx_ops.tan(input)</p>
+<p>Python version: onnx_ops.numpy.tan(input)</p>
 
 ## onnx::Tanh
  <p><i>
 Calculates the hyperbolic tangent of the given input tensor element-wise.
-</i></p> 
-<p><b>onnx::Tanh(input)</b> = onnx_ops.tanh(input)</p> 
-<p>Python version: onnx_ops.numpy.tanh(input)</p> 
+</i></p>
+<p><b>onnx::Tanh(input)</b> = onnx_ops.tanh(input)</p>
+<p>Python version: onnx_ops.numpy.tanh(input)</p>
 
 ## onnx::TfIdfVectorizer
  <p><i>
@@ -2970,26 +2970,26 @@ this operator first computes the counts of all n-grams and then scale them by th
 
 Only one of pool_strings and pool_int64s can be set. If pool_int64s is set, the input should be an integer tensor.
 If pool_strings is set, the input must be a string tensor.
-</i></p> 
-<p><b>onnx::TfIdfVectorizer(X)</b> = onnx_ops.tfidfvectorizer(X, max_gram_length, max_skip_count, min_gram_length, mode, ngram_counts, ngram_indexes, pool_int64s, pool_strings, weights)</p> 
-<p>Python version: onnx_ops.tfidfvectorizer(X, max_gram_length, max_skip_count, min_gram_length, mode, ngram_counts, ngram_indexes, pool_int64s, pool_strings, weights)</p> 
+</i></p>
+<p><b>onnx::TfIdfVectorizer(X)</b> = onnx_ops.tfidfvectorizer(X, max_gram_length, max_skip_count, min_gram_length, mode, ngram_counts, ngram_indexes, pool_int64s, pool_strings, weights)</p>
+<p>Python version: onnx_ops.tfidfvectorizer(X, max_gram_length, max_skip_count, min_gram_length, mode, ngram_counts, ngram_indexes, pool_int64s, pool_strings, weights)</p>
 
 ## onnx::ThresholdedRelu
  <p><i>
 ThresholdedRelu takes one input data (Tensor<T>) and produces one output data
 (Tensor<T>) where the rectified linear function, y = x for x > alpha, y = 0 otherwise,
 is applied to the tensor elementwise.
-</i></p> 
-<p><b>onnx::ThresholdedRelu(X)</b> = onnx_ops.thresholdedrelu(X, alpha)</p> 
-<p>Python version: onnx_ops.thresholdedrelu(X, alpha)</p> 
+</i></p>
+<p><b>onnx::ThresholdedRelu(X)</b> = onnx_ops.thresholdedrelu(X, alpha)</p>
+<p>Python version: onnx_ops.thresholdedrelu(X, alpha)</p>
 
 ## onnx::Tile
  <p><i>Constructs a tensor by tiling a given tensor.
 This is the same as function `tile` in Numpy, but no broadcast.
 For example A = [[1, 2], [3, 4]], B = [1, 2], tile(A, B) = [[1, 2, 1, 2], [3, 4, 3, 4]]
-</i></p> 
-<p><b>onnx::Tile(input, repeats)</b> = onnx_ops.tile(input, repeats)</p> 
-<p>Python version: onnx_ops.tile(input, repeats)</p> 
+</i></p>
+<p><b>onnx::Tile(input, repeats)</b> = onnx_ops.tile(input, repeats)</p>
+<p>Python version: onnx_ops.tile(input, repeats)</p>
 
 ## onnx::TopK
  <p><i>
@@ -3007,18 +3007,18 @@ If "sorted" is 0, order of returned 'Values' and 'Indices' are undefined.
 
 Given two equivalent values, this operator uses the indices along the axis as
  a tiebreaker. That is, the element with the lower index will appear first.
-</i></p> 
-<p><b>onnx::TopK(X, K)</b> = onnx_ops.topk(X, K, axis, largest, sorted)</p> 
-<p>Python version: onnx_ops.topk(X, K, axis, largest, sorted)</p> 
+</i></p>
+<p><b>onnx::TopK(X, K)</b> = onnx_ops.topk(X, K, axis, largest, sorted)</p>
+<p>Python version: onnx_ops.topk(X, K, axis, largest, sorted)</p>
 
 ## onnx::Transpose
  <p><i>
 Transpose the input tensor similar to numpy.transpose. For example, when
 perm=(1, 0, 2), given an input tensor of shape (1, 2, 3), the output shape
 will be (2, 1, 3).
-</i></p> 
-<p><b>onnx::Transpose(data)</b> = onnx_ops.transpose(data, perm)</p> 
-<p>Python version: onnx_ops.transpose(data, perm)</p> 
+</i></p>
+<p><b>onnx::Transpose(data)</b> = onnx_ops.transpose(data, perm)</p>
+<p>Python version: onnx_ops.transpose(data, perm)</p>
 
 ## onnx::Trilu
  <p><i>
@@ -3034,9 +3034,9 @@ If upper is set to true, a positive k retains the upper triangular matrix exclud
 A negative k value retains the main diagonal and |k| diagonals below it.
 If upper is set to false, a positive k retains the lower triangular matrix including the main diagonal and k diagonals above it.
 A negative k value excludes the main diagonal and (|k|-1) diagonals below it.
-</i></p> 
-<p><b>onnx::Trilu(input, k)</b> = onnx_ops.trilu(input, k, upper)</p> 
-<p>Python version: onnx_ops.trilu(input, k, upper)</p> 
+</i></p>
+<p><b>onnx::Trilu(input, k)</b> = onnx_ops.trilu(input, k, upper)</p>
+<p>Python version: onnx_ops.trilu(input, k, upper)</p>
 
 ## onnx::Unique
  <p><i>
@@ -3115,9 +3115,9 @@ Example 4:
   [1, 0, 2, 0]
 
   output_counts = [2 1 1]
-</i></p> 
-<p><b>onnx::Unique(X)</b> = onnx_ops.unique(X, axis, sorted)</p> 
-<p>Python version: onnx_ops.unique(X, axis, sorted)</p> 
+</i></p>
+<p><b>onnx::Unique(X)</b> = onnx_ops.unique(X, axis, sorted)</p>
+<p>Python version: onnx_ops.unique(X, axis, sorted)</p>
 
 ## onnx::Unsqueeze
  <p><i>
@@ -3133,18 +3133,18 @@ The rank of the output tensor (`output_rank`) is the rank of the input tensor (`
 Each value in `axes` should be within the (inclusive) range [-output_rank , output_rank - 1].
 The order of values in `axes` does not matter and can come in any order.
 
-</i></p> 
-<p><b>onnx::Unsqueeze(data, axes)</b> = onnx_ops.unsqueeze(data, axes)</p> 
-<p>Python version: onnx_ops.unsqueeze(data, axes)</p> 
+</i></p>
+<p><b>onnx::Unsqueeze(data, axes)</b> = onnx_ops.unsqueeze(data, axes)</p>
+<p>Python version: onnx_ops.unsqueeze(data, axes)</p>
 
 ## onnx::Upsample
  <p><i>
 Upsample the input tensor.
 Each dimension value of the output tensor is:
   output_dimension = floor(input_dimension * scale).
-</i></p> 
-<p><b>onnx::Upsample(X, scales)</b> = onnx_ops.upsample(X, scales, mode)</p> 
-<p>Python version: onnx_ops.upsample(X, scales, mode)</p> 
+</i></p>
+<p><b>onnx::Upsample(X, scales)</b> = onnx_ops.upsample(X, scales, mode)</p>
+<p>Python version: onnx_ops.upsample(X, scales, mode)</p>
 
 ## onnx::Where
  <p><i>
@@ -3153,9 +3153,9 @@ Where behaves like
 [numpy.where](https://docs.scipy.org/doc/numpy/reference/generated/numpy.where.html)
 with three parameters.
 
-This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).</i></p> 
-<p><b>onnx::Where(condition, X, Y)</b> = onnx_ops.where(condition, X, Y)</p> 
-<p>Python version: onnx_ops.where(condition, X, Y)</p> 
+This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).</i></p>
+<p><b>onnx::Where(condition, X, Y)</b> = onnx_ops.where(condition, X, Y)</p>
+<p>Python version: onnx_ops.where(condition, X, Y)</p>
 
 ## onnx::Xor
  <p><i>
@@ -3163,46 +3163,46 @@ Returns the tensor resulted from performing the `xor` logical operation
 elementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).
 
 This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).
-</i></p> 
-<p><b>onnx::Xor(A, B)</b> = onnx_ops.xor(A, B)</p> 
-<p>Python version: onnx_ops.xor(A, B)</p> 
+</i></p>
+<p><b>onnx::Xor(A, B)</b> = onnx_ops.xor(A, B)</p>
+<p>Python version: onnx_ops.xor(A, B)</p>
 
 ## pattern_matching_function
- <p><i>ACT-R pattern matching function</i></p> 
-<p><b>pattern_matching_function(productions, goal, retrieval)</b> = actr.pattern_matching_function(productions, goal, retrieval)</p> 
-<p>Python version: actr.pattern_matching_function(productions, goal, retrieval)</p> 
+ <p><i>ACT-R pattern matching function</i></p>
+<p><b>pattern_matching_function(productions, goal, retrieval)</b> = actr.pattern_matching_function(productions, goal, retrieval)</p>
+<p>Python version: actr.pattern_matching_function(productions, goal, retrieval)</p>
 
 ## retrieve_chunk
- <p><i>ACT-R retrieve chunk function</i></p> 
-<p><b>retrieve_chunk(pattern, dm_chunks, types)</b> = actr.retrieve_chunk(pattern, dm_chunks, types)</p> 
-<p>Python version: actr.retrieve_chunk(pattern, dm_chunks, types)</p> 
+ <p><i>ACT-R retrieve chunk function</i></p>
+<p><b>retrieve_chunk(pattern, dm_chunks, types)</b> = actr.retrieve_chunk(pattern, dm_chunks, types)</p>
+<p>Python version: actr.retrieve_chunk(pattern, dm_chunks, types)</p>
 
 ## sin
- <p><i>Sine function</i></p> 
-<p><b>sin(variable0, scale)</b> = scale * sin(variable0)</p> 
-<p>Python version: scale * numpy.sin(variable0)</p> 
+ <p><i>Sine function</i></p>
+<p><b>sin(variable0, scale)</b> = scale * sin(variable0)</p>
+<p>Python version: scale * numpy.sin(variable0)</p>
 
 ## sinh
- <p><i>Hyperbolic sine function</i></p> 
-<p><b>sinh(variable0, scale)</b> = scale * sinh(variable0)</p> 
-<p>Python version: scale * numpy.sinh(variable0)</p> 
+ <p><i>Hyperbolic sine function</i></p>
+<p><b>sinh(variable0, scale)</b> = scale * sinh(variable0)</p>
+<p>Python version: scale * numpy.sinh(variable0)</p>
 
 ## tan
- <p><i>Tangent function</i></p> 
-<p><b>tan(variable0, scale)</b> = scale * tan(variable0)</p> 
-<p>Python version: scale * numpy.tan(variable0)</p> 
+ <p><i>Tangent function</i></p>
+<p><b>tan(variable0, scale)</b> = scale * tan(variable0)</p>
+<p>Python version: scale * numpy.tan(variable0)</p>
 
 ## tanh
- <p><i>Hyperbolic tangent function</i></p> 
-<p><b>tanh(variable0, scale)</b> = scale * tanh(variable0)</p> 
-<p>Python version: scale * numpy.tanh(variable0)</p> 
+ <p><i>Hyperbolic tangent function</i></p>
+<p><b>tanh(variable0, scale)</b> = scale * tanh(variable0)</p>
+<p>Python version: scale * numpy.tanh(variable0)</p>
 
 ## update_goal
- <p><i>ACT-R update goal buffer function</i></p> 
-<p><b>update_goal(production)</b> = actr.update_goal(production)</p> 
-<p>Python version: actr.update_goal(production)</p> 
+ <p><i>ACT-R update goal buffer function</i></p>
+<p><b>update_goal(production)</b> = actr.update_goal(production)</p>
+<p>Python version: actr.update_goal(production)</p>
 
 ## update_retrieval
- <p><i>ACT-R update retrieval buffer function</i></p> 
-<p><b>update_retrieval(production)</b> = actr.update_retrieval(production)</p> 
-<p>Python version: actr.update_retrieval(production)</p> 
+ <p><i>ACT-R update retrieval buffer function</i></p>
+<p><b>update_retrieval(production)</b> = actr.update_retrieval(production)</p>
+<p>Python version: actr.update_retrieval(production)</p>
