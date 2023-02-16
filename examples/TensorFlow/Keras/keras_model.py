@@ -44,10 +44,6 @@ kr_model.compile(
 print("Training the Model")
 kr_model.fit(x_train, y_train, epochs=3)
 
-# save model
-print("Saving the Model")
-kr_model.save("num_reader.model")
-
 # loadthe model above
 # new_model = tf.keras.models.load_model("num_reader.model")
 
