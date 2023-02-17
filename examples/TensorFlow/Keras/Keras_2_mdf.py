@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+
+# In[1]:
+
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,9 +21,15 @@ import graph_scheduler
 import random
 
 
+# In[2]:
+
+
 new_model = tf.keras.models.load_model("kr_N_model.h5")
 for i in new_model.layers:
     print(i.name)
+
+
+# In[3]:
 
 
 def get_weights_and_activation(layers, model):
@@ -35,6 +46,9 @@ def get_weights_and_activation(layers, model):
     return params, activations
 
 
+# In[4]:
+
+
 # selective layers which will be used in MDF Model
 layers_to_extract = ["dense", "dense_1", "dense_2"]
 
@@ -42,7 +56,13 @@ layers_to_extract = ["dense", "dense_1", "dense_2"]
 params, activations = get_weights_and_activation(layers_to_extract, new_model)
 
 
+# In[5]:
+
+
 # print(params)
+
+
+# In[6]:
 
 
 def init_model_with_graph(model_id, graph_id):
@@ -50,6 +70,9 @@ def init_model_with_graph(model_id, graph_id):
     mod_graph = Graph(id=graph_id)
     mod.graphs.append(mod_graph)
     return mod, mod_graph
+
+
+# In[7]:
 
 
 def create_input_node(node_id, value):
@@ -61,6 +84,12 @@ def create_input_node(node_id, value):
         OutputPort(id=f"{node_id}_out", value=f"{node_id}_in")
     )
     return input_node
+
+
+# In[ ]:
+
+
+# In[8]:
 
 
 def create_dense_node(node_id, weights, bias):
@@ -75,6 +104,9 @@ def create_dense_node(node_id, weights, bias):
 
     node.output_ports.append(Parameter(id=f"{node_id}_out", value="op"))
     return node
+
+
+# In[9]:
 
 
 def create_activation_node(node_id, activation_name):
@@ -122,3 +154,9 @@ def create_activation_node(node_id, activation_name):
 
     activation.output_ports.append(OutputPort(id=f"{node_id}_out", value="op"))
     return activation
+
+
+# In[ ]:
+
+
+# In[10]:
