@@ -199,6 +199,24 @@ def mdf_to_graphviz(
                 format_term_condition("Termination cond"),
             )
             info += "</td></tr>"
+        if nt.type == "All":
+            info += "<tr><td>{}{} = Satisfied when".format(
+                format_label(" "),
+                format_term_condition("Termination cond"),
+            )
+            i = 0
+            for item in args.get("dependencies"):
+                while i < (len(args.get("dependencies")) - 1):
+                    info += " <b>{}</b> condition on node <b>{}</b> has ran after <b>{}</b> times and ".format(
+                        item.type, item.kwargs["dependencies"], item.kwargs["n"]
+                    )
+                    i = i + 1
+
+            info += " <b>{}</b> condition on node <b>{}</b> has ran after <b>{}</b> times. ".format(
+                item.type, item.kwargs["dependencies"], item.kwargs["n"]
+            )
+
+            info += "</td></tr>"
         info += "</table>"
         graph.node("termination condition", label="<%s>" % info)
 
