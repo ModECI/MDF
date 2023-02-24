@@ -201,3 +201,33 @@ Allowed field      Data Type             Description
 **receiver_port**  str                   The id of the InputPort on the receiver `Node <#node>`__
 **parameters**     Union[Any, NoneType]  Dictionary of parameters for the edge.
 =================  ====================  ============================================================================================================
+
+=========
+Condition
+=========
+A set of descriptors which specifies conditional execution of Nodes to meet complex execution requirements.
+
+**Allowed parameters**
+
+===============  ====================  =============================================================================================
+Allowed field    Data Type             Description
+===============  ====================  =============================================================================================
+**metadata**     Union[Any, NoneType]  Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
+**type**         str                   The type of `Condition <#condition>`__ from the library
+**kwargs**       Union[Any, NoneType]  The dictionary of keyword arguments needed to evaluate the `Condition <#condition>`__
+===============  ====================  =============================================================================================
+
+============
+ConditionSet
+============
+Specifies the non-default pattern of execution of Nodes
+
+**Allowed parameters**
+
+=================  ==========================  =============================================================================================
+Allowed field      Data Type                   Description
+=================  ==========================  =============================================================================================
+**metadata**       Union[Any, NoneType]        Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
+**node_specific**  Union[Condition, NoneType]  A dictionary mapping nodes to any non-default run conditions
+**termination**    Union[Condition, NoneType]  A dictionary mapping time scales of model execution to conditions indicating when they end
+=================  ==========================  =============================================================================================
