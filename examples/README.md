@@ -10,5 +10,3 @@
 - [WebGME](WebGME): Examples of interactions between WebGME and MDF.
 - [ACT-R](ACT-R): Examples of interactions between ACT-R and MDF.
 - [Quantum](Quantum): Examples of interactions between MDF and Quantum computing technologies.
-
-
