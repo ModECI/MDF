@@ -86,9 +86,5 @@ To Get the visualization below, you will need to install the following packages
 
 ##### Neutron
 Below is the viasualizationof this model using neutron
-<<<<<<< HEAD
-[Model layers](https://github.com/ModECI/MDF/blob/test_keras/examples/TensorFlow/Keras/layers_netron.png)
-=======
+
 [](https://github.com/ModECI/MDF/blob/test_keras/examples/TensorFlow/Keras/layers_netron.png)
-[layers_netron%20viz](layers_netron%20viz.png)
->>>>>>> a06e590d28a0e33a866f45010c8bc1e2ce038d7a

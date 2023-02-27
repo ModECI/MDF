@@ -1,0 +1,61 @@
+{
+    "keras_2_MDF": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.3",
+        "graphs": {
+            "Keras_to_MDF_example": {
+                "nodes": {
+                    "Dense": {
+                        "parameters": {
+                            "input": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "weight": {
+                                "value": -0.05233919993042946
+                            },
+                            "bias": {}
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "level"
+                            }
+                        }
+                    },
+                    "Dense_1": {
+                        "parameters": {
+                            "input": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "weight": {
+                                "value": 0.021624136716127396
+                            },
+                            "bias": {}
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "level"
+                            }
+                        }
+                    },
+                    "Dense_2": {
+                        "parameters": {
+                            "input": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "weight": {
+                                "value": -0.059562504291534424
+                            },
+                            "bias": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
