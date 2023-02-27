@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # In[1]:
 
 
@@ -170,12 +168,3 @@ mod.to_graph_image(
 from IPython.display import Image
 
 Image(filename="Keras_to_MDF_Example.png")
-
-
-# In[ ]:
-
-
-# In[ ]:
-
-
-# In[ ]:
