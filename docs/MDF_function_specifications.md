@@ -280,22 +280,6 @@ Conversion from a numerical type to any numerical type is always allowed.
 User must be aware of precision loss and value change caused by range difference between two types.
 For example, a 64-bit float 3.1415926459 may be round to a 32-bit float 3.141592. Similarly, converting
 an integer 36 to Boolean may produce 1 because we truncate bits which can't be stored in the targeted type.
-
-In more detail, the conversion among numerical types should follow these rules:
-
-* Casting from floating point to:
-  * floating point: +/- infinity if OOR (out of range).
-  * fixed point: undefined if OOR.
-  * bool: +/- 0.0 to False; all else to True.
-* Casting from fixed point to:
-  * floating point: +/- infinity if OOR. (+ infinity in the case of uint)
-  * fixed point: when OOR, discard higher bits and reinterpret (with respect to two's complement representation for
-signed types). For example, 200 (int16) -> -56 (int8).
-  * bool: zero to False; nonzero to True.
-* Casting from bool to:
-  * floating point: `{1.0, 0.0}`.
-  * fixed point: `{1, 0}`.
-  * bool: no change.
 </i></p>
 <p><b>onnx::Cast(input)</b> = onnx_ops.cast(input, to)</p>
 <p>Python version: onnx_ops.cast(input, to)</p>
@@ -1470,7 +1454,7 @@ This operator supports **multidirectional (i.e., Numpy-style) broadcasting**; fo
 ## onnx::MaxUnpool
  <p><i>
 MaxUnpool essentially computes the partial inverse of the MaxPool op.
- The input information to this op is typically the output information from a MaxPool op. The first
+ The input information to this op is typically the the output information from a MaxPool op. The first
  input tensor X is the tensor that needs to be unpooled, which is typically the pooled tensor (first output)
  from MaxPool. The second input tensor, I, contains the indices to the (locally maximal) elements corrsponding
  to the elements in the first input tensor X. Input tensor I is typically the second output of the MaxPool op.
@@ -2172,12 +2156,7 @@ could also be 0, in which case the actual dimension value is unchanged (i.e. tak
 from the input tensor). If 'allowzero' is set, and the new shape includes 0, the
 dimension will be set explicitly to zero (i.e. not taken from input tensor).
 Shape (second input) could be an empty shape, which means converting to a scalar.
-The input tensor's shape and the output tensor's shape are required to have the same number of elements.
-
-If the attribute 'allowzero' is set, it is invalid for the specified shape to
-contain both a zero value and -1, as the value of the dimension corresponding
-to -1 cannot be determined uniquely.
-</i></p>
+The input tensor's shape and the output tensor's shape are required to have the same number of elements.</i></p>
 <p><b>onnx::Reshape(data, shape)</b> = onnx_ops.reshape(data, shape, allowzero)</p>
 <p>Python version: onnx_ops.reshape(data, shape, allowzero)</p>
 
@@ -2521,8 +2500,7 @@ That is, two or more `updates` for the same index-location is not supported.
  `indices` is treated as a (q-1)-dimensional tensor of k-tuples, where each k-tuple is a partial-index into `data`.
 Hence, k can be a value at most the rank of `data`. When k equals rank(data), each update entry specifies an
 update to a single element of the tensor. When k is less than rank(data) each update entry specifies an
-update to a slice of the tensor. Index values are allowed to be negative, as per the usual
-convention for counting backwards from the end, but are expected in the valid range.
+update to a slice of the tensor.
 
 `updates` is treated as a (q-1)-dimensional tensor of replacement-slice-values. Thus, the
 first (q-1) dimensions of updates.shape must match the first (q-1) dimensions of indices.shape.
