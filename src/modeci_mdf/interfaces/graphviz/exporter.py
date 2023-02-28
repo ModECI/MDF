@@ -442,7 +442,7 @@ def mdf_to_graphviz(
                         format_label("OUT"),
                         format_output(op.id),
                         match_in_expr(op.value, node),
-                        "(shape: %s)" % op.shape
+                        "(shape: %s)" % str(op.shape)
                         if op.shape is not None
                         else ""
                         if level >= LEVEL_2 and op.shape is not None
