@@ -1,36 +1,33 @@
-keras_2_MDF:
+keras_to_MDF:
     format: ModECI MDF v0.4
     generating_application: Python modeci-mdf v0.4.3
     graphs:
-        Keras_to_MDF_example:
+        Keras_to_MDF_graph:
             nodes:
-                Dense:
+                input_node:
                     parameters:
-                        input:
+                        input_node_in:
                             value:
-                            - 0.0
-                        weight:
-                            value: -0.05233919993042946
-                        bias: {}
+                            - 1.0
                     output_ports:
-                        output:
-                            value: level
-                Dense_1:
+                        input_node_out:
+                            value: input_node_in
+                dense_node:
+                    input_ports:
+                        dense_node_in: {}
                     parameters:
-                        input:
-                            value:
-                            - 0.0
-                        weight:
-                            value: 0.021624136716127396
-                        bias: {}
+                        wgts:
+                            value: weights
+                        bias:
+                            value: bias
+                        Output:
+                            value: (dense_node_in @ wgts) + bias
                     output_ports:
-                        output:
-                            value: level
-                Dense_2:
-                    parameters:
-                        input:
-                            value:
-                            - 0.0
-                        weight:
-                            value: -0.059562504291534424
-                        bias: {}
+                        dense_node_out:
+                            value: Output
+                activation_node:
+                    input_ports:
+                        activation_node_in: {}
+                    output_ports:
+                        activation_node_out:
+                            value: Output

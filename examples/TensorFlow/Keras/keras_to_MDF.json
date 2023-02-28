@@ -1,57 +1,53 @@
 {
-    "keras_2_MDF": {
+    "keras_to_MDF": {
         "format": "ModECI MDF v0.4",
         "generating_application": "Python modeci-mdf v0.4.3",
         "graphs": {
-            "Keras_to_MDF_example": {
+            "Keras_to_MDF_graph": {
                 "nodes": {
-                    "Dense": {
+                    "input_node": {
                         "parameters": {
-                            "input": {
+                            "input_node_in": {
                                 "value": [
-                                    0.0
+                                    1.0
                                 ]
-                            },
-                            "weight": {
-                                "value": -0.05233919993042946
-                            },
-                            "bias": {}
+                            }
                         },
                         "output_ports": {
-                            "output": {
-                                "value": "level"
+                            "input_node_out": {
+                                "value": "input_node_in"
                             }
                         }
                     },
-                    "Dense_1": {
+                    "dense_node": {
+                        "input_ports": {
+                            "dense_node_in": {}
+                        },
                         "parameters": {
-                            "input": {
-                                "value": [
-                                    0.0
-                                ]
+                            "wgts": {
+                                "value": "weights"
                             },
-                            "weight": {
-                                "value": 0.021624136716127396
+                            "bias": {
+                                "value": "bias"
                             },
-                            "bias": {}
+                            "Output": {
+                                "value": "(dense_node_in @ wgts) + bias"
+                            }
                         },
                         "output_ports": {
-                            "output": {
-                                "value": "level"
+                            "dense_node_out": {
+                                "value": "Output"
                             }
                         }
                     },
-                    "Dense_2": {
-                        "parameters": {
-                            "input": {
-                                "value": [
-                                    0.0
-                                ]
-                            },
-                            "weight": {
-                                "value": -0.059562504291534424
-                            },
-                            "bias": {}
+                    "activation_node": {
+                        "input_ports": {
+                            "activation_node_in": {}
+                        },
+                        "output_ports": {
+                            "activation_node_out": {
+                                "value": "Output"
+                            }
                         }
                     }
                 }
