@@ -8,8 +8,6 @@ from torchviz import make_dot
 import netron
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
-# from modeci_mdf.interfaces.onnx.importer import get_category_of_onnx_node, get_color_for_onnx_category
-
 
 class SimpleNet(nn.Module):
     def __init__(self):
@@ -57,13 +55,7 @@ def main():
 
     # Get the graph
     mdf_graph = mdf_model.graphs[0]
-    """
-    for item in mdf_model.graphs:
-        for s in item.nodes:
-            a= get_category_of_onnx_node(s.id)
-            b= get_color_for_onnx_category(a)
-            s.metadata= b
-    """
+
     # Add inputs to the parameters dict so we can feed this to the EvaluableGraph for initialization of graph input.
     params_dict["input1"] = input_images.numpy()
 
