@@ -70,6 +70,11 @@ cd RNN
 cd ../../NeuroML
 ./regenerateAndTest.sh -nogui
 
+## Test PyTorch examples
+
+cd ../PyTorch
+./regenerate.sh
+
 ## Test ONNX examples
 
 cd ../ONNX
