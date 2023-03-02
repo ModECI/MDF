@@ -1,7 +1,7 @@
 {
     "keras_to_MDF": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.3",
+        "generating_application": "Python modeci-mdf v0.4.4",
         "graphs": {
             "Keras_to_MDF_graph": {
                 "nodes": {

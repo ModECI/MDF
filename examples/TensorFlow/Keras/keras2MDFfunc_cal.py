@@ -11,6 +11,9 @@ from modeci_mdf.execution_engine import EvaluableGraph
 from modeci_mdf.utils import simple_connect
 
 # from Keras_2_mdf import * #contains helper functions for this model
+import sys, os
+
+sys.path.append(os.path.dirname(__file__))  #  to find keras2mdf.py in tests
 from keras2mdf import *
 
 # import the necessary package to use Conditions in MDF
