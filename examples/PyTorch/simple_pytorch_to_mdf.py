@@ -103,6 +103,7 @@ def main():
             filename_root="simple_pytorch_to_mdf.1",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
             is_horizontal=True,
+            solid_color=True,
         )
         mdf_model.to_graph_image(
             engine="dot",
@@ -110,7 +111,8 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="simple_pytorch_to_mdf",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=True,
+            solid_color=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
     # export to PyTorch graph
     if "-graph-torch" in sys.argv:

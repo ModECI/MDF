@@ -143,6 +143,7 @@ def mdf_to_graphviz(
     level=LEVEL_2,
     filename_root=None,
     is_horizontal=False,
+    solid_color=False,
 ):
 
     DEFAULT_POP_SHAPE = "ellipse"
@@ -231,16 +232,43 @@ def mdf_to_graphviz(
                 color = color_rgb_to_hex(node.metadata["color"])
                 penwidth = "2"
 
-        graph.attr(
-            "node",
-            color=color,
-            style="rounded",
-            shape="box",
-            fontcolor=COLOR_MAIN,
-            penwidth=penwidth,
-        )
-        info = '<table border="0" cellborder="0">'
-        info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
+                graph.attr(
+                    "node",
+                    color=color,
+                    style="rounded",
+                    shape="box",
+                    fontcolor=COLOR_MAIN,
+                    penwidth=penwidth,
+                )
+
+            info = '<table border="0" cellborder="0">'
+            info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
+
+            if solid_color:
+                rgb_ = node.metadata["color"].split(" ")
+                print(rgb_)
+
+                if (
+                    float(rgb_[0]) * 0.299
+                    + float(rgb_[1]) * 0.587
+                    + float(rgb_[2]) * 0.2
+                ) > 0.25:
+                    fcolor = "black"
+                else:
+                    fcolor = "white"
+
+                graph.attr(
+                    "node",
+                    color=color,
+                    fillcolor=color,
+                    style="filled",
+                    shape="box",
+                    fontcolor=fcolor,
+                    penwidth=penwidth,
+                )
+
+            info = '<table border="0" cellborder="0">'
+            info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
 
         if node.metadata is not None and level >= LEVEL_3:
 
