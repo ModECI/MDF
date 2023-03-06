@@ -3,7 +3,7 @@
 # ModECI contributors
 
 This page list names and Github profiles of contributors to the various ModECI repositories, listed in no particular order.
-This file is generated periodically, the most recent was on 2022-12-16.
+This page is generated periodically, most recently on 2023-03-06.
 
 - Padraig Gleeson ([@pgleeson](https://github.com/pgleeson))
 - David Turner ([@davidt0x](https://github.com/davidt0x))
@@ -11,10 +11,12 @@ This file is generated periodically, the most recent was on 2022-12-16.
 - Ivy ([@Ivy8127](https://github.com/Ivy8127))
 -  ([@mraunak](https://github.com/mraunak))
 - Shanka Subhra Mondal ([@Shanka123](https://github.com/Shanka123))
+- Onabajo Monsurat ([@Monsurat-Onabajo](https://github.com/Monsurat-Onabajo))
 - Parikshit Singh Rathore ([@parikshit14](https://github.com/parikshit14))
 - Patrick Stock ([@patrickstock](https://github.com/patrickstock))
 - Jeremy Lee ([@jeremyrl7](https://github.com/jeremyrl7))
 - Raghavendra Pradyumna Pothukuchi ([@rpradyumna](https://github.com/rpradyumna))
+- Marble Kusanele Mpofu ([@kusanele](https://github.com/kusanele))
 - Somya Agrawal ([@somyagr](https://github.com/somyagr))
 -  ([@jdcpni](https://github.com/jdcpni))
 - Riya Saxena ([@29riyasaxena](https://github.com/29riyasaxena))
