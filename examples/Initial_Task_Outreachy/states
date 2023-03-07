@@ -1,0 +1,7 @@
+digraph book_recommendation {
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	user [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>user</b></td></tr><tr><td><i>description = User of the recommendation system</i></td></tr><tr><td><font color="#1666ff">level</font> = ['ystery', 'thriller'](list)</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">level</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	book [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>book</b></td></tr><tr><td><i>description = Book in the recommendation system</i></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">slope</font> = 1.2</td></tr><tr><td><font color="#1666ff">intercept</font> = 3</td></tr><tr><td><font color="#1666ff">linear_func</font> = <font color="#188855">input</font> * <font color="#1666ff">slope</font> + <font color="#1666ff">intercept</font></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">linear_func</font> </td></tr></table>>]
+	user -> book [label=<edge_user_book (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
+}

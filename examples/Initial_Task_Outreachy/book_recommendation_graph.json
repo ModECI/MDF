@@ -1,0 +1,74 @@
+{
+    "book_recommendation_graph": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "book_recommendation": {
+                "nodes": {
+                    "user": {
+                        "metadata": {
+                            "description": "User of the recommendation system"
+                        },
+                        "parameters": {
+                            "level": {
+                                "metadata": {
+                                    "description": "Name of the thunder"
+                                },
+                                "value": [
+                                    "ystery",
+                                    "thriller"
+                                ]
+                            },
+                            "genre_pref": {
+                                "metadata": {
+                                    "description": "Genres preferred by the user"
+                                },
+                                "value": [
+                                    "mystery",
+                                    "thriller"
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "level"
+                            }
+                        }
+                    },
+                    "book": {
+                        "metadata": {
+                            "description": "Book in the recommendation system"
+                        },
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "slope": {
+                                "value": 1.2
+                            },
+                            "intercept": {
+                                "value": 3
+                            },
+                            "linear_func": {
+                                "value": "input * slope + intercept"
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "linear_func"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_user_book": {
+                        "sender": "user",
+                        "receiver": "book",
+                        "sender_port": "output",
+                        "receiver_port": "input"
+                    }
+                }
+            }
+        }
+    }
+}

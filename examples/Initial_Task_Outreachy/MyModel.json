@@ -1,0 +1,46 @@
+{
+    "MyModel": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "my_graph": {
+                "nodes": {
+                    "node1": {
+                        "metadata": {
+                            "color": "2.9"
+                        },
+                        "parameters": {
+                            "node1": {
+                                "value": 3.0
+                            },
+                            "slope": {
+                                "value": 5.2
+                            },
+                            "linear_func": {
+                                "value": "input * slope "
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "linear_func"
+                            }
+                        }
+                    },
+                    "node2": {
+                        "metadata": {
+                            "color ": "3.8.0"
+                        },
+                        "parameters": {
+                            "level": {
+                                "value": 3.5
+                            },
+                            "output": {
+                                "value": "level2"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
