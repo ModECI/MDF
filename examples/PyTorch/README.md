@@ -65,7 +65,7 @@ can be translated to TorchScript (via `torch.jit.script` or `torch.jit.trace`) s
 then be able to be converted to their MDF representation automatically. Below are
 several working examples of this functionality.
 
-To perform an PyTorch to MDF conversion, provide a PyTorch model as an input to the [pytorch_to_mdf()](https://mdf.readthedocs.io/en/latest/api/_autosummary/modeci_mdf.interfaces.pytorch.importer.pytorch_to_mdf.html#modeci_mdf.interfaces.pytorch.importer.pytorch_to_mdf) function
+To perform a PyTorch to MDF conversion, provide a PyTorch model as an input to the [pytorch_to_mdf()](https://mdf.readthedocs.io/en/latest/api/_autosummary/modeci_mdf.interfaces.pytorch.importer.pytorch_to_mdf.html#modeci_mdf.interfaces.pytorch.importer.pytorch_to_mdf) function
 which is available in [importer.py](/src/modeci_mdf/interfaces/pytorch/importer.py). The output of `pytorch_to_mdf()` is an MDF model.
 
 ```
