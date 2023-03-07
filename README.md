@@ -11,7 +11,10 @@
 [**Click here for the full MDF documentation**](https://mdf.readthedocs.io)
 
 **Note: MDF is still in development! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](http://modeci.org/#contactPage) to get in contact regarding MDF.**
-*The MDF format was first proposed following a meeting organised at Princeton in July 2019 by Russ Poldrack of the Center for Reproducible Neuroscience (CRN) at Stanford and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative. For more on the previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF).*
+
+
+
+*The revolutionary MDF format arose from a visionary meeting convened by Russ Poldrack, founder of the Center for Reproducible Neuroscience (CRN) at Stanford, and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative, at the prestigious Princeton University in July 2019. Discover more about the groundbreaking work in this field by exploring this invaluable [resource](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF)*
 
 
 ## Overview
@@ -83,7 +86,7 @@ To get started, follow the simple example in a Jupyter notebook [here](https://g
 
 Multiple examples of serialized MDF files, the Python scripts used to generate them, as well as mappings to target environments can be found [here](https://github.com/ModECI/MDF/blob/main/examples/README.md).
 
-[actions-badge]:            https://github.com/ModECI/MDF/actions/workflows/ci.yml/badge.svg
-[actions-link]:             https://github.com/ModECI/MDF/actions
-[rtd-badge]:                https://readthedocs.org/projects/mdf/badge/?version=latest
-[rtd-link]:                 https://mdf.readthedocs.io/en/latest/?badge=latest
+[actions-badge]:             https://github.com/ModECI/MDF/actions/workflows/ci.yml/badge.svg
+[actions-link]:              https://github.com/ModECI/MDF/actions
+[rtd-badge]:                 https://readthedocs.org/projects/mdf/badge/?version=latest
+[rtd-link]:                  https://mdf.readthedocs.io/en/latest/?badge=latest
