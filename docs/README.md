@@ -243,7 +243,7 @@ and args attributes will be None.</i></td>
 </table>
 
 ## Parameter
-A parameter of the <a href="#node">Node</a>, which can be: 1) a specific fixed <b>value</b> (a constant (int/float) or an array) 2) a string expression for the <b>value</b> referencing other named <a href="#parameter">Parameter</a>(s). which may be stateful (i.e. can change value over multiple executions of the <a href="#node">Node</a>); 3) be evaluated by an
+A parameter of the <a href="#node">Node</a>, which can be: 1) a specific fixed <b>value</b> which can be a constant (int/float) or an array).it is otherwise known as stateless 2) a string expression for the <b>value</b> referencing other named <a href="#parameter">Parameter</a>(s). which may be stateful (i.e. can change value over multiple executions of the <a href="#node">Node</a>); 3) be evaluated by an
 inbuilt <b>function</b> with <b>args</b>; 4) or change from a <b>default_initial_value</b> with a <b>time_derivative</b>.
 
 ### Allowed parameters
@@ -294,7 +294,7 @@ inbuilt <b>function</b> with <b>args</b>; 4) or change from a <b>default_initial
     <td><b>args</b></td>
     <td>Union[Any, NoneType]</td>
     <td><i>Dictionary of values for each of the arguments for the function of the parameter,
-e.g. if the in-build function is <b>linear(slope)</b>, the args here could be <b>{"slope": 3}</b> or
+e.g, if the in-build function is <b>linear(slope)</b>, the args here could be <b>{"slope": 3}</b> or
 <b>{"slope": "input_port_0 + 2"}</b></i></td>
  </tr>
 
