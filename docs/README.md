@@ -1,7 +1,7 @@
 # Specification of ModECI v0.4
 **Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues) for ongoing discussions.
-## Model
-The top level construct in MDF is Model, which may contain multiple <a href="#graph">Graph</a> objects and model attribute(s)
+
+Here updated code will be maintained.
 
 ### Allowed parameters
 <table>
