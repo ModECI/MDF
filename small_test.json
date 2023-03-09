@@ -1,0 +1,169 @@
+{
+    "small_test": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "small_test": {
+                "nodes": {
+                    "input_node": {
+                        "parameters": {
+                            "input_level": {
+                                "value": [
+                                    [
+                                        0.1915194503788923,
+                                        0.6221087710398319
+                                    ],
+                                    [
+                                        0.4377277390071145,
+                                        0.7853585837137692
+                                    ]
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "input_level"
+                            }
+                        }
+                    },
+                    "hidden_node_0": {
+                        "input_ports": {
+                            "in_port": {}
+                        },
+                        "parameters": {
+                            "slope0": {
+                                "value": 0.5
+                            },
+                            "intercept0": {
+                                "value": [
+                                    [
+                                        0.7799758081188035,
+                                        0.2725926052826416
+                                    ],
+                                    [
+                                        0.2764642551430967,
+                                        0.8018721775350193
+                                    ]
+                                ]
+                            },
+                            "linear_1": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "in_port",
+                                    "slope": "slope0",
+                                    "intercept": "intercept0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "linear_1"
+                            }
+                        }
+                    },
+                    "hidden_node_1": {
+                        "input_ports": {
+                            "in_port": {}
+                        },
+                        "parameters": {
+                            "slope0": {
+                                "value": 0.5
+                            },
+                            "intercept0": {
+                                "value": [
+                                    [
+                                        0.6834629351721363,
+                                        0.7127020269829002
+                                    ],
+                                    [
+                                        0.37025075479039493,
+                                        0.5611961860656249
+                                    ]
+                                ]
+                            },
+                            "linear_1": {
+                                "function": "linear",
+                                "args": {
+                                    "variable0": "in_port",
+                                    "slope": "slope0",
+                                    "intercept": "intercept0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "linear_1"
+                            }
+                        }
+                    },
+                    "output_node": {
+                        "input_ports": {
+                            "in_port": {}
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "in_port"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_0": {
+                        "sender": "input_node",
+                        "receiver": "hidden_node_0",
+                        "sender_port": "out_port",
+                        "receiver_port": "in_port",
+                        "parameters": {
+                            "weight": [
+                                [
+                                    0.9581393536837052,
+                                    0.8759326347420947
+                                ],
+                                [
+                                    0.35781726995786667,
+                                    0.5009951255234587
+                                ]
+                            ]
+                        }
+                    },
+                    "edge_1": {
+                        "sender": "hidden_node_0",
+                        "receiver": "hidden_node_1",
+                        "sender_port": "out_port",
+                        "receiver_port": "in_port",
+                        "parameters": {
+                            "weight": [
+                                [
+                                    0.5030831653078097,
+                                    0.013768449590682241
+                                ],
+                                [
+                                    0.772826621612374,
+                                    0.8826411906361166
+                                ]
+                            ]
+                        }
+                    },
+                    "edge_2": {
+                        "sender": "hidden_node_1",
+                        "receiver": "output_node",
+                        "sender_port": "out_port",
+                        "receiver_port": "in_port",
+                        "parameters": {
+                            "weight": [
+                                [
+                                    0.3648859839013723,
+                                    0.6153961784334937
+                                ],
+                                [
+                                    0.07538124164297655,
+                                    0.3688240060019745
+                                ]
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
