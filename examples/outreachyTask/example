@@ -1,11 +1,17 @@
 digraph example_graph {
 	graph [rankdir=LR]
 	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
-	node1 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node1</b></td></tr><tr><td><font color="#1666ff">input_val</font> = 2.0</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">input_val</font> </td></tr></table>>]
+	node1 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node1</b></td></tr><tr><td><font color="#1666ff">input_val</font> = 12</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">input_val</font> </td></tr></table>>]
 	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
 	node2 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node2</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">multiplier</font> = 3.0</td></tr><tr><td><font color="#1666ff">offset</font> = 21.0</td></tr><tr><td><font color="#1666ff">result</font> = <font color="#188855">input</font> * <font color="#1666ff">multiplier</font> + <font color="#1666ff">offset</font></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">result</font> </td></tr></table>>]
 	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
 	node3 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node3</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">result</font> = <font color="#188855">input</font> * 10</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">result</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	node2 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node2</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">multiplier</font> = 3.0</td></tr><tr><td><font color="#1666ff">offset</font> = 9.0</td></tr><tr><td><font color="#1666ff">result</font> = <font color="#188855">input</font> * <font color="#1666ff">multiplier</font> + <font color="#1666ff">offset</font></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">result</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	node3 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node3</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">result</font> = <font color="#188855">input</font> * 10</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">result</font> </td></tr></table>>]
+	node1 -> node2 [label=<edge_node1_node2 (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
+	node2 -> node3 [label=<edge_node2_node3 (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
 	node1 -> node2 [label=<edge_node1_node2 (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
 	node2 -> node3 [label=<edge_node2_node3 (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
 }
