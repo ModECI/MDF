@@ -76,7 +76,10 @@ The installation requires Python >= 3.7. See installation instructions at https:
     ```
 * Step 5 : Activate the virtual environment
     ```
-    source mdf-env/bin/activate
+    Linux: source mdf-env/bin/activate
+    ```
+    ```
+    windows:  mdf-env\Scripts\activate.bat
     ```
 * Step 6 : Install MDF
     ```
