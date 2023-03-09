@@ -1,0 +1,74 @@
+{
+    "example_model": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "example_graph": {
+                "nodes": {
+                    "node1": {
+                        "parameters": {
+                            "input_val": {
+                                "value": 2.0
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "input_val"
+                            }
+                        }
+                    },
+                    "node2": {
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "multiplier": {
+                                "value": 3.0
+                            },
+                            "offset": {
+                                "value": 2.0
+                            },
+                            "result": {
+                                "value": "input * multiplier + offset"
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "result"
+                            }
+                        }
+                    },
+                    "node3": {
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "result": {
+                                "value": "input * 10"
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "result"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_node1_node2": {
+                        "sender": "node1",
+                        "receiver": "node2",
+                        "sender_port": "output",
+                        "receiver_port": "input"
+                    },
+                    "edge_node2_node3": {
+                        "sender": "node2",
+                        "receiver": "node3",
+                        "sender_port": "output",
+                        "receiver_port": "input"
+                    }
+                }
+            }
+        }
+    }
+}
