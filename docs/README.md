@@ -29,7 +29,7 @@ The top level construct in MDF is Model, which may contain multiple <a href="#gr
   <tr>
     <td><b>generating_application</b></td>
     <td>str</td>
-    <td><i>Information on what application generated/saved this file</i></td>
+    <td><i>Information on what application is  generated/saved in this file</i></td>
  </tr>
 
 
@@ -68,7 +68,7 @@ A directed graph consisting of <a href="#node">Node</a>s (with <a href="#paramet
   <tr>
     <td><b>id</b></td>
     <td>str</td>
-    <td><i>A unique identifier for this Graph</i></td>
+    <td><i>A unique identifier for each Graph</i></td>
  </tr>
 
 
@@ -428,7 +428,7 @@ An <a href="#edge">Edge</a> is an attribute of a <a href="#graph">Graph</a> that
   <tr>
     <td><b>receiver_port</b></td>
     <td>str</td>
-    <td><i>The id of the InputPort on the receiver <a href="#node">Node</a></i></td>
+    <td><i>The id of the InputPort on the receiver's <a href="#node">Node</a></i></td>
  </tr>
 
 
