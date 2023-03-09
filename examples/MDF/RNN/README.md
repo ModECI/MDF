@@ -6,7 +6,7 @@ The script [generate_rnn.py](generate_rnn.py) can be used to generate an example
 
 <p align="center"><img src="rnn.png" alt="rnn.png" height="400"></p>
 
-To run the network using the MDF execution engine type `python generate_rnn.py -run`, producing:
+To run the network using the MDF execution engine type `python generate_rnn.py -run`, producing the following network graph:
 
 <p align="center"><img src="RNN.run.png" alt="RNN.run.png" height="400"></p>
 
@@ -17,10 +17,10 @@ The script [generate_iaf.py](generate_iaf.py) can be used to generate an example
 
 <p align="center"><img src="iaf.png" alt="iaf.png"></p>
 
-To run the network with 1 input, a pre and a post IAF node using the MDF execution engine type `python generate_iaf.py -run`, producing:
+To run the network with 1 input, a pre and a post IAF node using the MDF execution engine type `python generate_iaf.py -run`, producing the following graph:
 
 <p align="center"><img src="IaF.run.png" alt="IaF.run.png" height="500"></p>
 
-To run a network with an array for the state variable v type `python generate_iaf.py -run -net`, producing:
+To run a network with an array for the state variable v type `python generate_iaf.py -run -net`, producing the following graph image
 
 <p align="center"><img src="IaF.net.run.png" alt="IaF.net.run.png" height="500"></p>
