@@ -6,4 +6,4 @@
 - Build the documentation
 - Fork the repository, create a new branch and push a few commits
 
-**Note** This repository contain each python version environment requirement.txt file for all the installed packages.
+**Note** This folder contains each python version environment requirement.txt file for all the installed packages.
