@@ -1,0 +1,42 @@
+3-connected-nodes:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        state_example:
+            nodes:
+                A:
+                    parameters:
+                        level:
+                            value: 1.0
+                    output_ports:
+                        output:
+                            value: level
+                B:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        2nd-node:
+                            value: 1/(1+(input))
+                    output_ports:
+                        output:
+                            value: 2nd-node
+                C:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        3rd-node:
+                            value: 100*input
+                    output_ports:
+                        output:
+                            value: 3rd-node
+            edges:
+                edge_A_B:
+                    sender: A
+                    receiver: B
+                    sender_port: output
+                    receiver_port: input
+                edge_B_C:
+                    sender: B
+                    receiver: C
+                    sender_port: output
+                    receiver_port: input
