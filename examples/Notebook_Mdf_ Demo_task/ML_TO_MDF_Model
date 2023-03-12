@@ -1,0 +1,12 @@
+digraph Mygraph {
+	graph [rankdir=LR]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	node1 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node1</b></td></tr><tr><td><font color="#188855">input1</font> </td></tr><tr><td><font color="#188855">input2</font> </td></tr><tr><td><font color="#cc3355">output</font> = None(NoneType) </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	node2 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node2</b></td></tr><tr><td><font color="#188855">input1</font> </td></tr><tr><td><font color="#188855">input2</font> </td></tr><tr><td><font color="#cc3355">output</font> = None(NoneType) </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	node3 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>node3</b></td></tr><tr><td><font color="#188855">input1</font> </td></tr><tr><td><font color="#188855">input2</font> </td></tr><tr><td><font color="#cc3355">output</font> = None(NoneType) </td></tr></table>>]
+	node1 -> node2 [label=<edge_node1_node2 (<font color="#cc3355">output</font> -&gt; <font color="#188855">input1</font>)> arrowhead=empty]
+	node2 -> node3 [label=<edge_node2_node3 (<font color="#cc3355">output</font> -&gt; <font color="#188855">input1</font>)> arrowhead=empty]
+	node1 -> node3 [label=<edge_node1_node3 (<font color="#cc3355">output</font> -&gt; <font color="#188855">input1</font>)> arrowhead=empty]
+}

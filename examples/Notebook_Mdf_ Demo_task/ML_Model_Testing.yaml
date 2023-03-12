@@ -1,0 +1,41 @@
+my_model:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        Mygraph:
+            nodes:
+                node1:
+                    input_ports:
+                        input1: {}
+                        input2: {}
+                    functions:
+                        output = input1 * input2: {}
+                    output_ports:
+                        output: {}
+                node2:
+                    input_ports:
+                        input1: {}
+                        input2: {}
+                    functions:
+                        output = input1 * input2: {}
+                    output_ports:
+                        output: {}
+                node3:
+                    input_ports:
+                        input1: {}
+                        input2: {}
+                    functions:
+                        output = input1 * input2: {}
+                    output_ports:
+                        output: {}
+            edges:
+                edge_node1_node2:
+                    sender: node1
+                    receiver: node2
+                    sender_port: output
+                    receiver_port: input1
+                edge_node1_node3:
+                    sender: node1
+                    receiver: node3
+                    sender_port: output
+                    receiver_port: input1
