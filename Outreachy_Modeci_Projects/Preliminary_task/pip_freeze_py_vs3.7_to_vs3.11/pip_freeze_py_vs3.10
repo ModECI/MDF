@@ -1,9 +1,7 @@
 python -V
-
 Python 3.10.9
 
 pip freeze
-
 attrs==22.2.0
 boltons==23.0.0
 cattrs==22.2.0
