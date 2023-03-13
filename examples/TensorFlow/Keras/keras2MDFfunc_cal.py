@@ -65,8 +65,8 @@ print(mod_graph.to_yaml())
 mod.to_json_file("keras_to_MDF.json")
 mod.to_yaml_file("keras_to_MDF.yaml")
 
-
-""""mod.to_graph_image(
+"""
+mod.to_graph_image(
         engine="dot",
         output_format="png",
         view_on_render=False,

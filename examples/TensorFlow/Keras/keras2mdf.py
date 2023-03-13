@@ -1,30 +1,21 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
+import random
 
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.layers import Input, Dense, Flatten
+from tensorflow.keras.layers import Dense, Flatten, Input
 
-
-from modeci_mdf.mdf import *
 from modeci_mdf.execution_engine import EvaluableGraph
+from modeci_mdf.mdf import *
 from modeci_mdf.utils import simple_connect
-import graph_scheduler
-import random
 
-
-new_model = tf.keras.models.load_model("kr_N_model.h5")
-for i in new_model.layers:
-    print(i.name)
+import numpy as np
 
 
 def get_weights_and_activation(layers, model):
 
     params = {}
     activations = []
-    for layer in layers_to_extract:
+    for layer in layers:
         n = {}
         lyr = model.get_layer(layer)
         wgts, bias = lyr.weights
@@ -32,13 +23,6 @@ def get_weights_and_activation(layers, model):
         params[layer] = n
         activations.append(str(lyr.activation).split()[1])
     return params, activations
-
-
-# selective layers which will be used in MDF Model
-layers_to_extract = ["dense", "dense_1", "dense_2"]
-
-# Calling the function to get weights and activation of layer
-params, activations = get_weights_and_activation(layers_to_extract, new_model)
 
 
 def init_model_with_graph(model_id, graph_id):

@@ -1,3 +1,4 @@
+import sys
 import tensorflow as tf
 
 # tf.__version__
@@ -67,7 +68,9 @@ print("Predict value at index 0:")
 predictions = kr_model.predict([x_test])
 print("The predicted number at index 0 is", np.argmax(predictions[0]))
 
-# print the actauly value at that index
+# print the actual value at that index
 print("The actually number at index zero is (see the image below):")
 plt.imshow(x_test[0])
-plt.show()
+
+if not "-nogui" in sys.argv:
+    plt.show()
