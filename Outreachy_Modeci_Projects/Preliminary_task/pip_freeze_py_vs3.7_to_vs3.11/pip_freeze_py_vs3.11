@@ -1,1 +1,14 @@
+python -V
+Python 3.11.0
 
+pip freeze
+certifi==2022.9.24
+wincertstore==0.2
+
+When trying to install all the MDF package in my virtual environment which has 3.11 python version installed in it, i got the error below
+ERROR: Ignored the following versions that require a different python version: 1.21.2 Requires-Python >=3.7,<3.11; 1.21.3 Requires-Python >=3.7,<3.11; 1.21.4 Requires-Python >=3.7,<3.11; 1.21.5 Requires-Python >=3.7,<3.11; 1.21.6 Requires-Python >=3.7,<3.11
+ERROR: Could not find a version that satisfies the requirement onnxruntime>=1.12.0 (from modeci-mdf) (from versions: none)
+ERROR: No matching distribution found for onnxruntime>=1.12.0
+
+**NOTE** 
+Not all the dependencies for MDF currently support py3.11
