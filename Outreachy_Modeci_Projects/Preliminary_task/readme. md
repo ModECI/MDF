@@ -1,6 +1,6 @@
 # PRELIMINARY TASK OUTLINE 
 1. Setup virtual environments for different python from 3.7 to 3.11 for your project.
-2. install MDF from [source](
+2. install MDF from [source](https://github.com/ModECI/MDF.git)
 3. Run all tests
 4. Run all examples
 5. Build the documentation
