@@ -1,1 +1,9 @@
-This is the preliminary task of the MDF project
+# PRELIMINARY TASK OUTLINE 
+1. Setup virtual environments for different python from 3.7 to 3.11 for your project.
+2. install MDF from [source](
+3. Run all tests
+4. Run all examples
+5. Build the documentation
+6. Fork the repository, create a new branch and push few commits there.
+
+**NOTE** This folder contains different python versions installed in each of my virtual environments and all the installed packages in it.
