@@ -1,0 +1,111 @@
+{
+    "Simple": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "simple_example": {
+                "nodes": {
+                    "A": {
+                        "metadata": {
+                            "color": "0 0.8 0"
+                        },
+                        "parameters": {
+                            "level": {
+                                "value": 1
+                            },
+                            "Logistic": {
+                                "function": "logistic",
+                                "args": {
+                                    "variable0": "level",
+                                    "gain": 1,
+                                    "bias": 0,
+                                    "offset": 0
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "Logistic"
+                            }
+                        }
+                    },
+                    "B": {
+                        "metadata": {
+                            "color": ".8 0 0"
+                        },
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "x_value": {
+                                "value": "input"
+                            },
+                            "tanh": {
+                                "function": "onnx::Atanh",
+                                "args": {
+                                    "input": "x_value"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "tanh"
+                            }
+                        }
+                    },
+                    "C": {
+                        "metadata": {
+                            "color": ".8 0 0"
+                        },
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "t_value": {
+                                "value": "input"
+                            },
+                            "increment": {
+                                "value": "increment+input"
+                            },
+                            "sigm": {
+                                "function": "onnx::Atanh",
+                                "args": {
+                                    "input": "increment"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "sigm"
+                            }
+                        }
+                    },
+                    "D": {
+                        "metadata": {
+                            "color": ".8 0 0"
+                        },
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "p_value": {
+                                "value": "input"
+                            },
+                            "val": {
+                                "function": "onnx::Round",
+                                "args": {
+                                    "X": "p_value"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "output": {
+                                "value": "val"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
