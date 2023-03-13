@@ -32,7 +32,7 @@ LEVEL_2 = 2
 LEVEL_3 = 3
 
 COLOR_MAIN = "#444444"
-# COLOR_BG_MAIN = "#999911"
+COLOR_BG_MAIN = "#ffffff"
 COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
 COLOR_PARAM = "#1666ff"
@@ -224,51 +224,54 @@ def mdf_to_graphviz(
     for node in mdf_graph.nodes:
         print("    Node: %s" % node.id)
         color = COLOR_MAIN
+        fillcolor = COLOR_BG_MAIN
         penwidth = "1"
-        # bg_color = COLOR_BG_MAIN
 
         if node.metadata is not None:
             if "color" in node.metadata:
                 color = color_rgb_to_hex(node.metadata["color"])
                 penwidth = "2"
 
-                graph.attr(
-                    "node",
-                    color=color,
-                    style="rounded",
-                    shape="box",
-                    fontcolor=COLOR_MAIN,
-                    penwidth=penwidth,
-                )
-
-            info = '<table border="0" cellborder="0">'
-            info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
-
-            if solid_color:
+        if solid_color:
+            rgb_ = None
+            if node.metadata is not None and "color" in node.metadata:
+                fillcolor = color
                 rgb_ = node.metadata["color"].split(" ")
-                print(rgb_)
 
                 if (
                     float(rgb_[0]) * 0.299
                     + float(rgb_[1]) * 0.587
                     + float(rgb_[2]) * 0.2
-                ) > 0.25:
+                ) > 0.45:
                     fcolor = "black"
                 else:
                     fcolor = "white"
+            else:
+                fcolor = "black"
 
-                graph.attr(
-                    "node",
-                    color=color,
-                    fillcolor=color,
-                    style="filled",
-                    shape="box",
-                    fontcolor=fcolor,
-                    penwidth=penwidth,
-                )
+            print(f"Bkgd color: {rgb_} ({color}), font: {fcolor}")
 
-            info = '<table border="0" cellborder="0">'
-            info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
+            graph.attr(
+                "node",
+                color=color,
+                fillcolor=fillcolor,
+                style="rounded,filled",
+                shape="box",
+                fontcolor=fcolor,
+                penwidth=penwidth,
+            )
+        else:
+            graph.attr(
+                "node",
+                color=color,
+                style="rounded",
+                shape="box",
+                fontcolor=COLOR_MAIN,
+                penwidth=penwidth,
+            )
+
+        info = '<table border="0" cellborder="0">'
+        info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
 
         if node.metadata is not None and level >= LEVEL_3:
 
@@ -548,4 +551,5 @@ if __name__ == "__main__":
         view_on_render=view,
         level=int(sys.argv[2]),
         is_horizontal=is_horizontal,
+        solid_color=False,
     )
