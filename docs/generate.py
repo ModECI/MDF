@@ -23,6 +23,17 @@ for ex in [
         f"sphinx/source/api/export_format/{ex}/{ex}.md",
     )
 
+import glob
+
+for ex in ["ACT-R", "NeuroML", "ONNX", "PyTorch"]:
+    for file in glob.glob("../examples/%s/*.png" % ex):
+        print("Copying: %s" % file)
+        shutil.copy(file, "sphinx/source/api/export_format/%s" % ex)
+
+for file in glob.glob("../examples/MDF/images/*.png"):
+    print("Copying: %s" % file)
+    shutil.copy(file, "sphinx/source/api/export_format/MDF/images")
+
 
 mod = Model(id="Simple")
 condition = Condition("testing_condition")
