@@ -35,6 +35,7 @@ re-used in other environments.
 
    api/Introduction
    api/Installation
+   api/QuickStart
    api/Contributors
 
 
