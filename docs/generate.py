@@ -128,7 +128,7 @@ with open("MDF_function_specifications.md", "w") as d:
     d.write("%s\n" % comment)
 
     d.write(
-        "These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py\n"
+        "These functions are defined in https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions\n"
     )
 
     d.write("## All of MDF functions:\n | ")

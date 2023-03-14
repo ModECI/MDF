@@ -18,7 +18,7 @@ sys.path.append(str(BASEDIR / "src"))
 # -- Project information -----------------------------------------------------
 
 project = "modeci-mdf"
-copyright = "2022, ModECI project"
+copyright = "2023, ModECI project"
 author = "ModECI project"
 
 
