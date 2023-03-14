@@ -4,7 +4,7 @@
 
 Python (>=3.7)
 
-## Quick start
+## Installation using pip
 
 Use pip to install the latest version of MDF (plus dependencies) from [PyPI](https://pypi.org/project/modeci-mdf):
 ```
