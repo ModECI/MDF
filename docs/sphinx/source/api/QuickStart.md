@@ -13,10 +13,9 @@ Use pip to install the latest version of MDF (plus dependencies) from [PyPI](htt
 pip install modeci_mdf
 ```
 
-More details can be found [here](Installation). 
+More details can be found [here](Installation).
 
 
 ## Background to the ModECI Initiative
 
 See [here](https://modeci.org/#aboutPage).
-
