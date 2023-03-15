@@ -311,6 +311,7 @@ def main():
             filename_root="inception",
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
             is_horizontal=True,
+            solid_color=True,
         )
 
 

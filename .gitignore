@@ -1,5 +1,3 @@
-# No BSON in the repo
-*.bson
 /examples/MDF/conditions/everyncalls
 /examples/MDF/conditions/threshold
 /examples/MDF/conditions/timeinterval
@@ -277,3 +275,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/NLP/TestNLP_3
 /examples/MDF/NLP/TestNLP
 /examples/MDF/conditions/composite_example
+/examples/NeuroML/arm64
