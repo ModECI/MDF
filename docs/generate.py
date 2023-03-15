@@ -7,6 +7,7 @@ import yaml
 import shutil
 
 shutil.copy("../README.md", "sphinx/source/api/Introduction.md")
+shutil.copy("../CONTRIBUTING.md", "sphinx/source/api/Contributing.md")
 
 for ex in [
     "ACT-R",
