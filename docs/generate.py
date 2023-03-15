@@ -26,9 +26,10 @@ for ex in [
 import glob
 
 for ex in ["ACT-R", "NeuroML", "ONNX", "PyTorch"]:
-    for file in glob.glob("../examples/%s/*.png" % ex):
-        print("Copying: %s" % file)
-        shutil.copy(file, "sphinx/source/api/export_format/%s" % ex)
+    for suf in ["png", "svg"]:
+        for file in glob.glob(f"../examples/{ex}/*.{suf}"):
+            print("Copying: %s" % file)
+            shutil.copy(file, "sphinx/source/api/export_format/%s" % ex)
 
 for file in glob.glob("../examples/MDF/images/*.png"):
     print("Copying: %s" % file)
