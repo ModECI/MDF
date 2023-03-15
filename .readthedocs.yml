@@ -9,8 +9,8 @@ version: 2
 sphinx:
   configuration: docs/sphinx/source/conf.py
 
-# Include PDF and ePub
-formats: all
+# Just generate html version, as pdf failing due to inclusion of svg files (in badges)
+formats: html
 
 python:
   version: 3.7
