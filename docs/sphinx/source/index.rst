@@ -34,8 +34,9 @@ re-used in other environments.
    :caption: Contents
 
    api/Introduction
-   api/Installation
    api/QuickStart
+   api/Installation
+   api/Contributing
    api/Contributors
 
 
