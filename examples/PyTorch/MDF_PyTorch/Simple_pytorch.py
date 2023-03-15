@@ -46,13 +46,13 @@ class Model(nn.Module):
 		self.input_node = input_node
 		self.processing_node = processing_node
 	def forward(self, input):
-		 val_input_node=torch.zeros_like(input)
-		 val_processing_node=torch.zeros_like(input)
+		val_input_node=torch.zeros_like(input)
+		val_processing_node=torch.zeros_like(input)
 
-		 val_input_node=val_input_node+self.input_node()
-		 val_processing_node=val_processing_node+self.processing_node(val_input_node*torch.tensor(0.55))
+		val_input_node=val_input_node+self.input_node()
+		val_processing_node=val_processing_node+self.processing_node(val_input_node*torch.tensor(0.55))
 
-		 return val_input_node,val_processing_node,
+		return val_input_node,val_processing_node,
 
 model = Model(input_node=input_node(),processing_node=processing_node(),)
 model=torch.jit.script(model)
