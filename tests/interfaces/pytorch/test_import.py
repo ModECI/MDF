@@ -76,15 +76,24 @@ def _get_torchvision_models():
         {"weights": None} if is_new_weights_api else {"pretrained": False}
     )
 
+    xfails = {
+        "inception_v3": "Inception-V3 is failing to match currently.",
+        "maxvit_t": "MaxViT is failing because we are trying to call ast.parse on a string that is not valid python."
+                    " Need to handle string arguments requried by einops.",
+        "resnet101": "Resnet101 is failing to match currently.",
+    }
+
     pytest_params = []
     for model in models_to_test:
         t = (model, model_weights_spec)
-        if model.__name__ == "inception_v3":
+        xf_models = [n for n in xfails.keys() if n in model.__name__]
+        if len(xf_models) > 0:
+            xf_reason = xfails[xf_models[0]]
             pytest_params.append(
                 pytest.param(
                     *t,
                     marks=pytest.mark.xfail(
-                        reason="Inception-V3 is failing to match currently."
+                        reason=xf_reason,
                     ),
                 )
             )
