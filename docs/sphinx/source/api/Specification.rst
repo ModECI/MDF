@@ -231,4 +231,3 @@ Allowed field      Data Type                   Description
 **node_specific**  Union[Condition, NoneType]  A dictionary mapping nodes to any non-default run conditions
 **termination**    Union[Condition, NoneType]  A dictionary mapping time scales of model execution to conditions indicating when they end
 =================  ==========================  =============================================================================================
-

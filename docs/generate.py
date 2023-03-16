@@ -135,7 +135,7 @@ with open("MDF_function_specifications.md", "w") as d:
     d.write("%s\n" % comment)
 
     d.write(
-        'These functions are defined in Python API module '
+        "These functions are defined in Python API module "
         '<a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>.\n'
     )
 
@@ -164,7 +164,11 @@ with open("MDF_function_specifications.md", "w") as d:
         if "onnx::" not in f:
             d.write(
                 "<p><b>%s(%s)</b> = %s</p> \n"
-                % (f, ", ".join([a for a in func["arguments"]]), func["expression_string"])
+                % (
+                    f,
+                    ", ".join([a for a in func["arguments"]]),
+                    func["expression_string"],
+                )
             )
 
         d.write(
@@ -175,9 +179,7 @@ with open("MDF_function_specifications.md", "w") as d:
         if "onnx::" in f:
             # Link to ONNX API Documentation
             onnx_link = f"https://onnx.ai/onnx/operators/onnx__{f_str}.html"
-            d.write(
-                f"<a href={onnx_link}><i>ONNX Documentation</i></a>\n"
-            )
+            d.write(f"<a href={onnx_link}><i>ONNX Documentation</i></a>\n")
 
 shutil.copy(
     "MDF_function_specifications.md", "sphinx/source/api/MDF_function_specifications.md"
