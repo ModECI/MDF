@@ -17,9 +17,45 @@ pip install modeci_mdf
 
 More details, and importantly, how to set up a [virtual environment](https://virtualenv.pypa.io/en/latest/) for the package, can be found [here](Installation).
 
-## Serialization formats
+## Examples of MDF
 
-While Python scripts can be used to generate the MDF models (e.g. [this](https://github.com/ModECI/MDF/blob/main/examples/MDF/simple.py)) the models are saved in standardized format in text based [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.json) or [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.yaml) formats or in binary [BSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.bson) format.
+### Simple examples
+
+Some basic examples of models in MDF format which illustrate how a model can be 1) created using the Python API, 2) saved to JSON and YAML, 3) exported to graphical form and 4) executed to evaluate all parameters, can be found [here](export_format/MDF/MDF).
+
+### More complex examples
+
+- An example of a simple **spiking neuronal network** can be found [here](https://github.com/ModECI/MDF/tree/main/examples/MDF/RNN#integrate-and-fire-iaf-neuron-model).
+
+## Export/import formats
+
+### Serialization formats
+
+Whenever a model is exchanged between different environments...
+
+While Python scripts can be used to generate MDF models (e.g. [this](https://github.com/ModECI/MDF/blob/main/examples/MDF/simple.py)) the models are saved in standardized format in text based [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.json) or [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.yaml) formats or in binary [BSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/Simple.bson) format.
+
+### Current supported environments
+
+#### PyTorch
+
+More...
+
+#### ONNX
+
+
+
+#### NeuroML
+#### PsyNeuLink
+
+### Planned supported environments
+
+#### BIDS
+
+#### ACT-R
+
+
+
 
 ## Background to the ModECI Initiative
 
