@@ -23,6 +23,10 @@ More details, and importantly, how to set up a [virtual environment](https://vir
 
 Some basic examples of models in MDF format which illustrate how a model can be 1) created using the Python API, 2) saved to JSON and YAML, 3) exported to graphical form and 4) executed to evaluate all parameters, can be found [here](export_format/MDF/MDF).
 
+### A step-by-step guide to using MDF
+
+[This Jupyter notebook](https://github.com/ModECI/MDF/blob/main/examples/SimpleExample.ipynb) provides a step-by-step guide to creating, saving and executing an MDF model in Python.
+
 ### More complex examples
 
 - An example of a simple **Spiking Neuronal Network (SNN)** can be found [here](https://github.com/ModECI/MDF/tree/main/examples/MDF/RNN#integrate-and-fire-iaf-neuron-model).
@@ -44,7 +48,7 @@ Models can be created in [PyTorch](http://www.pytorch.org) and exported into MDF
 
 #### ONNX
 
-[ONNX](https://onnx.ai) (Open Neural Network Exchange) is an important format for exchanging models between machine learning environments. It is used in the MDF function ontology, and models in ONNX format can be exported to MDF. See [here](export_format/ONNX/ONNX) for more details. Converting MDF->ONNX is best enabled currently by converting the model to PyTorch and from there to ONNX.
+[ONNX](https://onnx.ai) (Open Neural Network Exchange) is an important format for exchanging models between machine learning environments. It is used in the [MDF function ontology](https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html), and models in ONNX format can be exported to MDF. See [here](export_format/ONNX/ONNX) for more details. Converting MDF->ONNX is best enabled currently by converting the model to PyTorch and from there to ONNX.
 
 #### NeuroML
 
