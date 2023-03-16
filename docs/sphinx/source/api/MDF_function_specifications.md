@@ -1,383 +1,198 @@
 # Specification of standard functions in ModECI v0.4
 **Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues) for ongoing discussions.
 These functions are defined in Python API module <a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>.
-
-## All of MDF functions:
-
-<a href="#matmul">MatMul</a>
-
-<a href="#relu">Relu</a>
-
-<a href="#changegoal">change_goal</a>
-
-<a href="#checktermination">check_termination</a>
-
-<a href="#conflictresolutionfunction">conflict_resolution_function</a>
-
-<a href="#cos">cos</a>
-
-<a href="#cosh">cosh</a>
-
-<a href="#exponential">exponential</a>
-
-<a href="#linear">linear</a>
-
-<a href="#logistic">logistic</a>
-
-<a href="#abs">Abs</a>
-
-<a href="#acos">Acos</a>
-
-<a href="#acosh">Acosh</a>
-
-<a href="#add">Add</a>
-
-<a href="#and">And</a>
-
-<a href="#argmax">ArgMax</a>
-
-<a href="#argmin">ArgMin</a>
-
-<a href="#asin">Asin</a>
-
-<a href="#asinh">Asinh</a>
-
-<a href="#atan">Atan</a>
-
-<a href="#atanh">Atanh</a>
-
-<a href="#averagepool">AveragePool</a>
-
-<a href="#batchnormalization">BatchNormalization</a>
-
-<a href="#bernoulli">Bernoulli</a>
-
-<a href="#bitshift">BitShift</a>
-
-<a href="#cast">Cast</a>
-
-<a href="#castlike">CastLike</a>
-
-<a href="#ceil">Ceil</a>
-
-<a href="#celu">Celu</a>
-
-<a href="#clip">Clip</a>
-
-<a href="#compress">Compress</a>
-
-<a href="#concat">Concat</a>
-
-<a href="#concatfromsequence">ConcatFromSequence</a>
-
-<a href="#constant">Constant</a>
-
-<a href="#constantofshape">ConstantOfShape</a>
-
-<a href="#conv">Conv</a>
-
-<a href="#convinteger">ConvInteger</a>
-
-<a href="#convtranspose">ConvTranspose</a>
-
-<a href="#cos">Cos</a>
-
-<a href="#cosh">Cosh</a>
-
-<a href="#cumsum">CumSum</a>
-
-<a href="#depthtospace">DepthToSpace</a>
-
-<a href="#dequantizelinear">DequantizeLinear</a>
-
-<a href="#det">Det</a>
-
-<a href="#div">Div</a>
-
-<a href="#dropout">Dropout</a>
-
-<a href="#dynamicquantizelinear">DynamicQuantizeLinear</a>
-
-<a href="#einsum">Einsum</a>
-
-<a href="#elu">Elu</a>
-
-<a href="#equal">Equal</a>
-
-<a href="#erf">Erf</a>
-
-<a href="#exp">Exp</a>
-
-<a href="#expand">Expand</a>
-
-<a href="#eyelike">EyeLike</a>
-
-<a href="#flatten">Flatten</a>
-
-<a href="#floor">Floor</a>
-
-<a href="#gru">GRU</a>
-
-<a href="#gather">Gather</a>
-
-<a href="#gatherelements">GatherElements</a>
-
-<a href="#gathernd">GatherND</a>
-
-<a href="#gemm">Gemm</a>
-
-<a href="#globalaveragepool">GlobalAveragePool</a>
-
-<a href="#globallppool">GlobalLpPool</a>
-
-<a href="#globalmaxpool">GlobalMaxPool</a>
-
-<a href="#greater">Greater</a>
-
-<a href="#greaterorequal">GreaterOrEqual</a>
-
-<a href="#hardsigmoid">HardSigmoid</a>
-
-<a href="#hardswish">HardSwish</a>
-
-<a href="#hardmax">Hardmax</a>
-
-<a href="#identity">Identity</a>
-
-<a href="#if">If</a>
-
-<a href="#instancenormalization">InstanceNormalization</a>
-
-<a href="#isinf">IsInf</a>
-
-<a href="#isnan">IsNaN</a>
-
-<a href="#lrn">LRN</a>
-
-<a href="#lstm">LSTM</a>
-
-<a href="#leakyrelu">LeakyRelu</a>
-
-<a href="#less">Less</a>
-
-<a href="#lessorequal">LessOrEqual</a>
-
-<a href="#log">Log</a>
-
-<a href="#logsoftmax">LogSoftmax</a>
-
-<a href="#loop">Loop</a>
-
-<a href="#lpnormalization">LpNormalization</a>
-
-<a href="#lppool">LpPool</a>
-
-<a href="#matmul">MatMul</a>
-
-<a href="#matmulinteger">MatMulInteger</a>
-
-<a href="#max">Max</a>
-
-<a href="#maxpool">MaxPool</a>
-
-<a href="#maxroipool">MaxRoiPool</a>
-
-<a href="#maxunpool">MaxUnpool</a>
-
-<a href="#mean">Mean</a>
-
-<a href="#meanvariancenormalization">MeanVarianceNormalization</a>
-
-<a href="#min">Min</a>
-
-<a href="#mod">Mod</a>
-
-<a href="#mul">Mul</a>
-
-<a href="#multinomial">Multinomial</a>
-
-<a href="#neg">Neg</a>
-
-<a href="#negativeloglikelihoodloss">NegativeLogLikelihoodLoss</a>
-
-<a href="#nonmaxsuppression">NonMaxSuppression</a>
-
-<a href="#nonzero">NonZero</a>
-
-<a href="#not">Not</a>
-
-<a href="#onehot">OneHot</a>
-
-<a href="#optional">Optional</a>
-
-<a href="#optionalgetelement">OptionalGetElement</a>
-
-<a href="#optionalhaselement">OptionalHasElement</a>
-
-<a href="#or">Or</a>
-
-<a href="#prelu">PRelu</a>
-
-<a href="#pad">Pad</a>
-
-<a href="#pow">Pow</a>
-
-<a href="#qlinearconv">QLinearConv</a>
-
-<a href="#qlinearmatmul">QLinearMatMul</a>
-
-<a href="#quantizelinear">QuantizeLinear</a>
-
-<a href="#rnn">RNN</a>
-
-<a href="#randomnormal">RandomNormal</a>
-
-<a href="#randomnormallike">RandomNormalLike</a>
-
-<a href="#randomuniform">RandomUniform</a>
-
-<a href="#randomuniformlike">RandomUniformLike</a>
-
-<a href="#range">Range</a>
-
-<a href="#reciprocal">Reciprocal</a>
-
-<a href="#reducel1">ReduceL1</a>
-
-<a href="#reducel2">ReduceL2</a>
-
-<a href="#reducelogsum">ReduceLogSum</a>
-
-<a href="#reducelogsumexp">ReduceLogSumExp</a>
-
-<a href="#reducemax">ReduceMax</a>
-
-<a href="#reducemean">ReduceMean</a>
-
-<a href="#reducemin">ReduceMin</a>
-
-<a href="#reduceprod">ReduceProd</a>
-
-<a href="#reducesum">ReduceSum</a>
-
-<a href="#reducesumsquare">ReduceSumSquare</a>
-
-<a href="#relu">Relu</a>
-
-<a href="#reshape">Reshape</a>
-
-<a href="#resize">Resize</a>
-
-<a href="#reversesequence">ReverseSequence</a>
-
-<a href="#roialign">RoiAlign</a>
-
-<a href="#round">Round</a>
-
-<a href="#scan">Scan</a>
-
-<a href="#scatter">Scatter</a>
-
-<a href="#scatterelements">ScatterElements</a>
-
-<a href="#scatternd">ScatterND</a>
-
-<a href="#selu">Selu</a>
-
-<a href="#sequenceat">SequenceAt</a>
-
-<a href="#sequenceconstruct">SequenceConstruct</a>
-
-<a href="#sequenceempty">SequenceEmpty</a>
-
-<a href="#sequenceerase">SequenceErase</a>
-
-<a href="#sequenceinsert">SequenceInsert</a>
-
-<a href="#sequencelength">SequenceLength</a>
-
-<a href="#shape">Shape</a>
-
-<a href="#shrink">Shrink</a>
-
-<a href="#sigmoid">Sigmoid</a>
-
-<a href="#sign">Sign</a>
-
-<a href="#sin">Sin</a>
-
-<a href="#sinh">Sinh</a>
-
-<a href="#size">Size</a>
-
-<a href="#slice">Slice</a>
-
-<a href="#softmax">Softmax</a>
-
-<a href="#softmaxcrossentropyloss">SoftmaxCrossEntropyLoss</a>
-
-<a href="#softplus">Softplus</a>
-
-<a href="#softsign">Softsign</a>
-
-<a href="#spacetodepth">SpaceToDepth</a>
-
-<a href="#split">Split</a>
-
-<a href="#splittosequence">SplitToSequence</a>
-
-<a href="#sqrt">Sqrt</a>
-
-<a href="#squeeze">Squeeze</a>
-
-<a href="#stringnormalizer">StringNormalizer</a>
-
-<a href="#sub">Sub</a>
-
-<a href="#sum">Sum</a>
-
-<a href="#tan">Tan</a>
-
-<a href="#tanh">Tanh</a>
-
-<a href="#tfidfvectorizer">TfIdfVectorizer</a>
-
-<a href="#thresholdedrelu">ThresholdedRelu</a>
-
-<a href="#tile">Tile</a>
-
-<a href="#topk">TopK</a>
-
-<a href="#transpose">Transpose</a>
-
-<a href="#trilu">Trilu</a>
-
-<a href="#unique">Unique</a>
-
-<a href="#unsqueeze">Unsqueeze</a>
-
-<a href="#upsample">Upsample</a>
-
-<a href="#where">Where</a>
-
-<a href="#xor">Xor</a>
-
-<a href="#patternmatchingfunction">pattern_matching_function</a>
-
-<a href="#retrievechunk">retrieve_chunk</a>
-
-<a href="#sin">sin</a>
-
-<a href="#sinh">sinh</a>
-
-<a href="#tan">tan</a>
-
-<a href="#tanh">tanh</a>
-
-<a href="#updategoal">update_goal</a>
-
-<a href="#updateretrieval">update_retrieval</a>
-
+## Non-ONNX Functions
+
+- <a href="#matmul">MatMul</a>
+- <a href="#relu">Relu</a>
+- <a href="#changegoal">change_goal</a>
+- <a href="#checktermination">check_termination</a>
+- <a href="#conflictresolutionfunction">conflict_resolution_function</a>
+- <a href="#cos">cos</a>
+- <a href="#cosh">cosh</a>
+- <a href="#exponential">exponential</a>
+- <a href="#linear">linear</a>
+- <a href="#logistic">logistic</a>
+- <a href="#patternmatchingfunction">pattern_matching_function</a>
+- <a href="#retrievechunk">retrieve_chunk</a>
+- <a href="#sin">sin</a>
+- <a href="#sinh">sinh</a>
+- <a href="#tan">tan</a>
+- <a href="#tanh">tanh</a>
+- <a href="#updategoal">update_goal</a>
+- <a href="#updateretrieval">update_retrieval</a>
+
+## ONNX Functions
+
+- <a href="#abs">Abs</a>
+- <a href="#acos">Acos</a>
+- <a href="#acosh">Acosh</a>
+- <a href="#add">Add</a>
+- <a href="#and">And</a>
+- <a href="#argmax">ArgMax</a>
+- <a href="#argmin">ArgMin</a>
+- <a href="#asin">Asin</a>
+- <a href="#asinh">Asinh</a>
+- <a href="#atan">Atan</a>
+- <a href="#atanh">Atanh</a>
+- <a href="#averagepool">AveragePool</a>
+- <a href="#batchnormalization">BatchNormalization</a>
+- <a href="#bernoulli">Bernoulli</a>
+- <a href="#bitshift">BitShift</a>
+- <a href="#cast">Cast</a>
+- <a href="#castlike">CastLike</a>
+- <a href="#ceil">Ceil</a>
+- <a href="#celu">Celu</a>
+- <a href="#clip">Clip</a>
+- <a href="#compress">Compress</a>
+- <a href="#concat">Concat</a>
+- <a href="#concatfromsequence">ConcatFromSequence</a>
+- <a href="#constant">Constant</a>
+- <a href="#constantofshape">ConstantOfShape</a>
+- <a href="#conv">Conv</a>
+- <a href="#convinteger">ConvInteger</a>
+- <a href="#convtranspose">ConvTranspose</a>
+- <a href="#cos">Cos</a>
+- <a href="#cosh">Cosh</a>
+- <a href="#cumsum">CumSum</a>
+- <a href="#depthtospace">DepthToSpace</a>
+- <a href="#dequantizelinear">DequantizeLinear</a>
+- <a href="#det">Det</a>
+- <a href="#div">Div</a>
+- <a href="#dropout">Dropout</a>
+- <a href="#dynamicquantizelinear">DynamicQuantizeLinear</a>
+- <a href="#einsum">Einsum</a>
+- <a href="#elu">Elu</a>
+- <a href="#equal">Equal</a>
+- <a href="#erf">Erf</a>
+- <a href="#exp">Exp</a>
+- <a href="#expand">Expand</a>
+- <a href="#eyelike">EyeLike</a>
+- <a href="#flatten">Flatten</a>
+- <a href="#floor">Floor</a>
+- <a href="#gru">GRU</a>
+- <a href="#gather">Gather</a>
+- <a href="#gatherelements">GatherElements</a>
+- <a href="#gathernd">GatherND</a>
+- <a href="#gemm">Gemm</a>
+- <a href="#globalaveragepool">GlobalAveragePool</a>
+- <a href="#globallppool">GlobalLpPool</a>
+- <a href="#globalmaxpool">GlobalMaxPool</a>
+- <a href="#greater">Greater</a>
+- <a href="#greaterorequal">GreaterOrEqual</a>
+- <a href="#hardsigmoid">HardSigmoid</a>
+- <a href="#hardswish">HardSwish</a>
+- <a href="#hardmax">Hardmax</a>
+- <a href="#identity">Identity</a>
+- <a href="#if">If</a>
+- <a href="#instancenormalization">InstanceNormalization</a>
+- <a href="#isinf">IsInf</a>
+- <a href="#isnan">IsNaN</a>
+- <a href="#lrn">LRN</a>
+- <a href="#lstm">LSTM</a>
+- <a href="#leakyrelu">LeakyRelu</a>
+- <a href="#less">Less</a>
+- <a href="#lessorequal">LessOrEqual</a>
+- <a href="#log">Log</a>
+- <a href="#logsoftmax">LogSoftmax</a>
+- <a href="#loop">Loop</a>
+- <a href="#lpnormalization">LpNormalization</a>
+- <a href="#lppool">LpPool</a>
+- <a href="#matmul">MatMul</a>
+- <a href="#matmulinteger">MatMulInteger</a>
+- <a href="#max">Max</a>
+- <a href="#maxpool">MaxPool</a>
+- <a href="#maxroipool">MaxRoiPool</a>
+- <a href="#maxunpool">MaxUnpool</a>
+- <a href="#mean">Mean</a>
+- <a href="#meanvariancenormalization">MeanVarianceNormalization</a>
+- <a href="#min">Min</a>
+- <a href="#mod">Mod</a>
+- <a href="#mul">Mul</a>
+- <a href="#multinomial">Multinomial</a>
+- <a href="#neg">Neg</a>
+- <a href="#negativeloglikelihoodloss">NegativeLogLikelihoodLoss</a>
+- <a href="#nonmaxsuppression">NonMaxSuppression</a>
+- <a href="#nonzero">NonZero</a>
+- <a href="#not">Not</a>
+- <a href="#onehot">OneHot</a>
+- <a href="#optional">Optional</a>
+- <a href="#optionalgetelement">OptionalGetElement</a>
+- <a href="#optionalhaselement">OptionalHasElement</a>
+- <a href="#or">Or</a>
+- <a href="#prelu">PRelu</a>
+- <a href="#pad">Pad</a>
+- <a href="#pow">Pow</a>
+- <a href="#qlinearconv">QLinearConv</a>
+- <a href="#qlinearmatmul">QLinearMatMul</a>
+- <a href="#quantizelinear">QuantizeLinear</a>
+- <a href="#rnn">RNN</a>
+- <a href="#randomnormal">RandomNormal</a>
+- <a href="#randomnormallike">RandomNormalLike</a>
+- <a href="#randomuniform">RandomUniform</a>
+- <a href="#randomuniformlike">RandomUniformLike</a>
+- <a href="#range">Range</a>
+- <a href="#reciprocal">Reciprocal</a>
+- <a href="#reducel1">ReduceL1</a>
+- <a href="#reducel2">ReduceL2</a>
+- <a href="#reducelogsum">ReduceLogSum</a>
+- <a href="#reducelogsumexp">ReduceLogSumExp</a>
+- <a href="#reducemax">ReduceMax</a>
+- <a href="#reducemean">ReduceMean</a>
+- <a href="#reducemin">ReduceMin</a>
+- <a href="#reduceprod">ReduceProd</a>
+- <a href="#reducesum">ReduceSum</a>
+- <a href="#reducesumsquare">ReduceSumSquare</a>
+- <a href="#relu">Relu</a>
+- <a href="#reshape">Reshape</a>
+- <a href="#resize">Resize</a>
+- <a href="#reversesequence">ReverseSequence</a>
+- <a href="#roialign">RoiAlign</a>
+- <a href="#round">Round</a>
+- <a href="#scan">Scan</a>
+- <a href="#scatter">Scatter</a>
+- <a href="#scatterelements">ScatterElements</a>
+- <a href="#scatternd">ScatterND</a>
+- <a href="#selu">Selu</a>
+- <a href="#sequenceat">SequenceAt</a>
+- <a href="#sequenceconstruct">SequenceConstruct</a>
+- <a href="#sequenceempty">SequenceEmpty</a>
+- <a href="#sequenceerase">SequenceErase</a>
+- <a href="#sequenceinsert">SequenceInsert</a>
+- <a href="#sequencelength">SequenceLength</a>
+- <a href="#shape">Shape</a>
+- <a href="#shrink">Shrink</a>
+- <a href="#sigmoid">Sigmoid</a>
+- <a href="#sign">Sign</a>
+- <a href="#sin">Sin</a>
+- <a href="#sinh">Sinh</a>
+- <a href="#size">Size</a>
+- <a href="#slice">Slice</a>
+- <a href="#softmax">Softmax</a>
+- <a href="#softmaxcrossentropyloss">SoftmaxCrossEntropyLoss</a>
+- <a href="#softplus">Softplus</a>
+- <a href="#softsign">Softsign</a>
+- <a href="#spacetodepth">SpaceToDepth</a>
+- <a href="#split">Split</a>
+- <a href="#splittosequence">SplitToSequence</a>
+- <a href="#sqrt">Sqrt</a>
+- <a href="#squeeze">Squeeze</a>
+- <a href="#stringnormalizer">StringNormalizer</a>
+- <a href="#sub">Sub</a>
+- <a href="#sum">Sum</a>
+- <a href="#tan">Tan</a>
+- <a href="#tanh">Tanh</a>
+- <a href="#tfidfvectorizer">TfIdfVectorizer</a>
+- <a href="#thresholdedrelu">ThresholdedRelu</a>
+- <a href="#tile">Tile</a>
+- <a href="#topk">TopK</a>
+- <a href="#transpose">Transpose</a>
+- <a href="#trilu">Trilu</a>
+- <a href="#unique">Unique</a>
+- <a href="#unsqueeze">Unsqueeze</a>
+- <a href="#upsample">Upsample</a>
+- <a href="#where">Where</a>
+- <a href="#xor">Xor</a>
 <a name="matmul"></a>
 
 ## MatMul

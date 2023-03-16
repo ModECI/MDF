@@ -136,14 +136,21 @@ with open("MDF_function_specifications.md", "w") as d:
 
     d.write(
         'These functions are defined in Python API module '
-        '<a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>.\n\n'
+        '<a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>.\n'
     )
 
-    d.write("## All of MDF functions:\n\n")
     all_f = sorted(mdf_functions.keys())
-    for f in all_f:
+    onnx_f = [f for f in all_f if f.startswith("onnx::")]
+    non_onnx_f = [f for f in all_f if not f.startswith("onnx::")]
+
+    d.write("## Non-ONNX Functions\n\n")
+    for f in non_onnx_f:
+        d.write(f'- <a href="#{f.lower().replace("_", "")}">{f}</a>\n')
+
+    d.write("\n## ONNX Functions\n\n")
+    for f in onnx_f:
         f = f.replace("onnx::", "")
-        d.write(f'<a href="#{f.lower().replace("_", "")}">{f}</a>\n\n')
+        d.write(f'- <a href="#{f.lower().replace("_", "")}">{f}</a>\n')
 
     for f in sorted(mdf_functions.keys()):
         f_str = f.replace("onnx::", "")
