@@ -136,7 +136,7 @@ with open("MDF_function_specifications.md", "w") as d:
 
     d.write(
         'These functions are defined in Python API module '
-        '<a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>\n.'
+        '<a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>.\n\n'
     )
 
     d.write("## All of MDF functions:\n\n")
