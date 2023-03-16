@@ -11,7 +11,6 @@ import logging
 from typing import Union, Dict, Any, Tuple, List, Callable
 import onnx.defs
 
-
 import torch
 
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Parameter
@@ -325,6 +324,16 @@ def torchnode_to_mdfnode(
         arguments, parameters = process_torch_schema(node, consts, port_mapper)
 
     mdf_node = Node(id=make_node_id(node))
+
+    from modeci_mdf.interfaces.onnx.importer import (
+        get_category_of_onnx_node,
+        get_color_for_onnx_category,
+    )
+
+    category = get_category_of_onnx_node(mdf_node.id)
+    color = get_color_for_onnx_category(category)
+    mdf_node.metadata = color
+
     for p in parameters:
         mdf_node.parameters.append(Parameter(id=p, value=parameters[p]))
 

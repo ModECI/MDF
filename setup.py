@@ -7,6 +7,7 @@ from setuptools import setup
 extras = {
     "psyneulink": ["psyneulink"],
     "neuroml": ["pyNeuroML>=0.5.20", "neuromllite>=0.5.2"],
+    "tensorflow": ["tensorflow", "keras_visualizer", "pydot"],
     "test": [
         "pytest",
         "pytest-benchmark",
@@ -28,7 +29,7 @@ extras = {
         "torchviz",
         "netron",
         "torch>=1.11.0",
-        "torchvision",
+        "torchvision<=0.12.0",
         "h5py",
     ],
     "dev": [],

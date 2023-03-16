@@ -47,13 +47,16 @@ python -m modeci_mdf.interfaces.graphviz.exporter abc_conditions.yaml 3 -noview
 mv abc_conditions_example.gv.png images/abc_conditions.png
 python -m modeci_mdf.interfaces.graphviz.exporter ParametersFunctions.yaml 3 -noview
 mv params_funcs_example.gv.png images/params_funcs.png
+
 cd conditions
-python -m modeci_mdf.interfaces.graphviz.exporter everyncalls_condition.yaml 3 -noview
-mv everyncalls_example.gv.png images/everyncalls.png
-python -m modeci_mdf.interfaces.graphviz.exporter timeinterval_condition.yaml 3 -noview
-mv timeinterval_example.gv.png images/timeinterval.png
-python -m modeci_mdf.interfaces.graphviz.exporter threshold_condition.yaml 3 -noview
-mv threshold_example.gv.png images/threshold.png
+python everyNCalls.py -graph
+mv everyncalls.png images/everyncalls.png
+python timeInterval.py -graph
+mv timeinterval.png images/timeinterval.png
+python threshold.py -graph
+mv threshold.png images/threshold.png
+python composite_condition_example.py -graph
+mv composite_example.png images/composite_example.png
 cd ..
 
 ## Test regenerating NeuroML
@@ -66,6 +69,11 @@ cd RNN
 
 cd ../../NeuroML
 ./regenerateAndTest.sh -nogui
+
+## Test PyTorch examples
+
+cd ../PyTorch
+./regenerate.sh
 
 ## Test ONNX examples
 

@@ -1,7 +1,7 @@
 {
     "timeinterval_condition": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.1.1",
+        "generating_application": "Python modeci-mdf v0.4.5",
         "graphs": {
             "timeinterval_example": {
                 "nodes": {
@@ -20,7 +20,7 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "input_port1"
+                                "value": "param_A"
                             }
                         }
                     },
@@ -39,7 +39,26 @@
                         },
                         "output_ports": {
                             "output_1": {
-                                "value": "input_port1"
+                                "value": "param_B"
+                            }
+                        }
+                    },
+                    "C": {
+                        "input_ports": {
+                            "input_port1": {
+                                "shape": [
+                                    1
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "param_C": {
+                                "value": "param_C + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "output_1": {
+                                "value": "param_C"
                             }
                         }
                     }
@@ -50,20 +69,30 @@
                         "receiver": "B",
                         "sender_port": "output_1",
                         "receiver_port": "input_port1"
+                    },
+                    "edge_B_C": {
+                        "sender": "B",
+                        "receiver": "C",
+                        "sender_port": "output_1",
+                        "receiver_port": "input_port1"
                     }
                 },
                 "conditions": {
                     "node_specific": {
                         "A": {
-                            "type": "TimeInterval",
-                            "kwargs": {
-                                "start": 5
-                            }
+                            "type": "Always",
+                            "kwargs": {}
                         },
                         "B": {
-                            "type": "TimeInterval",
+                            "type": "AfterPass",
                             "kwargs": {
-                                "start": 10
+                                "n": 1
+                            }
+                        },
+                        "C": {
+                            "type": "AfterPass",
+                            "kwargs": {
+                                "n": 4
                             }
                         }
                     }
