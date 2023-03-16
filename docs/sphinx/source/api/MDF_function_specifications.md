@@ -1,7 +1,7 @@
 # Specification of standard functions in ModECI v0.4
 **Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues) for ongoing discussions.
-These functions are defined in https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions
-## All of MDF functions:
+These functions are defined in Python API module <a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>
+.## All of MDF functions:
 
 <a href="#matmul">MatMul</a>
 

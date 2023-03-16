@@ -55,12 +55,6 @@ with open("README.md", "w") as d:
     d.write(doc_md_1)
     d.write(doc_md_2)
 
-"""
-with open("sphinx/source/api/Specification.md", "w") as d:
-    d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
-    d.write("%s\n" % comment)
-    d.write(doc)"""
-
 
 doc = mod.generate_documentation(format="rst")
 doc_rst_1 = condition.generate_documentation(format="rst")
@@ -141,7 +135,8 @@ with open("MDF_function_specifications.md", "w") as d:
     d.write("%s\n" % comment)
 
     d.write(
-        "These functions are defined in https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions\n"
+        'These functions are defined in Python API module '
+        '<a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>\n.'
     )
 
     d.write("## All of MDF functions:\n\n")
