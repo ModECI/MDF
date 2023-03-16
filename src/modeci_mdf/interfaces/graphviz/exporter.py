@@ -32,7 +32,7 @@ LEVEL_2 = 2
 LEVEL_3 = 3
 
 COLOR_MAIN = "#444444"
-# COLOR_BG_MAIN = "#999911"
+COLOR_BG_MAIN = "#ffffff"
 COLOR_LABEL = "#666666"
 COLOR_NUM = "#444444"
 COLOR_PARAM = "#1666ff"
@@ -143,6 +143,7 @@ def mdf_to_graphviz(
     level=LEVEL_2,
     filename_root=None,
     is_horizontal=False,
+    solid_color=False,
 ):
 
     DEFAULT_POP_SHAPE = "ellipse"
@@ -199,28 +200,76 @@ def mdf_to_graphviz(
                 format_term_condition("Termination cond"),
             )
             info += "</td></tr>"
+        if nt.type == "All":
+            info += "<tr><td>{}{} = Satisfied when".format(
+                format_label(" "),
+                format_term_condition("Termination cond"),
+            )
+            i = 0
+            for item in args.get("dependencies"):
+                while i < (len(args.get("dependencies")) - 1):
+                    info += " <b>{}</b> condition on node <b>{}</b> has ran after <b>{}</b> times and ".format(
+                        item.type, item.kwargs["dependencies"], item.kwargs["n"]
+                    )
+                    i = i + 1
+
+            info += " <b>{}</b> condition on node <b>{}</b> has ran after <b>{}</b> times. ".format(
+                item.type, item.kwargs["dependencies"], item.kwargs["n"]
+            )
+
+            info += "</td></tr>"
         info += "</table>"
         graph.node("termination condition", label="<%s>" % info)
 
     for node in mdf_graph.nodes:
         print("    Node: %s" % node.id)
         color = COLOR_MAIN
+        fillcolor = COLOR_BG_MAIN
         penwidth = "1"
-        # bg_color = COLOR_BG_MAIN
 
         if node.metadata is not None:
             if "color" in node.metadata:
                 color = color_rgb_to_hex(node.metadata["color"])
                 penwidth = "2"
 
-        graph.attr(
-            "node",
-            color=color,
-            style="rounded",
-            shape="box",
-            fontcolor=COLOR_MAIN,
-            penwidth=penwidth,
-        )
+        if solid_color:
+            rgb_ = None
+            if node.metadata is not None and "color" in node.metadata:
+                fillcolor = color
+                rgb_ = node.metadata["color"].split(" ")
+
+                if (
+                    float(rgb_[0]) * 0.299
+                    + float(rgb_[1]) * 0.587
+                    + float(rgb_[2]) * 0.2
+                ) > 0.45:
+                    fcolor = "black"
+                else:
+                    fcolor = "white"
+            else:
+                fcolor = "black"
+
+            print(f"Bkgd color: {rgb_} ({color}), font: {fcolor}")
+
+            graph.attr(
+                "node",
+                color=color,
+                fillcolor=fillcolor,
+                style="rounded,filled",
+                shape="box",
+                fontcolor=fcolor,
+                penwidth=penwidth,
+            )
+        else:
+            graph.attr(
+                "node",
+                color=color,
+                style="rounded",
+                shape="box",
+                fontcolor=COLOR_MAIN,
+                penwidth=penwidth,
+            )
+
         info = '<table border="0" cellborder="0">'
         info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
 
@@ -364,6 +413,15 @@ def mdf_to_graphviz(
                     )
                     info += "</td></tr>"
                 elif ns.type == "AfterNCalls":
+                    info += "<tr><td>{}{} = <b>{}</b> will run when or after <b>{}</b> calls of <b>{}</b>".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        node.id,
+                        args.get("n"),
+                        args.get("dependencies"),
+                    )
+                    info += "</td></tr>"
+                elif ns.type == "AfterCall":
                     info += "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> calls of <b>{}</b>".format(
                         format_label(" "),
                         format_condition("condition"),
@@ -380,6 +438,14 @@ def mdf_to_graphviz(
                             node.id,
                             args.get("start"),
                         )
+                    )
+                    info += "</td></tr>"
+                elif ns.type == "AfterPass":
+                    info += "<tr><td>{}{} = <b>{}</b> will run after <b>{}</b> passes".format(
+                        format_label(" "),
+                        format_condition("condition"),
+                        node.id,
+                        args.get("n"),
                     )
                     info += "</td></tr>"
                 elif ns.type == "Threshold":
@@ -407,7 +473,7 @@ def mdf_to_graphviz(
                         format_label("OUT"),
                         format_output(op.id),
                         match_in_expr(op.value, node),
-                        "(shape: %s)" % op.shape
+                        "(shape: %s)" % str(op.shape)
                         if op.shape is not None
                         else ""
                         if level >= LEVEL_2 and op.shape is not None
@@ -485,4 +551,5 @@ if __name__ == "__main__":
         view_on_render=view,
         level=int(sys.argv[2]),
         is_horizontal=is_horizontal,
+        solid_color=False,
     )
