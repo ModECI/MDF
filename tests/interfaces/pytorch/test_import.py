@@ -26,13 +26,31 @@ def _get_torchvision_models():
     Get all the backbone models in torch vision, suprised there is no function to do this in torchvision.
     """
 
+    import torchvision.models
+    from torchvision.models import get_model_builder, list_models
+
+    def list_model_fns(module):
+        return [(name, get_model_builder(name)) for name in list_models(module)]
+
+    # Copied from https://github.com/pytorch/vision/blob/main/test/test_models.py
+    skipped_big_models = {
+        "vit_h_14": {("Windows", "cpu"), ("Windows", "cuda")},
+        "regnet_y_128gf": {("Windows", "cpu"), ("Windows", "cuda")},
+        "mvit_v1_b": {("Windows", "cuda"), ("Linux", "cuda")},
+        "mvit_v2_s": {("Windows", "cuda"), ("Linux", "cuda")},
+    }
+
     if models is None:
         return []
 
     models_to_test = []
     model_classes = set()
-    for model_name, model in models.__dict__.items():
+    for model_name, model in list_model_fns(torchvision.models):
         try:
+
+            if model_name in skipped_big_models:
+                continue
+
             params = inspect.signature(model).parameters
 
             # Get the model class that this construction function returns. To cut down on tests,
@@ -40,8 +58,7 @@ def _get_torchvision_models():
             return_type = inspect.signature(model).return_annotation
 
             if (
-                "weights" in params
-                or "pretrained" in params
+                ("weights" in params or "pretrained" in params)
                 and return_type not in model_classes
             ):
                 models_to_test.append(model)
@@ -61,7 +78,7 @@ def _get_torchvision_models():
 
     pytest_params = []
     for model in models_to_test:
-        t = (model, model(**model_weights_spec))
+        t = (model, model_weights_spec)
         if model.__name__ == "inception_v3":
             pytest_params.append(
                 pytest.param(
@@ -121,10 +138,10 @@ def _run_and_check_model(model, input=None):
     mdf_model2 = Model.from_json(mdf_model.to_json())
 
 
-@pytest.mark.parametrize("model_init, model", _get_torchvision_models())
-def test_torchvision_models(model_init, model):
+@pytest.mark.parametrize("model_init, kwargs", _get_torchvision_models())
+def test_torchvision_models(model_init, kwargs):
     """Test importing the PyTorch model into MDF, executing in execution engine"""
-    _run_and_check_model(model)
+    _run_and_check_model(model_init(**kwargs))
 
 
 def test_simple_convolution(simple_convolution_pytorch):

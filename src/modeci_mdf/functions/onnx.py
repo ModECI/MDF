@@ -125,9 +125,12 @@ def run_onnx_op(
     if op_name == "Pad":
         if "constant_value" in inputs:
             cval = inputs["constant_value"]
-            data = list(inputs.values())[0]
-            if cval.dtype != data.dtype:
-                inputs["constant_value"] = cval.astype(data.dtype)
+            if cval is None:
+                inputs.pop("constant_value")
+            else:
+                data = list(inputs.values())[0]
+                if cval.dtype != data.dtype:
+                    inputs["constant_value"] = cval.astype(data.dtype)
 
     # SkLearn ONNX doesn't seem to support ConcatFromSequence, see
     # https://github.com/onnx/sklearn-onnx/issues/710

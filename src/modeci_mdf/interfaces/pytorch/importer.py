@@ -294,14 +294,14 @@ def torchnode_to_mdfnode(
     """
     op = node.kind()
 
-    # Lookup the schema. For some reason we cannot just call node.schema(), it returns "(no schema)", huh?
-    # We need to do this the hard way.
-    schema = onnx.defs.get_schema(op.replace("onnx::", ""), modeci_onnx_opset_version)
-
     # Exclude constants (as nodes) from the MDF graph. We will instead insert them as parameters to the nodes that
     # they project to.
     if op in ("prim::Constant", "onnx::Constant"):
         return None
+
+    # Lookup the schema. For some reason we cannot just call node.schema(), it returns "(no schema)", huh?
+    # We need to do this the hard way.
+    schema = onnx.defs.get_schema(op.replace("onnx::", ""), modeci_onnx_opset_version)
 
     # If we are dealing with a loop node, we need to recursively create a sub-graph for the loop body
     if op == "onnx::Loop":
