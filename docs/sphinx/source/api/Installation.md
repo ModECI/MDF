@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Python (>=3.7)
+Python >=3.7 is required. Support on Python 3.11 is limited, see [this issue](https://github.com/ModECI/MDF/issues/362).
 
 ## Installation using pip
 
