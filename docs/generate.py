@@ -152,8 +152,8 @@ with open("MDF_function_specifications.md", "w") as d:
 
     for f in sorted(mdf_functions.keys()):
         f_str = f.replace("onnx::", "")
-        d.write(f"<a name=\"{f_str.lower().replace('_', '')}\"></a>")
-        d.write("\n## %s\n " % f_str)
+        d.write(f"<a name=\"{f_str.lower().replace('_', '')}\"></a>\n\n")
+        d.write("## %s\n " % f_str)
         func = mdf_functions[f]
         d.write("<p><i>%s</i></p> \n" % (func["description"]))
         # d.write('<p>Arguments: %s</p> \n'%(func['arguments']))
