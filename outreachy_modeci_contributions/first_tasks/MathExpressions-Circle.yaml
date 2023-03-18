@@ -1,0 +1,53 @@
+MathExpressions-Circle:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        func_graph:
+            nodes:
+                area:
+                    parameters:
+                        radius:
+                            value: 7
+                        pii:
+                            value: 3.141592653589793
+                    output_ports:
+                        output:
+                            value: pii * radius * radius
+                diameter:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        area:
+                            value: input
+                        pii:
+                            value: 3.141592653589793
+                        radius:
+                            function: onnx::Pow
+                            args:
+                                X: area/pii
+                                Y: 0.5
+                    output_ports:
+                        output:
+                            value: 2 * radius
+                perimeter:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        diameter:
+                            value: input
+                        pii:
+                            value: 3.141592653589793
+                    output_ports:
+                        output:
+                            value: diameter * pii
+            edges:
+                area-diameter:
+                    sender: area
+                    receiver: diameter
+                    sender_port: output
+                    receiver_port: input
+                diameter-perimeter:
+                    sender: diameter
+                    receiver: perimeter
+                    sender_port: output
+                    receiver_port: input
