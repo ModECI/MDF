@@ -153,3 +153,16 @@ via the MDF scheduler and the results are compared to the native execution in Py
     <p align="center"><img alt="DDM mdf" src="ddm.png"/></p>
     Conversion to MDF: TODO...
 -->
+
+## Pytorch (DenseNet Model) to MDf
+
+This [Jupyter notebook](..\PyTorch\PyTorch_MDF\pytorch_densenet_mdf_examples.ipynb) demonstrates how to convert a PyTorch model to an MDF model using the pytorch_to_mdf function from the ModeCI library. The notebook also includes code to evaluate the resulting MDF model using the EvaluableGraph class and visualize the model using to_graph_image. Additionally, the notebook includes code to export the PyTorch model as an ONNX file and visualize the resulting ONNX graph using Netron.
+
+The [notebook](..\PyTorch\PyTorch_MDF\pytorch_densenet_mdf_examples.ipynb) loads an example image, pre-processes it using the transforms module from torchvision, and uses a pre-trained DenseNet121 model to classify the image. The notebook also loads a text file containing a mapping of ImageNet labels to their corresponding indices and uses this mapping to display the top predicted label.
+
+Finally, the notebook includes two images. The first image, [denseNet](../PyTorch/PyTorch_MDF/denseNet.png), is a visualization of the MDF graph generated using to_graph_image.
+![denseNet](../PyTorch/PyTorch_MDF/denseNet.png)
+
+The second image, [denseNet.onnx.png](../PyTorch/PyTorch_MDF/denseNet.onnx.png), is a visualization of the ONNX graph generated using Netron (if Netron is not available, the notebook falls back to exporting the ONNX file and printing the resulting output).
+
+![denseNet ONNX image](../PyTorch/PyTorch_MDF/denseNet.onnx.png)
