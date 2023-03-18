@@ -1,7 +1,6 @@
 # PyTorch and MDF
 
-1. [MDF to Pytorch](#MDF-to-PyTorch)
-2. [Pytorch to MDF](#PyTorch-to-MDF)
+Models can be created in [PyTorch](http://www.pytorch.org) and exported into MDF format, or MDF models can be converted to code which executes natively in PyTorch.
 
 ## MDF to PyTorch
 

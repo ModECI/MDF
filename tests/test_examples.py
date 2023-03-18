@@ -24,7 +24,11 @@ example_mdf_scripts = {
 example_pnl_scripts = {
     Path(f) for f in glob.glob("examples/PsyNeuLink/**/*.py", recursive=True)
 }
-example_exclusion_strings = [".reconstructed.py", "generate_json_and_scripts.py"]
+example_exclusion_strings = [
+    ".reconstructed.py",
+    "generate_json_and_scripts.py",
+    "pytorch_ddm.py",
+]
 
 # Filter any excluded example scripts
 example_scripts = [

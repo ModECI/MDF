@@ -121,14 +121,14 @@
         "function": null
     },
     "onnx::ArgMax": {
-        "description": "\nComputes the indices of the max elements of the input tensor's element along the\nprovided axis. The resulting tensor has the same rank as the input if keepdims equal 1.\nIf keepdims equal 0, then the resulting tensor have the reduced dimension pruned.\nIf select_last_index is True (default False), the index of the last occurrence of the max\nis selected if the max appears more than once in the input. Otherwise the index of the\nfirst occurrence is selected.\nThe type of the output tensor is integer.",
+        "description": "\nComputes the indices of the max elements of the input tensor's element along the\nprovided axis. The resulting tensor has the same rank as the input if keepdims equals 1.\nIf keepdims equals 0, then the resulting tensor has the reduced dimension pruned.\nIf select_last_index is True (default False), the index of the last occurrence of the max\nis selected if the max appears more than once in the input. Otherwise the index of the\nfirst occurrence is selected.\nThe type of the output tensor is integer.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.argmax(data, axis, keepdims, select_last_index)"
     },
     "onnx::ArgMin": {
-        "description": "\nComputes the indices of the min elements of the input tensor's element along the\nprovided axis. The resulting tensor has the same rank as the input if keepdims equal 1.\nIf keepdims equal 0, then the resulting tensor have the reduced dimension pruned.\nIf select_last_index is True (default False), the index of the last occurrence of the min\nis selected if the min appears more than once in the input. Otherwise the index of the\nfirst occurrence is selected.\nThe type of the output tensor is integer.",
+        "description": "\nComputes the indices of the min elements of the input tensor's element along the\nprovided axis. The resulting tensor has the same rank as the input if keepdims equals 1.\nIf keepdims equals 0, then the resulting tensor has the reduced dimension pruned.\nIf select_last_index is True (default False), the index of the last occurrence of the min\nis selected if the min appears more than once in the input. Otherwise the index of the\nfirst occurrence is selected.\nThe type of the output tensor is integer.",
         "arguments": [
             "data"
         ],
@@ -170,7 +170,7 @@
         "expression_string": "onnx_ops.averagepool(X, auto_pad, ceil_mode, count_include_pad, kernel_shape, pads, strides)"
     },
     "onnx::BatchNormalization": {
-        "description": "\nCarries out batch normalization as described in the paper\nhttps://arxiv.org/abs/1502.03167. Depending on the mode it is being run,\nThere are five required inputs 'X', 'scale', 'B', 'input_mean' and\n'input_var'.\nNote that 'input_mean' and 'input_var' are expected to be the estimated\nstatistics in inference mode (training_mode=False, default),\nand the running statistics in training mode (training_mode=True).\nThere are multiple cases for the number of outputs, which we list below:\n\nOutput case #1: Y, running_mean, running_var (training_mode=True)\nOutput case #2: Y (training_mode=False)\n\nWhen training_mode=False, extra outputs are invalid.\nThe outputs are updated as follows when training_mode=True:\n```\nrunning_mean = input_mean * momentum + current_mean * (1 - momentum)\nrunning_var = input_var * momentum + current_var * (1 - momentum)\n\nY = (X - current_mean) / sqrt(current_var + epsilon) * scale + B\n\nwhere:\n\ncurrent_mean = ReduceMean(X, axis=all_except_channel_index)\ncurrent_var =  ReduceVar(X, axis=all_except_channel_index)\n\nNotice that ReduceVar refers to the population variance, and it equals to\nsum(sqrd(x_i - x_avg)) / N\nwhere N is the population size (this formula does not use sample size N - 1).\n\n```\n\nWhen training_mode=False:\n```\nY = (X - input_mean) / sqrt(input_var + epsilon) * scale + B\n```\n\nFor previous (depreciated) non-spatial cases, implementors are suggested\nto flatten the input shape to (N x C * D1 * D2 * ... * Dn) before a BatchNormalization Op.\nThis operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.\n",
+        "description": "\nCarries out batch normalization as described in the paper\nhttps://arxiv.org/abs/1502.03167. Depending on the mode it is being run,\nThere are five required inputs 'X', 'scale', 'B', 'input_mean' and\n'input_var'.\nNote that 'input_mean' and 'input_var' are expected to be the estimated\nstatistics in inference mode (training_mode=False, default),\nand the running statistics in training mode (training_mode=True).\nThere are multiple cases for the number of outputs, which we list below:\n\nOutput case #1: Y, running_mean, running_var (training_mode=True)\nOutput case #2: Y (training_mode=False)\n\nWhen training_mode=False, extra outputs are invalid.\nThe outputs are updated as follows when training_mode=True:\n```\nrunning_mean = input_mean * momentum + current_mean * (1 - momentum)\nrunning_var = input_var * momentum + current_var * (1 - momentum)\n\nY = (X - current_mean) / sqrt(current_var + epsilon) * scale + B\n\nwhere:\n\ncurrent_mean = ReduceMean(X, axis=all_except_channel_index)\ncurrent_var =  ReduceVar(X, axis=all_except_channel_index)\n\nNotice that ReduceVar refers to the population variance, and it equals to\nsum(sqrd(x_i - x_avg)) / N\nwhere N is the population size (this formula does not use sample size N - 1).\n\n```\n\nThe computation of ReduceMean and ReduceVar uses float to avoid overflow for float16 inputs.\n\nWhen training_mode=False:\n```\nY = (X - input_mean) / sqrt(input_var + epsilon) * scale + B\n```\n\nFor previous (depreciated) non-spatial cases, implementors are suggested\nto flatten the input shape to (N x C * D1 * D2 * ... * Dn) before a BatchNormalization Op.\nThis operator has **optional** inputs/outputs. See [the doc](IR.md) for more details about the representation of optional arguments. An empty string may be used in the place of an actual argument's name to indicate a missing argument. Trailing optional arguments (those not followed by an argument that is present) may also be simply omitted.\n",
         "arguments": [
             "X",
             "scale",
@@ -179,6 +179,13 @@
             "input_var"
         ],
         "expression_string": "onnx_ops.batchnormalization(X, scale, B, input_mean, input_var, epsilon, momentum, training_mode)"
+    },
+    "onnx::Bernoulli": {
+        "description": "\nDraws binary random numbers (0 or 1) from a Bernoulli distribution. The input tensor should be a tensor\ncontaining probabilities p (a value in the range [0,1]) to be used for drawing the binary random number,\nwhere an output of 1 is produced with probability p and an output of 0 is produced with probability (1-p).\n\nThis operator is non-deterministic and may not produce the same values in different\nimplementations (even if a seed is specified).\n",
+        "arguments": [
+            "input"
+        ],
+        "expression_string": "onnx_ops.bernoulli(input, dtype, seed)"
     },
     "onnx::BitShift": {
         "description": "\nBitwise shift operator performs element-wise operation. For each input element, if the\n attribute \"direction\" is \"RIGHT\", this operator moves its binary representation toward\n the right side so that the input value is effectively decreased. If the attribute \"direction\"\n is \"LEFT\", bits of binary representation moves toward the left side, which results the\n increase of its actual value. The input X is the tensor to be shifted and another input\n Y specifies the amounts of shifting. For example, if \"direction\" is \"Right\", X is [1, 4],\n and S is [1, 1], the corresponding output Z would be [0, 2]. If \"direction\" is \"LEFT\" with\n X=[1, 2] and S=[1, 2], the corresponding output Y would be [2, 8].\n\n Because this operator supports Numpy-style broadcasting, X's and Y's shapes are\n not necessarily identical.\nThis operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).",
@@ -194,6 +201,14 @@
             "input"
         ],
         "expression_string": "onnx_ops.cast(input, to)"
+    },
+    "onnx::CastLike": {
+        "description": "\nThe operator casts the elements of a given input tensor (the first input) to\nthe same data type as the elements of the second input tensor.\nSee documentation of the Cast operator for further details.\n",
+        "arguments": [
+            "input",
+            "target_type"
+        ],
+        "expression_string": "onnx_ops.castlike(input, target_type)"
     },
     "onnx::Ceil": {
         "description": "\nCeil takes one input data (Tensor<T>) and produces one output data\n(Tensor<T>) where the ceil is, y = ceil(x), is applied to\nthe tensor elementwise.\n",
@@ -272,7 +287,7 @@
         "expression_string": "onnx_ops.convinteger(x, w, x_zero_point, w_zero_point, auto_pad, dilations, group, kernel_shape, pads, strides)"
     },
     "onnx::ConvTranspose": {
-        "description": "\nThe convolution transpose operator consumes an input tensor and a filter,\nand computes the output.\n\nIf the pads parameter is provided the shape of the output is calculated via the following equation:\n\n  output_shape[i] = stride[i] * (input_size[i] - 1) + output_padding[i] + ((kernel_shape[i] - 1) * dilations[i] + 1) - pads[start_i] - pads[end_i]\n\noutput_shape can also be explicitly specified in which case pads values are auto generated using these equations:\n\n  total_padding[i] = stride[i] * (input_size[i] - 1) + output_padding[i] + ((kernel_shape[i] - 1) * dilations[i] + 1) - output_shape[i]\n  If (auto_pads != SAME_UPPER): pads[start_i] = total_padding[i]/2; pads[end_i] = total_padding[i] - (total_padding[i]/2)\n  Else: pads[start_i] = total_padding[i] - (total_padding[i]/2); pads[end_i] = (total_padding[i]/2).\n\n    ",
+        "description": "\nThe convolution transpose operator consumes an input tensor and a filter,\nand computes the output.\n\nIf the pads parameter is provided the shape of the output is calculated via the following equation:\n\n  output_shape[i] = stride[i] * (input_size[i] - 1) + output_padding[i] + ((kernel_shape[i] - 1) * dilations[i] + 1) - pads[start_i] - pads[end_i]\n\noutput_shape can also be explicitly specified in which case pads values are auto generated using these equations:\n\n  total_padding[i] = stride[i] * (input_size[i] - 1) + output_padding[i] + ((kernel_shape[i] - 1) * dilations[i] + 1) - output_shape[i]\n  If (auto_pads == SAME_UPPER): pads[start_i] = total_padding[i]/2; pads[end_i] = total_padding[i] - (total_padding[i]/2)\n  Else: pads[start_i] = total_padding[i] - (total_padding[i]/2); pads[end_i] = (total_padding[i]/2).\n\n    ",
         "arguments": [
             "X",
             "W",
@@ -310,7 +325,7 @@
         "expression_string": "onnx_ops.depthtospace(input, blocksize, mode)"
     },
     "onnx::DequantizeLinear": {
-        "description": "\nThe linear dequantization operator. It consumes a quantized tensor, a scale, and a zero point to compute the full precision tensor.\nThe dequantization formula is y = (x - x_zero_point) * x_scale. 'x_scale' and 'x_zero_point' must have same shape, and can be either a scalar\nfor per-tensor / per layer quantization, or a 1-D tensor for per-axis quantizations.\n'x_zero_point' and 'x' must have same type. 'x' and 'y' must have same shape. In the case of dequantizing int32,\nthere's no zero point (zero point is supposed to be 0).\n",
+        "description": "\nThe linear dequantization operator. It consumes a quantized tensor, a scale, and a zero point to compute the full precision tensor.\nThe dequantization formula is y = (x - x_zero_point) * x_scale. 'x_scale' and 'x_zero_point' must have same shape, and can be either a scalar\nfor per-tensor / per layer quantization, or a 1-D tensor for per-axis quantization.\n'x_zero_point' and 'x' must have same type. 'x' and 'y' must have same shape. In the case of dequantizing int32,\nthere's no zero point (zero point is supposed to be 0).\n",
         "arguments": [
             "x",
             "x_scale",
@@ -386,7 +401,7 @@
         "expression_string": "onnx_ops.exp(input)"
     },
     "onnx::Expand": {
-        "description": "\nBroadcast the input tensor following the given shape and the broadcast rule.\nThe broadcast rule is similar to numpy.array(input) * numpy.ones(shape):\nDimensions are right alignment;\nTwo corresponding dimension must have the same value, or one of them is equal to 1.\nAlso, this operator is similar to numpy.broadcast_to(input, shape),\nbut the major difference is numpy.broadcast_to() does not allow shape to be smaller than input.size().\nIt is possible that the output.shape is not equal to shape, when some dimensions in shape is equal to 1,\nor the shape.ndim < input.shape.ndim.\n",
+        "description": "\nBroadcast the input tensor following the given shape and the broadcast rule.\nThe broadcast rule is similar to numpy.array(input) * numpy.ones(shape):\nDimensions are right alignment;\nTwo corresponding dimensions must have the same value, or one of them is equal to 1.\nAlso, this operator is similar to numpy.broadcast_to(input, shape),\nbut the major difference is numpy.broadcast_to() does not allow shape to be smaller than input.size().\nIt is possible that the output.shape is not equal to shape, when some dimensions in shape is equal to 1,\nor the shape.ndim < input.shape.ndim.\n",
         "arguments": [
             "input",
             "shape"
@@ -427,7 +442,7 @@
         "expression_string": "onnx_ops.gru(X, W, R, B, sequence_lens, initial_h, activation_alpha, activation_beta, activations, clip, direction, hidden_size, layout, linear_before_reset)"
     },
     "onnx::Gather": {
-        "description": "\nGiven `data` tensor of rank r >= 1, and `indices` tensor of rank q, gather\nentries of the axis dimension of `data` (by default outer-most one as axis=0) indexed by `indices`, and concatenates\nthem in an output tensor of rank q + (r - 1).\n\naxis = 0 :\n\nLet\nk = indices[i_{0}, ..., i_{q-1}]\nThen\noutput[i_{0}, ..., i_{q-1}, j_{0}, ..., j_{r-2}] = input[k , j_{0}, ..., j_{r-2}]\n\n```\n  data = [\n      [1.0, 1.2],\n      [2.3, 3.4],\n      [4.5, 5.7],\n  ]\n  indices = [\n      [0, 1],\n      [1, 2],\n  ]\n  output = [\n      [\n          [1.0, 1.2],\n          [2.3, 3.4],\n      ],\n      [\n          [2.3, 3.4],\n          [4.5, 5.7],\n      ],\n  ]\n```\naxis = 1 :\n\nLet\nk = indices[i_{0}, ..., i_{q-1}]\nThen\noutput[i_{0}, ..., i_{q-1}, j_{0}, ..., j_{r-2}] = input[j_{0}, k, j_{1}, ..., j_{r-2}]\n\n```\n  data = [\n      [1.0, 1.2, 1.9],\n      [2.3, 3.4, 3.9],\n      [4.5, 5.7, 5.9],\n  ]\n  indices = [\n      [0, 2],\n  ]\n  axis = 1,\n  output = [\n          [[1.0, 1.9]],\n          [[2.3, 3.9]],\n          [[4.5, 5.9]],\n  ]\n```\n",
+        "description": "\nGiven `data` tensor of rank r >= 1, and `indices` tensor of rank q, gather\nentries of the axis dimension of `data` (by default outer-most one as axis=0) indexed by `indices`, and concatenates\nthem in an output tensor of rank q + (r - 1).\n\naxis = 0 :\n\nLet\nk = indices[i_{0}, ..., i_{q-1}]\nThen\noutput[i_{0}, ..., i_{q-1}, j_{0}, ..., j_{r-2}] = input[k , j_{0}, ..., j_{r-2}]\n\n```\n  data = [\n      [1.0, 1.2],\n      [2.3, 3.4],\n      [4.5, 5.7],\n  ]\n  indices = [\n      [0, 1],\n      [1, 2],\n  ]\n  output = [\n      [\n          [1.0, 1.2],\n          [2.3, 3.4],\n      ],\n      [\n          [2.3, 3.4],\n          [4.5, 5.7],\n      ],\n  ]\n```\naxis = 1 :\n\nLet\nk = indices[i_{0}, ..., i_{q-1}]\nThen\noutput[j_{0}, i_{0}, ..., i_{q-1}, j_{1}, ..., j_{r-2}] = input[j_{0}, k, j_{1}, ..., j_{r-2}]\n\n```\n  data = [\n      [1.0, 1.2, 1.9],\n      [2.3, 3.4, 3.9],\n      [4.5, 5.7, 5.9],\n  ]\n  indices = [\n      [0, 2],\n  ]\n  axis = 1,\n  output = [\n          [[1.0, 1.9]],\n          [[2.3, 3.9]],\n          [[4.5, 5.9]],\n  ]\n```\n",
         "arguments": [
             "data",
             "indices"
@@ -435,7 +450,7 @@
         "expression_string": "onnx_ops.gather(data, indices, axis)"
     },
     "onnx::GatherElements": {
-        "description": "\n\nGatherElements takes two inputs `data` and `indices` of the same rank r >= 1\nand an optional attribute `axis` that identifies an axis of `data`\n(by default, the outer-most axis, that is axis 0). It is an indexing operation\nthat produces its output by indexing into the input data tensor at index\npositions determined by elements of the `indices` tensor.\nIts output shape is the same as the shape of `indices` and consists of one value\n(gathered from the `data`) for each element in `indices`.\n\nFor instance, in the 3-D case (r = 3), the output produced is determined\nby the following equations:\n```\n  out[i][j][k] = input[index[i][j][k]][j][k] if axis = 0,\n  out[i][j][k] = input[i][index[i][j][k]][k] if axis = 1,\n  out[i][j][k] = input[i][j][index[i][j][k]] if axis = 2,\n```\n\nThis operator is also the inverse of ScatterElements. It is similar to Torch's gather operation.\n\nExample 1:\n```\n  data = [\n      [1, 2],\n      [3, 4],\n  ]\n  indices = [\n      [0, 0],\n      [1, 0],\n  ]\n  axis = 1\n  output = [\n      [\n        [1, 1],\n        [4, 3],\n      ],\n  ]\n```\nExample 2:\n```\n  data = [\n      [1, 2, 3],\n      [4, 5, 6],\n      [7, 8, 9],\n  ]\n  indices = [\n      [1, 2, 0],\n      [2, 0, 0],\n  ]\n  axis = 0\n  output = [\n      [\n        [4, 8, 3],\n        [7, 2, 3],\n      ],\n  ]\n```\n",
+        "description": "\n\nGatherElements takes two inputs `data` and `indices` of the same rank r >= 1\nand an optional attribute `axis` that identifies an axis of `data`\n(by default, the outer-most axis, that is axis 0). It is an indexing operation\nthat produces its output by indexing into the input data tensor at index\npositions determined by elements of the `indices` tensor.\nIts output shape is the same as the shape of `indices` and consists of one value\n(gathered from the `data`) for each element in `indices`.\n\nFor instance, in the 3-D case (r = 3), the output produced is determined\nby the following equations:\n```\n  out[i][j][k] = input[index[i][j][k]][j][k] if axis = 0,\n  out[i][j][k] = input[i][index[i][j][k]][k] if axis = 1,\n  out[i][j][k] = input[i][j][index[i][j][k]] if axis = 2,\n```\n\nThis operator is also the inverse of ScatterElements. It is similar to Torch's gather operation.\n\nExample 1:\n```\n  data = [\n      [1, 2],\n      [3, 4],\n  ]\n  indices = [\n      [0, 0],\n      [1, 0],\n  ]\n  axis = 1\n  output = [\n      [1, 1],\n      [4, 3],\n  ]\n```\nExample 2:\n```\n  data = [\n      [1, 2, 3],\n      [4, 5, 6],\n      [7, 8, 9],\n  ]\n  indices = [\n      [1, 2, 0],\n      [2, 0, 0],\n  ]\n  axis = 0\n  output = [\n      [4, 8, 3],\n      [7, 2, 3],\n  ]\n```\n",
         "arguments": [
             "data",
             "indices"
@@ -511,7 +526,7 @@
         "expression_string": "onnx_ops.hardswish(X)"
     },
     "onnx::Hardmax": {
-        "description": "\nThe operator computes the hardmax values for the given input:\n\n Hardmax(element in input, axis) = 1 if the element is the first maximum value along the specified axis, 0 otherwise\n\nThe input does not need to explicitly be a 2D vector. The \"axis\" attribute\nindicates the dimension along which Hardmax will be performed.\nThe output tensor has the same shape\nand contains the Hardmax values of the corresponding input.\n",
+        "description": "\nThe operator computes the hardmax values for the given input:\n\n Hardmax(element in input, axis) = 1 if the element is the first maximum value along the specified axis, 0 otherwise\n\nThe \"axis\" attribute indicates the dimension along which Hardmax\nwill be performed. The output tensor has the same shape\nand contains the Hardmax values of the corresponding input.\n",
         "arguments": [
             "input"
         ],
@@ -607,7 +622,7 @@
         "expression_string": "onnx_ops.log(input)"
     },
     "onnx::LogSoftmax": {
-        "description": "\nThe operator computes the log of softmax values for the given input:\n\n LogSoftmax(input, axis) = Log(Softmax(input, axis=axis))\n\nThe input does not need to explicitly be a 2D vector. The \"axis\" attribute\nindicates the dimension along which LogSoftmax will be performed.\nThe output tensor has the same shape\nand contains the LogSoftmax values of the corresponding input.\n",
+        "description": "\nThe operator computes the log of softmax values for the given input:\n\n LogSoftmax(input, axis) = Log(Softmax(input, axis=axis))\n\nThe \"axis\" attribute indicates the dimension along which LogSoftmax\nwill be performed. The output tensor has the same shape\nand contains the LogSoftmax values of the corresponding input.\n",
         "arguments": [
             "input"
         ],
@@ -757,7 +772,7 @@
         "expression_string": "onnx_ops.nonmaxsuppression(boxes, scores, max_output_boxes_per_class, iou_threshold, score_threshold, center_point_box)"
     },
     "onnx::NonZero": {
-        "description": "\n    Returns the indices of the elements that are non-zero\n    (in row-major order - by dimension).\n    NonZero behaves similar to numpy.nonzero:\n    https://docs.scipy.org/doc/numpy/reference/generated/numpy.nonzero.html\n",
+        "description": "\n    Returns the indices of the elements that are non-zero\n    (in row-major order - by dimension).\n    NonZero behaves similar to numpy.nonzero:\n    https://docs.scipy.org/doc/numpy/reference/generated/numpy.nonzero.html,\n    but for scalar input, NonZero produces output shape (0, N) instead of (1, N), which is different from Numpy's behavior.\n",
         "arguments": [
             "X"
         ],
@@ -779,6 +794,27 @@
             "values"
         ],
         "expression_string": "onnx_ops.onehot(indices, depth, values, axis)"
+    },
+    "onnx::Optional": {
+        "description": "\nConstructs an optional-type value containing either an empty optional of a certain type specified by the attribute,\nor a non-empty value containing the input element.\n",
+        "arguments": [
+            "input"
+        ],
+        "expression_string": "onnx_ops.optional(input, type)"
+    },
+    "onnx::OptionalGetElement": {
+        "description": "\nOutputs the element in the optional-type input. It is an error if the input value does not have an element\nand the behavior is undefined in this case.\n",
+        "arguments": [
+            "input"
+        ],
+        "expression_string": "onnx_ops.optionalgetelement(input)"
+    },
+    "onnx::OptionalHasElement": {
+        "description": "\nReturns true if the optional-type input contains an element. If it is an empty optional-type, this op returns false.\n",
+        "arguments": [
+            "input"
+        ],
+        "expression_string": "onnx_ops.optionalhaselement(input)"
     },
     "onnx::Or": {
         "description": "\nReturns the tensor resulted from performing the `or` logical operation\nelementwise on the input tensors `A` and `B` (with Numpy-style broadcasting support).\n\nThis operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).\n",
@@ -830,7 +866,7 @@
         "expression_string": "onnx_ops.qlinearconv(x, x_scale, x_zero_point, w, w_scale, w_zero_point, y_scale, y_zero_point, B, auto_pad, dilations, group, kernel_shape, pads, strides)"
     },
     "onnx::QLinearMatMul": {
-        "description": "\nMatrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html.\nIt consumes two quantized input tensors, their scales and zero points, scale and zero point of output, and computes the quantized output.\nThe quantization formula is y = saturate((x / y_scale) + y_zero_point). For (x / y_scale), it is rounding to nearest ties to even.\nRefer to https://en.wikipedia.org/wiki/Rounding for details. Scale and zero point must have same shape.\nThey must be either scalar (per tensor) or 1-D tensor (per row for 'a' and per column for 'b'). If scale and zero point are 1-D tensor,\nthe number of elements of scale and zero point tensor of input 'a' and output 'y' should be equal to the number of rows of input 'a',\nand the number of elements of scale and zero point tensor of input 'b' should be equal to the number of columns of input 'b'.\nProduction must never overflow, and accumulation may overflow if and only if in 32 bits.\n",
+        "description": "\nMatrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html.\nIt consumes two quantized input tensors, their scales and zero points, scale and zero point of output,\nand computes the quantized output. The quantization formula is y = saturate((x / y_scale) + y_zero_point).\nFor (x / y_scale), it is rounding to nearest ties to even. Refer to https://en.wikipedia.org/wiki/Rounding for details.\nScale and zero point must have same shape. They must be either scalar (per tensor) or N-D tensor\n(per row for 'a' and per column for 'b'). Scalar refers to per tensor quantization whereas N-D refers to per row\nor per column quantization. If the input is 2D of shape [M, K] then zero point and scale tensor may be\nan M element vector [v_1, v_2, ..., v_M] for per row quantization and K element vector of shape [v_1, v_2, ..., v_K]\nfor per column quantization. If the input is N-D tensor with shape [D1, D2, M, K] then zero point and scale tensor may\nhave shape [D1, D2, M, 1] for per row quantization and shape [D1, D2, 1, K] for per column quantization.\nProduction must never overflow, and accumulation may overflow if and only if in 32 bits.\n",
         "arguments": [
             "a",
             "a_scale",
@@ -844,7 +880,7 @@
         "expression_string": "onnx_ops.qlinearmatmul(a, a_scale, a_zero_point, b, b_scale, b_zero_point, y_scale, y_zero_point)"
     },
     "onnx::QuantizeLinear": {
-        "description": "\nThe linear quantization operator. It consumes a high precision tensor, a scale, and a zero point to compute the low precision / quantized tensor. The scale factor can be a scalar\n(per-tensor/layer quantization), or a 1-D tensor for per-axis quantization. The quantization formula is y = saturate ((x / y_scale) + y_zero_point).\nFor saturation, it saturates to [0, 255] if it's uint8, or [-128, 127] if it's int8.\nFor (x / y_scale), it's rounding to nearest ties to even. Refer to https://en.wikipedia.org/wiki/Rounding for details. 'y_zero_point' and 'y' must have same type.\n",
+        "description": "\nThe linear quantization operator. It consumes a high precision tensor, a scale, and a zero point to compute the low precision / quantized tensor.\nThe scale factor and zero point must have same shape, and can be either a scalar for per-tensor / per layer quantization, or a 1-D tensor for per-axis quantization.\nThe quantization formula is y = saturate ((x / y_scale) + y_zero_point).\nFor saturation, it saturates to [0, 255] if it's uint8, or [-128, 127] if it's int8.\nFor (x / y_scale), it's rounding to nearest ties to even. Refer to https://en.wikipedia.org/wiki/Rounding for details. 'y_zero_point' and 'y' must have same type.\n",
         "arguments": [
             "x",
             "y_scale",
@@ -905,63 +941,63 @@
         "expression_string": "onnx_ops.reciprocal(X)"
     },
     "onnx::ReduceL1": {
-        "description": "\nComputes the L1 norm of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the L1 norm of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reducel1(data, axes, keepdims)"
     },
     "onnx::ReduceL2": {
-        "description": "\nComputes the L2 norm of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the L2 norm of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reducel2(data, axes, keepdims)"
     },
     "onnx::ReduceLogSum": {
-        "description": "\nComputes the log sum of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the log sum of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reducelogsum(data, axes, keepdims)"
     },
     "onnx::ReduceLogSumExp": {
-        "description": "\nComputes the log sum exponent of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the log sum exponent of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reducelogsumexp(data, axes, keepdims)"
     },
     "onnx::ReduceMax": {
-        "description": "\nComputes the max of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the max of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reducemax(data, axes, keepdims)"
     },
     "onnx::ReduceMean": {
-        "description": "\nComputes the mean of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the mean of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reducemean(data, axes, keepdims)"
     },
     "onnx::ReduceMin": {
-        "description": "\nComputes the min of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the min of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reducemin(data, axes, keepdims)"
     },
     "onnx::ReduceProd": {
-        "description": "\nComputes the product of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the product of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
         "expression_string": "onnx_ops.reduceprod(data, axes, keepdims)"
     },
     "onnx::ReduceSum": {
-        "description": "\nComputes the sum of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the sum of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data",
             "axes"
@@ -969,7 +1005,7 @@
         "expression_string": "onnx_ops.reducesum(data, axes, keepdims, noop_with_empty_axes)"
     },
     "onnx::ReduceSumSquare": {
-        "description": "\nComputes the sum square of the input tensor's element along the provided axes. The resulted\ntensor has the same rank as the input if keepdims equal 1. If keepdims equal 0, then\nthe resulted tensor have the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy default keepdims to\nFalse instead of True.",
+        "description": "\nComputes the sum square of the input tensor's element along the provided axes. The resulting\ntensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then\nthe resulting tensor has the reduced dimension pruned.\n\nThe above behavior is similar to numpy, with the exception that numpy defaults keepdims to\nFalse instead of True.",
         "arguments": [
             "data"
         ],
@@ -983,7 +1019,7 @@
         "expression_string": "onnx_ops.relu(X)"
     },
     "onnx::Reshape": {
-        "description": "\nReshape the input tensor similar to numpy.reshape.\nFirst input is the data tensor, second input is a shape tensor which specifies the output shape. It outputs the reshaped tensor.\nAt most one dimension of the new shape can be -1. In this case, the value is\ninferred from the size of the tensor and the remaining dimensions. A dimension\ncould also be 0, in which case the actual dimension value is unchanged (i.e. taken\nfrom the input tensor). If 'allowzero' is set, and the new shape includes 0, the\ndimension will be set explicitly to zero (i.e. not taken from input tensor)",
+        "description": "\nReshape the input tensor similar to numpy.reshape.\nFirst input is the data tensor, second input is a shape tensor which specifies the output shape. It outputs the reshaped tensor.\nAt most one dimension of the new shape can be -1. In this case, the value is\ninferred from the size of the tensor and the remaining dimensions. A dimension\ncould also be 0, in which case the actual dimension value is unchanged (i.e. taken\nfrom the input tensor). If 'allowzero' is set, and the new shape includes 0, the\ndimension will be set explicitly to zero (i.e. not taken from input tensor).\nShape (second input) could be an empty shape, which means converting to a scalar.\nThe input tensor's shape and the output tensor's shape are required to have the same number of elements.",
         "arguments": [
             "data",
             "shape"
@@ -1025,7 +1061,7 @@
         "expression_string": "onnx_ops.round(X)"
     },
     "onnx::Scan": {
-        "description": "\nScan can be used to iterate over one or more scan_input tensors,\nconstructing zero or more scan_output tensors. It combines ideas from general recurrences,\nfunctional programming constructs such as scan, fold, map, and zip and is intended to enable\ngeneralizations of RNN-like constructs for sequence-to-sequence processing.\nOther tensors (referred to as state_variables here) can be used to carry a state\nwhen iterating from one element to another (similar to hidden-state in RNNs, also referred\nto as loop-carried dependences in the context of loops).\nMany common usages involve a single scan_input tensor (where functionality\nsimilar to scan, fold and map can be obtained). When more than one scan_input is used,\na behavior similar to zip is obtained.\n\nThe attribute body must be a graph, specifying the computation to be performed in\nevery iteration. It takes as input the current values of the state_variables and\nthe current iterated element of the scan_inputs. It must return the (updated) values\nof the state_variables and zero or more scan_output_element tensors. The values of the\nscan_output_element tensors are concatenated over all the iterations to produce the\nscan_output values of the scan construct (similar to the concatenated intermediate\nhidden-state values of RNN-like constructs). All the output tensors (state_variables as\nwell as scan_output_element tensors) are required to have the same shape in each iteration\nof the loop (a restriction imposed to enable efficient memory allocation).\n\nNote that the iterated element passed to the body subgraph does not have a sequence\naxis. It will have a rank one less than the rank of the corresponding scan_input.\n\nThe scan operation returns the final values of the state_variables as well as the\nscan_outputs.\n\nThe optional attribute scan_input_directions specifies the direction (forward or backward)\nfor each scan input. If this attribute is omitted, all sequences are scanned in the forward\ndirection. A bidirectional scan may be performed by specifying the same tensor input twice\nin the scan_inputs, once with a forward direction, and once with a backward direction.\n\nThe scan_output of the operation is produced by concatenating the scan_output_element\nvalues produced by the body in each iteration.  The optional attribute scan_output_directions\nspecifies the direction in which scan_output is constructed (by appending or prepending the\nscan_output_element to scan_output in each iteration) for each scan_output. If this attribute\nis omitted, the scan_output_element is appended to the scan_output in each iteration.\n\nThe optional attribute scan_input_axes specifies the axis to be scanned for each scan_input.\nIf omitted, every scan_input will be scanned in axis 0. For example, if axis 0 is the\nbatch axis and axis 1 is the time axis (to be scanned), specify an axis value of 1.\nNote that scanning a non-zero axis may be less efficient than scanning axis zero.\n\nThe optional attribute scan_output_axes specifies the axis along which the scan_outputs\nare accumulated for each scan_output. For example, if axis 1 is the time axis (to be\nscanned) for both inputs and outputs, specify a scan_input axis and scan_output axis\nvalue of 1.\n\nNote that because of the ONNX restriction that only the last parameter of an operator can\nbe variadic, the initial-states and scan-inputs are listed together as one input parameter.\nSimilarly, the final-states and scan-outputs are listed together as one output parameter.\nThe attribute num_scan_inputs indicates the number M of scan-inputs.\n\nThe behavior of\n\n    Scan <\n        num_scan_inputs = m,\n        body = loop-body,\n        scan_input_axes = [axis_1, ..., axis_m]\n    > (init_1, ..., init_n, scan_1, ..., scan_m)\n\nis equivalent to the following pseudo-code:\n\n    // scan_i.shape[axis_i] denotes the (max) sequence-length of scan_i\n    // scan_i.shape[axis_i] is required to be equal to scan_j.shape[axis_j] for all i,j.\n    sequence_length = scan_1.shape[axis_1];\n\n    // initialize state-variables\n    st_1 = init_1; ... st_n = init_n;\n    // initialize scan-output variables: [] denotes an empty tensor\n    scan_out_1 = []; ...; scan_out_k = [];\n    // identify number of iterations:\n\n    // execute loop\n    for (int t = 0; t < sequence_length; ++t) {\n        // generate the scan-input elements: the notation T<axis=k>[t] indicates the sub-tensor\n        // of rank one less than T obtained by indexing T at position t along axis k.\n        si_1 = scan_1<axis=axis_1>[t];\n        ... ;\n        si_m = scan_m<axis=axis_m>[t];\n        // execute loop-body\n        st_1, ..., st_n, so_1, ..., so_k = loop-body(st_1, ..., st_n, si_1, ..., si_m)\n        // accumulate the scan-output elements\n        scan_out_1 = Concat<axis=0>(scan_out_1, so_1); ... ; scan_out_k = Concat<axis=0>(scan_out_k, so_k);\n    }\n\n    return st_1, ..., st_n, scan_out_1, ..., scan_out_k;\n\n*Sample usage: Encoding RNN using a Scan*\n\nThe following example shows how a simple RNN over an input tensor %X, with weight tensor %Wi,\nrecurrence weight tensor %Ri, bias tensors %Wbi and %Rbi, and initial hidden-state %H_0 can\nbe encoded as a ScanLoop. Note that the loop-body is a nested graph, and it directly computes\n%Wi, %Ri, %Wbi, and %Rbi (typically constants or initializers in the body graph). If these\nvalues are computed in the outer graph, they need to be passed in as extra state_variables.\n\n    graph rnn-encoding {\n      %H_0 = ...\n      %X = ...\n      %Y_h, %Y = Scan[body = <graph rnn-cell-1>, num_scan_inputs=1](%H_0, %X)\n      return %Y, %Y_h\n    }\n\n    graph rnn-cell-1 (\n      %H_tminus1[FLOAT, tensor]\n      %X_t[FLOAT, tensor]\n    ) {\n      %Wi = ...\n      %Ri = ...\n      %Wbi = ...\n      %Rbi = ...\n      %t1 = X_t * (Wi^T)\n      %t2 = H_tminus1*(Ri^T)\n      %t3 = Add(%t1, %t2)\n      %t4 = Add(%t3, %Wbi)\n      %t5 = Add(%t4, %Rbi)\n      %Ht = Tanh(%t5)\n      %Accumulate = Identity(%Ht)\n      return %Ht, %Accumulate\n    }\n\n",
+        "description": "\nScan can be used to iterate over one or more scan_input tensors,\nconstructing zero or more scan_output tensors. It combines ideas from general recurrences,\nfunctional programming constructs such as scan, fold, map, and zip, and is intended to enable\ngeneralizations of RNN-like constructs for sequence-to-sequence processing.\nOther tensors (referred to as state_variables here) can be used to carry a state\nwhen iterating from one element to another (similar to hidden-state in RNNs, also referred\nto as loop-carried dependences in the context of loops).\nMany common usages involve a single scan_input tensor (where functionality\nsimilar to scan, fold and map can be obtained). When more than one scan_input is used,\na behavior similar to zip is obtained.\n\nThe attribute body must be a graph, specifying the computation to be performed in\nevery iteration. It takes as input the current values of the state_variables and\nthe current iterated element of the scan_inputs. It must return the (updated) values\nof the state_variables and zero or more scan_output_element tensors. The values of the\nscan_output_element tensors are concatenated over all the iterations to produce the\nscan_output values of the scan construct (similar to the concatenated intermediate\nhidden-state values of RNN-like constructs). All the output tensors (state_variables as\nwell as scan_output_element tensors) are required to have the same shape in each iteration\nof the loop (a restriction imposed to enable efficient memory allocation).\n\nNote that the iterated element passed to the body subgraph does not have a sequence\naxis. It will have a rank one less than the rank of the corresponding scan_input.\n\nThe scan operation returns the final values of the state_variables as well as the\nscan_outputs.\n\nThe optional attribute scan_input_directions specifies the direction (forward or backward)\nfor each scan input. If this attribute is omitted, all sequences are scanned in the forward\ndirection. A bidirectional scan may be performed by specifying the same tensor input twice\nin the scan_inputs, once with a forward direction, and once with a backward direction.\n\nThe scan_output of the operation is produced by concatenating the scan_output_element\nvalues produced by the body in each iteration.  The optional attribute scan_output_directions\nspecifies the direction in which scan_output is constructed (by appending or prepending the\nscan_output_element to scan_output in each iteration) for each scan_output. If this attribute\nis omitted, the scan_output_element is appended to the scan_output in each iteration.\n\nThe optional attribute scan_input_axes specifies the axis to be scanned for each scan_input.\nIf omitted, every scan_input will be scanned in axis 0. For example, if axis 0 is the\nbatch axis and axis 1 is the time axis (to be scanned), specify an axis value of 1.\nNote that scanning a non-zero axis may be less efficient than scanning axis zero.\n\nThe optional attribute scan_output_axes specifies the axis along which the scan_outputs\nare accumulated for each scan_output. For example, if axis 1 is the time axis (to be\nscanned) for both inputs and outputs, specify a scan_input axis and scan_output axis\nvalue of 1.\n\nNote that because of the ONNX restriction that only the last parameter of an operator can\nbe variadic, the initial-states and scan-inputs are listed together as one input parameter.\nSimilarly, the final-states and scan-outputs are listed together as one output parameter.\nThe attribute num_scan_inputs indicates the number M of scan-inputs.\n\nThe behavior of\n\n    Scan <\n        num_scan_inputs = m,\n        body = loop-body,\n        scan_input_axes = [axis_1, ..., axis_m]\n    > (init_1, ..., init_n, scan_1, ..., scan_m)\n\nis equivalent to the following pseudo-code:\n\n    // scan_i.shape[axis_i] denotes the (max) sequence-length of scan_i\n    // scan_i.shape[axis_i] is required to be equal to scan_j.shape[axis_j] for all i,j.\n    sequence_length = scan_1.shape[axis_1];\n\n    // initialize state-variables\n    st_1 = init_1; ... st_n = init_n;\n    // initialize scan-output variables: [] denotes an empty tensor\n    scan_out_1 = []; ...; scan_out_k = [];\n    // identify number of iterations:\n\n    // execute loop\n    for (int t = 0; t < sequence_length; ++t) {\n        // generate the scan-input elements: the notation T<axis=k>[t] indicates the sub-tensor\n        // of rank one less than T obtained by indexing T at position t along axis k.\n        si_1 = scan_1<axis=axis_1>[t];\n        ... ;\n        si_m = scan_m<axis=axis_m>[t];\n        // execute loop-body\n        st_1, ..., st_n, so_1, ..., so_k = loop-body(st_1, ..., st_n, si_1, ..., si_m)\n        // accumulate the scan-output elements\n        scan_out_1 = Concat<axis=0>(scan_out_1, so_1); ... ; scan_out_k = Concat<axis=0>(scan_out_k, so_k);\n    }\n\n    return st_1, ..., st_n, scan_out_1, ..., scan_out_k;\n\n*Sample usage: Encoding RNN using a Scan*\n\nThe following example shows how a simple RNN over an input tensor %X, with weight tensor %Wi,\nrecurrence weight tensor %Ri, bias tensors %Wbi and %Rbi, and initial hidden-state %H_0 can\nbe encoded as a ScanLoop. Note that the loop-body is a nested graph, and it directly computes\n%Wi, %Ri, %Wbi, and %Rbi (typically constants or initializers in the body graph). If these\nvalues are computed in the outer graph, they need to be passed in as extra state_variables.\n\n    graph rnn-encoding {\n      %H_0 = ...\n      %X = ...\n      %Y_h, %Y = Scan[body = <graph rnn-cell-1>, num_scan_inputs=1](%H_0, %X)\n      return %Y, %Y_h\n    }\n\n    graph rnn-cell-1 (\n      %H_tminus1[FLOAT, tensor]\n      %X_t[FLOAT, tensor]\n    ) {\n      %Wi = ...\n      %Ri = ...\n      %Wbi = ...\n      %Rbi = ...\n      %t1 = X_t * (Wi^T)\n      %t2 = H_tminus1*(Ri^T)\n      %t3 = Add(%t1, %t2)\n      %t4 = Add(%t3, %Wbi)\n      %t5 = Add(%t4, %Rbi)\n      %Ht = Tanh(%t5)\n      %Accumulate = Identity(%Ht)\n      return %Ht, %Accumulate\n    }\n\n",
         "arguments": [
             "initial_state_and_scan_inputs"
         ],
@@ -1110,11 +1146,11 @@
         "expression_string": "onnx_ops.sequencelength(input_sequence)"
     },
     "onnx::Shape": {
-        "description": "\nTakes a tensor as input and outputs an 1D int64 tensor containing the shape of the input tensor.\n",
+        "description": "\nTakes a tensor as input and outputs an 1D int64 tensor containing the shape of the input tensor.\nOptional attributes start and end can be used to compute a slice of the input tensor's shape.\nIf start axis is omitted, the slice starts from axis 0.\nThe end axis, if specified, is exclusive (and the returned value will not include the size of that axis).\nIf the end axis is omitted, the axes upto the last one will be included.\nNegative axes indicate counting back from the last axis.\nNote that axes will be clamped to the range [0, r-1], where r is the\nrank of the input tensor if they are out-of-range (after adding r in the case of\nnegative axis). Thus, specifying any end value > r is equivalent to specifying an end\nvalue of r, and specifying any start value < -r is equivalent to specifying a start\nvalue of 0.\n\nFor example:\nInput tensor with shape: [2, 3, 4] \nNo attributes specified.\nOutput: [2, 3, 4] \n\nInput tensor with shape: [2, 3, 4] \nstart: -1\nOutput: [4] \n\nInput tensor with shape: [2, 3, 4] \nend: -1\nOutput: [2, 3]\n\nInput tensor with shape: [2, 3, 4] \nstart: 1\nend: 2\nOutput: [3] \n",
         "arguments": [
             "data"
         ],
-        "expression_string": "onnx_ops.shape(data)"
+        "expression_string": "onnx_ops.shape(data, end, start)"
     },
     "onnx::Shrink": {
         "description": "\nShrink takes one input data (Tensor<numeric>) and produces one Tensor output,\nhaving same datatype and shape with input. It has two attributes, lambd and\nbias. The formula of this operator is: If x < -lambd, y = x + bias;\nIf x > lambd, y = x - bias; Otherwise, y = 0.\n",
@@ -1159,7 +1195,7 @@
         "expression_string": "onnx_ops.size(data)"
     },
     "onnx::Slice": {
-        "description": "\nProduces a slice of the input tensor along multiple axes. Similar to numpy:\nhttps://docs.scipy.org/doc/numpy/reference/arrays.indexing.html\nSlices uses `starts`, `ends`, `axes` and `steps` inputs to specify the start and end\ndimension and step for each axis in the list of axes, it uses this information to\nslice the input `data` tensor. If a negative value is passed for any of the\nstart or end indices, it represents number of elements before the end of that\ndimension. If the value passed to start or end is larger than the `n` (the\nnumber of elements in this dimension), it represents `n`. For slicing to the\nend of a dimension with unknown size, it is recommended to pass in `INT_MAX`\nwhen sclicing forward and 'INT_MIN' when slicing backward.\nIf a negative value is passed for step, it represents slicing backward.\nHowever step value cannot be 0.\nIf `axes` are omitted, they are set to `[0, ..., ndim-1]`.\nIf `steps` are omitted, they are set to `[1, ..., 1]` of length `len(starts)`\nExample 1:\n  data = [\n      [1, 2, 3, 4],\n      [5, 6, 7, 8],\n  ]\n  axes = [0, 1]\n  starts = [1, 0]\n  ends = [2, 3]\n  steps = [1, 2]\n  result = [\n      [5, 7],\n  ]\nExample 2:\n  data = [\n      [1, 2, 3, 4],\n      [5, 6, 7, 8],\n  ]\n  starts = [0, 1]\n  ends = [-1, 1000]\n  result = [\n      [2, 3, 4],\n  ]\n",
+        "description": "\nProduces a slice of the input tensor along multiple axes. Similar to numpy:\nhttps://numpy.org/doc/stable/user/basics.indexing.html?highlight=slice#slicing-and-striding\n\nSlice uses the `starts`, `ends`, `axes` and `steps` inputs to select a sub-tensor\nof its input `data` tensor.\n\nAn effective `start[i]`, `end[i]`, and `step[i]` must be computed for each `i`\nin `[0, ... r-1]` where `r = rank(input)` as follows:\n\nIf `axes` are omitted, they are set to `[0, ..., r-1]`.\nIf `steps` are omitted, they are set to `[1, ..., 1]` of length `len(starts)`\n\nThe effective values are initialized as `start[i] = 0`, `end[i] = dims[i]` where\n`dims` are the dimensions of `input` and `step[i] = `1.\n\nAll negative elements of `axes` are made non-negatve by adding `r` to them, where\n`r =rank(input)`.\n\nAll negative values in `starts[i]` and `ends[i]` have `dims[axes[i]]` added to them,\nwhere `dims` are the dimensions of `input`. Then `start[axes[i]]` is the adjusted\n`starts[i]` is clamped into the range `[0, dims[axes[i]]]` for positive stepping\nand `[0, dims[axes[i]]-1]` for negative stepping.\n\nThe clamping for the adjusted `ends[i]` depends on the sign of `steps[i]` and must\naccommodate copying 0 through `dims[axes[i]]` elements, so for positive stepping\n`end[axes[i]]` is clamped to `[0, dims[axes[i]]]`, while for negative stepping it\nis clamped to `[-1, dims[axes[i]]-1]`.\n\nFinally, `step[axes[i]] = steps[i]`.\n\nFor slicing to the end of a dimension with unknown size, it is recommended to pass\nin `INT_MAX` when slicing forward and 'INT_MIN' when slicing backward.\n\nExample 1:\n  data = [\n      [1, 2, 3, 4],\n      [5, 6, 7, 8],\n  ]\n  axes = [0, 1]\n  starts = [1, 0]\n  ends = [2, 3]\n  steps = [1, 2]\n  result = [\n      [5, 7],\n  ]\nExample 2:\n  data = [\n      [1, 2, 3, 4],\n      [5, 6, 7, 8],\n  ]\n  starts = [0, 1]\n  ends = [-1, 1000]\n  result = [\n      [2, 3, 4],\n  ]\n",
         "arguments": [
             "data",
             "starts",
@@ -1170,7 +1206,7 @@
         "expression_string": "onnx_ops.slice(data, starts, ends, axes, steps)"
     },
     "onnx::Softmax": {
-        "description": "\nThe operator computes the normalized exponential values for the given input:\n\n Softmax(input, axis) = Exp(input) / ReduceSum(Exp(input), axis=axis, keepdims=1) \n\nThe input does not need to explicitly be a 2D vector. The \"axis\" attribute\nindicates the dimension along which Softmax will be performed.\nThe output tensor has the same shape\nand contains the Softmax values of the corresponding input.\n",
+        "description": "\nThe operator computes the normalized exponential values for the given input:\n\n Softmax(input, axis) = Exp(input) / ReduceSum(Exp(input), axis=axis, keepdims=1) \n\nThe \"axis\" attribute indicates the dimension along which Softmax\nwill be performed. The output tensor has the same shape\nand contains the Softmax values of the corresponding input.\n",
         "arguments": [
             "input"
         ],
@@ -1342,7 +1378,7 @@
         "expression_string": "onnx_ops.upsample(X, scales, mode)"
     },
     "onnx::Where": {
-        "description": "\n    Return elements, either from X or Y, depending on condition\n    (with Numpy-style broadcasting support).\n    Where behaves like numpy.where with three parameters:\n    https://docs.scipy.org/doc/numpy/reference/generated/numpy.where.html\n",
+        "description": "\nReturn elements, either from X or Y, depending on condition.\nWhere behaves like\n[numpy.where](https://docs.scipy.org/doc/numpy/reference/generated/numpy.where.html)\nwith three parameters.\n\nThis operator supports **multidirectional (i.e., Numpy-style) broadcasting**; for more details please check [the doc](Broadcasting.md).",
         "arguments": [
             "condition",
             "X",
