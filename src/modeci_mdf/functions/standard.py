@@ -4,7 +4,12 @@ Implementation of core MDF function ontology.
 This module implements and registers all builtin MDF functions.
 
 """
-from typing import List, Dict
+import warnings
+
+from typing import List, Dict, Callable
+
+from docstring_parser import parse
+
 
 # Make sure we import math and numpy for Python expression strings. These imports
 # are important, do not remove even though they appear unused.
@@ -124,6 +129,67 @@ def create_python_function(
     return res[name]
 
 
+def parse_description_and_args(f: Callable):
+    """Parse the description and arguments from a callable."""
+
+    # Parse the docstring into markdown format
+    p = parse(f.__doc__)
+
+    # Extract the description, use the long description if available.
+    # "short_description" only parse the first non-empty line and
+    # "long_description" parse the rest of the docstring i.e.
+    # it skips the first non-empty line and parse the rest of the docstring
+    if p.long_description:
+        description = f"{p.short_description} {p.long_description}"
+    else:
+        description = p.short_description
+
+    args = [p.arg_name for p in p.params]
+
+    return description, args
+
+
+def add_function_from_callable(f: Callable):
+    """Adds a standard function from a callable.
+
+    Args:
+        f: A callable object.
+
+    Returns:
+        None
+    """
+    description, args = parse_description_and_args(f)
+
+    add_mdf_function(
+        name=f.__name__,
+        description=description,
+        arguments=args,
+        expression_string=f.__name__ + "(" + ",".join(args) + ")",
+    )
+
+
+def add_public_functions_from_module(module):
+    """Adds all public functions from a module to MDF standard functions.
+
+    Args:
+        module: A module object.
+
+    Returns:
+        None
+    """
+
+    try:
+        for name in module.__all__:
+            if callable(module.__dict__[name]):
+                add_function_from_callable(module.__dict__[name])
+
+    except AttributeError:
+        warnings.warn(
+            f"Module {module.__name__} does not have an __all__ attribute. "
+            f"No MDF standard functions were found."
+        )
+
+
 # Populate the list of known functions
 
 if len(mdf_functions) == 0:
@@ -216,11 +282,14 @@ if len(mdf_functions) == 0:
         add_mdf_function(**mdf_func_spec)
 
     # Add the ACT-R functions.
-    from modeci_mdf.functions.actr import get_actr_functions
+    import modeci_mdf.functions.actr as actr
 
-    for mdf_func_spec in get_actr_functions():
-        add_mdf_function(**mdf_func_spec)
+    add_public_functions_from_module(actr)
 
+    # Add the DDM functions.
+    import modeci_mdf.functions.ddm as ddm
+
+    add_public_functions_from_module(ddm)
 
 if __name__ == "__main__":
 

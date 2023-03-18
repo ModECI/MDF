@@ -7,18 +7,23 @@ These functions are defined in Python API module <a href="https://github.com/Mod
 - <a href="#relu">Relu</a>
 - <a href="#changegoal">change_goal</a>
 - <a href="#checktermination">check_termination</a>
+- <a href="#chunktostring">chunk_to_string</a>
 - <a href="#conflictresolutionfunction">conflict_resolution_function</a>
 - <a href="#cos">cos</a>
 - <a href="#cosh">cosh</a>
+- <a href="#driftdiffusionintegrator">drift_diffusion_integrator</a>
 - <a href="#exponential">exponential</a>
 - <a href="#linear">linear</a>
 - <a href="#logistic">logistic</a>
+- <a href="#matchproduction">match_production</a>
 - <a href="#patternmatchingfunction">pattern_matching_function</a>
+- <a href="#patterntostring">pattern_to_string</a>
 - <a href="#retrievechunk">retrieve_chunk</a>
 - <a href="#sin">sin</a>
 - <a href="#sinh">sinh</a>
 - <a href="#tan">tan</a>
 - <a href="#tanh">tanh</a>
+- <a href="#updatebuffer">update_buffer</a>
 - <a href="#updategoal">update_goal</a>
 - <a href="#updateretrieval">update_retrieval</a>
 
@@ -209,26 +214,35 @@ Python version: `A * (A > 0)`
 <a name="changegoal"></a>
 
 ## change_goal
- <p><i>ACT-R change goal buffer function</i></p>
-<p><b>change_goal(pattern, curr_goal)</b> = actr.change_goal(pattern, curr_goal)</p>
+ <p><i>Modifies the current goal buffer using the given pattern.</i></p>
+<p><b>change_goal(pattern, curr_goal)</b> = change_goal(pattern,curr_goal)</p>
 
-Python version: `actr.change_goal(pattern, curr_goal)`
+Python version: `change_goal(pattern,curr_goal)`
 
 <a name="checktermination"></a>
 
 ## check_termination
- <p><i>check_termination</i></p>
-<p><b>check_termination(production)</b> = actr.check_termination(production)</p>
+ <p><i>Function used to check if no production was selected.</i></p>
+<p><b>check_termination(production)</b> = check_termination(production)</p>
 
-Python version: `actr.check_termination(production)`
+Python version: `check_termination(production)`
+
+<a name="chunktostring"></a>
+
+## chunk_to_string
+ <p><i>Converts a chunk dictionary to a string format.</i></p>
+<p><b>chunk_to_string(chunk)</b> = chunk_to_string(chunk)</p>
+
+Python version: `chunk_to_string(chunk)`
 
 <a name="conflictresolutionfunction"></a>
 
 ## conflict_resolution_function
- <p><i>ACT-R conflict resolution function</i></p>
-<p><b>conflict_resolution_function(productions)</b> = actr.conflict_resolution_function(productions)</p>
+ <p><i>ACT-R conflict resolution function. Currently selects a production at random from the already matched productions, since utility values and learning
+are not implemented yet.</i></p>
+<p><b>conflict_resolution_function(productions)</b> = conflict_resolution_function(productions)</p>
 
-Python version: `actr.conflict_resolution_function(productions)`
+Python version: `conflict_resolution_function(productions)`
 
 <a name="cos"></a>
 
@@ -245,6 +259,15 @@ Python version: `scale * numpy.cos(variable0)`
 <p><b>cosh(variable0, scale)</b> = scale * cosh(variable0)</p>
 
 Python version: `scale * numpy.cosh(variable0)`
+
+<a name="driftdiffusionintegrator"></a>
+
+## drift_diffusion_integrator
+ <p><i>Integrates the drift diffusion model for a single trial using and implementation of the using the Euler-Maruyama method. This is a proof of concept implementation and
+is not optimized for speed.</i></p>
+<p><b>drift_diffusion_integrator(starting_point, non_decision_time, drift_rate, threshold, noise, dt)</b> = drift_diffusion_integrator(starting_point,non_decision_time,drift_rate,threshold,noise,dt)</p>
+
+Python version: `drift_diffusion_integrator(starting_point,non_decision_time,drift_rate,threshold,noise,dt)`
 
 <a name="exponential"></a>
 
@@ -269,6 +292,14 @@ Python version: `(variable0 * slope + intercept)`
 <p><b>logistic(variable0, gain, bias, offset)</b> = 1/(1 + exp(-1*gain*(variable0 + bias) + offset))</p>
 
 Python version: `1/(1 + numpy.exp(-1*gain*(variable0 + bias) + offset))`
+
+<a name="matchproduction"></a>
+
+## match_production
+ <p><i>Returns True if the production's left hand side matches the given context and adds the matching bindings to the production.</i></p>
+<p><b>match_production(production, context)</b> = match_production(production,context)</p>
+
+Python version: `match_production(production,context)`
 
 <a name="abs"></a>
 
@@ -3612,18 +3643,26 @@ Python version: `onnx_ops.xor(A, B)`
 <a name="patternmatchingfunction"></a>
 
 ## pattern_matching_function
- <p><i>ACT-R pattern matching function</i></p>
-<p><b>pattern_matching_function(productions, goal, retrieval)</b> = actr.pattern_matching_function(productions, goal, retrieval)</p>
+ <p><i>Returns the productions that match the given goal and retrieval buffers.</i></p>
+<p><b>pattern_matching_function(productions, goal, retrieval)</b> = pattern_matching_function(productions,goal,retrieval)</p>
 
-Python version: `actr.pattern_matching_function(productions, goal, retrieval)`
+Python version: `pattern_matching_function(productions,goal,retrieval)`
+
+<a name="patterntostring"></a>
+
+## pattern_to_string
+ <p><i>Converts a pattern dictionary to a string format.</i></p>
+<p><b>pattern_to_string(chunk)</b> = pattern_to_string(chunk)</p>
+
+Python version: `pattern_to_string(chunk)`
 
 <a name="retrievechunk"></a>
 
 ## retrieve_chunk
- <p><i>ACT-R retrieve chunk function</i></p>
-<p><b>retrieve_chunk(pattern, dm_chunks, types)</b> = actr.retrieve_chunk(pattern, dm_chunks, types)</p>
+ <p><i>Retrieve a chunk from declarative memory given a pattern.</i></p>
+<p><b>retrieve_chunk(pattern, dm_chunks, types)</b> = retrieve_chunk(pattern,dm_chunks,types)</p>
 
-Python version: `actr.retrieve_chunk(pattern, dm_chunks, types)`
+Python version: `retrieve_chunk(pattern,dm_chunks,types)`
 
 <a name="sin"></a>
 
@@ -3657,18 +3696,26 @@ Python version: `scale * numpy.tan(variable0)`
 
 Python version: `scale * numpy.tanh(variable0)`
 
+<a name="updatebuffer"></a>
+
+## update_buffer
+ <p><i>Returns a pattern to update the given buffer with.</i></p>
+<p><b>update_buffer(production, buffer)</b> = update_buffer(production,buffer)</p>
+
+Python version: `update_buffer(production,buffer)`
+
 <a name="updategoal"></a>
 
 ## update_goal
- <p><i>ACT-R update goal buffer function</i></p>
-<p><b>update_goal(production)</b> = actr.update_goal(production)</p>
+ <p><i>Returns a pattern to update the goal buffer with.</i></p>
+<p><b>update_goal(production)</b> = update_goal(production)</p>
 
-Python version: `actr.update_goal(production)`
+Python version: `update_goal(production)`
 
 <a name="updateretrieval"></a>
 
 ## update_retrieval
- <p><i>ACT-R update retrieval buffer function</i></p>
-<p><b>update_retrieval(production)</b> = actr.update_retrieval(production)</p>
+ <p><i>Returns a pattern to update the retrieval buffer with.</i></p>
+<p><b>update_retrieval(production)</b> = update_retrieval(production)</p>
 
-Python version: `actr.update_retrieval(production)`
+Python version: `update_retrieval(production)`

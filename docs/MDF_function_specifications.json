@@ -15,26 +15,33 @@
         "expression_string": "A * (A > 0)"
     },
     "change_goal": {
-        "description": "ACT-R change goal buffer function",
+        "description": "Modifies the current goal buffer using the given pattern.",
         "arguments": [
             "pattern",
             "curr_goal"
         ],
-        "expression_string": "actr.change_goal(pattern, curr_goal)"
+        "expression_string": "change_goal(pattern,curr_goal)"
     },
     "check_termination": {
-        "description": "check_termination",
+        "description": "Function used to check if no production was selected.",
         "arguments": [
             "production"
         ],
-        "expression_string": "actr.check_termination(production)"
+        "expression_string": "check_termination(production)"
+    },
+    "chunk_to_string": {
+        "description": "Converts a chunk dictionary to a string format.",
+        "arguments": [
+            "chunk"
+        ],
+        "expression_string": "chunk_to_string(chunk)"
     },
     "conflict_resolution_function": {
-        "description": "ACT-R conflict resolution function",
+        "description": "ACT-R conflict resolution function. Currently selects a production at random from the already matched productions, since utility values and learning\nare not implemented yet.",
         "arguments": [
             "productions"
         ],
-        "expression_string": "actr.conflict_resolution_function(productions)"
+        "expression_string": "conflict_resolution_function(productions)"
     },
     "cos": {
         "description": "Cosine function",
@@ -51,6 +58,18 @@
             "scale"
         ],
         "expression_string": "scale * cosh(variable0)"
+    },
+    "drift_diffusion_integrator": {
+        "description": "Integrates the drift diffusion model for a single trial using and implementation of the using the Euler-Maruyama method. This is a proof of concept implementation and\nis not optimized for speed.",
+        "arguments": [
+            "starting_point",
+            "non_decision_time",
+            "drift_rate",
+            "threshold",
+            "noise",
+            "dt"
+        ],
+        "expression_string": "drift_diffusion_integrator(starting_point,non_decision_time,drift_rate,threshold,noise,dt)"
     },
     "exponential": {
         "description": "Exponential function",
@@ -81,6 +100,14 @@
             "offset"
         ],
         "expression_string": "1/(1 + exp(-1*gain*(variable0 + bias) + offset))"
+    },
+    "match_production": {
+        "description": "Returns True if the production's left hand side matches the given context and adds the matching bindings to the production.",
+        "arguments": [
+            "production",
+            "context"
+        ],
+        "expression_string": "match_production(production,context)"
     },
     "onnx::Abs": {
         "description": "\nAbsolute takes one input data (Tensor<T>) and produces one output data\n(Tensor<T>) where the absolute is, y = abs(x), is applied to\nthe tensor elementwise.\n",
@@ -1371,22 +1398,29 @@
         "expression_string": "onnx_ops.xor(A, B)"
     },
     "pattern_matching_function": {
-        "description": "ACT-R pattern matching function",
+        "description": "Returns the productions that match the given goal and retrieval buffers.",
         "arguments": [
             "productions",
             "goal",
             "retrieval"
         ],
-        "expression_string": "actr.pattern_matching_function(productions, goal, retrieval)"
+        "expression_string": "pattern_matching_function(productions,goal,retrieval)"
+    },
+    "pattern_to_string": {
+        "description": "Converts a pattern dictionary to a string format.",
+        "arguments": [
+            "chunk"
+        ],
+        "expression_string": "pattern_to_string(chunk)"
     },
     "retrieve_chunk": {
-        "description": "ACT-R retrieve chunk function",
+        "description": "Retrieve a chunk from declarative memory given a pattern.",
         "arguments": [
             "pattern",
             "dm_chunks",
             "types"
         ],
-        "expression_string": "actr.retrieve_chunk(pattern, dm_chunks, types)"
+        "expression_string": "retrieve_chunk(pattern,dm_chunks,types)"
     },
     "sin": {
         "description": "Sine function",
@@ -1420,18 +1454,26 @@
         ],
         "expression_string": "scale * tanh(variable0)"
     },
+    "update_buffer": {
+        "description": "Returns a pattern to update the given buffer with.",
+        "arguments": [
+            "production",
+            "buffer"
+        ],
+        "expression_string": "update_buffer(production,buffer)"
+    },
     "update_goal": {
-        "description": "ACT-R update goal buffer function",
+        "description": "Returns a pattern to update the goal buffer with.",
         "arguments": [
             "production"
         ],
-        "expression_string": "actr.update_goal(production)"
+        "expression_string": "update_goal(production)"
     },
     "update_retrieval": {
-        "description": "ACT-R update retrieval buffer function",
+        "description": "Returns a pattern to update the retrieval buffer with.",
         "arguments": [
             "production"
         ],
-        "expression_string": "actr.update_retrieval(production)"
+        "expression_string": "update_retrieval(production)"
     }
 }
