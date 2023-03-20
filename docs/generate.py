@@ -7,6 +7,7 @@ import yaml
 import shutil
 
 shutil.copy("../README.md", "sphinx/source/api/Introduction.md")
+shutil.copy("../CONTRIBUTING.md", "sphinx/source/api/Contributing.md")
 
 for ex in [
     "ACT-R",
@@ -22,6 +23,18 @@ for ex in [
         "../examples/%s/README.md" % ex,
         f"sphinx/source/api/export_format/{ex}/{ex}.md",
     )
+
+import glob
+
+for ex in ["ACT-R", "NeuroML", "ONNX", "PyTorch"]:
+    for suf in ["png", "svg"]:
+        for file in glob.glob(f"../examples/{ex}/*.{suf}"):
+            print("Copying: %s" % file)
+            shutil.copy(file, "sphinx/source/api/export_format/%s" % ex)
+
+for file in glob.glob("../examples/MDF/images/*.png"):
+    print("Copying: %s" % file)
+    shutil.copy(file, "sphinx/source/api/export_format/MDF/images")
 
 
 mod = Model(id="Simple")
@@ -128,7 +141,7 @@ with open("MDF_function_specifications.md", "w") as d:
     d.write("%s\n" % comment)
 
     d.write(
-        "These functions are defined in https://github.com/ModECI/MDF/blob/main/src/modeci_mdf/standard_functions.py\n"
+        "These functions are defined in https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions\n"
     )
 
     d.write("## All of MDF functions:\n | ")
