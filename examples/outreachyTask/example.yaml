@@ -7,7 +7,7 @@ example_model:
                 node1:
                     parameters:
                         input_val:
-                            value: 12
+                            value: 2.0
                     output_ports:
                         output:
                             value: input_val
@@ -18,7 +18,7 @@ example_model:
                         multiplier:
                             value: 3.0
                         offset:
-                            value: 9.0
+                            value: 2.0
                         result:
                             value: input * multiplier + offset
                     output_ports:
