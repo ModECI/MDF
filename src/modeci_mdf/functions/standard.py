@@ -149,30 +149,37 @@ def parse_description_and_args(f: Callable):
     return description, args
 
 
-def add_function_from_callable(f: Callable):
+def add_function_from_callable(f: Callable, module_alias: str = None):
     """Adds a standard function from a callable.
 
     Args:
         f: A callable object.
+        module_alias: A string to prepend to the function name.
 
     Returns:
         None
     """
     description, args = parse_description_and_args(f)
 
+    expression_string = f.__name__ + "(" + ",".join(args) + ")"
+
+    if module_alias:
+        expression_string = module_alias + "." + expression_string
+
     add_mdf_function(
         name=f.__name__,
         description=description,
         arguments=args,
-        expression_string=f.__name__ + "(" + ",".join(args) + ")",
+        expression_string=expression_string,
     )
 
 
-def add_public_functions_from_module(module):
+def add_public_functions_from_module(module, module_alias: str = None):
     """Adds all public functions from a module to MDF standard functions.
 
     Args:
         module: A module object.
+        module_alias: A string to prepend to the function names.
 
     Returns:
         None
@@ -181,7 +188,7 @@ def add_public_functions_from_module(module):
     try:
         for name in module.__all__:
             if callable(module.__dict__[name]):
-                add_function_from_callable(module.__dict__[name])
+                add_function_from_callable(module.__dict__[name], module_alias=module_alias)
 
     except AttributeError:
         warnings.warn(
@@ -284,12 +291,12 @@ if len(mdf_functions) == 0:
     # Add the ACT-R functions.
     import modeci_mdf.functions.actr as actr
 
-    add_public_functions_from_module(actr)
+    add_public_functions_from_module(actr, module_alias="actr")
 
     # Add the DDM functions.
     import modeci_mdf.functions.ddm as ddm
 
-    add_public_functions_from_module(ddm)
+    add_public_functions_from_module(ddm, module_alias="ddm")
 
 if __name__ == "__main__":
 
