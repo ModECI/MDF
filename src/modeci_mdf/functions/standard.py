@@ -188,7 +188,9 @@ def add_public_functions_from_module(module, module_alias: str = None):
     try:
         for name in module.__all__:
             if callable(module.__dict__[name]):
-                add_function_from_callable(module.__dict__[name], module_alias=module_alias)
+                add_function_from_callable(
+                    module.__dict__[name], module_alias=module_alias
+                )
 
     except AttributeError:
         warnings.warn(
