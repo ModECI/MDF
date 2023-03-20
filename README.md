@@ -14,7 +14,7 @@
 
 
 
-*The revolutionary MDF format arose from a visionary meeting convened by Russ Poldrack, founder of the Center for Reproducible Neuroscience (CRN) at Stanford, and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative, at the prestigious Princeton University in July 2019. Discover more about the groundbreaking work in this field by exploring this invaluable [resource](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF)*
+*The MDF format was created after a meeting organized by Russ Poldrack, who founded the Center for Reproducible Neuroscience (CRN) at Stanford, and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative. The meeting was held at Princeton University in July 2019. This format is an important advancement in the field, and you can learn more about it by exploring the available [resources](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF).*
 
 
 ## Overview
