@@ -1,0 +1,385 @@
+{
+    "TitanicModel": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "TitanicModelGraph": {
+                "nodes": {
+                    "Gemm_7": {
+                        "input_ports": {
+                            "input1": {
+                                "shape": [
+                                    712,
+                                    7
+                                ],
+                                "type": "float32"
+                            },
+                            "fc1_weight": {
+                                "shape": [
+                                    16,
+                                    7
+                                ],
+                                "type": "float32"
+                            },
+                            "fc1_bias": {
+                                "shape": [
+                                    16
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx_Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "input1",
+                                    "B": "fc1_weight",
+                                    "C": "fc1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_7": {
+                                "value": "onnx_Gemm_1",
+                                "shape": [
+                                    712,
+                                    16
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Relu_8": {
+                        "input_ports": {
+                            "_7": {
+                                "shape": [
+                                    712,
+                                    16
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_7"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_8": {
+                                "value": "onnx_Relu_1",
+                                "shape": [
+                                    712,
+                                    16
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Dropout_11_12": {
+                        "input_ports": {
+                            "_8": {
+                                "shape": [
+                                    712,
+                                    16
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "_9": {
+                                "value": 0.20000000298023224
+                            },
+                            "_10": {
+                                "value": true
+                            },
+                            "onnx_Dropout_1": {
+                                "function": "onnx::Dropout",
+                                "args": {
+                                    "data": "_8",
+                                    "ratio": "_9",
+                                    "training_mode": "_10"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_11": {
+                                "value": "onnx_Dropout_1[0]",
+                                "shape": [
+                                    712,
+                                    16
+                                ],
+                                "type": "float32"
+                            },
+                            "_12": {
+                                "value": "onnx_Dropout_1[1]",
+                                "type": "None"
+                            }
+                        }
+                    },
+                    "Gemm_13": {
+                        "input_ports": {
+                            "_11": {
+                                "shape": [
+                                    712,
+                                    16
+                                ],
+                                "type": "float32"
+                            },
+                            "fc2_weight": {
+                                "shape": [
+                                    8,
+                                    16
+                                ],
+                                "type": "float32"
+                            },
+                            "fc2_bias": {
+                                "shape": [
+                                    8
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx_Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_11",
+                                    "B": "fc2_weight",
+                                    "C": "fc2_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_13": {
+                                "value": "onnx_Gemm_1",
+                                "shape": [
+                                    712,
+                                    8
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Relu_14": {
+                        "input_ports": {
+                            "_13": {
+                                "shape": [
+                                    712,
+                                    8
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "_13"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_14": {
+                                "value": "onnx_Relu_1",
+                                "shape": [
+                                    712,
+                                    8
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Dropout_17_18": {
+                        "input_ports": {
+                            "_14": {
+                                "shape": [
+                                    712,
+                                    8
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "_15": {
+                                "value": 0.20000000298023224
+                            },
+                            "_16": {
+                                "value": true
+                            },
+                            "onnx_Dropout_1": {
+                                "function": "onnx::Dropout",
+                                "args": {
+                                    "data": "_14",
+                                    "ratio": "_15",
+                                    "training_mode": "_16"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_17": {
+                                "value": "onnx_Dropout_1[0]",
+                                "shape": [
+                                    712,
+                                    8
+                                ],
+                                "type": "float32"
+                            },
+                            "_18": {
+                                "value": "onnx_Dropout_1[1]",
+                                "type": "None"
+                            }
+                        }
+                    },
+                    "Gemm_19": {
+                        "input_ports": {
+                            "_17": {
+                                "shape": [
+                                    712,
+                                    8
+                                ],
+                                "type": "float32"
+                            },
+                            "fc3_weight": {
+                                "shape": [
+                                    1,
+                                    8
+                                ],
+                                "type": "float32"
+                            },
+                            "fc3_bias": {
+                                "shape": [
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx_Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "_17",
+                                    "B": "fc3_weight",
+                                    "C": "fc3_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_19": {
+                                "value": "onnx_Gemm_1",
+                                "shape": [
+                                    712,
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Sigmoid_20": {
+                        "input_ports": {
+                            "_19": {
+                                "shape": [
+                                    712,
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Sigmoid_1": {
+                                "function": "onnx::Sigmoid",
+                                "args": {
+                                    "X": "_19"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_20": {
+                                "value": "onnx_Sigmoid_1",
+                                "shape": [
+                                    712,
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Gemm_7_Relu_8": {
+                        "sender": "Gemm_7",
+                        "receiver": "Relu_8",
+                        "sender_port": "_7",
+                        "receiver_port": "_7"
+                    },
+                    "Relu_8_Dropout_11_12": {
+                        "sender": "Relu_8",
+                        "receiver": "Dropout_11_12",
+                        "sender_port": "_8",
+                        "receiver_port": "_8"
+                    },
+                    "Dropout_11_12_Gemm_13": {
+                        "sender": "Dropout_11_12",
+                        "receiver": "Gemm_13",
+                        "sender_port": "_11",
+                        "receiver_port": "_11"
+                    },
+                    "Gemm_13_Relu_14": {
+                        "sender": "Gemm_13",
+                        "receiver": "Relu_14",
+                        "sender_port": "_13",
+                        "receiver_port": "_13"
+                    },
+                    "Relu_14_Dropout_17_18": {
+                        "sender": "Relu_14",
+                        "receiver": "Dropout_17_18",
+                        "sender_port": "_14",
+                        "receiver_port": "_14"
+                    },
+                    "Dropout_17_18_Gemm_19": {
+                        "sender": "Dropout_17_18",
+                        "receiver": "Gemm_19",
+                        "sender_port": "_17",
+                        "receiver_port": "_17"
+                    },
+                    "Gemm_19_Sigmoid_20": {
+                        "sender": "Gemm_19",
+                        "receiver": "Sigmoid_20",
+                        "sender_port": "_19",
+                        "receiver_port": "_19"
+                    }
+                }
+            }
+        },
+        "onnx_opset_version": 9
+    }
+}
