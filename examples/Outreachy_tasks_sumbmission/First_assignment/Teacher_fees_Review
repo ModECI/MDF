@@ -1,0 +1,7 @@
+digraph Teacher_fees_graph {
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	months_of_teaching [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>months_of_teaching</b></td></tr><tr><td><font color="#1666ff">unit_increment</font> = 1.0</td></tr><tr><td><b><font color="#1666ff">months</font></b> = <font color="#1666ff">months</font> + <font color="#1666ff">unit_increment</font></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">months</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	Class_Teacher_fees [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>Class_Teacher_fees</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">fees_per_months</font> = 100*<font color="#188855">input</font></td></tr><tr><td><b><font color="#1666ff">batch</font></b> = <font color="#1666ff">batch</font> + <font color="#1666ff">fees_per_months</font></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">batch</font> </td></tr></table>>]
+	months_of_teaching -> Class_Teacher_fees [label=<edge_months_of_teaching_Class_Teacher_fees (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
+}
