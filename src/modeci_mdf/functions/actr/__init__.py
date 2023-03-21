@@ -7,6 +7,20 @@ from .ccm.dm import Memory
 from .ccm.buffer import Chunk, Buffer
 from typing import Union, Dict, Any, Tuple, List, Callable
 
+__all__ = [
+    "chunk_to_string",
+    "pattern_to_string",
+    "change_goal",
+    "retrieve_chunk",
+    "match_production",
+    "pattern_matching_function",
+    "update_buffer",
+    "update_goal",
+    "update_retrieval",
+    "conflict_resolution_function",
+    "check_termination",
+]
+
 
 def chunk_to_string(chunk: Dict[str, str]) -> str:
     """Converts a chunk dictionary to a string format.
@@ -204,69 +218,3 @@ def check_termination(production: Dict[str, Any]):
         True if the production is empty.
     """
     return production == {}
-
-
-def get_actr_functions() -> List[Dict[str, Any]]:
-    """Creates a list of all the ACT-R functions as MDF specifications.
-
-    Returns:
-        A list of MDF function specifications.
-    """
-    actr_funcs = []
-    actr_funcs.append(
-        dict(
-            name="change_goal",
-            description="ACT-R change goal buffer function",
-            arguments=["pattern", "curr_goal"],
-            expression_string="actr.change_goal(pattern, curr_goal)",
-        )
-    )
-    actr_funcs.append(
-        dict(
-            name="retrieve_chunk",
-            description="ACT-R retrieve chunk function",
-            arguments=["pattern", "dm_chunks", "types"],
-            expression_string="actr.retrieve_chunk(pattern, dm_chunks, types)",
-        )
-    )
-    actr_funcs.append(
-        dict(
-            name="pattern_matching_function",
-            description="ACT-R pattern matching function",
-            arguments=["productions", "goal", "retrieval"],
-            expression_string="actr.pattern_matching_function(productions, goal, retrieval)",
-        )
-    )
-    actr_funcs.append(
-        dict(
-            name="conflict_resolution_function",
-            description="ACT-R conflict resolution function",
-            arguments=["productions"],
-            expression_string="actr.conflict_resolution_function(productions)",
-        )
-    )
-    actr_funcs.append(
-        dict(
-            name="update_goal",
-            description="ACT-R update goal buffer function",
-            arguments=["production"],
-            expression_string="actr.update_goal(production)",
-        )
-    )
-    actr_funcs.append(
-        dict(
-            name="update_retrieval",
-            description="ACT-R update retrieval buffer function",
-            arguments=["production"],
-            expression_string="actr.update_retrieval(production)",
-        )
-    )
-    actr_funcs.append(
-        dict(
-            name="check_termination",
-            description="check_termination",
-            arguments=["production"],
-            expression_string="actr.check_termination(production)",
-        )
-    )
-    return actr_funcs
