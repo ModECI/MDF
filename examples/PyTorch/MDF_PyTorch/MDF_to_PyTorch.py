@@ -12,7 +12,6 @@ def main(filename):
     print("Converting MDF model in %s to PyTorch" % file_path)
 
     model_input = file_path.replace(os.sep, "/")
-    print(model_input)
     mdf_model = load_mdf(model_input)
 
     if "Translated" in model_input:
