@@ -52,6 +52,4 @@ if __name__ == "__main__":
                 main(ex)
     else:
         filename = "examples/MDF/Simple.json"
-        # Used the below for changing my MDF model to pytorch
-        # filename = "examples/Outreachy_tasks_sumbmission/Second_assignment_outreachy.json"
         main(filename)
