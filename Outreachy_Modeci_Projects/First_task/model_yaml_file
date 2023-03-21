@@ -1,0 +1,71 @@
+TAO:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        TAO_GRAPH:
+            nodes:
+                A:
+                    metadata:
+                        color: 0 .8 0
+                    parameters:
+                        increment:
+                            value: 10.0
+                    output_ports:
+                        output:
+                            value: increment
+                B:
+                    metadata:
+                        color: .8 0 0
+                    input_ports:
+                        input: {}
+                    parameters:
+                        u:
+                            value: 1.2
+                        v:
+                            value: 3
+                        simple_exp:
+                            value: input * u - v
+                    output_ports:
+                        output:
+                            value: simple_exp
+                C:
+                    metadata:
+                        color: 0 .8 0
+                    input_ports:
+                        input: {}
+                    parameters:
+                        y:
+                            value: 8.2
+                        u:
+                            value: 15
+                        simple_eq:
+                            value: y**2 + 2*u
+                    output_ports:
+                        output:
+                            value: simple_eq
+            edges:
+                edge_A_B:
+                    sender: A
+                    receiver: B
+                    sender_port: output
+                    receiver_port: input
+                edge_B_C:
+                    sender: B
+                    receiver: C
+                    sender_port: output
+                    receiver_port: input
+            conditions:
+                node_specific:
+                    A:
+                        type: Always
+                        kwargs: {}
+                    B:
+                        type: EveryNCalls
+                        kwargs:
+                            dependencies: A
+                            n: 3
+                    C:
+                        type: EveryNCalls
+                        kwargs:
+                            dependencies: B
+                            n: 4
