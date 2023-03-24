@@ -1,6 +1,7 @@
 ## First Task Outline
 
-Create a notebook to include the following details below:
+Create a notebook that depicts an understanding of MDF models. 
+The notebook should include the details below:
 
 - One MDF model with a graph
 - Three nodes in the graph of the model
