@@ -1,0 +1,11 @@
+digraph func_graph {
+	graph [rankdir=LR]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	area [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>area</b></td></tr><tr><td><font color="#1666ff">radius</font> = 7</td></tr><tr><td><font color="#1666ff">pii</font> = 3.141592653589793</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">pii</font> * <font color="#1666ff">radius</font> * <font color="#1666ff">radius</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	diameter [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>diameter</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">area</font> = <font color="#188855">input</font></td></tr><tr><td><font color="#1666ff">pii</font> = 3.141592653589793</td></tr><tr><td><font color="#1666ff">radius</font> = <i>onnx::Pow</i>(<font color="#1666ff">area</font>/<font color="#1666ff">pii</font>, 0.5)</td></tr><tr><td><i>onnx::Pow(X, Y) = onnx_ops.pow(X, Y)</i></td></tr><tr><td><font color="#cc3355">output</font> = 2 * <font color="#1666ff">radius</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	perimeter [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>perimeter</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">diameter</font> = <font color="#188855">input</font></td></tr><tr><td><font color="#1666ff">pii</font> = 3.141592653589793</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">diameter</font> * <font color="#1666ff">pii</font> </td></tr></table>>]
+	area -> diameter [label=<area-diameter (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
+	diameter -> perimeter [label=<diameter-perimeter (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
+}

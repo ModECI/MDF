@@ -1,0 +1,6 @@
+digraph house_state_graph {
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	house_unit [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>house_unit</b></td></tr><tr><td><font color="#1666ff">unit_increment</font> = 1.0</td></tr><tr><td><b><font color="#1666ff">no_of_units</font></b> = <font color="#1666ff">no_of_units</font> + <font color="#1666ff">unit_increment</font></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">no_of_units</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	house_price [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>house_price</b></td></tr><tr><td><font color="#1666ff">price_increment</font> = 175000</td></tr><tr><td><b><font color="#1666ff">price</font></b> = <font color="#1666ff">price</font> + <font color="#1666ff">price_increment</font></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">price</font> </td></tr></table>>]
+}
