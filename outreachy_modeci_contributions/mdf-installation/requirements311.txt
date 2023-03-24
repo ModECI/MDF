@@ -1,0 +1,9 @@
+ERROR: Ignored the following versions that require a different python version: 1.21.2 Requires-Python >=3.7,<3.11; 1.21.3 Requires-Python >=3.7,<3.11; 1.21.4 Requires-Python >=3.7,<3.11; 1.21.5 Requires-Python >=3.7,<3.11; 1.21.6 Requires-Python >=3.7,<3.11
+ERROR: Could not find a version that satisfies the requirement onnxruntime<=1.13.1,>=1.12.0 (from modeci-mdf[all]) (from versions: none)
+ERROR: No matching distribution found for onnxruntime<=1.13.1,>=1.12.0
+
+Packages could not be installed:
+
+pip freeze returned nothing
+python -V
+Python 3.11.2
