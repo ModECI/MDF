@@ -1,0 +1,116 @@
+{
+    "my_model": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.3",
+        "graphs": {
+            "my_graph": {
+                "nodes": {
+                    "radius_of_a_circle": {
+                        "metadata": {
+                            "color": "0 .9 0"
+                        },
+                        "parameters": {
+                            "area": {
+                                "value": 9
+                            },
+                            "pi": {
+                                "value": 3.14
+                            },
+                            "constant": {
+                                "value": 2
+                            },
+                            "radius": {
+                                "value": "area / (constant * pi)"
+                            }
+                        },
+                        "output_ports": {
+                            "node_one_output": {
+                                "value": "radius"
+                            }
+                        }
+                    },
+                    "circumference_of_a_circle": {
+                        "metadata": {
+                            "color": "0 .7 0"
+                        },
+                        "input_ports": {
+                            "radius": {}
+                        },
+                        "parameters": {
+                            "pi": {
+                                "value": 3.14
+                            },
+                            "constant": {
+                                "value": 2
+                            },
+                            "circunference": {
+                                "value": "radius * constant * pi"
+                            }
+                        },
+                        "output_ports": {
+                            "node_two_output": {
+                                "value": "circunference"
+                            }
+                        }
+                    },
+                    "diameter_of_a_circle": {
+                        "metadata": {
+                            "color": "0 .4 0"
+                        },
+                        "input_ports": {
+                            "circumference": {}
+                        },
+                        "parameters": {
+                            "pi": {
+                                "value": 3.14
+                            },
+                            "diameter": {
+                                "value": "circumference / pi"
+                            }
+                        },
+                        "output_ports": {
+                            "node_three_output": {
+                                "value": "diameter"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_radius_of_a_circle_circumference_of_a_circle": {
+                        "sender": "radius_of_a_circle",
+                        "receiver": "circumference_of_a_circle",
+                        "sender_port": "node_one_output",
+                        "receiver_port": "radius"
+                    },
+                    "edge_circumference_of_a_circle_diameter_of_a_circle": {
+                        "sender": "circumference_of_a_circle",
+                        "receiver": "diameter_of_a_circle",
+                        "sender_port": "node_two_output",
+                        "receiver_port": "circumference"
+                    }
+                },
+                "conditions": {
+                    "node_specific": {
+                        "radius_of_a_circle": {
+                            "type": "Always",
+                            "kwargs": {}
+                        },
+                        "circumference_of_a_circle": {
+                            "type": "AfterCall",
+                            "kwargs": {
+                                "dependencies": "radius_of_a_circle",
+                                "n": 2
+                            }
+                        },
+                        "diameter_of_a_circle": {
+                            "type": "AfterPass",
+                            "kwargs": {
+                                "n": 1
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
