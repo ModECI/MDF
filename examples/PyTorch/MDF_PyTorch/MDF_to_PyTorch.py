@@ -12,7 +12,7 @@ def main(filename):
     print("Converting MDF model in %s to PyTorch" % file_path)
 
     model_input = file_path.replace(os.sep, "/")
-    print(model_input)
+
     mdf_model = load_mdf(model_input)
 
     if "Translated" in model_input:
@@ -52,6 +52,4 @@ if __name__ == "__main__":
                 main(ex)
     else:
         filename = "examples/MDF/Simple.json"
-        # Used the below for changing my MDF model to pytorch
-        # filename = "examples/Outreachy_tasks_sumbmission/Second_assignment_outreachy.json"
         main(filename)
