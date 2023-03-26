@@ -66,7 +66,7 @@ def create_activation_node(node_id, activation_name):
     # Functionality of relu
     if activation_name == "relu":
         # Value of relu function
-        relu_ = f"({node_id}_in > 0 ) "
+        relu_ = f"({node_id}_in > 0 * {node_id}_in) "
         activation.parameters.append(Parameter(id="Output", value=relu_))
 
     # Functionality of sigmoid
