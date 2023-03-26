@@ -1,0 +1,17 @@
+digraph feedforward_graph {
+	graph [rankdir=LR]
+	node [color="#444444" fillcolor="#ffffff" fontcolor=black penwidth=1 shape=box style="rounded,filled"]
+	input_node [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>input_node</b></td></tr></table>>]
+	node [color="#444444" fillcolor="#ffffff" fontcolor=black penwidth=1 shape=box style="rounded,filled"]
+	dense_node [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>dense_node</b></td></tr></table>>]
+	node [color="#444444" fillcolor="#ffffff" fontcolor=black penwidth=1 shape=box style="rounded,filled"]
+	activation_node [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>activation_node</b></td></tr></table>>]
+	node [color="#444444" fillcolor="#ffffff" fontcolor=black penwidth=1 shape=box style="rounded,filled"]
+	dense_node_1 [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>dense_node_1</b></td></tr></table>>]
+	node [color="#444444" fillcolor="#ffffff" fontcolor=black penwidth=1 shape=box style="rounded,filled"]
+	output_node [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>output_node</b></td></tr></table>>]
+	input_node -> dense_node [label="" arrowhead=empty]
+	dense_node -> activation_node [label="" arrowhead=empty]
+	activation_node -> dense_node_1 [label="" arrowhead=empty]
+	dense_node_1 -> output_node [label="" arrowhead=empty]
+}
