@@ -249,7 +249,7 @@ def mdf_to_graphviz(
             else:
                 fcolor = "black"
 
-            print(f"Bkgd color: {rgb_} ({color}), font: {fcolor}")
+            # print(f"Bkgd color: {rgb_} ({color}), font: {fcolor}")
 
             graph.attr(
                 "node",
