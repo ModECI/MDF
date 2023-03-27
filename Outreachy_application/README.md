@@ -36,5 +36,6 @@ Task 2
 <summary>
 Task 3
 </summary>
-
+1. [Creating a four layered keras model](https://github.com/mqnifestkelvin/MDF/blob/main/Outreachy_application/Keras_to_mdf_using_Iris_data_set/train_keras_with_iris_data.ipynb)
+2. [Converting a keras model to mdf](https://github.com/mqnifestkelvin/MDF/blob/main/Outreachy_application/Keras_to_mdf_using_Iris_data_set/keras_to_mdf.ipynb)
 <details>
