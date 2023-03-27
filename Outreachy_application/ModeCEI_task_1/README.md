@@ -57,34 +57,34 @@ Along side installing the graphviz dependancy with pip, I also need to installed
 
 ## Observation 2
 
-* Sphinx is compatible with Python v3.10 although it best to use Python v3.9 because it runs the make command 
+* Sphinx is compatible with Python v3.10 although it best to use Python v3.9 because it runs the make command
 without any issues.
 
 ## Solving Issues with Runnig Sphinx
 
-Generating an MDF documentation can be done using the package called Sphinx. Sphinx is a documentation generator or a tool that translates a set of plain text source files into various output formats, automatically producing cross-references, indices, etc. 
+Generating an MDF documentation can be done using the package called Sphinx. Sphinx is a documentation generator or a tool that translates a set of plain text source files into various output formats, automatically producing cross-references, indices, etc.
 To run generate a document, the make command is a requirement. This is a command native to the GNU Linux system.
 
 ### Step 1: Install Chocolatey
 To install the make command, I the followed steps:
 * I install chocolatey
   * I opened powershell as administrator
-  * I ran 
+  * I ran
   ```
   Get-ExecutionPolicy
   ```
   * If it returns **Restricted**
-  * I ran 
+  * I ran
   ```
   Set-ExecutionPolicy AllSigned` or `Set-ExecutionPolicy Bypass -Scope Process
   ```
-  * I ran 
+  * I ran
   ```
   Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
   ```
   * I waited for a few moment for it to install
   * I finally I `run choco -V` to comfirm installantion
-  
+
 ### Step 2: Install make
 I installed the make command,by running running the command:
 
