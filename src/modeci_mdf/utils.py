@@ -103,7 +103,7 @@ def load_mdf_yaml(filename: str) -> Model:
 def color_rgb_to_hex(rgb):
     """Convert a rgb color to hexadecimal format."""
     color = "#"
-    print("Converting %s to hex color" % rgb)
+    # print("Converting %s to hex color" % rgb)
     for a in rgb.split():
         color = color + "%02x" % int(float(a) * 255)
     return color
