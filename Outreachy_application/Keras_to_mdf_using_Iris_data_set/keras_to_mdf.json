@@ -1,11 +1,14 @@
 {
     "Iris Data Prediction": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.3",
+        "generating_application": "Python modeci-mdf v0.4.5",
         "graphs": {
             "Predictions using converted Keras model using mdf": {
                 "nodes": {
                     "input layer": {
+                        "metadata": {
+                            "color": ".0 .6 .8"
+                        },
                         "parameters": {
                             "input_layer": {
                                 "value": [
@@ -333,6 +336,9 @@
                         }
                     },
                     "first_layer_activation": {
+                        "metadata": {
+                            "color": ".0 .1 .6"
+                        },
                         "input_ports": {
                             "first_layer_output": {}
                         },
@@ -2557,6 +2563,9 @@
                         }
                     },
                     "second_layer_activation": {
+                        "metadata": {
+                            "color": ".8 .4 .0"
+                        },
                         "input_ports": {
                             "second_layer_output": {}
                         },
@@ -6893,6 +6902,9 @@
                         }
                     },
                     "third_layer_activation": {
+                        "metadata": {
+                            "color": ".0 .1 .8"
+                        },
                         "input_ports": {
                             "third_layer_output": {}
                         },
@@ -7134,6 +7146,9 @@
                         }
                     },
                     "fourth_layer_activation": {
+                        "metadata": {
+                            "color": ".0 .3 .8"
+                        },
                         "input_ports": {
                             "fourth_layer_output": {}
                         },

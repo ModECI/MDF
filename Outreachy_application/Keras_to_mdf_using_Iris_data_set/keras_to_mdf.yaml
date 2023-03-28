@@ -1,10 +1,12 @@
 Iris Data Prediction:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.3
+    generating_application: Python modeci-mdf v0.4.5
     graphs:
         Predictions using converted Keras model using mdf:
             nodes:
                 input layer:
+                    metadata:
+                        color: .0 .6 .8
                     parameters:
                         input_layer:
                             value:
@@ -267,6 +269,8 @@ Iris Data Prediction:
                         first_layer_output:
                             value: first_layer_equation
                 first_layer_activation:
+                    metadata:
+                        color: .0 .1 .6
                     input_ports:
                         first_layer_output: {}
                     parameters:
@@ -2408,6 +2412,8 @@ Iris Data Prediction:
                         second_layer_output:
                             value: second_layer_equation
                 second_layer_activation:
+                    metadata:
+                        color: .8 .4 .0
                     input_ports:
                         second_layer_output: {}
                     parameters:
@@ -6597,6 +6603,8 @@ Iris Data Prediction:
                         third_layer_output:
                             value: third_layer_equation
                 third_layer_activation:
+                    metadata:
+                        color: .0 .1 .8
                     input_ports:
                         third_layer_output: {}
                     parameters:
@@ -6691,6 +6699,8 @@ Iris Data Prediction:
                         fourth_layer_output:
                             value: fourth_layer_equation
                 fourth_layer_activation:
+                    metadata:
+                        color: .0 .3 .8
                     input_ports:
                         fourth_layer_output: {}
                     parameters:
