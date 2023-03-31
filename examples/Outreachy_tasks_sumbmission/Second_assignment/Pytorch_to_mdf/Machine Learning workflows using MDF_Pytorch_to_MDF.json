@@ -1,0 +1,103 @@
+{
+    "TitanicModel": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "TitanicModelGraph": {
+                "nodes": {
+                    "Gemm_3": {
+                        "input_ports": {
+                            "input1": {
+                                "shape": [
+                                    712,
+                                    9
+                                ],
+                                "type": "float32"
+                            },
+                            "fc1_weight": {
+                                "shape": [
+                                    1,
+                                    9
+                                ],
+                                "type": "float32"
+                            },
+                            "fc1_bias": {
+                                "shape": [
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "onnx_Gemm_1": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "input1",
+                                    "B": "fc1_weight",
+                                    "C": "fc1_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_3": {
+                                "value": "onnx_Gemm_1",
+                                "shape": [
+                                    712,
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    },
+                    "Sigmoid_4": {
+                        "input_ports": {
+                            "_3": {
+                                "shape": [
+                                    712,
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        },
+                        "parameters": {
+                            "onnx_Sigmoid_1": {
+                                "function": "onnx::Sigmoid",
+                                "args": {
+                                    "X": "_3"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "_4": {
+                                "value": "onnx_Sigmoid_1",
+                                "shape": [
+                                    712,
+                                    1
+                                ],
+                                "type": "float32"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Gemm_3_Sigmoid_4": {
+                        "sender": "Gemm_3",
+                        "receiver": "Sigmoid_4",
+                        "sender_port": "_3",
+                        "receiver_port": "_3"
+                    }
+                }
+            }
+        },
+        "onnx_opset_version": 9
+    }
+}
