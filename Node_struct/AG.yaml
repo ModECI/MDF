@@ -1,0 +1,50 @@
+AG:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        ag_example:
+            nodes:
+                X:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        pi:
+                            value: 3.14
+                        pii:
+                            value: pi
+                    output_ports:
+                        output:
+                            value: pii
+                Y:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        pi:
+                            value: 3.14
+                        circle_perimeter:
+                            value: 2*pi*input
+                    output_ports:
+                        output:
+                            value: circle_perimeter
+                Z:
+                    input_ports:
+                        input: {}
+                    parameters:
+                        pi:
+                            value: 3.14
+                        sphere_volume:
+                            value: 4/3 *pi* input*input*input
+                    output_ports:
+                        output:
+                            value: sphere_volume
+            edges:
+                edge_X_Y:
+                    sender: X
+                    receiver: Y
+                    sender_port: output
+                    receiver_port: input
+                edge_X_Z:
+                    sender: X
+                    receiver: Z
+                    sender_port: output
+                    receiver_port: input

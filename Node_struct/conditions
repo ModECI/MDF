@@ -1,0 +1,10 @@
+digraph ag_example {
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	X [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>X</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">pi</font> = [[1 2] [3 4]] (NP (2, 2) int32)</td></tr><tr><td><font color="#1666ff">pii</font> = <font color="#1666ff">pi</font></td></tr><tr><td><font color="#ffa1d">condition</font> = <b>X</b> will <b>Always</b> run</td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">pii</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	Y [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>Y</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">pi</font> = 3.14</td></tr><tr><td><font color="#1666ff">circle_perimeter</font> = 2*<font color="#1666ff">pi</font>*<font color="#188855">input</font></td></tr><tr><td><font color="#ffa1d">condition</font> = <b>Y</b> will run every <b>4</b> calls of <b>X</b></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">circle_perimeter</font> </td></tr></table>>]
+	node [color="#444444" fontcolor="#444444" penwidth=1 shape=box style=rounded]
+	Z [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>Z</b></td></tr><tr><td><font color="#188855">input</font> </td></tr><tr><td><font color="#1666ff">pi</font> = 3.14</td></tr><tr><td><font color="#1666ff">sphere_volume</font> = 4/3 *<font color="#1666ff">pi</font>* <font color="#188855">input</font>*<font color="#188855">input</font>*<font color="#188855">input</font></td></tr><tr><td><font color="#ffa1d">condition</font> = <b>Z</b> will run every <b>2</b> calls of <b>Y</b></td></tr><tr><td><font color="#cc3355">output</font> = <font color="#1666ff">sphere_volume</font> </td></tr></table>>]
+	X -> Y [label=<edge_X_Y (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
+	X -> Z [label=<edge_X_Z (<font color="#cc3355">output</font> -&gt; <font color="#188855">input</font>)> arrowhead=empty]
+}
