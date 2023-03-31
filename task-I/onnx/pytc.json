@@ -1,0 +1,3018 @@
+{
+    "ONNX Model": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.4",
+        "graphs": {
+            "torch_jit": {
+                "nodes": {
+                    "Identity_0": {
+                        "input_ports": {
+                            "onnx_Conv_219": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_0": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_219"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_231": {
+                                "value": "Identity_0"
+                            }
+                        }
+                    },
+                    "Identity_1": {
+                        "input_ports": {
+                            "onnx_Conv_219": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_1": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_219"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_228": {
+                                "value": "Identity_1"
+                            }
+                        }
+                    },
+                    "Identity_2": {
+                        "input_ports": {
+                            "onnx_Conv_219": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_2": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_219"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_225": {
+                                "value": "Identity_2"
+                            }
+                        }
+                    },
+                    "Identity_3": {
+                        "input_ports": {
+                            "onnx_Conv_219": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_3": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_219"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_222": {
+                                "value": "Identity_3"
+                            }
+                        }
+                    },
+                    "Identity_4": {
+                        "input_ports": {
+                            "onnx_Conv_204": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_4": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_204"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_216": {
+                                "value": "Identity_4"
+                            }
+                        }
+                    },
+                    "Identity_5": {
+                        "input_ports": {
+                            "onnx_Conv_204": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_5": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_204"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_213": {
+                                "value": "Identity_5"
+                            }
+                        }
+                    },
+                    "Identity_6": {
+                        "input_ports": {
+                            "onnx_Conv_204": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_6": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_204"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_210": {
+                                "value": "Identity_6"
+                            }
+                        }
+                    },
+                    "Identity_7": {
+                        "input_ports": {
+                            "onnx_Conv_204": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_7": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_204"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_207": {
+                                "value": "Identity_7"
+                            }
+                        }
+                    },
+                    "Identity_8": {
+                        "input_ports": {
+                            "onnx_Conv_189": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_8": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_189"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_201": {
+                                "value": "Identity_8"
+                            }
+                        }
+                    },
+                    "Identity_9": {
+                        "input_ports": {
+                            "onnx_Conv_189": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_9": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_189"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_198": {
+                                "value": "Identity_9"
+                            }
+                        }
+                    },
+                    "Identity_10": {
+                        "input_ports": {
+                            "onnx_Conv_189": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_10": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_189"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_195": {
+                                "value": "Identity_10"
+                            }
+                        }
+                    },
+                    "Identity_11": {
+                        "input_ports": {
+                            "onnx_Conv_189": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_11": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_189"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_192": {
+                                "value": "Identity_11"
+                            }
+                        }
+                    },
+                    "Identity_12": {
+                        "input_ports": {
+                            "onnx_Conv_174": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_12": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_174"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_186": {
+                                "value": "Identity_12"
+                            }
+                        }
+                    },
+                    "Identity_13": {
+                        "input_ports": {
+                            "onnx_Conv_174": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_13": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_174"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_183": {
+                                "value": "Identity_13"
+                            }
+                        }
+                    },
+                    "Identity_14": {
+                        "input_ports": {
+                            "onnx_Conv_174": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_14": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_174"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_180": {
+                                "value": "Identity_14"
+                            }
+                        }
+                    },
+                    "Identity_15": {
+                        "input_ports": {
+                            "onnx_Conv_174": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "Identity_15": {
+                                "function": "onnx::Identity",
+                                "args": {
+                                    "input": "onnx_Conv_174"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "onnx_Conv_177": {
+                                "value": "Identity_15"
+                            }
+                        }
+                    },
+                    "/conv1/Conv": {
+                        "input_ports": {
+                            "input": {
+                                "shape": [
+                                    1,
+                                    3,
+                                    224,
+                                    224
+                                ]
+                            },
+                            "onnx_Conv_173": {
+                                "shape": [
+                                    64,
+                                    3,
+                                    7,
+                                    7
+                                ]
+                            },
+                            "onnx_Conv_174": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    7,
+                                    7
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    3,
+                                    3,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "input",
+                                    "W": "onnx_Conv_173",
+                                    "B": "onnx_Conv_174"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/conv1/Conv_output_0": {
+                                "value": "/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/relu/Relu": {
+                        "input_ports": {
+                            "/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    112,
+                                    112
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/relu/Relu_output_0": {
+                                "value": "/relu/Relu"
+                            }
+                        }
+                    },
+                    "/maxpool/MaxPool": {
+                        "input_ports": {
+                            "/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    112,
+                                    112
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/maxpool/MaxPool": {
+                                "function": "onnx::MaxPool",
+                                "args": {
+                                    "X": "/relu/Relu_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/maxpool/MaxPool_output_0": {
+                                "value": "/maxpool/MaxPool"
+                            }
+                        }
+                    },
+                    "/layer1/0/conv1/Conv": {
+                        "input_ports": {
+                            "/maxpool/MaxPool_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "onnx_Conv_176": {
+                                "shape": [
+                                    64,
+                                    64,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_177": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer1/0/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/maxpool/MaxPool_output_0",
+                                    "W": "onnx_Conv_176",
+                                    "B": "onnx_Conv_177"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/0/conv1/Conv_output_0": {
+                                "value": "/layer1/0/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/layer1/0/relu/Relu": {
+                        "input_ports": {
+                            "/layer1/0/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer1/0/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer1/0/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/0/relu/Relu_output_0": {
+                                "value": "/layer1/0/relu/Relu"
+                            }
+                        }
+                    },
+                    "/layer1/0/conv2/Conv": {
+                        "input_ports": {
+                            "/layer1/0/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "onnx_Conv_179": {
+                                "shape": [
+                                    64,
+                                    64,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_180": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer1/0/conv2/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer1/0/relu/Relu_output_0",
+                                    "W": "onnx_Conv_179",
+                                    "B": "onnx_Conv_180"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/0/conv2/Conv_output_0": {
+                                "value": "/layer1/0/conv2/Conv"
+                            }
+                        }
+                    },
+                    "/layer1/0/Add": {
+                        "input_ports": {
+                            "/layer1/0/conv2/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "/maxpool/MaxPool_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer1/0/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer1/0/conv2/Conv_output_0",
+                                    "B": "/maxpool/MaxPool_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/0/Add_output_0": {
+                                "value": "/layer1/0/Add"
+                            }
+                        }
+                    },
+                    "/layer1/0/relu_1/Relu": {
+                        "input_ports": {
+                            "/layer1/0/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer1/0/relu_1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer1/0/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/0/relu_1/Relu_output_0": {
+                                "value": "/layer1/0/relu_1/Relu"
+                            }
+                        }
+                    },
+                    "/layer1/1/Conv": {
+                        "input_ports": {
+                            "/layer1/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "onnx_Conv_182": {
+                                "shape": [
+                                    64,
+                                    64,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_183": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer1/1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer1/0/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_182",
+                                    "B": "onnx_Conv_183"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/1/Conv_output_0": {
+                                "value": "/layer1/1/Conv"
+                            }
+                        }
+                    },
+                    "/layer1/1/Relu": {
+                        "input_ports": {
+                            "/layer1/1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer1/1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer1/1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/1/Relu_output_0": {
+                                "value": "/layer1/1/Relu"
+                            }
+                        }
+                    },
+                    "/layer1/1/Conv_1": {
+                        "input_ports": {
+                            "/layer1/1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "onnx_Conv_185": {
+                                "shape": [
+                                    64,
+                                    64,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_186": {
+                                "shape": [
+                                    64
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer1/1/Conv_1": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer1/1/Relu_output_0",
+                                    "W": "onnx_Conv_185",
+                                    "B": "onnx_Conv_186"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/1/Conv_1_output_0": {
+                                "value": "/layer1/1/Conv_1"
+                            }
+                        }
+                    },
+                    "/layer1/1/Add": {
+                        "input_ports": {
+                            "/layer1/1/Conv_1_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "/layer1/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer1/1/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer1/1/Conv_1_output_0",
+                                    "B": "/layer1/0/relu_1/Relu_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/1/Add_output_0": {
+                                "value": "/layer1/1/Add"
+                            }
+                        }
+                    },
+                    "/layer1/1/Relu_1": {
+                        "input_ports": {
+                            "/layer1/1/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer1/1/Relu_1": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer1/1/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer1/1/Relu_1_output_0": {
+                                "value": "/layer1/1/Relu_1"
+                            }
+                        }
+                    },
+                    "/layer2/0/conv1/Conv": {
+                        "input_ports": {
+                            "/layer1/1/Relu_1_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "onnx_Conv_188": {
+                                "shape": [
+                                    128,
+                                    64,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_189": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/layer2/0/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer1/1/Relu_1_output_0",
+                                    "W": "onnx_Conv_188",
+                                    "B": "onnx_Conv_189"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/0/conv1/Conv_output_0": {
+                                "value": "/layer2/0/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/layer2/0/relu/Relu": {
+                        "input_ports": {
+                            "/layer2/0/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer2/0/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer2/0/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/0/relu/Relu_output_0": {
+                                "value": "/layer2/0/relu/Relu"
+                            }
+                        }
+                    },
+                    "/layer2/0/downsample/0/Conv": {
+                        "input_ports": {
+                            "/layer1/1/Relu_1_output_0": {
+                                "shape": [
+                                    1,
+                                    64,
+                                    56,
+                                    56
+                                ]
+                            },
+                            "onnx_Conv_194": {
+                                "shape": [
+                                    128,
+                                    64,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_195": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/layer2/0/downsample/0/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer1/1/Relu_1_output_0",
+                                    "W": "onnx_Conv_194",
+                                    "B": "onnx_Conv_195"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/0/downsample/0/Conv_output_0": {
+                                "value": "/layer2/0/downsample/0/Conv"
+                            }
+                        }
+                    },
+                    "/layer2/0/conv2/Conv": {
+                        "input_ports": {
+                            "/layer2/0/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            },
+                            "onnx_Conv_191": {
+                                "shape": [
+                                    128,
+                                    128,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_192": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer2/0/conv2/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer2/0/relu/Relu_output_0",
+                                    "W": "onnx_Conv_191",
+                                    "B": "onnx_Conv_192"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/0/conv2/Conv_output_0": {
+                                "value": "/layer2/0/conv2/Conv"
+                            }
+                        }
+                    },
+                    "/layer2/0/Add": {
+                        "input_ports": {
+                            "/layer2/0/conv2/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            },
+                            "/layer2/0/downsample/0/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer2/0/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer2/0/conv2/Conv_output_0",
+                                    "B": "/layer2/0/downsample/0/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/0/Add_output_0": {
+                                "value": "/layer2/0/Add"
+                            }
+                        }
+                    },
+                    "/layer2/0/relu_1/Relu": {
+                        "input_ports": {
+                            "/layer2/0/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer2/0/relu_1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer2/0/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/0/relu_1/Relu_output_0": {
+                                "value": "/layer2/0/relu_1/Relu"
+                            }
+                        }
+                    },
+                    "/layer2/1/conv1/Conv": {
+                        "input_ports": {
+                            "/layer2/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            },
+                            "onnx_Conv_197": {
+                                "shape": [
+                                    128,
+                                    128,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_198": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer2/1/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer2/0/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_197",
+                                    "B": "onnx_Conv_198"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/1/conv1/Conv_output_0": {
+                                "value": "/layer2/1/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/layer2/1/relu/Relu": {
+                        "input_ports": {
+                            "/layer2/1/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer2/1/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer2/1/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/1/relu/Relu_output_0": {
+                                "value": "/layer2/1/relu/Relu"
+                            }
+                        }
+                    },
+                    "/layer2/1/conv2/Conv": {
+                        "input_ports": {
+                            "/layer2/1/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            },
+                            "onnx_Conv_200": {
+                                "shape": [
+                                    128,
+                                    128,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_201": {
+                                "shape": [
+                                    128
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer2/1/conv2/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer2/1/relu/Relu_output_0",
+                                    "W": "onnx_Conv_200",
+                                    "B": "onnx_Conv_201"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/1/conv2/Conv_output_0": {
+                                "value": "/layer2/1/conv2/Conv"
+                            }
+                        }
+                    },
+                    "/layer2/1/Add": {
+                        "input_ports": {
+                            "/layer2/1/conv2/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            },
+                            "/layer2/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer2/1/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer2/1/conv2/Conv_output_0",
+                                    "B": "/layer2/0/relu_1/Relu_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/1/Add_output_0": {
+                                "value": "/layer2/1/Add"
+                            }
+                        }
+                    },
+                    "/layer2/1/relu_1/Relu": {
+                        "input_ports": {
+                            "/layer2/1/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer2/1/relu_1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer2/1/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer2/1/relu_1/Relu_output_0": {
+                                "value": "/layer2/1/relu_1/Relu"
+                            }
+                        }
+                    },
+                    "/layer3/0/conv1/Conv": {
+                        "input_ports": {
+                            "/layer2/1/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            },
+                            "onnx_Conv_203": {
+                                "shape": [
+                                    256,
+                                    128,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_204": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/layer3/0/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer2/1/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_203",
+                                    "B": "onnx_Conv_204"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/0/conv1/Conv_output_0": {
+                                "value": "/layer3/0/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/layer3/0/relu/Relu": {
+                        "input_ports": {
+                            "/layer3/0/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer3/0/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer3/0/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/0/relu/Relu_output_0": {
+                                "value": "/layer3/0/relu/Relu"
+                            }
+                        }
+                    },
+                    "/layer3/0/downsample/0/Conv": {
+                        "input_ports": {
+                            "/layer2/1/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    128,
+                                    28,
+                                    28
+                                ]
+                            },
+                            "onnx_Conv_209": {
+                                "shape": [
+                                    256,
+                                    128,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_210": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/layer3/0/downsample/0/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer2/1/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_209",
+                                    "B": "onnx_Conv_210"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/0/downsample/0/Conv_output_0": {
+                                "value": "/layer3/0/downsample/0/Conv"
+                            }
+                        }
+                    },
+                    "/layer3/0/conv2/Conv": {
+                        "input_ports": {
+                            "/layer3/0/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            },
+                            "onnx_Conv_206": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_207": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer3/0/conv2/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer3/0/relu/Relu_output_0",
+                                    "W": "onnx_Conv_206",
+                                    "B": "onnx_Conv_207"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/0/conv2/Conv_output_0": {
+                                "value": "/layer3/0/conv2/Conv"
+                            }
+                        }
+                    },
+                    "/layer3/0/Add": {
+                        "input_ports": {
+                            "/layer3/0/conv2/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            },
+                            "/layer3/0/downsample/0/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer3/0/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer3/0/conv2/Conv_output_0",
+                                    "B": "/layer3/0/downsample/0/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/0/Add_output_0": {
+                                "value": "/layer3/0/Add"
+                            }
+                        }
+                    },
+                    "/layer3/0/relu_1/Relu": {
+                        "input_ports": {
+                            "/layer3/0/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer3/0/relu_1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer3/0/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/0/relu_1/Relu_output_0": {
+                                "value": "/layer3/0/relu_1/Relu"
+                            }
+                        }
+                    },
+                    "/layer3/1/conv1/Conv": {
+                        "input_ports": {
+                            "/layer3/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            },
+                            "onnx_Conv_212": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_213": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer3/1/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer3/0/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_212",
+                                    "B": "onnx_Conv_213"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/1/conv1/Conv_output_0": {
+                                "value": "/layer3/1/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/layer3/1/relu/Relu": {
+                        "input_ports": {
+                            "/layer3/1/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer3/1/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer3/1/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/1/relu/Relu_output_0": {
+                                "value": "/layer3/1/relu/Relu"
+                            }
+                        }
+                    },
+                    "/layer3/1/conv2/Conv": {
+                        "input_ports": {
+                            "/layer3/1/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            },
+                            "onnx_Conv_215": {
+                                "shape": [
+                                    256,
+                                    256,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_216": {
+                                "shape": [
+                                    256
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer3/1/conv2/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer3/1/relu/Relu_output_0",
+                                    "W": "onnx_Conv_215",
+                                    "B": "onnx_Conv_216"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/1/conv2/Conv_output_0": {
+                                "value": "/layer3/1/conv2/Conv"
+                            }
+                        }
+                    },
+                    "/layer3/1/Add": {
+                        "input_ports": {
+                            "/layer3/1/conv2/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            },
+                            "/layer3/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer3/1/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer3/1/conv2/Conv_output_0",
+                                    "B": "/layer3/0/relu_1/Relu_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/1/Add_output_0": {
+                                "value": "/layer3/1/Add"
+                            }
+                        }
+                    },
+                    "/layer3/1/relu_1/Relu": {
+                        "input_ports": {
+                            "/layer3/1/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer3/1/relu_1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer3/1/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer3/1/relu_1/Relu_output_0": {
+                                "value": "/layer3/1/relu_1/Relu"
+                            }
+                        }
+                    },
+                    "/layer4/0/conv1/Conv": {
+                        "input_ports": {
+                            "/layer3/1/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            },
+                            "onnx_Conv_218": {
+                                "shape": [
+                                    512,
+                                    256,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_219": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/layer4/0/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer3/1/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_218",
+                                    "B": "onnx_Conv_219"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/0/conv1/Conv_output_0": {
+                                "value": "/layer4/0/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/layer4/0/relu/Relu": {
+                        "input_ports": {
+                            "/layer4/0/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer4/0/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer4/0/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/0/relu/Relu_output_0": {
+                                "value": "/layer4/0/relu/Relu"
+                            }
+                        }
+                    },
+                    "/layer4/0/downsample/0/Conv": {
+                        "input_ports": {
+                            "/layer3/1/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    256,
+                                    14,
+                                    14
+                                ]
+                            },
+                            "onnx_Conv_224": {
+                                "shape": [
+                                    512,
+                                    256,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "onnx_Conv_225": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    2,
+                                    2
+                                ]
+                            },
+                            "/layer4/0/downsample/0/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer3/1/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_224",
+                                    "B": "onnx_Conv_225"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/0/downsample/0/Conv_output_0": {
+                                "value": "/layer4/0/downsample/0/Conv"
+                            }
+                        }
+                    },
+                    "/layer4/0/conv2/Conv": {
+                        "input_ports": {
+                            "/layer4/0/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            },
+                            "onnx_Conv_221": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_222": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer4/0/conv2/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer4/0/relu/Relu_output_0",
+                                    "W": "onnx_Conv_221",
+                                    "B": "onnx_Conv_222"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/0/conv2/Conv_output_0": {
+                                "value": "/layer4/0/conv2/Conv"
+                            }
+                        }
+                    },
+                    "/layer4/0/Add": {
+                        "input_ports": {
+                            "/layer4/0/conv2/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            },
+                            "/layer4/0/downsample/0/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer4/0/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer4/0/conv2/Conv_output_0",
+                                    "B": "/layer4/0/downsample/0/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/0/Add_output_0": {
+                                "value": "/layer4/0/Add"
+                            }
+                        }
+                    },
+                    "/layer4/0/relu_1/Relu": {
+                        "input_ports": {
+                            "/layer4/0/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer4/0/relu_1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer4/0/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/0/relu_1/Relu_output_0": {
+                                "value": "/layer4/0/relu_1/Relu"
+                            }
+                        }
+                    },
+                    "/layer4/1/conv1/Conv": {
+                        "input_ports": {
+                            "/layer4/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            },
+                            "onnx_Conv_227": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_228": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer4/1/conv1/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer4/0/relu_1/Relu_output_0",
+                                    "W": "onnx_Conv_227",
+                                    "B": "onnx_Conv_228"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/1/conv1/Conv_output_0": {
+                                "value": "/layer4/1/conv1/Conv"
+                            }
+                        }
+                    },
+                    "/layer4/1/relu/Relu": {
+                        "input_ports": {
+                            "/layer4/1/conv1/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer4/1/relu/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer4/1/conv1/Conv_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/1/relu/Relu_output_0": {
+                                "value": "/layer4/1/relu/Relu"
+                            }
+                        }
+                    },
+                    "/layer4/1/conv2/Conv": {
+                        "input_ports": {
+                            "/layer4/1/relu/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            },
+                            "onnx_Conv_230": {
+                                "shape": [
+                                    512,
+                                    512,
+                                    3,
+                                    3
+                                ]
+                            },
+                            "onnx_Conv_231": {
+                                "shape": [
+                                    512
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "dilations": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "group": {
+                                "value": 1
+                            },
+                            "kernel_shape": {
+                                "value": [
+                                    3,
+                                    3
+                                ]
+                            },
+                            "pads": {
+                                "value": [
+                                    1,
+                                    1,
+                                    1,
+                                    1
+                                ]
+                            },
+                            "strides": {
+                                "value": [
+                                    1,
+                                    1
+                                ]
+                            },
+                            "/layer4/1/conv2/Conv": {
+                                "function": "onnx::Conv",
+                                "args": {
+                                    "X": "/layer4/1/relu/Relu_output_0",
+                                    "W": "onnx_Conv_230",
+                                    "B": "onnx_Conv_231"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/1/conv2/Conv_output_0": {
+                                "value": "/layer4/1/conv2/Conv"
+                            }
+                        }
+                    },
+                    "/layer4/1/Add": {
+                        "input_ports": {
+                            "/layer4/1/conv2/Conv_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            },
+                            "/layer4/0/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer4/1/Add": {
+                                "function": "onnx::Add",
+                                "args": {
+                                    "A": "/layer4/1/conv2/Conv_output_0",
+                                    "B": "/layer4/0/relu_1/Relu_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/1/Add_output_0": {
+                                "value": "/layer4/1/Add"
+                            }
+                        }
+                    },
+                    "/layer4/1/relu_1/Relu": {
+                        "input_ports": {
+                            "/layer4/1/Add_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/layer4/1/relu_1/Relu": {
+                                "function": "onnx::Relu",
+                                "args": {
+                                    "X": "/layer4/1/Add_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/layer4/1/relu_1/Relu_output_0": {
+                                "value": "/layer4/1/relu_1/Relu"
+                            }
+                        }
+                    },
+                    "/avgpool/GlobalAveragePool": {
+                        "input_ports": {
+                            "/layer4/1/relu_1/Relu_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    7,
+                                    7
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "/avgpool/GlobalAveragePool": {
+                                "function": "onnx::GlobalAveragePool",
+                                "args": {
+                                    "X": "/layer4/1/relu_1/Relu_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/avgpool/GlobalAveragePool_output_0": {
+                                "value": "/avgpool/GlobalAveragePool"
+                            }
+                        }
+                    },
+                    "/Flatten": {
+                        "input_ports": {
+                            "/avgpool/GlobalAveragePool_output_0": {
+                                "shape": [
+                                    1,
+                                    512,
+                                    1,
+                                    1
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "axis": {
+                                "value": 1
+                            },
+                            "/Flatten": {
+                                "function": "onnx::Flatten",
+                                "args": {
+                                    "input": "/avgpool/GlobalAveragePool_output_0"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "/Flatten_output_0": {
+                                "value": "/Flatten"
+                            }
+                        }
+                    },
+                    "/fc/Gemm": {
+                        "input_ports": {
+                            "/Flatten_output_0": {
+                                "shape": [
+                                    1,
+                                    512
+                                ]
+                            },
+                            "fc_weight": {
+                                "shape": [
+                                    1000,
+                                    512
+                                ]
+                            },
+                            "fc_bias": {
+                                "shape": [
+                                    1000
+                                ]
+                            }
+                        },
+                        "parameters": {
+                            "alpha": {
+                                "value": 1.0
+                            },
+                            "beta": {
+                                "value": 1.0
+                            },
+                            "transB": {
+                                "value": 1
+                            },
+                            "/fc/Gemm": {
+                                "function": "onnx::Gemm",
+                                "args": {
+                                    "A": "/Flatten_output_0",
+                                    "B": "fc_weight",
+                                    "C": "fc_bias"
+                                }
+                            }
+                        },
+                        "output_ports": {
+                            "x_20": {
+                                "value": "/fc/Gemm"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "Identity_0.onnx_Conv_231_/layer4/1/conv2/Conv.onnx_Conv_231": {
+                        "sender": "Identity_0",
+                        "receiver": "/layer4/1/conv2/Conv",
+                        "sender_port": "onnx_Conv_231",
+                        "receiver_port": "onnx_Conv_231"
+                    },
+                    "Identity_1.onnx_Conv_228_/layer4/1/conv1/Conv.onnx_Conv_228": {
+                        "sender": "Identity_1",
+                        "receiver": "/layer4/1/conv1/Conv",
+                        "sender_port": "onnx_Conv_228",
+                        "receiver_port": "onnx_Conv_228"
+                    },
+                    "Identity_2.onnx_Conv_225_/layer4/0/downsample/0/Conv.onnx_Conv_225": {
+                        "sender": "Identity_2",
+                        "receiver": "/layer4/0/downsample/0/Conv",
+                        "sender_port": "onnx_Conv_225",
+                        "receiver_port": "onnx_Conv_225"
+                    },
+                    "Identity_3.onnx_Conv_222_/layer4/0/conv2/Conv.onnx_Conv_222": {
+                        "sender": "Identity_3",
+                        "receiver": "/layer4/0/conv2/Conv",
+                        "sender_port": "onnx_Conv_222",
+                        "receiver_port": "onnx_Conv_222"
+                    },
+                    "Identity_4.onnx_Conv_216_/layer3/1/conv2/Conv.onnx_Conv_216": {
+                        "sender": "Identity_4",
+                        "receiver": "/layer3/1/conv2/Conv",
+                        "sender_port": "onnx_Conv_216",
+                        "receiver_port": "onnx_Conv_216"
+                    },
+                    "Identity_5.onnx_Conv_213_/layer3/1/conv1/Conv.onnx_Conv_213": {
+                        "sender": "Identity_5",
+                        "receiver": "/layer3/1/conv1/Conv",
+                        "sender_port": "onnx_Conv_213",
+                        "receiver_port": "onnx_Conv_213"
+                    },
+                    "Identity_6.onnx_Conv_210_/layer3/0/downsample/0/Conv.onnx_Conv_210": {
+                        "sender": "Identity_6",
+                        "receiver": "/layer3/0/downsample/0/Conv",
+                        "sender_port": "onnx_Conv_210",
+                        "receiver_port": "onnx_Conv_210"
+                    },
+                    "Identity_7.onnx_Conv_207_/layer3/0/conv2/Conv.onnx_Conv_207": {
+                        "sender": "Identity_7",
+                        "receiver": "/layer3/0/conv2/Conv",
+                        "sender_port": "onnx_Conv_207",
+                        "receiver_port": "onnx_Conv_207"
+                    },
+                    "Identity_8.onnx_Conv_201_/layer2/1/conv2/Conv.onnx_Conv_201": {
+                        "sender": "Identity_8",
+                        "receiver": "/layer2/1/conv2/Conv",
+                        "sender_port": "onnx_Conv_201",
+                        "receiver_port": "onnx_Conv_201"
+                    },
+                    "Identity_9.onnx_Conv_198_/layer2/1/conv1/Conv.onnx_Conv_198": {
+                        "sender": "Identity_9",
+                        "receiver": "/layer2/1/conv1/Conv",
+                        "sender_port": "onnx_Conv_198",
+                        "receiver_port": "onnx_Conv_198"
+                    },
+                    "Identity_10.onnx_Conv_195_/layer2/0/downsample/0/Conv.onnx_Conv_195": {
+                        "sender": "Identity_10",
+                        "receiver": "/layer2/0/downsample/0/Conv",
+                        "sender_port": "onnx_Conv_195",
+                        "receiver_port": "onnx_Conv_195"
+                    },
+                    "Identity_11.onnx_Conv_192_/layer2/0/conv2/Conv.onnx_Conv_192": {
+                        "sender": "Identity_11",
+                        "receiver": "/layer2/0/conv2/Conv",
+                        "sender_port": "onnx_Conv_192",
+                        "receiver_port": "onnx_Conv_192"
+                    },
+                    "Identity_12.onnx_Conv_186_/layer1/1/Conv_1.onnx_Conv_186": {
+                        "sender": "Identity_12",
+                        "receiver": "/layer1/1/Conv_1",
+                        "sender_port": "onnx_Conv_186",
+                        "receiver_port": "onnx_Conv_186"
+                    },
+                    "Identity_13.onnx_Conv_183_/layer1/1/Conv.onnx_Conv_183": {
+                        "sender": "Identity_13",
+                        "receiver": "/layer1/1/Conv",
+                        "sender_port": "onnx_Conv_183",
+                        "receiver_port": "onnx_Conv_183"
+                    },
+                    "Identity_14.onnx_Conv_180_/layer1/0/conv2/Conv.onnx_Conv_180": {
+                        "sender": "Identity_14",
+                        "receiver": "/layer1/0/conv2/Conv",
+                        "sender_port": "onnx_Conv_180",
+                        "receiver_port": "onnx_Conv_180"
+                    },
+                    "Identity_15.onnx_Conv_177_/layer1/0/conv1/Conv.onnx_Conv_177": {
+                        "sender": "Identity_15",
+                        "receiver": "/layer1/0/conv1/Conv",
+                        "sender_port": "onnx_Conv_177",
+                        "receiver_port": "onnx_Conv_177"
+                    },
+                    "/conv1/Conv./conv1/Conv_output_0_/relu/Relu./conv1/Conv_output_0": {
+                        "sender": "/conv1/Conv",
+                        "receiver": "/relu/Relu",
+                        "sender_port": "/conv1/Conv_output_0",
+                        "receiver_port": "/conv1/Conv_output_0"
+                    },
+                    "/relu/Relu./relu/Relu_output_0_/maxpool/MaxPool./relu/Relu_output_0": {
+                        "sender": "/relu/Relu",
+                        "receiver": "/maxpool/MaxPool",
+                        "sender_port": "/relu/Relu_output_0",
+                        "receiver_port": "/relu/Relu_output_0"
+                    },
+                    "/maxpool/MaxPool./maxpool/MaxPool_output_0_/layer1/0/conv1/Conv./maxpool/MaxPool_output_0": {
+                        "sender": "/maxpool/MaxPool",
+                        "receiver": "/layer1/0/conv1/Conv",
+                        "sender_port": "/maxpool/MaxPool_output_0",
+                        "receiver_port": "/maxpool/MaxPool_output_0"
+                    },
+                    "/maxpool/MaxPool./maxpool/MaxPool_output_0_/layer1/0/Add./maxpool/MaxPool_output_0": {
+                        "sender": "/maxpool/MaxPool",
+                        "receiver": "/layer1/0/Add",
+                        "sender_port": "/maxpool/MaxPool_output_0",
+                        "receiver_port": "/maxpool/MaxPool_output_0"
+                    },
+                    "/layer1/0/conv1/Conv./layer1/0/conv1/Conv_output_0_/layer1/0/relu/Relu./layer1/0/conv1/Conv_output_0": {
+                        "sender": "/layer1/0/conv1/Conv",
+                        "receiver": "/layer1/0/relu/Relu",
+                        "sender_port": "/layer1/0/conv1/Conv_output_0",
+                        "receiver_port": "/layer1/0/conv1/Conv_output_0"
+                    },
+                    "/layer1/0/relu/Relu./layer1/0/relu/Relu_output_0_/layer1/0/conv2/Conv./layer1/0/relu/Relu_output_0": {
+                        "sender": "/layer1/0/relu/Relu",
+                        "receiver": "/layer1/0/conv2/Conv",
+                        "sender_port": "/layer1/0/relu/Relu_output_0",
+                        "receiver_port": "/layer1/0/relu/Relu_output_0"
+                    },
+                    "/layer1/0/conv2/Conv./layer1/0/conv2/Conv_output_0_/layer1/0/Add./layer1/0/conv2/Conv_output_0": {
+                        "sender": "/layer1/0/conv2/Conv",
+                        "receiver": "/layer1/0/Add",
+                        "sender_port": "/layer1/0/conv2/Conv_output_0",
+                        "receiver_port": "/layer1/0/conv2/Conv_output_0"
+                    },
+                    "/layer1/0/Add./layer1/0/Add_output_0_/layer1/0/relu_1/Relu./layer1/0/Add_output_0": {
+                        "sender": "/layer1/0/Add",
+                        "receiver": "/layer1/0/relu_1/Relu",
+                        "sender_port": "/layer1/0/Add_output_0",
+                        "receiver_port": "/layer1/0/Add_output_0"
+                    },
+                    "/layer1/0/relu_1/Relu./layer1/0/relu_1/Relu_output_0_/layer1/1/Conv./layer1/0/relu_1/Relu_output_0": {
+                        "sender": "/layer1/0/relu_1/Relu",
+                        "receiver": "/layer1/1/Conv",
+                        "sender_port": "/layer1/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer1/0/relu_1/Relu_output_0"
+                    },
+                    "/layer1/0/relu_1/Relu./layer1/0/relu_1/Relu_output_0_/layer1/1/Add./layer1/0/relu_1/Relu_output_0": {
+                        "sender": "/layer1/0/relu_1/Relu",
+                        "receiver": "/layer1/1/Add",
+                        "sender_port": "/layer1/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer1/0/relu_1/Relu_output_0"
+                    },
+                    "/layer1/1/Conv./layer1/1/Conv_output_0_/layer1/1/Relu./layer1/1/Conv_output_0": {
+                        "sender": "/layer1/1/Conv",
+                        "receiver": "/layer1/1/Relu",
+                        "sender_port": "/layer1/1/Conv_output_0",
+                        "receiver_port": "/layer1/1/Conv_output_0"
+                    },
+                    "/layer1/1/Relu./layer1/1/Relu_output_0_/layer1/1/Conv_1./layer1/1/Relu_output_0": {
+                        "sender": "/layer1/1/Relu",
+                        "receiver": "/layer1/1/Conv_1",
+                        "sender_port": "/layer1/1/Relu_output_0",
+                        "receiver_port": "/layer1/1/Relu_output_0"
+                    },
+                    "/layer1/1/Conv_1./layer1/1/Conv_1_output_0_/layer1/1/Add./layer1/1/Conv_1_output_0": {
+                        "sender": "/layer1/1/Conv_1",
+                        "receiver": "/layer1/1/Add",
+                        "sender_port": "/layer1/1/Conv_1_output_0",
+                        "receiver_port": "/layer1/1/Conv_1_output_0"
+                    },
+                    "/layer1/1/Add./layer1/1/Add_output_0_/layer1/1/Relu_1./layer1/1/Add_output_0": {
+                        "sender": "/layer1/1/Add",
+                        "receiver": "/layer1/1/Relu_1",
+                        "sender_port": "/layer1/1/Add_output_0",
+                        "receiver_port": "/layer1/1/Add_output_0"
+                    },
+                    "/layer1/1/Relu_1./layer1/1/Relu_1_output_0_/layer2/0/conv1/Conv./layer1/1/Relu_1_output_0": {
+                        "sender": "/layer1/1/Relu_1",
+                        "receiver": "/layer2/0/conv1/Conv",
+                        "sender_port": "/layer1/1/Relu_1_output_0",
+                        "receiver_port": "/layer1/1/Relu_1_output_0"
+                    },
+                    "/layer1/1/Relu_1./layer1/1/Relu_1_output_0_/layer2/0/downsample/0/Conv./layer1/1/Relu_1_output_0": {
+                        "sender": "/layer1/1/Relu_1",
+                        "receiver": "/layer2/0/downsample/0/Conv",
+                        "sender_port": "/layer1/1/Relu_1_output_0",
+                        "receiver_port": "/layer1/1/Relu_1_output_0"
+                    },
+                    "/layer2/0/conv1/Conv./layer2/0/conv1/Conv_output_0_/layer2/0/relu/Relu./layer2/0/conv1/Conv_output_0": {
+                        "sender": "/layer2/0/conv1/Conv",
+                        "receiver": "/layer2/0/relu/Relu",
+                        "sender_port": "/layer2/0/conv1/Conv_output_0",
+                        "receiver_port": "/layer2/0/conv1/Conv_output_0"
+                    },
+                    "/layer2/0/relu/Relu./layer2/0/relu/Relu_output_0_/layer2/0/conv2/Conv./layer2/0/relu/Relu_output_0": {
+                        "sender": "/layer2/0/relu/Relu",
+                        "receiver": "/layer2/0/conv2/Conv",
+                        "sender_port": "/layer2/0/relu/Relu_output_0",
+                        "receiver_port": "/layer2/0/relu/Relu_output_0"
+                    },
+                    "/layer2/0/downsample/0/Conv./layer2/0/downsample/0/Conv_output_0_/layer2/0/Add./layer2/0/downsample/0/Conv_output_0": {
+                        "sender": "/layer2/0/downsample/0/Conv",
+                        "receiver": "/layer2/0/Add",
+                        "sender_port": "/layer2/0/downsample/0/Conv_output_0",
+                        "receiver_port": "/layer2/0/downsample/0/Conv_output_0"
+                    },
+                    "/layer2/0/conv2/Conv./layer2/0/conv2/Conv_output_0_/layer2/0/Add./layer2/0/conv2/Conv_output_0": {
+                        "sender": "/layer2/0/conv2/Conv",
+                        "receiver": "/layer2/0/Add",
+                        "sender_port": "/layer2/0/conv2/Conv_output_0",
+                        "receiver_port": "/layer2/0/conv2/Conv_output_0"
+                    },
+                    "/layer2/0/Add./layer2/0/Add_output_0_/layer2/0/relu_1/Relu./layer2/0/Add_output_0": {
+                        "sender": "/layer2/0/Add",
+                        "receiver": "/layer2/0/relu_1/Relu",
+                        "sender_port": "/layer2/0/Add_output_0",
+                        "receiver_port": "/layer2/0/Add_output_0"
+                    },
+                    "/layer2/0/relu_1/Relu./layer2/0/relu_1/Relu_output_0_/layer2/1/conv1/Conv./layer2/0/relu_1/Relu_output_0": {
+                        "sender": "/layer2/0/relu_1/Relu",
+                        "receiver": "/layer2/1/conv1/Conv",
+                        "sender_port": "/layer2/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer2/0/relu_1/Relu_output_0"
+                    },
+                    "/layer2/0/relu_1/Relu./layer2/0/relu_1/Relu_output_0_/layer2/1/Add./layer2/0/relu_1/Relu_output_0": {
+                        "sender": "/layer2/0/relu_1/Relu",
+                        "receiver": "/layer2/1/Add",
+                        "sender_port": "/layer2/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer2/0/relu_1/Relu_output_0"
+                    },
+                    "/layer2/1/conv1/Conv./layer2/1/conv1/Conv_output_0_/layer2/1/relu/Relu./layer2/1/conv1/Conv_output_0": {
+                        "sender": "/layer2/1/conv1/Conv",
+                        "receiver": "/layer2/1/relu/Relu",
+                        "sender_port": "/layer2/1/conv1/Conv_output_0",
+                        "receiver_port": "/layer2/1/conv1/Conv_output_0"
+                    },
+                    "/layer2/1/relu/Relu./layer2/1/relu/Relu_output_0_/layer2/1/conv2/Conv./layer2/1/relu/Relu_output_0": {
+                        "sender": "/layer2/1/relu/Relu",
+                        "receiver": "/layer2/1/conv2/Conv",
+                        "sender_port": "/layer2/1/relu/Relu_output_0",
+                        "receiver_port": "/layer2/1/relu/Relu_output_0"
+                    },
+                    "/layer2/1/conv2/Conv./layer2/1/conv2/Conv_output_0_/layer2/1/Add./layer2/1/conv2/Conv_output_0": {
+                        "sender": "/layer2/1/conv2/Conv",
+                        "receiver": "/layer2/1/Add",
+                        "sender_port": "/layer2/1/conv2/Conv_output_0",
+                        "receiver_port": "/layer2/1/conv2/Conv_output_0"
+                    },
+                    "/layer2/1/Add./layer2/1/Add_output_0_/layer2/1/relu_1/Relu./layer2/1/Add_output_0": {
+                        "sender": "/layer2/1/Add",
+                        "receiver": "/layer2/1/relu_1/Relu",
+                        "sender_port": "/layer2/1/Add_output_0",
+                        "receiver_port": "/layer2/1/Add_output_0"
+                    },
+                    "/layer2/1/relu_1/Relu./layer2/1/relu_1/Relu_output_0_/layer3/0/conv1/Conv./layer2/1/relu_1/Relu_output_0": {
+                        "sender": "/layer2/1/relu_1/Relu",
+                        "receiver": "/layer3/0/conv1/Conv",
+                        "sender_port": "/layer2/1/relu_1/Relu_output_0",
+                        "receiver_port": "/layer2/1/relu_1/Relu_output_0"
+                    },
+                    "/layer2/1/relu_1/Relu./layer2/1/relu_1/Relu_output_0_/layer3/0/downsample/0/Conv./layer2/1/relu_1/Relu_output_0": {
+                        "sender": "/layer2/1/relu_1/Relu",
+                        "receiver": "/layer3/0/downsample/0/Conv",
+                        "sender_port": "/layer2/1/relu_1/Relu_output_0",
+                        "receiver_port": "/layer2/1/relu_1/Relu_output_0"
+                    },
+                    "/layer3/0/conv1/Conv./layer3/0/conv1/Conv_output_0_/layer3/0/relu/Relu./layer3/0/conv1/Conv_output_0": {
+                        "sender": "/layer3/0/conv1/Conv",
+                        "receiver": "/layer3/0/relu/Relu",
+                        "sender_port": "/layer3/0/conv1/Conv_output_0",
+                        "receiver_port": "/layer3/0/conv1/Conv_output_0"
+                    },
+                    "/layer3/0/relu/Relu./layer3/0/relu/Relu_output_0_/layer3/0/conv2/Conv./layer3/0/relu/Relu_output_0": {
+                        "sender": "/layer3/0/relu/Relu",
+                        "receiver": "/layer3/0/conv2/Conv",
+                        "sender_port": "/layer3/0/relu/Relu_output_0",
+                        "receiver_port": "/layer3/0/relu/Relu_output_0"
+                    },
+                    "/layer3/0/downsample/0/Conv./layer3/0/downsample/0/Conv_output_0_/layer3/0/Add./layer3/0/downsample/0/Conv_output_0": {
+                        "sender": "/layer3/0/downsample/0/Conv",
+                        "receiver": "/layer3/0/Add",
+                        "sender_port": "/layer3/0/downsample/0/Conv_output_0",
+                        "receiver_port": "/layer3/0/downsample/0/Conv_output_0"
+                    },
+                    "/layer3/0/conv2/Conv./layer3/0/conv2/Conv_output_0_/layer3/0/Add./layer3/0/conv2/Conv_output_0": {
+                        "sender": "/layer3/0/conv2/Conv",
+                        "receiver": "/layer3/0/Add",
+                        "sender_port": "/layer3/0/conv2/Conv_output_0",
+                        "receiver_port": "/layer3/0/conv2/Conv_output_0"
+                    },
+                    "/layer3/0/Add./layer3/0/Add_output_0_/layer3/0/relu_1/Relu./layer3/0/Add_output_0": {
+                        "sender": "/layer3/0/Add",
+                        "receiver": "/layer3/0/relu_1/Relu",
+                        "sender_port": "/layer3/0/Add_output_0",
+                        "receiver_port": "/layer3/0/Add_output_0"
+                    },
+                    "/layer3/0/relu_1/Relu./layer3/0/relu_1/Relu_output_0_/layer3/1/conv1/Conv./layer3/0/relu_1/Relu_output_0": {
+                        "sender": "/layer3/0/relu_1/Relu",
+                        "receiver": "/layer3/1/conv1/Conv",
+                        "sender_port": "/layer3/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer3/0/relu_1/Relu_output_0"
+                    },
+                    "/layer3/0/relu_1/Relu./layer3/0/relu_1/Relu_output_0_/layer3/1/Add./layer3/0/relu_1/Relu_output_0": {
+                        "sender": "/layer3/0/relu_1/Relu",
+                        "receiver": "/layer3/1/Add",
+                        "sender_port": "/layer3/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer3/0/relu_1/Relu_output_0"
+                    },
+                    "/layer3/1/conv1/Conv./layer3/1/conv1/Conv_output_0_/layer3/1/relu/Relu./layer3/1/conv1/Conv_output_0": {
+                        "sender": "/layer3/1/conv1/Conv",
+                        "receiver": "/layer3/1/relu/Relu",
+                        "sender_port": "/layer3/1/conv1/Conv_output_0",
+                        "receiver_port": "/layer3/1/conv1/Conv_output_0"
+                    },
+                    "/layer3/1/relu/Relu./layer3/1/relu/Relu_output_0_/layer3/1/conv2/Conv./layer3/1/relu/Relu_output_0": {
+                        "sender": "/layer3/1/relu/Relu",
+                        "receiver": "/layer3/1/conv2/Conv",
+                        "sender_port": "/layer3/1/relu/Relu_output_0",
+                        "receiver_port": "/layer3/1/relu/Relu_output_0"
+                    },
+                    "/layer3/1/conv2/Conv./layer3/1/conv2/Conv_output_0_/layer3/1/Add./layer3/1/conv2/Conv_output_0": {
+                        "sender": "/layer3/1/conv2/Conv",
+                        "receiver": "/layer3/1/Add",
+                        "sender_port": "/layer3/1/conv2/Conv_output_0",
+                        "receiver_port": "/layer3/1/conv2/Conv_output_0"
+                    },
+                    "/layer3/1/Add./layer3/1/Add_output_0_/layer3/1/relu_1/Relu./layer3/1/Add_output_0": {
+                        "sender": "/layer3/1/Add",
+                        "receiver": "/layer3/1/relu_1/Relu",
+                        "sender_port": "/layer3/1/Add_output_0",
+                        "receiver_port": "/layer3/1/Add_output_0"
+                    },
+                    "/layer3/1/relu_1/Relu./layer3/1/relu_1/Relu_output_0_/layer4/0/conv1/Conv./layer3/1/relu_1/Relu_output_0": {
+                        "sender": "/layer3/1/relu_1/Relu",
+                        "receiver": "/layer4/0/conv1/Conv",
+                        "sender_port": "/layer3/1/relu_1/Relu_output_0",
+                        "receiver_port": "/layer3/1/relu_1/Relu_output_0"
+                    },
+                    "/layer3/1/relu_1/Relu./layer3/1/relu_1/Relu_output_0_/layer4/0/downsample/0/Conv./layer3/1/relu_1/Relu_output_0": {
+                        "sender": "/layer3/1/relu_1/Relu",
+                        "receiver": "/layer4/0/downsample/0/Conv",
+                        "sender_port": "/layer3/1/relu_1/Relu_output_0",
+                        "receiver_port": "/layer3/1/relu_1/Relu_output_0"
+                    },
+                    "/layer4/0/conv1/Conv./layer4/0/conv1/Conv_output_0_/layer4/0/relu/Relu./layer4/0/conv1/Conv_output_0": {
+                        "sender": "/layer4/0/conv1/Conv",
+                        "receiver": "/layer4/0/relu/Relu",
+                        "sender_port": "/layer4/0/conv1/Conv_output_0",
+                        "receiver_port": "/layer4/0/conv1/Conv_output_0"
+                    },
+                    "/layer4/0/relu/Relu./layer4/0/relu/Relu_output_0_/layer4/0/conv2/Conv./layer4/0/relu/Relu_output_0": {
+                        "sender": "/layer4/0/relu/Relu",
+                        "receiver": "/layer4/0/conv2/Conv",
+                        "sender_port": "/layer4/0/relu/Relu_output_0",
+                        "receiver_port": "/layer4/0/relu/Relu_output_0"
+                    },
+                    "/layer4/0/downsample/0/Conv./layer4/0/downsample/0/Conv_output_0_/layer4/0/Add./layer4/0/downsample/0/Conv_output_0": {
+                        "sender": "/layer4/0/downsample/0/Conv",
+                        "receiver": "/layer4/0/Add",
+                        "sender_port": "/layer4/0/downsample/0/Conv_output_0",
+                        "receiver_port": "/layer4/0/downsample/0/Conv_output_0"
+                    },
+                    "/layer4/0/conv2/Conv./layer4/0/conv2/Conv_output_0_/layer4/0/Add./layer4/0/conv2/Conv_output_0": {
+                        "sender": "/layer4/0/conv2/Conv",
+                        "receiver": "/layer4/0/Add",
+                        "sender_port": "/layer4/0/conv2/Conv_output_0",
+                        "receiver_port": "/layer4/0/conv2/Conv_output_0"
+                    },
+                    "/layer4/0/Add./layer4/0/Add_output_0_/layer4/0/relu_1/Relu./layer4/0/Add_output_0": {
+                        "sender": "/layer4/0/Add",
+                        "receiver": "/layer4/0/relu_1/Relu",
+                        "sender_port": "/layer4/0/Add_output_0",
+                        "receiver_port": "/layer4/0/Add_output_0"
+                    },
+                    "/layer4/0/relu_1/Relu./layer4/0/relu_1/Relu_output_0_/layer4/1/conv1/Conv./layer4/0/relu_1/Relu_output_0": {
+                        "sender": "/layer4/0/relu_1/Relu",
+                        "receiver": "/layer4/1/conv1/Conv",
+                        "sender_port": "/layer4/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer4/0/relu_1/Relu_output_0"
+                    },
+                    "/layer4/0/relu_1/Relu./layer4/0/relu_1/Relu_output_0_/layer4/1/Add./layer4/0/relu_1/Relu_output_0": {
+                        "sender": "/layer4/0/relu_1/Relu",
+                        "receiver": "/layer4/1/Add",
+                        "sender_port": "/layer4/0/relu_1/Relu_output_0",
+                        "receiver_port": "/layer4/0/relu_1/Relu_output_0"
+                    },
+                    "/layer4/1/conv1/Conv./layer4/1/conv1/Conv_output_0_/layer4/1/relu/Relu./layer4/1/conv1/Conv_output_0": {
+                        "sender": "/layer4/1/conv1/Conv",
+                        "receiver": "/layer4/1/relu/Relu",
+                        "sender_port": "/layer4/1/conv1/Conv_output_0",
+                        "receiver_port": "/layer4/1/conv1/Conv_output_0"
+                    },
+                    "/layer4/1/relu/Relu./layer4/1/relu/Relu_output_0_/layer4/1/conv2/Conv./layer4/1/relu/Relu_output_0": {
+                        "sender": "/layer4/1/relu/Relu",
+                        "receiver": "/layer4/1/conv2/Conv",
+                        "sender_port": "/layer4/1/relu/Relu_output_0",
+                        "receiver_port": "/layer4/1/relu/Relu_output_0"
+                    },
+                    "/layer4/1/conv2/Conv./layer4/1/conv2/Conv_output_0_/layer4/1/Add./layer4/1/conv2/Conv_output_0": {
+                        "sender": "/layer4/1/conv2/Conv",
+                        "receiver": "/layer4/1/Add",
+                        "sender_port": "/layer4/1/conv2/Conv_output_0",
+                        "receiver_port": "/layer4/1/conv2/Conv_output_0"
+                    },
+                    "/layer4/1/Add./layer4/1/Add_output_0_/layer4/1/relu_1/Relu./layer4/1/Add_output_0": {
+                        "sender": "/layer4/1/Add",
+                        "receiver": "/layer4/1/relu_1/Relu",
+                        "sender_port": "/layer4/1/Add_output_0",
+                        "receiver_port": "/layer4/1/Add_output_0"
+                    },
+                    "/layer4/1/relu_1/Relu./layer4/1/relu_1/Relu_output_0_/avgpool/GlobalAveragePool./layer4/1/relu_1/Relu_output_0": {
+                        "sender": "/layer4/1/relu_1/Relu",
+                        "receiver": "/avgpool/GlobalAveragePool",
+                        "sender_port": "/layer4/1/relu_1/Relu_output_0",
+                        "receiver_port": "/layer4/1/relu_1/Relu_output_0"
+                    },
+                    "/avgpool/GlobalAveragePool./avgpool/GlobalAveragePool_output_0_/Flatten./avgpool/GlobalAveragePool_output_0": {
+                        "sender": "/avgpool/GlobalAveragePool",
+                        "receiver": "/Flatten",
+                        "sender_port": "/avgpool/GlobalAveragePool_output_0",
+                        "receiver_port": "/avgpool/GlobalAveragePool_output_0"
+                    },
+                    "/Flatten./Flatten_output_0_/fc/Gemm./Flatten_output_0": {
+                        "sender": "/Flatten",
+                        "receiver": "/fc/Gemm",
+                        "sender_port": "/Flatten_output_0",
+                        "receiver_port": "/Flatten_output_0"
+                    }
+                }
+            }
+        }
+    }
+}
