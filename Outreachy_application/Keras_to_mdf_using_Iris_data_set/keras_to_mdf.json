@@ -7154,7 +7154,7 @@
                         },
                         "parameters": {
                             "sigmoid": {
-                                "value": "1/(1 + (2.72 ** (-fourth_layer_output)))"
+                                "value": "1/(1 + (2.71828 ** (-fourth_layer_output)))"
                             }
                         },
                         "output_ports": {

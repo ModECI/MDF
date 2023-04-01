@@ -88,27 +88,6 @@
                         "sender_port": "node_two_output",
                         "receiver_port": "circumference"
                     }
-                },
-                "conditions": {
-                    "node_specific": {
-                        "radius_of_a_circle": {
-                            "type": "Always",
-                            "kwargs": {}
-                        },
-                        "circumference_of_a_circle": {
-                            "type": "AfterCall",
-                            "kwargs": {
-                                "dependencies": "radius_of_a_circle",
-                                "n": 2
-                            }
-                        },
-                        "diameter_of_a_circle": {
-                            "type": "AfterPass",
-                            "kwargs": {
-                                "n": 1
-                            }
-                        }
-                    }
                 }
             }
         }

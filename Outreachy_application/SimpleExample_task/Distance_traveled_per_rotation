@@ -1,0 +1,6 @@
+digraph Distance_traveled_per_rotation_graph {
+	node [color="#00b299" fillcolor="#00b299" fontcolor=black penwidth=2 shape=box style="rounded,filled"]
+	rotations [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>rotations</b></td></tr><tr><td><i>color = 0 .7 .6</i></td></tr><tr><td><font color="#1666ff">number_of_rotation_per_turn</font> = 1.0</td></tr><tr><td><b><font color="#1666ff">number_of_rotations</font></b> = <font color="#1666ff">number_of_rotations</font> + <font color="#1666ff">number_of_rotation_per_turn</font></td></tr><tr><td><font color="#cc3355">number_of_rotations</font> = <font color="#1666ff">number_of_rotations</font> </td></tr></table>>]
+	node [color="#007f1fe" fillcolor="#007f1fe" fontcolor=black penwidth=2 shape=box style="rounded,filled"]
+	distance_node [label=<<table border="0" cellborder="0"><tr><td colspan="2"><b>distance_node</b></td></tr><tr><td><i>color = 0 .5 2</i></td></tr><tr><td><font color="#1666ff">distance_per_rotation</font> = 1000</td></tr><tr><td><b><font color="#1666ff">distance</font></b> = <font color="#1666ff">distance</font> + distance_traveled</td></tr><tr><td><font color="#cc3355">distance</font> = <font color="#1666ff">distance</font> </td></tr></table>>]
+}
