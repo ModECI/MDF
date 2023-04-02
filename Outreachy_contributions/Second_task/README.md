@@ -1,0 +1,1 @@
+This project involves creating an MDF model with real world datasets. I downloaded real world dataset called MNIST fron the internet using some libraries in keras and pytorch respectively, i then perform some simple machine learning on it and then repeat the process with MDF.
