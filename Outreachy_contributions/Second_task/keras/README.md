@@ -1,1 +1,1 @@
-This folder contains python scripts and jupyter notebooks for the keras to MDF project.
+This folder contains python scripts and jupyter notebooks for the keras to MDF project. This folder demonstrate building a model with keras and then converting the model to MDF. The keras and MDF model was then fed with the same input data and the result of both models was confirmed to be the same.
