@@ -1,5 +1,5 @@
 {
-    "3-connected-nodes": {
+    "3_connected_nodes": {
         "format": "ModECI MDF v0.4",
         "generating_application": "Python modeci-mdf v0.4.4",
         "graphs": {
@@ -22,13 +22,13 @@
                             "input": {}
                         },
                         "parameters": {
-                            "2nd-node": {
+                            "b_node": {
                                 "value": "1/(1+(input))"
                             }
                         },
                         "output_ports": {
                             "output": {
-                                "value": "2nd-node"
+                                "value": "b_node"
                             }
                         }
                     },
@@ -37,13 +37,13 @@
                             "input": {}
                         },
                         "parameters": {
-                            "3rd-node": {
+                            "c_node": {
                                 "value": "100*input"
                             }
                         },
                         "output_ports": {
                             "output": {
-                                "value": "3rd-node"
+                                "value": "c_node"
                             }
                         }
                     }
