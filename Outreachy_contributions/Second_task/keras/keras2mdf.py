@@ -11,10 +11,6 @@ from modeci_mdf.utils import simple_connect
 import numpy as np
 
 
-
-
-
-
 def get_weights_and_activation(layers, model):
 
     params = {}
