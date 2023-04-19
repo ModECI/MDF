@@ -5,7 +5,7 @@ from setuptools import setup
 # Most of this packages settings are defined in setup.cfg
 # FIXME: Not sure of the best way to setup extras_require from setup.cfg
 extras = {
-    "psyneulink": ["psyneulink"],
+    "psyneulink": ["grpcio-tools==1.42.0", "psyneulink"],
     "neuroml": ["pyNeuroML>=0.5.20", "neuromllite>=0.5.2"],
     "tensorflow": ["tensorflow", "keras_visualizer", "pydot"],
     "test": [

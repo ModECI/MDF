@@ -1,5 +1,7 @@
 # ONNX MDF Converter
 
+[ONNX](https://onnx.ai) (Open Neural Network Exchange) is an important format for exchanging models between machine learning environments. It is used in the MDF function ontology, and models in ONNX format can be exported to MDF. Converting MDF->ONNX is best enabled currently by converting the model to PyTorch and from there to ONNX.
+
 ## ONNX to MDF
 
 <!---   This example is not included here...
