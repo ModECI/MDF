@@ -279,3 +279,5 @@ Thumbs.db #thumbnail cache on Windows
 /examples/MDF/net/weight.py
 /examples/MDF/conditions/composite_example
 /examples/NeuroML/arm64
+/examples/MDF/RNN/iaf.net
+/examples/MDF/RNN/iaf.net2
