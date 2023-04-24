@@ -10,21 +10,52 @@ import random
 random.seed(1234)
 
 
-def create_iaf_node(
-    id, num_cells=1, v0=-60, erev=-70, thresh=-20, tau=10.0, syn_tau=10
+def create_iaf_syn_node(
+    id, num_cells=1, syn_also=True, v0=-60, erev=-70, thresh=-20, tau=10.0, syn_tau=10
 ):
+
+    if syn_also:
+        ## Syn node...
+        syn_node = Node("syn_%s" % id)
+
+        syn_tau = Parameter(id="syn_tau", value=syn_tau)
+        syn_node.parameters.append(syn_tau)
+
+        ip_spike = InputPort(id="spike_input", shape="(%i,)" % num_cells)
+        syn_node.input_ports.append(ip_spike)
+
+        spike_weights = Parameter(id="spike_weights", value=numpy.identity(num_cells))
+        syn_node.parameters.append(spike_weights)
+
+        weighted_spike = Parameter(
+            id="weighted_spike",
+            function="MatMul",
+            args={"A": spike_weights.id, "B": ip_spike.id},
+        )
+        syn_node.parameters.append(weighted_spike)
+
+        pc = ParameterCondition(
+            id="spike_detected",
+            test="%s > 0" % ip_spike.id,
+            value="%s" % (weighted_spike.id),
+        )
+
+        syn_i = Parameter(
+            id="syn_i",
+            default_initial_value="0",
+            time_derivative="-1 * syn_i",
+        )
+        syn_i.conditions.append(pc)
+        syn_node.parameters.append(syn_i)
+
+        op_v = OutputPort(id="current_output", value="syn_i")
+        syn_node.output_ports.append(op_v)
 
     ## IAF node...
     iaf_node = Node(id)
 
     ip_current = InputPort(id="current_input", shape="(%i,)" % num_cells)
     iaf_node.input_ports.append(ip_current)
-
-    ip_spike = InputPort(id="spike_input", shape="(%i,)" % num_cells)
-    iaf_node.input_ports.append(ip_spike)
-
-    syn_tau = Parameter(id="syn_tau", value=syn_tau)
-    iaf_node.parameters.append(syn_tau)
 
     v0 = Parameter(
         id="v0",
@@ -40,30 +71,6 @@ def create_iaf_node(
 
     thresh = Parameter(id="thresh", value=numpy.array([thresh] * num_cells))
     iaf_node.parameters.append(thresh)
-
-    spike_weights = Parameter(id="spike_weights", value=numpy.identity(num_cells))
-    iaf_node.parameters.append(spike_weights)
-
-    weighted_spike = Parameter(
-        id="weighted_spike",
-        function="MatMul",
-        args={"A": spike_weights.id, "B": ip_spike.id},
-    )
-    iaf_node.parameters.append(weighted_spike)
-
-    pc = ParameterCondition(
-        id="spike_detected",
-        test="%s > 0" % ip_spike.id,
-        value="%s" % (weighted_spike.id),
-    )
-
-    syn_i = Parameter(
-        id="syn_i",
-        default_initial_value="0",
-        time_derivative="-1 * syn_i",
-    )
-    syn_i.conditions.append(pc)
-    iaf_node.parameters.append(syn_i)
 
     pc1 = ParameterCondition(id="is_spiking", test="v >= thresh", value="1")
     pc2 = ParameterCondition(id="not_spiking", test="v < thresh", value="0")
@@ -81,19 +88,31 @@ def create_iaf_node(
     v = Parameter(
         id="v",
         default_initial_value="v0",
-        time_derivative=f"-1 * (v-erev)/tau + {syn_i.id} + {ip_current.id}",
+        time_derivative=f"-1 * (v-erev)/tau + {ip_current.id}",
     )
     v.conditions.append(pc)
 
     iaf_node.parameters.append(v)
 
-    op_v = OutputPort(id="out_port_v", value="v")
+    op_v = OutputPort(id="v_output", value="v")
     iaf_node.output_ports.append(op_v)
 
-    op_spiking = OutputPort(id="out_port_spiking", value="spiking")
+    op_spiking = OutputPort(id="spiking_output", value="spiking")
     iaf_node.output_ports.append(op_spiking)
 
-    return iaf_node
+    if syn_also:
+
+        internal_edge = Edge(
+            id="%s_internal_edge" % id,
+            sender=syn_node.id,
+            sender_port=syn_node.get_output_port("current_output").id,
+            receiver=iaf_node.id,
+            receiver_port=iaf_node.get_input_port("current_input").id,
+        )
+
+        return iaf_node, syn_node, internal_edge
+    else:
+        return iaf_node
 
 
 def main():
@@ -149,7 +168,7 @@ def main():
 
     input_node.parameters.append(level)
 
-    op1 = OutputPort(id="out_port", value=level.id)
+    op1 = OutputPort(id="current_output", value=level.id)
     input_node.output_ports.append(op1)
 
     mod_graph.nodes.append(input_node)
@@ -162,14 +181,14 @@ def main():
         else -60
     )
 
-    iaf_node1 = create_iaf_node("pre", num_cells, v0)
+    iaf_node1 = create_iaf_syn_node("pre", num_cells, syn_also=False, v0=v0)
 
     mod_graph.nodes.append(iaf_node1)
 
     e1 = Edge(
         id="input_edge",
         sender=input_node.id,
-        sender_port=input_node.get_output_port("out_port").id,
+        sender_port=input_node.get_output_port("current_output").id,
         receiver=iaf_node1.id,
         receiver_port=iaf_node1.get_input_port("current_input").id,
     )
@@ -177,8 +196,12 @@ def main():
     mod_graph.edges.append(e1)
     mod_graph.nodes.append(iaf_node1)
 
-    iaf_node2 = create_iaf_node("post", num_cells, v0)
+    iaf_node2, syn_node2, internal_edge2 = create_iaf_syn_node(
+        "post", num_cells, syn_also=True, v0=v0
+    )
     mod_graph.nodes.append(iaf_node2)
+    mod_graph.nodes.append(syn_node2)
+    mod_graph.edges.append(internal_edge2)
 
     if net2:
         iaf_node2.get_parameter("tau").value = 1
@@ -191,14 +214,14 @@ def main():
         for i in range(num_cells):
             weight[i, i] = i
 
-    iaf_node2.get_parameter("spike_weights").value = weight
+    syn_node2.get_parameter("spike_weights").value = weight
 
     e2 = Edge(
         id="syn_edge",
         sender=iaf_node1.id,
-        sender_port=iaf_node1.get_output_port("out_port_spiking").id,
-        receiver=iaf_node2.id,
-        receiver_port=iaf_node2.get_input_port("spike_input").id,
+        sender_port=iaf_node1.get_output_port("spiking_output").id,
+        receiver=syn_node2.id,
+        receiver_port=syn_node2.get_input_port("spike_input").id,
     )
 
     mod_graph.edges.append(e2)
@@ -215,8 +238,11 @@ def main():
         verbose = "-v" in sys.argv
 
         from modeci_mdf.utils import load_mdf, print_summary
-
         from modeci_mdf.execution_engine import EvaluableGraph
+
+        from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
+
+        format = FORMAT_TENSORFLOW if "-tf" in sys.argv else FORMAT_NUMPY
 
         eg = EvaluableGraph(mod_graph, verbose)
         dt = 0.1
@@ -237,20 +263,23 @@ def main():
             times.append(t_ext)
             print("======   Evaluating at t = %s  ======" % (t_ext))
             if t_ext == 0:
-                eg.evaluate()  # replace with initialize?
+                eg.evaluate(array_format=format)  # replace with initialize?
             else:
-                eg.evaluate(time_increment=dt)
+                eg.evaluate(time_increment=dt, array_format=format)
 
-            print(
-                "  Out v: %s"
-                % eg.enodes["post"].evaluable_outputs["out_port_v"].curr_value
+            if verbose:
+                print(
+                    "  Out v: %s"
+                    % eg.enodes["post"].evaluable_outputs["v_output"].curr_value
+                )
+
+            i.append(
+                eg.enodes[input_node.id].evaluable_outputs["current_output"].curr_value
             )
-
-            i.append(eg.enodes[input_node.id].evaluable_outputs["out_port"].curr_value)
             t.append(eg.enodes[input_node.id].evaluable_parameters["time"].curr_value)
-            s1.append(eg.enodes["pre"].evaluable_outputs["out_port_v"].curr_value)
+            s1.append(eg.enodes["pre"].evaluable_outputs["v_output"].curr_value)
             sp1.append(eg.enodes["pre"].evaluable_parameters["spiking"].curr_value)
-            s2.append(eg.enodes["post"].evaluable_outputs["out_port_v"].curr_value)
+            s2.append(eg.enodes["post"].evaluable_outputs["v_output"].curr_value)
             sp2.append(eg.enodes["post"].evaluable_parameters["spiking"].curr_value)
             t_ext += dt
 
@@ -259,6 +288,8 @@ def main():
         figure, axis = plt.subplots(4, 1, figsize=(7, 7))
 
         # axis[0].plot(times, t, label="time at input node")
+
+        markersize = 2 if num_cells < 20 else 0.5
 
         if type(i[0]) == numpy.ndarray and i[0].size > 1:
             for ii in range(len(i[0])):
@@ -306,7 +337,12 @@ def main():
 
                 nz = [t * dt for t in numpy.nonzero(sps1)][0]
                 axis[3].plot(
-                    nz, numpy.ones(len(nz)) * spi1, marker=".", color="r", linewidth=0
+                    nz,
+                    numpy.ones(len(nz)) * spi1,
+                    marker=".",
+                    color="r",
+                    linewidth=0,
+                    markersize=markersize,
                 )
 
             for spi in range(len(sp2[0])):
@@ -321,6 +357,7 @@ def main():
                     marker=".",
                     color="b",
                     linewidth=0,
+                    markersize=markersize,
                 )
         else:
             nz1 = [t * dt for t in numpy.nonzero(sp1)][0]

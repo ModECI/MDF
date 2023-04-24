@@ -41,19 +41,14 @@ IAF_net2:
                                 test: time > start + duration
                                 value: amplitude*0
                     output_ports:
-                        out_port:
+                        current_output:
                             value: level
                 pre:
                     input_ports:
                         current_input:
                             shape:
                             - 8
-                        spike_input:
-                            shape:
-                            - 8
                     parameters:
-                        syn_tau:
-                            value: 10
                         v0:
                             value:
                             - -70
@@ -86,84 +81,6 @@ IAF_net2:
                             - -20
                             - -20
                             - -20
-                        spike_weights:
-                            value:
-                            -   - 1.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                            -   - 0.0
-                                - 1.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                            -   - 0.0
-                                - 0.0
-                                - 1.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                            -   - 0.0
-                                - 0.0
-                                - 0.0
-                                - 1.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                            -   - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 1.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                            -   - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 1.0
-                                - 0.0
-                                - 0.0
-                            -   - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 1.0
-                                - 0.0
-                            -   - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 0.0
-                                - 1.0
-                        weighted_spike:
-                            function: MatMul
-                            args:
-                                A: spike_weights
-                                B: spike_input
-                        syn_i:
-                            default_initial_value: '0'
-                            time_derivative: -1 * syn_i
-                            conditions:
-                            -   id: spike_detected
-                                test: spike_input > 0
-                                value: weighted_spike
                         spiking:
                             default_initial_value: '0'
                             conditions:
@@ -175,27 +92,22 @@ IAF_net2:
                                 value: '0'
                         v:
                             default_initial_value: v0
-                            time_derivative: -1 * (v-erev)/tau + syn_i + current_input
+                            time_derivative: -1 * (v-erev)/tau + current_input
                             conditions:
                             -   id: reset
                                 test: v > thresh
                                 value: erev
                     output_ports:
-                        out_port_v:
+                        v_output:
                             value: v
-                        out_port_spiking:
+                        spiking_output:
                             value: spiking
                 post:
                     input_ports:
                         current_input:
                             shape:
                             - 8
-                        spike_input:
-                            shape:
-                            - 8
                     parameters:
-                        syn_tau:
-                            value: 10
                         v0:
                             value:
                             - -70
@@ -228,6 +140,35 @@ IAF_net2:
                             - -20
                             - -20
                             - -20
+                        spiking:
+                            default_initial_value: '0'
+                            conditions:
+                            -   id: is_spiking
+                                test: v >= thresh
+                                value: '1'
+                            -   id: not_spiking
+                                test: v < thresh
+                                value: '0'
+                        v:
+                            default_initial_value: v0
+                            time_derivative: -1 * (v-erev)/tau + current_input
+                            conditions:
+                            -   id: reset
+                                test: v > thresh
+                                value: erev
+                    output_ports:
+                        v_output:
+                            value: v
+                        spiking_output:
+                            value: spiking
+                syn_post:
+                    input_ports:
+                        spike_input:
+                            shape:
+                            - 8
+                    parameters:
+                        syn_tau:
+                            value: 10
                         spike_weights:
                             value:
                             -   - 0.0
@@ -306,35 +247,22 @@ IAF_net2:
                             -   id: spike_detected
                                 test: spike_input > 0
                                 value: weighted_spike
-                        spiking:
-                            default_initial_value: '0'
-                            conditions:
-                            -   id: is_spiking
-                                test: v >= thresh
-                                value: '1'
-                            -   id: not_spiking
-                                test: v < thresh
-                                value: '0'
-                        v:
-                            default_initial_value: v0
-                            time_derivative: -1 * (v-erev)/tau + syn_i + current_input
-                            conditions:
-                            -   id: reset
-                                test: v > thresh
-                                value: erev
                     output_ports:
-                        out_port_v:
-                            value: v
-                        out_port_spiking:
-                            value: spiking
+                        current_output:
+                            value: syn_i
             edges:
                 input_edge:
                     sender: current_input_node
                     receiver: pre
-                    sender_port: out_port
+                    sender_port: current_output
+                    receiver_port: current_input
+                post_internal_edge:
+                    sender: syn_post
+                    receiver: post
+                    sender_port: current_output
                     receiver_port: current_input
                 syn_edge:
                     sender: pre
-                    receiver: post
-                    sender_port: out_port_spiking
+                    receiver: syn_post
+                    sender_port: spiking_output
                     receiver_port: spike_input
