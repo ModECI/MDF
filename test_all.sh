@@ -93,3 +93,5 @@ python addition.py
 cd ../../docs
 python generate.py
 cd ..
+
+pre-commit run --all-files

@@ -10,35 +10,51 @@ import random
 random.seed(1234)
 
 
-def create_iaf_node(id, num_cells=1):
+def create_iaf_node(
+    id, num_cells=1, v0=-60, erev=-70, thresh=-20, tau=10.0, syn_tau=10
+):
 
     ## IAF node...
     iaf_node = Node(id)
-    ip_current = InputPort(id="current_input")
+
+    ip_current = InputPort(id="current_input", shape="(%i,)" % num_cells)
     iaf_node.input_ports.append(ip_current)
 
-    ip_spike = InputPort(id="spike_input")
+    ip_spike = InputPort(id="spike_input", shape="(%i,)" % num_cells)
     iaf_node.input_ports.append(ip_spike)
 
-    syn_tau = Parameter(id="syn_tau", value=10)
+    syn_tau = Parameter(id="syn_tau", value=syn_tau)
     iaf_node.parameters.append(syn_tau)
 
-    v0 = Parameter(id="v0", value=-60)
-
+    v0 = Parameter(
+        id="v0",
+        value=numpy.array([v0] * num_cells) if isinstance(v0, (int, float)) else v0,
+    )
     iaf_node.parameters.append(v0)
 
-    erev = Parameter(id="erev", value=-70)
+    erev = Parameter(id="erev", value=numpy.array([erev] * num_cells))
     iaf_node.parameters.append(erev)
-    tau = Parameter(id="tau", value=10.0)
+
+    tau = Parameter(id="tau", value=tau)
     iaf_node.parameters.append(tau)
-    thresh = Parameter(id="thresh", value=-20.0)
+
+    thresh = Parameter(id="thresh", value=numpy.array([thresh] * num_cells))
     iaf_node.parameters.append(thresh)
 
-    # v_init = Parameter(id="v_init", value=-30)
-    # iaf_node.parameters.append(v_init)
+    spike_weights = Parameter(id="spike_weights", value=numpy.identity(num_cells))
+    iaf_node.parameters.append(spike_weights)
+
+    weighted_spike = Parameter(
+        id="weighted_spike",
+        function="MatMul",
+        args={"A": spike_weights.id, "B": ip_spike.id},
+    )
+    iaf_node.parameters.append(weighted_spike)
 
     pc = ParameterCondition(
-        id="spike_detected", test="%s > 0" % ip_spike.id, value=ip_spike.id
+        id="spike_detected",
+        test="%s > 0" % ip_spike.id,
+        value="%s" % (weighted_spike.id),
     )
 
     syn_i = Parameter(
@@ -77,12 +93,6 @@ def create_iaf_node(id, num_cells=1):
     op_spiking = OutputPort(id="out_port_spiking", value="spiking")
     iaf_node.output_ports.append(op_spiking)
 
-    if num_cells > 1:
-        v0.value = numpy.array([random.random() * 20 - 70 for r in range(num_cells)])
-        erev.value = numpy.array([-70.0] * len(v0.value))
-        thresh.value = numpy.array([-20.0] * len(v0.value))
-        # e1.parameters['weight'] = [1,.5]
-
     return iaf_node
 
 
@@ -90,16 +100,19 @@ def main():
     mod = Model(id="IAFs")
 
     net = "-net" in sys.argv
+    net2 = "-net2" in sys.argv
     if net:
         mod.id = "IAF_net"
+    if net2:
+        mod.id = "IAF_net2"
 
-    num_cells = 8 if net else 1
+    num_cells = 8 if net or net2 else 1
 
     mod_graph = Graph(id="iaf_example")
     mod.graphs.append(mod_graph)
 
-    ## Counter node
-    input_node = Node(id="input_node")
+    ## Current input node
+    input_node = Node(id="current_input_node")
 
     t_param = Parameter(id="time", default_initial_value=0, time_derivative="1")
     input_node.parameters.append(t_param)
@@ -116,12 +129,17 @@ def main():
     if num_cells > 1:
         amp.value = numpy.array([random.random() * 20 for r in range(num_cells)])
 
+    if net2:
+        amp.value = 15
+        start.value = numpy.arange(10, 10 * (num_cells + 1), 10)
+        dur.value = numpy.ones(num_cells) * 5
+        # t_param.default_initial_value = numpy.zeros(num_cells)
+        # t_param.time_derivative = str([0]*num_cells)
+
     level = Parameter(id="level", value=0)
 
     level.conditions.append(
-        ParameterCondition(
-            id="on", test="time > start and time < start + duration", value=amp.id
-        )
+        ParameterCondition(id="on", test="time > start", value=amp.id)
     )
     level.conditions.append(
         ParameterCondition(
@@ -134,18 +152,22 @@ def main():
     op1 = OutputPort(id="out_port", value=level.id)
     input_node.output_ports.append(op1)
 
-    # op2 = OutputPort(id="t_out_port", value=t_param.id)
-    # input_node.output_ports.append(op2)
-
     mod_graph.nodes.append(input_node)
 
-    iaf_node1 = create_iaf_node("pre", num_cells)
+    v0 = (
+        numpy.array([random.random() * 20 - 70 for r in range(num_cells)])
+        if net
+        else -70
+        if net2
+        else -60
+    )
+
+    iaf_node1 = create_iaf_node("pre", num_cells, v0)
 
     mod_graph.nodes.append(iaf_node1)
 
     e1 = Edge(
         id="input_edge",
-        parameters={"weight": 1},
         sender=input_node.id,
         sender_port=input_node.get_output_port("out_port").id,
         receiver=iaf_node1.id,
@@ -155,12 +177,24 @@ def main():
     mod_graph.edges.append(e1)
     mod_graph.nodes.append(iaf_node1)
 
-    iaf_node2 = create_iaf_node("post", num_cells)
+    iaf_node2 = create_iaf_node("post", num_cells, v0)
     mod_graph.nodes.append(iaf_node2)
+
+    if net2:
+        iaf_node2.get_parameter("tau").value = 1
+
+    weight = [40]
+    if net:
+        weight = numpy.ones([num_cells, num_cells]) * 40
+    if net2:
+        weight = numpy.identity(num_cells)
+        for i in range(num_cells):
+            weight[i, i] = i
+
+    iaf_node2.get_parameter("spike_weights").value = weight
 
     e2 = Edge(
         id="syn_edge",
-        parameters={"weight": 40},
         sender=iaf_node1.id,
         sender_port=iaf_node1.get_output_port("out_port_spiking").id,
         receiver=iaf_node2.id,
@@ -169,8 +203,12 @@ def main():
 
     mod_graph.edges.append(e2)
 
-    new_file = mod.to_json_file("%s.json" % mod.id)
-    new_file = mod.to_yaml_file("%s.yaml" % mod.id)
+    j_file = "%s.json" % mod.id
+    new_file = mod.to_json_file(j_file)
+    print("Saved to %s" % j_file)
+    y_file = "%s.yaml" % mod.id
+    new_file = mod.to_yaml_file(y_file)
+    print("Saved to %s" % y_file)
 
     if "-run" in sys.argv:
 
@@ -203,8 +241,13 @@ def main():
             else:
                 eg.evaluate(time_increment=dt)
 
-            i.append(eg.enodes["input_node"].evaluable_outputs["out_port"].curr_value)
-            t.append(eg.enodes["input_node"].evaluable_parameters["time"].curr_value)
+            print(
+                "  Out v: %s"
+                % eg.enodes["post"].evaluable_outputs["out_port_v"].curr_value
+            )
+
+            i.append(eg.enodes[input_node.id].evaluable_outputs["out_port"].curr_value)
+            t.append(eg.enodes[input_node.id].evaluable_parameters["time"].curr_value)
             s1.append(eg.enodes["pre"].evaluable_outputs["out_port_v"].curr_value)
             sp1.append(eg.enodes["pre"].evaluable_parameters["spiking"].curr_value)
             s2.append(eg.enodes["post"].evaluable_outputs["out_port_v"].curr_value)
@@ -228,7 +271,7 @@ def main():
         else:
             axis[0].plot(times, i, label="Input node current", color="k")
 
-        if not net:
+        if not (net or net2):
             axis[0].legend()
 
         if type(s1[0]) == numpy.ndarray and s1[0].size > 1:
@@ -240,7 +283,7 @@ def main():
         else:
             axis[1].plot(times, s1, label="IaF pre v", color="r")
 
-        if not net:
+        if not (net or net2):
             axis[1].legend()
 
         if type(s2[0]) == numpy.ndarray and s2[0].size > 1:
@@ -252,7 +295,7 @@ def main():
         else:
             axis[2].plot(times, s2, label="IaF post v", color="b")
 
-        if not net:
+        if not (net or net2):
             axis[2].legend()
 
         if type(sp1[0]) == numpy.ndarray and sp1[0].size > 1:
@@ -262,7 +305,6 @@ def main():
                     sps1.append(sp1[ti][spi1])
 
                 nz = [t * dt for t in numpy.nonzero(sps1)][0]
-                print(nz)
                 axis[3].plot(
                     nz, numpy.ones(len(nz)) * spi1, marker=".", color="r", linewidth=0
                 )
@@ -273,7 +315,6 @@ def main():
                     sps.append(sp2[ti][spi])
 
                 nz = [t * dt for t in numpy.nonzero(sps)][0]
-                print(nz)
                 axis[3].plot(
                     nz,
                     numpy.ones(len(nz)) * spi + num_cells,
@@ -283,7 +324,6 @@ def main():
                 )
         else:
             nz1 = [t * dt for t in numpy.nonzero(sp1)][0]
-            print(nz1)
             axis[3].plot(
                 nz1,
                 numpy.zeros(len(nz1)),
@@ -293,7 +333,6 @@ def main():
                 color="r",
             )
             nz2 = [t * dt for t in numpy.nonzero(sp2)][0]
-            print(nz2)
             axis[3].plot(
                 nz2,
                 numpy.ones(len(nz2)),
@@ -309,7 +348,10 @@ def main():
         plt.xlim([0, duration])
         plt.xlabel("Time")
 
-        plt.savefig("IaF%s.run.png" % (".net" if net else ""), bbox_inches="tight")
+        plt.savefig(
+            "IaF%s.run.png" % (".net" if (net) else (".net2" if (net2) else "")),
+            bbox_inches="tight",
+        )
 
         if "-nogui" not in sys.argv:
             plt.show()
@@ -320,7 +362,7 @@ def main():
             output_format="png",
             view_on_render=False,
             level=2,
-            filename_root="iaf",
+            filename_root="iaf%s" % (".net" if (net) else (".net2" if (net2) else "")),
             is_horizontal=True,
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )

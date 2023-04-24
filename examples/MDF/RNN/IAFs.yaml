@@ -4,7 +4,7 @@ IAFs:
     graphs:
         iaf_example:
             nodes:
-                input_node:
+                current_input_node:
                     parameters:
                         time:
                             default_initial_value: 0
@@ -19,7 +19,7 @@ IAFs:
                             value: 0
                             conditions:
                             -   id: 'on'
-                                test: time > start and time < start + duration
+                                test: time > start
                                 value: amplitude
                             -   id: 'off'
                                 test: time > start + duration
@@ -29,26 +29,41 @@ IAFs:
                             value: level
                 pre:
                     input_ports:
-                        current_input: {}
-                        spike_input: {}
+                        current_input:
+                            shape:
+                            - 1
+                        spike_input:
+                            shape:
+                            - 1
                     parameters:
                         syn_tau:
                             value: 10
                         v0:
-                            value: -60
+                            value:
+                            - -60
                         erev:
-                            value: -70
+                            value:
+                            - -70
                         tau:
                             value: 10.0
                         thresh:
-                            value: -20.0
+                            value:
+                            - -20
+                        spike_weights:
+                            value:
+                            -   - 1.0
+                        weighted_spike:
+                            function: MatMul
+                            args:
+                                A: spike_weights
+                                B: spike_input
                         syn_i:
                             default_initial_value: '0'
                             time_derivative: -1 * syn_i
                             conditions:
                             -   id: spike_detected
                                 test: spike_input > 0
-                                value: spike_input
+                                value: weighted_spike
                         spiking:
                             default_initial_value: '0'
                             conditions:
@@ -72,26 +87,41 @@ IAFs:
                             value: spiking
                 post:
                     input_ports:
-                        current_input: {}
-                        spike_input: {}
+                        current_input:
+                            shape:
+                            - 1
+                        spike_input:
+                            shape:
+                            - 1
                     parameters:
                         syn_tau:
                             value: 10
                         v0:
-                            value: -60
+                            value:
+                            - -60
                         erev:
-                            value: -70
+                            value:
+                            - -70
                         tau:
                             value: 10.0
                         thresh:
-                            value: -20.0
+                            value:
+                            - -20
+                        spike_weights:
+                            value:
+                            - 40
+                        weighted_spike:
+                            function: MatMul
+                            args:
+                                A: spike_weights
+                                B: spike_input
                         syn_i:
                             default_initial_value: '0'
                             time_derivative: -1 * syn_i
                             conditions:
                             -   id: spike_detected
                                 test: spike_input > 0
-                                value: spike_input
+                                value: weighted_spike
                         spiking:
                             default_initial_value: '0'
                             conditions:
@@ -115,16 +145,12 @@ IAFs:
                             value: spiking
             edges:
                 input_edge:
-                    sender: input_node
+                    sender: current_input_node
                     receiver: pre
                     sender_port: out_port
                     receiver_port: current_input
-                    parameters:
-                        weight: 1
                 syn_edge:
                     sender: pre
                     receiver: post
                     sender_port: out_port_spiking
                     receiver_port: spike_input
-                    parameters:
-                        weight: 40
