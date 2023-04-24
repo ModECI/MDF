@@ -10,6 +10,42 @@ import random
 random.seed(1234)
 
 
+def create_current_pulse_node(id, start=20, duration=60, amplitude=10):
+
+    ## Current input node
+    current_pulse_node = Node(id=id)
+
+    t_param = Parameter(id="time", default_initial_value=0, time_derivative="1")
+    current_pulse_node.parameters.append(t_param)
+
+    start = Parameter(id="start", value=start)
+    current_pulse_node.parameters.append(start)
+
+    dur = Parameter(id="duration", value=duration)
+    current_pulse_node.parameters.append(dur)
+
+    amp = Parameter(id="amplitude", value=amplitude)
+    current_pulse_node.parameters.append(amp)
+
+    level = Parameter(id="level", value=0)
+
+    level.conditions.append(
+        ParameterCondition(id="on", test="time > start", value=amp.id)
+    )
+    level.conditions.append(
+        ParameterCondition(
+            id="off", test="time > start + duration", value="amplitude*0"
+        )
+    )
+
+    current_pulse_node.parameters.append(level)
+
+    op1 = OutputPort(id="current_output", value=level.id)
+    current_pulse_node.output_ports.append(op1)
+
+    return current_pulse_node
+
+
 def create_iaf_syn_node(
     id, num_cells=1, syn_also=True, v0=-60, erev=-70, thresh=-20, tau=10.0, syn_tau=10
 ):
@@ -130,46 +166,23 @@ def main():
     mod_graph = Graph(id="iaf_example")
     mod.graphs.append(mod_graph)
 
-    ## Current input node
-    input_node = Node(id="current_input_node")
-
-    t_param = Parameter(id="time", default_initial_value=0, time_derivative="1")
-    input_node.parameters.append(t_param)
-
-    start = Parameter(id="start", value=20)
-    input_node.parameters.append(start)
-
-    dur = Parameter(id="duration", value=60)
-    input_node.parameters.append(dur)
-
-    amp = Parameter(id="amplitude", value=10)
-    input_node.parameters.append(amp)
+    start = 20
+    duration = 60
+    amplitude = 10
 
     if num_cells > 1:
-        amp.value = numpy.array([random.random() * 20 for r in range(num_cells)])
+        amplitude = numpy.array([random.random() * 20 for r in range(num_cells)])
 
     if net2:
-        amp.value = 15
-        start.value = numpy.arange(10, 10 * (num_cells + 1), 10)
-        dur.value = numpy.ones(num_cells) * 5
+        amplitude = 15
+        start = numpy.arange(10, 10 * (num_cells + 1), 10)
+        duration = numpy.ones(num_cells) * 5
         # t_param.default_initial_value = numpy.zeros(num_cells)
         # t_param.time_derivative = str([0]*num_cells)
 
-    level = Parameter(id="level", value=0)
-
-    level.conditions.append(
-        ParameterCondition(id="on", test="time > start", value=amp.id)
+    input_node = create_current_pulse_node(
+        "current_input_node", start, duration, amplitude
     )
-    level.conditions.append(
-        ParameterCondition(
-            id="off", test="time > start + duration", value="amplitude*0"
-        )
-    )
-
-    input_node.parameters.append(level)
-
-    op1 = OutputPort(id="current_output", value=level.id)
-    input_node.output_ports.append(op1)
 
     mod_graph.nodes.append(input_node)
 
