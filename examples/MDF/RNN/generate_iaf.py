@@ -156,12 +156,18 @@ def main():
 
     net = "-net" in sys.argv
     net2 = "-net2" in sys.argv
+    net3 = "-net3" in sys.argv
+
     if net:
         mod.id = "IAF_net"
     if net2:
         mod.id = "IAF_net2"
+    if net3:
+        mod.id = "IAF_net3"
 
-    num_cells = 8 if net or net2 else 1
+    some_net = net or net2 or net3
+
+    num_cells = 8 if net or net2 else (1 if net3 else 1)
 
     mod_graph = Graph(id="iaf_example")
     mod.graphs.append(mod_graph)
@@ -180,11 +186,20 @@ def main():
         # t_param.default_initial_value = numpy.zeros(num_cells)
         # t_param.time_derivative = str([0]*num_cells)
 
+    if net3:
+        amplitude = 10
+        start = 20
+        duration = 10
+
     input_node = create_current_pulse_node(
         "current_input_node", start, duration, amplitude
     )
 
     mod_graph.nodes.append(input_node)
+
+    if net3:
+        input_node2 = create_current_pulse_node("current_input_node2", 60, 10, 3)
+        mod_graph.nodes.append(input_node2)
 
     v0 = (
         numpy.array([random.random() * 20 - 70 for r in range(num_cells)])
@@ -208,6 +223,17 @@ def main():
 
     mod_graph.edges.append(e1)
     mod_graph.nodes.append(iaf_node1)
+
+    if net3:
+        e2 = Edge(
+            id="input_edge2",
+            sender=input_node2.id,
+            sender_port=input_node2.get_output_port("current_output").id,
+            receiver=iaf_node1.id,
+            receiver_port=iaf_node1.get_input_port("current_input").id,
+        )
+
+        mod_graph.edges.append(e2)
 
     iaf_node2, syn_node2, internal_edge2 = create_iaf_syn_node(
         "post", num_cells, syn_also=True, v0=v0
@@ -315,7 +341,7 @@ def main():
         else:
             axis[0].plot(times, i, label="Input node current", color="k")
 
-        if not (net or net2):
+        if not some_net:
             axis[0].legend()
 
         if type(s1[0]) == numpy.ndarray and s1[0].size > 1:
@@ -327,7 +353,7 @@ def main():
         else:
             axis[1].plot(times, s1, label="IaF pre v", color="r")
 
-        if not (net or net2):
+        if not some_net:
             axis[1].legend()
 
         if type(s2[0]) == numpy.ndarray and s2[0].size > 1:
@@ -339,7 +365,7 @@ def main():
         else:
             axis[2].plot(times, s2, label="IaF post v", color="b")
 
-        if not (net or net2):
+        if not some_net:
             axis[2].legend()
 
         if type(sp1[0]) == numpy.ndarray and sp1[0].size > 1:
@@ -399,7 +425,12 @@ def main():
         plt.xlabel("Time")
 
         plt.savefig(
-            "IaF%s.run.png" % (".net" if (net) else (".net2" if (net2) else "")),
+            "IaF%s.run.png"
+            % (
+                ".net"
+                if (net)
+                else (".net2" if (net2) else (".net3" if (net3) else ""))
+            ),
             bbox_inches="tight",
         )
 
@@ -412,7 +443,12 @@ def main():
             output_format="png",
             view_on_render=False,
             level=2,
-            filename_root="iaf%s" % (".net" if (net) else (".net2" if (net2) else "")),
+            filename_root="iaf%s"
+            % (
+                ".net"
+                if (net)
+                else (".net2" if (net2) else (".net3" if (net3) else ""))
+            ),
             is_horizontal=True,
             only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
