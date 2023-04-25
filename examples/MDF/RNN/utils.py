@@ -8,10 +8,10 @@ def create_rnn_node(id, N, g, seed=1234):
 
     ## RNN node...
     rnn_node = Node(id=id)
-    ext_ip = InputPort(id="ext_input")
+    ext_ip = InputPort(id="ext_input", shape="(%i,)" % N)
     rnn_node.input_ports.append(ext_ip)
 
-    fb_ip = InputPort(id="fb_input", default_value=0)
+    fb_ip = InputPort(id="fb_input", default_value=0, shape="(%i,)" % N)
     rnn_node.input_ports.append(fb_ip)
 
     default_initial_value = np.zeros(N)

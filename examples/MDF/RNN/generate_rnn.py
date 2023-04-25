@@ -62,7 +62,7 @@ def main():
 
     readout_node = Node(id="readout_node")
 
-    ipro = InputPort(id="input")
+    ipro = InputPort(id="input", shape="(%i,)" % N)
     readout_node.input_ports.append(ipro)
 
     wr = Parameter(id="wr", value=np.ones(N))

@@ -26,7 +26,7 @@ def main():
         Parameter(id="intercept", value=np.array([[0, 1.0], [2, 2]]))
     )
 
-    ip1 = InputPort(id="input_port1")
+    ip1 = InputPort(id="input_port1", shape="(2,2)")
     middle_node.input_ports.append(ip1)
     mod_graph.nodes.append(middle_node)
 

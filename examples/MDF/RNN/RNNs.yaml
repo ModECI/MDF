@@ -27,9 +27,13 @@ RNNs:
                             value: t
                 rnn_node:
                     input_ports:
-                        ext_input: {}
+                        ext_input:
+                            shape:
+                            - 5
                         fb_input:
                             default_value: 0
+                            shape:
+                            - 5
                     parameters:
                         M:
                             value:
@@ -85,7 +89,9 @@ RNNs:
                             value: r
                 readout_node:
                     input_ports:
-                        input: {}
+                        input:
+                            shape:
+                            - 5
                     parameters:
                         wr:
                             value:
