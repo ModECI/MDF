@@ -102,6 +102,7 @@ class InputPort(MdfBase):
         shape: The shape of the input port. This uses the same syntax as numpy ndarray shapes
             (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
         type: The data type of the input received at a port.
+        reduce: Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)
 
     """
     id: str = field(validator=instance_of(str))
@@ -112,6 +113,9 @@ class InputPort(MdfBase):
         converter=lambda x: make_tuple(x) if type(x) == str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+    reduce: Optional[str] = field(
+        validator=optional(instance_of(str)), default="overwrite"
+    )
 
 
 @modelspec.define(eq=False)

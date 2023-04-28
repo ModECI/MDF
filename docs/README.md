@@ -201,6 +201,13 @@ The <a href="#inputport">InputPort</a> is an attribute of a Node which allows ex
  </tr>
 
 
+  <tr>
+    <td><b>reduce</b></td>
+    <td>Union[str, NoneType]</td>
+    <td><i>Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)</i></td>
+ </tr>
+
+
 </table>
 
 ## Function

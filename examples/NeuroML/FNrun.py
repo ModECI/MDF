@@ -52,7 +52,7 @@ def execute(multi=False):
             id="input_edge",
             sender=input_node.id,
             sender_port=op1.id,
-            receiver="FNpop_0",
+            receiver="FNpop",
             receiver_port="INPUT",
         )
 
@@ -87,12 +87,13 @@ def execute(multi=False):
         else:
             eg.evaluate(array_format=format, time_increment=dt)
 
-        for i in range(len(eg.enodes["FNpop_0"].evaluable_parameters["V"].curr_value)):
+        for i in range(len(eg.enodes["FNpop"].evaluable_parameters["V"].curr_value)):
             if not i in vv:
                 vv[i] = []
                 ww[i] = []
-            v = eg.enodes["FNpop_0"].evaluable_parameters["V"].curr_value[i]
-            w = eg.enodes["FNpop_0"].evaluable_parameters["W"].curr_value[i]
+            v = eg.enodes["FNpop"].evaluable_parameters["V"].curr_value[i]
+            w = eg.enodes["FNpop"].evaluable_parameters["W"].curr_value[i]
+            print("   Time %s: index: %i, V: %s, W: %s" % (t, i, v, w))
             vv[i].append(v)
             ww[i].append(w)
             if i == 0:
@@ -102,8 +103,10 @@ def execute(multi=False):
     import matplotlib.pyplot as plt
 
     for vi in vv:
+        print(f"Plotting {vi}, {input}")
         plt.plot(times, vv[vi], label="V %.3f" % input[vi])
         plt.plot(times, ww[vi], label="W %.3f" % input[vi])
+
     plt.legend()
 
     if not multi:

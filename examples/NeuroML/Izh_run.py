@@ -17,17 +17,15 @@ def execute():
     duration = 0.7
 
     input_node = mod_graph.get_node("Input_stim_0")
-    izh_node = mod_graph.get_node("izhPop_0")
+    izh_node = mod_graph.get_node("izhPop")
 
     num_cells = 1
 
     if not "-iaf" in sys.argv:  # for testing...
-        izh_node.get_parameter("v0").value = [
-            izh_node.get_parameter("v0").value
-        ] * num_cells
+        izh_node.get_parameter("v0").value = [-0.08] * num_cells
         izh_node.get_parameter("u").default_initial_value = [0.0] * num_cells
         izh_node.get_parameter("c").value = [
-            izh_node.get_parameter("c").value
+            izh_node.get_parameter("c").value[0]
         ] * num_cells
 
         input_node.get_parameter("i").conditions[0].value = [0] * num_cells
@@ -71,13 +69,13 @@ def execute():
         else:
             eg.evaluate(array_format=format, time_increment=dt)
 
-        for i in range(len(eg.enodes["izhPop_0"].evaluable_parameters["v"].curr_value)):
+        for i in range(len(eg.enodes["izhPop"].evaluable_parameters["v"].curr_value)):
             if not i in vv:
                 vv[i] = []
                 uu[i] = []
                 ii[i] = []
-            v = eg.enodes["izhPop_0"].evaluable_parameters["v"].curr_value[i]
-            u = eg.enodes["izhPop_0"].evaluable_parameters["u"].curr_value[i]
+            v = eg.enodes["izhPop"].evaluable_parameters["v"].curr_value[i]
+            u = eg.enodes["izhPop"].evaluable_parameters["u"].curr_value[i]
             vv[i].append(v)
             uu[i].append(u)
 
@@ -85,8 +83,8 @@ def execute():
             ii[i].append(ic)
 
         print(
-            f"    Value at {t}: v={eg.enodes['izhPop_0'].evaluable_parameters['v'].curr_value }, \
-            u={eg.enodes['izhPop_0'].evaluable_parameters['u'].curr_value},\
+            f"    Value at {t}: v={eg.enodes['izhPop'].evaluable_parameters['v'].curr_value }, \
+            u={eg.enodes['izhPop'].evaluable_parameters['u'].curr_value},\
             i={eg.enodes['Input_stim_0'].evaluable_parameters['i'].curr_value}"
         )
         t += dt

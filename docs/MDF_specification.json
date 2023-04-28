@@ -117,6 +117,10 @@
                 "type": {
                     "type": "Union[str, NoneType]",
                     "description": "The data type of the input received at a port."
+                },
+                "reduce": {
+                    "type": "Union[str, NoneType]",
+                    "description": "Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)"
                 }
             }
         },

@@ -1,4 +1,4 @@
-IAF_net:
+IAF_net3:
     format: ModECI MDF v0.4
     generating_application: Python modeci-mdf v0.4.5
     graphs:
@@ -12,17 +12,32 @@ IAF_net:
                         start:
                             value: 20
                         duration:
-                            value: 60
+                            value: 10
                         amplitude:
-                            value:
-                            - 19.329070713842775
-                            - 8.814651983507053
-                            - 0.14982940117174381
-                            - 18.219519248982483
-                            - 18.78537994727528
-                            - 11.644551461178983
-                            - 13.4312696297597
-                            - 1.6787645367416792
+                            value: 10
+                        level:
+                            value: 0
+                            conditions:
+                            -   id: 'on'
+                                test: time > start
+                                value: amplitude
+                            -   id: 'off'
+                                test: time > start + duration
+                                value: amplitude*0
+                    output_ports:
+                        current_output:
+                            value: level
+                current_input_node2:
+                    parameters:
+                        time:
+                            default_initial_value: 0
+                            time_derivative: '1'
+                        start:
+                            value: 60
+                        duration:
+                            value: 10
+                        amplitude:
+                            value: 3
                         level:
                             value: 0
                             conditions:
@@ -39,40 +54,19 @@ IAF_net:
                     input_ports:
                         current_input:
                             shape:
-                            - 8
+                            - 1
                             reduce: add
                     parameters:
                         v0:
                             value:
-                            - -54.67038134416407
-                            - -65.26380449273765
-                            - -69.3837195654678
-                            - -54.224545655274326
-                            - -63.07822068805754
-                            - -57.53437049921663
-                            - -57.6836860979277
-                            - -67.02890722583425
+                            - -60
                         erev:
                             value:
-                            - -70
-                            - -70
-                            - -70
-                            - -70
-                            - -70
-                            - -70
-                            - -70
                             - -70
                         tau:
                             value: 10.0
                         thresh:
                             value:
-                            - -20
-                            - -20
-                            - -20
-                            - -20
-                            - -20
-                            - -20
-                            - -20
                             - -20
                         spiking:
                             default_initial_value: '0'
@@ -99,40 +93,19 @@ IAF_net:
                     input_ports:
                         current_input:
                             shape:
-                            - 8
+                            - 1
                             reduce: add
                     parameters:
                         v0:
                             value:
-                            - -54.67038134416407
-                            - -65.26380449273765
-                            - -69.3837195654678
-                            - -54.224545655274326
-                            - -63.07822068805754
-                            - -57.53437049921663
-                            - -57.6836860979277
-                            - -67.02890722583425
+                            - -60
                         erev:
                             value:
-                            - -70
-                            - -70
-                            - -70
-                            - -70
-                            - -70
-                            - -70
-                            - -70
                             - -70
                         tau:
                             value: 10.0
                         thresh:
                             value:
-                            - -20
-                            - -20
-                            - -20
-                            - -20
-                            - -20
-                            - -20
-                            - -20
                             - -20
                         spiking:
                             default_initial_value: '0'
@@ -159,77 +132,14 @@ IAF_net:
                     input_ports:
                         spike_input:
                             shape:
-                            - 8
+                            - 1
                             reduce: add
                     parameters:
                         syn_tau:
                             value: 10
                         spike_weights:
                             value:
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                            -   - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
-                                - 40.0
+                            - 40
                         weighted_spike:
                             function: MatMul
                             args:
@@ -248,6 +158,11 @@ IAF_net:
             edges:
                 input_edge:
                     sender: current_input_node
+                    receiver: pre
+                    sender_port: current_output
+                    receiver_port: current_input
+                input_edge2:
+                    sender: current_input_node2
                     receiver: pre
                     sender_port: current_output
                     receiver_port: current_input

@@ -1,17 +1,18 @@
 ABCD:
-    format: ModECI MDF v0.3
+    format: ModECI MDF v0.4
     graphs:
         ABCD:
             notes: Example of a simplified network
             nodes:
-                A_input_0:
+                A_input:
                     metadata:
                         color: 0.2 0.2 0.2
                         radius: 3
                         region: region1
                     parameters:
                         variable:
-                            value: 2.0
+                            value:
+                            - 2.0
                         V:
                             value: 0
                         OUTPUT:
@@ -29,16 +30,18 @@ ABCD:
                         \ is defined in PNL.xml and in Lems is: Component, id: a_input,\
                         \ type: inputNode,\n   parameters: {'variable': '2'}\n   parent:\
                         \ None\n"
-                A_0:
+                A:
                     metadata:
                         color: 0 0.9 0
                         radius: 5
                         region: region1
                     parameters:
                         slope:
-                            value: 2.0
+                            value:
+                            - 2.0
                         intercept:
-                            value: 2.0
+                            value:
+                            - 2.0
                         V:
                             value: 0
                         OUTPUT:
@@ -56,20 +59,24 @@ ABCD:
                         \ and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n\
                         \   parameters: {'slope': '2', 'intercept': '2'}\n   parent:\
                         \ None\n"
-                B_0:
+                B:
                     metadata:
                         color: .8 .8 .8
                         radius: 5
                         region: region1
                     parameters:
                         gain:
-                            value: 1.0
+                            value:
+                            - 1.0
                         bias:
-                            value: 0.0
+                            value:
+                            - 0.0
                         x_0:
-                            value: 0.0
+                            value:
+                            - 0.0
                         offset:
-                            value: 0.0
+                            value:
+                            - 0.0
                         V:
                             value: 0
                         OUTPUT:
@@ -87,20 +94,24 @@ ABCD:
                         \ and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n\
                         \   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0',\
                         \ 'offset': '0.0'}\n   parent: None\n"
-                C_0:
+                C:
                     metadata:
                         color: 0.7 0.7 0.7
                         radius: 5
                         region: region1
                     parameters:
                         rate:
-                            value: 1.0
+                            value:
+                            - 1.0
                         bias:
-                            value: 0.0
+                            value:
+                            - 0.0
                         scale:
-                            value: 1.0
+                            value:
+                            - 1.0
                         offset:
-                            value: 0.0
+                            value:
+                            - 0.0
                         V:
                             value: 0
                         OUTPUT:
@@ -118,16 +129,18 @@ ABCD:
                         \ and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n\
                         \   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0',\
                         \ 'offset': '0.0'}\n   parent: None\n"
-                D_0:
+                D:
                     metadata:
                         color: 0.7 0 0
                         radius: 5
                         region: region1
                     parameters:
                         rate:
-                            value: 0.05
+                            value:
+                            - 0.05
                         time_step_size:
-                            value: 0.1
+                            value:
+                            - 0.1
                         OUTPUT:
                             time_derivative: (rate * INPUT) / time_step_size
                         V:
@@ -146,38 +159,33 @@ ABCD:
                         \   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n\
                         \   parent: None\n"
             edges:
-                Edge A_0 to B_0:
-                    name: Edge A_0 to B_0
+                Edge A to B:
+                    name: Edge A to B
                     sender_port: OUTPUT
                     receiver_port: INPUT
-                    sender: A_0
-                    receiver: B_0
-                    weight: 1
-                Edge A_input_0 to A_0:
-                    name: Edge A_input_0 to A_0
+                    sender: A
+                    receiver: B
+                Edge A_input to A:
+                    name: Edge A_input to A
                     sender_port: OUTPUT
                     receiver_port: INPUT
-                    sender: A_input_0
-                    receiver: A_0
-                    weight: 1
-                Edge A_0 to C_0:
-                    name: Edge A_0 to C_0
+                    sender: A_input
+                    receiver: A
+                Edge A to C:
+                    name: Edge A to C
                     sender_port: OUTPUT
                     receiver_port: INPUT
-                    sender: A_0
-                    receiver: C_0
-                    weight: 1
-                Edge B_0 to D_0:
-                    name: Edge B_0 to D_0
+                    sender: A
+                    receiver: C
+                Edge B to D:
+                    name: Edge B to D
                     sender_port: OUTPUT
                     receiver_port: INPUT
-                    sender: B_0
-                    receiver: D_0
-                    weight: 1
-                Edge C_0 to D_0:
-                    name: Edge C_0 to D_0
+                    sender: B
+                    receiver: D
+                Edge C to D:
+                    name: Edge C to D
                     sender_port: OUTPUT
                     receiver_port: INPUT
-                    sender: C_0
-                    receiver: D_0
-                    weight: 1
+                    sender: C
+                    receiver: D

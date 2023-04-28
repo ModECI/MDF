@@ -687,10 +687,13 @@ class EvaluableInput:
         self.verbose = verbose
         self.input_port = input_port
 
-        if self.input_port.default_value is not None:
-            self.curr_value = self.input_port.default_value
+        if self.input_port.reduce == "overwrite":
+            if self.input_port.default_value is not None:
+                self.curr_value = self.input_port.default_value
+            else:
+                self.curr_value = np.full(input_port.shape, 0.0)
         else:
-            self.curr_value = np.full(input_port.shape, 0)
+            self.curr_value = None
 
     def set_input_value(self, value: Union[str, int, np.ndarray]):
         """Set a new value at input port
@@ -698,9 +701,30 @@ class EvaluableInput:
         Args:
             value: Value to be set at Input Port
         """
-        if self.verbose:
-            print(f"    Input value in {self.input_port.id} set to {_val_info(value)}")
-        self.curr_value = value
+
+        if self.curr_value is None:
+            ## No value set yet, so just set to value being input now
+            print(
+                f"    Input value in {self.input_port.id} being set to {_val_info(value)}"
+            )
+            self.curr_value = value
+        else:
+            ## A previous value has been set during this time step. So reduce it...
+            if self.input_port.reduce == "overwrite":
+                print(
+                    f"    Input value in {self.input_port.id} being set to {_val_info(value)}"
+                )
+                self.curr_value = value
+            elif self.input_port.reduce == "add":
+                print(
+                    f"    Input value in {self.input_port.id} was {self.curr_value}, increasing by {_val_info(value)}"
+                )
+                self.curr_value += value
+            elif self.input_port.reduce == "multiply":
+                print(
+                    f"    Input value in {self.input_port.id} was {self.curr_value}, increasing by {_val_info(value)}"
+                )
+                self.curr_value *= value
 
     def evaluate(
         self, parameters: Dict[str, Any] = None, array_format: str = FORMAT_DEFAULT
@@ -715,17 +739,27 @@ class EvaluableInput:
         Returns:
             value at Input port
         """
+
+        if self.curr_value is None:
+            if self.input_port.default_value is not None:
+                self.curr_value = self.input_port.default_value
+            else:
+                self.curr_value = np.full(self.input_port.shape, 0.0)
+
+        final_val = self.curr_value
+
         if self.verbose:
             print(
-                "    Evaluated %s with params %s =\t%s"
+                "    Evaluated the %s with params %s \n       =\t%s"
                 % (
                     self.input_port,
                     _params_info(parameters),
-                    _val_info(self.curr_value),
+                    _val_info(final_val),
                 )
             )
-        return self.curr_value
 
+        self.curr_value = None
+        return final_val
 
 class EvaluableNode:
     r"""Evaluates a :class:`~modeci_mdf.mdf.Node` during MDF graph execution.
