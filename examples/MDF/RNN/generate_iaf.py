@@ -4,6 +4,7 @@
 
 from modeci_mdf.mdf import *
 import sys
+import os
 import numpy
 import random
 
@@ -459,7 +460,9 @@ def main():
                 else (".net2" if (net2) else (".net3" if (net3) else ""))
             ),
             is_horizontal=True,
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
     if "-neuroml" in sys.argv:

@@ -5,6 +5,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
 
 from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 import sys
+import os
 import numpy as np
 
 
@@ -45,7 +46,9 @@ def execute():
         view_on_render=False,
         level=3,
         filename_root="Izh",
-        only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        only_warn_on_fail=(
+            os.name == "nt"
+        ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
     )
 
     verbose = "-v" in sys.argv

@@ -6,6 +6,7 @@ from modeci_mdf.mdf import *
 import sys
 import numpy as np
 import time
+import os
 
 from utils import create_rnn_node
 
@@ -184,7 +185,9 @@ def main():
             view_on_render=False,
             level=2,
             filename_root="rnn",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
     return mod_graph

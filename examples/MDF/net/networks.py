@@ -6,6 +6,7 @@ from modeci_mdf.mdf import *
 from modeci_mdf.utils import simple_connect
 
 import sys
+import os
 
 
 def create_increment_node(node_id, mod_graph, input_port=False):
@@ -91,7 +92,9 @@ def main(ref="acyclical"):
             view_on_render=False,
             level=3,
             filename_root=mod_graph.id,
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
     return mod_graph
