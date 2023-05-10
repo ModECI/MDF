@@ -761,6 +761,7 @@ class EvaluableInput:
         self.curr_value = None
         return final_val
 
+
 class EvaluableNode:
     r"""Evaluates a :class:`~modeci_mdf.mdf.Node` during MDF graph execution.
 
