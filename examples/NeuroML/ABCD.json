@@ -1,6 +1,6 @@
 {
     "ABCD": {
-        "version": "NeuroMLlite v0.5.3",
+        "version": "NeuroMLlite v0.5.4",
         "notes": "Example of a simplified network",
         "parameters": {
             "A_initial": 0.1,
