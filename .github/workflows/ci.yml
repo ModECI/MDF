@@ -59,7 +59,11 @@ jobs:
         python -m pytest -m coremdf tests/
 
     - name: Install optional dependencies
-      run: python -m pip install .[all]
+      run: |
+        python -m pip install .[all]
+
+        if [[  ${{ matrix.runs-on }} == *"macos"* ]]; then brew install graphviz ; fi
+        if [[  ${{ matrix.runs-on }} == *"ubuntu"* ]]; then sudo apt install graphviz ; fi
 
     - name: Version info for optional installed packages
       run: |
@@ -88,8 +92,6 @@ jobs:
     - name: Test interface TensorFlow linux/mac
       if: ${{ matrix.runs-on != 'windows-latest' }}
       run: |
-        if [[  ${{ matrix.runs-on }} == *"macos"* ]]; then brew install graphviz ; fi
-        if [[  ${{ matrix.runs-on }} == *"ubuntu"* ]]; then sudo apt install graphviz ; fi
         dot -V
         python -m pytest -v -m "tensorflow" tests/
 
