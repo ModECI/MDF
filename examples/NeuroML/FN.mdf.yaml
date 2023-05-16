@@ -1,51 +1,69 @@
 FN:
-    format: ModECI MDF v0.3
+    format: ModECI MDF v0.4
     graphs:
         FN:
             notes: FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS
             nodes:
-                FNpop_0:
+                FNpop:
                     metadata:
                         color: 0.2 0.2 0.2
                         radius: 3
                         region: region1
                     parameters:
                         initial_w:
-                            value: 0.0
+                            value:
+                            - 0.0
                         initial_v:
-                            value: -1.0
+                            value:
+                            - -1.0
                         a_v:
-                            value: -0.3333333333333333
+                            value:
+                            - -0.3333333333333333
                         b_v:
-                            value: 0.0
+                            value:
+                            - 0.0
                         c_v:
-                            value: 1.0
+                            value:
+                            - 1.0
                         d_v:
-                            value: 1.0
+                            value:
+                            - 1.0
                         e_v:
-                            value: -1.0
+                            value:
+                            - -1.0
                         f_v:
-                            value: 1.0
+                            value:
+                            - 1.0
                         time_constant_v:
-                            value: 1.0
+                            value:
+                            - 1.0
                         a_w:
-                            value: 1.0
+                            value:
+                            - 1.0
                         b_w:
-                            value: -0.8
+                            value:
+                            - -0.8
                         c_w:
-                            value: 0.7
+                            value:
+                            - 0.7
                         time_constant_w:
-                            value: 12.5
+                            value:
+                            - 12.5
                         threshold_exc:
-                            value: -1.0
+                            value:
+                            - -1.0
                         mode:
-                            value: 1.0
+                            value:
+                            - 1.0
                         uncorrelated_activity:
-                            value: 0.0
+                            value:
+                            - 0.0
                         Iext:
-                            value: 0.0
+                            value:
+                            - 0.0
                         MSEC:
-                            value: 0.001
+                            value:
+                            - 0.001
                         V:
                             default_initial_value: initial_v
                             time_derivative: (a_v*V*V*V + (1+threshold_exc)*b_v*V*V

@@ -40,8 +40,16 @@
                     },
                     "rnn_node": {
                         "input_ports": {
-                            "ext_input": {},
-                            "fb_input": {}
+                            "ext_input": {
+                                "shape": [
+                                    5
+                                ]
+                            },
+                            "fb_input": {
+                                "shape": [
+                                    5
+                                ]
+                            }
                         },
                         "parameters": {
                             "M": {
@@ -122,7 +130,11 @@
                     },
                     "readout_node": {
                         "input_ports": {
-                            "input": {}
+                            "input": {
+                                "shape": [
+                                    5
+                                ]
+                            }
                         },
                         "parameters": {
                             "wr": {
