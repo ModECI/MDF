@@ -26,8 +26,16 @@ def _get_torchvision_models():
     Get all the backbone models in torch vision, suprised there is no function to do this in torchvision.
     """
 
-    import torchvision.models
-    from torchvision.models import get_model_builder, list_models
+    try:
+
+        import torchvision.models
+        from torchvision.models import get_model_builder, list_models
+
+    except ModuleNotFoundError:
+        pytest.mark.skip(
+            "Skipping PyTorch interface tests because pytorch is not installed."
+        )
+        return []
 
     def list_model_fns(module):
         return [(name, get_model_builder(name)) for name in list_models(module)]
@@ -39,6 +47,31 @@ def _get_torchvision_models():
         "mvit_v1_b": {("Windows", "cuda"), ("Linux", "cuda")},
         "mvit_v2_s": {("Windows", "cuda"), ("Linux", "cuda")},
     }
+
+    # Copied from https://github.com/pytorch/vision/blob/main/test/test_models.py
+    # speeding up slow models:
+    slow_models = [
+        "convnext_base",
+        "convnext_large",
+        "resnext101_32x8d",
+        "resnext101_64x4d",
+        "wide_resnet101_2",
+        "efficientnet_b6",
+        "efficientnet_b7",
+        "efficientnet_v2_m",
+        "efficientnet_v2_l",
+        "regnet_y_16gf",
+        "regnet_y_32gf",
+        "regnet_y_128gf",
+        "regnet_x_16gf",
+        "regnet_x_32gf",
+        "swin_t",
+        "swin_s",
+        "swin_b",
+        "swin_v2_t",
+        "swin_v2_s",
+        "swin_v2_b",
+    ]
 
     if models is None:
         return []
@@ -85,7 +118,12 @@ def _get_torchvision_models():
 
     pytest_params = []
     for model in models_to_test:
-        t = (model, model_weights_spec)
+
+        if model.__name__ not in slow_models:
+            t = (model, model_weights_spec, torch.rand((1, 3, 224, 224)))
+        else:
+            t = (model, model_weights_spec, torch.rand((1, 3, 64, 64)))
+
         xf_models = [n for n in xfails.keys() if n in model.__name__]
         if len(xf_models) > 0:
             xf_reason = xfails[xf_models[0]]
@@ -147,10 +185,10 @@ def _run_and_check_model(model, input=None):
     mdf_model2 = Model.from_json(mdf_model.to_json())
 
 
-@pytest.mark.parametrize("model_init, kwargs", _get_torchvision_models())
-def test_torchvision_models(model_init, kwargs):
+@pytest.mark.parametrize("model_init, kwargs, input", _get_torchvision_models())
+def test_torchvision_models(model_init, kwargs, input):
     """Test importing the PyTorch model into MDF, executing in execution engine"""
-    _run_and_check_model(model_init(**kwargs))
+    _run_and_check_model(model_init(**kwargs), input=input)
 
 
 def test_simple_convolution(simple_convolution_pytorch):
