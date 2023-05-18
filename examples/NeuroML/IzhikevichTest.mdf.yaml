@@ -73,7 +73,7 @@ IzhikevichTest:
                         \ 'C': '100 pF', 'k': '0.7 nS_per_mV', 'vr': '-60 mV', 'vt':\
                         \ '-40 mV', 'vpeak': '35 mV', 'a': '0.03 per_ms', 'b': '-2\
                         \ nS', 'c': '-50 mV', 'd': '100 pA'}\n   parent: None\n"
-                Input_stim_0:
+                InputList_stim:
                     parameters:
                         amplitude:
                             value:
@@ -99,7 +99,8 @@ IzhikevichTest:
                             default_initial_value: 0
                             time_derivative: '1'
                         weight:
-                            value: 1
+                            value:
+                            - 1
                     input_ports: {}
                     output_ports:
                         i:
@@ -112,9 +113,9 @@ IzhikevichTest:
                         \ '100pA', 'delay': '100ms', 'duration': '500ms'}\n   parent:\
                         \ None\n"
             edges:
-                Edge Input_stim_0 to izhPop:
-                    name: Edge Input_stim_0 to izhPop
+                Edge InputList_stim to izhPop:
+                    name: Edge InputList_stim to izhPop
                     sender_port: i
                     receiver_port: synapses_i
-                    sender: Input_stim_0
+                    sender: InputList_stim
                     receiver: izhPop
