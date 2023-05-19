@@ -84,8 +84,8 @@ def execute(mdf_filename):
 
 
 if __name__ == "__main__":
-    
-    if len(sys.argv)==1 or sys.argv[1]=='-run':
+
+    if len(sys.argv) == 1 or sys.argv[1] == "-run":
         print("Please specify the MDF file to run")
     else:
         f = sys.argv[1]

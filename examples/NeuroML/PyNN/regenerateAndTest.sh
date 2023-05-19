@@ -17,8 +17,7 @@ python RunInMDF.py OneCell.mdf.json -nogui
 
 ####  Generate multiple input example
 python Generate.py -input_weights -nml
-pynml -validate InputWeights.net.nml 
+pynml -validate InputWeights.net.nml
 
 python Generate.py -input_weights -mdf
 python RunInMDF.py InputWeights.mdf.json -nogui
-
