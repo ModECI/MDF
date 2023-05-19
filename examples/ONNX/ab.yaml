@@ -10,6 +10,7 @@ ONNX Model:
                             shape:
                             - 2
                             - 3
+                            type: float
                     parameters:
                         B:
                             value: 1.0
@@ -27,6 +28,7 @@ ONNX Model:
                             shape:
                             - 2
                             - 3
+                            type: float
                     parameters:
                         B:
                             value: 5.0

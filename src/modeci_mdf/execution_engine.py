@@ -691,7 +691,9 @@ class EvaluableInput:
             if self.input_port.default_value is not None:
                 self.curr_value = self.input_port.default_value
             else:
-                self.curr_value = np.full(input_port.shape, 0.0)
+                if input_port.type and "float" in input_port.type:
+                    default = 0.0
+                self.curr_value = np.full(input_port.shape, default)
         else:
             self.curr_value = None
 
