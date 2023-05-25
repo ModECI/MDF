@@ -8,8 +8,8 @@ def execute(mdf_filename):
     mdf_model = load_mdf(mdf_filename)
     mod_graph = mdf_model.graphs[0]
 
-    dt = 0.001
-    duration = 1
+    dt = 0.00005
+    duration = 0.2
 
     mdf_model.to_graph_image(
         engine="dot",
@@ -58,6 +58,8 @@ def execute(mdf_filename):
         for n in mod_graph.nodes:
             for op in n.output_ports:
                 ov = eg.enodes[n.id].evaluable_outputs[op.id].curr_value
+                if type(ov) == int or type(ov) == float:
+                    ov = [ov]
                 for i in range(len(ov)):
                     if not i in outputs[n.id][op.id]:
                         outputs[n.id][op.id][i] = []

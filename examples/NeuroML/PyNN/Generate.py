@@ -11,7 +11,14 @@ from neuromllite import Projection, RandomConnectivity, Input, Simulation
 import sys
 
 
-def generate(ref, num_pop0=2, num_pop1=2, input_percentage=50, input_weight=".8"):
+def generate(
+    ref,
+    num_pop0=2,
+    num_pop1=2,
+    input_percentage=50,
+    input_weight=".8",
+    pynn_cell="IF_curr_alpha",
+):
 
     ################################################################################
     ###   Build new network
@@ -20,14 +27,15 @@ def generate(ref, num_pop0=2, num_pop1=2, input_percentage=50, input_weight=".8"
     net.notes = "Example: %s" % ref
     net.parameters = {"input_amp": 0.99}
 
-    cell = Cell(id="testcell", pynn_cell="IF_cond_alpha")
-    cell.parameters = {"tau_refrac": 5, "i_offset": 0.1}
-    net.cells.append(cell)
+    cell = Cell(id="testcell", pynn_cell=pynn_cell)
 
-    if num_pop1 > 0:
-        cell2 = Cell(id="testcell2", pynn_cell="IF_cond_alpha")
-        cell2.parameters = {"tau_refrac": 5, "i_offset": -0.1}
-        net.cells.append(cell2)
+    cell.parameters = {"i_offset": 0.0}
+    if "IF_" in pynn_cell:
+        cell.parameters["tau_refrac"] = 5
+    else:
+        cell.parameters = {"i_offset": 0.05}
+        net.parameters = {"input_amp": 0}
+    net.cells.append(cell)
 
     input_source = InputSource(
         id="i_clamp",
@@ -54,7 +62,7 @@ def generate(ref, num_pop0=2, num_pop1=2, input_percentage=50, input_weight=".8"
         p1 = Population(
             id="pop1",
             size=num_pop1,
-            component=cell2.id,
+            component=cell.id,
             properties={"color": "0 1 0", "radius": 20},
             random_layout=RandomLayout(region=r1.id),
         )
@@ -74,8 +82,8 @@ def generate(ref, num_pop0=2, num_pop1=2, input_percentage=50, input_weight=".8"
         Synapse(
             id="ampaSyn",
             pynn_receptor_type="excitatory",
-            pynn_synapse_type="cond_alpha",
-            parameters={"e_rev": -10, "tau_syn": 2},
+            pynn_synapse_type="curr_alpha",
+            parameters={"tau_syn": 2},
         )
     )
     """net.synapses.append(
@@ -122,7 +130,6 @@ def generate(ref, num_pop0=2, num_pop1=2, input_percentage=50, input_weight=".8"
         )
     )
 
-    print(net.to_json())
     net_json_file = net.to_json_file("%s.json" % net.id)
     net_yaml_file = net.to_yaml_file("%s.yaml" % net.id)
 
@@ -135,7 +142,7 @@ def generate(ref, num_pop0=2, num_pop1=2, input_percentage=50, input_weight=".8"
         duration="1000",
         dt="0.01",
         record_traces={"all": "*"},
-        record_spikes={"pop0": "*"},
+        record_spikes={"pop0": "*"} if "IF_" in pynn_cell else {},
     )
 
     sim.to_json_file()
@@ -151,6 +158,10 @@ if __name__ == "__main__":
 
     if "-one" in sys.argv:
         sim, net = generate("OneCell", num_pop0=1, num_pop1=0, input_percentage=100)
+    elif "-hh" in sys.argv:
+        sim, net = generate(
+            "HH", num_pop0=1, num_pop1=0, input_percentage=0, pynn_cell="HH_cond_exp"
+        )
     elif "-input_weights" in sys.argv:
         sim, net = generate(
             "InputWeights",
@@ -158,6 +169,14 @@ if __name__ == "__main__":
             num_pop1=0,
             input_percentage=62,
             input_weight=".7",
+        )
+    elif "-simple_net" in sys.argv:
+        sim, net = generate(
+            "SimpleNet",
+            num_pop0=1,
+            num_pop1=1,
+            input_percentage=100,
+            input_weight="1",
         )
     else:
         sim, net = generate("All")

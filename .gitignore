@@ -278,3 +278,12 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/arm64
 /examples/MDF/RNN/iaf.net
 /examples/MDF/RNN/iaf.net2
+/examples/NeuroML/PyNN/All*
+/examples/NeuroML/PyNN/*dat
+/examples/NeuroML/PyNN/*.png
+/examples/NeuroML/PyNN/*.1
+/examples/NeuroML/PyNN/InputWeights*
+/examples/NeuroML/PyNN/OneCell*
+/examples/NeuroML/PyNN/Sim*
+/examples/NeuroML/PyNN/LEMS_Sim*
+/examples/NeuroML/PyNN/HH*
