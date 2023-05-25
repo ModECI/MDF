@@ -290,9 +290,9 @@ def mdf_to_graphviz(
                     additional = ""
                     if ip.shape is not None:
                         additional += "shape: %s, " % str(ip.shape)
-                    """if ip.reduce is not None:
+                    if ip.reduce is not None:
                         if ip.reduce != "overwrite":  # since this is the default...
-                            additional += "reduce: %s, " % str(ip.reduce)"""
+                            additional += "reduce: %s, " % str(ip.reduce)
                     if ip.type is not None:
                         additional += "type: %s, " % str(ip.type)
 
