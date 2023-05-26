@@ -8,7 +8,7 @@ def execute(mdf_filename):
     mdf_model = load_mdf(mdf_filename)
     mod_graph = mdf_model.graphs[0]
 
-    dt = 0.001
+    dt = 0.0001
     duration = 1
 
     mdf_model.to_graph_image(

@@ -287,3 +287,6 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/PyNN/Sim*
 /examples/NeuroML/PyNN/LEMS_Sim*
 /examples/NeuroML/PyNN/HH*
+/examples/NeuroML/PyNN/arm64
+/examples/NeuroML/PyNN/*.pkl
+*_code.gen.c

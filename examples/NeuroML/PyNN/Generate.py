@@ -83,7 +83,7 @@ def generate(
             id="ampaSyn",
             pynn_receptor_type="excitatory",
             pynn_synapse_type="curr_alpha",
-            parameters={"tau_syn": 2},
+            parameters={"tau_syn": 20},
         )
     )
     """net.synapses.append(
@@ -103,7 +103,7 @@ def generate(
                 postsynaptic=p1.id,
                 synapse="ampaSyn",
                 delay=2,
-                weight=0.02,
+                weight="0.3",
             )
         )
         net.projections[0].random_connectivity = RandomConnectivity(probability=1)
@@ -168,7 +168,7 @@ if __name__ == "__main__":
             num_pop0=4,
             num_pop1=0,
             input_percentage=62,
-            input_weight=".7",
+            input_weight=".8*random()",
         )
     elif "-simple_net" in sys.argv:
         sim, net = generate(

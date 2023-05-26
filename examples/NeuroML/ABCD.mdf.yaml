@@ -223,7 +223,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1.0
+                            - 1
                         SEC:
                             value:
                             - 1.0
@@ -245,7 +245,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1.0
+                            - 1
                         SEC:
                             value:
                             - 1.0
@@ -267,7 +267,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1.0
+                            - 1
                         SEC:
                             value:
                             - 1.0
@@ -289,7 +289,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1.0
+                            - 1
                         SEC:
                             value:
                             - 1.0
@@ -311,7 +311,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1.0
+                            - 1
                         SEC:
                             value:
                             - 1.0

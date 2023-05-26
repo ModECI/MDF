@@ -300,7 +300,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1.0
+                                    1
                                 ]
                             },
                             "SEC": {
@@ -329,7 +329,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1.0
+                                    1
                                 ]
                             },
                             "SEC": {
@@ -358,7 +358,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1.0
+                                    1
                                 ]
                             },
                             "SEC": {
@@ -387,7 +387,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1.0
+                                    1
                                 ]
                             },
                             "SEC": {
@@ -416,7 +416,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1.0
+                                    1
                                 ]
                             },
                             "SEC": {
