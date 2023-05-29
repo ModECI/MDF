@@ -17,7 +17,7 @@ def execute():
     dt = 0.0005
     duration = 0.7
 
-    input_node = mod_graph.get_node("Input_stim_0")
+    input_node = mod_graph.get_node("InputList_stim")
     izh_node = mod_graph.get_node("izhPop")
 
     num_cells = 1
@@ -82,13 +82,13 @@ def execute():
             vv[i].append(v)
             uu[i].append(u)
 
-            ic = eg.enodes["Input_stim_0"].evaluable_parameters["i"].curr_value[i]
+            ic = eg.enodes[input_node.id].evaluable_parameters["i"].curr_value[i]
             ii[i].append(ic)
 
         print(
             f"    Value at {t}: v={eg.enodes['izhPop'].evaluable_parameters['v'].curr_value }, \
             u={eg.enodes['izhPop'].evaluable_parameters['u'].curr_value},\
-            i={eg.enodes['Input_stim_0'].evaluable_parameters['i'].curr_value}"
+            i={eg.enodes[input_node.id].evaluable_parameters['i'].curr_value}"
         )
         t += dt
 

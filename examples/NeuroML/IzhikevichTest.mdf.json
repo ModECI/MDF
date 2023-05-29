@@ -57,6 +57,21 @@
                                     1e-10
                                 ]
                             },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "v > vpeak",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
                             "v": {
                                 "default_initial_value": "v0",
                                 "conditions": {
@@ -88,6 +103,9 @@
                             "synapses_i": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "v": {
                                 "value": "v"
                             },
@@ -100,7 +118,7 @@
                         },
                         "notes": "Cell: [Cell(notes=None, id='izhCell', parameters={'v0': 'v0', 'C': 'C', 'k': 'k', 'vr': 'vr', 'vt': 'vt', 'vpeak': 'vpeak', 'a': 'a', 'b': 'b', 'c': 'c', 'd': 'd'}, neuroml2_source_file=None, lems_source_file=None, neuroml2_cell='izhikevich2007Cell', pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in None and in Lems is: Component, id: izhCell, type: izhikevich2007Cell,\n   parameters: {'v0': '-80mV', 'C': '100 pF', 'k': '0.7 nS_per_mV', 'vr': '-60 mV', 'vt': '-40 mV', 'vpeak': '35 mV', 'a': '0.03 per_ms', 'b': '-2 nS', 'c': '-50 mV', 'd': '100 pA'}\n   parent: None\n"
                     },
-                    "Input_stim_0": {
+                    "InputList_stim": {
                         "parameters": {
                             "amplitude": {
                                 "value": [
@@ -115,6 +133,11 @@
                             "duration": {
                                 "value": [
                                     0.5
+                                ]
+                            },
+                            "weight": {
+                                "value": [
+                                    1
                                 ]
                             },
                             "i": {
@@ -136,12 +159,16 @@
                             "t": {
                                 "default_initial_value": 0,
                                 "time_derivative": "1"
-                            },
-                            "weight": {
-                                "value": 1
                             }
                         },
-                        "input_ports": {},
+                        "input_ports": {
+                            "spike_input": {
+                                "shape": [
+                                    1
+                                ],
+                                "reduce": "add"
+                            }
+                        },
                         "output_ports": {
                             "i": {
                                 "value": "i"
@@ -151,11 +178,11 @@
                     }
                 },
                 "edges": {
-                    "Edge Input_stim_0 to izhPop": {
-                        "name": "Edge Input_stim_0 to izhPop",
+                    "Edge InputList_stim to izhPop": {
+                        "name": "Edge InputList_stim to izhPop",
                         "sender_port": "i",
                         "receiver_port": "synapses_i",
-                        "sender": "Input_stim_0",
+                        "sender": "InputList_stim",
                         "receiver": "izhPop"
                     }
                 }
