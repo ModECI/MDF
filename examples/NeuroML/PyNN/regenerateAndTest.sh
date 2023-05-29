@@ -30,9 +30,18 @@ pynml -validate InputWeights.net.nml
 python Generate.py -input_weights -mdf
 python RunInMDF.py InputWeights.mdf.json -nogui
 
+
 ####  Generate simple net example
 python Generate.py -simple_net -nml
 pynml -validate SimpleNet.net.nml
 
 python Generate.py -simple_net -mdf
 python RunInMDF.py SimpleNet.mdf.json -nogui
+
+
+####  Generate bigger net example
+python Generate.py -net1 -nml
+pynml -validate Net1.net.nml
+
+python Generate.py -net1 -mdf
+python RunInMDF.py Net1.mdf.json -nogui

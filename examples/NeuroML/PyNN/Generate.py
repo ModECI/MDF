@@ -108,7 +108,9 @@ def generate(
                 weight=conn_weight,
             )
         )
-        net.projections[0].random_connectivity = RandomConnectivity(probability=conn_prob)
+        net.projections[0].random_connectivity = RandomConnectivity(
+            probability=conn_prob
+        )
 
     """net.projections.append(
         Projection(
@@ -183,9 +185,9 @@ if __name__ == "__main__":
     elif "-net1" in sys.argv:
         sim, net = generate(
             "Net1",
-            num_pop0=1,
-            num_pop1=2,
-            conn_weight='random()',
+            num_pop0=2,
+            num_pop1=3,
+            conn_weight="random()",
             input_percentage=100,
             input_weight="2*random()",
         )

@@ -8,7 +8,7 @@ def execute(mdf_filename):
     mdf_model = load_mdf(mdf_filename)
     mod_graph = mdf_model.graphs[0]
 
-    dt = 0.0001
+    dt = 0.001
     duration = 1
 
     mdf_model.to_graph_image(
@@ -81,8 +81,16 @@ def execute(mdf_filename):
             vals = outputs[n.id][op.id]
             plt.figure()
             for i in vals:
-                plt.plot(times, vals[i], label="%s_%s_%i" % (n.id, op.id, i))
-                plt.legend()
+                label = "%s_%s_%i" % (n.id, op.id, i)
+                print(
+                    " - Plotting %s, points in times: %i, val: %s"
+                    % (label, len(times), len(vals[i]))
+                )
+                try:
+                    plt.plot(times, vals[i], label=label)
+                    plt.legend()
+                except Exception as e:
+                    print(e)
 
     # plt.savefig("Izh_run.png", bbox_inches="tight")
 

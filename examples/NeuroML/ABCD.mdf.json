@@ -274,7 +274,9 @@
                             },
                             "OUTPUT": {
                                 "time_derivative": "(rate * INPUT) / time_step_size",
-                                "default_initial_value": 0
+                                "default_initial_value": [
+                                    0
+                                ]
                             },
                             "V": {
                                 "value": 0
@@ -300,7 +302,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1
+                                    1.0
                                 ]
                             },
                             "SEC": {
@@ -329,7 +331,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1
+                                    1.0
                                 ]
                             },
                             "SEC": {
@@ -358,7 +360,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1
+                                    1.0
                                 ]
                             },
                             "SEC": {
@@ -387,7 +389,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1
+                                    1.0
                                 ]
                             },
                             "SEC": {
@@ -416,7 +418,7 @@
                         "parameters": {
                             "weight": {
                                 "value": [
-                                    1
+                                    1.0
                                 ]
                             },
                             "SEC": {

@@ -201,7 +201,8 @@ ABCD:
                                     value: 0
                         OUTPUT:
                             time_derivative: (rate * INPUT) / time_step_size
-                            default_initial_value: 0
+                            default_initial_value:
+                            - 0
                         V:
                             value: 0
                     input_ports:
@@ -223,7 +224,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1
+                            - 1.0
                         SEC:
                             value:
                             - 1.0
@@ -245,7 +246,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1
+                            - 1.0
                         SEC:
                             value:
                             - 1.0
@@ -267,7 +268,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1
+                            - 1.0
                         SEC:
                             value:
                             - 1.0
@@ -289,7 +290,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1
+                            - 1.0
                         SEC:
                             value:
                             - 1.0
@@ -311,7 +312,7 @@ ABCD:
                     parameters:
                         weight:
                             value:
-                            - 1
+                            - 1.0
                         SEC:
                             value:
                             - 1.0
