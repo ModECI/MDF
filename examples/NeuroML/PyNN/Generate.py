@@ -15,6 +15,8 @@ def generate(
     ref,
     num_pop0=2,
     num_pop1=2,
+    conn_prob=1,
+    conn_weight=0.3,
     input_percentage=50,
     input_weight=".8",
     pynn_cell="IF_curr_alpha",
@@ -103,10 +105,10 @@ def generate(
                 postsynaptic=p1.id,
                 synapse="ampaSyn",
                 delay=2,
-                weight="0.3",
+                weight=conn_weight,
             )
         )
-        net.projections[0].random_connectivity = RandomConnectivity(probability=1)
+        net.projections[0].random_connectivity = RandomConnectivity(probability=conn_prob)
 
     """net.projections.append(
         Projection(
@@ -142,7 +144,7 @@ def generate(
         duration="1000",
         dt="0.01",
         record_traces={"all": "*"},
-        record_spikes={"pop0": "*"} if "IF_" in pynn_cell else {},
+        record_spikes={"all": "*"} if "IF_" in pynn_cell else {},
     )
 
     sim.to_json_file()
@@ -177,6 +179,15 @@ if __name__ == "__main__":
             num_pop1=1,
             input_percentage=100,
             input_weight="1",
+        )
+    elif "-net1" in sys.argv:
+        sim, net = generate(
+            "Net1",
+            num_pop0=1,
+            num_pop1=2,
+            conn_weight='random()',
+            input_percentage=100,
+            input_weight="2*random()",
         )
     else:
         sim, net = generate("All")
