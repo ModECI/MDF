@@ -17,6 +17,21 @@
                                     2.0
                                 ]
                             },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
                             "V": {
                                 "value": 0
                             },
@@ -28,6 +43,9 @@
                             "INPUT": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "V": {
                                 "value": "V"
                             },
@@ -54,6 +72,21 @@
                                     2.0
                                 ]
                             },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
                             "V": {
                                 "value": 0
                             },
@@ -65,6 +98,9 @@
                             "INPUT": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "V": {
                                 "value": "V"
                             },
@@ -101,17 +137,35 @@
                                     0.0
                                 ]
                             },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
                             "V": {
                                 "value": 0
                             },
                             "OUTPUT": {
-                                "value": "1/(1+math.exp(-1*gain*(INPUT + bias - x_0)+offset))"
+                                "value": "1/(1+numpy.exp(-1*gain*(INPUT + bias - x_0)+offset))"
                             }
                         },
                         "input_ports": {
                             "INPUT": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "V": {
                                 "value": "V"
                             },
@@ -148,17 +202,35 @@
                                     0.0
                                 ]
                             },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
                             "V": {
                                 "value": 0
                             },
                             "OUTPUT": {
-                                "value": "scale * math.exp((rate * INPUT) + bias) + offset"
+                                "value": "scale * numpy.exp((rate * INPUT) + bias) + offset"
                             }
                         },
                         "input_ports": {
                             "INPUT": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "V": {
                                 "value": "V"
                             },
@@ -185,8 +257,26 @@
                                     0.1
                                 ]
                             },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
                             "OUTPUT": {
-                                "time_derivative": "(rate * INPUT) / time_step_size"
+                                "time_derivative": "(rate * INPUT) / time_step_size",
+                                "default_initial_value": [
+                                    0
+                                ]
                             },
                             "V": {
                                 "value": 0
@@ -196,6 +286,9 @@
                             "INPUT": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "OUTPUT": {
                                 "value": "OUTPUT"
                             },
@@ -204,42 +297,222 @@
                             }
                         },
                         "notes": "Cell: [Cell(notes=None, id='d', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n"
+                    },
+                    "proj_input_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj0_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj1_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj2_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj3_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
                     }
                 },
                 "edges": {
-                    "Edge A to B": {
-                        "name": "Edge A to B",
+                    "A_TO_proj_input_rsDL": {
+                        "name": "A_TO_proj_input_rsDL",
                         "sender_port": "OUTPUT",
-                        "receiver_port": "INPUT",
+                        "receiver_port": "peer_OUTPUT",
                         "sender": "A",
+                        "receiver": "proj_input_rsDL"
+                    },
+                    "proj_input_rsDL_TO_B": {
+                        "name": "proj_input_rsDL_TO_B",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj_input_rsDL",
                         "receiver": "B"
                     },
-                    "Edge A_input to A": {
-                        "name": "Edge A_input to A",
+                    "A_input_TO_proj0_rsDL": {
+                        "name": "A_input_TO_proj0_rsDL",
                         "sender_port": "OUTPUT",
-                        "receiver_port": "INPUT",
+                        "receiver_port": "peer_OUTPUT",
                         "sender": "A_input",
+                        "receiver": "proj0_rsDL"
+                    },
+                    "proj0_rsDL_TO_A": {
+                        "name": "proj0_rsDL_TO_A",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj0_rsDL",
                         "receiver": "A"
                     },
-                    "Edge A to C": {
-                        "name": "Edge A to C",
+                    "A_TO_proj1_rsDL": {
+                        "name": "A_TO_proj1_rsDL",
                         "sender_port": "OUTPUT",
-                        "receiver_port": "INPUT",
+                        "receiver_port": "peer_OUTPUT",
                         "sender": "A",
+                        "receiver": "proj1_rsDL"
+                    },
+                    "proj1_rsDL_TO_C": {
+                        "name": "proj1_rsDL_TO_C",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj1_rsDL",
                         "receiver": "C"
                     },
-                    "Edge B to D": {
-                        "name": "Edge B to D",
+                    "B_TO_proj2_rsDL": {
+                        "name": "B_TO_proj2_rsDL",
                         "sender_port": "OUTPUT",
-                        "receiver_port": "INPUT",
+                        "receiver_port": "peer_OUTPUT",
                         "sender": "B",
+                        "receiver": "proj2_rsDL"
+                    },
+                    "proj2_rsDL_TO_D": {
+                        "name": "proj2_rsDL_TO_D",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj2_rsDL",
                         "receiver": "D"
                     },
-                    "Edge C to D": {
-                        "name": "Edge C to D",
+                    "C_TO_proj3_rsDL": {
+                        "name": "C_TO_proj3_rsDL",
                         "sender_port": "OUTPUT",
-                        "receiver_port": "INPUT",
+                        "receiver_port": "peer_OUTPUT",
                         "sender": "C",
+                        "receiver": "proj3_rsDL"
+                    },
+                    "proj3_rsDL_TO_D": {
+                        "name": "proj3_rsDL_TO_D",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj3_rsDL",
                         "receiver": "D"
                     }
                 }

@@ -36,6 +36,16 @@ IzhikevichTest:
                         d:
                             value:
                             - 1.0e-10
+                        spike:
+                            default_initial_value:
+                            - 0
+                            conditions:
+                                condition_0_on:
+                                    test: v > vpeak
+                                    value: 1
+                                condition_0_off:
+                                    test: spike > 0
+                                    value: 0
                         v:
                             default_initial_value: v0
                             conditions:
@@ -57,6 +67,8 @@ IzhikevichTest:
                     input_ports:
                         synapses_i: {}
                     output_ports:
+                        spike:
+                            value: spike
                         v:
                             value: v
                         u:
@@ -84,6 +96,9 @@ IzhikevichTest:
                         duration:
                             value:
                             - 0.5
+                        weight:
+                            value:
+                            - 1
                         i:
                             conditions:
                                 condition_0:
@@ -98,10 +113,11 @@ IzhikevichTest:
                         t:
                             default_initial_value: 0
                             time_derivative: '1'
-                        weight:
-                            value:
+                    input_ports:
+                        spike_input:
+                            shape:
                             - 1
-                    input_ports: {}
+                            reduce: add
                     output_ports:
                         i:
                             value: i

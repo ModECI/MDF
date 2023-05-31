@@ -57,6 +57,21 @@
                                     1e-10
                                 ]
                             },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "v > vpeak",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
                             "v": {
                                 "default_initial_value": "v0",
                                 "conditions": {
@@ -88,6 +103,9 @@
                             "synapses_i": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "v": {
                                 "value": "v"
                             },
@@ -117,6 +135,11 @@
                                     0.5
                                 ]
                             },
+                            "weight": {
+                                "value": [
+                                    1
+                                ]
+                            },
                             "i": {
                                 "conditions": {
                                     "condition_0": {
@@ -136,14 +159,16 @@
                             "t": {
                                 "default_initial_value": 0,
                                 "time_derivative": "1"
-                            },
-                            "weight": {
-                                "value": [
-                                    1
-                                ]
                             }
                         },
-                        "input_ports": {},
+                        "input_ports": {
+                            "spike_input": {
+                                "shape": [
+                                    1
+                                ],
+                                "reduce": "add"
+                            }
+                        },
                         "output_ports": {
                             "i": {
                                 "value": "i"
