@@ -99,7 +99,9 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="abc_conditions",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 
