@@ -104,6 +104,11 @@ jobs:
         choco install graphviz
         dot -V
         python -m pytest -v -m "tensorflow" tests/
+        
+    - name: Build Documentation
+      run: |
+        make clean docs/sphinx
+        make html docs/sphinx
 
     - name: Final version info for optional installed packages
       run: |
