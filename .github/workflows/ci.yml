@@ -107,7 +107,11 @@ jobs:
 
     - name: Build Documentation
       run: |
-        sphinx-build -b html docs/sphinx/source docs/sphinx/build
+        cd docs
+        python generate.py
+        cd sphinx
+        make clean
+        make html
 
     - name: Final version info for optional installed packages
       run: |
