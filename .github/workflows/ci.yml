@@ -105,6 +105,14 @@ jobs:
         dot -V
         python -m pytest -v -m "tensorflow" tests/
 
+    - name: Build Documentation
+      run: |
+        cd docs
+        python generate.py
+        cd sphinx
+        make clean
+        make html
+
     - name: Final version info for optional installed packages
       run: |
           pip list
