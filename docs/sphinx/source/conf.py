@@ -145,14 +145,14 @@ intersphinx_mapping = {
     "pytest": ("https://docs.pytest.org/en/stable", None),
 }
 
-from sphinx.ext.autodoc import ClassLevelDocumenter, InstanceAttributeDocumenter
+from sphinx.ext.autodoc import ClassLevelDocumenter, AttributeDocumenter
 
 
 def add_directive_header(self, sig):
     ClassLevelDocumenter.add_directive_header(self, sig)
 
 
-InstanceAttributeDocumenter.add_directive_header = add_directive_header
+AttributeDocumenter.add_directive_header = add_directive_header
 
 
 import os
