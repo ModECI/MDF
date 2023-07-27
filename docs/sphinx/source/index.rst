@@ -35,6 +35,7 @@ re-used in other environments.
 
    api/Introduction
    api/QuickStart
+   api/MDFpaper
    api/Installation
    api/Contributing
    api/Contributors

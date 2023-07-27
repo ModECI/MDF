@@ -1349,12 +1349,12 @@ class EvaluableGraph:
         # if specified as dict
         try:
             args = condition["kwargs"]
-        except (TypeError, KeyError):
+        except (IndexError, TypeError, KeyError):
             args = {}
 
         try:
             condition = Condition(condition["type"], **args)
-        except (TypeError, KeyError):
+        except (IndexError, TypeError, KeyError):
             pass
 
         cond_type = condition.type
