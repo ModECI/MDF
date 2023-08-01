@@ -35,9 +35,9 @@ mdf_model.to_graph_image(
     is_horizontal=True,
     solid_color=True,
 )
-from IPython.display import Image
+# from IPython.display import Image
 
-Image(filename="Keras_to_MDF.png")
+# Image(filename="Keras_to_MDF.png")
 
 # Evaluate the model via the MDF scheduler
 eg = EvaluableGraph(graph=mdf_graph, verbose=False)
