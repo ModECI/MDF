@@ -44,9 +44,7 @@ def create_input_node(node_id, value):  # , reshape=False):
     # else:
     #     value = np.array(value)
     input_node = Node(id=node_id)
-    input_node.parameters.append(
-        Parameter(id=f"{node_id}_in", value=np.array(value).tolist())
-    )
+    input_node.parameters.append(Parameter(id=f"{node_id}_in", value=value))
     input_node.output_ports.append(
         OutputPort(id=f"{node_id}_out", value=f"{node_id}_in")
     )
@@ -82,7 +80,7 @@ def create_dense_node(node_id, weights, bias):
         Parameter(id="Output", value=f"({node_id}_in @ wgts) + bias")
     )
 
-    node.output_ports.append(Parameter(id=f"{node_id}_out", value="Output"))
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
     return node
 
 

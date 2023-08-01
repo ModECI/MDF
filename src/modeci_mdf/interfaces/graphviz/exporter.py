@@ -101,7 +101,7 @@ def match_in_expr(expr, node):
     else:
         # print("Checking %s" % (expr))
 
-        expr = " %s " % expr
+        expr = " %s " % safe_comparitor(expr)
 
         def _replace_var(v, expr, format_method):
             # print(f"Replacing {v} in {expr}")

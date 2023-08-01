@@ -278,3 +278,4 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/arm64
 /examples/MDF/RNN/iaf.net
 /examples/MDF/RNN/iaf.net2
+/examples/TensorFlow/Keras/keras_to_MDF
