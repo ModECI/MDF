@@ -62,8 +62,8 @@ print(mod_graph.to_yaml())
 
 
 #  Save the model to file
-mod.to_json_file("keras_to_MDF.json")
-mod.to_yaml_file("keras_to_MDF.yaml")
+mod.to_json_file("keras2MDF.json")
+mod.to_yaml_file("keras2MDF.yaml")
 
 """
 mod.to_graph_image(

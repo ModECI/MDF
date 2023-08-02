@@ -38,11 +38,13 @@ def init_model_with_graph(model_id, graph_id):
     return mod, mod_graph
 
 
-def create_input_node(node_id, value):
+def create_input_node(node_id, value):  # , reshape=False):
+    # if reshape == True:
+    #     value = np.array(value).flatten()
+    # else:
+    #     value = np.array(value)
     input_node = Node(id=node_id)
-    input_node.parameters.append(
-        Parameter(id=f"{node_id}_in", value=np.array(value).tolist())
-    )
+    input_node.parameters.append(Parameter(id=f"{node_id}_in", value=value))
     input_node.output_ports.append(
         OutputPort(id=f"{node_id}_out", value=f"{node_id}_in")
     )
@@ -78,7 +80,7 @@ def create_dense_node(node_id, weights, bias):
         Parameter(id="Output", value=f"({node_id}_in @ wgts) + bias")
     )
 
-    node.output_ports.append(Parameter(id=f"{node_id}_out", value="Output"))
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
     return node
 
 
@@ -150,44 +152,42 @@ def keras_to_mdf(
     )
 
     # create the input node
-    input_node = create_input_node("Input", args)
+    input_node = create_input_node("Input_0", args)
     mdf_model_graph.nodes.append(input_node)
 
     # create other nodes needed for mdf graph using the type of layers from the keras model
     # get layers in the keras model
     layers = []
-    types_of_layers = []
     for layer in model.layers:
         layers.append(layer.name)
-        types_of_layers.append(type(layer))
-
-    layer_type_dict = {
-        layer: layer_type for layer, layer_type in zip(layers, types_of_layers)
-    }
 
     # get the parameters and activation in each dense layer
     params, activations = get_weights_and_activation(layers, model)
 
-    activation_node_count = 0
-    for layer, layer_type in layer_type_dict.items():
-        if layer_type == Flatten:
-            flatten_node = create_flatten_node(f"{layer.capitalize()}")
+    node_count = 1
+    for layer in layers:
+        if layer == "flatten":
+            # input_node = create_input_node(f"{layer.capitalize()}_{node_count}", args, reshape=True)
+            flatten_node = create_flatten_node(f"{layer.capitalize()}_{node_count}")
             mdf_model_graph.nodes.append(flatten_node)
+            node_count += 1
 
-        elif layer_type == Dense:
+        elif "dense" in layer:
             weights = params[f"{layer}"]["weights"]
             bias = params[f"{layer}"]["bias"]
-            dense_node = create_dense_node(f"{layer.capitalize()}", weights, bias)
+            dense_node = create_dense_node(
+                f"{layer[:5].capitalize()}_{node_count}", weights, bias
+            )
             mdf_model_graph.nodes.append(dense_node)
+            node_count += 1
 
             activation = str(model.get_layer(layer).activation).split()[1]
-
             if activation != "linear":
                 activation_node = create_activation_node(
-                    f"{activation.capitalize()}_{activation_node_count}", activation
+                    f"{activation.capitalize()}_{node_count}", activation
                 )
                 mdf_model_graph.nodes.append(activation_node)
-                activation_node_count += 1
+                node_count += 1
 
     for i in range(len(mdf_model_graph.nodes) - 1):
         e1 = simple_connect(

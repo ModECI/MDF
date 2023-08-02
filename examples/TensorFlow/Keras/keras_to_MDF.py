@@ -18,9 +18,15 @@ one_x_test = one_x_test.reshape(1, 28, 28)
 
 # get the output of predicting with the keras model
 output = model.predict(one_x_test)
+print("Output of network when predicted with Keras directly: %s" % output)
 
 # Convert the Keras model to MDF
 mdf_model, params_dict = keras_to_mdf(model=model, args=one_x_test)
+
+
+# Save the MDF to JSON & YAML
+mdf_model.to_json_file("keras_to_MDF.json")
+mdf_model.to_yaml_file("keras_to_MDF.yaml")
 
 # Get mdf graph
 mdf_graph = mdf_model.graphs[0]
@@ -30,14 +36,12 @@ mdf_model.to_graph_image(
     engine="dot",
     output_format="png",
     view_on_render=False,
-    level=1,
+    level=3,
     filename_root="keras_to_MDF",
-    is_horizontal=True,
+    is_horizontal=False,
     solid_color=True,
 )
-# from IPython.display import Image
 
-# Image(filename="Keras_to_MDF.png")
 
 # Evaluate the model via the MDF scheduler
 eg = EvaluableGraph(graph=mdf_graph, verbose=False)
