@@ -59,6 +59,7 @@ python -m modeci_mdf.interfaces.graphviz.exporter FN.mdf.yaml 3 -noview
 python -m modeci_mdf.execution_engine FN.mdf.json
 
 ####  Test running MDF version & save result
+python FNrun.py -multi -nogui
 python FNrun.py -nogui
 
 

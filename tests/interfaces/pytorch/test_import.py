@@ -46,6 +46,12 @@ def _get_torchvision_models():
         "regnet_y_128gf": {("Windows", "cpu"), ("Windows", "cuda")},
         "mvit_v1_b": {("Windows", "cuda"), ("Linux", "cuda")},
         "mvit_v2_s": {("Windows", "cuda"), ("Linux", "cuda")},
+        "swin_t": {},
+        "swin_s": {},
+        "swin_b": {},
+        "swin_v2_t": {},
+        "swin_v2_s": {},
+        "swin_v2_b": {},
     }
 
     # Copied from https://github.com/pytorch/vision/blob/main/test/test_models.py
@@ -114,6 +120,7 @@ def _get_torchvision_models():
         "maxvit_t": "MaxViT is failing because we are trying to call ast.parse on a string that is not valid python."
                     " Need to handle string arguments requried by einops.",
         "resnet101": "Resnet101 is failing to match currently.",
+        "vit_": "ViT models are failing because PyTorch cant convert to ONNX the unflatten op.",
     }
 
     pytest_params = []

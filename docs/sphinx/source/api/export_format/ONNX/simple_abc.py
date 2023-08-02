@@ -6,6 +6,7 @@ This file does three things:
 """
 import torch
 import onnx
+import os
 
 
 from modeci_mdf.interfaces.onnx import onnx_to_mdf
@@ -82,7 +83,9 @@ def main():
         view_on_render=False,
         level=3,
         filename_root="abc",
-        only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        only_warn_on_fail=(
+            os.name == "nt"
+        ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
     )
 
 

@@ -11,7 +11,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
 import argparse
 import sys
 import numpy as np
-import sys
+import os
 import h5py
 import time
 
@@ -57,7 +57,9 @@ def main():
             view_on_render=False,
             level=2,
             filename_root="mlp_pure_mdf",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
     if test_all:

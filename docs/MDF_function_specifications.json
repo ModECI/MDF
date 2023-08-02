@@ -15,26 +15,33 @@
         "expression_string": "A * (A > 0)"
     },
     "change_goal": {
-        "description": "ACT-R change goal buffer function",
+        "description": "Modifies the current goal buffer using the given pattern.",
         "arguments": [
             "pattern",
             "curr_goal"
         ],
-        "expression_string": "actr.change_goal(pattern, curr_goal)"
+        "expression_string": "change_goal(pattern,curr_goal)"
     },
     "check_termination": {
-        "description": "check_termination",
+        "description": "Function used to check if no production was selected.",
         "arguments": [
             "production"
         ],
-        "expression_string": "actr.check_termination(production)"
+        "expression_string": "check_termination(production)"
+    },
+    "chunk_to_string": {
+        "description": "Converts a chunk dictionary to a string format.",
+        "arguments": [
+            "chunk"
+        ],
+        "expression_string": "chunk_to_string(chunk)"
     },
     "conflict_resolution_function": {
-        "description": "ACT-R conflict resolution function",
+        "description": "ACT-R conflict resolution function. Currently selects a production at random from the already matched productions, since utility values and learning\nare not implemented yet.",
         "arguments": [
             "productions"
         ],
-        "expression_string": "actr.conflict_resolution_function(productions)"
+        "expression_string": "conflict_resolution_function(productions)"
     },
     "cos": {
         "description": "Cosine function",
@@ -51,6 +58,18 @@
             "scale"
         ],
         "expression_string": "scale * cosh(variable0)"
+    },
+    "drift_diffusion_integrator": {
+        "description": "Integrates the drift diffusion model for a single trial using and implementation of the using the Euler-Maruyama method. This is a proof of concept implementation and\nis not optimized for speed.",
+        "arguments": [
+            "starting_point",
+            "non_decision_time",
+            "drift_rate",
+            "threshold",
+            "noise",
+            "dt"
+        ],
+        "expression_string": "drift_diffusion_integrator(starting_point,non_decision_time,drift_rate,threshold,noise,dt)"
     },
     "exponential": {
         "description": "Exponential function",
@@ -81,6 +100,14 @@
             "offset"
         ],
         "expression_string": "1/(1 + exp(-1*gain*(variable0 + bias) + offset))"
+    },
+    "match_production": {
+        "description": "Returns True if the production's left hand side matches the given context and adds the matching bindings to the production.",
+        "arguments": [
+            "production",
+            "context"
+        ],
+        "expression_string": "match_production(production,context)"
     },
     "onnx::Abs": {
         "description": "\nAbsolute takes one input data (Tensor<T>) and produces one output data\n(Tensor<T>) where the absolute is, y = abs(x), is applied to\nthe tensor elementwise.\n",
@@ -196,7 +223,7 @@
         "expression_string": "onnx_ops.bitshift(X, Y, direction)"
     },
     "onnx::Cast": {
-        "description": "\nThe operator casts the elements of a given input tensor to a data type\nspecified by the 'to' argument and returns an output tensor of the same size in\nthe converted type. The 'to' argument must be one of the data types specified\nin the 'DataType' enum field in the TensorProto message.\n\nCasting from string tensor in plain (e.g., \"3.14\" and \"1000\") and scientific numeric representations\n(e.g., \"1e-5\" and \"1E8\") to float types is supported. For example, converting string \"100.5\" to an integer may\nresult 100. There are some string literals reserved for special floating-point values;\n\"+INF\" (and \"INF\"), \"-INF\", and \"NaN\" are positive infinity, negative infinity, and not-a-number, respectively.\nAny string which can exactly match \"+INF\" in a case-insensitive way would be mapped to positive infinite. Similarly,\nthis case-insensitive rule is applied to \"INF\" and \"NaN\". When casting from numeric tensors\nto string tensors, plain floating-point representation (such as \"314.15926\") would be used.\nConverting non-numerical-literal string such as \"Hello World!\" is an undefined behavior. Cases\nof converting string representing floating-point arithmetic value, such as \"2.718\", to INT is an undefined behavior.\n\nConversion from a numerical type to any numerical type is always allowed.\nUser must be aware of precision loss and value change caused by range difference between two types.\nFor example, a 64-bit float 3.1415926459 may be round to a 32-bit float 3.141592. Similarly, converting\nan integer 36 to Boolean may produce 1 because we truncate bits which can't be stored in the targeted type.\n",
+        "description": "\nThe operator casts the elements of a given input tensor to a data type\nspecified by the 'to' argument and returns an output tensor of the same size in\nthe converted type. The 'to' argument must be one of the data types specified\nin the 'DataType' enum field in the TensorProto message.\n\nCasting from string tensor in plain (e.g., \"3.14\" and \"1000\") and scientific numeric representations\n(e.g., \"1e-5\" and \"1E8\") to float types is supported. For example, converting string \"100.5\" to an integer may\nresult 100. There are some string literals reserved for special floating-point values;\n\"+INF\" (and \"INF\"), \"-INF\", and \"NaN\" are positive infinity, negative infinity, and not-a-number, respectively.\nAny string which can exactly match \"+INF\" in a case-insensitive way would be mapped to positive infinite. Similarly,\nthis case-insensitive rule is applied to \"INF\" and \"NaN\". When casting from numeric tensors\nto string tensors, plain floating-point representation (such as \"314.15926\") would be used.\nConverting non-numerical-literal string such as \"Hello World!\" is an undefined behavior. Cases\nof converting string representing floating-point arithmetic value, such as \"2.718\", to INT is an undefined behavior.\n\nConversion from a numerical type to any numerical type is always allowed.\nUser must be aware of precision loss and value change caused by range difference between two types.\nFor example, a 64-bit float 3.1415926459 may be round to a 32-bit float 3.141592. Similarly, converting\nan integer 36 to Boolean may produce 1 because we truncate bits which can't be stored in the targeted type.\n\nIn more detail, the conversion among numerical types should follow these rules:\n\n* Casting from floating point to:\n  * floating point: +/- infinity if OOR (out of range).\n  * fixed point: undefined if OOR.\n  * bool: +/- 0.0 to False; all else to True.\n* Casting from fixed point to:\n  * floating point: +/- infinity if OOR. (+ infinity in the case of uint)\n  * fixed point: when OOR, discard higher bits and reinterpret (with respect to two's complement representation for\nsigned types). For example, 200 (int16) -> -56 (int8).\n  * bool: zero to False; nonzero to True.\n* Casting from bool to:\n  * floating point: `{1.0, 0.0}`.\n  * fixed point: `{1, 0}`.\n  * bool: no change.\n",
         "arguments": [
             "input"
         ],
@@ -539,14 +566,6 @@
         ],
         "expression_string": "onnx_ops.identity(input)"
     },
-    "onnx::If": {
-        "description": "If conditional",
-        "arguments": [
-            "cond"
-        ],
-        "expression_string": "onnx_ops.if(cond, else_branch, then_branch)",
-        "function": null
-    },
     "onnx::InstanceNormalization": {
         "description": "\nCarries out instance normalization as described in the paper\nhttps://arxiv.org/abs/1607.08022.\n\ny = scale * (x - mean) / sqrt(variance + epsilon) + B,\nwhere mean and variance are computed per instance per channel.\n\n",
         "arguments": [
@@ -628,15 +647,6 @@
         ],
         "expression_string": "onnx_ops.logsoftmax(input, axis)"
     },
-    "onnx::Loop": {
-        "description": "\nGeneric Looping construct. This loop has multiple termination conditions:\n\n1) Trip count. Iteration count specified at runtime. Set by\n   specifying the input M. Optional. Set to empty string to omit.\n   Note that a static trip count (specified at graph construction time) can be\n   specified by passing in a constant node for input M.\n2) Loop termination condition. This is an input to the op that determines\n   whether to run the first iteration and also a loop-carried dependency for\n   the body graph. The body graph must yield a value for the condition variable,\n   whether this input is provided or not.\n\nThis table summarizes the operating modes of this operator with equivalent\nC-style code:\n\n    Operator inputs defined as (max_trip_count, condition_var).\n\n    input (\"\", \"\"):\n        for (int i=0; ; ++i) {\n          cond = ... // Note this value is ignored, but is required in the body\n        }\n\n    input (\"\", cond) // Note this is analogous to a while loop\n        bool cond = ...;\n        for (int i=0; cond; ++i) {\n          cond = ...;\n        }\n\n    input (\"\", 1) // Note this is analogous to a do-while loop\n        bool cond = true\n        for (int i=0; cond; ++i) {\n          cond = ...;\n        }\n\n    input (trip_count, \"\") // Note this is analogous to a for loop\n        int trip_count = ...\n        for (int i=0; i < trip_count; ++i) {\n          cond = ...; // ignored\n        }\n\n    input (trip_count, cond)\n        int trip_count = ...;\n        bool cond = ...;\n        for (int i=0; i < trip_count && cond; ++i) {\n          cond = ...;\n        }\n\n\n*Sample usage - cond as well as trip count*\n\n    graph predict-net {\n      %a = Constant[value = <Scalar Tensor [3]>]()\n      %b = Constant[value = <Scalar Tensor [6]>]()\n      %keepgoing = Constant[value = <Scalar Tensor [1]>]()\n      %max_trip_count = Constant[value = <Scalar Tensor [10]>]()\n      %keepgoing_out, %b_out, %user_defined_vals = Loop[body = <graph body-net>](%max_trip_count, %keepgoing, %b)\n      return\n    }\n\n    graph body-net (\n      %i[INT32, scalar]           // iteration number\n      %keepgoing_in[BOOL, scalar] // incoming loop-termination-condition; not used\n      %b_in[INT32, scalar]        // incoming value of loop-carried-dependency b\n    ) {\n      %my_local = Add(%a, %b_in)\n      %b_out = Sub(%a, %b_in) // outgoing value of loop-carried-dependency b\n      %keepgoing_out = Greater(%my_local, %b_out) // outgoing loop-termination-condition\n      %user_defined_val = Add(%b_in, %b_in) // scan-output value to be accumulated\n      return %keepgoing_out, %b_out, %user_defined_val\n    }\n\n*Sample equivalent C code*\n\n    {\n      /* User-defined code (enclosing scope) */\n      int a = 3, b = 6;\n      bool keepgoing = true; // Analogous to input cond\n      /* End user-defined code */\n\n      /* Implicitly-defined code */\n      const int max_trip_count = 10; // Analogous to input M\n      int user_defined_vals[]; // Imagine this is resizable\n      /* End implicitly-defined code */\n      /* initialize loop-carried variables and scan-output variables */\n      bool keepgoing_out = keepgoing\n      int b_out = b\n\n      for (int i=0; i < max_trip_count && keepgoing_out; ++i) {\n        /* Implicitly-defined code: bind actual parameter values\n           to formal parameter variables of loop-body */\n        bool keepgoing_in = keepgoing_out;\n        bool b_in = b_out;\n\n        /* User-defined code (loop body) */\n        int my_local = a + b_in; // Reading value \"a\" from the enclosing scope is fine\n        b_out = a - b_in;\n        keepgoing_out = my_local > b_out;\n        user_defined_val = b_in + b_in; // b_in and b_out are different variables\n        /* End user-defined code */\n\n        /* Implicitly defined-code */\n        user_defined_vals[i] = user_defined_val // accumulate scan-output values\n      }\n      // int t = my_local; // Can't do this. my_local is not accessible here.\n\n      // The values below are bound to the output variables of the loop and therefore accessible\n      // b_out; user_defined_vals; keepgoing_out;\n    }\n\nThere are several things of note in this code snippet:\n\n1) Values from the enclosing scope (i.e. variable \"a\" here) are in scope and can\n   be referenced in the inputs of the loop.\n2) Any values computed in the loop body that needs to be used in a subsequent\n   iteration or after the loop are modelled using a pair of variables in the loop-body,\n   consisting of an input variable (eg., b_in) and an output variable (eg., b_out).\n   These are referred to as loop-carried dependences. The loop operation node\n   supplies the input value of the input variable for the first iteration, and\n   returns the output value of the output variable produced by the final\n   iteration.\n3) Scan_output variables are used to implicitly concatenate values computed across\n   all the iterations. In the above example, the value of user_defined_val computed\n   over all iterations are concatenated and returned as the value of user_defined_vals\n   after the loop.\n4) Values created in the body cannot be accessed in the enclosing scope,\n   except using the mechanism described above.\n\nNote that the semantics of this op support \"diagonal\" or \"wavefront\" execution.\n(See Step 3 here for an example:\nhttps://devblogs.nvidia.com/optimizing-recurrent-neural-networks-cudnn-5/).\nFrontends should emit multi-layer RNNs as a series of While operators (with\ntime being the inner looping dimension), with each successive layer consuming\nthe scan_outputs from the previous layer, possibly going through several\npoint-wise operators (e.g. dropout, residual connections, linear layer).\n\nThe input/output of subgraph (produced by loop node) matching is based on order instead of name. The implementation will figure out the names based on this order.\n",
-        "arguments": [
-            "M",
-            "cond",
-            "v_initial"
-        ],
-        "expression_string": "onnx_ops.loop(M, cond, v_initial, body)"
-    },
     "onnx::LpNormalization": {
         "description": "\nGiven a matrix, apply Lp-normalization along the provided axis.\n",
         "arguments": [
@@ -692,7 +702,7 @@
         "expression_string": "onnx_ops.maxroipool(X, rois, pooled_shape, spatial_scale)"
     },
     "onnx::MaxUnpool": {
-        "description": "\nMaxUnpool essentially computes the partial inverse of the MaxPool op.\n The input information to this op is typically the the output information from a MaxPool op. The first\n input tensor X is the tensor that needs to be unpooled, which is typically the pooled tensor (first output)\n from MaxPool. The second input tensor, I, contains the indices to the (locally maximal) elements corrsponding\n to the elements in the first input tensor X. Input tensor I is typically the second output of the MaxPool op.\n The third (optional) input is a tensor that specifies the output size of the unpooling operation.\n\nMaxUnpool is intended to do 'partial' inverse of the MaxPool op. 'Partial' because all the non-maximal\n values from the original input to MaxPool are set to zero in the output of the MaxUnpool op. Pooling\n the result of an unpooling operation should give back the original input to the unpooling op.\n\nMaxUnpool can produce the same output size for several input sizes, which makes unpooling op ambiguous.\n The third input argument, output_size, is meant to disambiguate the op and produce output tensor of\n known/predictable size.\n\nIn addition to the inputs, MaxUnpool takes three attributes, namely kernel_shape, strides, and pads,\n which define the exact unpooling op. The attributes typically have the same values as the corrsponding\n pooling op that the unpooling op is trying to invert.\n",
+        "description": "\nMaxUnpool essentially computes the partial inverse of the MaxPool op.\n The input information to this op is typically the output information from a MaxPool op. The first\n input tensor X is the tensor that needs to be unpooled, which is typically the pooled tensor (first output)\n from MaxPool. The second input tensor, I, contains the indices to the (locally maximal) elements corrsponding\n to the elements in the first input tensor X. Input tensor I is typically the second output of the MaxPool op.\n The third (optional) input is a tensor that specifies the output size of the unpooling operation.\n\nMaxUnpool is intended to do 'partial' inverse of the MaxPool op. 'Partial' because all the non-maximal\n values from the original input to MaxPool are set to zero in the output of the MaxUnpool op. Pooling\n the result of an unpooling operation should give back the original input to the unpooling op.\n\nMaxUnpool can produce the same output size for several input sizes, which makes unpooling op ambiguous.\n The third input argument, output_size, is meant to disambiguate the op and produce output tensor of\n known/predictable size.\n\nIn addition to the inputs, MaxUnpool takes three attributes, namely kernel_shape, strides, and pads,\n which define the exact unpooling op. The attributes typically have the same values as the corrsponding\n pooling op that the unpooling op is trying to invert.\n",
         "arguments": [
             "X",
             "I",
@@ -1019,7 +1029,7 @@
         "expression_string": "onnx_ops.relu(X)"
     },
     "onnx::Reshape": {
-        "description": "\nReshape the input tensor similar to numpy.reshape.\nFirst input is the data tensor, second input is a shape tensor which specifies the output shape. It outputs the reshaped tensor.\nAt most one dimension of the new shape can be -1. In this case, the value is\ninferred from the size of the tensor and the remaining dimensions. A dimension\ncould also be 0, in which case the actual dimension value is unchanged (i.e. taken\nfrom the input tensor). If 'allowzero' is set, and the new shape includes 0, the\ndimension will be set explicitly to zero (i.e. not taken from input tensor).\nShape (second input) could be an empty shape, which means converting to a scalar.\nThe input tensor's shape and the output tensor's shape are required to have the same number of elements.",
+        "description": "\nReshape the input tensor similar to numpy.reshape.\nFirst input is the data tensor, second input is a shape tensor which specifies the output shape. It outputs the reshaped tensor.\nAt most one dimension of the new shape can be -1. In this case, the value is\ninferred from the size of the tensor and the remaining dimensions. A dimension\ncould also be 0, in which case the actual dimension value is unchanged (i.e. taken\nfrom the input tensor). If 'allowzero' is set, and the new shape includes 0, the\ndimension will be set explicitly to zero (i.e. not taken from input tensor).\nShape (second input) could be an empty shape, which means converting to a scalar.\nThe input tensor's shape and the output tensor's shape are required to have the same number of elements.\n\nIf the attribute 'allowzero' is set, it is invalid for the specified shape to\ncontain both a zero value and -1, as the value of the dimension corresponding\nto -1 cannot be determined uniquely.\n",
         "arguments": [
             "data",
             "shape"
@@ -1060,13 +1070,6 @@
         ],
         "expression_string": "onnx_ops.round(X)"
     },
-    "onnx::Scan": {
-        "description": "\nScan can be used to iterate over one or more scan_input tensors,\nconstructing zero or more scan_output tensors. It combines ideas from general recurrences,\nfunctional programming constructs such as scan, fold, map, and zip, and is intended to enable\ngeneralizations of RNN-like constructs for sequence-to-sequence processing.\nOther tensors (referred to as state_variables here) can be used to carry a state\nwhen iterating from one element to another (similar to hidden-state in RNNs, also referred\nto as loop-carried dependences in the context of loops).\nMany common usages involve a single scan_input tensor (where functionality\nsimilar to scan, fold and map can be obtained). When more than one scan_input is used,\na behavior similar to zip is obtained.\n\nThe attribute body must be a graph, specifying the computation to be performed in\nevery iteration. It takes as input the current values of the state_variables and\nthe current iterated element of the scan_inputs. It must return the (updated) values\nof the state_variables and zero or more scan_output_element tensors. The values of the\nscan_output_element tensors are concatenated over all the iterations to produce the\nscan_output values of the scan construct (similar to the concatenated intermediate\nhidden-state values of RNN-like constructs). All the output tensors (state_variables as\nwell as scan_output_element tensors) are required to have the same shape in each iteration\nof the loop (a restriction imposed to enable efficient memory allocation).\n\nNote that the iterated element passed to the body subgraph does not have a sequence\naxis. It will have a rank one less than the rank of the corresponding scan_input.\n\nThe scan operation returns the final values of the state_variables as well as the\nscan_outputs.\n\nThe optional attribute scan_input_directions specifies the direction (forward or backward)\nfor each scan input. If this attribute is omitted, all sequences are scanned in the forward\ndirection. A bidirectional scan may be performed by specifying the same tensor input twice\nin the scan_inputs, once with a forward direction, and once with a backward direction.\n\nThe scan_output of the operation is produced by concatenating the scan_output_element\nvalues produced by the body in each iteration.  The optional attribute scan_output_directions\nspecifies the direction in which scan_output is constructed (by appending or prepending the\nscan_output_element to scan_output in each iteration) for each scan_output. If this attribute\nis omitted, the scan_output_element is appended to the scan_output in each iteration.\n\nThe optional attribute scan_input_axes specifies the axis to be scanned for each scan_input.\nIf omitted, every scan_input will be scanned in axis 0. For example, if axis 0 is the\nbatch axis and axis 1 is the time axis (to be scanned), specify an axis value of 1.\nNote that scanning a non-zero axis may be less efficient than scanning axis zero.\n\nThe optional attribute scan_output_axes specifies the axis along which the scan_outputs\nare accumulated for each scan_output. For example, if axis 1 is the time axis (to be\nscanned) for both inputs and outputs, specify a scan_input axis and scan_output axis\nvalue of 1.\n\nNote that because of the ONNX restriction that only the last parameter of an operator can\nbe variadic, the initial-states and scan-inputs are listed together as one input parameter.\nSimilarly, the final-states and scan-outputs are listed together as one output parameter.\nThe attribute num_scan_inputs indicates the number M of scan-inputs.\n\nThe behavior of\n\n    Scan <\n        num_scan_inputs = m,\n        body = loop-body,\n        scan_input_axes = [axis_1, ..., axis_m]\n    > (init_1, ..., init_n, scan_1, ..., scan_m)\n\nis equivalent to the following pseudo-code:\n\n    // scan_i.shape[axis_i] denotes the (max) sequence-length of scan_i\n    // scan_i.shape[axis_i] is required to be equal to scan_j.shape[axis_j] for all i,j.\n    sequence_length = scan_1.shape[axis_1];\n\n    // initialize state-variables\n    st_1 = init_1; ... st_n = init_n;\n    // initialize scan-output variables: [] denotes an empty tensor\n    scan_out_1 = []; ...; scan_out_k = [];\n    // identify number of iterations:\n\n    // execute loop\n    for (int t = 0; t < sequence_length; ++t) {\n        // generate the scan-input elements: the notation T<axis=k>[t] indicates the sub-tensor\n        // of rank one less than T obtained by indexing T at position t along axis k.\n        si_1 = scan_1<axis=axis_1>[t];\n        ... ;\n        si_m = scan_m<axis=axis_m>[t];\n        // execute loop-body\n        st_1, ..., st_n, so_1, ..., so_k = loop-body(st_1, ..., st_n, si_1, ..., si_m)\n        // accumulate the scan-output elements\n        scan_out_1 = Concat<axis=0>(scan_out_1, so_1); ... ; scan_out_k = Concat<axis=0>(scan_out_k, so_k);\n    }\n\n    return st_1, ..., st_n, scan_out_1, ..., scan_out_k;\n\n*Sample usage: Encoding RNN using a Scan*\n\nThe following example shows how a simple RNN over an input tensor %X, with weight tensor %Wi,\nrecurrence weight tensor %Ri, bias tensors %Wbi and %Rbi, and initial hidden-state %H_0 can\nbe encoded as a ScanLoop. Note that the loop-body is a nested graph, and it directly computes\n%Wi, %Ri, %Wbi, and %Rbi (typically constants or initializers in the body graph). If these\nvalues are computed in the outer graph, they need to be passed in as extra state_variables.\n\n    graph rnn-encoding {\n      %H_0 = ...\n      %X = ...\n      %Y_h, %Y = Scan[body = <graph rnn-cell-1>, num_scan_inputs=1](%H_0, %X)\n      return %Y, %Y_h\n    }\n\n    graph rnn-cell-1 (\n      %H_tminus1[FLOAT, tensor]\n      %X_t[FLOAT, tensor]\n    ) {\n      %Wi = ...\n      %Ri = ...\n      %Wbi = ...\n      %Rbi = ...\n      %t1 = X_t * (Wi^T)\n      %t2 = H_tminus1*(Ri^T)\n      %t3 = Add(%t1, %t2)\n      %t4 = Add(%t3, %Wbi)\n      %t5 = Add(%t4, %Rbi)\n      %Ht = Tanh(%t5)\n      %Accumulate = Identity(%Ht)\n      return %Ht, %Accumulate\n    }\n\n",
-        "arguments": [
-            "initial_state_and_scan_inputs"
-        ],
-        "expression_string": "onnx_ops.scan(initial_state_and_scan_inputs, body, num_scan_inputs, scan_input_axes, scan_input_directions, scan_output_axes, scan_output_directions)"
-    },
     "onnx::Scatter": {
         "description": "\nThis operator is deprecated. Please use ScatterElements, which provides the same functionality.\n\nScatter takes three inputs `data`, `updates`, and `indices` of the same\nrank r >= 1 and an optional attribute axis that identifies an axis of `data`\n(by default, the outer-most axis, that is axis 0). The output of the operation\nis produced by creating a copy of the input `data`, and then updating its value\nto values specified by `updates` at specific index positions specified by\n`indices`. Its output shape is the same as the shape of `data`.\n\nFor each entry in `updates`, the target index in `data` is obtained by combining\nthe corresponding entry in `indices` with the index of the entry itself: the\nindex-value for dimension = axis is obtained from the value of the corresponding\nentry in `indices` and the index-value for dimension != axis is obtained from the\nindex of the entry itself.\n\nFor instance, in a 2-D tensor case, the update corresponding to the [i][j] entry\nis performed as below:\n```\n  output[indices[i][j]][j] = updates[i][j] if axis = 0,\n  output[i][indices[i][j]] = updates[i][j] if axis = 1,\n```\n\nThis operator is the inverse of GatherElements. It is similar to Torch's Scatter operation.\n\nExample 1:\n```\n  data = [\n      [0.0, 0.0, 0.0],\n      [0.0, 0.0, 0.0],\n      [0.0, 0.0, 0.0],\n  ]\n  indices = [\n      [1, 0, 2],\n      [0, 2, 1],\n  ]\n  updates = [\n      [1.0, 1.1, 1.2],\n      [2.0, 2.1, 2.2],\n  ]\n  output = [\n      [2.0, 1.1, 0.0]\n      [1.0, 0.0, 2.2]\n      [0.0, 2.1, 1.2]\n  ]\n```\nExample 2:\n```\n  data = [[1.0, 2.0, 3.0, 4.0, 5.0]]\n  indices = [[1, 3]]\n  updates = [[1.1, 2.1]]\n  axis = 1\n  output = [[1.0, 1.1, 3.0, 2.1, 5.0]]\n```\n",
         "arguments": [
@@ -1086,7 +1089,7 @@
         "expression_string": "onnx_ops.scatterelements(data, indices, updates, axis)"
     },
     "onnx::ScatterND": {
-        "description": "\nScatterND takes three inputs `data` tensor of rank r >= 1, `indices` tensor of rank q >= 1,\nand `updates` tensor of rank q + r - indices.shape[-1] - 1. The output of the operation\nis produced by creating a copy of the input `data`, and then updating its value to values\nspecified by `updates` at specific index positions specified by `indices`. Its output shape\nis the same as the shape of `data`. Note that `indices` should not have duplicate entries.\nThat is, two or more `updates` for the same index-location is not supported.\n\n`indices` is an integer tensor. Let k denote indices.shape[-1], the last dimension in the shape of `indices`.\n `indices` is treated as a (q-1)-dimensional tensor of k-tuples, where each k-tuple is a partial-index into `data`.\nHence, k can be a value at most the rank of `data`. When k equals rank(data), each update entry specifies an\nupdate to a single element of the tensor. When k is less than rank(data) each update entry specifies an\nupdate to a slice of the tensor.\n\n`updates` is treated as a (q-1)-dimensional tensor of replacement-slice-values. Thus, the\nfirst (q-1) dimensions of updates.shape must match the first (q-1) dimensions of indices.shape.\nThe remaining dimensions of `updates` correspond to the dimensions of the\nreplacement-slice-values. Each replacement-slice-value is a (r-k) dimensional tensor,\ncorresponding to the trailing (r-k) dimensions of `data`.  Thus, the shape of `updates`\nmust equal indices.shape[0:q-1] ++ data.shape[k:r-1], where ++ denotes the concatenation\nof shapes.\n\nThe `output` is calculated via the following equation:\n\n    output = np.copy(data)\n    update_indices = indices.shape[:-1]\n    for idx in np.ndindex(update_indices):\n        output[indices[idx]] = updates[idx]\n\nThe order of iteration in the above loop is not specified.\nIn particular, indices should not have duplicate entries: that is, if idx1 != idx2, then indices[idx1] != indices[idx2].\nThis ensures that the output value does not depend on the iteration order.\n\nThis operator is the inverse of GatherND.\n\nExample 1:\n```\n  data    = [1, 2, 3, 4, 5, 6, 7, 8]\n  indices = [[4], [3], [1], [7]]\n  updates = [9, 10, 11, 12]\n  output  = [1, 11, 3, 10, 9, 6, 7, 12]\n```\n\nExample 2:\n```\n  data    = [[[1, 2, 3, 4], [5, 6, 7, 8], [8, 7, 6, 5], [4, 3, 2, 1]],\n             [[1, 2, 3, 4], [5, 6, 7, 8], [8, 7, 6, 5], [4, 3, 2, 1]],\n             [[8, 7, 6, 5], [4, 3, 2, 1], [1, 2, 3, 4], [5, 6, 7, 8]],\n             [[8, 7, 6, 5], [4, 3, 2, 1], [1, 2, 3, 4], [5, 6, 7, 8]]]\n  indices = [[0], [2]]\n  updates = [[[5, 5, 5, 5], [6, 6, 6, 6], [7, 7, 7, 7], [8, 8, 8, 8]],\n             [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3], [4, 4, 4, 4]]]\n  output  = [[[5, 5, 5, 5], [6, 6, 6, 6], [7, 7, 7, 7], [8, 8, 8, 8]],\n             [[1, 2, 3, 4], [5, 6, 7, 8], [8, 7, 6, 5], [4, 3, 2, 1]],\n             [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3], [4, 4, 4, 4]],\n             [[8, 7, 6, 5], [4, 3, 2, 1], [1, 2, 3, 4], [5, 6, 7, 8]]]\n```\n",
+        "description": "\nScatterND takes three inputs `data` tensor of rank r >= 1, `indices` tensor of rank q >= 1,\nand `updates` tensor of rank q + r - indices.shape[-1] - 1. The output of the operation\nis produced by creating a copy of the input `data`, and then updating its value to values\nspecified by `updates` at specific index positions specified by `indices`. Its output shape\nis the same as the shape of `data`. Note that `indices` should not have duplicate entries.\nThat is, two or more `updates` for the same index-location is not supported.\n\n`indices` is an integer tensor. Let k denote indices.shape[-1], the last dimension in the shape of `indices`.\n `indices` is treated as a (q-1)-dimensional tensor of k-tuples, where each k-tuple is a partial-index into `data`.\nHence, k can be a value at most the rank of `data`. When k equals rank(data), each update entry specifies an\nupdate to a single element of the tensor. When k is less than rank(data) each update entry specifies an\nupdate to a slice of the tensor. Index values are allowed to be negative, as per the usual\nconvention for counting backwards from the end, but are expected in the valid range.\n\n`updates` is treated as a (q-1)-dimensional tensor of replacement-slice-values. Thus, the\nfirst (q-1) dimensions of updates.shape must match the first (q-1) dimensions of indices.shape.\nThe remaining dimensions of `updates` correspond to the dimensions of the\nreplacement-slice-values. Each replacement-slice-value is a (r-k) dimensional tensor,\ncorresponding to the trailing (r-k) dimensions of `data`.  Thus, the shape of `updates`\nmust equal indices.shape[0:q-1] ++ data.shape[k:r-1], where ++ denotes the concatenation\nof shapes.\n\nThe `output` is calculated via the following equation:\n\n    output = np.copy(data)\n    update_indices = indices.shape[:-1]\n    for idx in np.ndindex(update_indices):\n        output[indices[idx]] = updates[idx]\n\nThe order of iteration in the above loop is not specified.\nIn particular, indices should not have duplicate entries: that is, if idx1 != idx2, then indices[idx1] != indices[idx2].\nThis ensures that the output value does not depend on the iteration order.\n\nThis operator is the inverse of GatherND.\n\nExample 1:\n```\n  data    = [1, 2, 3, 4, 5, 6, 7, 8]\n  indices = [[4], [3], [1], [7]]\n  updates = [9, 10, 11, 12]\n  output  = [1, 11, 3, 10, 9, 6, 7, 12]\n```\n\nExample 2:\n```\n  data    = [[[1, 2, 3, 4], [5, 6, 7, 8], [8, 7, 6, 5], [4, 3, 2, 1]],\n             [[1, 2, 3, 4], [5, 6, 7, 8], [8, 7, 6, 5], [4, 3, 2, 1]],\n             [[8, 7, 6, 5], [4, 3, 2, 1], [1, 2, 3, 4], [5, 6, 7, 8]],\n             [[8, 7, 6, 5], [4, 3, 2, 1], [1, 2, 3, 4], [5, 6, 7, 8]]]\n  indices = [[0], [2]]\n  updates = [[[5, 5, 5, 5], [6, 6, 6, 6], [7, 7, 7, 7], [8, 8, 8, 8]],\n             [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3], [4, 4, 4, 4]]]\n  output  = [[[5, 5, 5, 5], [6, 6, 6, 6], [7, 7, 7, 7], [8, 8, 8, 8]],\n             [[1, 2, 3, 4], [5, 6, 7, 8], [8, 7, 6, 5], [4, 3, 2, 1]],\n             [[1, 1, 1, 1], [2, 2, 2, 2], [3, 3, 3, 3], [4, 4, 4, 4]],\n             [[8, 7, 6, 5], [4, 3, 2, 1], [1, 2, 3, 4], [5, 6, 7, 8]]]\n```\n",
         "arguments": [
             "data",
             "indices",
@@ -1146,7 +1149,7 @@
         "expression_string": "onnx_ops.sequencelength(input_sequence)"
     },
     "onnx::Shape": {
-        "description": "\nTakes a tensor as input and outputs an 1D int64 tensor containing the shape of the input tensor.\nOptional attributes start and end can be used to compute a slice of the input tensor's shape.\nIf start axis is omitted, the slice starts from axis 0.\nThe end axis, if specified, is exclusive (and the returned value will not include the size of that axis).\nIf the end axis is omitted, the axes upto the last one will be included.\nNegative axes indicate counting back from the last axis.\nNote that axes will be clamped to the range [0, r-1], where r is the\nrank of the input tensor if they are out-of-range (after adding r in the case of\nnegative axis). Thus, specifying any end value > r is equivalent to specifying an end\nvalue of r, and specifying any start value < -r is equivalent to specifying a start\nvalue of 0.\n\nFor example:\nInput tensor with shape: [2, 3, 4] \nNo attributes specified.\nOutput: [2, 3, 4] \n\nInput tensor with shape: [2, 3, 4] \nstart: -1\nOutput: [4] \n\nInput tensor with shape: [2, 3, 4] \nend: -1\nOutput: [2, 3]\n\nInput tensor with shape: [2, 3, 4] \nstart: 1\nend: 2\nOutput: [3] \n",
+        "description": "\nTakes a tensor as input and outputs an 1D int64 tensor containing the shape of the input tensor.\nOptional attributes start and end can be used to compute a slice of the input tensor's shape.\nIf start axis is omitted, the slice starts from axis 0.\nThe end axis, if specified, is exclusive (and the returned value will not include the size of that axis).\nIf the end axis is omitted, the axes upto the last one will be included.\nNegative axes indicate counting back from the last axis.\nNote that axes will be clamped to the range [0, r-1], where r is the\nrank of the input tensor if they are out-of-range (after adding r in the case of\nnegative axis). Thus, specifying any end value > r is equivalent to specifying an end\nvalue of r, and specifying any start value < -r is equivalent to specifying a start\nvalue of 0.\n\nFor example:\nInput tensor with shape: [2, 3, 4]\nNo attributes specified.\nOutput: [2, 3, 4]\n\nInput tensor with shape: [2, 3, 4]\nstart: -1\nOutput: [4]\n\nInput tensor with shape: [2, 3, 4]\nend: -1\nOutput: [2, 3]\n\nInput tensor with shape: [2, 3, 4]\nstart: 1\nend: 2\nOutput: [3]\n",
         "arguments": [
             "data"
         ],
@@ -1395,22 +1398,29 @@
         "expression_string": "onnx_ops.xor(A, B)"
     },
     "pattern_matching_function": {
-        "description": "ACT-R pattern matching function",
+        "description": "Returns the productions that match the given goal and retrieval buffers.",
         "arguments": [
             "productions",
             "goal",
             "retrieval"
         ],
-        "expression_string": "actr.pattern_matching_function(productions, goal, retrieval)"
+        "expression_string": "pattern_matching_function(productions,goal,retrieval)"
+    },
+    "pattern_to_string": {
+        "description": "Converts a pattern dictionary to a string format.",
+        "arguments": [
+            "chunk"
+        ],
+        "expression_string": "pattern_to_string(chunk)"
     },
     "retrieve_chunk": {
-        "description": "ACT-R retrieve chunk function",
+        "description": "Retrieve a chunk from declarative memory given a pattern.",
         "arguments": [
             "pattern",
             "dm_chunks",
             "types"
         ],
-        "expression_string": "actr.retrieve_chunk(pattern, dm_chunks, types)"
+        "expression_string": "retrieve_chunk(pattern,dm_chunks,types)"
     },
     "sin": {
         "description": "Sine function",
@@ -1444,18 +1454,26 @@
         ],
         "expression_string": "scale * tanh(variable0)"
     },
+    "update_buffer": {
+        "description": "Returns a pattern to update the given buffer with.",
+        "arguments": [
+            "production",
+            "buffer"
+        ],
+        "expression_string": "update_buffer(production,buffer)"
+    },
     "update_goal": {
-        "description": "ACT-R update goal buffer function",
+        "description": "Returns a pattern to update the goal buffer with.",
         "arguments": [
             "production"
         ],
-        "expression_string": "actr.update_goal(production)"
+        "expression_string": "update_goal(production)"
     },
     "update_retrieval": {
-        "description": "ACT-R update retrieval buffer function",
+        "description": "Returns a pattern to update the retrieval buffer with.",
         "arguments": [
             "production"
         ],
-        "expression_string": "actr.update_retrieval(production)"
+        "expression_string": "update_retrieval(production)"
     }
 }

@@ -223,11 +223,16 @@ def get_onnx_ops(opset_version: int = onnx_opset_version) -> List[Dict]:
             add_mdf_function.
     """
 
+    ops_blacklist = ["Loop", "Scan", "If"]
+
     mdf_funcspecs = []
     for schema in get_all_schemas_version(opset_version):
         args_list = [input.name for input in schema.inputs]
         params_list = [p for p in schema.attributes]
         args_params_str = ", ".join(args_list + params_list)
+
+        if schema.name in ops_blacklist:
+            continue
 
         mdf_funcspecs.append(
             dict(

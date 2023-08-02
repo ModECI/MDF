@@ -55,12 +55,6 @@ with open("README.md", "w") as d:
     d.write(doc_md_1)
     d.write(doc_md_2)
 
-"""
-with open("sphinx/source/api/Specification.md", "w") as d:
-    d.write("# Specification of ModECI v%s\n" % MODECI_MDF_VERSION)
-    d.write("%s\n" % comment)
-    d.write(doc)"""
-
 
 doc = mod.generate_documentation(format="rst")
 doc_rst_1 = condition.generate_documentation(format="rst")
@@ -141,31 +135,51 @@ with open("MDF_function_specifications.md", "w") as d:
     d.write("%s\n" % comment)
 
     d.write(
-        "These functions are defined in https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions\n"
+        "These functions are defined in Python API module "
+        '<a href="https://github.com/ModECI/MDF/tree/main/src/modeci_mdf/functions">modeci_mdf.functions</a>.\n'
     )
 
-    d.write("## All of MDF functions:\n | ")
     all_f = sorted(mdf_functions.keys())
-    for f in all_f:
-        c = ":"
-        n = ""
-        d.write(f'<a href="#{f.lower().replace(c,n)}">{f}</a> | ')
+    onnx_f = [f for f in all_f if f.startswith("onnx::")]
+    non_onnx_f = [f for f in all_f if not f.startswith("onnx::")]
+
+    d.write("## Non-ONNX Functions\n\n")
+    for f in non_onnx_f:
+        d.write(f'- <a href="#{f.lower().replace("_", "")}">{f}</a>\n')
+
+    d.write("\n## ONNX Functions\n\n")
+    for f in onnx_f:
+        f = f.replace("onnx::", "")
+        d.write(f'- <a href="#{f.lower().replace("_", "")}">{f}</a>\n')
 
     for f in sorted(mdf_functions.keys()):
-
-        d.write("\n## %s\n " % f)
+        f_str = f.replace("onnx::", "")
+        d.write(f"<a name=\"{f_str.lower().replace('_', '')}\"></a>\n\n")
+        d.write("## %s\n " % f_str)
         func = mdf_functions[f]
+
         d.write("<p><i>%s</i></p> \n" % (func["description"]))
         # d.write('<p>Arguments: %s</p> \n'%(func['arguments']))
 
+        if "onnx::" not in f:
+            d.write(
+                "<p><b>%s(%s)</b> = %s</p> \n"
+                % (
+                    f,
+                    ", ".join([a for a in func["arguments"]]),
+                    func["expression_string"],
+                )
+            )
+
         d.write(
-            "<p><b>%s(%s)</b> = %s</p> \n"
-            % (f, ", ".join([a for a in func["arguments"]]), func["expression_string"])
-        )
-        d.write(
-            "<p>Python version: %s</p> \n"
+            "\nPython version: `%s`\n\n"
             % (create_python_expression(func["expression_string"]))
         )
+
+        if "onnx::" in f:
+            # Link to ONNX API Documentation
+            onnx_link = f"https://onnx.ai/onnx/operators/onnx__{f_str}.html"
+            d.write(f"<a href={onnx_link}><i>ONNX Documentation</i></a>\n")
 
 shutil.copy(
     "MDF_function_specifications.md", "sphinx/source/api/MDF_function_specifications.md"

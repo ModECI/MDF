@@ -1,6 +1,6 @@
 RNNs:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.5
+    generating_application: Python modeci-mdf v0.4.7
     graphs:
         rnn_example:
             nodes:
@@ -27,8 +27,12 @@ RNNs:
                             value: t
                 rnn_node:
                     input_ports:
-                        ext_input: {}
-                        fb_input: {}
+                        ext_input:
+                            shape:
+                            - 5
+                        fb_input:
+                            shape:
+                            - 5
                     parameters:
                         M:
                             value:
@@ -84,7 +88,9 @@ RNNs:
                             value: r
                 readout_node:
                     input_ports:
-                        input: {}
+                        input:
+                            shape:
+                            - 5
                     parameters:
                         wr:
                             value:

@@ -13,6 +13,17 @@ import onnx.defs
 
 import torch
 
+# We need to monkey patch the torch._C.Node class to add a __getitem__ method
+# This is for torch 2.0
+# From https://github.com/openai/CLIP/issues/79#issuecomment-1624202950
+def _node_get(node: torch._C.Node, key: str):
+    """Gets attributes of a node which is polymorphic over return type."""
+    sel = node.kindOf(key)
+    return getattr(node, sel)(key)
+
+torch._C.Node.__getitem__ = _node_get
+
+
 from modeci_mdf.mdf import Model, Graph, Node, Edge, InputPort, OutputPort, Parameter
 from modeci_mdf.functions.onnx import onnx_opset_version as modeci_onnx_opset_version
 
@@ -504,7 +515,7 @@ def pytorch_to_mdf(
             graph = None
 
     if use_onnx_ops:
-        operator_export_type = torch._C._onnx.OperatorExportTypes.ONNX_ATEN_FALLBACK
+        operator_export_type = torch._C._onnx.OperatorExportTypes.ONNX
     else:
         operator_export_type = torch._C._onnx.OperatorExportTypes.RAW
 
