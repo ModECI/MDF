@@ -38,11 +38,7 @@ def init_model_with_graph(model_id, graph_id):
     return mod, mod_graph
 
 
-def create_input_node(node_id, value):  # , reshape=False):
-    # if reshape == True:
-    #     value = np.array(value).flatten()
-    # else:
-    #     value = np.array(value)
+def create_input_node(node_id, value):
     input_node = Node(id=node_id)
     input_node.parameters.append(Parameter(id=f"{node_id}_in", value=value))
     input_node.output_ports.append(
@@ -158,26 +154,34 @@ def keras_to_mdf(
     # create other nodes needed for mdf graph using the type of layers from the keras model
     # get layers in the keras model
     layers = []
+    layers_types = []
     for layer in model.layers:
         layers.append(layer.name)
+        layers_types.append(type(layer))
 
     # get the parameters and activation in each dense layer
     params, activations = get_weights_and_activation(layers, model)
 
     node_count = 1
-    for layer in layers:
-        if layer == "flatten":
-            # input_node = create_input_node(f"{layer.capitalize()}_{node_count}", args, reshape=True)
+    for layer, layer_type in zip(layers, layers_types):
+        if layer_type == Flatten:
             flatten_node = create_flatten_node(f"{layer.capitalize()}_{node_count}")
             mdf_model_graph.nodes.append(flatten_node)
             node_count += 1
 
-        elif "dense" in layer:
+        elif layer_type == Dense:
             weights = params[f"{layer}"]["weights"]
             bias = params[f"{layer}"]["bias"]
-            dense_node = create_dense_node(
-                f"{layer[:5].capitalize()}_{node_count}", weights, bias
-            )
+
+            # layer might have been renamed from the default name containing "dense"
+            if "dense" in layer:
+                dense_node = create_dense_node(
+                    f"{layer[:5].capitalize()}_{node_count}", weights, bias
+                )
+            else:
+                dense_node = create_dense_node(
+                    f"{layer.capitalize()}_{node_count}", weights, bias
+                )
             mdf_model_graph.nodes.append(dense_node)
             node_count += 1
 
