@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import os
 import torch.nn as nn
 
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
@@ -309,8 +310,11 @@ def main():
             view_on_render=False,
             level=1,
             filename_root="inception",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
             is_horizontal=True,
+            solid_color=True,
         )
 
 

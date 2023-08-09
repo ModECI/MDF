@@ -5,6 +5,7 @@
 from modeci_mdf.mdf import *
 import sys
 import numpy as np
+import os
 
 
 def main():
@@ -26,7 +27,7 @@ def main():
         Parameter(id="intercept", value=np.array([[0, 1.0], [2, 2]]))
     )
 
-    ip1 = InputPort(id="input_port1")
+    ip1 = InputPort(id="input_port1", shape="(2,2)")
     middle_node.input_ports.append(ip1)
     mod_graph.nodes.append(middle_node)
 
@@ -71,7 +72,9 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="arrays",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

@@ -193,13 +193,13 @@ class Parameter(MdfBase):
             self.value,
             self.is_stateful(),
         )
-        if self.default_initial_value:
+        if self.default_initial_value is not None:
             info += f", def init: {self.default_initial_value}"
 
-        if self.time_derivative:
+        if self.time_derivative is not None:
             info += f", time deriv: {self.time_derivative}"
 
-        if self.conditions:
+        if self.conditions is not None:
             for c in self.conditions:
                 info += f", {c}"
 
@@ -536,6 +536,7 @@ class Model(MdfBase):
         filename_root: Optional[str] = None,
         only_warn_on_fail: bool = False,
         is_horizontal: bool = False,
+        solid_color=False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
 
@@ -546,6 +547,7 @@ class Model(MdfBase):
             level: 1,2,3, depending on how much detail to include
             filename_root: will change name of file generated to filename_root.png, etc.
             only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing errors in automated tests
+            solid_color: if True, will return a solid color for the graphviz node.  default is False
         """
         from modeci_mdf.interfaces.graphviz.exporter import mdf_to_graphviz
 
@@ -558,6 +560,7 @@ class Model(MdfBase):
                 level=level,
                 filename_root=filename_root,
                 is_horizontal=is_horizontal,
+                solid_color=solid_color,
             )
 
         except Exception as e:

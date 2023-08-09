@@ -29,7 +29,7 @@ import graph_scheduler
 import onnxruntime
 
 from modeci_mdf.functions.standard import mdf_functions, create_python_expression
-from modeci_mdf.utils import is_number
+
 
 from modelspec.utils import evaluate as evaluate_params_modelspec
 from modelspec.utils import _params_info, _val_info
@@ -50,6 +50,7 @@ from modeci_mdf.mdf import (
 
 import modeci_mdf.functions.onnx as onnx_ops
 import modeci_mdf.functions.actr as actr_funcs
+import modeci_mdf.functions.ddm as ddm_funcs
 
 
 FORMAT_DEFAULT = FORMAT_NUMPY
@@ -365,6 +366,11 @@ class EvaluableFunction:
         elif "actr." in expr:
             actr_function = getattr(actr_funcs, expr.split("(")[0].split(".")[-1])
             self.curr_value = actr_function(
+                *[func_params[arg] for arg in self.function.args]
+            )
+        elif "ddm." in expr:
+            actr_function = getattr(ddm_funcs, expr.split("(")[0].split(".")[-1])
+            self.curr_value = ddm_function(
                 *[func_params[arg] for arg in self.function.args]
             )
         else:
@@ -1283,12 +1289,12 @@ class EvaluableGraph:
         # if specified as dict
         try:
             args = condition["kwargs"]
-        except (TypeError, KeyError):
+        except (IndexError, TypeError, KeyError):
             args = {}
 
         try:
             condition = Condition(condition["type"], **args)
-        except (TypeError, KeyError):
+        except (IndexError, TypeError, KeyError):
             pass
 
         cond_type = condition.type

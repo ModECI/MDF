@@ -4,6 +4,7 @@ import numpy as np
 import sys
 import h5py
 import time
+import os
 
 # Note: the weights for this model were precomputed and saved in the file weights.h5
 def get_weight_info():
@@ -202,7 +203,9 @@ def main():
             view_on_render=False,
             level=2,
             filename_root="mlp_pure_mdf",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
     if test_all:

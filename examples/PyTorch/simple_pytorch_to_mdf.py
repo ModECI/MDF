@@ -7,6 +7,7 @@ import onnxruntime as rt
 from torchviz import make_dot
 import netron
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
+import os
 
 
 class SimpleNet(nn.Module):
@@ -101,8 +102,11 @@ def main():
             view_on_render=False,
             level=1,
             filename_root="simple_pytorch_to_mdf.1",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
             is_horizontal=True,
+            solid_color=True,
         )
         mdf_model.to_graph_image(
             engine="dot",
@@ -110,7 +114,10 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="simple_pytorch_to_mdf",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            solid_color=False,
         )
     # export to PyTorch graph
     if "-graph-torch" in sys.argv:

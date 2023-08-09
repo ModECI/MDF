@@ -1,0 +1,33 @@
+keras_to_MDF:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.4
+    graphs:
+        Keras_to_MDF_graph:
+            nodes:
+                input_node:
+                    parameters:
+                        input_node_in:
+                            value:
+                            - 1.0
+                    output_ports:
+                        input_node_out:
+                            value: input_node_in
+                dense_node:
+                    input_ports:
+                        dense_node_in: {}
+                    parameters:
+                        wgts:
+                            value: weights
+                        bias:
+                            value: bias
+                        Output:
+                            value: (dense_node_in @ wgts) + bias
+                    output_ports:
+                        dense_node_out:
+                            value: Output
+                activation_node:
+                    input_ports:
+                        activation_node_in: {}
+                    output_ports:
+                        activation_node_out:
+                            value: Output

@@ -348,6 +348,88 @@ def convert_file(input_file: str):
     mdf_model.to_yaml_file(f"{out_filename}.yaml")
 
 
+# The data used for getting the name and categories of graphs are gotten here https://raw.githubusercontent.com/lutzroeder/netron/main/source/onnx-metadata.json'
+
+# the data used for getting the color of categories of graphs are gotten here 'https://github.com/lutzroeder/netron/blob/b7a0be975f852c2c2fbce4a6fce69a37819b3601/source/grapher.css#L27'
+
+
+new_dict = {
+    "AveragePool": "Pool",
+    "BatchNormalization": "Normalization",
+    "Clip": "Activation",
+    "Concat": "Tensor",
+    "Constant": "Constant",
+    "Conv": "Layer",
+    "ConvInteger": "Layer",
+    "ConvTranspose": "Layer",
+    "Dropout": "Dropout",
+    "Elu": "Activation",
+    "Flatten": "Shape",
+    "GRU": "Layer",
+    "Gather": "Transform",
+    "Gemm": "Layer",
+    "GlobalAveragePool": "Pool",
+    "GlobalLpPool": "Pool",
+    "GlobalMaxPool": "Pool",
+    "HardSigmoid": "Activation",
+    "InstanceNormalization": "Normalization",
+    "LRN": "Normalization",
+    "LSTM": "Layer",
+    "LeakyRelu": "Activation",
+    "LogSoftmax": "Activation",
+    "LpNormalization": "Normalization",
+    "LpPool": "Pool",
+    "MaxPool": "Pool",
+    "MaxRoiPool": "Pool",
+    "PRelu": "Activation",
+    "Pad": "Tensor",
+    "RNN": "Layer",
+    "Relu": "Activation",
+    "Reshape": "Shape",
+    "Selu": "Activation",
+    "Sigmoid": "Activation",
+    "Slice": "Tensor",
+    "Softmax": "Activation",
+    "Softplus": "Activation",
+    "Softsign": "Activation",
+    "Split": "Tensor",
+    "Squeeze": "Transform",
+    "Tanh": "Activation",
+    "ThresholdedRelu": "Activation",
+    "Tile": "Shape",
+    "Transpose": "Transform",
+    "Unsqueeze": "Transform",
+    "Upsample": "Data",
+    "FusedConv": "Layer",
+}
+
+color_dict = {
+    "Activation": ".4 .2 .1",
+    "Layer": ".2 .3 .5",
+    "Pool": ".2 .3 .2",
+    "Normalization": ".2 .3 .3",
+    "Tensor": ".3 .3 .2",
+    "Transform": ".2 .3 .3",
+    "Shape": ".4 .3 .3",
+    "Dropout": ".3 .3 .4",
+    "Data": ".3 .3 .3",
+}
+
+
+def get_category_of_onnx_node(entry):
+    for key, value in new_dict.items():
+        if key in entry:
+            return value
+
+
+def get_color_for_onnx_category(shape):
+    a = {}
+    for key, val in color_dict.items():
+        if shape == key:
+            a["color"] = val
+            return a
+
+
 def main():
 
     import argparse

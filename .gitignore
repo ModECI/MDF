@@ -1,8 +1,7 @@
-# No BSON in the repo
-*.bson
 /examples/MDF/conditions/everyncalls
 /examples/MDF/conditions/threshold
 /examples/MDF/conditions/timeinterval
+/examples/MDF/conditions/composite_condition_example
 /abc_conditions
 examples/ONNX/data
 examples/ONNX/*.onnx
@@ -275,3 +274,7 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PyTorch/simple_pytorch_to_mdf.1
 /examples/MDF/NLP/TestNLP_3
 /examples/MDF/NLP/TestNLP
+/examples/MDF/conditions/composite_example
+/examples/NeuroML/arm64
+/examples/MDF/RNN/iaf.net
+/examples/MDF/RNN/iaf.net2
