@@ -24,6 +24,8 @@ def get_model_names(directory):
 if len(sys.argv) == 1:
     available_models = get_model_names(".")
     print("Please provide a model name")
+    print("Usage: python benchmark.py [model] count <integer>")
+    print("Example: python benchmark.py -convolution count 10")
     print("Available models:")
     for model in available_models:
         print(f"    {model}")
