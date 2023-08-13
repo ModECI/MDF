@@ -22,11 +22,11 @@ def main():
     ebv_output = torch.zeros((1,))
 
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
-    model = et_pytorch_model()
+    model = get_pytorch_model()
     model.eval()
 
     # Run the model once to get some ground truth outpot (from PyTorch)
-    output = shufflenet_v2(x).detach().numpy()
+    output = model(x).detach().numpy()
 
     # Convert to MDF
     mdf_model, params_dict = pytorch_to_mdf(
