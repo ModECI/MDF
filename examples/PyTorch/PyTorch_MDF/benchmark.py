@@ -66,7 +66,7 @@ if len(sys.argv) >= 1:
             sys.exit(1)
     except ImportError:
         print(
-            f"Could not import module '{model_name}'. Make sure the module exists and is properly defined."
+            f"Could not import  '{model_name}'. Make sure the model definition exists and is properly defined."
         )
         sys.exit(1)
 
