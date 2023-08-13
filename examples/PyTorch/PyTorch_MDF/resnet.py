@@ -32,7 +32,7 @@ def main():
 
     # Convert to MDF
     mdf_model, params_dict = pytorch_to_mdf(
-        model=resnet18,
+        model=model,
         args=(x),
         trace=True,
     )
