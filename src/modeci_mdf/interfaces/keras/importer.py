@@ -80,7 +80,7 @@ def create_dense_node(node_id, weights, bias, activation_name):
         node.parameters.append(Parameter(id="Output", value="linear"))
 
     else:
-        add_activation_node(node, activation_name, "linear")
+        add_activation(node, activation_name, "linear")
 
     node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
     return node
