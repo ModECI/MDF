@@ -26,7 +26,7 @@ def main():
     model.eval()
 
     # Run the model once to get some ground truth outpot (from PyTorch)
-    output = mobilenet_v2(x).detach().numpy()
+    output = model(x).detach().numpy()
 
     # Convert to MDF
     mdf_model, params_dict = pytorch_to_mdf(
