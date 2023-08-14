@@ -57,12 +57,11 @@ mdf_model.to_graph_image(
 eg = EvaluableGraph(graph=mdf_graph, verbose=False)
 eg.evaluate()
 output_mdf = eg.output_enodes[0].get_output()
-print(output_mdf)
-# print("Evaluated the graph in Keras, output: %s" % (_val_info(output_mdf)))
+print("Evaluated the graph in MDF, output: %s" % (_val_info(output_mdf)))
 
 # Assert that the results are the same for Keras and MDF
-# assert np.allclose(
-#     output,
-#     output_mdf,
-# )
-# print("Passed all comparison tests!")
+assert np.allclose(
+    output,
+    output_mdf,
+)
+print("Passed all comparison tests!")
