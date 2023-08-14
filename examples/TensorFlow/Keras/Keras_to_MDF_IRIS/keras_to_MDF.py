@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import tensorflow as tf
 
@@ -60,8 +62,12 @@ output_mdf = eg.output_enodes[0].get_output()
 print("Evaluated the graph in MDF, output: %s" % (_val_info(output_mdf)))
 
 # Assert that the results are the same for Keras and MDF
-assert np.allclose(
-    output,
-    output_mdf,
-)
-print("Passed all comparison tests!")
+try:
+    assert np.allclose(
+        output,
+        output_mdf,
+    )
+    print("Passed all comparison tests!")
+except AssertionError:
+    print("Failed all comparison tests")
+    sys.exit(1)
