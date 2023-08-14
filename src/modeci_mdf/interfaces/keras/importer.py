@@ -38,11 +38,7 @@ def init_model_with_graph(model_id, graph_id):
     return mod, mod_graph
 
 
-def create_input_node(node_id, value):  # , reshape=False):
-    # if reshape == True:
-    #     value = np.array(value).flatten()
-    # else:
-    #     value = np.array(value)
+def create_input_node(node_id, value):
     input_node = Node(id=node_id)
     input_node.parameters.append(Parameter(id=f"{node_id}_in", value=value))
     input_node.output_ports.append(
@@ -68,7 +64,7 @@ def create_flatten_node(node_id):
     return flatten_node
 
 
-def create_dense_node(node_id, weights, bias):
+def create_dense_node(node_id, weights, bias, activation_name):
     node = Node(id=node_id)
     node.input_ports.append(InputPort(id=f"{node_id}_in"))
     # Weights
@@ -77,22 +73,27 @@ def create_dense_node(node_id, weights, bias):
     node.parameters.append(Parameter(id="bias", value=bias))
     # Value Weights + bias
     node.parameters.append(
-        Parameter(id="Output", value=f"({node_id}_in @ wgts) + bias")
+        Parameter(id="linear", value=f"({node_id}_in @ wgts) + bias")
     )
+
+    if activation_name == "linear":
+        node.parameters.append(Parameter(id="Output", value="linear"))
+
+    else:
+        add_activation(node, activation_name, "linear")
 
     node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
     return node
 
 
-def create_activation_node(node_id, activation_name):
-    activation = Node(id=node_id)
-    activation.input_ports.append(InputPort(id=f"{node_id}_in"))
+def add_activation(node, activation_name, str_input):
+    """This function does not return anything. It is used to add an activation function implementation to a dense node"""
 
     # Functionality of relu
     if activation_name == "relu":
-        # Value of relu function
-        relu_ = f"({node_id}_in * ({node_id}_in > 0 ))"
-        activation.parameters.append(Parameter(id="Output", value=relu_))
+        # Value of relu expression
+        relu_ = str_input + "*" + "(" + str_input + ">" + "0" + ")"
+        node.parameters.append(Parameter(id="Output", value=relu_))
 
     # Functionality of sigmoid
     elif activation_name == "sigmoid":
@@ -100,18 +101,17 @@ def create_activation_node(node_id, activation_name):
         args = {"variable0": "pos_in", "scale": 1, "rate": 1, "bias": 0, "offset": 0}
 
         # this will make x => x
-        activation.parameters.append(Parameter(id="pos_in", value=f"{node_id}_in"))
+        node.parameters.append(Parameter(id="pos_in", value=str_input))
         # value of e^x
-        activation.functions.append(
-            Function(id="exp", function="exponential", args=args)
-        )
+        node.functions.append(Function(id="exp", function="exponential", args=args))
         # value of sigmoid
-        activation.functions.append(Function(id="Output", value="1 / (1 + exp)"))
+        node.functions.append(Function(id="Output", value="1 / (1 + exp)"))
 
     elif activation_name == "softmax":
         # args for exponential function
+        # linear_shift = str_input + "-" +"max" + "(" + str_input + ")"
         args = {
-            "variable0": f"{node_id}_in",
+            "variable0": str_input,
             "scale": 1,
             "rate": 1,
             "bias": 0,
@@ -119,16 +119,11 @@ def create_activation_node(node_id, activation_name):
         }
 
         # exponential of each value
-        activation.functions.append(
-            Function(id="exp", function="exponential", args=args)
-        )
+        node.functions.append(Function(id="exp", function="exponential", args=args))
         # sum of all exponentials
-        activation.functions.append(Function(id="exp_sum", value="sum(exp)"))
+        node.functions.append(Function(id="exp_sum", value="sum(exp)"))
         # normalizing results
-        activation.functions.append(Function(id="Output", value="exp / exp_sum"))
-
-    activation.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
-    return activation
+        node.functions.append(Function(id="Output", value="exp / exp_sum"))
 
 
 def keras_to_mdf(
@@ -152,42 +147,34 @@ def keras_to_mdf(
     )
 
     # create the input node
-    input_node = create_input_node("Input_0", args)
+    input_node = create_input_node("Input", args)
     mdf_model_graph.nodes.append(input_node)
 
     # create other nodes needed for mdf graph using the type of layers from the keras model
     # get layers in the keras model
     layers = []
+    layers_types = []
     for layer in model.layers:
         layers.append(layer.name)
+        layers_types.append(type(layer))
 
     # get the parameters and activation in each dense layer
     params, activations = get_weights_and_activation(layers, model)
 
-    node_count = 1
-    for layer in layers:
-        if layer == "flatten":
-            # input_node = create_input_node(f"{layer.capitalize()}_{node_count}", args, reshape=True)
-            flatten_node = create_flatten_node(f"{layer.capitalize()}_{node_count}")
+    for layer, layer_type in zip(layers, layers_types):
+        if layer_type == Flatten:
+            flatten_node = create_flatten_node(f"{layer.capitalize()}")
             mdf_model_graph.nodes.append(flatten_node)
-            node_count += 1
 
-        elif "dense" in layer:
+        elif layer_type == Dense:
             weights = params[f"{layer}"]["weights"]
             bias = params[f"{layer}"]["bias"]
+            activation_name = str(model.get_layer(layer).activation).split()[1]
+
             dense_node = create_dense_node(
-                f"{layer[:5].capitalize()}_{node_count}", weights, bias
+                f"{layer.capitalize()}", weights, bias, activation_name
             )
             mdf_model_graph.nodes.append(dense_node)
-            node_count += 1
-
-            activation = str(model.get_layer(layer).activation).split()[1]
-            if activation != "linear":
-                activation_node = create_activation_node(
-                    f"{activation.capitalize()}_{node_count}", activation
-                )
-                mdf_model_graph.nodes.append(activation_node)
-                node_count += 1
 
     for i in range(len(mdf_model_graph.nodes) - 1):
         e1 = simple_connect(
