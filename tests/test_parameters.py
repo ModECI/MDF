@@ -46,6 +46,10 @@ from modelspec.utils import _params_info
         ),
         ### Conditions
         (0, {"x": 3}, 1, "x<4", 1, None),
+        (0, {"x": 3}, 0, "x<1", 1, None),
+        (0, {"x": 3}, 1, "x==3", 1, None),
+        (0, {"x": 3}, 1, "x==3 and x<=5", 1, None),
+        (2, {"x": 3}, 3, "x<4", 3, None),
         (0.6, {"x": 3}, 0.6, "x>=4", 1.6, None),
         ("y+z", {"x": 3, "y": 2, "z": 3}, 3, "x>y", "z", None),
         (
@@ -54,6 +58,14 @@ from modelspec.utils import _params_info
             numpy.array([3, 2]),
             "x>y",
             [3, 3],
+            None,
+        ),
+        (
+            numpy.array([0, 0]),
+            {"x": numpy.array([1, 1]), "y": numpy.array([0, 0])},
+            numpy.array([1, 1]),
+            "y<x",
+            [1, 1],
             None,
         ),
         # ([0,0], {"x": 3}, 1, 'x<4', 1, None),
