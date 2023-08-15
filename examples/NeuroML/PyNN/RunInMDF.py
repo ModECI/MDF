@@ -58,6 +58,13 @@ def execute(mdf_filename):
         for n in mod_graph.nodes:
             for op in n.output_ports:
                 ov = eg.enodes[n.id].evaluable_outputs[op.id].curr_value
+                if type(ov) == int or type(ov) == float:
+                    ov = [ov]
+                if ov is None:
+                    raise Exception(
+                        "Error getting value of output port: %s on node: %s"
+                        % (op, n.id)
+                    )
                 for i in range(len(ov)):
                     if not i in outputs[n.id][op.id]:
                         outputs[n.id][op.id][i] = []
@@ -74,8 +81,16 @@ def execute(mdf_filename):
             vals = outputs[n.id][op.id]
             plt.figure()
             for i in vals:
-                plt.plot(times, vals[i], label="%s_%s_%i" % (n.id, op.id, i))
-                plt.legend()
+                label = "%s_%s_%i" % (n.id, op.id, i)
+                print(
+                    " - Plotting %s, points in times: %i, val: %s"
+                    % (label, len(times), len(vals[i]))
+                )
+                try:
+                    plt.plot(times, vals[i], label=label)
+                    plt.legend()
+                except Exception as e:
+                    print(e)
 
     # plt.savefig("Izh_run.png", bbox_inches="tight")
 
