@@ -1,42 +1,61 @@
-import numpy
 import time
 import torch
 import sys
-import warnings
-import re
 from PIL import Image, ImageDraw, ImageFont
 import os
-
+import json
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 from modeci_mdf.execution_engine import EvaluableGraph
 
 
+# This crawls over the directory and identifies available and viable models
+# to be used in the benchmarking app.
+# Example: Run "python benchmark.py" in your terminal to see available models.
+# ***Note*** remove the Run keyword and quotation marks from the above before
+# running the example above.
 def get_model_names(directory):
     excluded_files = ["benchmark.py"]
-    model_names = [
-        os.path.splitext(file)[0]
-        for file in os.listdir(directory)
-        if file.endswith(".py") and file not in excluded_files
-    ]
+    model_names = []
+
+    for file in os.listdir(directory):
+        if file.endswith(".py") and file not in excluded_files:
+            module_name = os.path.splitext(file)[0]
+            module = __import__(module_name)
+            get_example_input = getattr(module, "get_example_input", None)
+            get_pytorch_model = getattr(module, "get_pytorch_model", None)
+
+            if get_example_input and get_pytorch_model:
+                model_names.append(module_name)
+
     return model_names
 
 
-if len(sys.argv) == 1:
+# This triggers the benchmark app, displaying all the available and viable models
+# in the directory. Use the example above to get a birds eye view of all the available
+# models and further useage examples.
+if len(sys.argv) == 1 and "--all" not in sys.argv:
     available_models = get_model_names(".")
     print("Please provide a model name")
     print("Usage: python benchmark.py [model] count <integer>")
-    print("Example: python benchmark.py -convolution count 10")
+    print("Example: python benchmark.py convolution count 10")
     print("Available models:")
     for model in available_models:
         print(f"    {model}")
     sys.exit(1)
 
-if len(sys.argv) >= 1:
+
+# This block handles the instanciation of the type of model you are intersetd in,
+# it loads in necessary resources such as the model definition, a suitable dataset
+# and also instanciates all of them, preparing them for useage.
+# This block also handles looking into the model script, checking if necessary resources
+# and definitions are available. If reverse is the case, it displays a message displaying
+# how to modify the files and get these resourse available globally.
+if len(sys.argv) >= 1 and "--all" not in sys.argv:
     model_name = sys.argv[1]
     if model_name not in get_model_names("."):
         print("Your seem to be forgetting to include your model type")
         print("Usage: python benchmark.py [model] count <integer>")
-        print("Example: python benchmark.py -convolution count 10")
+        print("Example: python benchmark.py convolution count 10")
         print(
             "***Note***: The larger the count the greater the run time, keep count within 10 - 50 range"
         )
@@ -72,17 +91,21 @@ if len(sys.argv) >= 1:
         )
         sys.exit(1)
 
-if "count" not in sys.argv and len(sys.argv) >= 2:
+
+# This handles the number of iterations, it also handles other subtle processes such as if
+# the keyword count is omitted or if the count value is not given or if count is incorrectly spelt.
+# It also checks if an integer count value is passed.
+if "count" not in sys.argv and len(sys.argv) >= 2 and "--all" not in sys.argv:
     print('Your seem to be forgetting to include keyword:"count"')
     print("Usage: python benchmark.py [model] count <integer>")
-    print("Example: python benchmark.py -convolution count 10")
+    print("Example: python benchmark.py convolution count 10")
     print(
         "***Note***: The larger the count the greater the run time, keep count within 10 - 50 range"
     )
     sys.exit(1)
 
 try:
-    if len(sys.argv) >= 3:
+    if len(sys.argv) >= 3 and "--all" not in sys.argv:
         count_index = sys.argv.index("count")
         if count_index + 1 < len(sys.argv):
             count = sys.argv[count_index + 1]
@@ -102,43 +125,47 @@ except ValueError:
     sys.exit(1)
 
 
-def pytorch_benchmark(loop_count, model, data):
-    total_pytorch_prediction_time = 0.0
+# This takes the shape of the data collected from the model data definition and generates similarly shaped
+# datasets all containing randomized values withing their tensors for every iteration. This function
+# returns a list the same datasets to pass through the benchmark engine for pytorch and mdf ensuring
+# both are given similar data.
+def data_random_gen(count, data):
+    return [torch.rand_like(data) for _ in range(count)]
+
+
+# This take model definitions, such as model definitation data, model definition and selects the
+# type of benchmark to be done. It outputs the prediction time and also the prediction count.
+def benchmark_engine(model, data, engine):
+    total_time = 0.0
     prediction_count = 0
 
-    for i in range(loop_count):
+    if engine == "mdf":
+        mdf_model, params_dict = pytorch_to_mdf(model=model, args=(data[0]), trace=True)
+        mdf_graph = mdf_model.graphs[0]
+        eg = EvaluableGraph(graph=mdf_graph, verbose=False)
+
+    for d in data:
         start_time = time.time()
-        with torch.no_grad():
-            pred = model(data)
-        prediction = pred.argmax().item()
+        if engine == "pytorch":
+            with torch.no_grad():
+                pred = model(d)
+            pred = pred.argmax().item()
+        elif engine == "mdf":
+            params_dict["input1"] = d.detach().numpy()
+            eg.evaluate(initializer=params_dict)
+            mdf_pred = eg.output_enodes[0].get_output()
+            pred = mdf_pred.argmax().item()
         end_time = time.time()
-        total_pytorch_prediction_time += end_time - start_time
-        prediction_count += 1
-    return total_pytorch_prediction_time, prediction_count
 
-
-def mdf_benchmark(loop_count, model, data):
-    total_mdf_prediction_time = 0.0
-    prediction_count = 0
-    mdf_model, params_dict = pytorch_to_mdf(model=model, args=(data), trace=True)
-
-    mdf_graph = mdf_model.graphs[0]
-    eg = EvaluableGraph(graph=mdf_graph, verbose=False)
-    warnings.resetwarnings()
-
-    for i in range(loop_count):
-        start_time = time.time()
-        params_dict["input1"] = data.detach().numpy()
-        eg.evaluate(initializer=params_dict)
-        mdf_pred = eg.output_enodes[0].get_output()
-        mdf_pred = mdf_pred.argmax().item()
-        end_time = time.time()
-        total_mdf_prediction_time += end_time - start_time
+        total_time += end_time - start_time
         prediction_count += 1
 
-    return total_mdf_prediction_time, prediction_count
+    return total_time, prediction_count
 
 
+# This displays the PYTORCH work after a successful run,
+# if the run is unsuccessful, the word is not displayed
+# similar to the other words such as TO and MDF.
 def print_pytorch_word():
     pytorch_word = [
         "   ****   *     *  *******   ***    ****       ***  *     * ",
@@ -178,51 +205,16 @@ def print_MDF_word():
         print(line)
 
 
-def write_text_to_png(text, filename):
-    # Create an image with white background
-    width, height = 2000, 1200  # Increased image size
-    background_color = (255, 255, 255)  # White
-    image = Image.new("RGB", (width, height), background_color)
-
-    # Draw the text on the image
-    draw = ImageDraw.Draw(image)
-    font_size = 45  # Increased font size
-    font = ImageFont.truetype("arial.ttf", font_size)  # Load a TrueType font
-    text_color = (0, 0, 0)  # Black
-    text_position = (20, 20)
-    draw.text(text_position, text, font=font, fill=text_color)
-
-    # Save the image as a PNG file
-    png_filename = filename + ".png"
-    image.save(png_filename, "PNG")
-
-    # Open the PNG image using the default image viewer
-    try:
-        if sys.platform == "win32":
-            os.startfile(png_filename)
-        elif sys.platform == "darwin":
-            subprocess.run(["open", png_filename], check=True)
-        else:
-            print("Unsupported platform for opening files.")
-    except Exception as e:
-        print("Error:", e)
-
-    # Wait for the user to close the image viewer
-    input("Press Enter after viewing the image...")
-
-    # Delete the PNG file
-    try:
-        os.remove(png_filename)
-        print("PNG file deleted.")
-    except Exception as e:
-        print("Error deleting the PNG file:", e)
+# This momentarily outputs a graphical instance of the output of the selected model,
+# displaying their count and prediction time.
+if "--all" not in sys.argv:
+    data = data_random_gen(count, data)
 
 
 def main():
 
-    pytorch_time, pytorch_predictions = pytorch_benchmark(count, model, data)
-    mdf_time, mdf_predictions = mdf_benchmark(count, model, data)
-    warnings.resetwarnings()
+    pytorch_time, pytorch_predictions = benchmark_engine(model, data, "pytorch")
+    mdf_time, mdf_predictions = benchmark_engine(model, data, "mdf")
 
     print_pytorch_word()
     print("\n")
@@ -234,8 +226,64 @@ def main():
     mdf_text = f"It takes MDF {mdf_time:.4f} seconds to make {mdf_predictions} predictions with the {model_type} model"
 
     concat_text = f"{pytorch_text}\n\n{mdf_text}"
-    write_text_to_png(concat_text, "benchmark")
+
+    results = []
+    result_entry = {
+        "model_name": model_name,
+        "model_type": model_type,
+        "pytorch_time": pytorch_time,
+        "pytorch_predictions": pytorch_predictions,
+        "mdf_time": mdf_time,
+        "mdf_predictions": mdf_predictions,
+    }
+    results.append(result_entry)
+
+    with open(f"{model_name}_benchmark.json", "w") as json_file:
+        json.dump(results, json_file, indent=4)
 
 
 if __name__ == "__main__":
-    main()
+
+    if "--all" in sys.argv:
+        available_models = get_model_names(".")
+
+        results = []
+        for model_name in available_models:
+            module = __import__(model_name)
+
+            get_example_input = getattr(module, "get_example_input", None)
+            get_pytorch_model = getattr(module, "get_pytorch_model", None)
+
+            model = get_pytorch_model()
+            data = get_example_input()
+            model_type = model.__class__.__name__
+            count = 100
+
+            data = data_random_gen(count, data)
+            pytorch_time, pytorch_predictions = benchmark_engine(model, data, "pytorch")
+            mdf_time, mdf_predictions = benchmark_engine(model, data, "mdf")
+
+            result_entry = {
+                "model_name": model_name,
+                "model_type": model_type,
+                "pytorch_time": round(pytorch_time, 4),
+                "pytorch_predictions": pytorch_predictions,
+                "mdf_time": round(mdf_time, 4),
+                "mdf_predictions": mdf_predictions,
+                "mdf : pytorch ratio": round(
+                    mdf_time / pytorch_time,
+                ),
+            }
+            results.append(result_entry)
+
+        print_pytorch_word()
+        print("\n")
+        print_to_word()
+        print("\n")
+        print_MDF_word()
+
+        with open("benchmark_results.json", "w") as json_file:
+            json.dump(results, json_file, indent=4)
+
+    else:
+        main()
