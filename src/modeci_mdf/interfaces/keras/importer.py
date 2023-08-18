@@ -7,7 +7,7 @@ from xml.dom import Node
 
 import tensorflow as tf
 from tensorflow import keras
-from tensorflow.keras.layers import Dense, Flatten, Input
+from tensorflow.keras.layers import *
 
 from modeci_mdf.execution_engine import EvaluableGraph
 from modeci_mdf.mdf import *
@@ -19,15 +19,15 @@ import numpy as np
 def get_weights_and_activation(layers, model):
 
     params = {}
-    activations = []
+    activations = {}
     for layer in layers:
         n = {}
         lyr = model.get_layer(layer)
-        if lyr.weights != []:
+        if type(lyr) == Dense:
             wgts, bias = lyr.weights
             n["weights"], n["bias"] = wgts.numpy(), bias.numpy()
             params[layer] = n
-            activations.append(str(lyr.activation).split()[1])
+            activations[layer] = str(lyr.activation).split()[1]
     return params, activations
 
 
@@ -51,6 +51,7 @@ def create_flatten_node(node_id):
     flatten_node = Node(id=node_id)
     flatten_node.input_ports.append(InputPort(id=f"{node_id}_in"))
     args = {"input": f"{node_id}_in"}
+
     # application of the onnx::flatten function to the input
     flatten_node.functions.append(
         Function(id="onnx_Flatten", function="onnx::Flatten", args=args)
@@ -130,7 +131,6 @@ def keras_to_mdf(
         The translated MDF model
     """
 
-    print("About to work!!")
     # create mdf model and graph
     mdf_model, mdf_model_graph = init_model_with_graph(
         f"{model.name}".capitalize(), f"{model.name}_Graph".capitalize()
@@ -159,7 +159,7 @@ def keras_to_mdf(
         elif layer_type == Dense:
             weights = params[f"{layer}"]["weights"]
             bias = params[f"{layer}"]["bias"]
-            activation_name = str(model.get_layer(layer).activation).split()[1]
+            activation_name = activations[f"{layer}"]
 
             dense_node = create_dense_node(
                 f"{layer.capitalize()}", weights, bias, activation_name
