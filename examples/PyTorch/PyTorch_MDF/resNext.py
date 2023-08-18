@@ -22,7 +22,7 @@ def main():
     ebv_output = torch.zeros((1,))
 
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
-    model = get_example_input()
+    model = get_pytorch_model()
     model.eval()
 
     # Run the model once to get some ground truth outpot (from PyTorch)
