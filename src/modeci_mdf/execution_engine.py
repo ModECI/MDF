@@ -686,7 +686,10 @@ class EvaluableInput:
     def __init__(self, input_port: InputPort, verbose: Optional[bool] = False):
         self.verbose = verbose
         self.input_port = input_port
-        self.curr_value = np.full(input_port.shape, 0)
+        default = 0
+        if input_port.type and "float" in input_port.type:
+            default = 0.0
+        self.curr_value = np.full(input_port.shape, default)
 
     def set_input_value(self, value: Union[str, int, np.ndarray]):
         """Set a new value at input port
