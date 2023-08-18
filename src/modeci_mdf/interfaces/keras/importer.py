@@ -50,16 +50,13 @@ def create_input_node(node_id, value):
 def create_flatten_node(node_id):
     flatten_node = Node(id=node_id)
     flatten_node.input_ports.append(InputPort(id=f"{node_id}_in"))
-
-    # args for onnx::reshape function
-    args = {"data": f"{node_id}_in", "shape": np.array([-1], dtype=np.int64)}
-
-    # application of the onnx::reshape function to the input
+    args = {"input": f"{node_id}_in"}
+    # application of the onnx::flatten function to the input
     flatten_node.functions.append(
-        Function(id="onnx_Reshape", function="onnx::Reshape", args=args)
+        Function(id="onnx_Flatten", function="onnx::Flatten", args=args)
     )
     flatten_node.output_ports.append(
-        OutputPort(id=f"{node_id}_out", value="onnx_Reshape")
+        OutputPort(id=f"{node_id}_out", value="onnx_Flatten")
     )
     return flatten_node
 
@@ -108,22 +105,14 @@ def add_activation(node, activation_name, str_input):
         node.functions.append(Function(id="Output", value="1 / (1 + exp)"))
 
     elif activation_name == "softmax":
-        # args for exponential function
-        # linear_shift = str_input + "-" +"max" + "(" + str_input + ")"
-        args = {
-            "variable0": str_input,
-            "scale": 1,
-            "rate": 1,
-            "bias": 0,
-            "offset": 0,
-        }
+        # args for softmax
+        args = {"input": str_input}
 
-        # exponential of each value
-        node.functions.append(Function(id="exp", function="exponential", args=args))
-        # sum of all exponentials
-        node.functions.append(Function(id="exp_sum", value="sum(exp)"))
-        # normalizing results
-        node.functions.append(Function(id="Output", value="exp / exp_sum"))
+        # softmax function implementation
+        node.functions.append(
+            Function(id="softmax", function="onnx::Softmax", args=args)
+        )
+        node.functions.append(Function(id="Output", value="softmax"))
 
 
 def keras_to_mdf(
@@ -141,6 +130,7 @@ def keras_to_mdf(
         The translated MDF model
     """
 
+    print("About to work!!")
     # create mdf model and graph
     mdf_model, mdf_model_graph = init_model_with_graph(
         f"{model.name}".capitalize(), f"{model.name}_Graph".capitalize()
