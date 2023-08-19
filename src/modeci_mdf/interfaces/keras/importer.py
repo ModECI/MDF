@@ -28,6 +28,28 @@ def get_weights_and_activation(layers, model):
             n["weights"], n["bias"] = wgts.numpy(), bias.numpy()
             params[layer] = n
             activations[layer] = str(lyr.activation).split()[1]
+
+        elif type(lyr) == Conv1D or type(lyr) == Conv2D or type(lyr) == Conv3D:
+            kernel, bias = lyr.weights
+            n["weights"], n["bias"] = kernel.numpy(), bias.numpy()
+            n["padding"], n["strides"] = lyr.padding, lyr.strides
+            n["dilation_rate"], n["groups"] = lyr.dilation_rate, lyr.groups
+            params[layer] = n
+            n["activation"] = str(lyr.activation).split()[1]
+
+        elif type(lyr) == BatchNormalization:
+            gamma, beta, moving_mean, moving_variance = lyr.weights
+            n["gamma"], n["beta"] = gamma.numpy(), beta.numpy()
+            n["moving_mean"], n["moving_variance"] = (
+                moving_mean.numpy(),
+                moving_variance.numpy(),
+            )
+            n["epsilon"] = lyr.epsilon
+            params[layer] = n
+
+        elif type(lyr) == Dropout:
+            n["rate"] = lyr.rate
+            params[layer] = n
     return params, activations
 
 
@@ -54,11 +76,9 @@ def create_flatten_node(node_id):
 
     # application of the onnx::flatten function to the input
     flatten_node.functions.append(
-        Function(id="onnx_Flatten", function="onnx::Flatten", args=args)
+        Function(id="Output", function="onnx::Flatten", args=args)
     )
-    flatten_node.output_ports.append(
-        OutputPort(id=f"{node_id}_out", value="onnx_Flatten")
-    )
+    flatten_node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
     return flatten_node
 
 
@@ -84,8 +104,150 @@ def create_dense_node(node_id, weights, bias, activation_name):
     return node
 
 
+def create_conv_node(
+    node_id,
+    kernel,
+    bias,
+    activation_name,
+    dilations,
+    groups,
+    padding,
+    strides,
+    conv_type,
+):
+    node = Node(id=node_id)
+    node.input_ports.append(InputPort(id=f"{node_id}_in"))
+
+    # args for onnx::batchnormalization
+    args = {
+        "X": "transposed_input",
+        "W": "transposed_kernel",
+        "B": bias,
+        "dilations": dilations,
+        "group": groups,
+        "strides": strides,
+    }
+
+    if conv_type == "2d":
+        node.functions.append(
+            Function(
+                id="transposed_input",
+                function="onnx:Transpose",
+                args={"data": f"{node_id}_in", "perm": [0, 3, 1, 2]},
+            )
+        )
+        node.functions.append(
+            Function(
+                id="transposed_kernel",
+                function="onnx:Transpose",
+                args={"data": kernel, "perm": [3, 2, 0, 1]},
+            )
+        )
+
+    elif conv_type == "3d":
+        node.functions.append(
+            Function(
+                id="transposed_input",
+                function="onnx:Transpose",
+                args={"data": f"{node_id}_in", "perm": [0, 4, 1, 2, 3]},
+            )
+        )
+        node.functions.append(
+            Function(
+                id="transposed_kernel",
+                function="onnx:Transpose",
+                args={"data": kernel, "perm": [4, 3, 0, 1, 2]},
+            )
+        )
+
+    if padding == "same":
+        args["autopad"] = "SAME_UPPER"
+    else:
+        args["autopad"] = "VALID"
+
+    # application of the onnx::conv function
+    node.functions.append(Function(id="onnx_conv", function="onnx::Conv", args=args))
+
+    if activation_name == "linear":
+        node.functions.append(Function(id="Output", value="onnx_conv"))
+
+    else:
+        add_activation(node, activation_name, "onnx_conv")
+
+    if conv_type == "2d":
+        node.functions.append(
+            Function(
+                id="transposed_output",
+                function="onnx:Transpose",
+                args={"data": "Output", "perm": [0, 2, 3, 1]},
+            )
+        )
+    elif conv_type == "3d":
+        node.functions.append(
+            Function(
+                id="transposed_output",
+                function="onnx:Transpose",
+                args={"data": f"{node_id}_in", "perm": [0, 2, 3, 4, 1]},
+            )
+        )
+
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="transposed_output"))
+    return node
+
+
+def create_batch_normalization_node(
+    node_id, gamma, beta, moving_mean, moving_variance, epsilon
+):
+    node = Node(id=node_id)
+    node.input_ports.append(InputPort(id=f"{node_id}_in"))
+
+    # args for onnx::batchnormalization
+    args = {
+        "X": f"{node_id}_in",
+        "scale": gamma,
+        "B": beta,
+        "input_mean": moving_mean,
+        "input_var": moving_variance,
+        "epsilon": epsilon,
+    }
+
+    # application of the onnx::batchnormalization function
+    node.functions.append(
+        Function(id="Output", function="onnx::Batchnormalization", args=args)
+    )
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
+    return node
+
+
+def create_dropout_node(node_id, rate):
+    node = Node(id=node_id)
+    node.input_ports.append(InputPort(id=f"{node_id}_in"))
+
+    # args for onnx::dropout function
+    args = {"data": f"{node_id}_in", "ratio": rate}
+
+    # application of onnx:dropout function
+    node.functions.append(Function(id="Output", function="onnx::Dropout", args=args))
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
+    return node
+
+
+def create_global_average_pool(node_id):
+    node = Node(id=node_id)
+    node.input_ports.append(InputPort(id=f"{node_id}_in"))
+
+    # application of onnx::globalaveragepool
+    node.functions.append(
+        Function(
+            id="Output", function="onnx::GlobalAveragePool", args={"X": f"{node_id}_in"}
+        )
+    )
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
+
+
 def add_activation(node, activation_name, str_input):
-    """This function does not return anything. It is used to add an activation function implementation to a dense node"""
+    """This function does not return anything.
+    It is used to add an activation function to a dense or convolution node"""
 
     # Functionality of relu
     if activation_name == "relu":
