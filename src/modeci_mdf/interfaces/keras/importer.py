@@ -29,13 +29,18 @@ def get_weights_and_activation(layers, model):
             params[layer] = n
             activations[layer] = str(lyr.activation).split()[1]
 
-        elif type(lyr) == Conv1D or type(lyr) == Conv2D or type(lyr) == Conv3D:
+        elif (type(lyr) == Conv2D) or (type(lyr) == Conv3D):
             kernel, bias = lyr.weights
-            n["weights"], n["bias"] = kernel.numpy(), bias.numpy()
+            n["kernel"], n["bias"] = kernel.numpy(), bias.numpy()
             n["padding"], n["strides"] = lyr.padding, lyr.strides
-            n["dilation_rate"], n["groups"] = lyr.dilation_rate, lyr.groups
+            n["dilations"], n["groups"] = lyr.dilation_rate, lyr.groups
             params[layer] = n
-            n["activation"] = str(lyr.activation).split()[1]
+            activations[layer] = str(lyr.activation).split()[1]
+
+        elif type(lyr) == MaxPooling3D:
+            n["pool_size"] = lyr.pool_size
+            n["strides"] = lyr.strides
+            params[layer] = n
 
         elif type(lyr) == BatchNormalization:
             gamma, beta, moving_mean, moving_variance = lyr.weights
@@ -118,7 +123,7 @@ def create_conv_node(
     node = Node(id=node_id)
     node.input_ports.append(InputPort(id=f"{node_id}_in"))
 
-    # args for onnx::batchnormalization
+    # args for onnx::conv
     args = {
         "X": "transposed_input",
         "W": "transposed_kernel",
@@ -128,6 +133,14 @@ def create_conv_node(
         "strides": strides,
     }
 
+    # define auto_pad value
+    if padding == "same":
+        args["auto_pad"] = "SAME_UPPER"
+    else:
+        args["auto_pad"] = "VALID"
+
+    # transpose input and kernel with onnx::transpose ops
+    # define axis for when input image is 2-D (input:NHWC to NCHW, kernel: HWCF to FCHW)
     if conv_type == "2d":
         node.functions.append(
             Function(
@@ -144,6 +157,7 @@ def create_conv_node(
             )
         )
 
+    # define axis for when input image is 3-D (input:NHWDC to NCHWD, kernel: HWDCF to FCHWD)
     elif conv_type == "3d":
         node.functions.append(
             Function(
@@ -160,20 +174,17 @@ def create_conv_node(
             )
         )
 
-    if padding == "same":
-        args["autopad"] = "SAME_UPPER"
-    else:
-        args["autopad"] = "VALID"
-
     # application of the onnx::conv function
     node.functions.append(Function(id="onnx_conv", function="onnx::Conv", args=args))
 
+    # add activation if applicable
     if activation_name == "linear":
         node.functions.append(Function(id="Output", value="onnx_conv"))
 
     else:
         add_activation(node, activation_name, "onnx_conv")
 
+    # transpose output from NCHW back to NHWC
     if conv_type == "2d":
         node.functions.append(
             Function(
@@ -182,6 +193,8 @@ def create_conv_node(
                 args={"data": "Output", "perm": [0, 2, 3, 1]},
             )
         )
+
+    # transpose output from NCHWD back to NHWDC
     elif conv_type == "3d":
         node.functions.append(
             Function(
@@ -193,6 +206,17 @@ def create_conv_node(
 
     node.output_ports.append(OutputPort(id=f"{node_id}_out", value="transposed_output"))
     return node
+
+
+def create_max_pool_node(node_id, kernel_shape, strides):
+    node = Node(id=node_id)
+    node.input_ports.append(InputPort(id=f"{node_id}_in"))
+
+    # args for onnx::maxpool
+    args = {"X": f"{node_id}_in", "kernel_shape": kernel_shape, "strides": strides}
+
+    node.functions.append(Function(id="Output", function="onnx::MaxPool", args=args))
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
 
 
 def create_batch_normalization_node(
@@ -243,6 +267,7 @@ def create_global_average_pool(node_id):
         )
     )
     node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
+    return node
 
 
 def add_activation(node, activation_name, str_input):
@@ -327,6 +352,70 @@ def keras_to_mdf(
                 f"{layer.capitalize()}", weights, bias, activation_name
             )
             mdf_model_graph.nodes.append(dense_node)
+
+        elif (layer_type == Conv2D) or (layer_type == Conv3D):
+            kernel, bias = params[f"{layer}"]["kernel"], params[f"{layer}"]["bias"]
+            dilations, groups = (
+                params[f"{layer}"]["dilations"],
+                params[f"{layer}"]["groups"],
+            )
+            padding, strides = (
+                params[f"{layer}"]["padding"],
+                params[f"{layer}"]["strides"],
+            )
+            activation_name = activations[f"{layer}"]
+
+            if layer_type == Conv2D:
+                conv_type = "2d"
+            elif layer_type == Conv3D:
+                conv_type = "3d"
+
+            conv_node = create_conv_node(
+                f"{layer.capitalize()}",
+                kernel,
+                bias,
+                activation_name,
+                dilations,
+                groups,
+                padding,
+                strides,
+                conv_type,
+            )
+            mdf_model_graph.nodes.append(conv_node)
+
+        elif layer_type == MaxPooling3D:
+            kernel_shape, strides = (
+                params[f"{layer}"]["pool_size"],
+                params[f"{layer}"]["strides"],
+            )
+            max_pool_node = create_max_pool_node(
+                f"{layer.capitalize()}", kernel_shape, strides
+            )
+            mdf_model_graph.nodes.append(max_pool_node)
+
+        elif layer_type == BatchNormalization:
+            gamma, beta = params[f"{layer}"]["gamma"], params[f"{layer}"]["beta"]
+            moving_mean = params[f"{layer}"]["moving_mean"]
+            moving_variance = params[f"{layer}"]["moving_variance"]
+            epsilon = params[f"{layer}"]["epsilon"]
+            batch_norm_node = create_batch_normalization_node(
+                f"{layer.capitalize()}",
+                gamma,
+                beta,
+                moving_mean,
+                moving_variance,
+                epsilon,
+            )
+            mdf_model_graph.nodes.append(batch_norm_node)
+
+        elif layer_type == Dropout:
+            rate = params[f"{layer}"]["rate"]
+            drop_out_node = create_dropout_node(f"{layer.capitalize()}", rate)
+            mdf_model_graph.nodes.append(drop_out_node)
+
+        elif layer_type == GlobalAveragePooling3D:
+            global_avg_pool_node = create_dropout_node(f"{layer.capitalize()}")
+            mdf_model_graph.nodes.append(global_avg_pool_node)
 
     for i in range(len(mdf_model_graph.nodes) - 1):
         e1 = simple_connect(
