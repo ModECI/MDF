@@ -123,24 +123,26 @@ def create_conv_node(
     node = Node(id=node_id)
     node.input_ports.append(InputPort(id=f"{node_id}_in"))
 
+    # # define auto_pad value
+    # if padding == "same":
+    #     padding = padding.upper()+"_UPPER"
+    # else:
+    #     padding = padding.upper()
+
     # args for onnx::conv
     args = {
         "X": "transposed_input",
         "W": "transposed_kernel",
         "B": bias,
+        # "auto_pad": padding,
         "dilations": dilations,
         "group": groups,
         "strides": strides,
+        "pads": [0, 0, 0, 0, 0, 0],
     }
 
-    # define auto_pad value
-    if padding == "same":
-        args["auto_pad"] = "SAME_UPPER"
-    else:
-        args["auto_pad"] = "VALID"
-
     # transpose input and kernel with onnx::transpose ops
-    # define axis for when input image is 2-D (input:NHWC to NCHW, kernel: HWCF to FCHW)
+    # define axis for when input iSmage is 2-D (input:NHWC to NCHW, kernel: HWCF to FCHW)
     if conv_type == "2d":
         node.functions.append(
             Function(
@@ -177,20 +179,13 @@ def create_conv_node(
     # application of the onnx::conv function
     node.functions.append(Function(id="onnx_conv", function="onnx::Conv", args=args))
 
-    # add activation if applicable
-    if activation_name == "linear":
-        node.functions.append(Function(id="Output", value="onnx_conv"))
-
-    else:
-        add_activation(node, activation_name, "onnx_conv")
-
     # transpose output from NCHW back to NHWC
     if conv_type == "2d":
         node.functions.append(
             Function(
                 id="transposed_output",
                 function="onnx:Transpose",
-                args={"data": "Output", "perm": [0, 2, 3, 1]},
+                args={"data": "onnx_conv", "perm": [0, 2, 3, 1]},
             )
         )
 
@@ -200,11 +195,18 @@ def create_conv_node(
             Function(
                 id="transposed_output",
                 function="onnx:Transpose",
-                args={"data": f"{node_id}_in", "perm": [0, 2, 3, 4, 1]},
+                args={"data": "onnx_conv", "perm": [0, 2, 3, 4, 1]},
             )
         )
 
-    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="transposed_output"))
+    # add activation if applicable
+    if activation_name == "linear":
+        node.functions.append(Function(id="Output", value="transposed_output"))
+
+    else:
+        add_activation(node, activation_name, "transposed_output")
+
+    node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
     return node
 
 
@@ -217,6 +219,7 @@ def create_max_pool_node(node_id, kernel_shape, strides):
 
     node.functions.append(Function(id="Output", function="onnx::MaxPool", args=args))
     node.output_ports.append(OutputPort(id=f"{node_id}_out", value="Output"))
+    return node
 
 
 def create_batch_normalization_node(
@@ -414,7 +417,7 @@ def keras_to_mdf(
             mdf_model_graph.nodes.append(drop_out_node)
 
         elif layer_type == GlobalAveragePooling3D:
-            global_avg_pool_node = create_dropout_node(f"{layer.capitalize()}")
+            global_avg_pool_node = create_global_average_pool(f"{layer.capitalize()}")
             mdf_model_graph.nodes.append(global_avg_pool_node)
 
     for i in range(len(mdf_model_graph.nodes) - 1):
