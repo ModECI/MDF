@@ -8,20 +8,17 @@ from modeci_mdf.execution_engine import EvaluableGraph
 # load the keras model
 model = tf.keras.models.load_model("kr_N_model.h5")
 
-# get one of the test images from the mnnist test dataset
+# get 20 of the test images from the mnnist test dataset
 _, (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 x_test = tf.keras.utils.normalize(x_test, axis=1)
-one_x_test = x_test[0, :, :]
-
-# reshape the dimension of the test image to 2-D image
-one_x_test = one_x_test.reshape(1, 28, 28)
+twenty_x_test = x_test[:20, :, :]
 
 # get the output of predicting with the keras model
-output = model.predict(one_x_test)
+output = model.predict(twenty_x_test)
 print("Output of network when predicted with Keras directly: %s" % output)
 
 # Convert the Keras model to MDF
-mdf_model, params_dict = keras_to_mdf(model=model, args=one_x_test)
+mdf_model, params_dict = keras_to_mdf(model=model, args=twenty_x_test)
 
 
 # Save the MDF to JSON & YAML
