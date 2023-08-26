@@ -16,6 +16,7 @@ The benchmarking script is intended to evaluate the performance of different Pyt
 To use the benchmarking script, it is necessary to include the srcipt including the model definition and the model data shape. a simple example include:
 
     **To define the model and get it ready for benchmarking, we have to define the model type in this form**
+    
     ```
     def get_pytorch_model():
         model = model_definition_goes_here
@@ -23,6 +24,7 @@ To use the benchmarking script, it is necessary to include the srcipt including 
     ```
 
     **To define the model data and get it ready for benchmarking, we have to define the model data in this form**
+    
     ```
     def get_example_input():
         x = data_to_be_predicted_goes_here
@@ -37,7 +39,11 @@ The benchmarking code can be used to evaluate specidfic models or all available 
 
 ### **Benchmark a Specific Model**
 To benchmark a specific model, run the following command:
-`python benchmark.py [model] count [integer]`
+
+```
+python benchmark.py [model] count [integer]
+```
+
 - `[model]`: Replace this with the name of the model you want to benchmark. Ensure that a corresponding `.py` file exist in the directory, with the necessary functions:
     - `get_example_input()`
     - `get_pytorch_model()`.
@@ -46,12 +52,19 @@ To benchmark a specific model, run the following command:
 
 ### **Benchmark All Available Models**
 To benchmark all available models in the directory, run the following command:
-`python benchmark.py --all`
+
+```
+python benchmark.py --all
+```
+
 This will iterate through all available models, benchmarking each one. Results will be saved to a JSON file named benchmark_results.json.
 
 ## Python Benchmark.py
 On successful execution of the code below, This will display all available and suitable models in the directory.
-`python benchmark.py`
+
+```
+python benchmark.py
+```
 
 Also, on successful command execution, the code runs a demo metric evaluation of the convolution.py script displaying results for both Pytorch and MDF models.
 
