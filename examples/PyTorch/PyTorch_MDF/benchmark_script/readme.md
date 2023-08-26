@@ -59,9 +59,6 @@ python benchmark.py --all
 
 This will iterate through all available models, benchmarking each one. Results will be saved to a JSON file named benchmark_results.json.
 
-```
-Python Benchmark.py
-```
 On successful execution of the code below, This will display all available and suitable models in the directory.
 
 ```
