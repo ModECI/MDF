@@ -35,7 +35,7 @@ To use the benchmarking script, it is necessary to include the srcipt including 
     In the directory where the models are defined, create a sub-directory within where the pytorch defined scripts are located and move the the benchmarking script to this directory.
 
 ## Usage
-The benchmarking code can be used to evaluate specidfic models or all available models in a particular set directory. Here are some usage examples:
+The benchmarking script can be used to evaluate specidfic models or all available models in a particular set directory. Here are some usage examples:
 
 ### **Benchmark a Specific Model**
 To benchmark a specific model, run the following command:
