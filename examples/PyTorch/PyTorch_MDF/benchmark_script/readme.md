@@ -48,7 +48,7 @@ python benchmark.py [model] count [integer]
     - `get_example_input()`
     - `get_pytorch_model()`.
 
-`[integer]`: Replace this with the number of iterations for benchmarking. The larger the count, the longer the benchmark will take to completely run. Keep the count within a suitable range of between 10 to 50 for a reasonable runtime.
+- `[integer]`: Replace this with the number of iterations for benchmarking. The larger the count, the longer the benchmark will take to completely run. Keep the count within a suitable range of between 10 to 50 for a reasonable runtime.
 
 ### **Benchmark All Available Models**
 To benchmark all available models in the directory, run the following command:
