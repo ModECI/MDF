@@ -16,7 +16,7 @@ The benchmarking script is intended to evaluate the performance of different Pyt
 To use the benchmarking script, it is necessary to include the srcipt including the model definition and the model data shape. a simple example include:
 
     **To define the model and get it ready for benchmarking, we have to define the model type in this form**
-    
+
     ```
     def get_pytorch_model():
         model = model_definition_goes_here
@@ -24,7 +24,7 @@ To use the benchmarking script, it is necessary to include the srcipt including 
     ```
 
     **To define the model data and get it ready for benchmarking, we have to define the model data in this form**
-    
+
     ```
     def get_example_input():
         x = data_to_be_predicted_goes_here
