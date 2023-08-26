@@ -21,11 +21,11 @@ To use the benchmarking script, it is necessary to include the srcipt including 
     def get_pytorch_model():
         model = model_definition_goes_here
         return model
-    ```
+    
 
     **To define the model data and get it ready for benchmarking, we have to define the model data in this form**
 
-    ```
+    
     def get_example_input():
         x = data_to_be_predicted_goes_here
         return model
@@ -59,7 +59,9 @@ python benchmark.py --all
 
 This will iterate through all available models, benchmarking each one. Results will be saved to a JSON file named benchmark_results.json.
 
-## Python Benchmark.py
+```
+Python Benchmark.py
+```
 On successful execution of the code below, This will display all available and suitable models in the directory.
 
 ```
