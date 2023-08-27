@@ -19,7 +19,7 @@ def get_model_names(directory):
 
     for file in os.listdir(directory):
         if file.endswith(".py") and file not in excluded_files:
-            file_path = os.path.join(directory, file) 
+            file_path = os.path.join(directory, file)
             module_name = os.path.splitext(file)[0]
             spec = importlib.util.spec_from_file_location(module_name, file_path)
             module = importlib.util.module_from_spec(spec)
@@ -39,9 +39,9 @@ def get_model_names(directory):
 # This block also handles looking into the model script, checking if necessary resources
 # and definitions are available. If reverse is the case, it displays a message displaying
 # how to modify the files and get these resourse available globally.
-if len(sys.argv) >= 2 and "--all" not in sys.argv and '-run' not in sys.argv:
+if len(sys.argv) >= 2 and "--all" not in sys.argv and "-run" not in sys.argv:
     model_name = sys.argv[1]
-    file_path = os.path.join("..", f"{model_name}.py") 
+    file_path = os.path.join("..", f"{model_name}.py")
     module_name = os.path.splitext(file_path)[0]
     if model_name not in get_model_names(".."):
         print("Your seem to be forgetting to include your model type")
@@ -50,14 +50,13 @@ if len(sys.argv) >= 2 and "--all" not in sys.argv and '-run' not in sys.argv:
         print(
             "***Note***: The larger the count the greater the run time, keep count within 10 - 50 range"
         )
-        #sys.exit(1)
+        # sys.exit(1)
     try:
         spec = importlib.util.spec_from_file_location(module_name, file_path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         get_example_input = getattr(module, "get_example_input", None)
         get_pytorch_model = getattr(module, "get_pytorch_model", None)
-        
 
         if get_example_input and get_pytorch_model:
             data = get_example_input()
@@ -70,7 +69,7 @@ if len(sys.argv) >= 2 and "--all" not in sys.argv and '-run' not in sys.argv:
                 "Modify the file to be benchmarked as such:\n"
                 "def get_pytorch_model():\n    model = model_definition_goes_here\n    return model"
             )
-            #sys.exit(1)
+            # sys.exit(1)
 
         if not get_example_input:
             print("The function get_example_input() seems to be absent in the file.")
@@ -78,28 +77,33 @@ if len(sys.argv) >= 2 and "--all" not in sys.argv and '-run' not in sys.argv:
                 "Modify the file to be benchmarked as such:\n"
                 "def get_example_input():\n    x = data_to_be_predicted_goes_here"
             )
-            #sys.exit(1)
+            # sys.exit(1)
     except ImportError:
         print(
             f"Could not import  '{model_name}'. Make sure the model definition exists and is properly defined."
         )
-        #sys.exit(1)
+        # sys.exit(1)
 
 
 # This handles the number of iterations, it also handles other subtle processes such as if
 # the keyword count is omitted or if the count value is not given or if count is incorrectly spelt.
 # It also checks if an integer count value is passed.
-if "count" not in sys.argv and len(sys.argv) >= 2 and "--all" not in sys.argv and '-run' not in sys.argv:
+if (
+    "count" not in sys.argv
+    and len(sys.argv) >= 2
+    and "--all" not in sys.argv
+    and "-run" not in sys.argv
+):
     print('Your seem to be forgetting to include keyword:"count"')
     print("Usage: python benchmark.py [model] count <integer>")
     print("Example: python benchmark.py convolution count 10")
     print(
         "***Note***: The larger the count the greater the run time, keep count within 10 - 50 range"
     )
-    #sys.exit(1)
+    # sys.exit(1)
 
 try:
-    if len(sys.argv) >= 3 and "--all" not in sys.argv and '-run' not in sys.argv:
+    if len(sys.argv) >= 3 and "--all" not in sys.argv and "-run" not in sys.argv:
         count_index = sys.argv.index("count")
         if count_index + 1 < len(sys.argv):
             count = sys.argv[count_index + 1]
@@ -107,7 +111,7 @@ try:
                 count = int(count)
             else:
                 print("Invalid count argument. It should be an integer.")
-                #sys.exit(1)
+                # sys.exit(1)
         else:
             raise ValueError("No count argument provided.")
 except ValueError:
@@ -116,7 +120,7 @@ except ValueError:
     print(
         "***Note***: The larger the count the greater the run time, keep count within 10 - 50 range"
     )
-    #sys.exit(0)
+    # sys.exit(0)
 
 
 # This takes the shape of the data collected from the model data definition and generates similarly shaped
@@ -137,7 +141,7 @@ def benchmark_engine(model, data, engine):
         mdf_model, params_dict = pytorch_to_mdf(model=model, args=(data[0]), trace=True)
         mdf_graph = mdf_model.graphs[0]
         eg = EvaluableGraph(graph=mdf_graph, verbose=False)
-        node_density = len(mdf_graph.__getattribute__('nodes'))
+        node_density = len(mdf_graph.__getattribute__("nodes"))
 
     for d in data:
         start_time = time.time()
@@ -154,9 +158,9 @@ def benchmark_engine(model, data, engine):
 
         total_time += end_time - start_time
         prediction_count += 1
-    if engine == 'mdf':
+    if engine == "mdf":
         return total_time, prediction_count, node_density
-    return total_time, prediction_count 
+    return total_time, prediction_count
 
 
 # This displays the PYTORCH work after a successful run,
@@ -203,7 +207,7 @@ def print_MDF_word():
 
 # This momentarily outputs a graphical instance of the output of the selected model,
 # displaying their count and prediction time.
-if len(sys.argv) > 2 and  "--all" not in sys.argv and '-run' not in sys.argv:
+if len(sys.argv) > 2 and "--all" not in sys.argv and "-run" not in sys.argv:
     data = data_random_gen(count, data)
 
 
@@ -220,7 +224,7 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
         print(f"    {model_name}")
 
     for model_name in available_models:
-        if model_name == 'convolution':
+        if model_name == "convolution":
             file_path = os.path.join("..", f"{model_name}.py")
             module_name = os.path.splitext(file_path)[0]
             spec = importlib.util.spec_from_file_location(module_name, file_path)
@@ -234,7 +238,9 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
             count = 100
             data = data_random_gen(count, data)
             pytorch_time, pytorch_predictions = benchmark_engine(model, data, "pytorch")
-            mdf_time, mdf_predictions, node_density = benchmark_engine(model, data, "mdf")
+            mdf_time, mdf_predictions, node_density = benchmark_engine(
+                model, data, "mdf"
+            )
             results = []
             result_entry = {
                 "model_name": model_name,
@@ -243,7 +249,7 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
                 "pytorch_predictions": pytorch_predictions,
                 "mdf_time": mdf_time,
                 "mdf_predictions": mdf_predictions,
-                'node density': node_density,
+                "node density": node_density,
                 "mdf : pytorch ratio": round(mdf_time / pytorch_time, 4),
             }
             results.append(result_entry)
@@ -292,8 +298,8 @@ if __name__ == "__main__":
         available_models = get_model_names("..")
 
         data_count = {
-            'convolution': 10000,
-            'simple_Convolution': 10000,
+            "convolution": 10000,
+            "simple_Convolution": 10000,
         }
 
         results = []
@@ -315,7 +321,9 @@ if __name__ == "__main__":
 
             data = data_random_gen(count, data)
             pytorch_time, pytorch_predictions = benchmark_engine(model, data, "pytorch")
-            mdf_time, mdf_predictions, node_density = benchmark_engine(model, data, "mdf")
+            mdf_time, mdf_predictions, node_density = benchmark_engine(
+                model, data, "mdf"
+            )
 
             result_entry = {
                 "model_name": model_name,
@@ -325,9 +333,9 @@ if __name__ == "__main__":
                 "mdf_time": round(mdf_time, 4),
                 "mdf_predictions": mdf_predictions,
                 "mdf : pytorch ratio": round(
-                    mdf_time / pytorch_time, 
+                    mdf_time / pytorch_time,
                 ),
-                'node density': node_density
+                "node density": node_density,
             }
             results.append(result_entry)
 
@@ -340,5 +348,5 @@ if __name__ == "__main__":
         with open("benchmark_results.json", "w") as json_file:
             json.dump(results, json_file, indent=4)
 
-    elif len(sys.argv) >= 2 and '-run' not in sys.argv:
+    elif len(sys.argv) >= 2 and "-run" not in sys.argv:
         main()
