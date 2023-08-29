@@ -278,6 +278,7 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/arm64
 /examples/MDF/RNN/iaf.net
 /examples/MDF/RNN/iaf.net2
+/examples/TensorFlow/Keras/keras_to_MDF
 /examples/NeuroML/PyNN/All*
 /examples/NeuroML/PyNN/*dat
 /examples/NeuroML/PyNN/*.png
@@ -291,3 +292,7 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/PyNN/*.pkl
 *_code.gen.c
 /examples/NeuroML/PyNN/Net1*
+examples/TensorFlow/Keras/Keras_to_MDF_IRIS/keras_to_MDF
+examples/TensorFlow/Keras/keras_to_MDF
+/examples/TensorFlow/Keras/Keras_MDF/Keras_to_MDF_IRIS/keras_to_MDF
+/examples/TensorFlow/Keras/Keras_MDF/keras_to_MDF
