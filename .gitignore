@@ -294,3 +294,5 @@ Thumbs.db #thumbnail cache on Windows
 /examples/NeuroML/PyNN/Net1*
 examples/TensorFlow/Keras/Keras_to_MDF_IRIS/keras_to_MDF
 examples/TensorFlow/Keras/keras_to_MDF
+/examples/TensorFlow/Keras/Keras_MDF/Keras_to_MDF_IRIS/keras_to_MDF
+/examples/TensorFlow/Keras/Keras_MDF/keras_to_MDF

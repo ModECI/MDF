@@ -90,12 +90,12 @@ python addition.py
 
 ## Test Keras examples
 
-cd ../Tensorflow/Keras
+cd ../Tensorflow/Keras/Keras_MDF
 ./regenerate.sh
 
 ## Generate the docs
 
-cd ../../../docs
+cd ../../../../docs
 python generate.py
 cd ..
 
