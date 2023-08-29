@@ -259,7 +259,7 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
                 "mdf_time": mdf_time,
                 "mdf_predictions": mdf_predictions,
                 "node density": node_density,
-                "mdf/pytorch ratio": "%.2f"%(mdf_time / pytorch_time),
+                "mdf/pytorch ratio": "%.2f" % (mdf_time / pytorch_time),
             }
             results.append(result_entry)
 
@@ -297,7 +297,7 @@ def main():
         "mdf_time": round(mdf_time, 4),
         "mdf_predictions": mdf_predictions,
         "node density": node_density,
-        "mdf : pytorch ratio": "%.2f"%(mdf_time / pytorch_time),
+        "mdf : pytorch ratio": "%.2f" % (mdf_time / pytorch_time),
     }
     results.append(result_entry)
 
@@ -347,7 +347,7 @@ if __name__ == "__main__":
                 "pytorch_predictions": pytorch_predictions,
                 "mdf_time": round(mdf_time, 4),
                 "mdf_predictions": mdf_predictions,
-                "mdf : pytorch ratio": "%.2f"%(mdf_time / pytorch_time),
+                "mdf : pytorch ratio": "%.2f" % (mdf_time / pytorch_time),
                 "node density": node_density,
             }
             results.append(result_entry)

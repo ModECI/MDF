@@ -2,11 +2,11 @@
     {
         "model_name": "squeezenet1_1",
         "model_type": "SqueezeNet",
-        "pytorch_time": 0.0862,
+        "pytorch_time": 0.0739,
         "pytorch_predictions": 10,
-        "mdf_time": 0.8178,
+        "mdf_time": 0.6941,
         "mdf_predictions": 10,
         "node density": 66,
-        "mdf : pytorch ratio": "9.49"
+        "mdf : pytorch ratio": "9.39"
     }
 ]
