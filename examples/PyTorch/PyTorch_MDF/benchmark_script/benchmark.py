@@ -254,8 +254,8 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
             }
             results.append(result_entry)
 
-        with open(f"{model_name}_benchmark.json", "w") as json_file:
-            json.dump(results, json_file, indent=4)
+            with open(f"{model_name}_benchmark.json", "w") as json_file:
+                json.dump(results, json_file, indent=4)
 
 
 def main():
