@@ -27,7 +27,7 @@ The MNIST dataset is widely available and easy to download you can also load it 
 The MNIST dataset consists of simple grayscale images of handwritten digits, and the task of classifying the digit in each image is well-defined and straightforward.
 The grayscale images look like the one below
 
-![3](https://raw.githubusercontent.com/ModECI/MDF/test_keras/examples/TensorFlow/Keras/3.jpeg)
+![3](3.png)
 
 ######  Low dimensional:
 The MNIST images are 28x28 pixels in size, which is a relatively low dimensional input space compared to more complex image datasets. This makes it easier to train machine learning models and to visualize the results.
@@ -94,9 +94,9 @@ Keras has a [plot_model](https://keras.io/api/utils/model_plotting_utils/) funct
 
 ##### MDF Model
 The keras_to_mdf function is used to convert keras model to MDF. Graphviz is used to generate visualization for the MDF graph. Below is the visualization of the MDF graph after converting the keras model to MDF.
-![keras_to_MDF](https://github.com/ModECI/MDF/blob/test_keras/examples/TensorFlow/Keras/keras_to_MDF.png)
+![keras_to_MDF](keras_to_MDF.png)
 
 ##### Neutron
 Below is the visualization of this model using neutron
 
-![keras-model-to-neutron](https://github.com/ModECI/MDF/blob/test_keras/examples/TensorFlow/Keras/layers_netron.png)
+![keras-model-to-neutron](layers_netron.png)
