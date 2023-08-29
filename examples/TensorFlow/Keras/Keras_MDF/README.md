@@ -99,7 +99,17 @@ Keras has a [plot_model](https://keras.io/api/utils/model_plotting_utils/) funct
 <br>
 
 ##### MDF Model
-The keras_to_mdf function is used to convert keras model to MDF. Graphviz is used to generate visualization for the MDF graph. Below is the visualization of the MDF graph after converting the keras model to MDF.
+The keras_to_mdf function is used to convert keras model to MDF. The current implementation of the keras_to_mdf functionality is built upon translating each layer in a keras model into a node in MDF that contains parameters and functions used in the keras layers. It is still a work in progress. In its current state, keras layers with Flatten layer and Dense layers can be automatically translated to MDF.
+
+An example illustrating this conversion in python is the [keras_to_MDF.py](keras_to_MDF.py) Script.
+Below is how the keras_to_mdf fucntion was used in the Script
+```Python
+mdf_model, params_dict = keras_to_mdf(model=model, args=twenty_x_test)
+```
+
+The function has two parameters, the first parameter **model** accepts a keras model as its argument while the second parameter **args** accepts an input tensor or numpy array as its argument. The function returns an mdf model and parameters as its output.
+
+Graphviz is used to generate visualization for the MDF graph. Below is the visualization of the MDF graph after converting the keras model to MDF.
 
 ![keras_to_MDF](keras_to_MDF.png)
 
