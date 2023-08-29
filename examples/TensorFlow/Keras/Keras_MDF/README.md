@@ -23,7 +23,7 @@ The MNIST dataset is widely available and easy to download. You can also easily 
 ```Python
 import tensorflow
 # access the dataset
-mnist = tensorflow.datasets.mnist
+mnist = tensorflow.keras.datasets.mnist
 # load the dataset
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
