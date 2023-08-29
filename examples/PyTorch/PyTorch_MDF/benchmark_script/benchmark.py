@@ -7,6 +7,9 @@ from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 from modeci_mdf.execution_engine import EvaluableGraph
 import importlib.util
 
+MDF_ENGINE = "MDF"
+PYTORCH_ENGINE = "PyTorch"
+
 
 # This crawls over the directory and identifies available and viable models
 # to be used in the benchmarking app.
@@ -30,21 +33,21 @@ def get_model_names(directory):
             if get_example_input and get_pytorch_model:
                 model_names.append(module_name)
 
-    return model_names
+    return sorted(model_names)
 
 
-# This block handles the instanciation of the type of model you are intersetd in,
+# This block handles the instantiation of the type of model you are interested in,
 # it loads in necessary resources such as the model definition, a suitable dataset
-# and also instanciates all of them, preparing them for useage.
+# and also instantiates all of them, preparing them for use.
 # This block also handles looking into the model script, checking if necessary resources
 # and definitions are available. If reverse is the case, it displays a message displaying
-# how to modify the files and get these resourse available globally.
+# how to modify the files and get these resource available globally.
 if len(sys.argv) >= 2 and "--all" not in sys.argv and "-run" not in sys.argv:
     model_name = sys.argv[1]
     file_path = os.path.join("..", f"{model_name}.py")
     module_name = os.path.splitext(file_path)[0]
     if model_name not in get_model_names(".."):
-        print("Your seem to be forgetting to include your model type")
+        print("Please include your model type")
         print("Usage: python benchmark.py [model] count <integer>")
         print("Example: python benchmark.py convolution count 10")
         print(
@@ -94,7 +97,7 @@ if (
     and "--all" not in sys.argv
     and "-run" not in sys.argv
 ):
-    print('Your seem to be forgetting to include keyword:"count"')
+    print('You seem to be forgetting to include keyword:"count"')
     print("Usage: python benchmark.py [model] count <integer>")
     print("Example: python benchmark.py convolution count 10")
     print(
@@ -124,32 +127,36 @@ except ValueError:
 
 
 # This takes the shape of the data collected from the model data definition and generates similarly shaped
-# datasets all containing randomized values withing their tensors for every iteration. This function
+# datasets all containing randomized values within their tensors for every iteration. This function
 # returns a list the same datasets to pass through the benchmark engine for pytorch and mdf ensuring
 # both are given similar data.
 def data_random_gen(count, data):
     return [torch.rand_like(data) for _ in range(count)]
 
 
-# This take model definitions, such as model definitation data, model definition and selects the
+# This take model definitions, such as model definition data, model definition and selects the
 # type of benchmark to be done. It outputs the prediction time and also the prediction count.
-def benchmark_engine(model, data, engine):
+def benchmark_engine(model, model_name, data, engine):
     total_time = 0.0
     prediction_count = 0
 
-    if engine == "mdf":
+    if engine == MDF_ENGINE:
         mdf_model, params_dict = pytorch_to_mdf(model=model, args=(data[0]), trace=True)
         mdf_graph = mdf_model.graphs[0]
         eg = EvaluableGraph(graph=mdf_graph, verbose=False)
         node_density = len(mdf_graph.__getattribute__("nodes"))
 
     for d in data:
+        print(
+            "\n  =====  Running model: %s on engine %s, count %i/%i"
+            % (model_name, engine, prediction_count + 1, len(data))
+        )
         start_time = time.time()
-        if engine == "pytorch":
+        if engine == PYTORCH_ENGINE:
             with torch.no_grad():
                 pred = model(d)
             pred = pred.argmax().item()
-        elif engine == "mdf":
+        elif engine == MDF_ENGINE:
             params_dict["input1"] = d.detach().numpy()
             eg.evaluate(initializer=params_dict)
             mdf_pred = eg.output_enodes[0].get_output()
@@ -158,7 +165,7 @@ def benchmark_engine(model, data, engine):
 
         total_time += end_time - start_time
         prediction_count += 1
-    if engine == "mdf":
+    if engine == MDF_ENGINE:
         return total_time, prediction_count, node_density
     return total_time, prediction_count
 
@@ -237,9 +244,11 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
             model_type = model.__class__.__name__
             count = 100
             data = data_random_gen(count, data)
-            pytorch_time, pytorch_predictions = benchmark_engine(model, data, "pytorch")
+            pytorch_time, pytorch_predictions = benchmark_engine(
+                model, model_name, data, PYTORCH_ENGINE
+            )
             mdf_time, mdf_predictions, node_density = benchmark_engine(
-                model, data, "mdf"
+                model, model_name, data, MDF_ENGINE
             )
             results = []
             result_entry = {
@@ -250,7 +259,7 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
                 "mdf_time": mdf_time,
                 "mdf_predictions": mdf_predictions,
                 "node density": node_density,
-                "mdf : pytorch ratio": round(mdf_time / pytorch_time, 4),
+                "mdf/pytorch ratio": "%.2f"%(mdf_time / pytorch_time),
             }
             results.append(result_entry)
 
@@ -260,8 +269,12 @@ if len(sys.argv) >= 1 and "--all" not in sys.argv and "-run" in sys.argv:
 
 def main():
 
-    pytorch_time, pytorch_predictions = benchmark_engine(model, data, "pytorch")
-    mdf_time, mdf_predictions, node_density = benchmark_engine(model, data, "mdf")
+    pytorch_time, pytorch_predictions = benchmark_engine(
+        model, model_name, data, PYTORCH_ENGINE
+    )
+    mdf_time, mdf_predictions, node_density = benchmark_engine(
+        model, model_name, data, MDF_ENGINE
+    )
 
     print_pytorch_word()
     print("\n")
@@ -284,7 +297,7 @@ def main():
         "mdf_time": round(mdf_time, 4),
         "mdf_predictions": mdf_predictions,
         "node density": node_density,
-        "mdf : pytorch ratio": round(mdf_time / pytorch_time, 4),
+        "mdf : pytorch ratio": "%.2f"%(mdf_time / pytorch_time),
     }
     results.append(result_entry)
 
@@ -320,9 +333,11 @@ if __name__ == "__main__":
                 count = 100
 
             data = data_random_gen(count, data)
-            pytorch_time, pytorch_predictions = benchmark_engine(model, data, "pytorch")
+            pytorch_time, pytorch_predictions = benchmark_engine(
+                model, model_name, data, PYTORCH_ENGINE
+            )
             mdf_time, mdf_predictions, node_density = benchmark_engine(
-                model, data, "mdf"
+                model, model_name, data, MDF_ENGINE
             )
 
             result_entry = {
@@ -332,9 +347,7 @@ if __name__ == "__main__":
                 "pytorch_predictions": pytorch_predictions,
                 "mdf_time": round(mdf_time, 4),
                 "mdf_predictions": mdf_predictions,
-                "mdf : pytorch ratio": round(
-                    mdf_time / pytorch_time,
-                ),
+                "mdf : pytorch ratio": "%.2f"%(mdf_time / pytorch_time),
                 "node density": node_density,
             }
             results.append(result_entry)

@@ -10,10 +10,10 @@ This README provides an overview of the benchmarking code and how it is used for
 - [Result Output](#result-output)
 
 ## Introduction
-The benchmarking script is intended to evaluate the performance of different Pytorch and MDF converted models. Its functionalities cuts across benchmarking both PyTorch and MDF models evaluating and providing information regarding model prediction time, prediction count, and node density.
+The benchmarking script is intended to evaluate the performance of different PyTorch and MDF converted models. Its functionality cuts across benchmarking both PyTorch and MDF models, evaluating and providing information regarding model prediction time, prediction count, and node density.
 
 ## Getting Started
-To use the benchmarking script, it is necessary to include the srcipt including the model definition and the model data shape. a simple example include:
+To use the benchmarking script, it is necessary to specify the script which contains the model definition and the model input data shape. A simple example is:
 
     **To define the model and get it ready for benchmarking, we have to define the model type in this form**
 
@@ -23,7 +23,7 @@ To use the benchmarking script, it is necessary to include the srcipt including 
         return model
 
 
-    **To define the model data and get it ready for benchmarking, we have to define the model data in this form**
+    **To define the model data and get it ready for benchmarking, we have to define the model input data in this form**
 
 
     def get_example_input():
@@ -32,10 +32,10 @@ To use the benchmarking script, it is necessary to include the srcipt including 
 
 
     **Where to put the benchmarking script with minimal code changes**
-    In the directory where the models are defined, create a sub-directory within where the pytorch defined scripts are located and move the the benchmarking script to this directory.
+    In the directory where the models are defined, create a sub-directory where the PyTorch defined scripts are located and move the the benchmarking script to this directory.
 
 ## Usage
-The benchmarking script can be used to evaluate specidfic models or all available models in a particular set directory. Here are some usage examples:
+The benchmarking script can be used to evaluate specific models or all available models in a particular directory. Here are some usage examples:
 
 ### **Benchmark a Specific Model**
 To benchmark a specific model, run the following command:
@@ -49,6 +49,11 @@ python benchmark.py [model] count [integer]
     - `get_pytorch_model()`.
 
 - `[integer]`: Replace this with the number of iterations for benchmarking. The larger the count, the longer the benchmark will take to completely run. Keep the count within a suitable range of between 10 to 50 for a reasonable runtime.
+
+```
+# Example:
+python benchmark.py squeezenet1_1 count 10
+```
 
 ### **Benchmark All Available Models**
 To benchmark all available models in the directory, run the following command:
@@ -65,10 +70,10 @@ On successful execution of the code below, This will display all available and s
 python benchmark.py
 ```
 
-Also, on successful command execution, the code runs a demo metric evaluation of the convolution.py script displaying results for both Pytorch and MDF models.
+Also, on successful command execution, the code runs a demo metric evaluation of the convolution.py script displaying results for both PyTorch and MDF models.
 
 ## Available Models
-The benchmarking script automatically identifies available and viable models in the specidied directory. These models should have corresponding `.py` files containing the necessary functions for benchmarking: `get_example_imput()` and `get_pytorch_model()`.
+The benchmarking script automatically identifies available and viable models in the specified directory. These models should have corresponding `.py` files containing the necessary functions for benchmarking: `get_example_input()` and `get_pytorch_model()`.
 
 ## Benchmarking Process
 The benchmarking code follows these steps:
