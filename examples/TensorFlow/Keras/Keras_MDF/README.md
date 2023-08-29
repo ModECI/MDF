@@ -19,9 +19,13 @@ The ultimate goal is to produce a model that generalizes well to new, unseen ima
 The MNIST (Modified National Institute of Standards and Technology) dataset is a widely used dataset for machine learning and computer vision. It consists of a large collection of grayscale images of handwritten digits (0-9), along with their corresponding labels (the digit in each image).Each image in the MNIST dataset is 28x28 pixels in size, and is represented as a 2-dimensional array of pixel intensities. The reason why we use MNISt to build this model its because of the following:
 
 ###### Availability:
-The MNIST dataset is widely available and easy to download you can also load it online using the Commands below
+The MNIST dataset is widely available and easy to download. You can also easily load it from tensorflow datasets using the Commands below
 ```Python
-
+import tensorflow
+# access the dataset
+mnist = tensorflow.datasets.mnist
+# load the dataset
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
 ###### Simple and well-defined:
 The MNIST dataset consists of simple grayscale images of handwritten digits, and the task of classifying the digit in each image is well-defined and straightforward.
@@ -90,10 +94,13 @@ To Get the visualization below, you will need to install the following packages
 
 ##### Keras Model
 Keras has a [plot_model](https://keras.io/api/utils/model_plotting_utils/) function that is used to generate the graphical representation of the model's network. Below is the visual representation of the keras model used on the MNIST data set.
+<br>
 ![model_plot](model_plot.png)
+<br>
 
 ##### MDF Model
 The keras_to_mdf function is used to convert keras model to MDF. Graphviz is used to generate visualization for the MDF graph. Below is the visualization of the MDF graph after converting the keras model to MDF.
+
 ![keras_to_MDF](keras_to_MDF.png)
 
 ##### Neutron
