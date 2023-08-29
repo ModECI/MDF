@@ -17,19 +17,19 @@ To use the benchmarking script, it is necessary to include the srcipt including 
 
     **To define the model and get it ready for benchmarking, we have to define the model type in this form**
 
-    
+
     def get_pytorch_model():
         model = model_definition_goes_here
         return model
-    
+
 
     **To define the model data and get it ready for benchmarking, we have to define the model data in this form**
 
-    
+
     def get_example_input():
         x = data_to_be_predicted_goes_here
         return model
-    
+
 
     **Where to put the benchmarking script with minimal code changes**
     In the directory where the models are defined, create a sub-directory within where the pytorch defined scripts are located and move the the benchmarking script to this directory.
