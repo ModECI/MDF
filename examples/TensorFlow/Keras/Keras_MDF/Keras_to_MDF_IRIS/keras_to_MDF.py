@@ -37,8 +37,8 @@ mdf_model, params_dict = keras_to_mdf(model=model, args=X_test)
 
 
 # Save the MDF to JSON & YAML
-# mdf_model.to_json_file("keras_to_MDF.json")
-# mdf_model.to_yaml_file("keras_to_MDF.yaml")
+mdf_model.to_json_file("keras_to_MDF.json")
+mdf_model.to_yaml_file("keras_to_MDF.yaml")
 
 # Get mdf graph
 mdf_graph = mdf_model.graphs[0]

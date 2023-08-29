@@ -16,6 +16,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Controlling randomness, to facilitate testing/reproducibility
+# based on https://keras.io/examples/keras_recipes/reproducibility_recipes/
+from keras.utils import set_random_seed
+
+set_random_seed(1234)
+tf.config.experimental.enable_op_determinism()
+
 print("Loading data")
 mnist = tf.keras.datasets.mnist  # 28*28 images of handwritten digits (0-9)
 

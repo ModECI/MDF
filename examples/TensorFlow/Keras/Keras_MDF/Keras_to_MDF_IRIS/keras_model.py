@@ -20,6 +20,13 @@ from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
+# Controlling randomness, to facilitate testing/reproducibility
+# based on https://keras.io/examples/keras_recipes/reproducibility_recipes/
+from keras.utils import set_random_seed
+
+set_random_seed(1234)
+tf.config.experimental.enable_op_determinism()
+
 print("Loading data")
 iris = load_iris()
 
