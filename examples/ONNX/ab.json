@@ -11,7 +11,8 @@
                                 "shape": [
                                     2,
                                     3
-                                ]
+                                ],
+                                "type": "float"
                             }
                         },
                         "parameters": {
@@ -38,7 +39,8 @@
                                 "shape": [
                                     2,
                                     3
-                                ]
+                                ],
+                                "type": "float"
                             }
                         },
                         "parameters": {
