@@ -26,7 +26,7 @@ def test_ab():
     mdf_executable = EvaluableGraph(mdf_model.graphs[0], verbose=False)
 
     mdf_executable.evaluate(initializer={"input": test_input})
-    mdf_output = mdf_executable.enodes["Mul_3"].evaluable_outputs["_4"].curr_value
+    mdf_output = mdf_executable.enodes["/B/Mul"].evaluable_outputs["_4"].curr_value
 
     # Get the translated ONNX model
     onnx_models = mdf_to_onnx(mdf_model)

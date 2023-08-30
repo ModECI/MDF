@@ -25,7 +25,7 @@ def id_to_port(id: str):
     new_name = str(id).replace(".", "_")
 
     # Get rid of slashes in names
-    new_name = str(id).replace('/', '_')
+    new_name = str(id).replace("/", "_")
 
     # Get rid of double colon in id names, this causes issues with execution engine.
     new_name = new_name.replace("::", "_")

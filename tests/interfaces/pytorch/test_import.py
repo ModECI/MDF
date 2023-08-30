@@ -97,9 +97,8 @@ def _get_torchvision_models():
             return_type = inspect.signature(model).return_annotation
 
             if (
-                ("weights" in params or "pretrained" in params)
-                and return_type not in model_classes
-            ):
+                "weights" in params or "pretrained" in params
+            ) and return_type not in model_classes:
                 models_to_test.append(model)
                 if return_type:
                     model_classes.add(return_type)
@@ -118,7 +117,7 @@ def _get_torchvision_models():
     xfails = {
         "inception_v3": "Inception-V3 is failing to match currently.",
         "maxvit_t": "MaxViT is failing because we are trying to call ast.parse on a string that is not valid python."
-                    " Need to handle string arguments requried by einops.",
+        " Need to handle string arguments requried by einops.",
         "resnet101": "Resnet101 is failing to match currently.",
         "vit_": "ViT models are failing because PyTorch cant convert to ONNX the unflatten op.",
     }

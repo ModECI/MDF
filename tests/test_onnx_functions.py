@@ -107,6 +107,7 @@ def test_maxpool():
     )
     assert True
 
+
 def test_randomuniform():
     """Test ONNX randomuniform function."""
     out = onnx_ops.randomuniform(low=-1.0, high=1.0, seed=0.0, shape=(1, 1))

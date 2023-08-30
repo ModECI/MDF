@@ -51,7 +51,7 @@ def mdf_to_onnx(mdf_model):
         # be 8 for now. See: https://github.com/microsoft/onnxruntime/issues/15874
         make_model_kwargs = {}
         if onnxruntime.__version__ < "1.15":
-            make_model_kwargs = {'ir_version': 8}
+            make_model_kwargs = {"ir_version": 8}
 
         onnx_model = helper.make_model(onnx_graph, **make_model_kwargs)
 

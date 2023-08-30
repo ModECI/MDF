@@ -21,6 +21,7 @@ def _node_get(node: torch._C.Node, key: str):
     sel = node.kindOf(key)
     return getattr(node, sel)(key)
 
+
 torch._C.Node.__getitem__ = _node_get
 
 
