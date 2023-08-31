@@ -67,10 +67,7 @@ jobs:
           pip list
 
     - name: Install graphviz
-      if: ${{ matrix.runs-on != 'windows-latest' }}
-      run: |
-        if [[  ${{ matrix.runs-on }} == *"macos"* ]]; then brew install graphviz ; fi
-        if [[  ${{ matrix.runs-on }} == *"ubuntu"* ]]; then sudo apt install graphviz ; fi
+      uses: ts-graphviz/setup-graphviz@v1
 
     - name: Test interface ACT-R
       if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
