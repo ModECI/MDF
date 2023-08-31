@@ -70,30 +70,22 @@ jobs:
       uses: ts-graphviz/setup-graphviz@v1
 
     - name: Test interface ACT-R
-      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
+      if: ${{ matrix.python-version != '3.10' }}
       run: |
         python -m pytest -v -m "actr" tests/
 
     - name: Test interface PyTorch
-      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
+      if: ${{ matrix.python-version != '3.10' }}
       run: |
         python -m pytest -v -m "pytorch" tests/
 
     - name: Test interface NeuroML
-      if: ${{ matrix.python-version != '3.10' || matrix.runs-on != 'windows-latest' }}
+      if: ${{ matrix.python-version != '3.10' }}
       run: |
         python -m pytest -v -m "neuroml" tests/
 
-    - name: Test interface TensorFlow linux/mac
-      if: ${{ matrix.runs-on != 'windows-latest' }}
+    - name: Test interface TensorFlow
       run: |
-        dot -V
-        python -m pytest -v -m "tensorflow" tests/
-
-    - name: Test interface TensorFlow windows
-      if: ${{ matrix.python-version != '3.10' && matrix.runs-on == 'windows-latest' }}
-      run: |
-        choco install graphviz
         dot -V
         python -m pytest -v -m "tensorflow" tests/
 
