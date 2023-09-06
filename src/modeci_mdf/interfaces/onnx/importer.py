@@ -21,7 +21,11 @@ from modeci_mdf.mdf import *
 def id_to_port(id: str):
     """Turn unique ONNX output and input value names into valid MDF input and outport names"""
 
+    # Get rid of periods in names
     new_name = str(id).replace(".", "_")
+
+    # Get rid of slashes in names
+    new_name = str(id).replace("/", "_")
 
     # Get rid of double colon in id names, this causes issues with execution engine.
     new_name = new_name.replace("::", "_")
@@ -141,7 +145,7 @@ def onnx_node_to_mdf(
         for inp in non_constant_inputs:
             param_info = onnx_initializer.get(inp, None)
             shape = param_info["shape"] if param_info else None
-            ip = InputPort(id=id_to_port(inp), shape=shape)
+            ip = InputPort(id=id_to_port(inp), shape=shape, type="float")
             mdf_node.input_ports.append(ip)
 
         for out in node.output:

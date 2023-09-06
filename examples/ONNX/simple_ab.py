@@ -86,21 +86,21 @@ def main():
         ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
     )
     if "-run" in sys.argv:
-        verbose = True
-        verbose = False
+
+        verbose = "-v" in sys.argv
 
         from modeci_mdf.execution_engine import EvaluableGraph
 
         eg = EvaluableGraph(mdf_model.graphs[0], verbose=verbose)
 
         print("Evaluating graph...")
-        test_values = [0, 1, [1, 2], dummy_input.numpy()]
-        test_values = [0, 1, [1, 2]]
+        test_values = [0.0, 1.0, [1.0, 2.0], dummy_input.numpy()]
+        test_values = [0.0, 1.0, [1.0, 2.0]]
 
         for t in test_values:
             print("===================\nEvaluating MDF model with input: %s" % t)
             eg.evaluate(initializer={"input": t})
-            print("Output: %s" % eg.enodes["Mul_3"].evaluable_outputs["_4"].curr_value)
+            print("Output: %s" % eg.enodes["/B/Mul"].evaluable_outputs["_4"].curr_value)
 
 
 if __name__ == "__main__":

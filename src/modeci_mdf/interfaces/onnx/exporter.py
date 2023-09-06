@@ -12,6 +12,8 @@ from onnx import helper, shape_inference
 from onnx import AttributeProto, TensorProto, GraphProto
 from onnx.defs import get_schema
 
+import onnxruntime
+
 from ast import literal_eval
 
 import argparse
@@ -44,7 +46,14 @@ def mdf_to_onnx(mdf_model):
         onnx_graph = generate_onnx_graph(graph, nodenames_in_execution_order)
 
         # Make an onnx model from graph
-        onnx_model = helper.make_model(onnx_graph)
+
+        # Check to see if onnxruntime version is less than 1.15, if so ir_version should
+        # be 8 for now. See: https://github.com/microsoft/onnxruntime/issues/15874
+        make_model_kwargs = {}
+        if onnxruntime.__version__ < "1.15":
+            make_model_kwargs = {"ir_version": 8}
+
+        onnx_model = helper.make_model(onnx_graph, **make_model_kwargs)
 
         # Infer shapes
         onnx_model = shape_inference.infer_shapes(onnx_model)
