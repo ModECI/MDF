@@ -123,6 +123,7 @@ make clean
 make html
 ```
 
+
 ### 7) Change directory into html folder and run the documentation offline
 ```
 # for Windows go into build\html folder and double click on the index.html file, or:

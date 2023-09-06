@@ -24,7 +24,7 @@ from tensorflow import keras
 from tensorflow.keras.layers import Input, Dense, Flatten
 
 
-new_model = tf.keras.models.load_model("kr_N_model.h5")
+new_model = tf.keras.models.load_model("kr_N_model.h5", compile=False)
 for i in new_model.layers:
     print(i.name)
 
