@@ -69,7 +69,7 @@ def test_execution_engine_onnx(tmpdir):
         eg = modeci_mdf.execution_engine.main(
             "examples/ONNX/ab.%s" % mdf_format, array_format=array_format
         )
-        output = eg.enodes["/B/Mul"].evaluable_outputs["_4"].curr_value
+        output = eg.enodes["Mul_3"].evaluable_outputs["_4"].curr_value
         assert np.array_equal(output, np.full((2, 3), 5))
 
 

@@ -57,7 +57,7 @@
                                         "nodes": {
                                             "Div_5": {
                                                 "input_ports": {
-                                                    "x_11": {
+                                                    "x.11": {
                                                         "shape": [
                                                             2,
                                                             3
@@ -72,7 +72,7 @@
                                                     "Div_5": {
                                                         "function": "onnx::Div",
                                                         "args": {
-                                                            "A": "x_11",
+                                                            "A": "x.11",
                                                             "B": "B"
                                                         }
                                                     }
@@ -118,14 +118,14 @@
                             }
                         },
                         "output_ports": {
-                            "x_3": {
+                            "x.3": {
                                 "value": "Loop_3"
                             }
                         }
                     },
                     "Mul_8": {
                         "input_ports": {
-                            "x_3": {
+                            "x.3": {
                                 "shape": [
                                     1
                                 ],
@@ -139,7 +139,7 @@
                             "Mul_8": {
                                 "function": "onnx::Mul",
                                 "args": {
-                                    "A": "x_3",
+                                    "A": "x.3",
                                     "B": "B"
                                 }
                             }
@@ -158,11 +158,11 @@
                         "sender_port": "onnx_Loop_3",
                         "receiver_port": "onnx_Loop_3"
                     },
-                    "Loop_3.x_3_Mul_8.x_3": {
+                    "Loop_3.x.3_Mul_8.x.3": {
                         "sender": "Loop_3",
                         "receiver": "Mul_8",
-                        "sender_port": "x_3",
-                        "receiver_port": "x_3"
+                        "sender_port": "x.3",
+                        "receiver_port": "x.3"
                     }
                 }
             }
