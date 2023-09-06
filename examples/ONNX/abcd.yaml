@@ -2,9 +2,9 @@ ONNX Model:
     format: ModECI MDF v0.4
     generating_application: Python modeci-mdf v0.4.7
     graphs:
-        torch-jit-export:
+        torch_jit:
             nodes:
-                Mul_1:
+                /A/Mul:
                     input_ports:
                         input:
                             shape:
@@ -15,17 +15,17 @@ ONNX Model:
                         A:
                             value:
                             -   - 2.0
-                        Mul_1:
+                        /A/Mul:
                             function: onnx::Mul
                             args:
                                 A: A
                                 B: input
                     output_ports:
-                        onnx_Add_2:
-                            value: Mul_1
-                Add_3:
+                        _A_Mul_output_0:
+                            value: /A/Mul
+                /A/Add:
                     input_ports:
-                        onnx_Add_2:
+                        _A_Mul_output_0:
                             shape:
                             - 1
                             - 1
@@ -34,17 +34,17 @@ ONNX Model:
                         B:
                             value:
                             -   - 2.0
-                        Add_3:
+                        /A/Add:
                             function: onnx::Add
                             args:
-                                A: onnx_Add_2
+                                A: _A_Mul_output_0
                                 B: B
                     output_ports:
-                        a:
-                            value: Add_3
-                Mul_5:
+                        _A_Add_output_0:
+                            value: /A/Add
+                /B/Mul:
                     input_ports:
-                        a:
+                        _A_Add_output_0:
                             shape:
                             - 1
                             - 1
@@ -53,17 +53,17 @@ ONNX Model:
                         A:
                             value:
                             -   - 2.0
-                        Mul_5:
+                        /B/Mul:
                             function: onnx::Mul
                             args:
                                 A: A
-                                B: a
+                                B: _A_Add_output_0
                     output_ports:
-                        onnx_Add_6:
-                            value: Mul_5
-                Add_7:
+                        _B_Mul_output_0:
+                            value: /B/Mul
+                /B/Add:
                     input_ports:
-                        onnx_Add_6:
+                        _B_Mul_output_0:
                             shape:
                             - 1
                             - 1
@@ -72,17 +72,17 @@ ONNX Model:
                         B:
                             value:
                             -   - 2.0
-                        Add_7:
+                        /B/Add:
                             function: onnx::Add
                             args:
-                                A: onnx_Add_6
+                                A: _B_Mul_output_0
                                 B: B
                     output_ports:
-                        b:
-                            value: Add_7
-                Mul_9:
+                        _B_Add_output_0:
+                            value: /B/Add
+                /C/Mul:
                     input_ports:
-                        b:
+                        _B_Add_output_0:
                             shape:
                             - 1
                             - 1
@@ -91,17 +91,17 @@ ONNX Model:
                         A:
                             value:
                             -   - 2.0
-                        Mul_9:
+                        /C/Mul:
                             function: onnx::Mul
                             args:
                                 A: A
-                                B: b
+                                B: _B_Add_output_0
                     output_ports:
-                        onnx_Add_10:
-                            value: Mul_9
-                Add_11:
+                        _C_Mul_output_0:
+                            value: /C/Mul
+                /C/Add:
                     input_ports:
-                        onnx_Add_10:
+                        _C_Mul_output_0:
                             shape:
                             - 1
                             - 1
@@ -110,17 +110,17 @@ ONNX Model:
                         B:
                             value:
                             -   - 2.0
-                        Add_11:
+                        /C/Add:
                             function: onnx::Add
                             args:
-                                A: onnx_Add_10
+                                A: _C_Mul_output_0
                                 B: B
                     output_ports:
                         c:
-                            value: Add_11
-                Add_13:
+                            value: /C/Add
+                /D/Add:
                     input_ports:
-                        onnx_Add_10:
+                        _C_Mul_output_0:
                             shape:
                             - 1
                             - 1
@@ -129,42 +129,42 @@ ONNX Model:
                         B:
                             value:
                             -   - 2.0
-                        Add_13:
+                        /D/Add:
                             function: onnx::Add
                             args:
-                                A: onnx_Add_10
+                                A: _C_Mul_output_0
                                 B: B
                     output_ports:
                         d:
-                            value: Add_13
+                            value: /D/Add
             edges:
-                Mul_1.onnx_Add_2_Add_3.onnx_Add_2:
-                    sender: Mul_1
-                    receiver: Add_3
-                    sender_port: onnx_Add_2
-                    receiver_port: onnx_Add_2
-                Add_3.a_Mul_5.a:
-                    sender: Add_3
-                    receiver: Mul_5
-                    sender_port: a
-                    receiver_port: a
-                Mul_5.onnx_Add_6_Add_7.onnx_Add_6:
-                    sender: Mul_5
-                    receiver: Add_7
-                    sender_port: onnx_Add_6
-                    receiver_port: onnx_Add_6
-                Add_7.b_Mul_9.b:
-                    sender: Add_7
-                    receiver: Mul_9
-                    sender_port: b
-                    receiver_port: b
-                Mul_9.onnx_Add_10_Add_11.onnx_Add_10:
-                    sender: Mul_9
-                    receiver: Add_11
-                    sender_port: onnx_Add_10
-                    receiver_port: onnx_Add_10
-                Mul_9.onnx_Add_10_Add_13.onnx_Add_10:
-                    sender: Mul_9
-                    receiver: Add_13
-                    sender_port: onnx_Add_10
-                    receiver_port: onnx_Add_10
+                /A/Mul._A_Mul_output_0_/A/Add._A_Mul_output_0:
+                    sender: /A/Mul
+                    receiver: /A/Add
+                    sender_port: _A_Mul_output_0
+                    receiver_port: _A_Mul_output_0
+                /A/Add._A_Add_output_0_/B/Mul._A_Add_output_0:
+                    sender: /A/Add
+                    receiver: /B/Mul
+                    sender_port: _A_Add_output_0
+                    receiver_port: _A_Add_output_0
+                /B/Mul._B_Mul_output_0_/B/Add._B_Mul_output_0:
+                    sender: /B/Mul
+                    receiver: /B/Add
+                    sender_port: _B_Mul_output_0
+                    receiver_port: _B_Mul_output_0
+                /B/Add._B_Add_output_0_/C/Mul._B_Add_output_0:
+                    sender: /B/Add
+                    receiver: /C/Mul
+                    sender_port: _B_Add_output_0
+                    receiver_port: _B_Add_output_0
+                /C/Mul._C_Mul_output_0_/C/Add._C_Mul_output_0:
+                    sender: /C/Mul
+                    receiver: /C/Add
+                    sender_port: _C_Mul_output_0
+                    receiver_port: _C_Mul_output_0
+                /C/Mul._C_Mul_output_0_/D/Add._C_Mul_output_0:
+                    sender: /C/Mul
+                    receiver: /D/Add
+                    sender_port: _C_Mul_output_0
+                    receiver_port: _C_Mul_output_0

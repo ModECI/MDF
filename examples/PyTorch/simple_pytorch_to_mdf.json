@@ -416,6 +416,6 @@
                 }
             }
         },
-        "onnx_opset_version": 9
+        "onnx_opset_version": 14
     }
 }
