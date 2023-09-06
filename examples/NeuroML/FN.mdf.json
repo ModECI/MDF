@@ -102,6 +102,11 @@
                                     0.001
                                 ]
                             },
+                            "spike": {
+                                "value": [
+                                    0
+                                ]
+                            },
                             "V": {
                                 "default_initial_value": "initial_v",
                                 "time_derivative": "(a_v*V*V*V + (1+threshold_exc)*b_v*V*V + (-1*threshold_exc)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT) / (time_constant_v*MSEC)"
@@ -115,6 +120,9 @@
                             "INPUT": {}
                         },
                         "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
                             "V": {
                                 "value": "V"
                             },

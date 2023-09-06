@@ -83,4 +83,10 @@ python -m modeci_mdf.execution_engine IzhikevichTest.mdf.yaml
 python Izh_run.py -nogui
 
 
+####  Test PyNN based examples
+cd PyNN
+./regenerateAndTest.sh
+
+
+
 echo "Successfully ran all tests"
