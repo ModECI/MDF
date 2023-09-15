@@ -1,4 +1,4 @@
-# Keras to/from MDF 
+# Keras to/from MDF
 
 **NOTE: this is still a work in progress!**
 

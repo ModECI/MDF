@@ -303,3 +303,5 @@ examples/TensorFlow/Keras/keras_to_MDF
 /examples/NeuroML/PyNN/SimSimpleNet.yaml
 /examples/NeuroML/PyNN/SimpleNet.yaml
 /examples/NeuroML/PyNN/SimInputWeights.yaml
+/examples/TensorFlow/Keras/IRIS/keras_to_MDF
+/examples/TensorFlow/Keras/MNIST/keras_to_MDF
