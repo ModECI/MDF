@@ -61,6 +61,9 @@ print("Accuracy of our model is:")
 val_loss, val_acc = kr_model.evaluate(x_test, y_test)
 print(val_loss, val_acc)
 
+# Print summary
+kr_model.summary()
+
 # plot the model
 print("Plotting the model")
 plot_model(kr_model, to_file="model_plot.png", show_shapes=True, show_layer_names=True)

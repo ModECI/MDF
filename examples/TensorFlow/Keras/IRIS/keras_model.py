@@ -70,6 +70,10 @@ print("Accuracy of our model is:")
 val_loss, val_acc = model.evaluate(X_test, y_test)
 print(val_loss, val_acc)
 
+
+# Print summary
+model.summary()
+
 # plot the model
 print("Plotting the model")
 plot_model(
