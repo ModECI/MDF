@@ -19,15 +19,19 @@ The ultimate goal is to produce a model that generalizes well to new, unseen ima
 The MNIST (Modified National Institute of Standards and Technology) dataset is a widely used dataset for machine learning and computer vision. It consists of a large collection of grayscale images of handwritten digits (0-9), along with their corresponding labels (the digit in each image).Each image in the MNIST dataset is 28x28 pixels in size, and is represented as a 2-dimensional array of pixel intensities. The reason why we use MNISt to build this model its because of the following:
 
 ###### Availability:
-The MNIST dataset is widely available and easy to download you can also load it online using the Commands below
+The MNIST dataset is widely available and easy to download. You can also easily load it from tensorflow datasets using the Commands below
 ```Python
-
+import tensorflow
+# access the dataset
+mnist = tensorflow.keras.datasets.mnist
+# load the dataset
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
 ###### Simple and well-defined:
 The MNIST dataset consists of simple grayscale images of handwritten digits, and the task of classifying the digit in each image is well-defined and straightforward.
 The grayscale images look like the one below
 
-![](https://raw.githubusercontent.com/ModECI/MDF/test_keras/examples/TensorFlow/Keras/3.jpeg)
+![3](3.png)
 
 ######  Low dimensional:
 The MNIST images are 28x28 pixels in size, which is a relatively low dimensional input space compared to more complex image datasets. This makes it easier to train machine learning models and to visualize the results.
@@ -45,7 +49,11 @@ This model uses the TensorFlow library to recognize handwritten digits from the 
 ##### Get Keras installed
 Open your command prompt and enter the commands below
 ```Python
-    pip install tensorflow
+    pip install keras
+```
+Keras is also integrated in Tensorflow and can be accessed in Python with the commands below
+```Python
+from tensorflow import keras
 ```
 
 ### Summarize Model
@@ -59,7 +67,7 @@ The number of parameters (weights) in each layer.
 The total number of parameters (weights) in the model.
 The summary can be created by calling the 'summary()' function on the model that returns a string that in turn can be printed.
 
-Below is the Summary of this model, We can clearly see the output shape and number of weights in each layer:
+Below is the Summary image captured from of this model, We can clearly see the output shape and number of weights in each layer:
 ![summary](summary.png)
 
 
@@ -84,9 +92,28 @@ To Get the visualization below, you will need to install the following packages
 ```
 [Graphviz](https://graphviz.org/) is open source graph visualization software. Graph visualization is a way of representing structural information as diagrams of abstract graphs and networks
 
+##### Keras Model
+Keras has a [plot_model](https://keras.io/api/utils/model_plotting_utils/) function that is used to generate the graphical representation of the model's network. Below is the visual representation of the keras model used on the MNIST data set.
+<br>
 ![model_plot](model_plot.png)
+<br>
+
+##### MDF Model
+The keras_to_mdf function is used to convert keras model to MDF. The current implementation of the keras_to_mdf functionality is built upon translating each layer in a keras model into a node in MDF that contains parameters and functions used in the keras layers. It is still a work in progress. In its current state, keras layers with Flatten layer and Dense layers can be automatically translated to MDF.
+
+An example illustrating this conversion in python is the [keras_to_MDF.py](keras_to_MDF.py) Script.
+Below is how the keras_to_mdf fucntion was used in the Script
+```Python
+mdf_model, params_dict = keras_to_mdf(model=model, args=twenty_x_test)
+```
+
+The function has two parameters, the first parameter **model** accepts a keras model as its argument while the second parameter **args** accepts an input tensor or numpy array as its argument. The function returns an mdf model and parameters as its output.
+
+Graphviz is used to generate visualization for the MDF graph. Below is the visualization of the MDF graph after converting the keras model to MDF.
+
+![keras_to_MDF](keras_to_MDF.png)
 
 ##### Neutron
-Below is the viasualizationof this model using neutron
+Below is the visualization of this model using neutron
 
-[](https://github.com/ModECI/MDF/blob/test_keras/examples/TensorFlow/Keras/layers_netron.png)
+![keras-model-to-neutron](layers_netron.png)
