@@ -91,7 +91,15 @@ class VGG16(nn.Module):
 in_channels = 3
 num_classes = 1
 
-model = VGG16()
+
+def get_pytorch_model():
+    model = VGG16()
+    return model
+
+
+def get_example_input():
+    x = torch.zeros((1, 3, 224, 224))
+    return x
 
 
 def main():
@@ -99,10 +107,11 @@ def main():
     from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
-    x = torch.zeros((1, 3, 224, 224))
+    x = get_example_input()
     ebv_output = torch.zeros((1,))
 
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
+    model = get_pytorch_model()
     model.eval()
 
     # Run the model once to get some ground truth outpot (from PyTorch)

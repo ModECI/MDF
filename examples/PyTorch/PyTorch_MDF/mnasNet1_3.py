@@ -5,23 +5,35 @@ from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 mnasnet1_3 = models.mnasnet1_3(pretrained=False)
 
 
+def get_pytorch_model():
+    model = models.mnasnet1_3(pretrained=False)
+    return model
+
+
+def get_example_input():
+    x = torch.zeros((1, 3, 224, 224))
+    return x
+
+
 def main():
     # changed import call
     from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
-    x = torch.zeros((1, 3, 224, 224))
+    x = get_example_input()
     ebv_output = torch.zeros((1,))
 
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
-    mnasnet1_3.eval()
+    model = get_pytorch_model()
+    model.eval()
 
     # Run the model once to get some ground truth outpot (from PyTorch)
-    output = mnasnet1_3(x).detach().numpy()
+
+    output = model(x).detach().numpy()
 
     # Convert to MDF
     mdf_model, params_dict = pytorch_to_mdf(
-        model=mnasnet1_3,
+        model=model,
         args=(x),
         trace=True,
     )

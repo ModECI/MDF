@@ -1,6 +1,6 @@
 ONNX Model:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.7
+    generating_application: Python modeci-mdf v0.4.8
     graphs:
         torch-jit-export:
             nodes:
@@ -10,6 +10,7 @@ ONNX Model:
                             shape:
                             - 2
                             - 3
+                            type: float
                     parameters:
                         B:
                             value: 1.0
@@ -27,6 +28,7 @@ ONNX Model:
                             shape:
                             - 2
                             - 3
+                            type: float
                     parameters:
                         B:
                             value: 5.0
