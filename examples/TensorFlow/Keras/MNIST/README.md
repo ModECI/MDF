@@ -1,7 +1,6 @@
-# Keras to/from MDF Converter
+# Keras to/from MDF 
 
 **NOTE: this is still a work in progress!**
-
 
 ## Keras
 
