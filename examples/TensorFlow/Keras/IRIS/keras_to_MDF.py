@@ -48,6 +48,16 @@ mdf_model.to_graph_image(
     engine="dot",
     output_format="png",
     view_on_render=False,
+    level=1,
+    filename_root="keras_to_MDF.1",
+    is_horizontal=True,
+    solid_color=True,
+)
+# visualize mdf graph-image
+mdf_model.to_graph_image(
+    engine="dot",
+    output_format="png",
+    view_on_render=False,
     level=3,
     filename_root="keras_to_MDF",
     is_horizontal=False,

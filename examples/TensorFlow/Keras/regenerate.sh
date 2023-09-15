@@ -3,7 +3,7 @@ set -ex
 
 # Script to regenerate and test the examples
 
-cd MNIST 
+cd MNIST
 
 python keras_model.py -nogui
 

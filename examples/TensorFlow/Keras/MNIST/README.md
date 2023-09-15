@@ -1,6 +1,4 @@
-# Keras to/from MDF
-
-**NOTE: this is still a work in progress!**
+# Keras to MDF example: MNIST
 
 ## Keras
 
@@ -69,7 +67,7 @@ The number of parameters (weights) in each layer.
 The total number of parameters (weights) in the model.
 The summary can be created by calling the 'summary()' function on the model that returns a string that in turn can be printed.
 
-Below is the Summary image captured from of this model, We can clearly see the output shape and number of weights in each layer:
+Below is the summary image of the trained Keras model. We can clearly see the output shape and number of weights in each layer:
 
 ![summary](summary.png)
 
