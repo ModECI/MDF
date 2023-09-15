@@ -1,6 +1,16 @@
 #!/bin/bash
 set -ex
 
+# Script to regenerate and test the examples
+
+cd MNIST
+
 python keras_model.py -nogui
 
-python keras2MDFfunc_cal.py
+python keras_to_MDF.py
+
+cd ../IRIS
+
+python keras_model.py
+
+python keras_to_MDF.py
