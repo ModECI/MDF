@@ -1,5 +1,5 @@
 IzhikevichTest:
-    version: NeuroMLlite v0.5.5
+    version: NeuroMLlite v0.5.7
     notes: Example Izhikevich
     parameters:
         N: 1
@@ -47,5 +47,5 @@ IzhikevichTest:
         stim:
             input_source: iclamp_0
             population: izhPop
-            percentage: 100.0
+            percentage: 100
             weight: 1
