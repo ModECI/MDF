@@ -1,6 +1,6 @@
 {
     "FN": {
-        "version": "NeuroMLlite v0.5.5",
+        "version": "NeuroMLlite v0.5.7",
         "notes": "FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS",
         "parameters": {
             "initial_w": 0.0,
