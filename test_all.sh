@@ -90,7 +90,7 @@ python addition.py
 
 ## Test Keras examples
 
-cd ../Tensorflow/Keras
+cd ../TensorFlow/Keras
 ./regenerate.sh
 
 ## Generate the docs
