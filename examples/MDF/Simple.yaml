@@ -1,6 +1,6 @@
 Simple:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.7
+    generating_application: Python modeci-mdf v0.4.8
     graphs:
         simple_example:
             nodes:
