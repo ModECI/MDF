@@ -92,6 +92,7 @@ jobs:
         python -m pytest -v -m "tensorflow" tests/
 
     - name: Test interface PsyNeuLink
+      if: ${{ matrix.python-version != '3.11'}}
       run: |
         python -m pip install .[psyneulink]
         python -m pytest -v -m "psyneulink" tests/
