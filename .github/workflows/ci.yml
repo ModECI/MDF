@@ -62,7 +62,7 @@ jobs:
 
     - name: Install most optional dependencies
       run: |
-        python -m pip install .[all_except_psyneulink]
+        python -m pip install .[optional]
 
     - name: Version info for optional installed packages
       run: |
@@ -81,10 +81,13 @@ jobs:
 
     - name: Test interface NeuroML
       run: |
+        python -m pip install .[neuroml]
         python -m pytest -v -m "neuroml" tests/
 
     - name: Test interface TensorFlow
+      if: ${{ matrix.python-version != '3.11'}}
       run: |
+        python -m pip install .[tensorflow]
         dot -V
         python -m pytest -v -m "tensorflow" tests/
 
