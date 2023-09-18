@@ -1,11 +1,11 @@
 {
     "ONNX Model": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.8",
+        "generating_application": "Python modeci-mdf v0.4.9",
         "graphs": {
-            "torch-jit-export": {
+            "torch_jit": {
                 "nodes": {
-                    "Add_1": {
+                    "/A/Add": {
                         "input_ports": {
                             "input": {
                                 "shape": [
@@ -19,7 +19,7 @@
                             "B": {
                                 "value": 1.0
                             },
-                            "Add_1": {
+                            "/A/Add": {
                                 "function": "onnx::Add",
                                 "args": {
                                     "A": "input",
@@ -28,14 +28,14 @@
                             }
                         },
                         "output_ports": {
-                            "onnx_Mul_2": {
-                                "value": "Add_1"
+                            "_A_Add_output_0": {
+                                "value": "/A/Add"
                             }
                         }
                     },
-                    "Mul_3": {
+                    "/B/Mul": {
                         "input_ports": {
-                            "onnx_Mul_2": {
+                            "_A_Add_output_0": {
                                 "shape": [
                                     2,
                                     3
@@ -47,27 +47,27 @@
                             "B": {
                                 "value": 5.0
                             },
-                            "Mul_3": {
+                            "/B/Mul": {
                                 "function": "onnx::Mul",
                                 "args": {
-                                    "A": "onnx_Mul_2",
+                                    "A": "_A_Add_output_0",
                                     "B": "B"
                                 }
                             }
                         },
                         "output_ports": {
                             "_4": {
-                                "value": "Mul_3"
+                                "value": "/B/Mul"
                             }
                         }
                     }
                 },
                 "edges": {
-                    "Add_1.onnx_Mul_2_Mul_3.onnx_Mul_2": {
-                        "sender": "Add_1",
-                        "receiver": "Mul_3",
-                        "sender_port": "onnx_Mul_2",
-                        "receiver_port": "onnx_Mul_2"
+                    "/A/Add._A_Add_output_0_/B/Mul._A_Add_output_0": {
+                        "sender": "/A/Add",
+                        "receiver": "/B/Mul",
+                        "sender_port": "_A_Add_output_0",
+                        "receiver_port": "_A_Add_output_0"
                     }
                 }
             }
