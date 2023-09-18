@@ -2,6 +2,7 @@
 set -ex
 
 pip install .[all]
+pip install .[dev]
 
 # Note this:
 #    1) runs examples to regenerate yaml/json...
