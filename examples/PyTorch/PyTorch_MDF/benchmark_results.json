@@ -1,0 +1,92 @@
+[
+    {
+        "model_name": "convolution",
+        "model_type": "CNN",
+        "pytorch_time": 0.4006,
+        "pytorch_predictions": 100,
+        "mdf_time": 13.0973,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 33
+    },
+    {
+        "model_name": "mnasNet1_3",
+        "model_type": "MNASNet",
+        "pytorch_time": 5.9951,
+        "pytorch_predictions": 100,
+        "mdf_time": 204.233,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 34
+    },
+    {
+        "model_name": "mobilenetv2",
+        "model_type": "MobileNetV2",
+        "pytorch_time": 15.3598,
+        "pytorch_predictions": 100,
+        "mdf_time": 219.3062,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 14
+    },
+    {
+        "model_name": "resnet",
+        "model_type": "ResNet",
+        "pytorch_time": 21.9143,
+        "pytorch_predictions": 100,
+        "mdf_time": 186.6032,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 9
+    },
+    {
+        "model_name": "resNext",
+        "model_type": "ResNet",
+        "pytorch_time": 46.0894,
+        "pytorch_predictions": 100,
+        "mdf_time": 411.9468,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 9
+    },
+    {
+        "model_name": "shufflenet_v2",
+        "model_type": "ShuffleNetV2",
+        "pytorch_time": 5.0403,
+        "pytorch_predictions": 100,
+        "mdf_time": 873.2305,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 173
+    },
+    {
+        "model_name": "simple_Convolution",
+        "model_type": "CNN",
+        "pytorch_time": 0.0827,
+        "pytorch_predictions": 100,
+        "mdf_time": 12.8437,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 155
+    },
+    {
+        "model_name": "squeezenet1_1",
+        "model_type": "SqueezeNet",
+        "pytorch_time": 5.9022,
+        "pytorch_predictions": 100,
+        "mdf_time": 115.3758,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 20
+    },
+    {
+        "model_name": "vgg16",
+        "model_type": "VGG16",
+        "pytorch_time": 63.7494,
+        "pytorch_predictions": 100,
+        "mdf_time": 207.093,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 3
+    },
+    {
+        "model_name": "vgg19",
+        "model_type": "VGG",
+        "pytorch_time": 72.6998,
+        "pytorch_predictions": 100,
+        "mdf_time": 221.9201,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": 3
+    }
+]

@@ -88,9 +88,14 @@ cd ../ACT-R
 python count.py
 python addition.py
 
+## Test Keras examples
+
+cd ../TensorFlow/Keras
+./regenerate.sh
+
 ## Generate the docs
 
-cd ../../docs
+cd ../../../docs
 python generate.py
 cd ..
 

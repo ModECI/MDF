@@ -29,9 +29,15 @@ class CNN(nn.Module):
 in_channels = 1
 num_classes = 10
 
-model = CNN(in_channels=in_channels, num_classes=num_classes)
 
-print(model)
+def get_pytorch_model():
+    model = CNN(in_channels=in_channels, num_classes=num_classes)
+    return model
+
+
+def get_example_input():
+    x = torch.zeros((1, 1, 28, 28))
+    return x
 
 
 def main():
@@ -39,10 +45,11 @@ def main():
     from modeci_mdf.execution_engine import EvaluableGraph
 
     # Create some test inputs for the model
-    x = torch.zeros((1, 1, 28, 28))
+    x = get_example_input()
     ebv_output = torch.zeros((10,))
 
     # Turn on eval mode for model to get rid of any randomization due to things like BatchNorm or Dropout
+    model = get_pytorch_model()
     model.eval()
 
     # Run the model once to get some ground truth outpot (from PyTorch)

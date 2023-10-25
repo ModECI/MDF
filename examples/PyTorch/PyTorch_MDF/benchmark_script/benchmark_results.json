@@ -1,0 +1,102 @@
+[
+    {
+        "model_name": "convolution",
+        "model_type": "CNN",
+        "pytorch_time": 3.0135,
+        "pytorch_predictions": 10000,
+        "mdf_time": 90.1613,
+        "mdf_predictions": 10000,
+        "mdf : pytorch ratio": "29.92",
+        "node density": 13
+    },
+    {
+        "model_name": "mnasNet1_3",
+        "model_type": "MNASNet",
+        "pytorch_time": 38.2517,
+        "pytorch_predictions": 100,
+        "mdf_time": 16.0048,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "0.42",
+        "node density": 152
+    },
+    {
+        "model_name": "mobilenetv2",
+        "model_type": "MobileNetV2",
+        "pytorch_time": 7.502,
+        "pytorch_predictions": 100,
+        "mdf_time": 15.9479,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "2.13",
+        "node density": 153
+    },
+    {
+        "model_name": "resNext",
+        "model_type": "ResNet",
+        "pytorch_time": 10.7243,
+        "pytorch_predictions": 100,
+        "mdf_time": 21.4015,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "2.00",
+        "node density": 175
+    },
+    {
+        "model_name": "resnet",
+        "model_type": "ResNet",
+        "pytorch_time": 6.9347,
+        "pytorch_predictions": 100,
+        "mdf_time": 18.7943,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "2.71",
+        "node density": 69
+    },
+    {
+        "model_name": "shufflenet_v2",
+        "model_type": "ShuffleNetV2",
+        "pytorch_time": 4.49,
+        "pytorch_predictions": 100,
+        "mdf_time": 52.2807,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "11.64",
+        "node density": 672
+    },
+    {
+        "model_name": "simple_Convolution",
+        "model_type": "CNN",
+        "pytorch_time": 1.4924,
+        "pytorch_predictions": 10000,
+        "mdf_time": 62.0085,
+        "mdf_predictions": 10000,
+        "mdf : pytorch ratio": "41.55",
+        "node density": 10
+    },
+    {
+        "model_name": "squeezenet1_1",
+        "model_type": "SqueezeNet",
+        "pytorch_time": 0.7175,
+        "pytorch_predictions": 100,
+        "mdf_time": 5.8855,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "8.20",
+        "node density": 66
+    },
+    {
+        "model_name": "vgg16",
+        "model_type": "VGG16",
+        "pytorch_time": 6.1255,
+        "pytorch_predictions": 100,
+        "mdf_time": 18.5687,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "3.03",
+        "node density": 44
+    },
+    {
+        "model_name": "vgg19",
+        "model_type": "VGG",
+        "pytorch_time": 6.8689,
+        "pytorch_predictions": 100,
+        "mdf_time": 21.6308,
+        "mdf_predictions": 100,
+        "mdf : pytorch ratio": "3.15",
+        "node density": 46
+    }
+]
