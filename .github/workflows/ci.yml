@@ -85,14 +85,12 @@ jobs:
         python -m pytest -v -m "neuroml" tests/
 
     - name: Test interface TensorFlow
-      if: ${{ matrix.python-version != '3.11'}}
       run: |
         python -m pip install .[tensorflow]
         dot -V
         python -m pytest -v -m "tensorflow" tests/
 
     - name: Test interface PsyNeuLink
-      if: ${{ matrix.python-version != '3.11'}}
       run: |
         python -m pip install .[psyneulink]
         python -m pytest -v -m "psyneulink" tests/
