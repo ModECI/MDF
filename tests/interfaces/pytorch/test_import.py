@@ -194,6 +194,7 @@ def _run_and_check_model(model, input=None):
 @pytest.mark.parametrize("model_init, kwargs, input", _get_torchvision_models())
 def test_torchvision_models(model_init, kwargs, input):
     """Test importing the PyTorch model into MDF, executing in execution engine"""
+    print(kwargs)
     _run_and_check_model(model_init(**kwargs), input=input)
 
 
