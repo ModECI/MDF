@@ -137,9 +137,9 @@ OneCell:
                         \ neuroml2_cell=None, pynn_cell='IF_curr_alpha', arbor_cell=None,\
                         \ bindsnet_node=None)] is defined in None and in Lems is:\
                         \ Component, id: testcell, type: IF_curr_alpha,\n   parameters:\
-                        \ {'cm': '1.', 'i_offset': 0.0, 'tau_syn_E': '0.5', 'tau_syn_I':\
-                        \ '0.5', 'v_init': '-65.', 'tau_m': '20.', 'tau_refrac': 5,\
-                        \ 'v_reset': '-65.', 'v_rest': '-65.', 'v_thresh': '-50.'}\n\
+                        \ {'cm': '1.0', 'i_offset': 0.0, 'tau_syn_E': '0.5', 'tau_syn_I':\
+                        \ '0.5', 'v_init': '-65.0', 'tau_m': '20.0', 'tau_refrac':\
+                        \ 5, 'v_reset': '-65.0', 'v_rest': '-65.0', 'v_thresh': '-50.0'}\n\
                         \   parent: None\n"
                 InputList_stim:
                     parameters:

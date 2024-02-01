@@ -5,8 +5,8 @@
     NeuroMLlite parameters:
         input_amp = 0.99</notes>
     <pulseGenerator id="i_clamp" delay="200.0ms" duration="600.0ms" amplitude="0.99nA"/>
-    <IF_curr_alpha id="testcell" cm="1." i_offset="0." tau_syn_E="20." tau_syn_I="0.5" v_init="-65." tau_m="20." tau_refrac="5." v_reset="-65." v_rest="-65." v_thresh="-50."/>
-    <alphaCurrSynapse id="ampaSyn" tau_syn="20."/>
+    <IF_curr_alpha id="testcell" cm="1.0" i_offset="0.0" tau_syn_E="20.0" tau_syn_I="0.5" v_init="-65.0" tau_m="20.0" tau_refrac="5.0" v_reset="-65.0" v_rest="-65.0" v_thresh="-50.0"/>
+    <alphaCurrSynapse id="ampaSyn" tau_syn="20.0"/>
     <network id="Net1">
         <notes>Example: Net1</notes>
         <property tag="recommended_dt_ms" value="0.01"/>
