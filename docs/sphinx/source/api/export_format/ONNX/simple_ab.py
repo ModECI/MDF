@@ -100,7 +100,7 @@ def main():
         for t in test_values:
             print("===================\nEvaluating MDF model with input: %s" % t)
             eg.evaluate(initializer={"input": t})
-            print("Output: %s" % eg.enodes["Mul_3"].evaluable_outputs["_4"].curr_value)
+            print("Output: %s" % eg.enodes["/B/Mul"].evaluable_outputs["_4"].curr_value)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 {
     "timeinterval_condition": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.7",
+        "generating_application": "Python modeci-mdf v0.4.9",
         "graphs": {
             "timeinterval_example": {
                 "nodes": {

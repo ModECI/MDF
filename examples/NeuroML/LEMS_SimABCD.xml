@@ -2,7 +2,7 @@
 
     <!--
 
-        This LEMS file has been automatically generated using PyNeuroML v1.0.8 (libNeuroML v0.5.1)
+        This LEMS file has been automatically generated using PyNeuroML v1.1.8 (libNeuroML v0.5.7)
 
      -->
 
@@ -19,7 +19,6 @@
     <Include file="ABCD__lems.xml"/>
 
     <Simulation id="SimABCD" length="5000.0ms" step="100.0ms" target="ABCD" seed="123">  <!-- Note seed: ensures same random numbers used every run -->
-
         <Display id="A_0_OUTPUT" title="Plots of A_0_OUTPUT" timeScale="1ms" xmin="-500.0" xmax="5500.0" ymin="-1" ymax="1">
             <Line id="A_0_a_OUTPUT" quantity="A/0/a/OUTPUT" scale="1" color="#d54f33" timeScale="1ms"/>
         </Display>
