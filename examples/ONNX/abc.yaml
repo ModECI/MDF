@@ -1,10 +1,10 @@
 ONNX Model:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.8
+    generating_application: Python modeci-mdf v0.4.9
     graphs:
-        torch-jit-export:
+        torch_jit:
             nodes:
-                Add_1:
+                /A/Add:
                     input_ports:
                         input:
                             shape:
@@ -14,21 +14,21 @@ ONNX Model:
                     parameters:
                         B:
                             value: 1.0
-                        Add_1:
+                        /A/Add:
                             function: onnx::Add
                             args:
                                 A: input
                                 B: B
                     output_ports:
-                        onnx_Loop_3:
-                            value: Add_1
+                        _A_Add_output_0:
+                            value: /A/Add
                 Loop_3:
                     input_ports:
                         B_loop_count:
                             shape:
                             - 1
                             type: float
-                        onnx_Loop_3:
+                        _A_Add_output_0:
                             shape:
                             - 2
                             - 3
@@ -36,12 +36,12 @@ ONNX Model:
                     parameters:
                         body:
                             value:
-                                graph_torch-jit-export1:
-                                    id: torch-jit-export1
+                                graph_torch_jit1:
+                                    id: torch_jit1
                                     nodes:
                                         Div_5:
                                             input_ports:
-                                                x_11:
+                                                x.11:
                                                     shape:
                                                     - 2
                                                     - 3
@@ -52,7 +52,7 @@ ONNX Model:
                                                 Div_5:
                                                     function: onnx::Div
                                                     args:
-                                                        A: x_11
+                                                        A: x.11
                                                         B: B
                                             output_ports:
                                                 x:
@@ -75,35 +75,35 @@ ONNX Model:
                             args:
                                 M: B_loop_count
                                 cond: cond
-                                v_initial: onnx_Loop_3
+                                v_initial: _A_Add_output_0
                     output_ports:
-                        x_3:
+                        x.3:
                             value: Loop_3
-                Mul_8:
+                /C/Mul:
                     input_ports:
-                        x_3:
+                        x.3:
                             shape:
                             - 1
                             type: float
                     parameters:
                         B:
                             value: 100.0
-                        Mul_8:
+                        /C/Mul:
                             function: onnx::Mul
                             args:
-                                A: x_3
+                                A: x.3
                                 B: B
                     output_ports:
                         _13:
-                            value: Mul_8
+                            value: /C/Mul
             edges:
-                Add_1.onnx_Loop_3_Loop_3.onnx_Loop_3:
-                    sender: Add_1
+                /A/Add._A_Add_output_0_Loop_3._A_Add_output_0:
+                    sender: /A/Add
                     receiver: Loop_3
-                    sender_port: onnx_Loop_3
-                    receiver_port: onnx_Loop_3
-                Loop_3.x_3_Mul_8.x_3:
+                    sender_port: _A_Add_output_0
+                    receiver_port: _A_Add_output_0
+                Loop_3.x.3_/C/Mul.x.3:
                     sender: Loop_3
-                    receiver: Mul_8
-                    sender_port: x_3
-                    receiver_port: x_3
+                    receiver: /C/Mul
+                    sender_port: x.3
+                    receiver_port: x.3

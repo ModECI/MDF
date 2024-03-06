@@ -1,7 +1,7 @@
 {
     "addition": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.8",
+        "generating_application": "Python modeci-mdf v0.4.9",
         "graphs": {
             "addition_graph": {
                 "nodes": {

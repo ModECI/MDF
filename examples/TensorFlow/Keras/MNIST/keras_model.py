@@ -4,7 +4,7 @@ import tensorflow as tf
 # tf.__version__
 
 from keras.layers import Dense
-from keras.utils.vis_utils import plot_model
+from keras.utils import plot_model
 from keras.models import Sequential
 
 # from keras_visualizer import visualizer
