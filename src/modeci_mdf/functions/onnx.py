@@ -152,6 +152,13 @@ def run_onnx_op(
     )
 
     model_def = op.to_onnx(inputs)
+
+    # For some reason, for some ops, the opset version is set to the miniumum supported version.
+    # For certain ops, this is version 1. The ONNX runtime is printing a warning about any version
+    # less than 7. So, if the opset version is less than 7, set to opset_version.
+    if model_def.opset_import[0].version < 7:
+        model_def.opset_import[0].version = opset_version
+
     return predict_with_onnxruntime(model_def, *input_vals)
 
 
