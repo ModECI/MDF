@@ -11,6 +11,10 @@ from modeci_mdf.interfaces.keras import keras_to_mdf
 from modelspec.utils import _val_info
 from modeci_mdf.execution_engine import EvaluableGraph
 
+# Import keras_model to ensure it runs and generates the model
+sys.path.append(".")
+import keras_model  # noqa: F401
+
 # load the keras model
 model = tf.keras.models.load_model("keras_model_on_iris.keras")
 
