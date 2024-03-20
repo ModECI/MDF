@@ -10,7 +10,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
 exec(open("./keras_model.py").read())
 
 # load the keras model
-model = tf.keras.models.load_model("kr_N_model.keras")
+# model = tf.keras.models.load_model("kr_N_model.keras")
 
 # get 20 of the test images from the mnnist test dataset
 _, (x_test, y_test) = tf.keras.datasets.mnist.load_data()

@@ -35,22 +35,22 @@ x_test = tf.keras.utils.normalize(x_test, axis=1)
 
 # Build Model
 print("Building the Model")
-kr_model = tf.keras.models.Sequential()
-kr_model.add(tf.keras.layers.Flatten())  # input layer
+model = tf.keras.models.Sequential()
+model.add(tf.keras.layers.Flatten())  # input layer
 
-kr_model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))  # hidden layers
-kr_model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))
-kr_model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))  # output layer
+model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))  # hidden layers
+model.add(tf.keras.layers.Dense(128, activation=tf.nn.relu))
+model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))  # output layer
 
 # Compile Model
 print("Compiling the model")
-kr_model.compile(
+model.compile(
     optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"]
 )
 
 # train the model
 print("Training the Model")
-kr_model.fit(x_train, y_train, epochs=3)
+model.fit(x_train, y_train, epochs=3)
 
 # loadthe model above
 # new_model = tf.keras.models.load_model("num_reader.model")
@@ -58,24 +58,24 @@ kr_model.fit(x_train, y_train, epochs=3)
 
 # check if the model actually generalize the data.
 print("Accuracy of our model is:")
-val_loss, val_acc = kr_model.evaluate(x_test, y_test)
+val_loss, val_acc = model.evaluate(x_test, y_test)
 print(val_loss, val_acc)
 
 # Print summary
-kr_model.summary()
+model.summary()
 
 # plot the model
 print("Plotting the model")
-plot_model(kr_model, to_file="model_plot.png", show_shapes=True, show_layer_names=True)
+plot_model(model, to_file="model_plot.png", show_shapes=True, show_layer_names=True)
 
 
 # Saving model in h5 for Ploting Nuetron visual
-kr_model.save("kr_N_model.keras")
+model.save("kr_N_model.keras")
 
 
 # predict example for index 0
 print("Predict value at index 0:")
-predictions = kr_model.predict([x_test])
+predictions = model.predict([x_test])
 print("The predicted number at index 0 is", np.argmax(predictions[0]))
 
 # print the actual value at that index

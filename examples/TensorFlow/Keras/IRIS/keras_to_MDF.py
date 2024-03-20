@@ -14,7 +14,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
 exec(open("./keras_model.py").read())
 
 # load the keras model
-model = tf.keras.models.load_model("keras_model_on_iris.keras")
+# model = tf.keras.models.load_model("keras_model_on_iris.keras")
 
 # get the test data from iris dataset
 iris = load_iris()
