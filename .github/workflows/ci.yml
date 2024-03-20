@@ -69,7 +69,10 @@ jobs:
           pip list
 
     - name: Install graphviz
-      uses: ts-graphviz/setup-graphviz@v1
+      uses: ts-graphviz/setup-graphviz@v2
+      with:
+        # Skip to run brew update command on macOS.
+        macos-skip-brew-update: 'true' # default false
 
     - name: Test interface ACT-R
       run: |
