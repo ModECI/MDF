@@ -12,7 +12,7 @@ from modelspec.utils import _val_info
 from modeci_mdf.execution_engine import EvaluableGraph
 
 # load the keras model
-model = tf.keras.models.load_model("keras_model_on_iris.h5")
+model = tf.keras.models.load_model("keras_model_on_iris.keras")
 
 # get the test data from iris dataset
 iris = load_iris()

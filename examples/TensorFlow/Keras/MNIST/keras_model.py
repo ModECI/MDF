@@ -70,7 +70,7 @@ plot_model(kr_model, to_file="model_plot.png", show_shapes=True, show_layer_name
 
 
 # Saving model in h5 for Ploting Nuetron visual
-kr_model.save("kr_N_model.h5")
+kr_model.save("kr_N_model.keras")
 
 
 # predict example for index 0
