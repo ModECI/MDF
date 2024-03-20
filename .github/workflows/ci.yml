@@ -88,7 +88,6 @@ jobs:
         python -m pytest -v -m "neuroml" tests/
 
     - name: Test interface TensorFlow
-      if: ${{ matrix.python-version != '3.11'}}
       run: |
         python -m pip install .[tensorflow]
         dot -V
