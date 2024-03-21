@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import tensorflow as tf
 
@@ -5,8 +7,10 @@ from modeci_mdf.interfaces.keras import keras_to_mdf
 from modelspec.utils import _val_info
 from modeci_mdf.execution_engine import EvaluableGraph
 
+exec(open("./keras_model.py").read())
+
 # load the keras model
-model = tf.keras.models.load_model("kr_N_model.h5")
+# model = tf.keras.models.load_model("kr_N_model.keras")
 
 # get 20 of the test images from the mnnist test dataset
 _, (x_test, y_test) = tf.keras.datasets.mnist.load_data()

@@ -82,7 +82,7 @@ plot_model(
 
 
 # Saving model in h5 for Ploting Nuetron visual
-model.save("keras_model_on_iris.h5")
+model.save("keras_model_on_iris.keras")
 
 
 # predict example for index 0
