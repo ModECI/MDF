@@ -69,7 +69,10 @@ jobs:
           pip list
 
     - name: Install graphviz
-      uses: ts-graphviz/setup-graphviz@v1
+      uses: ts-graphviz/setup-graphviz@v2
+      with:
+        # Skip to run brew update command on macOS.
+        macos-skip-brew-update: 'true' # default false
 
     - name: Test interface ACT-R
       run: |
@@ -85,7 +88,6 @@ jobs:
         python -m pytest -v -m "neuroml" tests/
 
     - name: Test interface TensorFlow
-      if: ${{ matrix.python-version != '3.11'}}
       run: |
         python -m pip install .[tensorflow]
         dot -V
