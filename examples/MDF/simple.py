@@ -17,6 +17,7 @@ from modeci_mdf.mdf import (
 import sys
 import os
 
+
 def main():
     mod = Model(id="Simple")
     mod_graph = Graph(id="simple_example")
