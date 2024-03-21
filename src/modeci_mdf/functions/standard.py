@@ -5,7 +5,7 @@ This module implements and registers all builtin MDF functions.
 
 """
 import warnings
-
+import types
 from typing import List, Dict, Callable
 
 from docstring_parser import parse
