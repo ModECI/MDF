@@ -295,7 +295,7 @@ def add_activation(node, activation_name, str_input):
         # value of sigmoid
         node.functions.append(Function(id="Output", value="1 / (1 + exp)"))
 
-    elif activation_name == "softmax":
+    elif activation_name == "softmax" or activation_name == "softmax_v2":
         # args for softmax
         args = {"input": str_input}
 
