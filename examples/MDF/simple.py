@@ -15,6 +15,7 @@ from modeci_mdf.mdf import (
 )
 
 import sys
+import os
 
 
 def main():
