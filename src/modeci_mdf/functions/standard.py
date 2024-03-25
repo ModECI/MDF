@@ -15,7 +15,8 @@ from docstring_parser import parse
 # are important, do not remove even though they appear unused.
 import math
 import numpy
-
+import types
+import re
 
 """
 A dict that stores all registered MDF functions.
@@ -69,12 +70,25 @@ def create_python_expression(expression_string: str = None) -> str:
         function expression in python
     """
 
-    for func in ["exp", "sin", "cos", "tan", "sinh", "cosh", "tanh"]:
-        if "numpy." + func not in expression_string:
+    functions = [
+        "arctan",
+        "arcsin",
+        "arccos",
+        "exp",
+        "sin",
+        "cos",
+        "tan",
+        "sinh",
+        "cosh",
+        "tanh",
+        "maximum",
+    ]
+    functions_sorted = sorted(functions, key=len, reverse=True)
+    for func in functions_sorted:
+        pattern = r"\b" + re.escape(func) + r"\b"
+        replacement = "numpy." + func
+        expression_string = re.sub(pattern, replacement, expression_string)
 
-            expression_string = expression_string.replace(
-                "%s(" % func, "numpy.%s(" % func
-            )
     for func in ["maximum"]:
         expression_string = expression_string.replace("%s(" % func, "numpy.%s(" % func)
     """for func in ["max"]:
@@ -211,6 +225,27 @@ if len(mdf_functions) == 0:
         description="A linear function, calculated from a slope and an intercept",
         arguments=[STANDARD_ARG_0, "slope", "intercept"],
         expression_string="(%s * slope + intercept)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "arctan",
+        description="Inverse tangent function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * arctan(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "arcsin",
+        description="Inverse sine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * arcsin(%s)" % (STANDARD_ARG_0),
+    )
+
+    add_mdf_function(
+        "arccos",
+        description="Inverse cosine function",
+        arguments=[STANDARD_ARG_0, "scale"],
+        expression_string="scale * arccos(%s)" % (STANDARD_ARG_0),
     )
 
     add_mdf_function(
