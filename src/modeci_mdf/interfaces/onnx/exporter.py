@@ -55,6 +55,7 @@ def mdf_to_onnx(mdf_model):
         make_model_kwargs = {}
         try:
             from packaging.version import Version, InvalidVersion
+
             v = Version(onnxruntime.__version__)
 
             if v < Version("1.15"):
