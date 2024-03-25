@@ -81,7 +81,6 @@ def create_python_expression(expression_string: str = None) -> str:
         "sinh",
         "cosh",
         "tanh",
-        "maximum",
     ]
     functions_sorted = sorted(functions, key=len, reverse=True)
     for func in functions_sorted:
