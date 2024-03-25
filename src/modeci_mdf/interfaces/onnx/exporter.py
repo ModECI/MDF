@@ -49,9 +49,21 @@ def mdf_to_onnx(mdf_model):
 
         # Check to see if onnxruntime version is less than 1.15, if so ir_version should
         # be 8 for now. See: https://github.com/microsoft/onnxruntime/issues/15874
+        # There is still now programmatic way to determine the max supported ir_version from onnxruntime
+        # Here is the issue: https://github.com/microsoft/onnxruntime/issues/14932
+        # We will have to continue this dumb hack for the time being.
         make_model_kwargs = {}
-        if onnxruntime.__version__ < "1.15":
-            make_model_kwargs = {"ir_version": 8}
+        try:
+            from packaging.version import Version, InvalidVersion
+            v = Version(onnxruntime.__version__)
+
+            if v < Version("1.15"):
+                make_model_kwargs = {"ir_version": 8}
+            elif v < Version("1.18"):
+                make_model_kwargs = {"ir_version": 9}
+
+        except (InvalidVersion, ModuleNotFoundError):
+            pass
 
         onnx_model = helper.make_model(onnx_graph, **make_model_kwargs)
 
