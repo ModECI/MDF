@@ -29,6 +29,12 @@ import modeci_mdf.functions.standard as stdf
         ),
         ("Relu", {"A": 1}, 1),
         ("Relu", {"A": -1}, 0),
+        ("arctan", {"variable0": 1, "scale": 1}, math.atan(1)),
+        ("arctan", {"variable0": 0, "scale": 2}, 2 * math.atan(0)),
+        ("arcsin", {"variable0": 0.5, "scale": 1}, math.asin(0.5)),
+        ("arcsin", {"variable0": 0, "scale": 2}, 2 * math.asin(0)),
+        ("arccos", {"variable0": 0.5, "scale": 1}, math.acos(0.5)),
+        ("arccos", {"variable0": 0, "scale": 2}, 2 * math.acos(0)),
     ],
 )
 def test_std_functions(name, expected_result, parameters):
