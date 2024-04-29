@@ -1,53 +1,62 @@
 ONNX Model:
-    format: ModECI MDF v0.2
-    generating_application: Python modeci-mdf v0.2.1
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.10
     graphs:
-        torch-jit-export:
+        main_graph:
             nodes:
-                Sin_0:
+                /A/Sin:
                     input_ports:
                         input:
-                            shape: (2, 3)
+                            shape:
+                            - 2
+                            - 3
+                            type: float
                     parameters:
-                        Sin_0:
+                        /A/Sin:
                             function: onnx::Sin
                             args:
                                 input: input
                     output_ports:
-                        _1:
-                            value: Sin_0
-                Sin_1:
+                        _A_Sin_output_0:
+                            value: /A/Sin
+                /B/Sin:
                     input_ports:
-                        _1:
-                            shape: (2, 3)
+                        _A_Sin_output_0:
+                            shape:
+                            - 2
+                            - 3
+                            type: float
                     parameters:
-                        Sin_1:
+                        /B/Sin:
                             function: onnx::Sin
                             args:
-                                input: _1
+                                input: _A_Sin_output_0
                     output_ports:
-                        _2:
-                            value: Sin_1
-                Cos_2:
+                        _B_Sin_output_0:
+                            value: /B/Sin
+                /C/Cos:
                     input_ports:
-                        _2:
-                            shape: (2, 3)
+                        _B_Sin_output_0:
+                            shape:
+                            - 2
+                            - 3
+                            type: float
                     parameters:
-                        Cos_2:
+                        /C/Cos:
                             function: onnx::Cos
                             args:
-                                input: _2
+                                input: _B_Sin_output_0
                     output_ports:
                         _3:
-                            value: Cos_2
+                            value: /C/Cos
             edges:
-                Sin_0._1_Sin_1._1:
-                    sender: Sin_0
-                    receiver: Sin_1
-                    sender_port: _1
-                    receiver_port: _1
-                Sin_1._2_Cos_2._2:
-                    sender: Sin_1
-                    receiver: Cos_2
-                    sender_port: _2
-                    receiver_port: _2
+                /A/Sin._A_Sin_output_0_/B/Sin._A_Sin_output_0:
+                    sender: /A/Sin
+                    receiver: /B/Sin
+                    sender_port: _A_Sin_output_0
+                    receiver_port: _A_Sin_output_0
+                /B/Sin._B_Sin_output_0_/C/Cos._B_Sin_output_0:
+                    sender: /B/Sin
+                    receiver: /C/Cos
+                    sender_port: _B_Sin_output_0
+                    receiver_port: _B_Sin_output_0
