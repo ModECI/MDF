@@ -5,6 +5,9 @@ These functions are defined in Python API module <a href="https://github.com/Mod
 
 - <a href="#matmul">MatMul</a>
 - <a href="#relu">Relu</a>
+- <a href="#arccos">arccos</a>
+- <a href="#arcsin">arcsin</a>
+- <a href="#arctan">arctan</a>
 - <a href="#changegoal">change_goal</a>
 - <a href="#checktermination">check_termination</a>
 - <a href="#chunktostring">chunk_to_string</a>
@@ -211,6 +214,30 @@ Python version: `A @ B`
 
 Python version: `A * (A > 0)`
 
+<a name="arccos"></a>
+
+## arccos
+ <p><i>Inverse cosine function</i></p>
+<p><b>arccos(variable0, scale)</b> = scale * arccos(variable0)</p>
+
+Python version: `scale * numpy.arccos(variable0)`
+
+<a name="arcsin"></a>
+
+## arcsin
+ <p><i>Inverse sine function</i></p>
+<p><b>arcsin(variable0, scale)</b> = scale * arcsin(variable0)</p>
+
+Python version: `scale * numpy.arcsin(variable0)`
+
+<a name="arctan"></a>
+
+## arctan
+ <p><i>Inverse tangent function</i></p>
+<p><b>arctan(variable0, scale)</b> = scale * arctan(variable0)</p>
+
+Python version: `scale * numpy.arctan(variable0)`
+
 <a name="changegoal"></a>
 
 ## change_goal
@@ -320,7 +347,7 @@ Python version: `onnx_ops.abs(X)`
 Calculates the arccosine (inverse of cosine) of the given input tensor, element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.cos(input)`
+Python version: `onnx_ops.acos(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Acos.html><i>ONNX Documentation</i></a>
 <a name="acosh"></a>
@@ -330,7 +357,7 @@ Python version: `onnx_ops.anumpy.cos(input)`
 Calculates the hyperbolic arccosine of the given input tensor element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.cosh(input)`
+Python version: `onnx_ops.acosh(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Acosh.html><i>ONNX Documentation</i></a>
 <a name="add"></a>
@@ -397,7 +424,7 @@ Python version: `onnx_ops.argmin(data, axis, keepdims, select_last_index)`
 Calculates the arcsine (inverse of sine) of the given input tensor, element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.sin(input)`
+Python version: `onnx_ops.asin(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Asin.html><i>ONNX Documentation</i></a>
 <a name="asinh"></a>
@@ -407,7 +434,7 @@ Python version: `onnx_ops.anumpy.sin(input)`
 Calculates the hyperbolic arcsine of the given input tensor element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.sinh(input)`
+Python version: `onnx_ops.asinh(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Asinh.html><i>ONNX Documentation</i></a>
 <a name="atan"></a>
@@ -417,7 +444,7 @@ Python version: `onnx_ops.anumpy.sinh(input)`
 Calculates the arctangent (inverse of tangent) of the given input tensor, element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.tan(input)`
+Python version: `onnx_ops.atan(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Atan.html><i>ONNX Documentation</i></a>
 <a name="atanh"></a>
@@ -427,7 +454,7 @@ Python version: `onnx_ops.anumpy.tan(input)`
 Calculates the hyperbolic arctangent of the given input tensor element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.tanh(input)`
+Python version: `onnx_ops.atanh(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Atanh.html><i>ONNX Documentation</i></a>
 <a name="averagepool"></a>
@@ -1705,7 +1732,7 @@ Python version: `onnx_ops.max(data_0)`
  ```
  output_spatial_shape[i] = ceil((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)
  ```
- if ceil_mode is enabled. `pad_shape[i]` is the sum of pads along axis `i`.
+ if ceil_mode is enabled. `pad_shape[i]` is the sum of pads along axis `i`. Sliding windows that would start in the right padded region are ignored.
 
  `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following when ceil_mode is enabled:
  ```
@@ -2464,7 +2491,7 @@ valid. Reduction over an empty set of values yields minus infinity (if supported
 The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
 to `False` instead of `True`.</i></p>
 
-Python version: `onnx_ops.reducelogsumnumpy.exp(data, axes, keepdims)`
+Python version: `onnx_ops.reducelogsumexp(data, axes, keepdims)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__ReduceLogSumExp.html><i>ONNX Documentation</i></a>
 <a name="reducemax"></a>
@@ -3431,11 +3458,11 @@ Python version: `onnx_ops.tile(input, repeats)`
 ## TopK
  <p><i>
 Retrieve the top-K largest or smallest elements along a specified axis. Given an input tensor of
-shape [a_1, a_2, ..., a_n, r] and integer argument k, return two outputs:
+shape [a_0, a_1, ..., a_{n-1}] and integer argument k, return two outputs:
 
-* Value tensor of shape [a_1, a_2, ..., a_{axis-1}, k, a_{axis+1}, ... a_n]
+* Value tensor of shape [a_0, a_1, ..., a_{axis-1}, k, a_{axis+1}, ... a_{n-1}]
   which contains the values of the top k elements along the specified axis
-* Index tensor of shape [a_1, a_2, ..., a_{axis-1}, k, a_{axis+1}, ... a_n] which
+* Index tensor of shape [a_0, a_1, ..., a_{axis-1}, k, a_{axis+1}, ... a_{n-1}] which
   contains the indices of the top k elements (original indices from the input
   tensor).
 
