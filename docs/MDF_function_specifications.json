@@ -14,6 +14,30 @@
         ],
         "expression_string": "A * (A > 0)"
     },
+    "arccos": {
+        "description": "Inverse cosine function",
+        "arguments": [
+            "variable0",
+            "scale"
+        ],
+        "expression_string": "scale * arccos(variable0)"
+    },
+    "arcsin": {
+        "description": "Inverse sine function",
+        "arguments": [
+            "variable0",
+            "scale"
+        ],
+        "expression_string": "scale * arcsin(variable0)"
+    },
+    "arctan": {
+        "description": "Inverse tangent function",
+        "arguments": [
+            "variable0",
+            "scale"
+        ],
+        "expression_string": "scale * arctan(variable0)"
+    },
     "change_goal": {
         "description": "Modifies the current goal buffer using the given pattern.",
         "arguments": [
@@ -687,7 +711,7 @@
         "expression_string": "onnx_ops.max(data_0)"
     },
     "onnx::MaxPool": {
-        "description": "\n MaxPool consumes an input tensor X and applies max pooling across\n the tensor according to kernel sizes, stride sizes, and pad lengths.\n max pooling consisting of computing the max on all values of a\n subset of the input tensor according to the kernel size and downsampling the\n data into the output tensor Y for further processing. The output spatial shape is calculated differently\n depending on whether explicit padding is used, where pads is employed, or auto padding is used, where auto_pad is utilized.\n With explicit padding (https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html?highlight=maxpool#torch.nn.MaxPool2d):\n ```\n output_spatial_shape[i] = floor((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)\n ```\n or\n ```\n output_spatial_shape[i] = ceil((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)\n ```\n if ceil_mode is enabled. `pad_shape[i]` is the sum of pads along axis `i`.\n\n `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following when ceil_mode is enabled:\n ```\n VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])\n SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = ceil(input_spatial_shape[i] / strides_spatial_shape[i])\n ```\n or when ceil_mode is disabled (https://www.tensorflow.org/api_docs/python/tf/keras/layers/AveragePooling2D):\n ```\n VALID: output_spatial_shape[i] = floor((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i]) + 1\n SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = floor((input_spatial_shape[i] - 1) / strides_spatial_shape[i]) + 1\n ```\n And pad shape will be following if `SAME_UPPER` or `SAME_LOWER`:\n ```\n pad_shape[i] = (output_spatial_shape[i] - 1) * strides_spatial_shape[i] + ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) - input_spatial_shape[i]\n ```\n The output of each pooling window is maximum number of elements exclude pad. \n ",
+        "description": "\n MaxPool consumes an input tensor X and applies max pooling across\n the tensor according to kernel sizes, stride sizes, and pad lengths.\n max pooling consisting of computing the max on all values of a\n subset of the input tensor according to the kernel size and downsampling the\n data into the output tensor Y for further processing. The output spatial shape is calculated differently\n depending on whether explicit padding is used, where pads is employed, or auto padding is used, where auto_pad is utilized.\n With explicit padding (https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html?highlight=maxpool#torch.nn.MaxPool2d):\n ```\n output_spatial_shape[i] = floor((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)\n ```\n or\n ```\n output_spatial_shape[i] = ceil((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)\n ```\n if ceil_mode is enabled. `pad_shape[i]` is the sum of pads along axis `i`. Sliding windows that would start in the right padded region are ignored.\n\n `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following when ceil_mode is enabled:\n ```\n VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])\n SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = ceil(input_spatial_shape[i] / strides_spatial_shape[i])\n ```\n or when ceil_mode is disabled (https://www.tensorflow.org/api_docs/python/tf/keras/layers/AveragePooling2D):\n ```\n VALID: output_spatial_shape[i] = floor((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i]) + 1\n SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = floor((input_spatial_shape[i] - 1) / strides_spatial_shape[i]) + 1\n ```\n And pad shape will be following if `SAME_UPPER` or `SAME_LOWER`:\n ```\n pad_shape[i] = (output_spatial_shape[i] - 1) * strides_spatial_shape[i] + ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) - input_spatial_shape[i]\n ```\n The output of each pooling window is maximum number of elements exclude pad. \n ",
         "arguments": [
             "X"
         ],
@@ -1335,7 +1359,7 @@
         "expression_string": "onnx_ops.tile(input, repeats)"
     },
     "onnx::TopK": {
-        "description": "\nRetrieve the top-K largest or smallest elements along a specified axis. Given an input tensor of\nshape [a_1, a_2, ..., a_n, r] and integer argument k, return two outputs:\n\n* Value tensor of shape [a_1, a_2, ..., a_{axis-1}, k, a_{axis+1}, ... a_n]\n  which contains the values of the top k elements along the specified axis\n* Index tensor of shape [a_1, a_2, ..., a_{axis-1}, k, a_{axis+1}, ... a_n] which\n  contains the indices of the top k elements (original indices from the input\n  tensor).\n\n* If \"largest\" is 1 (the default value) then the k largest elements are returned.\n* If \"sorted\" is 1 (the default value) then the resulting k elements will be sorted.\n* If \"sorted\" is 0, order of returned 'Values' and 'Indices' are undefined.\n\nGiven two equivalent values, this operator uses the indices along the axis as\na tiebreaker. That is, the element with the lower index will appear first.\n",
+        "description": "\nRetrieve the top-K largest or smallest elements along a specified axis. Given an input tensor of\nshape [a_0, a_1, ..., a_{n-1}] and integer argument k, return two outputs:\n\n* Value tensor of shape [a_0, a_1, ..., a_{axis-1}, k, a_{axis+1}, ... a_{n-1}]\n  which contains the values of the top k elements along the specified axis\n* Index tensor of shape [a_0, a_1, ..., a_{axis-1}, k, a_{axis+1}, ... a_{n-1}] which\n  contains the indices of the top k elements (original indices from the input\n  tensor).\n\n* If \"largest\" is 1 (the default value) then the k largest elements are returned.\n* If \"sorted\" is 1 (the default value) then the resulting k elements will be sorted.\n* If \"sorted\" is 0, order of returned 'Values' and 'Indices' are undefined.\n\nGiven two equivalent values, this operator uses the indices along the axis as\na tiebreaker. That is, the element with the lower index will appear first.\n",
         "arguments": [
             "X",
             "K"

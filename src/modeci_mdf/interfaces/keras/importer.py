@@ -5,9 +5,10 @@ import random
 from typing import Union, Dict, Any, Tuple, List, Callable
 from xml.dom import Node
 
-import tensorflow as tf
-from tensorflow import keras
+
 from tensorflow.keras.layers import *
+
+import tensorflow as tf
 
 from modeci_mdf.execution_engine import EvaluableGraph
 from modeci_mdf.mdf import *

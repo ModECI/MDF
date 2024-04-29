@@ -81,6 +81,7 @@ cd ../ONNX
 python simple_ab.py -run
 python simple_abc.py
 python simple_abcd.py
+python abc_basic.py
 
 ## Test ACT-R examples
 
