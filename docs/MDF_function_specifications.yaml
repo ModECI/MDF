@@ -95,7 +95,7 @@ onnx::Abs:
 
         Absolute takes one input data (Tensor<T>) and produces one output data
 
-        (Tensor<T>) where the absolute is, y = abs(x), is applied to
+        (Tensor<T>) where absolute value, y = abs(x), is applied to
 
         the tensor elementwise.
 
@@ -254,11 +254,15 @@ onnx::AveragePool:
         \ + pad_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i]\
         \ + 1)\n ```\n if ceil_mode is enabled\n\n ```\n * pad_shape[i] is sum of\
         \ pads along axis i\n ```\n\n `auto_pad` is a DEPRECATED attribute. If you\
-        \ are using them currently, the output spatial shape will be following:\n\
-        \ ```\n VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i] - ((kernel_spatial_shape[i]\
+        \ are using them currently, the output spatial shape will be following when\
+        \ ceil_mode is enabled:\n ```\n VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i]\
+        \ - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])\n\
+        \ SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = ceil(input_spatial_shape[i]\
+        \ / strides_spatial_shape[i])\n ```\nor when ceil_mode is disabled:\n ```\n\
+        \ VALID: output_spatial_shape[i] = floor((input_spatial_shape[i] - ((kernel_spatial_shape[i]\
         \ - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])\n SAME_UPPER or\
-        \ SAME_LOWER: output_spatial_shape[i] = ceil(input_spatial_shape[i] / strides_spatial_shape[i])\n\
-        \ ```\n And pad shape will be following if `SAME_UPPER` or `SAME_LOWER`:\n\
+        \ SAME_LOWER: output_spatial_shape[i] = floor(input_spatial_shape[i] / strides_spatial_shape[i])\n\
+        \ ```\n\n And pad shape will be following if `SAME_UPPER` or `SAME_LOWER`:\n\
         \ ```\n pad_shape[i] = (output_spatial_shape[i] - 1) * strides_spatial_shape[i]\
         \ + ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) - input_spatial_shape[i]\n\
         \ ```\n The output of each pooling window is divided by the number of elements\
@@ -808,7 +812,7 @@ onnx::Dropout:
 onnx::DynamicQuantizeLinear:
     description: '
 
-        A Function to fuse calculation for Scale, Zero Point and FP32->8Bit convertion
+        A Function to fuse calculation for Scale, Zero Point and FP32->8Bit conversion
         of FP32 Input data.
 
         Outputs Scale, ZeroPoint and Quantized Input for a given FP32 Input.
@@ -817,12 +821,12 @@ onnx::DynamicQuantizeLinear:
 
         ```
 
-        y_scale = (max(x) - min(x))/(qmax - qmin)
+        y_scale = (maximum(0, max(x)) - minimum(0, min(x))) / (qmax - qmin)
 
         ```
 
 
-        * where qmax and qmin are max and min values for quantization range .i.e [0,
+        * where qmax and qmin are max and min values for quantization range i.e. [0,
         255] in case of uint8
 
         * data range is adjusted to include 0.
@@ -875,7 +879,7 @@ onnx::Einsum:
 
         ```
 
-        output[output-term] = reduce-sum( input1[term1] * input2[term] )
+        output[output-term] = reduce-sum( input1[term1] * input2[term2] )
 
         ```
 
@@ -1175,22 +1179,22 @@ onnx::GatherND:
         \ tensors as `indices_slice`. Each *tensor slice* corresponding\n   to `data[0:b-1,\
         \ indices_slice , :]` is filled into the corresponding location of the `(q-b-1)`-dimensional\
         \ tensor\n   to form the `output` tensor (Examples 2, 3, 4 and 5 below)\n\n\
-        This operator is the inverse of `ScatterND`.\n\n`Example 1`\n\n  batch_dims\
-        \ = 0\n\n  data    = [[0,1],[2,3]]   # data_shape = [2, 2]\n\n  indices =\
-        \ [[0,0],[1,1]]   # indices_shape = [2, 2]\n\n  output  = [0,3]          \
-        \ # output_shape = [2]\n\n`Example 2`\n\n  batch_dims = 0\n\n  data    = [[0,1],[2,3]]\
-        \  # data_shape = [2, 2]\n\n  indices = [[1],[0]]      # indices_shape = [2,\
-        \ 1]\n\n  output  = [[2,3],[0,1]]  # output_shape = [2, 2]\n\n`Example 3`\n\
-        \n  batch_dims = 0\n\n  data    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape\
-        \ = [2, 2, 2]\n\n  indices = [[0,1],[1,0]]                 # indices_shape\
-        \ = [2, 2]\n\n  output  = [[2,3],[4,5]]                 # output_shape = [2,\
-        \ 2]\n\n`Example 4`\n\n  batch_dims = 0\n\n  data    = [[[0,1],[2,3]],[[4,5],[6,7]]]\
-        \ # data_shape = [2, 2, 2]\n\n  indices = [[[0,1]],[[1,0]]]             #\
-        \ indices_shape = [2, 1, 2]\n\n  output  = [[[2,3]],[[4,5]]]             #\
-        \ output_shape = [2, 1, 2]\n\n`Example 5`\n\n  batch_dims = 1\n\n  data  \
-        \  = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape = [2, 2, 2]\n\n  indices =\
-        \ [[1],[0]]             # indices_shape = [2, 1]\n\n  output  = [[2,3],[4,5]]\
-        \             # output_shape = [2, 2]\n\n\n"
+        This operator is the inverse of `ScatterND`.\n\n**Example 1**\n\n```\nbatch_dims\
+        \ = 0\ndata    = [[0,1],[2,3]]   # data_shape    = [2, 2]\nindices = [[0,0],[1,1]]\
+        \   # indices_shape = [2, 2]\noutput  = [0,3]           # output_shape  =\
+        \ [2]\n```\n\n**Example 2**\n\n```\nbatch_dims = 0\ndata    = [[0,1],[2,3]]\
+        \  # data_shape    = [2, 2]\nindices = [[1],[0]]      # indices_shape = [2,\
+        \ 1]\noutput  = [[2,3],[0,1]]  # output_shape  = [2, 2]\n```\n\n**Example\
+        \ 3**\n\n```\nbatch_dims = 0\ndata    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape\
+        \    = [2, 2, 2]\nindices = [[0,1],[1,0]]                 # indices_shape\
+        \ = [2, 2]\noutput  = [[2,3],[4,5]]                 # output_shape  = [2,\
+        \ 2]\n```\n\n**Example 4**\n\n```\nbatch_dims = 0\ndata    = [[[0,1],[2,3]],[[4,5],[6,7]]]\
+        \ # data_shape    = [2, 2, 2]\nindices = [[[0,1]],[[1,0]]]             # indices_shape\
+        \ = [2, 1, 2]\noutput  = [[[2,3]],[[4,5]]]             # output_shape  = [2,\
+        \ 1, 2]\n```\n\n**Example 5**\n\n```\nbatch_dims = 1\ndata    = [[[0,1],[2,3]],[[4,5],[6,7]]]\
+        \ # data_shape    = [2, 2, 2]\nindices = [[1],[0]]                     # indices_shape\
+        \ = [2, 1]\noutput  = [[2,3],[4,5]]                 # output_shape  = [2,\
+        \ 2]\n```\n"
     arguments:
     - data
     - indices
@@ -1637,21 +1641,29 @@ onnx::MaxPool:
         \ the tensor according to kernel sizes, stride sizes, and pad lengths.\n max\
         \ pooling consisting of computing the max on all values of a\n subset of the\
         \ input tensor according to the kernel size and downsampling the\n data into\
-        \ the output tensor Y for further processing. The output spatial shape will\
-        \ be following:\n ```\n output_spatial_shape[i] = floor((input_spatial_shape[i]\
-        \ + pad_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i]\
-        \ + 1)\n ```\n or\n ```\n output_spatial_shape[i] = ceil((input_spatial_shape[i]\
-        \ + pad_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i]\
-        \ + 1)\n ```\n if ceil_mode is enabled `pad_shape[i]` is the sum of pads along\
-        \ axis `i`.\n\n `auto_pad` is a DEPRECATED attribute. If you are using them\
-        \ currently, the output spatial shape will be following:\n ```\n VALID: output_spatial_shape[i]\
-        \ = ceil((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i]\
-        \ + 1) + 1) / strides_spatial_shape[i])\n SAME_UPPER or SAME_LOWER: output_spatial_shape[i]\
-        \ = ceil(input_spatial_shape[i] / strides_spatial_shape[i])\n ```\n And pad\
-        \ shape will be following if `SAME_UPPER` or `SAME_LOWER`:\n ```\n pad_shape[i]\
-        \ = (output_spatial_shape[i] - 1) * strides_spatial_shape[i] + ((kernel_spatial_shape[i]\
-        \ - 1) * dilations[i] + 1) - input_spatial_shape[i]\n ```\n The output of\
-        \ each pooling window is maximum number of elements exclude pad. \n "
+        \ the output tensor Y for further processing. The output spatial shape is\
+        \ calculated differently\n depending on whether explicit padding is used,\
+        \ where pads is employed, or auto padding is used, where auto_pad is utilized.\n\
+        \ With explicit padding (https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html?highlight=maxpool#torch.nn.MaxPool2d):\n\
+        \ ```\n output_spatial_shape[i] = floor((input_spatial_shape[i] + pad_shape[i]\
+        \ - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] +\
+        \ 1)\n ```\n or\n ```\n output_spatial_shape[i] = ceil((input_spatial_shape[i]\
+        \ + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i]\
+        \ + 1)\n ```\n if ceil_mode is enabled. `pad_shape[i]` is the sum of pads\
+        \ along axis `i`.\n\n `auto_pad` is a DEPRECATED attribute. If you are using\
+        \ them currently, the output spatial shape will be following when ceil_mode\
+        \ is enabled:\n ```\n VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i]\
+        \ - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])\n\
+        \ SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = ceil(input_spatial_shape[i]\
+        \ / strides_spatial_shape[i])\n ```\n or when ceil_mode is disabled (https://www.tensorflow.org/api_docs/python/tf/keras/layers/AveragePooling2D):\n\
+        \ ```\n VALID: output_spatial_shape[i] = floor((input_spatial_shape[i] - ((kernel_spatial_shape[i]\
+        \ - 1) * dilations[i] + 1)) / strides_spatial_shape[i]) + 1\n SAME_UPPER or\
+        \ SAME_LOWER: output_spatial_shape[i] = floor((input_spatial_shape[i] - 1)\
+        \ / strides_spatial_shape[i]) + 1\n ```\n And pad shape will be following\
+        \ if `SAME_UPPER` or `SAME_LOWER`:\n ```\n pad_shape[i] = (output_spatial_shape[i]\
+        \ - 1) * strides_spatial_shape[i] + ((kernel_spatial_shape[i] - 1) * dilations[i]\
+        \ + 1) - input_spatial_shape[i]\n ```\n The output of each pooling window\
+        \ is maximum number of elements exclude pad. \n "
     arguments:
     - X
     expression_string: onnx_ops.maxpool(X, auto_pad, ceil_mode, dilations, kernel_shape,
@@ -1670,7 +1682,7 @@ onnx::MaxUnpool:
         \ from a MaxPool op. The first\n input tensor X is the tensor that needs to\
         \ be unpooled, which is typically the pooled tensor (first output)\n from\
         \ MaxPool. The second input tensor, I, contains the indices to the (locally\
-        \ maximal) elements corrsponding\n to the elements in the first input tensor\
+        \ maximal) elements corresponding\n to the elements in the first input tensor\
         \ X. Input tensor I is typically the second output of the MaxPool op.\n The\
         \ third (optional) input is a tensor that specifies the output size of the\
         \ unpooling operation.\n\nMaxUnpool is intended to do 'partial' inverse of\
@@ -1683,7 +1695,7 @@ onnx::MaxUnpool:
         \ output tensor of\n known/predictable size.\n\nIn addition to the inputs,\
         \ MaxUnpool takes three attributes, namely kernel_shape, strides, and pads,\n\
         \ which define the exact unpooling op. The attributes typically have the same\
-        \ values as the corrsponding\n pooling op that the unpooling op is trying\
+        \ values as the corresponding\n pooling op that the unpooling op is trying\
         \ to invert.\n"
     arguments:
     - X
@@ -2338,19 +2350,20 @@ onnx::ReduceL1:
         Computes the L1 norm of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields 0.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducel1(data, axes, keepdims)
@@ -2360,19 +2373,20 @@ onnx::ReduceL2:
         Computes the L2 norm of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields 0.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducel2(data, axes, keepdims)
@@ -2382,19 +2396,21 @@ onnx::ReduceLogSum:
         Computes the log sum of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields minus infinity (if supported
+        by the datatype) or undefined otherwise.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducelogsum(data, axes, keepdims)
@@ -2404,19 +2420,21 @@ onnx::ReduceLogSumExp:
         Computes the log sum exponent of the input tensor''s elements along the provided
         axes. The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields minus infinity (if supported
+        by the datatype) or undefined otherwise.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducelogsumexp(data, axes, keepdims)
@@ -2426,19 +2444,21 @@ onnx::ReduceMax:
         Computes the max of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields minus infinity (if supported
+        by the datatype) or the minimum value of the data type otherwise.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducemax(data, axes, keepdims)
@@ -2448,19 +2468,20 @@ onnx::ReduceMean:
         Computes the mean of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields undefined.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducemean(data, axes, keepdims)
@@ -2470,19 +2491,21 @@ onnx::ReduceMin:
         Computes the min of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields plus infinity (if supported
+        by the datatype) or the maximum value of the data type otherwise.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducemin(data, axes, keepdims)
@@ -2492,19 +2515,20 @@ onnx::ReduceProd:
         Computes the product of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields 1.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reduceprod(data, axes, keepdims)
@@ -2514,19 +2538,20 @@ onnx::ReduceSum:
         Computes the sum of the input tensor''s elements along the provided axes.
         The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields 0.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     - axes
@@ -2537,19 +2562,20 @@ onnx::ReduceSumSquare:
         Computes the sum square of the input tensor''s elements along the provided
         axes. The resulting
 
-        tensor has the same rank as the input if keepdims equals 1. If keepdims equals
-        0, then
+        tensor has the same rank as the input if `keepdims` equals 1. If `keepdims`
+        equals 0, then
 
         the resulting tensor has the reduced dimension pruned. Input tensors of rank
         zero are
 
-        valid.
+        valid. Reduction over an empty set of values yields 0.
+
 
 
         The above behavior is similar to numpy, with the exception that numpy defaults
-        keepdims to
+        `keepdims`
 
-        False instead of True.'
+        to `False` instead of `True`.'
     arguments:
     - data
     expression_string: onnx_ops.reducesumsquare(data, axes, keepdims)
@@ -2680,7 +2706,7 @@ onnx::Round:
 
         it finds the nearest integer for each value.
 
-        In case of halfs, the rule is to round them to the nearest even integer.
+        In case of halves, the rule is to round them to the nearest even integer.
 
         If input x is integral, +0, -0, NaN,  or infinite, x itself is returned.
 
@@ -3069,22 +3095,22 @@ onnx::Slice:
     description: "\nProduces a slice of the input tensor along multiple axes. Similar\
         \ to numpy:\nhttps://numpy.org/doc/stable/user/basics.indexing.html?highlight=slice#slicing-and-striding\n\
         \nSlice uses the `starts`, `ends`, `axes` and `steps` inputs to select a sub-tensor\n\
-        of its input `data` tensor.\n\nAn effective `start[i]`, `end[i]`, and `step[i]`\
+        of its input `data` tensor.\n\nAn effective `starts[i]`, `ends[i]`, and `steps[i]`\
         \ must be computed for each `i`\nin `[0, ... r-1]` where `r = rank(input)`\
         \ as follows:\n\nIf `axes` are omitted, they are set to `[0, ..., r-1]`.\n\
         If `steps` are omitted, they are set to `[1, ..., 1]` of length `len(starts)`\n\
-        \nThe effective values are initialized as `start[i] = 0`, `end[i] = dims[i]`\
-        \ where\n`dims` are the dimensions of `input` and `step[i] = `1.\n\nAll negative\
-        \ elements of `axes` are made non-negatve by adding `r` to them, where\n`r\
-        \ =rank(input)`.\n\nAll negative values in `starts[i]` and `ends[i]` have\
+        \nThe effective values are initialized as `start[i] = 0`, `ends[i] = dims[i]`\
+        \ where\n`dims` are the dimensions of `input` and `steps[i] = 1`.\n\nAll negative\
+        \ elements of `axes` are made non-negative by adding `r` to them, where\n\
+        `r =rank(input)`.\n\nAll negative values in `starts[i]` and `ends[i]` have\
         \ `dims[axes[i]]` added to them,\nwhere `dims` are the dimensions of `input`.\
         \ Then `start[axes[i]]` is the adjusted\n`starts[i]` is clamped into the range\
         \ `[0, dims[axes[i]]]` for positive stepping\nand `[0, dims[axes[i]]-1]` for\
         \ negative stepping.\n\nThe clamping for the adjusted `ends[i]` depends on\
         \ the sign of `steps[i]` and must\naccommodate copying 0 through `dims[axes[i]]`\
-        \ elements, so for positive stepping\n`end[axes[i]]` is clamped to `[0, dims[axes[i]]]`,\
+        \ elements, so for positive stepping\n`ends[axes[i]]` is clamped to `[0, dims[axes[i]]]`,\
         \ while for negative stepping it\nis clamped to `[-1, dims[axes[i]]-1]`.\n\
-        \nFinally, `step[axes[i]] = steps[i]`.\n\nFor slicing to the end of a dimension\
+        \nFinally, `steps[axes[i]] = steps[i]`.\n\nFor slicing to the end of a dimension\
         \ with unknown size, it is recommended to pass\nin `INT_MAX` when slicing\
         \ forward and 'INT_MIN' when slicing backward.\n\nExample 1:\n\n```\ndata\
         \ = [\n    [1, 2, 3, 4],\n    [5, 6, 7, 8],\n]\naxes = [0, 1]\nstarts = [1,\
@@ -3119,7 +3145,7 @@ onnx::SoftmaxCrossEntropyLoss:
         \ the number of classes, or (N, C, D1, D2,..., Dk),\n  with K >= 1 in case\
         \ of K-dimensional loss.\n* shape(labels): (N) where each value is 0 <= labels[i]\
         \ <= C-1, or (N, D1, D2,..., Dk),\n  with K >= 1 in case of K-dimensional\
-        \ loss.\n\nThe loss for one sample, l_i, can caculated as follows:\n```\n\
+        \ loss.\n\nThe loss for one sample, l_i, can calculated as follows:\n```\n\
         l[i][d1][d2]...[dk] = -y[i][c][d1][d2]..[dk], where i is the index of classes.\n\
         ```\nor\n```\nl[i][d1][d2]...[dk] = -y[i][c][d1][d2]..[dk] * weights[c], if\
         \ 'weights' is provided.\n```\n\nloss is zero for the case when label-value\
@@ -3512,12 +3538,11 @@ onnx::Unique:
         \ unique subtensors of the input tensor and three optional outputs.\nThe first\
         \ output tensor 'Y' contains all unique values or subtensors of the input.\n\
         The second optional output tensor 'indices' contains indices of 'Y' elements'\
-        \ first occurance in 'X'..\nThe third optional output tensor 'inverse_indices'\
-        \ contains, for elements of 'X', its corresponding indices in 'Y'. \".\nThe\
-        \ fourth optional output tensor 'counts' contains the count of each element\
-        \ of 'Y' in the input.\n\nOutputs are either sorted in ascending order or\
-        \ optionally in the order of the first occurrence of the values in the input.\n\
-        \nhttps://docs.scipy.org/doc/numpy/reference/generated/numpy.unique.html\n\
+        \ first occurrence in 'X'.\nThe third optional output tensor 'inverse_indices'\
+        \ contains, for elements of 'X', its corresponding indices in 'Y'.\nThe fourth\
+        \ optional output tensor 'counts' contains the count of each element of 'Y'\
+        \ in the input.\n\nOutputs are either sorted in ascending order or optionally\
+        \ in the order of the first occurrence of the values in the input.\n\nhttps://docs.scipy.org/doc/numpy/reference/generated/numpy.unique.html\n\
         \nExample 1:\n```\ninput_X = [2, 1, 1, 3, 4, 3]\nattribute_sorted = 0\nattribute_axis\
         \ = None\noutput_Y = [2, 1, 3, 4]\noutput_indices = [0, 1, 3, 4]\noutput_inverse_indices\
         \ = [0, 1, 1, 2, 3, 2]\noutput_counts = [1, 2, 2, 1]\n```\n\nExample 2:\n\
