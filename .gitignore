@@ -310,3 +310,4 @@ examples/TensorFlow/Keras/keras_to_MDF
 /checkout_pngs.sh
 /examples/TensorFlow/Keras/IRIS/keras_model_on_iris.keras
 /examples/TensorFlow/Keras/MNIST/kr_N_model.keras
+/checkoutpngs.sh

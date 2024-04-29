@@ -286,7 +286,8 @@ inbuilt <b>function</b> with <b>args</b>; 4) or change from a <b>default_initial
   <tr>
     <td><b>function</b></td>
     <td>Union[str, NoneType]</td>
-    <td><i>Which of the in-build MDF functions (linear etc.) this uses, See</i></td>
+    <td><i>Which of the in-build MDF functions (linear etc.) this uses, See
+https://mdf.readthedocs.io/en/latest/api/MDF<a href="#function">function</a>specifications.html</i></td>
  </tr>
 
 
