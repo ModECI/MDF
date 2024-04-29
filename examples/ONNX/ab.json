@@ -3,7 +3,7 @@
         "format": "ModECI MDF v0.4",
         "generating_application": "Python modeci-mdf v0.4.9",
         "graphs": {
-            "torch_jit": {
+            "main_graph": {
                 "nodes": {
                     "/A/Add": {
                         "input_ports": {
