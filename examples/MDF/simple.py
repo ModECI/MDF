@@ -2,6 +2,7 @@
     Example of ModECI MDF - A simple 2 node graph.
 """
 
+import os
 from modeci_mdf.mdf import (
     Model,
     Graph,
@@ -14,6 +15,7 @@ from modeci_mdf.mdf import (
 )
 
 import sys
+import os
 
 
 def main():
