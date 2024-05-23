@@ -169,7 +169,7 @@ class Parameter(MdfBase):
         default_initial_value: The initial value of the parameter, only used when parameter is stateful.
         time_derivative: How the parameter changes with time, i.e. ds/dt. Units of time are seconds.
         function: Which of the in-build MDF functions (linear etc.) this uses, See
-        https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
+            https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
         args: Dictionary of values for each of the arguments for the function of the parameter,
             e.g. if the in-build function is :code:`linear(slope)`, the args here could be :code:`{"slope": 3}` or
             :code:`{"slope": "input_port_0 + 2"}`

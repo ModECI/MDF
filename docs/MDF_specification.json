@@ -174,7 +174,7 @@
                 },
                 "function": {
                     "type": "Union[str, NoneType]",
-                    "description": "Which of the in-build MDF functions (linear etc.) this uses, See"
+                    "description": "Which of the in-build MDF functions (linear etc.) this uses, See\nhttps://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html"
                 },
                 "args": {
                     "type": "Union[Any, NoneType]",

@@ -137,6 +137,7 @@ Allowed field              Data Type                                            
 **default_initial_value**  Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]  The initial value of the parameter, only used when parameter is stateful.
 **time_derivative**        Union[str, NoneType]                                                        How the parameter changes with time, i.e. ds/dt. Units of time are seconds.
 **function**               Union[str, NoneType]                                                        Which of the in-build MDF functions (linear etc.) this uses, See
+                                                                                                       https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
 **args**                   Union[Any, NoneType]                                                        Dictionary of values for each of the arguments for the function of the parameter,
                                                                                                        e.g. if the in-build function is **linear(slope)**, the args here could be **{"slope": 3}** or
                                                                                                        **{"slope": "input_port_0 + 2"}**

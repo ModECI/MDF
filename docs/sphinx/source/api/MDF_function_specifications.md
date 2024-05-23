@@ -5,6 +5,9 @@ These functions are defined in Python API module <a href="https://github.com/Mod
 
 - <a href="#matmul">MatMul</a>
 - <a href="#relu">Relu</a>
+- <a href="#arccos">arccos</a>
+- <a href="#arcsin">arcsin</a>
+- <a href="#arctan">arctan</a>
 - <a href="#changegoal">change_goal</a>
 - <a href="#checktermination">check_termination</a>
 - <a href="#chunktostring">chunk_to_string</a>
@@ -211,6 +214,30 @@ Python version: `A @ B`
 
 Python version: `A * (A > 0)`
 
+<a name="arccos"></a>
+
+## arccos
+ <p><i>Inverse cosine function</i></p>
+<p><b>arccos(variable0, scale)</b> = scale * arccos(variable0)</p>
+
+Python version: `scale * numpy.arccos(variable0)`
+
+<a name="arcsin"></a>
+
+## arcsin
+ <p><i>Inverse sine function</i></p>
+<p><b>arcsin(variable0, scale)</b> = scale * arcsin(variable0)</p>
+
+Python version: `scale * numpy.arcsin(variable0)`
+
+<a name="arctan"></a>
+
+## arctan
+ <p><i>Inverse tangent function</i></p>
+<p><b>arctan(variable0, scale)</b> = scale * arctan(variable0)</p>
+
+Python version: `scale * numpy.arctan(variable0)`
+
 <a name="changegoal"></a>
 
 ## change_goal
@@ -306,7 +333,7 @@ Python version: `actr.match_production(production,context)`
 ## Abs
  <p><i>
 Absolute takes one input data (Tensor<T>) and produces one output data
-(Tensor<T>) where the absolute is, y = abs(x), is applied to
+(Tensor<T>) where absolute value, y = abs(x), is applied to
 the tensor elementwise.
 </i></p>
 
@@ -320,7 +347,7 @@ Python version: `onnx_ops.abs(X)`
 Calculates the arccosine (inverse of cosine) of the given input tensor, element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.cos(input)`
+Python version: `onnx_ops.acos(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Acos.html><i>ONNX Documentation</i></a>
 <a name="acosh"></a>
@@ -330,7 +357,7 @@ Python version: `onnx_ops.anumpy.cos(input)`
 Calculates the hyperbolic arccosine of the given input tensor element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.cosh(input)`
+Python version: `onnx_ops.acosh(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Acosh.html><i>ONNX Documentation</i></a>
 <a name="add"></a>
@@ -397,7 +424,7 @@ Python version: `onnx_ops.argmin(data, axis, keepdims, select_last_index)`
 Calculates the arcsine (inverse of sine) of the given input tensor, element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.sin(input)`
+Python version: `onnx_ops.asin(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Asin.html><i>ONNX Documentation</i></a>
 <a name="asinh"></a>
@@ -407,7 +434,7 @@ Python version: `onnx_ops.anumpy.sin(input)`
 Calculates the hyperbolic arcsine of the given input tensor element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.sinh(input)`
+Python version: `onnx_ops.asinh(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Asinh.html><i>ONNX Documentation</i></a>
 <a name="atan"></a>
@@ -417,7 +444,7 @@ Python version: `onnx_ops.anumpy.sinh(input)`
 Calculates the arctangent (inverse of tangent) of the given input tensor, element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.tan(input)`
+Python version: `onnx_ops.atan(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Atan.html><i>ONNX Documentation</i></a>
 <a name="atanh"></a>
@@ -427,7 +454,7 @@ Python version: `onnx_ops.anumpy.tan(input)`
 Calculates the hyperbolic arctangent of the given input tensor element-wise.
 </i></p>
 
-Python version: `onnx_ops.anumpy.tanh(input)`
+Python version: `onnx_ops.atanh(input)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__Atanh.html><i>ONNX Documentation</i></a>
 <a name="averagepool"></a>
@@ -452,11 +479,17 @@ Python version: `onnx_ops.anumpy.tanh(input)`
  * pad_shape[i] is sum of pads along axis i
  ```
 
- `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following:
+ `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following when ceil_mode is enabled:
  ```
  VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])
  SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = ceil(input_spatial_shape[i] / strides_spatial_shape[i])
  ```
+or when ceil_mode is disabled:
+ ```
+ VALID: output_spatial_shape[i] = floor((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])
+ SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = floor(input_spatial_shape[i] / strides_spatial_shape[i])
+ ```
+
  And pad shape will be following if `SAME_UPPER` or `SAME_LOWER`:
  ```
  pad_shape[i] = (output_spatial_shape[i] - 1) * strides_spatial_shape[i] + ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) - input_spatial_shape[i]
@@ -889,14 +922,14 @@ Python version: `onnx_ops.dropout(data, ratio, training_mode, seed)`
 
 ## DynamicQuantizeLinear
  <p><i>
-A Function to fuse calculation for Scale, Zero Point and FP32->8Bit convertion of FP32 Input data.
+A Function to fuse calculation for Scale, Zero Point and FP32->8Bit conversion of FP32 Input data.
 Outputs Scale, ZeroPoint and Quantized Input for a given FP32 Input.
 Scale is calculated as:
 ```
-y_scale = (max(x) - min(x))/(qmax - qmin)
+y_scale = (maximum(0, max(x)) - minimum(0, min(x))) / (qmax - qmin)
 ```
 
-* where qmax and qmin are max and min values for quantization range .i.e [0, 255] in case of uint8
+* where qmax and qmin are max and min values for quantization range i.e. [0, 255] in case of uint8
 * data range is adjusted to include 0.
 
 Zero point is calculated as:
@@ -928,7 +961,7 @@ Python version: `onnx_ops.dynamicquantizelinear(x)`
 An einsum of the form `term1, term2 -> output-term` produces an output tensor using the following equation
 
 ```
-output[output-term] = reduce-sum( input1[term1] * input2[term] )
+output[output-term] = reduce-sum( input1[term1] * input2[term2] )
 ```
 
 where the reduce-sum performs a summation over all the indices occurring in the input terms (term1, term2)
@@ -1276,57 +1309,50 @@ The output tensor is obtained by mapping each index-tuple in the `indices` tenso
 
 This operator is the inverse of `ScatterND`.
 
-`Example 1`
+**Example 1**
 
-  batch_dims = 0
+```
+batch_dims = 0
+data    = [[0,1],[2,3]]   # data_shape    = [2, 2]
+indices = [[0,0],[1,1]]   # indices_shape = [2, 2]
+output  = [0,3]           # output_shape  = [2]
+```
 
-  data    = [[0,1],[2,3]]   # data_shape = [2, 2]
+**Example 2**
 
-  indices = [[0,0],[1,1]]   # indices_shape = [2, 2]
+```
+batch_dims = 0
+data    = [[0,1],[2,3]]  # data_shape    = [2, 2]
+indices = [[1],[0]]      # indices_shape = [2, 1]
+output  = [[2,3],[0,1]]  # output_shape  = [2, 2]
+```
 
-  output  = [0,3]           # output_shape = [2]
+**Example 3**
 
-`Example 2`
+```
+batch_dims = 0
+data    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape    = [2, 2, 2]
+indices = [[0,1],[1,0]]                 # indices_shape = [2, 2]
+output  = [[2,3],[4,5]]                 # output_shape  = [2, 2]
+```
 
-  batch_dims = 0
+**Example 4**
 
-  data    = [[0,1],[2,3]]  # data_shape = [2, 2]
+```
+batch_dims = 0
+data    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape    = [2, 2, 2]
+indices = [[[0,1]],[[1,0]]]             # indices_shape = [2, 1, 2]
+output  = [[[2,3]],[[4,5]]]             # output_shape  = [2, 1, 2]
+```
 
-  indices = [[1],[0]]      # indices_shape = [2, 1]
+**Example 5**
 
-  output  = [[2,3],[0,1]]  # output_shape = [2, 2]
-
-`Example 3`
-
-  batch_dims = 0
-
-  data    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape = [2, 2, 2]
-
-  indices = [[0,1],[1,0]]                 # indices_shape = [2, 2]
-
-  output  = [[2,3],[4,5]]                 # output_shape = [2, 2]
-
-`Example 4`
-
-  batch_dims = 0
-
-  data    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape = [2, 2, 2]
-
-  indices = [[[0,1]],[[1,0]]]             # indices_shape = [2, 1, 2]
-
-  output  = [[[2,3]],[[4,5]]]             # output_shape = [2, 1, 2]
-
-`Example 5`
-
-  batch_dims = 1
-
-  data    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape = [2, 2, 2]
-
-  indices = [[1],[0]]             # indices_shape = [2, 1]
-
-  output  = [[2,3],[4,5]]             # output_shape = [2, 2]
-
-
+```
+batch_dims = 1
+data    = [[[0,1],[2,3]],[[4,5],[6,7]]] # data_shape    = [2, 2, 2]
+indices = [[1],[0]]                     # indices_shape = [2, 1]
+output  = [[2,3],[4,5]]                 # output_shape  = [2, 2]
+```
 </i></p>
 
 Python version: `onnx_ops.gathernd(data, indices, batch_dims)`
@@ -1696,20 +1722,27 @@ Python version: `onnx_ops.max(data_0)`
  the tensor according to kernel sizes, stride sizes, and pad lengths.
  max pooling consisting of computing the max on all values of a
  subset of the input tensor according to the kernel size and downsampling the
- data into the output tensor Y for further processing. The output spatial shape will be following:
+ data into the output tensor Y for further processing. The output spatial shape is calculated differently
+ depending on whether explicit padding is used, where pads is employed, or auto padding is used, where auto_pad is utilized.
+ With explicit padding (https://pytorch.org/docs/stable/generated/torch.nn.MaxPool2d.html?highlight=maxpool#torch.nn.MaxPool2d):
  ```
- output_spatial_shape[i] = floor((input_spatial_shape[i] + pad_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i] + 1)
+ output_spatial_shape[i] = floor((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)
  ```
  or
  ```
- output_spatial_shape[i] = ceil((input_spatial_shape[i] + pad_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i] + 1)
+ output_spatial_shape[i] = ceil((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)
  ```
- if ceil_mode is enabled `pad_shape[i]` is the sum of pads along axis `i`.
+ if ceil_mode is enabled. `pad_shape[i]` is the sum of pads along axis `i`. Sliding windows that would start in the right padded region are ignored.
 
- `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following:
+ `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following when ceil_mode is enabled:
  ```
  VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])
  SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = ceil(input_spatial_shape[i] / strides_spatial_shape[i])
+ ```
+ or when ceil_mode is disabled (https://www.tensorflow.org/api_docs/python/tf/keras/layers/AveragePooling2D):
+ ```
+ VALID: output_spatial_shape[i] = floor((input_spatial_shape[i] - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1)) / strides_spatial_shape[i]) + 1
+ SAME_UPPER or SAME_LOWER: output_spatial_shape[i] = floor((input_spatial_shape[i] - 1) / strides_spatial_shape[i]) + 1
  ```
  And pad shape will be following if `SAME_UPPER` or `SAME_LOWER`:
  ```
@@ -1739,7 +1772,7 @@ Python version: `onnx_ops.maxroipool(X, rois, pooled_shape, spatial_scale)`
 MaxUnpool essentially computes the partial inverse of the MaxPool op.
  The input information to this op is typically the output information from a MaxPool op. The first
  input tensor X is the tensor that needs to be unpooled, which is typically the pooled tensor (first output)
- from MaxPool. The second input tensor, I, contains the indices to the (locally maximal) elements corrsponding
+ from MaxPool. The second input tensor, I, contains the indices to the (locally maximal) elements corresponding
  to the elements in the first input tensor X. Input tensor I is typically the second output of the MaxPool op.
  The third (optional) input is a tensor that specifies the output size of the unpooling operation.
 
@@ -1752,7 +1785,7 @@ MaxUnpool can produce the same output size for several input sizes, which makes 
  known/predictable size.
 
 In addition to the inputs, MaxUnpool takes three attributes, namely kernel_shape, strides, and pads,
- which define the exact unpooling op. The attributes typically have the same values as the corrsponding
+ which define the exact unpooling op. The attributes typically have the same values as the corresponding
  pooling op that the unpooling op is trying to invert.
 </i></p>
 
@@ -2402,12 +2435,13 @@ Python version: `onnx_ops.reciprocal(X)`
 ## ReduceL1
  <p><i>
 Computes the L1 norm of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields 0.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducel1(data, axes, keepdims)`
 
@@ -2417,12 +2451,13 @@ Python version: `onnx_ops.reducel1(data, axes, keepdims)`
 ## ReduceL2
  <p><i>
 Computes the L2 norm of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields 0.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducel2(data, axes, keepdims)`
 
@@ -2432,12 +2467,13 @@ Python version: `onnx_ops.reducel2(data, axes, keepdims)`
 ## ReduceLogSum
  <p><i>
 Computes the log sum of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields minus infinity (if supported by the datatype) or undefined otherwise.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducelogsum(data, axes, keepdims)`
 
@@ -2447,14 +2483,15 @@ Python version: `onnx_ops.reducelogsum(data, axes, keepdims)`
 ## ReduceLogSumExp
  <p><i>
 Computes the log sum exponent of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields minus infinity (if supported by the datatype) or undefined otherwise.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
 
-Python version: `onnx_ops.reducelogsumnumpy.exp(data, axes, keepdims)`
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
+
+Python version: `onnx_ops.reducelogsumexp(data, axes, keepdims)`
 
 <a href=https://onnx.ai/onnx/operators/onnx__ReduceLogSumExp.html><i>ONNX Documentation</i></a>
 <a name="reducemax"></a>
@@ -2462,12 +2499,13 @@ Python version: `onnx_ops.reducelogsumnumpy.exp(data, axes, keepdims)`
 ## ReduceMax
  <p><i>
 Computes the max of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields minus infinity (if supported by the datatype) or the minimum value of the data type otherwise.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducemax(data, axes, keepdims)`
 
@@ -2477,12 +2515,13 @@ Python version: `onnx_ops.reducemax(data, axes, keepdims)`
 ## ReduceMean
  <p><i>
 Computes the mean of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields undefined.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducemean(data, axes, keepdims)`
 
@@ -2492,12 +2531,13 @@ Python version: `onnx_ops.reducemean(data, axes, keepdims)`
 ## ReduceMin
  <p><i>
 Computes the min of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields plus infinity (if supported by the datatype) or the maximum value of the data type otherwise.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducemin(data, axes, keepdims)`
 
@@ -2507,12 +2547,13 @@ Python version: `onnx_ops.reducemin(data, axes, keepdims)`
 ## ReduceProd
  <p><i>
 Computes the product of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields 1.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reduceprod(data, axes, keepdims)`
 
@@ -2522,12 +2563,13 @@ Python version: `onnx_ops.reduceprod(data, axes, keepdims)`
 ## ReduceSum
  <p><i>
 Computes the sum of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields 0.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducesum(data, axes, keepdims, noop_with_empty_axes)`
 
@@ -2537,12 +2579,13 @@ Python version: `onnx_ops.reducesum(data, axes, keepdims, noop_with_empty_axes)`
 ## ReduceSumSquare
  <p><i>
 Computes the sum square of the input tensor's elements along the provided axes. The resulting
-tensor has the same rank as the input if keepdims equals 1. If keepdims equals 0, then
+tensor has the same rank as the input if `keepdims` equals 1. If `keepdims` equals 0, then
 the resulting tensor has the reduced dimension pruned. Input tensors of rank zero are
-valid.
+valid. Reduction over an empty set of values yields 0.
 
-The above behavior is similar to numpy, with the exception that numpy defaults keepdims to
-False instead of True.</i></p>
+
+The above behavior is similar to numpy, with the exception that numpy defaults `keepdims`
+to `False` instead of `True`.</i></p>
 
 Python version: `onnx_ops.reducesumsquare(data, axes, keepdims)`
 
@@ -2661,7 +2704,7 @@ Python version: `onnx_ops.roialign(X, rois, batch_indices, mode, output_height, 
  <p><i>
 Round takes one input Tensor and rounds the values, element-wise, meaning
 it finds the nearest integer for each value.
-In case of halfs, the rule is to round them to the nearest even integer.
+In case of halves, the rule is to round them to the nearest even integer.
 If input x is integral, +0, -0, NaN,  or infinite, x itself is returned.
 The output tensor has the same shape and type as the input.
 
@@ -3072,16 +3115,16 @@ https://numpy.org/doc/stable/user/basics.indexing.html?highlight=slice#slicing-a
 Slice uses the `starts`, `ends`, `axes` and `steps` inputs to select a sub-tensor
 of its input `data` tensor.
 
-An effective `start[i]`, `end[i]`, and `step[i]` must be computed for each `i`
+An effective `starts[i]`, `ends[i]`, and `steps[i]` must be computed for each `i`
 in `[0, ... r-1]` where `r = rank(input)` as follows:
 
 If `axes` are omitted, they are set to `[0, ..., r-1]`.
 If `steps` are omitted, they are set to `[1, ..., 1]` of length `len(starts)`
 
-The effective values are initialized as `start[i] = 0`, `end[i] = dims[i]` where
-`dims` are the dimensions of `input` and `step[i] = `1.
+The effective values are initialized as `start[i] = 0`, `ends[i] = dims[i]` where
+`dims` are the dimensions of `input` and `steps[i] = 1`.
 
-All negative elements of `axes` are made non-negatve by adding `r` to them, where
+All negative elements of `axes` are made non-negative by adding `r` to them, where
 `r =rank(input)`.
 
 All negative values in `starts[i]` and `ends[i]` have `dims[axes[i]]` added to them,
@@ -3091,10 +3134,10 @@ and `[0, dims[axes[i]]-1]` for negative stepping.
 
 The clamping for the adjusted `ends[i]` depends on the sign of `steps[i]` and must
 accommodate copying 0 through `dims[axes[i]]` elements, so for positive stepping
-`end[axes[i]]` is clamped to `[0, dims[axes[i]]]`, while for negative stepping it
+`ends[axes[i]]` is clamped to `[0, dims[axes[i]]]`, while for negative stepping it
 is clamped to `[-1, dims[axes[i]]-1]`.
 
-Finally, `step[axes[i]] = steps[i]`.
+Finally, `steps[axes[i]] = steps[i]`.
 
 For slicing to the end of a dimension with unknown size, it is recommended to pass
 in `INT_MAX` when slicing forward and 'INT_MIN' when slicing backward.
@@ -3165,7 +3208,7 @@ After L is available, this operator can optionally do a reduction operator.
 * shape(labels): (N) where each value is 0 <= labels[i] <= C-1, or (N, D1, D2,..., Dk),
   with K >= 1 in case of K-dimensional loss.
 
-The loss for one sample, l_i, can caculated as follows:
+The loss for one sample, l_i, can calculated as follows:
 ```
 l[i][d1][d2]...[dk] = -y[i][c][d1][d2]..[dk], where i is the index of classes.
 ```
@@ -3415,11 +3458,11 @@ Python version: `onnx_ops.tile(input, repeats)`
 ## TopK
  <p><i>
 Retrieve the top-K largest or smallest elements along a specified axis. Given an input tensor of
-shape [a_1, a_2, ..., a_n, r] and integer argument k, return two outputs:
+shape [a_0, a_1, ..., a_{n-1}] and integer argument k, return two outputs:
 
-* Value tensor of shape [a_1, a_2, ..., a_{axis-1}, k, a_{axis+1}, ... a_n]
+* Value tensor of shape [a_0, a_1, ..., a_{axis-1}, k, a_{axis+1}, ... a_{n-1}]
   which contains the values of the top k elements along the specified axis
-* Index tensor of shape [a_1, a_2, ..., a_{axis-1}, k, a_{axis+1}, ... a_n] which
+* Index tensor of shape [a_0, a_1, ..., a_{axis-1}, k, a_{axis+1}, ... a_{n-1}] which
   contains the indices of the top k elements (original indices from the input
   tensor).
 
@@ -3476,8 +3519,8 @@ Otherwise the input tensor is flattened and unique values of the flattened tenso
 
 This operator returns the unique values or sliced unique subtensors of the input tensor and three optional outputs.
 The first output tensor 'Y' contains all unique values or subtensors of the input.
-The second optional output tensor 'indices' contains indices of 'Y' elements' first occurance in 'X'..
-The third optional output tensor 'inverse_indices' contains, for elements of 'X', its corresponding indices in 'Y'. ".
+The second optional output tensor 'indices' contains indices of 'Y' elements' first occurrence in 'X'.
+The third optional output tensor 'inverse_indices' contains, for elements of 'X', its corresponding indices in 'Y'.
 The fourth optional output tensor 'counts' contains the count of each element of 'Y' in the input.
 
 Outputs are either sorted in ascending order or optionally in the order of the first occurrence of the values in the input.

@@ -1,8 +1,8 @@
 ONNX Model:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.9
+    generating_application: Python modeci-mdf v0.4.11
     graphs:
-        torch_jit:
+        main_graph:
             nodes:
                 /A/Add:
                     input_ports:
@@ -36,8 +36,8 @@ ONNX Model:
                     parameters:
                         body:
                             value:
-                                graph_torch_jit1:
-                                    id: torch_jit1
+                                graph_sub_graph:
+                                    id: sub_graph
                                     nodes:
                                         Div_5:
                                             input_ports:

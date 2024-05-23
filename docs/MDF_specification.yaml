@@ -179,8 +179,10 @@ specification:
                     of time are seconds.
             function:
                 type: Union[str, NoneType]
-                description: Which of the in-build MDF functions (linear etc.) this
+                description: 'Which of the in-build MDF functions (linear etc.) this
                     uses, See
+
+                    https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html'
             args:
                 type: Union[Any, NoneType]
                 description: 'Dictionary of values for each of the arguments for the

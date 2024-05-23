@@ -61,7 +61,7 @@ def test_abc():
     # Get the result of MDF execution
     mdf_executable = EvaluableGraph(mdf_model.graphs[0], verbose=False)
     mdf_executable.evaluate(initializer={"input": test_input})
-    mdf_output = mdf_executable.enodes["Cos_2"].evaluable_outputs["_3"].curr_value
+    mdf_output = mdf_executable.enodes["/C/Cos"].evaluable_outputs["_3"].curr_value
 
     # Get the translated ONNX model
     onnx_models = mdf_to_onnx(mdf_model)
