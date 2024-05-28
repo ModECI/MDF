@@ -1,7 +1,7 @@
 {
     "Net_acyclical": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.4",
+        "generating_application": "Python modeci-mdf v0.4.11",
         "graphs": {
             "Net_acyclical": {
                 "nodes": {
