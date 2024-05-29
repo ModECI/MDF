@@ -66,7 +66,7 @@ cd RNN
 
 ## Test regenerating network example
 
-cd network
+cd ../networks
 ./regenerate.sh
 
 
