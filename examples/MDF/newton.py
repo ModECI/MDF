@@ -15,7 +15,9 @@ def main():
     cool_node.parameters.append(Parameter(id="T_a", value=20))
     s1 = Parameter(id="T_curr", default_initial_value=90, time_derivative="dT_dt")
     cool_node.parameters.append(s1)
-    s2 = Parameter(id="dT_dt", default_initial_value=0, value="-cooling_coeff*(T_curr - T_a)")
+    s2 = Parameter(
+        id="dT_dt", default_initial_value=0, value="-cooling_coeff*(T_curr - T_a)"
+        )
     cool_node.parameters.append(s2)
 
     # Output Ports
@@ -50,23 +52,23 @@ def main():
 
         # Plotting the results
         plt.plot(times, s)
-        plt.xlabel('Time')
-        plt.ylabel('Temperature')
+        plt.xlabel("Time")
+        plt.ylabel("Temperature")
         plt.title("Newton's Cooling Law Simulation")
-        plt.savefig('newton_plot.png')
+        plt.savefig("newton_plot.png")
         plt.show()
 
     if "-graph" in sys.argv:
-            mod.to_graph_image(
-                engine="dot",
-                output_format="png",
-                view_on_render=False,
-                level=3,
-                filename_root="newton",
-                only_warn_on_fail=(
-                    os.name == "nt"
-                ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
-            )
+        mod.to_graph_image(
+            engine="dot",
+            output_format="png",
+            view_on_render=False,
+            level=3,
+            filename_root="newton",
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+        )
 
 if __name__ == "__main__":
     main()
