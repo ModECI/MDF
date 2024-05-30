@@ -3,6 +3,7 @@ from modeci_mdf.execution_engine import EvaluableGraph
 import matplotlib.pyplot as plt
 import sys, os
 
+
 def main():
     # Creating the model and graph
     mod = Model(id="NewtonCoolingModel")
@@ -17,7 +18,7 @@ def main():
     cool_node.parameters.append(s1)
     s2 = Parameter(
         id="dT_dt", default_initial_value=0, value="-cooling_coeff*(T_curr - T_a)"
-        )
+    )
     cool_node.parameters.append(s2)
 
     # Output Ports
@@ -69,6 +70,7 @@ def main():
                 os.name == "nt"
             ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
+
 
 if __name__ == "__main__":
     main()
