@@ -21,6 +21,7 @@ python arrays.py -run
 python states.py -run -nogui
 python abc_conditions.py -run
 python params_funcs.py -run
+python newton.py -run
 
 ## Test exporting to NeuroML
 
