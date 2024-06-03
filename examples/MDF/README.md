@@ -79,7 +79,7 @@ A simple [Node](https://mdf.readthedocs.io/en/latest/api/Specification.html#node
 
 [Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/newton.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/NewtonCoolingModel.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/NewtonCoolingModel.yaml)
 
-A simple [Newtonian cooling process](https://en.wikipedia.org/wiki/Newton%27s_law_of_cooling) model which simulates the cooling of an object to the ambient temperature over time.
+A simple [Newtonian cooling process](https://en.wikipedia.org/wiki/Newton%27s_law_of_cooling) model that demonstrates the use of time derivative simulating the cooling of an object to the ambient temperature over time.
 
 <img src="https://raw.githubusercontent.com/ModECI/MDF/development/examples/MDF/newton.png" width="250"/>
 <img src="https://raw.githubusercontent.com/ModECI/MDF/development/examples/MDF/newtonplot.png" width="250"/>
