@@ -48,6 +48,9 @@ python -m modeci_mdf.interfaces.graphviz.exporter abc_conditions.yaml 3 -noview
 mv abc_conditions_example.gv.png images/abc_conditions.png
 python -m modeci_mdf.interfaces.graphviz.exporter ParametersFunctions.yaml 3 -noview
 mv params_funcs_example.gv.png images/params_funcs.png
+python -m modeci_mdf.interfaces.graphviz.exporter NewtonCoolingModel.yaml 3 -noview
+mv cooling_process.gv.png images/newton.png
+mv newton_plot.png images/newton_plot.png
 
 cd conditions
 python everyNCalls.py -graph

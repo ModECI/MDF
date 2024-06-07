@@ -33,7 +33,7 @@ def main():
 
     if "-run" in sys.argv:
         # Running the Model
-        verbose = True
+        verbose = False
         eg = EvaluableGraph(mod_graph, verbose=verbose)
         dt = 0.1
         duration = 100
@@ -43,7 +43,8 @@ def main():
 
         while t <= duration:
             times.append(t)
-            print(f"======   Evaluating at t = {t:.1f}  ======")
+            if verbose:
+                print(f"======   Evaluating at t = {t:.1f}  ======")
             if t == 0:
                 eg.evaluate()
             else:
