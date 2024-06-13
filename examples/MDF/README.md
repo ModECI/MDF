@@ -2,7 +2,7 @@
 
 Examples of [Python](https://python.org), [JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON#:~:text=JavaScript%20Object%20Notation%20(JSON)%20is,page%2C%20or%20vice%20versa) and [YAML](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/) files to illustrate the structure and usage of MDF.
 
-<a href="#simple"> Simple </a>| <a href="#abcd"> ABCD </a> | <a href="#arrays"> Arrays </a> | <a href="#st"> States </a> | <a href="#conditions"> Conditions </a> | <a href="#parameters-and-functions"> Parameters and Functions </a>
+<a href="#simple"> Simple </a>| <a href="#abcd"> ABCD </a> | <a href="#arrays"> Arrays </a> | <a href="#st"> States </a> | <a href="#conditions"> Conditions </a> | <a href="#parameters-and-functions"> Parameters and Functions </a>| <a href="#newton"> Newton'a Law of Cooling</a>
 
 <p id="simple"></p>
 
@@ -73,6 +73,16 @@ A simple 3 [Nodes](https://mdf.readthedocs.io/en/latest/api/Specification.html#n
 A simple [Node](https://mdf.readthedocs.io/en/latest/api/Specification.html#node) with a number of different types of [Parameters](https://mdf.readthedocs.io/en/latest/api/Specification.html#parameter) (in blue; fixed and **stateful**) and [Functions](https://mdf.readthedocs.io/en/latest/api/Specification.html#function) (in purple; can be built in or ONNX based).
 
 <img src="https://raw.githubusercontent.com/ModECI/MDF/main/examples/MDF/images/params_funcs.png" width="250" height="198" />
+<p id="newton"></p>
+
+## Newton's Law of Cooling
+
+[Python Source](https://github.com/ModECI/MDF/blob/main/examples/MDF/newton.py) | [JSON](https://github.com/ModECI/MDF/blob/main/examples/MDF/NewtonCoolingModel.json) | [YAML](https://github.com/ModECI/MDF/blob/main/examples/MDF/NewtonCoolingModel.yaml)
+
+A simple [Newtonian cooling process](https://en.wikipedia.org/wiki/Newton%27s_law_of_cooling) model that demonstrates the use of time derivative simulating the cooling of an object to the ambient temperature over time.
+
+<img src="https://raw.githubusercontent.com/ModECI/MDF/development/examples/MDF/images/newton.png" width="250"/>
+<img src="https://raw.githubusercontent.com/ModECI/MDF/development/examples/MDF/images/newton_plot.png" width="250"/>
 
 
 ## More examples
