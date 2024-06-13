@@ -1,0 +1,38 @@
+{
+    "NewtonCoolingModel": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.11",
+        "graphs": {
+            "cooling_process": {
+                "nodes": {
+                    "cool_node": {
+                        "parameters": {
+                            "cooling_coeff": {
+                                "value": 0.1
+                            },
+                            "T_a": {
+                                "value": 20
+                            },
+                            "T_curr": {
+                                "default_initial_value": 90,
+                                "time_derivative": "dT_dt"
+                            },
+                            "dT_dt": {
+                                "value": "-cooling_coeff*(T_curr - T_a)",
+                                "default_initial_value": 0
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "T_curr"
+                            },
+                            "out_port2": {
+                                "value": "dT_dt"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

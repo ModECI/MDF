@@ -1109,11 +1109,11 @@ class EvaluableGraph:
             for inp_name, inp in en.evaluable_inputs.items():
                 if initializer and inp_name in initializer:
                     inp.set_input_value(initializer[inp_name])
-
-        print(
-            "Evaluating graph: %s, root nodes: %s, with array format %s"
-            % (self.graph.id, self.root_nodes, array_format)
-        )
+        if self.verbose:
+            print(
+                "Evaluating graph: %s, root nodes: %s, with array format %s"
+                % (self.graph.id, self.root_nodes, array_format)
+            )
         str_conds_nb = "\n  ".join(
             [
                 f"{node.id}: {cond}"
