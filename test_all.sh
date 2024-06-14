@@ -22,6 +22,7 @@ python states.py -run -nogui
 python abc_conditions.py -run
 python params_funcs.py -run
 python newton.py -run
+python switched_rlc_circuit.py -run
 
 ## Test exporting to NeuroML
 
@@ -51,6 +52,9 @@ mv params_funcs_example.gv.png images/params_funcs.png
 python -m modeci_mdf.interfaces.graphviz.exporter NewtonCoolingModel.yaml 3 -noview
 mv cooling_process.gv.png images/newton.png
 mv newton_plot.png images/newton_plot.png
+python -m modeci_mdf.interfaces.graphviz.exporter SwitchedRLC_Circuit.yaml 3 -noview
+mv SwitchedRLC_Circuit.gv.png images/switched_rlc_circuit.png
+mv switched_rlc_plot.png images/switched_rlc_plot.png
 
 cd conditions
 python everyNCalls.py -graph
