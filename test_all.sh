@@ -22,7 +22,7 @@ python states.py -run -nogui
 python abc_conditions.py -run
 python params_funcs.py -run
 python newton.py -run
-python switched_rlc_circuit.py -run
+python switched_rlc.py -run
 
 ## Test exporting to NeuroML
 
