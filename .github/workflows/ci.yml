@@ -58,11 +58,13 @@ jobs:
         brew install hdf5
 
     - name: Install core package
-      run: python -m pip install .[dev]
+      run: |
+        pip install 'numpy<2.0.0' # due to lingering issues with other modules & numpy v2...
+        python -m pip install .[dev]
 
     - name: Version info for installed packages
       run: |
-          pip list
+        pip list
 
     - name: Test core package
       run: |
