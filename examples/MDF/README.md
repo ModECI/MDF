@@ -2,7 +2,7 @@
 
 Examples of [Python](https://python.org), [JSON](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON#:~:text=JavaScript%20Object%20Notation%20(JSON)%20is,page%2C%20or%20vice%20versa) and [YAML](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/) files to illustrate the structure and usage of MDF.
 
-<a href="#simple"> Simple </a>| <a href="#abcd"> ABCD </a> | <a href="#arrays"> Arrays </a> | <a href="#st"> States </a> | <a href="#conditions"> Conditions </a> | <a href="#parameters-and-functions"> Parameters and Functions </a>| <a href="#newton"> Newton'a Law of Cooling</a>
+<a href="#simple"> Simple </a>| <a href="#abcd"> ABCD </a> | <a href="#arrays"> Arrays </a> | <a href="#st"> States </a> | <a href="#conditions"> Conditions </a> | <a href="#parameters-and-functions"> Parameters and Functions </a>| <a href="#newton"> Newton's Law of Cooling</a>
 
 <p id="simple"></p>
 
