@@ -1,0 +1,51 @@
+name: CI Test script
+
+on:
+  push:
+    branches: [ main, development, experimental, test* ]
+  pull_request:
+    branches: [ main, development, experimental, test* ]
+
+jobs:
+
+  checks:
+    name: Check Python ${{ matrix.python-version }} on ${{ matrix.runs-on }}
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.11"]
+        runs-on: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install HDF5 for pytables on macos-14/latest
+      if: ${{ matrix.runs-on == 'macos-latest' }}
+      run: |
+        brew install hdf5
+
+    - name: Install graphviz
+      uses: ts-graphviz/setup-graphviz@v2
+      with:
+        # Skip to run brew update command on macOS.
+        macos-skip-brew-update: 'true' # default false
+
+    - name: Run test script
+      run: |
+        ./test_all.sh
+
+    - name: Version info for installed packages
+      run: |
+        pip list
+
+
+
+
+    - name: Final version info for optional installed packages
+      run: |
+          pip list

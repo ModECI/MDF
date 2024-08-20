@@ -52,13 +52,13 @@ def main():
             s.append(eg.enodes["cool_node"].evaluable_outputs["out_port"].curr_value)
             t += dt
 
+        # Plotting the results
+        plt.plot(times, s)
+        plt.xlabel("Time")
+        plt.ylabel("Temperature")
+        plt.title("Newton's Cooling Law Simulation")
+        plt.savefig("newton_plot.png")
         if "-nogui" not in sys.argv:
-            # Plotting the results
-            plt.plot(times, s)
-            plt.xlabel("Time")
-            plt.ylabel("Temperature")
-            plt.title("Newton's Cooling Law Simulation")
-            plt.savefig("newton_plot.png")
             plt.show()
 
     if "-graph" in sys.argv:
