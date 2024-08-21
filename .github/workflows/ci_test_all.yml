@@ -37,6 +37,7 @@ jobs:
 
     - name: Run test script
       run: |
+        export NEURON_HOME=$pythonLocation
         ./test_all.sh
 
     - name: Version info for installed packages
