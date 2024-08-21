@@ -31,38 +31,18 @@ def run_simulation(mod_graph, duration=2, dt=0.001):
         V_values.append(V)
         t += dt
 
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 10))
-
-    ax1.plot(times, i_L_values, label="Inductor Current (i_L)")
-    ax1.plot(times, i_R_values, label="Resistor Current (i_R)")
-    ax1.plot(times, i_C_values, label="Capacitor Current (i_C)")
-    ax1.set_xlabel("Time (s)")
-    ax1.set_ylabel("Current (A)")
-    ax1.set_title("Currents in RLC Circuit")
-    ax1.legend()
-
-    ax2.plot(times, V_values, label="Response Voltage (V)", color="orange")
-    ax2.plot(times, Vs_values, label="Source Voltage (Vs)", color="green")
-    ax2.set_xlabel("Time (s)")
-    ax2.set_ylabel("Voltage (V)")
-    ax2.set_title("Voltage in RLC Circuit")
-    ax2.legend()
-
-    plt.tight_layout()
+    plt.figure(figsize=(10, 5))
+    plt.plot(times, i_L_values, label="Inductor Current (i_L)")
+    plt.plot(times, i_R_values, label="Resistor Current (i_R)")
+    plt.plot(times, i_C_values, label="Capacitor Current (i_C)")
+    plt.plot(times, V_values, label="Voltage (V)")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Values")
+    plt.title("Switched RLC Circuit Simulation Results")
+    plt.legend()
     plt.savefig("switched_rlc_plot.png")
     if "-nogui" not in sys.argv:
         plt.show()
-
-    # plt.figure(figsize=(10, 5))
-    # plt.plot(times, i_L_values, label='Inductor Current (i_L)')
-    # plt.plot(times, i_R_values, label='Resistor Current (i_R)')
-    # plt.plot(times, i_C_values, label='Capacitor Current (i_C)')
-    # plt.plot(times, V_values, label='Voltage (V)')
-    # plt.xlabel('Time (s)')
-    # plt.ylabel('Values')
-    # plt.title('Switched RLC Circuit Simulation Results')
-    # plt.legend()
-    # plt.show()
 
     return times, i_L_values, i_R_values, i_C_values, V_values
 
@@ -74,8 +54,16 @@ def main():
         "C": 1e-3,  # Capacitance in Farads
         "Vb": 0.1,  # Battery Voltage in Volts
     }
-
-    mod = Model(id="SwitchedRLC_Circuit")
+    parameter_descriptions = {
+        "R": "Resistance in Ohms",
+        "L": "Inductance in Henrys",
+        "C": "Capacitance in Farads",
+        "Vb": "Battery Voltage in Volts",
+    }
+    mod = Model(
+        id="SwitchedRLC_Circuit",
+        metadata={"preferred_duration": 2, "preferred_dt": 0.001},
+    )
     mod_graph = Graph(id="SwitchedRLC_Circuit")
     mod.graphs.append(mod_graph)
 
@@ -88,8 +76,20 @@ def main():
     voltage.conditions.append(vb)
     node.parameters.append(voltage)
 
-    node.parameters.append(Parameter(id="R", value=parameters["R"]))
-    node.parameters.append(Parameter(id="L", value=parameters["L"]))
+    node.parameters.append(
+        Parameter(
+            id="R",
+            value=parameters["R"],
+            metadata={"description": parameter_descriptions["R"]},
+        )
+    )
+    node.parameters.append(
+        Parameter(
+            id="L",
+            value=parameters["L"],
+            metadata={"description": parameter_descriptions["L"]},
+        )
+    )
     node.parameters.append(Parameter(id="C", value=parameters["C"]))
 
     node.parameters.append(
