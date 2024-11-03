@@ -1,15 +1,18 @@
 {
     "iaf_example": {
-        "version": "NeuroMLlite v0.5.3",
+        "version": "NeuroMLlite v0.6.0",
         "notes": "NeuroMLlite export of MDF graph: iaf_example",
         "cells": {
-            "input_node__instance": {
+            "current_input_node__instance": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             },
             "pre__instance": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             },
             "post__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "syn_post__instance": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             }
         },
@@ -20,14 +23,17 @@
             "silentSyn_proj_input_edge": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             },
+            "silentSyn_proj_post_internal_edge": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
             "silentSyn_proj_syn_edge": {
                 "lems_source_file": "iaf_example_lems_definitions.xml"
             }
         },
         "populations": {
-            "input_node": {
+            "current_input_node": {
                 "size": 1,
-                "component": "input_node__instance",
+                "component": "current_input_node__instance",
                 "properties": {
                     "color": "0.2 0.2 0.2",
                     "radius": 3
@@ -48,11 +54,19 @@
                     "color": "0.2 0.2 0.2",
                     "radius": 3
                 }
+            },
+            "syn_post": {
+                "size": 1,
+                "component": "syn_post__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
             }
         },
         "projections": {
             "proj_input_edge": {
-                "presynaptic": "input_node",
+                "presynaptic": "current_input_node",
                 "postsynaptic": "pre",
                 "synapse": "rsDL",
                 "pre_synapse": "silentSyn_proj_input_edge",
@@ -62,9 +76,20 @@
                     "probability": 1
                 }
             },
+            "proj_post_internal_edge": {
+                "presynaptic": "syn_post",
+                "postsynaptic": "post",
+                "synapse": "rsDL",
+                "pre_synapse": "silentSyn_proj_post_internal_edge",
+                "type": "continuousProjection",
+                "weight": 1,
+                "random_connectivity": {
+                    "probability": 1
+                }
+            },
             "proj_syn_edge": {
                 "presynaptic": "pre",
-                "postsynaptic": "post",
+                "postsynaptic": "syn_post",
                 "synapse": "rsDL",
                 "pre_synapse": "silentSyn_proj_syn_edge",
                 "type": "continuousProjection",

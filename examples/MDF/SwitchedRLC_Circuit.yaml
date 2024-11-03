@@ -1,6 +1,9 @@
 SwitchedRLC_Circuit:
     format: ModECI MDF v0.4
     generating_application: Python modeci-mdf v0.4.11
+    metadata:
+        preferred_duration: 2
+        preferred_dt: 0.001
     graphs:
         SwitchedRLC_Circuit:
             nodes:
@@ -15,8 +18,12 @@ SwitchedRLC_Circuit:
                                 test: time>=0.5
                                 value: 0.1
                         R:
+                            metadata:
+                                description: Resistance in Ohms
                             value: 100
                         L:
+                            metadata:
+                                description: Inductance in Henrys
                             value: 1
                         C:
                             value: 0.001

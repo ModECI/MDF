@@ -31,6 +31,11 @@ def run_simulation(mod_graph, duration=2, dt=0.001):
         V_values.append(V)
         t += dt
 
+    print(
+        "Finished simulation of MDF model: %s of duration: %s sec"
+        % (mod_graph.id, duration)
+    )
+
     plt.figure(figsize=(10, 5))
     plt.plot(times, i_L_values, label="Inductor Current (i_L)")
     plt.plot(times, i_R_values, label="Resistor Current (i_R)")

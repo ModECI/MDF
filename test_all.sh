@@ -6,9 +6,9 @@ pip install .[all]
 # Note this:
 #    1) runs examples to regenerate yaml/json...
 #    2) tests examples with simple_scheduler
-python -m pytest -ra tests/*.py
-python -m pytest -ra tests/interfaces/onnx/*.py
-python -m pytest -ra tests/interfaces/pytorch/test_export.py
+python -m pytest -ra -v tests/*.py
+python -m pytest -rav tests/interfaces/onnx/*.py
+python -m pytest -rav tests/interfaces/pytorch/test_export.py
 #python -m pytest -ra tests/interfaces/pytorch/test_import.py # inception taking v long
 
 cd examples/MDF
@@ -21,8 +21,8 @@ python arrays.py -run
 python states.py -run -nogui
 python abc_conditions.py -run
 python params_funcs.py -run
-python newton.py -run
-python switched_rlc.py -run
+python newton.py -run -nogui
+python switched_rlc.py -run -nogui
 
 ## Test exporting to NeuroML
 
@@ -108,4 +108,4 @@ cd ../../../docs
 python generate.py
 cd ..
 
-pre-commit run --all-files
+/bin/bash -c 'pre-commit run --all-files; echo Finished running pre-commit!' # Note: prevents error code when reformatting

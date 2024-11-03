@@ -36,7 +36,11 @@ def mdf_to_neuroml(
         node_comp = "%s__instance" % node.id
 
         # Create the ComponentType which defines behaviour of the general class
-        ct = lems.ComponentType(node_comp_type, extends="baseCellMembPotDL")
+        ct = lems.ComponentType(
+            node_comp_type,
+            extends="baseCellMembPotDL",
+            description="LEMS ComponentType generated from MDF node definition",
+        )
 
         for ip in node.input_ports:
             ct.add(lems.Attachments("ip_%s" % ip.id, "basePointCurrentDL"))
@@ -133,7 +137,11 @@ def mdf_to_neuroml(
                     on_start.actions.append(sa)
 
                 if p.time_derivative:
-                    td = lems.TimeDerivative(variable=p.id, value=p.time_derivative)
+
+                    ct.add(lems.Constant("SEC", "1s", "time"))
+                    td = lems.TimeDerivative(
+                        variable=p.id, value="(%s)/SEC" % p.time_derivative
+                    )
                     ct.dynamics.add(td)
 
             if p.conditions:
@@ -279,6 +287,7 @@ if __name__ == "__main__":
     from modeci_mdf.utils import load_mdf, print_summary
 
     example = "../../../../examples/MDF/Simple.json"
+    example = "../../../../examples/MDF/States.json"
     verbose = True
     run = False
     if "-run" in sys.argv:

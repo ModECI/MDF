@@ -1,5 +1,5 @@
 SimIzhikevichTest:
-    version: NeuroMLlite v0.5.9
+    version: NeuroMLlite v0.6.0
     network: IzhikevichTest.nmllite.yaml
     duration: 700.0
     dt: 0.025
