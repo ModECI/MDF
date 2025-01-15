@@ -523,7 +523,14 @@ def pytorch_to_mdf(
     # Call out to a part of the ONNX exporter that simiplifies the graph before ONNX export.
     from torch.onnx.utils import _model_to_graph
     from torch.onnx import TrainingMode
-    from torch.onnx.symbolic_helper import _set_opset_version
+
+    # Seems they got rid of _set_opset_version in 2.2 or something, can't find a better way to do this
+    try:
+        from torch.onnx.symbolic_helper import _set_opset_version
+    except ImportError:
+        def _set_opset_version(version):
+            from torch.onnx._globals import GLOBALS
+            GLOBALS.export_onnx_opset_version = version
 
     try:
         from torch.onnx.symbolic_helper import _export_onnx_opset_version
