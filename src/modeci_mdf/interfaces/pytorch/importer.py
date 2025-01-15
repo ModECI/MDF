@@ -5,6 +5,7 @@ This code was originally inspired by the following blog post:
 
     Mike He, "From Models to Computation Graphs (Part I)", https://ad1024.space/articles/22
 """
+
 import inspect
 import logging
 
@@ -12,6 +13,7 @@ from typing import Union, Dict, Any, Tuple, List, Callable
 import onnx.defs
 
 import torch
+
 
 # We need to monkey patch the torch._C.Node class to add a __getitem__ method
 # This is for torch 2.0
@@ -528,8 +530,10 @@ def pytorch_to_mdf(
     try:
         from torch.onnx.symbolic_helper import _set_opset_version
     except ImportError:
+
         def _set_opset_version(version):
             from torch.onnx._globals import GLOBALS
+
             GLOBALS.export_onnx_opset_version = version
 
     try:
