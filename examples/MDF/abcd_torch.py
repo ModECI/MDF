@@ -86,7 +86,7 @@ for i in abcd.test_values:
 
 # Export the model
 fn = "ABCD_from_torch.onnx"
-torch_out = torch.onnx._export(
+torch.onnx.export(
     m_abcd,  # model being run
     input,  # model input (or a tuple for multiple inputs)
     fn,  # where to save the model (can be a file or file-like object)
