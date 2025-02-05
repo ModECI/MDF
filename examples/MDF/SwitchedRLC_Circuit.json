@@ -1,0 +1,75 @@
+{
+    "SwitchedRLC_Circuit": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.11",
+        "metadata": {
+            "preferred_duration": 2,
+            "preferred_dt": 0.001
+        },
+        "graphs": {
+            "SwitchedRLC_Circuit": {
+                "nodes": {
+                    "V": {
+                        "parameters": {
+                            "Vs": {
+                                "conditions": [
+                                    {
+                                        "id": "off",
+                                        "test": "time<0.5",
+                                        "value": "0"
+                                    },
+                                    {
+                                        "id": "on",
+                                        "test": "time>=0.5",
+                                        "value": 0.1
+                                    }
+                                ]
+                            },
+                            "R": {
+                                "metadata": {
+                                    "description": "Resistance in Ohms"
+                                },
+                                "value": 100
+                            },
+                            "L": {
+                                "metadata": {
+                                    "description": "Inductance in Henrys"
+                                },
+                                "value": 1
+                            },
+                            "C": {
+                                "value": 0.001
+                            },
+                            "time": {
+                                "default_initial_value": 0,
+                                "time_derivative": "1"
+                            },
+                            "V": {
+                                "default_initial_value": 0,
+                                "time_derivative": "i_C /C"
+                            },
+                            "i_R": {
+                                "value": "V / R"
+                            },
+                            "i_L": {
+                                "default_initial_value": 0,
+                                "time_derivative": "(Vs - V)/L"
+                            },
+                            "i_C": {
+                                "value": "i_L-i_R"
+                            }
+                        },
+                        "output_ports": {
+                            "V_out": {
+                                "value": "V"
+                            },
+                            "i_L_out": {
+                                "value": "i_L"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
