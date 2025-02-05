@@ -314,3 +314,5 @@ examples/TensorFlow/Keras/keras_to_MDF
 /examples/TensorFlow/Keras/IRIS/keras_model_on_iris.keras
 /examples/TensorFlow/Keras/MNIST/kr_N_model.keras
 /checkoutpngs.sh
+/docs/sphinx/source/api/export_format/MDF/images/newton.png
+/docs/sphinx/source/api/export_format/MDF/images/newton_plot.png

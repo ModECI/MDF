@@ -352,12 +352,20 @@ def mdf_to_graphviz(
                                 p.time_derivative, node
                             )
                         for cond in p.conditions:
-                            test = cond.test.replace(">", "&gt;").replace("<", "&lt;")
+                            cond_test = (
+                                cond.test if hasattr(cond, "test") else cond["test"]
+                            )
+                            cond_value = (
+                                cond.value if hasattr(cond, "value") else cond["value"]
+                            )
+                            cond_id = cond.id if hasattr(cond, "id") else cond["id"]
+
+                            test = cond_test.replace(">", "&gt;").replace("<", "&lt;")
                             v += "<br/><i>{}: </i>IF {} THEN {}={}".format(
-                                cond.id,
+                                cond_id,
                                 match_in_expr(test, node),
                                 format_param(p.id),
-                                match_in_expr(cond.value, node),
+                                match_in_expr(cond_value, node),
                             )
                         info += "<tr><td>{}{} = {}</td></tr>".format(
                             format_label(" "),
