@@ -586,15 +586,26 @@ class EvaluableParameter:
 
         if len(self.parameter.conditions) > 0:
             for condition in self.parameter.conditions:
+
+                test = (
+                    condition.test if hasattr(condition, "test") else condition["test"]
+                )
+                value = (
+                    condition.value
+                    if hasattr(condition, "value")
+                    else condition["value"]
+                )
+                cond_id = condition.id if hasattr(condition, "id") else condition["id"]
+
                 cond_mask = evaluate_expr(
-                    condition.test,
+                    test,
                     parameters,
                     verbose=False,
                     array_format=array_format,
                 )
 
                 val_if_true = evaluate_expr(
-                    condition.value,
+                    value,
                     parameters,
                     verbose=False,
                     array_format=array_format,
@@ -603,7 +614,7 @@ class EvaluableParameter:
                 if self.verbose:
                     print(
                         " --- Condition: %s: %s = %s: true? %s"
-                        % (condition.id, condition.test, val_if_true, cond_mask)
+                        % (cond_id, test, val_if_true, cond_mask)
                     )
 
                 # e.g. if the parameter value is set only by a set of conditions...
@@ -1109,11 +1120,11 @@ class EvaluableGraph:
             for inp_name, inp in en.evaluable_inputs.items():
                 if initializer and inp_name in initializer:
                     inp.set_input_value(initializer[inp_name])
-
-        print(
-            "Evaluating graph: %s, root nodes: %s, with array format %s"
-            % (self.graph.id, self.root_nodes, array_format)
-        )
+        if self.verbose:
+            print(
+                "Evaluating graph: %s, root nodes: %s, with array format %s"
+                % (self.graph.id, self.root_nodes, array_format)
+            )
         str_conds_nb = "\n  ".join(
             [
                 f"{node.id}: {cond}"
