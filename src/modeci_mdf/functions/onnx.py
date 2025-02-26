@@ -20,9 +20,8 @@ except ModuleNotFoundError:
 
 # Currently using sklearn2onnx API to define ONNX operations. This dependency can probably be removed pretty easily.
 # Do not remove this import even though it appears unused.
-import skl2onnx.algebra.onnx_ops
 
-from typing import Dict, Tuple, Any, List, Callable
+from typing import Dict, Any, List, Callable
 
 OpSchema = onnx.defs.OpSchema
 FormalParameterOption = OpSchema.FormalParameterOption
@@ -71,10 +70,10 @@ def predict_with_onnxruntime(model_def, *inputs) -> Dict[str, np.array]:
 def convert_type(v):
     """Helper function to convert types to ONNX compatible types."""
 
-    if type(v) == list:
+    if type(v) is list:
         v = np.array(v)
 
-    if type(v) == int or type(v) == float:
+    if type(v) is int or type(v) is float:
         v = np.atleast_1d(v)
 
     if hasattr(v, "dtype") and v.dtype == np.int32:

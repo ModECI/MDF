@@ -95,7 +95,7 @@ def mdf_to_neuroml(
                             "   Standard parameter: %s = %s"
                             % (p.id, comp.parameters[p.id])
                         )
-                    except Exception as e:
+                    except Exception:
                         ct.add(lems.Exposure(p.id, "none"))
                         dv = lems.DerivedVariable(
                             name=p.id,
@@ -255,18 +255,18 @@ def mdf_to_neuroml(
     record_variables = {}
     for node in graph.nodes:
         for ip in node.input_ports:
-            if not ip.id in record_variables:
+            if ip.id not in record_variables:
                 record_variables[ip.id] = {}
             record_variables[ip.id][node.id] = 0
 
         for p in node.parameters:
             if p.is_stateful():
-                if not p.id in record_variables:
+                if p.id not in record_variables:
                     record_variables[p.id] = {}
                 record_variables[p.id][node.id] = 0
 
         for op in node.output_ports:
-            if not op.id in record_variables:
+            if op.id not in record_variables:
                 record_variables[op.id] = {}
             record_variables[op.id][node.id] = 0
 

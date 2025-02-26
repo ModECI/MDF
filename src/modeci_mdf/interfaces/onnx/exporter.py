@@ -9,17 +9,14 @@ from modeci_mdf.execution_engine import EvaluableGraph
 
 import onnx
 from onnx import helper, shape_inference
-from onnx import AttributeProto, TensorProto, GraphProto
+from onnx import TensorProto
 from onnx.defs import get_schema
 
 import onnxruntime
 
-from ast import literal_eval
 
 import argparse
 import os
-
-import numpy
 
 
 def mdf_to_onnx(mdf_model):
@@ -228,7 +225,6 @@ def generate_onnx_node(node, graph):
 
 
 def main():
-    import argparse
 
     parser = argparse.ArgumentParser(
         description="Converter from MDF to ONNX. "
@@ -259,8 +255,6 @@ def convert_mdf_file_to_onnx(input_file: str):
     Returns:
         NoneType
     """
-
-    import os
 
     # Load the MDF model from file - this is not used anymore
     mdf_model = load_mdf(input_file)

@@ -372,7 +372,7 @@ def build_script(
     if graph_input:
         script += f"\ndummy_input =torch.tensor{tuple(graph_input)}"
     else:
-        script += f"\ndummy_input =torch.tensor(0.0)"
+        script += "\ndummy_input =torch.tensor(0.0)"
     script += "\noutput = model(dummy_input)"
     script += f"\ntorch.onnx.export(model,dummy_input,'{model_id}',verbose=True,input_names=[],opset_version=9)"
     script += f"\nonnx_model = onnx.load('{model_id}')"

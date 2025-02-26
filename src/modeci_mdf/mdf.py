@@ -7,12 +7,11 @@ environments using the :mod:`~modeci_mdf.interfaces` module.
 """
 
 import copy
-import numpy as np
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
 import modelspec
-from modelspec import has, field, fields, optional, instance_of, in_
+from modelspec import field, optional, instance_of
 from modelspec.base_types import (
     Base,
     converter,
@@ -110,7 +109,7 @@ class InputPort(MdfBase):
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
         default=None,
-        converter=lambda x: make_tuple(x) if type(x) == str else x,
+        converter=lambda x: make_tuple(x) if type(x) is str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
 
@@ -135,7 +134,7 @@ class OutputPort(MdfBase):
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
         default=None,
-        converter=lambda x: make_tuple(x) if type(x) == str else x,
+        converter=lambda x: make_tuple(x) if type(x) is str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
 
@@ -226,7 +225,7 @@ class Parameter(MdfBase):
             return True
         if self.default_initial_value is not None:
             return True
-        if self.value is not None and type(self.value) == str:
+        if self.value is not None and type(self.value) is str:
             sf = self.id in get_required_variables_from_expression(self.value)
             """
             print(
@@ -248,7 +247,7 @@ class Parameter(MdfBase):
         d = {
             name: val
             for name, val in d.items()
-            if not ((val is None) or (type(val) == list and len(val) == 0))
+            if not ((val is None) or (type(val) is list and len(val) == 0))
         }
 
         return d

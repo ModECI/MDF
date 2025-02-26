@@ -21,10 +21,9 @@ import itertools
 import os
 import re
 import sys
-import math
 
-import attr
 import numpy as np
+import tensorflow as tf
 
 import graph_scheduler
 import onnxruntime
@@ -63,7 +62,7 @@ time_scale_str_regex = r"(TimeScale)?\.(.*)"
 
 
 def evaluate_expr(
-    expr: Union[str, List[str], np.ndarray, "tf.tensor"] = None,
+    expr: Union[str, List[str], np.ndarray] = None,
     func_params: Dict[str, Any] = None,
     array_format: str = FORMAT_DEFAULT,
     allow_strings_returned: Optional[bool] = False,
@@ -86,7 +85,7 @@ def evaluate_expr(
     e = evaluate_params_modelspec(
         expr, func_params, array_format=array_format, verbose=verbose
     )
-    if type(e) == str and e not in KNOWN_PARAMETERS and not allow_strings_returned:
+    if type(e) is str and e not in KNOWN_PARAMETERS and not allow_strings_returned:
         raise Exception(
             "Error! Could not evaluate expression [%s] with params %s, returned [%s] which is a %s"
             % (expr, _params_info(func_params, multiline=True), e, type(e))
@@ -368,10 +367,14 @@ class EvaluableFunction:
                 *[func_params[arg] for arg in self.function.args]
             )
         elif "ddm." in expr:
+
             actr_function = getattr(ddm_funcs, expr.split("(")[0].split(".")[-1])
+            raise Exception("Not implemented? ddm_function below undefined. ")
+            """
+            # This block removed to get ruff checks to pass
             self.curr_value = ddm_function(
                 *[func_params[arg] for arg in self.function.args]
-            )
+            )"""
         else:
             self.curr_value = evaluate_expr(
                 expr, func_params, verbose=self.verbose, array_format=array_format
@@ -552,7 +555,7 @@ class EvaluableParameter:
                 )
 
         elif self.parameter.time_derivative is not None:
-            if time_increment == None:
+            if time_increment is None:
                 self.curr_value = evaluate_expr(
                     self.parameter.default_initial_value,
                     parameters,
@@ -861,7 +864,7 @@ class EvaluableNode:
                 )
             all_req_vars = []
 
-            if p.value is not None and type(p.value) == str:
+            if p.value is not None and type(p.value) is str:
                 all_req_vars.extend(
                     [
                         v
@@ -1174,7 +1177,7 @@ class EvaluableGraph:
         value = pre_node.evaluable_outputs[edge.sender_port].curr_value
         weight = (
             1
-            if not edge.parameters or not "weight" in edge.parameters
+            if not edge.parameters or "weight" not in edge.parameters
             else edge.parameters["weight"]
         )
 
@@ -1189,7 +1192,7 @@ class EvaluableGraph:
                     _val_info(weight),
                 )
             )
-        if (type(weight) == int or type(weight) == float) and weight == 1:
+        if (type(weight) is int or type(weight) is float) and weight == 1:
             input_value = value
         else:
             input_value = weight * value
