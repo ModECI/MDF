@@ -1,10 +1,11 @@
 r"""
-    The main object-oriented implementation of the MDF schema, with each core component of the `MDF specification <../Specification.html>`_
-    implemented as a :code:`class`. Instances of these objects can be composed to create a representation of
-    an MDF model as Python objects. These models can then be serialized and deserialized to and from JSON or YAML,
-    executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
-    environments using the :mod:`~modeci_mdf.interfaces` module.
+The main object-oriented implementation of the MDF schema, with each core component of the `MDF specification <../Specification.html>`_
+implemented as a :code:`class`. Instances of these objects can be composed to create a representation of
+an MDF model as Python objects. These models can then be serialized and deserialized to and from JSON or YAML,
+executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
+environments using the :mod:`~modeci_mdf.interfaces` module.
 """
+
 import copy
 import numpy as np
 
@@ -71,6 +72,7 @@ class Function(MdfBase):
         value: If the function is a value expression, this attribute will contain the expression and the function
             and args attributes will be None.
     """
+
     id: str = field(validator=instance_of(str))
     function: Optional[str] = field(
         default=None, validator=optional(instance_of((str, dict)))
@@ -103,6 +105,7 @@ class InputPort(MdfBase):
         type: The data type of the input received at a port.
 
     """
+
     id: str = field(validator=instance_of(str))
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
@@ -126,6 +129,7 @@ class OutputPort(MdfBase):
             (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
         type: The data type of the output sent by a port.
     """
+
     id: str = field(validator=instance_of(str))
     value: Optional[str] = field(validator=optional(instance_of(str)), default=None)
     shape: Optional[Tuple[int, ...]] = field(
@@ -146,6 +150,7 @@ class ParameterCondition(Base):
         test: The boolean expression to evaluate
         value: The new value of the Parameter if the test is true
     """
+
     id: str = field(validator=instance_of(str))
     test: Optional[ValueExprType] = field(default=None)
     value: Optional[ValueExprType] = field(default=None)
@@ -323,6 +328,7 @@ class Edge(MdfBase):
         receiver_port: The id of the InputPort on the receiver :class:`~Node`
         parameters: Dictionary of parameters for the edge.
     """
+
     id: str = field(validator=instance_of(str))
     sender: str = field(validator=instance_of(str))
     receiver: str = field(validator=instance_of(str))
@@ -342,6 +348,7 @@ class Condition(MdfBase):
         kwargs: The dictionary of keyword arguments needed to evaluate the :class:`Condition`
 
     """
+
     type: str = field(validator=instance_of(str))
     kwargs: Optional[Dict[str, Any]] = field(
         validator=optional(instance_of(dict)), default=None
@@ -413,6 +420,7 @@ class ConditionSet(MdfBase):
         node_specific: A dictionary mapping nodes to any non-default run conditions
         termination: A dictionary mapping time scales of model execution to conditions indicating when they end
     """
+
     node_specific: Optional[Dict[str, Condition]] = field(
         validator=optional(instance_of(dict)), default=None
     )
@@ -441,6 +449,7 @@ class Graph(MdfBase):
         parameters: Dictionary of global parameters for the Graph
         conditions: The ConditionSet stored as dictionary for scheduling of the Graph
     """
+
     id: str = field(validator=instance_of(str))
     nodes: List[Node] = field(factory=list)
     edges: List[Edge] = field(factory=list)
@@ -517,6 +526,7 @@ class Model(MdfBase):
         onnx_opset_version: The ONNX opset used for any ONNX functions in this model.
 
     """
+
     id: str = field(validator=instance_of(str))
     graphs: List[Graph] = field(factory=list)
     format: str = field(

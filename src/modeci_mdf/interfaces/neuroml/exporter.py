@@ -17,7 +17,6 @@ from modeci_mdf.execution_engine import evaluate_expr
 def mdf_to_neuroml(
     graph, save_to=None, format=None, run_duration_sec=2, run_dt_sec=0.01
 ):
-
     print("Converting graph: %s to NeuroML" % (graph.id))
 
     net = neuromllite.Network(id=graph.id)
@@ -137,7 +136,6 @@ def mdf_to_neuroml(
                     on_start.actions.append(sa)
 
                 if p.time_derivative:
-
                     ct.add(lems.Constant("SEC", "1s", "time"))
                     td = lems.TimeDerivative(
                         variable=p.id, value="(%s)/SEC" % p.time_derivative
@@ -199,7 +197,6 @@ def mdf_to_neuroml(
             )
 
     if len(graph.edges) > 0:
-
         model.add(
             lems.Include(os.path.join(os.path.dirname(__file__), "syn_definitions.xml"))
         )
@@ -283,7 +280,6 @@ def mdf_to_neuroml(
 
 
 if __name__ == "__main__":
-
     from modeci_mdf.utils import load_mdf, print_summary
 
     example = "../../../../examples/MDF/Simple.json"

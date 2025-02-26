@@ -10,7 +10,6 @@ expression_items = ["+", "*", "-", "/", "%", "(", ")"]
 
 
 def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
-
     """Translates json file if with states to json file with stateful_parameters, otherwise unchanged
     Args:
             file_path: File in Json Format
@@ -34,7 +33,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
 
     def keysExtractor(nested_dictionary):
         for k, v in nested_dictionary.items():
-
             if isinstance(v, dict) and k in "conditions":
                 continue
             elif isinstance(v, dict):
@@ -76,11 +74,9 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
         for k, v in nested_dictionary.items():
             if isinstance(v, dict) and k in list(nodes_dict.keys()):
                 for kk, vv in v.items():
-
                     if (isinstance(vv, dict) and kk in filtered_list) or (
                         isinstance(vv, str) and kk in filtered_list
                     ):
-
                         nodes_dict[k][kk] = vv
             if isinstance(v, dict):
                 parameterExtractor(v)
@@ -135,12 +131,10 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
             temp_dic = {}
             if "parameters" in d[key].keys():
                 for param in d[key]["parameters"].keys():
-
                     if "time_derivative" in d[key]["parameters"][param].keys():
                         li.append(param)
                         vi.append(d[key]["parameters"][param]["time_derivative"])
                     elif "value" in d[key]["parameters"][param].keys():
-
                         if isinstance(d[key]["parameters"][param]["value"], str):
                             if any(
                                 x in d[key]["parameters"][param]["value"]
@@ -185,7 +179,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
                 functions replacing time derivative for each state variable
         """
         for key in d.keys():
-
             if "functions" not in d[key].keys():
                 d[key]["functions"] = {}
 
@@ -194,7 +187,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
 
                 for idx, param in enumerate(list(d[key]["parameters"].keys())):
                     if "time_derivative" in d[key]["parameters"][param].keys():
-
                         d[key]["functions"][f"evaluated_{key}_{param}_next_value"] = {}
                         d[key]["functions"][f"evaluated_{key}_{param}_next_value"][
                             "value"
@@ -214,7 +206,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
                         parameterlist.append(param)
                     elif "value" in d[key]["parameters"][param].keys():
                         if isinstance(d[key]["parameters"][param]["value"], str):
-
                             if any(
                                 x in d[key]["parameters"][param]["value"]
                                 for x in expression_items
@@ -235,7 +226,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
                                 parameterlist.append(param)
 
                     elif "function" in d[key]["parameters"][param].keys():
-
                         d[key]["functions"][param] = {}
                         d[key]["functions"][param]["function"] = {}
 
@@ -248,7 +238,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
 
                     if idx > 0:
                         for prev_param in parameterlist[:-1]:
-
                             # d[key]['functions']["evaluated_{}_{}_next_value".format(key, param)]['args'][prev_param] = "evaluated_{}_{}_next_value".format(key, prev_param)
                             d[key]["functions"][f"evaluated_{key}_{param}_next_value"][
                                 "value"
@@ -261,7 +250,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
                             )
 
             if "output_ports" in d[key].keys():
-
                 for idx, output_port in enumerate(list(d[key]["output_ports"].keys())):
                     if isinstance(d[key]["output_ports"][output_port]["value"], str):
                         if any(
@@ -382,7 +370,6 @@ def convert_states_to_stateful_parameters(file_path: str = None, dt=5e-05):
                             x in d[key]["output_ports"][output_port]["value"]
                             for x in expression_items
                         ):
-
                             d[key]["output_ports"][output_port][
                                 "value"
                             ] = f"evaluated_{key}_{output_port}_value"

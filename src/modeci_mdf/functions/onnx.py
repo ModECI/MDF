@@ -4,6 +4,7 @@ way somewhat defeats the performance purposes of ONNX since the overhead for eac
 allows us to test the MDF scheduler (which invokes Python functions) on any MDF model defined over ONNX operations. In
 the future, the MDF should probably just compile to ONNX (or some other IR) for execution.
 """
+
 import functools
 
 import numpy as np
@@ -265,7 +266,6 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
     """
 
     def onnx_wrapper(*args, **kwargs):
-
         # If we are dealing with cosntant, just return it.
         if schema.name == "Constant":
             value = args[0] if len(args) > 0 else list(kwargs.values())[0]
@@ -291,7 +291,6 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
             len(schema.inputs) > 0
             and schema.inputs[0].option == FormalParameterOption.Variadic
         ):
-
             for i, arg in enumerate(args):
                 inputs_dict[f"input{i}"] = arg
 
@@ -390,7 +389,6 @@ def _define_onnx_functions(opset_version):
     current_module = sys.modules[__name__]
 
     for schema in get_all_schemas_version(opset_version):
-
         onnx_wrapper = _make_onnx_function(schema)
 
         # Lets call this function a lowercase version of the opname, follow PEP 8

@@ -11,6 +11,7 @@ of the :class:`EvaluableGraph` class. The external library `graph-scheduler
 conditional constraints.
 
 """
+
 import ast
 import builtins
 import copy
@@ -68,7 +69,6 @@ def evaluate_expr(
     allow_strings_returned: Optional[bool] = False,
     verbose: Optional[bool] = False,
 ) -> np.ndarray:
-
     """Evaluates an expression given in string format and a :code:`dict` of parameters.
 
     Args:
@@ -295,7 +295,6 @@ class EvaluableFunction:
         parameters: Dict[str, Any] = None,
         array_format: str = FORMAT_DEFAULT,
     ) -> Dict[str, Any]:
-
         r"""Performs evaluation on the basis of given parameters and array_format
 
         Args:
@@ -399,7 +398,6 @@ class EvaluableParameter:
     DEFAULT_INIT_VALUE = 0.0  # Temporary!
 
     def __init__(self, parameter: Parameter, verbose: bool = False):
-
         self.verbose = verbose
         self.parameter = parameter
         self.curr_value = None
@@ -487,7 +485,6 @@ class EvaluableParameter:
             )
 
         if self.parameter.value is not None:
-
             self.curr_value = evaluate_expr(
                 self.parameter.value,
                 parameters,
@@ -503,7 +500,6 @@ class EvaluableParameter:
                         mdf_functions[f]["expression_string"]
                     )
             if not expr:
-
                 expr = self.parameter.function
                 # raise "Unknown function: {}. Known functions: {}".format(
                 #    self.parameter.function,
@@ -556,7 +552,6 @@ class EvaluableParameter:
                 )
 
         elif self.parameter.time_derivative is not None:
-
             if time_increment == None:
                 self.curr_value = evaluate_expr(
                     self.parameter.default_initial_value,
@@ -586,7 +581,6 @@ class EvaluableParameter:
 
         if len(self.parameter.conditions) > 0:
             for condition in self.parameter.conditions:
-
                 test = (
                     condition.test if hasattr(condition, "test") else condition["test"]
                 )
@@ -654,7 +648,6 @@ class EvaluableOutput:
         parameters: Dict[str, Any] = None,
         array_format: str = FORMAT_DEFAULT,
     ) -> Union[int, np.ndarray]:
-
         """Evaluate the value at the output port on the basis of parameters and array_format
 
         Args:
@@ -715,7 +708,6 @@ class EvaluableInput:
     def evaluate(
         self, parameters: Dict[str, Any] = None, array_format: str = FORMAT_DEFAULT
     ) -> Union[int, np.ndarray]:
-
         """Evaluates value at Input port based on parameters and array_format
 
         Args:
@@ -963,7 +955,6 @@ class EvaluableNode:
 
         # First set params to previous parameter values for use in funcs and states...
         for ep in self.evaluable_parameters:
-
             curr_params[ep] = self.evaluable_parameters[ep].get_current_value(
                 curr_params, array_format=array_format
             )
@@ -1407,7 +1398,6 @@ def main(example_file: str, array_format: str = FORMAT_NUMPY, verbose: bool = Fa
 
 
 if __name__ == "__main__":
-
     example_file = os.path.join(
         os.path.dirname(__file__), "..", "..", "examples/MDF/Simple.json"
     )

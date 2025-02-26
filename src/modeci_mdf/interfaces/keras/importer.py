@@ -18,7 +18,6 @@ import numpy as np
 
 
 def get_weights_and_activation(layers, model):
-
     params = {}
     activations = {}
     for layer in layers:
