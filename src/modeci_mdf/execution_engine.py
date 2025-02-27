@@ -23,7 +23,6 @@ import re
 import sys
 
 import numpy as np
-import tensorflow as tf
 
 import graph_scheduler
 import onnxruntime
