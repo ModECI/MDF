@@ -4,6 +4,7 @@ Implementation of core MDF function ontology.
 This module implements and registers all builtin MDF functions.
 
 """
+
 import warnings
 
 from typing import List, Dict, Callable
@@ -30,7 +31,6 @@ def add_mdf_function(
     arguments: List[str] = None,
     expression_string: str = None,
 ):
-
     """Register a function with MDF function ontology.
 
     Adds a function to the registered list of available MDF functions.
@@ -215,7 +215,6 @@ def add_public_functions_from_module(module, module_alias: str = None):
 # Populate the list of known functions
 
 if len(mdf_functions) == 0:
-
     STANDARD_ARG_0 = "variable0"
     STANDARD_ARG_1 = "variable1"
 
@@ -335,7 +334,6 @@ if len(mdf_functions) == 0:
     add_public_functions_from_module(ddm, module_alias="ddm")
 
 if __name__ == "__main__":
-
     import pprint
 
     pp = pprint.PrettyPrinter(indent=4)

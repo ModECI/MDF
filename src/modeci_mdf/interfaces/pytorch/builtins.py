@@ -77,7 +77,10 @@ _builtin_ops = [
     (torch.autograd.grad, "aten::grad"),
     (torch.autograd.backward, "aten::backward"),
     (torch._C._infer_size, "aten::_infer_size"),
-    (torch.nn.functional._no_grad_embedding_renorm_, "aten::_no_grad_embedding_renorm_"),  # type: ignore
+    (
+        torch.nn.functional._no_grad_embedding_renorm_,
+        "aten::_no_grad_embedding_renorm_",
+    ),  # type: ignore
     (torch.nn.functional.assert_int_or_pair, "aten::_assert_int_or_pair"),
     (torch.nn.init._no_grad_fill_, "aten::_no_grad_fill_"),
     (torch.nn.init._no_grad_normal_, "aten::_no_grad_normal_"),

@@ -95,7 +95,6 @@ def format_term_condition(s):
 
 
 def match_in_expr(expr, node):
-
     if type(expr) != str:
         return "%s" % _val_info(expr)
     else:
@@ -145,7 +144,6 @@ def mdf_to_graphviz(
     is_horizontal=False,
     solid_color=False,
 ):
-
     DEFAULT_POP_SHAPE = "ellipse"
     DEFAULT_ARROW_SHAPE = "empty"
 
@@ -274,7 +272,6 @@ def mdf_to_graphviz(
         info += '<tr><td colspan="2"><b>%s</b></td></tr>' % (node.id)
 
         if node.metadata is not None and level >= LEVEL_3:
-
             info += "<tr><td>%s" % format_label("METADATA")
 
             for m in node.metadata:
@@ -283,10 +280,8 @@ def mdf_to_graphviz(
             info += "</td></tr>"
 
         if level >= LEVEL_2:
-
             if node.input_ports and len(node.input_ports) > 0:
                 for ip in node.input_ports:
-
                     additional = ""
                     if ip.shape is not None:
                         additional += "shape: %s, " % str(ip.shape)
@@ -306,7 +301,6 @@ def mdf_to_graphviz(
                     )
 
             if node.parameters and len(node.parameters) > 0:
-
                 for p in node.parameters:
                     try:
                         stateful = p.is_stateful()
@@ -536,7 +530,6 @@ def mdf_to_graphviz(
 
 
 if __name__ == "__main__":
-
     from modeci_mdf.utils import load_mdf, print_summary
 
     verbose = True
