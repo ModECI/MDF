@@ -57,7 +57,7 @@ def make_func_id(node: torch.Node) -> str:
 
 
 def make_model_graph_name(
-    model: Union[torch.ScriptModule, torch.ScriptFunction]
+    model: Union[torch.ScriptModule, torch.ScriptFunction],
 ) -> Tuple[str, str]:
     """Helper function that generates a clean graph and model name from a TorchScript model"""
     # Get a name for this module
@@ -213,7 +213,6 @@ class PortMapper:
     """
 
     def __init__(self, graph: torch.Graph, args: Tuple):
-
         # Keep generate special names for all the graph inputs and parameters
         self.graph_inputs = PortMapper._get_graph_inputs_dict(graph, args)
 
@@ -354,7 +353,6 @@ def torchnode_to_mdfnode(
     # Add any output ports
     subscript = lambda x: "" if len(schema.outputs) <= 1 else f"[{x}]"
     for out_num, o in enumerate(outputs):
-
         # Try to get the shape and type of the out port
         out_type = node.outputsAt(out_num).type()
         try:
@@ -433,7 +431,6 @@ def translate_graph(
     }
 
     for node in graph.nodes():
-
         mdf_node = torchnode_to_mdfnode(
             node=node, graph=graph, consts=consts, port_mapper=port_mapper
         )
@@ -452,7 +449,6 @@ def translate_graph(
         # O(n^2) in terms of the number of the nodes!
         outputs = [o.unique() for o in node.outputs()]
         for to in graph.nodes():
-
             # Lookup this nodes input edges
             to_inputs = node_to_in_edge[to]
 
@@ -507,7 +503,6 @@ def pytorch_to_mdf(
         graph = model.graph
         jit_model = model
     except AttributeError:
-
         # Lets jit things, if the user doesn't want to trace or we are dealing with a standard Python function, we need
         # to JIT script it.
         if not trace or inspect.isfunction(model):
@@ -539,7 +534,6 @@ def pytorch_to_mdf(
     try:
         from torch.onnx.symbolic_helper import _export_onnx_opset_version
     except ImportError:
-
         # This is need for PyTorch 1.12
         from torch.onnx._globals import GLOBALS
 

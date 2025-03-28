@@ -1,6 +1,7 @@
 """
 Functions for converting from MDF models to PyTorch
 """
+
 import collections
 import numpy as np
 import torch
@@ -345,10 +346,10 @@ def build_script(
         modules_declaration_text += declaration_text
 
     # Build Main call
-    main_call_declaration = "\n\nclass Model(nn.Module):" "\n\tdef __init__(self,"
+    main_call_declaration = "\n\nclass Model(nn.Module):\n\tdef __init__(self,"
     for node in nodes:
         main_call_declaration += f"{node.id}" + ", "
-    main_call_declaration += "):" "\n\t\tsuper().__init__()"
+    main_call_declaration += "):\n\t\tsuper().__init__()"
 
     for idx, node in enumerate(nodes):
         main_call_declaration += f"\n\t\tself.{node.id} = {node.id}"
@@ -371,7 +372,7 @@ def build_script(
     if graph_input:
         script += f"\ndummy_input =torch.tensor{tuple(graph_input)}"
     else:
-        script += f"\ndummy_input =torch.tensor(0.0)"
+        script += "\ndummy_input =torch.tensor(0.0)"
     script += "\noutput = model(dummy_input)"
     script += f"\ntorch.onnx.export(model,dummy_input,'{model_id}',verbose=True,input_names=[],opset_version=9)"
     script += f"\nonnx_model = onnx.load('{model_id}')"
