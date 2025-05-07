@@ -1,0 +1,64 @@
+{
+    "Net_acyclical": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.12",
+        "graphs": {
+            "Net_acyclical": {
+                "nodes": {
+                    "A": {
+                        "input_ports": {
+                            "input_port": {
+                                "default_value": 0
+                            }
+                        },
+                        "parameters": {
+                            "passed_token": {
+                                "value": "input_port + 1"
+                            },
+                            "internal_count": {
+                                "value": "internal_count + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "passed_token"
+                            }
+                        }
+                    },
+                    "B": {
+                        "input_ports": {
+                            "input_port": {}
+                        },
+                        "parameters": {
+                            "passed_token": {
+                                "value": "input_port + 1"
+                            },
+                            "internal_count": {
+                                "value": "internal_count + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "passed_token"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "edge_A_B": {
+                        "sender": "A",
+                        "receiver": "B",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port"
+                    },
+                    "edge_B_A": {
+                        "sender": "B",
+                        "receiver": "A",
+                        "sender_port": "out_port",
+                        "receiver_port": "input_port"
+                    }
+                }
+            }
+        }
+    }
+}

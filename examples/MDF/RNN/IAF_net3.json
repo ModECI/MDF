@@ -1,5 +1,5 @@
 {
-    "IAF_net2": {
+    "IAF_net3": {
         "format": "ModECI MDF v0.4",
         "generating_application": "Python modeci-mdf v0.4.12",
         "graphs": {
@@ -12,31 +12,50 @@
                                 "time_derivative": "1"
                             },
                             "start": {
-                                "value": [
-                                    10,
-                                    20,
-                                    30,
-                                    40,
-                                    50,
-                                    60,
-                                    70,
-                                    80
-                                ]
+                                "value": 20
                             },
                             "duration": {
-                                "value": [
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0,
-                                    5.0
-                                ]
+                                "value": 10
                             },
                             "amplitude": {
-                                "value": 15
+                                "value": 10
+                            },
+                            "level": {
+                                "value": 0,
+                                "conditions": [
+                                    {
+                                        "id": "on",
+                                        "test": "time > start",
+                                        "value": "amplitude"
+                                    },
+                                    {
+                                        "id": "off",
+                                        "test": "time > start + duration",
+                                        "value": "amplitude*0"
+                                    }
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "current_output": {
+                                "value": "level"
+                            }
+                        }
+                    },
+                    "current_input_node2": {
+                        "parameters": {
+                            "time": {
+                                "default_initial_value": 0,
+                                "time_derivative": "1"
+                            },
+                            "start": {
+                                "value": 60
+                            },
+                            "duration": {
+                                "value": 10
+                            },
+                            "amplitude": {
+                                "value": 3
                             },
                             "level": {
                                 "value": 0,
@@ -64,7 +83,7 @@
                         "input_ports": {
                             "current_input": {
                                 "shape": [
-                                    8
+                                    1
                                 ],
                                 "reduce": "add"
                             }
@@ -72,25 +91,11 @@
                         "parameters": {
                             "v0": {
                                 "value": [
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70
+                                    -60
                                 ]
                             },
                             "erev": {
                                 "value": [
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
                                     -70
                                 ]
                             },
@@ -99,13 +104,6 @@
                             },
                             "thresh": {
                                 "value": [
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
                                     -20
                                 ]
                             },
@@ -149,7 +147,7 @@
                         "input_ports": {
                             "current_input": {
                                 "shape": [
-                                    8
+                                    1
                                 ],
                                 "reduce": "add"
                             }
@@ -157,40 +155,19 @@
                         "parameters": {
                             "v0": {
                                 "value": [
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70
+                                    -60
                                 ]
                             },
                             "erev": {
                                 "value": [
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
-                                    -70,
                                     -70
                                 ]
                             },
                             "tau": {
-                                "value": 1
+                                "value": 10.0
                             },
                             "thresh": {
                                 "value": [
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
-                                    -20,
                                     -20
                                 ]
                             },
@@ -234,7 +211,7 @@
                         "input_ports": {
                             "spike_input": {
                                 "shape": [
-                                    8
+                                    1
                                 ],
                                 "reduce": "add"
                             }
@@ -245,86 +222,7 @@
                             },
                             "spike_weights": {
                                 "value": [
-                                    [
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    [
-                                        0.0,
-                                        1.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    [
-                                        0.0,
-                                        0.0,
-                                        2.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    [
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        3.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    [
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        4.0,
-                                        0.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    [
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        5.0,
-                                        0.0,
-                                        0.0
-                                    ],
-                                    [
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        6.0,
-                                        0.0
-                                    ],
-                                    [
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        7.0
-                                    ]
+                                    40
                                 ]
                             },
                             "weighted_spike": {
@@ -356,6 +254,12 @@
                 "edges": {
                     "input_edge": {
                         "sender": "current_input_node",
+                        "receiver": "pre",
+                        "sender_port": "current_output",
+                        "receiver_port": "current_input"
+                    },
+                    "input_edge2": {
+                        "sender": "current_input_node2",
                         "receiver": "pre",
                         "sender_port": "current_output",
                         "receiver_port": "current_input"
