@@ -1,6 +1,6 @@
 IAF_net:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.11
+    generating_application: Python modeci-mdf v0.4.12
     graphs:
         iaf_example:
             nodes:
@@ -40,6 +40,7 @@ IAF_net:
                         current_input:
                             shape:
                             - 8
+                            reduce: add
                     parameters:
                         v0:
                             value:
@@ -99,6 +100,7 @@ IAF_net:
                         current_input:
                             shape:
                             - 8
+                            reduce: add
                     parameters:
                         v0:
                             value:
@@ -158,6 +160,7 @@ IAF_net:
                         spike_input:
                             shape:
                             - 8
+                            reduce: add
                     parameters:
                         syn_tau:
                             value: 10

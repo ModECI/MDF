@@ -17,7 +17,6 @@ from modeci_mdf.execution_engine import evaluate_expr
 def mdf_to_neuroml(
     graph, save_to=None, format=None, run_duration_sec=2, run_dt_sec=0.01
 ):
-
     print("Converting graph: %s to NeuroML" % (graph.id))
 
     net = neuromllite.Network(id=graph.id)
@@ -96,7 +95,7 @@ def mdf_to_neuroml(
                             "   Standard parameter: %s = %s"
                             % (p.id, comp.parameters[p.id])
                         )
-                    except Exception as e:
+                    except Exception:
                         ct.add(lems.Exposure(p.id, "none"))
                         dv = lems.DerivedVariable(
                             name=p.id,
@@ -137,7 +136,6 @@ def mdf_to_neuroml(
                     on_start.actions.append(sa)
 
                 if p.time_derivative:
-
                     ct.add(lems.Constant("SEC", "1s", "time"))
                     td = lems.TimeDerivative(
                         variable=p.id, value="(%s)/SEC" % p.time_derivative
@@ -199,7 +197,6 @@ def mdf_to_neuroml(
             )
 
     if len(graph.edges) > 0:
-
         model.add(
             lems.Include(os.path.join(os.path.dirname(__file__), "syn_definitions.xml"))
         )
@@ -258,18 +255,18 @@ def mdf_to_neuroml(
     record_variables = {}
     for node in graph.nodes:
         for ip in node.input_ports:
-            if not ip.id in record_variables:
+            if ip.id not in record_variables:
                 record_variables[ip.id] = {}
             record_variables[ip.id][node.id] = 0
 
         for p in node.parameters:
             if p.is_stateful():
-                if not p.id in record_variables:
+                if p.id not in record_variables:
                     record_variables[p.id] = {}
                 record_variables[p.id][node.id] = 0
 
         for op in node.output_ports:
-            if not op.id in record_variables:
+            if op.id not in record_variables:
                 record_variables[op.id] = {}
             record_variables[op.id][node.id] = 0
 
@@ -283,7 +280,6 @@ def mdf_to_neuroml(
 
 
 if __name__ == "__main__":
-
     from modeci_mdf.utils import load_mdf, print_summary
 
     example = "../../../../examples/MDF/Simple.json"

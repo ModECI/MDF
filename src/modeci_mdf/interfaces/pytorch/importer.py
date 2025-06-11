@@ -5,6 +5,7 @@ This code was originally inspired by the following blog post:
 
     Mike He, "From Models to Computation Graphs (Part I)", https://ad1024.space/articles/22
 """
+
 import inspect
 import logging
 
@@ -12,6 +13,7 @@ from typing import Union, Dict, Any, Tuple, List, Callable
 import onnx.defs
 
 import torch
+
 
 # We need to monkey patch the torch._C.Node class to add a __getitem__ method
 # This is for torch 2.0
@@ -55,7 +57,7 @@ def make_func_id(node: torch.Node) -> str:
 
 
 def make_model_graph_name(
-    model: Union[torch.ScriptModule, torch.ScriptFunction]
+    model: Union[torch.ScriptModule, torch.ScriptFunction],
 ) -> Tuple[str, str]:
     """Helper function that generates a clean graph and model name from a TorchScript model"""
     # Get a name for this module
@@ -211,7 +213,6 @@ class PortMapper:
     """
 
     def __init__(self, graph: torch.Graph, args: Tuple):
-
         # Keep generate special names for all the graph inputs and parameters
         self.graph_inputs = PortMapper._get_graph_inputs_dict(graph, args)
 
@@ -352,7 +353,6 @@ def torchnode_to_mdfnode(
     # Add any output ports
     subscript = lambda x: "" if len(schema.outputs) <= 1 else f"[{x}]"
     for out_num, o in enumerate(outputs):
-
         # Try to get the shape and type of the out port
         out_type = node.outputsAt(out_num).type()
         try:
@@ -431,7 +431,6 @@ def translate_graph(
     }
 
     for node in graph.nodes():
-
         mdf_node = torchnode_to_mdfnode(
             node=node, graph=graph, consts=consts, port_mapper=port_mapper
         )
@@ -450,7 +449,6 @@ def translate_graph(
         # O(n^2) in terms of the number of the nodes!
         outputs = [o.unique() for o in node.outputs()]
         for to in graph.nodes():
-
             # Lookup this nodes input edges
             to_inputs = node_to_in_edge[to]
 
@@ -505,7 +503,6 @@ def pytorch_to_mdf(
         graph = model.graph
         jit_model = model
     except AttributeError:
-
         # Lets jit things, if the user doesn't want to trace or we are dealing with a standard Python function, we need
         # to JIT script it.
         if not trace or inspect.isfunction(model):
@@ -523,12 +520,20 @@ def pytorch_to_mdf(
     # Call out to a part of the ONNX exporter that simiplifies the graph before ONNX export.
     from torch.onnx.utils import _model_to_graph
     from torch.onnx import TrainingMode
-    from torch.onnx.symbolic_helper import _set_opset_version
+
+    # Seems they got rid of _set_opset_version in 2.2 or something, can't find a better way to do this
+    try:
+        from torch.onnx.symbolic_helper import _set_opset_version
+    except ImportError:
+
+        def _set_opset_version(version):
+            from torch.onnx._globals import GLOBALS
+
+            GLOBALS.export_onnx_opset_version = version
 
     try:
         from torch.onnx.symbolic_helper import _export_onnx_opset_version
     except ImportError:
-
         # This is need for PyTorch 1.12
         from torch.onnx._globals import GLOBALS
 

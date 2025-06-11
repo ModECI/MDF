@@ -87,16 +87,15 @@ def main():
     )
     mod_graph.edges.append(e2)
 
-    """
     e3 = Edge(
         id="feedback_edge",
-        parameters={"weight": 0.1},
+        parameters={"weight": 0.3},
         sender=readout_node.id,
         sender_port=readout_node.get_output_port("z").id,
         receiver=rnn_node.id,
         receiver_port=rnn_node.get_input_port("fb_input").id,
     )
-    mod_graph.edges.append(e3)"""
+    mod_graph.edges.append(e3)
 
     if N < 100:
         new_file = mod.to_json_file("%s.json" % mod.id)

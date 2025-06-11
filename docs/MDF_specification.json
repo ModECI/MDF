@@ -106,6 +106,10 @@
                     "type": "str",
                     "description": "The unique (for this Node) id of the input port,"
                 },
+                "default_value": {
+                    "type": "Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]",
+                    "description": "Value to set at this input port if no edge connected to it."
+                },
                 "shape": {
                     "type": "Union[Tuple[int, ...], NoneType]",
                     "description": "The shape of the input port. This uses the same syntax as numpy ndarray shapes\n(e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape"
@@ -113,6 +117,10 @@
                 "type": {
                     "type": "Union[str, NoneType]",
                     "description": "The data type of the input received at a port."
+                },
+                "reduce": {
+                    "type": "Union[str, NoneType]",
+                    "description": "Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)"
                 }
             }
         },
