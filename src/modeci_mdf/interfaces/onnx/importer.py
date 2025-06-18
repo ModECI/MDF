@@ -1,6 +1,7 @@
 """
 Code for importing ONNX models into MDF.
 """
+
 import typing
 
 import onnx
@@ -60,7 +61,6 @@ def get_shape_params(shape: onnx.TensorShapeProto) -> typing.Tuple:
 
 
 def get_onnx_attribute(a):
-
     # Use the helpers to get the appropriate value
     val = onnx.helper.get_attribute_value(a)
 
@@ -92,7 +92,6 @@ def onnx_node_to_mdf(
 
     # If this is a ONNX Node,
     if type(node) == onnx.NodeProto:
-
         # Create and MDF node with parameters
         # FIXME: We need to preserve type info somewhere
         params_dict = {a.name: get_onnx_attribute(a) for a in node.attribute}
@@ -107,7 +106,6 @@ def onnx_node_to_mdf(
         non_constant_inputs = []
         func_args = {}
         for inp_i, inp in enumerate(node.input):
-
             # Get the name of the formal argument that corresponds to this input.
             # We need to go to the schema for this.
             # FIXME: We need to make sure we are going the correct schema here ... yuck!
@@ -192,7 +190,6 @@ def onnx_to_mdf(
         onnx_initializer = {}
 
     if type(onnx_model) == ModelProto:
-
         # Do shape inference on the model so we can get shapes of intermediate outputs
         # FIXME: This function has side-effects, it probably shouldn't
         try:
@@ -435,7 +432,6 @@ def get_color_for_onnx_category(shape):
 
 
 def main():
-
     import argparse
 
     parser = argparse.ArgumentParser(

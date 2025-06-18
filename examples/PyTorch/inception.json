@@ -1,7 +1,7 @@
 {
     "InceptionBlocks": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.11",
+        "generating_application": "Python modeci-mdf v0.4.12",
         "graphs": {
             "InceptionBlocksGraph": {
                 "nodes": {

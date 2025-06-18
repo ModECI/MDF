@@ -2,6 +2,7 @@
 Wrap commonly-used torch builtins in nn.Module subclass
 for easier automatic construction of script
 """
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -124,7 +125,6 @@ class concat(torch.nn.Module):
         super().__init__()
 
     def forward(self, A, axis=0):
-
         return torch.cat(A, axis)
 
 
@@ -133,7 +133,6 @@ class ceil(torch.nn.Module):
         super().__init__()
 
     def forward(self, A):
-
         return torch.ceil(A)
 
 
@@ -142,7 +141,6 @@ class floor(torch.nn.Module):
         super().__init__()
 
     def forward(self, A):
-
         return torch.floor(A)
 
 
@@ -217,7 +215,6 @@ class conv(torch.nn.Module):
                 )
 
         elif self.auto_pad == "SAME_LOWER":
-
             pad_dim1 = (
                 torch.ceil(torch.tensor(A.shape[2]).to(torch.float32) / strides[0])
                 .to(torch.int64)
@@ -266,36 +263,30 @@ class conv(torch.nn.Module):
 
 class elu(torch.nn.Module):
     def __init__(self, alpha=1.0):
-
         super().__init__()
         self.alpha = alpha
 
     def forward(self, A):
-
         return nn.ELU(alpha=self.alpha)(A.to(torch.float32))
 
 
 class hardsigmoid(torch.nn.Module):
     def __init__(self, alpha=0.2, beta=0.5):
-
         super().__init__()
         self.alpha = alpha
         self.beta = beta
 
     def forward(self, A):
-
         return torch.clamp(self.alpha * (A.to(torch.float32)) + self.beta, 0, 1)
 
 
 class hardswish(torch.nn.Module):
     def __init__(self):
-
         super().__init__()
         self.alpha = 1.0 / 6
         self.beta = 0.5
 
     def forward(self, A):
-
         return A * torch.clamp(self.alpha * (A.to(torch.float32)) + self.beta, 0, 1)
 
 
@@ -314,7 +305,6 @@ class hardmax(torch.nn.Module):
         repeats = []
         repeats.append(1)
         for i, idx in enumerate(reversed(rank[: self.axis])):
-
             repeats.append(1)
             tensor = torch.stack([tensor] * idx)
 
@@ -342,13 +332,11 @@ class compress(torch.nn.Module):
         super().__init__()
 
     def forward(self, A, B):
-
         idx = (B.to(torch.bool) != 0).nonzero().reshape(-1)
         if self.axis != None:
             return torch.index_select(A, self.axis, idx)
 
         else:
-
             return torch.index_select(A.reshape(-1), 0, idx)
 
 

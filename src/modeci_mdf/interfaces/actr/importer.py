@@ -1,6 +1,7 @@
 """
-    Code for importing ACT-R models into MDF.
+Code for importing ACT-R models into MDF.
 """
+
 from modeci_mdf.mdf import *
 
 
