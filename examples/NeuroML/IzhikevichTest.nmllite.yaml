@@ -1,5 +1,5 @@
 IzhikevichTest:
-    version: NeuroMLlite v0.6.0
+    version: NeuroMLlite v0.6.1
     notes: Example Izhikevich
     parameters:
         N: 1
