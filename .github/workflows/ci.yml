@@ -90,8 +90,8 @@ jobs:
         cd docs
         uv run generate.py
         cd sphinx
-        make clean
-        make html
+        uv run make clean
+        uv run make html
 
     - name: Final version info for optional installed packages
       run: |
