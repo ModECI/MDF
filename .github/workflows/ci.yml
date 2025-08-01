@@ -58,7 +58,7 @@ jobs:
 
     - name: Test core package
       run: |
-        uv sync --locked --dev
+        uv sync --dev
         uv run pytest -m coremdf tests/
 
     - name: Version info for optional installed packages
@@ -67,32 +67,32 @@ jobs:
 
     - name: Test interface ACT-R
       run: |
-        uv sync --locked --extra "actr" --dev
+        uv sync --extra "actr" --dev
         uv run pytest -v -m "actr" tests/
 
     - name: Test interface PyTorch
       run: |
-        uv sync --locked --extra "optional" --dev
+        uv sync --extra "optional" --dev
         uv run pytest -v -m "pytorch" tests/
 
     - name: Test interface NeuroML
       run: |
-        uv sync --locked --extra "neuroml" --dev
+        uv sync --extra "neuroml" --dev
         uv run pytest -v -m "neuroml" tests/
 
     - name: Test interface TensorFlow
       run: |
-        uv sync --locked --extra "tensorflow" --dev
+        uv sync --extra "tensorflow" --dev
         uv run pytest -v -m "tensorflow" tests/
 
     - name: Test interface PsyNeuLink
       run: |
-        uv sync --locked --extra "psyneulink" --dev
+        uv sync --extra "psyneulink" --dev
         uv run pytest -v -m "psyneulink" tests/
 
     - name: Build Documentation
       run: |
-        uv sync --locked --extra "docs" --dev
+        uv sync --extra "docs" --dev
         cd docs
         uv run generate.py
         cd sphinx
