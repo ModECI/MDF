@@ -156,7 +156,8 @@ markers = [
     "actr: marks tests which require ACT-R to be installed.",
     "pytorch: marks test which require PyTorch to be installed.')",
     "psyneulink: marks tests which require PsyNueLink to be installed.",
-    "neuroml: marks tests which require NeuroML to be installed."
+    "neuroml: marks tests which require NeuroML to be installed.",
+    "tensorflow: marks tests which require TensorFlow to be installed.",
 ]
 
 [tool.isort]
