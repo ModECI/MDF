@@ -73,6 +73,8 @@ jobs:
         uv run pytest -v -m "neuroml" tests/
 
     - name: Test interface TensorFlow
+      # Skip on windows due to lack of wheel support for tensorflow
+      if: ${{ matrix.runs-on != 'windows-latest' }}
       run: |
         uv sync --extra "tensorflow" --dev
         uv run pytest -v -m "tensorflow" tests/
@@ -84,7 +86,7 @@ jobs:
 
     - name: Build Documentation
       run: |
-        uv sync --extra "docs" --dev
+        uv sync --group docs
         cd docs
         uv run generate.py
         cd sphinx
