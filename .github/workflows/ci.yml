@@ -28,7 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ "3.9", "3.11", "3.12"]
-        runs-on: [macos-latest]
+        runs-on: [ubuntu-latest, macos-latest, windows-latest]
         exclude:
           - runs-on: macos-latest
             python-version: "3.9"
@@ -40,42 +40,15 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    # Rely on version of modelspec from PyPI as set by setup.cfg...
-    #- name: Install modelspec
-    #  run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
-
-    # Rely on version of NeuroMLlite from PyPI as set by setup.py...
-    # - name: Install NeuroMLlite
-    #   run: python -m pip install NeuroMLlite>=0.5.0
-
-    # Rely on version of PsyNeuLink from PyPI as set by setup.py...
-    #- name: Install specific PsyNeuLink branch
-    #  run: python -m pip install git+https://github.com/ModECI/PsyNeuLink@devel
+    - name: Install uv and set the python version
+      uses: astral-sh/setup-uv@v6
+      with:
+        python-version: ${{ matrix.python-version }}
 
     - name: Install HDF5 for pytables on macos-14/latest
       if: ${{ matrix.runs-on == 'macos-latest' }}
       run: |
         brew install hdf5
-
-    - name: Install core package
-      run: |
-        python -m pip install .[dev]
-
-    - name: Version info for installed packages
-      run: |
-        pip list
-
-    - name: Test core package
-      run: |
-        python -m pytest -m coremdf tests/
-
-    - name: Install most optional dependencies
-      run: |
-        python -m pip install .[optional]
-
-    - name: Version info for optional installed packages
-      run: |
-          pip list
 
     - name: Install graphviz
       uses: ts-graphviz/setup-graphviz@v2
@@ -83,44 +56,52 @@ jobs:
         # Skip to run brew update command on macOS.
         macos-skip-brew-update: 'true' # default false
 
+    - name: Test core package
+      run: |
+        uv sync --locked --dev
+        uv run pytest -m coremdf tests/
+
+    - name: Version info for optional installed packages
+      run: |
+          pip list
+
     - name: Test interface ACT-R
       run: |
-        python -m pytest -v -m "actr" tests/
+        uv sync --locked --extra "actr" --dev
+        uv run pytest -v -m "actr" tests/
 
     - name: Test interface PyTorch
       run: |
-        python -m pytest -v -m "pytorch" tests/
+        uv sync --locked --extra "optional" --dev
+        uv run pytest -v -m "pytorch" tests/
 
     - name: Test interface NeuroML
       run: |
-        python -m pip install .[neuroml]
-        python -m pytest -v -m "neuroml" tests/
+        uv sync --locked --extra "neuroml" --dev
+        uv run pytest -v -m "neuroml" tests/
 
     - name: Test interface TensorFlow
       run: |
-        python -m pip install .[tensorflow]
-        dot -V
-#        gtimeout --signal=INT 60 python -m pytest --full-trace -v -m "tensorflow" tests/
-
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+        uv sync --locked --extra "tensorflow" --dev
+        uv run pytest -v -m "tensorflow" tests/
 
     - name: Test interface PsyNeuLink
       run: |
-        python -m pip install .[psyneulink]
-        python -m pytest -v -m "psyneulink" tests/
+        uv sync --locked --extra "psyneulink" --dev
+        uv run pytest -v -m "psyneulink" tests/
 
     - name: Build Documentation
       run: |
+        uv sync --locked --extra "docs" --dev
         cd docs
-        python generate.py
+        uv run generate.py
         cd sphinx
         make clean
         make html
 
     - name: Final version info for optional installed packages
       run: |
-          pip list
+          uv pip list
 
   dist:
     name: Distribution build
