@@ -58,14 +58,9 @@ jobs:
         uv sync --dev
         uv run pytest -m coremdf tests/
 
-    - name: Version info for optional installed packages
-      run: |
-          pip list
-
     - name: Test interface ACT-R
       run: |
-        uv sync --extra "actr" --dev
-        uv run pytest -v -m "actr" tests/
+       uv run pytest -v -m "actr" tests/
 
     - name: Test interface PyTorch
       run: |
