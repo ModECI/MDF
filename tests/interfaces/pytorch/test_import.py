@@ -52,6 +52,7 @@ def _get_torchvision_models():
         "swin_v2_t": {},
         "swin_v2_s": {},
         "swin_v2_b": {},
+        "vit_b_16": {},
     }
 
     # Copied from https://github.com/pytorch/vision/blob/main/test/test_models.py
