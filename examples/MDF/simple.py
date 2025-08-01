@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - A simple 2 node graph.
+Example of ModECI MDF - A simple 2 node graph.
 """
 
 import os

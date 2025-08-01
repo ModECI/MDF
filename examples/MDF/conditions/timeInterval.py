@@ -1,6 +1,7 @@
 """
-    Example of ModECI MDF - A simple Graph satisfying a time based condition
+Example of ModECI MDF - A simple Graph satisfying a time based condition
 """
+
 import sys
 import os
 import graph_scheduler

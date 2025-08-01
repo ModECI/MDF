@@ -70,7 +70,6 @@ def run():
     print("Plotting the model")
     plot_model(model, to_file="model_plot.png", show_shapes=True, show_layer_names=True)
 
-
     # Saving model in h5 for Ploting Nuetron visual
     model.save("kr_N_model.keras")
 
@@ -87,6 +86,7 @@ def run():
         plt.show()
 
     return model
+
 
 if __name__ == "__main__":
     run()

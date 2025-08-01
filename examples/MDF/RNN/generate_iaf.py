@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Testing integrate and fire neurons
+Example of ModECI MDF - Testing integrate and fire neurons
 """
 
 from modeci_mdf.mdf import *
@@ -205,9 +205,7 @@ def main():
     v0 = (
         numpy.array([random.random() * 20 - 70 for r in range(num_cells)])
         if net
-        else -70
-        if net2
-        else -60
+        else -70 if net2 else -60
     )
 
     iaf_node1 = create_iaf_syn_node("pre", num_cells, syn_also=False, v0=v0)
