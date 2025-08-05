@@ -24,6 +24,9 @@ example_mdf_scripts = {
 example_pnl_scripts = {
     Path(f) for f in glob.glob("examples/PsyNeuLink/**/*.py", recursive=True)
 }
+example_tf_scripts = {
+    Path(f) for f in glob.glob("examples/TensorFlow/**/*.py", recursive=True)
+}
 example_exclusion_strings = [
     ".reconstructed.py",
     "generate_json_and_scripts.py",
@@ -98,8 +101,9 @@ def test_example(script, example_tmp_dir, additional_args):
     dir_path = os.path.dirname(os.path.realpath(full_script_path))
     os.chdir(dir_path)
 
-    # If this is one of the example/MDF scripts, we need to append example/MDF to sys.path
-    if Path(script) in example_mdf_scripts:
+    # If this is one of the example/MDF scripts, we need to append example/MDF to sys.path.
+    # Do the same for tensorflow examples since they also have local imports.
+    if Path(script) in example_mdf_scripts or Path(script) in example_tf_scripts:
         sys.path.append(dir_path)
 
     print(f"Running script {full_script_path} in working dir {os.getcwd()}")

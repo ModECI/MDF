@@ -11,7 +11,9 @@ from modeci_mdf.interfaces.keras import keras_to_mdf
 from modelspec.utils import _val_info
 from modeci_mdf.execution_engine import EvaluableGraph
 
-exec(open("./keras_model.py").read())
+from keras_model import run
+
+model = run()
 
 # load the keras model
 # model = tf.keras.models.load_model("keras_model_on_iris.keras")
