@@ -5,8 +5,7 @@ on:
   pull_request:
   push:
   release:
-    types:
-      - published
+    types: [published]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -17,107 +16,83 @@ jobs:
     name: Format
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-    - uses: pre-commit/action@v3.0.1
-      with:
-        extra_args: --hook-stage manual --all-files
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
+      - uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --hook-stage manual --all-files
 
-  checks:
-    name: Check Python ${{ matrix.python-version }} on ${{ matrix.runs-on }}
-    runs-on: ${{ matrix.runs-on }}
+  tests:
+    name: Test ${{ matrix.test-suite }} on Python ${{ matrix.python-version }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.10", "3.11", "3.12"]
-        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.10, 3.12]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        test-suite: [core, actr, pytorch, neuroml, tensorflow, psyneulink]
+        exclude:
+          - os: windows-latest
+            test-suite: tensorflow
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: Install uv and set the python version
-      uses: astral-sh/setup-uv@v6
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Install extras for ${{ matrix.test-suite }}
+        run: |
+          uv sync --dev
+          case "${{ matrix.test-suite }}" in
+            pytorch)    uv sync --extra "optional"   --dev ;;
+            neuroml)    uv sync --extra "neuroml"     --dev ;;
+            tensorflow) uv sync --extra "tensorflow" --dev ;;
+            psyneulink) uv sync --extra "psyneulink"  --dev ;;
+          esac
 
-    - name: Install HDF5 for pytables on macos-14/latest
-      if: ${{ matrix.runs-on == 'macos-latest' }}
-      run: |
-        brew install hdf5
+      - name: Run ${{ matrix.test-suite }} tests
+        run: |
+          MARKER="${{ matrix.test-suite }}"
+          if [ "${{ matrix.test-suite }}" = "core" ]; then
+            MARKER="coremdf"
+          fi
+          uv run pytest -v -m "${MARKER}" tests/
 
-    - name: Install graphviz
-      uses: ts-graphviz/setup-graphviz@v2
-      with:
-        # Skip to run brew update command on macOS.
-        macos-skip-brew-update: 'true' # default false
-
-    - name: Test core package
-      run: |
-        uv sync --dev
-        uv run pytest -m coremdf tests/
-
-    - name: Test interface ACT-R
-      run: |
-       uv run pytest -v -m "actr" tests/
-
-    - name: Test interface PyTorch
-      run: |
-        uv sync --extra "optional" --dev
-        uv run pytest -v -m "pytorch" tests/
-
-    - name: Test interface NeuroML
-      run: |
-        uv sync --extra "neuroml" --dev
-        uv run pytest -v -m "neuroml" tests/
-
-    - name: Test interface TensorFlow
-      # Skip on windows due to lack of wheel support for tensorflow
-      if: ${{ matrix.runs-on != 'windows-latest' }}
-      run: |
-        uv sync --extra "tensorflow" --dev
-        uv run pytest -v -m "tensorflow" tests/
-
-    - name: Test interface PsyNeuLink
-      run: |
-        uv sync --extra "psyneulink" --dev
-        uv run pytest -v -m "psyneulink" tests/
-
-    - name: Build Documentation
-      run: |
-        uv sync --group docs
-        cd docs
-        uv run generate.py
-        cd sphinx
-        uv run make clean
-        uv run make html
-
-    - name: Final version info for optional installed packages
-      run: |
-          uv pip list
+  docs:
+    name: Build Documentation
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
+      - name: Generate and Build Docs
+        run: |
+          uv sync --group docs
+          cd docs
+          uv run generate.py
+          cd sphinx
+          uv run make clean
+          uv run make html
 
   dist:
     name: Distribution build
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Build sdist and wheel
-      run: pipx run --spec build pyproject-build
-
-    - uses: actions/upload-artifact@v4
-      with:
-        path: dist
-
-    - uses: pypa/gh-action-pypi-publish@v1.4.1
-      if: github.event_name == 'release' && github.event.action == 'published'
-      with:
-        user: __token__
-        # Remember to generate this and set it in "GitHub Secrets"
-        password: ${{ secrets.pypi_password }}
+      - uses: actions/checkout@v4
+      - name: Build sdist & wheel
+        run: pipx run --spec build pyproject-build
+      - uses: actions/upload-artifact@v4
+        with:
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@v1.4.1
+        if: github.event_name == 'release' && github.event.action == 'published'
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
