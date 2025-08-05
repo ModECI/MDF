@@ -73,6 +73,7 @@ jobs:
           esac
 
       - name: Run ${{ matrix.test-suite }} tests
+        shell: bash
         run: |
           MARKER="${{ matrix.test-suite }}"
           if [ "${{ matrix.test-suite }}" = "core" ]; then
