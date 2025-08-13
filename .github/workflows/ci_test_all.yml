@@ -43,4 +43,3 @@ jobs:
     - name: Version info for installed packages
       run: |
         pip list
-

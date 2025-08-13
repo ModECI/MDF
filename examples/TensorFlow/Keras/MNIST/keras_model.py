@@ -78,9 +78,11 @@ print("Predict value at index 0:")
 predictions = model.predict([x_test])
 print("The predicted number at index 0 is", np.argmax(predictions[0]))
 
-# print the actual value at that index
-print("The actually number at index zero is (see the image below):")
-plt.imshow(x_test[0])
 
-if not "-nogui" in sys.argv:
+if "-gui" in sys.argv:
+    # print the actual value at that index
+    print("The actual number at index zero is (see the image below):")
+    plt.imshow(x_test[0])
     plt.show()
+else:
+    print("Run with argument -gui to see actual number")
