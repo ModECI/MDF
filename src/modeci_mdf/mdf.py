@@ -1,17 +1,17 @@
 r"""
-    The main object-oriented implementation of the MDF schema, with each core component of the `MDF specification <../Specification.html>`_
-    implemented as a :code:`class`. Instances of these objects can be composed to create a representation of
-    an MDF model as Python objects. These models can then be serialized and deserialized to and from JSON or YAML,
-    executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
-    environments using the :mod:`~modeci_mdf.interfaces` module.
+The main object-oriented implementation of the MDF schema, with each core component of the `MDF specification <../Specification.html>`_
+implemented as a :code:`class`. Instances of these objects can be composed to create a representation of
+an MDF model as Python objects. These models can then be serialized and deserialized to and from JSON or YAML,
+executed via the :mod:`~modeci_mdf.execution_engine` module, or imported and exported to supported external
+environments using the :mod:`~modeci_mdf.interfaces` module.
 """
-import sympy
-import numpy as np
+
+import copy
 
 from typing import List, Tuple, Dict, Set, Any, Union, Optional
 
 import modelspec
-from modelspec import has, field, fields, optional, instance_of, in_
+from modelspec import field, optional, instance_of
 from modelspec.base_types import (
     Base,
     converter,
@@ -59,7 +59,7 @@ class MdfBase(Base):
 @modelspec.define(eq=False)
 class Function(MdfBase):
     r"""
-    A single value which is evaluated as a function of values on :class:`InputPort`\(s) and other Functions
+    A single value which is evaluated as a function of values on :class:`InputPort`(s) and other Functions
 
     Attributes:
         id: The unique (for this Node) id of the function, which will be used in other :class:`~Function`s and
@@ -71,36 +71,25 @@ class Function(MdfBase):
         value: If the function is a value expression, this attribute will contain the expression and the function
             and args attributes will be None.
     """
+
     id: str = field(validator=instance_of(str))
-    function: Optional[str] = field(default=None, validator=optional(instance_of(str)))
+    function: Optional[str] = field(
+        default=None, validator=optional(instance_of((str, dict)))
+    )
     args: Optional[Dict[str, Any]] = field(default=None)
     value: Optional[ValueExprType] = field(
         default=None, validator=optional(instance_of(value_expr_types))
     )
 
     @classmethod
-    def _structure(cls, o: Dict[str, Any], t: Any) -> "Function":
-        """
-        A custom structuring hook for Functions that handle the "translated" case when function is specified as
-        a dictionary
-        """
-
-        # This structure function creates function objects without id as empty strings if it is not specified.
-        if "id" not in o:
-            id = ""
-        else:
-            id = o["id"]
-
-        if "function" in o.keys() and isinstance(o["function"], dict):
-            func_name = list(o["function"].keys())[0]
-            args = o["function"][func_name]
-            return cls(id=id, function=func_name, args=args)
-        elif "function" in o.keys() and isinstance(o["function"], str):
-            return cls(id=id, function=o["function"], args=o["args"])
-        elif "value" in o.keys():
-            return cls(id=id, value=o["value"])
-        else:
-            raise ValueError(f"Could not parse function specification: {o}")
+    def _parse_cattr_structure(cls, o):
+        if "function" in o:
+            if isinstance(o["function"], dict):
+                # TODO: handle args already present and conflicting?
+                func_name = list(o["function"].keys())[0]
+                o["args"] = o["function"][func_name]
+                o["function"] = func_name
+        return o
 
 
 @modelspec.define(eq=False)
@@ -110,18 +99,25 @@ class InputPort(MdfBase):
 
     Attributes:
         id: The unique (for this Node) id of the input port,
+        default_value: Value to set at this input port if no edge connected to it.
         shape: The shape of the input port. This uses the same syntax as numpy ndarray shapes
             (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
         type: The data type of the input received at a port.
+        reduce: Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)
 
     """
+
     id: str = field(validator=instance_of(str))
+    default_value: Optional[ValueExprType] = field(default=None)
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
         default=None,
-        converter=lambda x: make_tuple(x) if type(x) == str else x,
+        converter=lambda x: make_tuple(x) if type(x) is str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+    reduce: Optional[str] = field(
+        validator=optional(instance_of(str)), default="overwrite"
+    )
 
 
 @modelspec.define(eq=False)
@@ -138,12 +134,13 @@ class OutputPort(MdfBase):
             (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
         type: The data type of the output sent by a port.
     """
+
     id: str = field(validator=instance_of(str))
     value: Optional[str] = field(validator=optional(instance_of(str)), default=None)
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
         default=None,
-        converter=lambda x: make_tuple(x) if type(x) == str else x,
+        converter=lambda x: make_tuple(x) if type(x) is str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
 
@@ -158,6 +155,7 @@ class ParameterCondition(Base):
         test: The boolean expression to evaluate
         value: The new value of the Parameter if the test is true
     """
+
     id: str = field(validator=instance_of(str))
     test: Optional[ValueExprType] = field(default=None)
     value: Optional[ValueExprType] = field(default=None)
@@ -166,16 +164,16 @@ class ParameterCondition(Base):
 @modelspec.define(eq=False)
 class Parameter(MdfBase):
     r"""
-    A parameter of the :class:`Node`, which can have a specific value (a constant or a string expression
-    referencing other :class:`Parameter`\(s)), be evaluated by an inbuilt function with args, or change from a
-    :code:`default_initial_value` with a :code:`time_derivative`.
+    A parameter of the :class:`Node`, which can be: 1) a specific fixed :code:`value` (a constant (int/float) or an array) 2) a string expression for the :code:`value`
+    referencing other named :class:`Parameter`(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an
+    inbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value` with a :code:`time_derivative`.
 
     Attributes:
         value: The next value of the parameter, in terms of the inputs, functions and PREVIOUS parameter values
         default_initial_value: The initial value of the parameter, only used when parameter is stateful.
         time_derivative: How the parameter changes with time, i.e. ds/dt. Units of time are seconds.
         function: Which of the in-build MDF functions (linear etc.) this uses, See
-        https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
+            https://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html
         args: Dictionary of values for each of the arguments for the function of the parameter,
             e.g. if the in-build function is :code:`linear(slope)`, the args here could be :code:`{"slope": 3}` or
             :code:`{"slope": "input_port_0 + 2"}`
@@ -196,40 +194,50 @@ class Parameter(MdfBase):
         factory=list, validator=instance_of(list)
     )
 
+    def summary(self):
+        """
+        Short summary of Parameter...
+        """
+        info = "Parameter: {} = {} (stateful: {})".format(
+            self.id,
+            self.value,
+            self.is_stateful(),
+        )
+        if self.default_initial_value is not None:
+            info += f", def init: {self.default_initial_value}"
+
+        if self.time_derivative is not None:
+            info += f", time deriv: {self.time_derivative}"
+
+        if self.conditions is not None:
+            for c in self.conditions:
+                info += f", {c}"
+
+        return info
+
     def is_stateful(self) -> bool:
         """
         Is the parameter stateful?
 
-        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`defualt_initial_value`, or it's
+        A parameter is considered stateful if it has a :code:`time_derivative`, :code:`default_initial_value`, or its
         id is referenced in its value expression.
 
         Returns:
             :code:`True` if stateful, `False` if not.
         """
-        from modeci_mdf.execution_engine import parse_str_as_list
+        from modeci_mdf.execution_engine import get_required_variables_from_expression
 
         if self.time_derivative is not None:
             return True
         if self.default_initial_value is not None:
             return True
-        if self.value is not None and type(self.value) == str:
-            # If we are dealing with a list of symbols, each must treated separately
-            if self.value[0] == "[" and self.value[-1] == "]":
-                # Use the Python interpreter to parse this into a List[str]
-                arg_expr_list = parse_str_as_list(self.value)
-            else:
-                arg_expr_list = [self.value]
-
-            req_vars = []
-
-            for e in arg_expr_list:
-                param_expr = sympy.simplify(e)
-                req_vars.extend([str(s) for s in param_expr.free_symbols])
-            sf = self.id in req_vars
+        if self.value is not None and type(self.value) is str:
+            sf = self.id in get_required_variables_from_expression(self.value)
+            """
             print(
                 "Checking whether %s is stateful, %s: %s"
                 % (self, param_expr.free_symbols, sf)
-            )
+            )"""
             return sf
 
         return False
@@ -245,7 +253,7 @@ class Parameter(MdfBase):
         d = {
             name: val
             for name, val in d.items()
-            if not ((val is None) or (type(val) == list and len(val) == 0))
+            if not ((val is None) or (type(val) is list and len(val) == 0))
         }
 
         return d
@@ -254,16 +262,16 @@ class Parameter(MdfBase):
 @modelspec.define(eq=False)
 class Node(MdfBase):
     r"""
-    A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`\(s).
-    The values from these are processed via a number of :class:`Function`\(s) and one or more final values
-    are calculated on the :class:`OutputPort`\(s)
+    A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`(s).
+    The values from these are processed via a number of :class:`Function`(s) and one or more final values
+    are calculated on the :class:`OutputPort`(s)
 
     Attributes:
         id: A unique identifier for the node.
         input_ports: Dictionary of the :class:`InputPort` objects in the Node
-        parameters: Dictionary of :class:`Parameter`\(s) for the node
-        functions: The :class:`Function`\(s) for computation the node
-        output_ports: The :class:`OutputPort`\(s) containing evaluated quantities from the node
+        parameters: Dictionary of :class:`Parameter`(s) for the node
+        functions: The :class:`Function`(s) for computation the node
+        output_ports: The :class:`OutputPort`(s) containing evaluated quantities from the node
     """
 
     id: str = field(validator=instance_of(str))
@@ -325,6 +333,7 @@ class Edge(MdfBase):
         receiver_port: The id of the InputPort on the receiver :class:`~Node`
         parameters: Dictionary of parameters for the edge.
     """
+
     id: str = field(validator=instance_of(str))
     sender: str = field(validator=instance_of(str))
     receiver: str = field(validator=instance_of(str))
@@ -344,6 +353,7 @@ class Condition(MdfBase):
         kwargs: The dictionary of keyword arguments needed to evaluate the :class:`Condition`
 
     """
+
     type: str = field(validator=instance_of(str))
     kwargs: Optional[Dict[str, Any]] = field(
         validator=optional(instance_of(dict)), default=None
@@ -368,6 +378,43 @@ class Condition(MdfBase):
 
         self.__attrs_init__(type, kwargs)
 
+    @classmethod
+    def _parse_cattr_structure(cls, o):
+        def _parse_as_condition(arg):
+            try:
+                return Condition(**cls._parse_cattr_structure(arg))
+            except (TypeError, ValueError):
+                return arg
+
+        if "kwargs" in o:
+            for k in o["kwargs"]:
+                if isinstance(o["kwargs"][k], list):
+                    o["kwargs"][k] = [_parse_as_condition(a) for a in o["kwargs"][k]]
+                else:
+                    try:
+                        # read Model object as just object id
+                        o["kwargs"][k] = o["kwargs"][k]["id"]
+                    except (KeyError, TypeError):
+                        o["kwargs"][k] = _parse_as_condition(o["kwargs"][k])
+
+        return o
+
+    @classmethod
+    def _parse_cattr_unstructure(cls, o):
+        def _clean_nested_Condition_objects(cond):
+            res = copy.copy(cond)
+
+            for k, v in res.kwargs.items():
+                if isinstance(v, Condition):
+                    res.kwargs[k] = _clean_nested_Condition_objects(v)
+                elif isinstance(v, Base):
+                    # replace mdf objects with their id to avoid making duplicates
+                    res.kwargs[k] = v.id
+
+            return res
+
+        return _clean_nested_Condition_objects(o)
+
 
 @modelspec.define(eq=False)
 class ConditionSet(MdfBase):
@@ -378,6 +425,7 @@ class ConditionSet(MdfBase):
         node_specific: A dictionary mapping nodes to any non-default run conditions
         termination: A dictionary mapping time scales of model execution to conditions indicating when they end
     """
+
     node_specific: Optional[Dict[str, Condition]] = field(
         validator=optional(instance_of(dict)), default=None
     )
@@ -385,19 +433,28 @@ class ConditionSet(MdfBase):
         validator=optional(instance_of(dict)), default=None
     )
 
+    @classmethod
+    def _parse_cattr_unstructure(cls, o):
+        res = copy.copy(o)
+        if res.termination is not None:
+            res.termination = {str(k): v for k, v in res.termination.items()}
+
+        return res
+
 
 @modelspec.define(eq=False)
 class Graph(MdfBase):
     r"""
-    A directed graph consisting of Node(s) connected via Edge(s)
+    A directed graph consisting of :class:`~Node`s (with :class:`~Parameter`s and :class:`~Function`s evaluated internally) connected via :class:`~Edge`s.
 
     Attributes:
         id: A unique identifier for this Graph
-        nodes: One or more :class:`Node`\(s) present in the graph
-        edges: Zero or more :class:`Edge`\(s) present in the graph
+        nodes: One or more :class:`Node`(s) present in the graph
+        edges: Zero or more :class:`Edge`(s) present in the graph
         parameters: Dictionary of global parameters for the Graph
         conditions: The ConditionSet stored as dictionary for scheduling of the Graph
     """
+
     id: str = field(validator=instance_of(str))
     nodes: List[Node] = field(factory=list)
     edges: List[Edge] = field(factory=list)
@@ -437,7 +494,10 @@ class Graph(MdfBase):
             sender = self.get_node(edge.sender)
             receiver = self.get_node(edge.receiver)
 
-            dependencies[receiver].add(sender)
+            if receiver.get_input_port(edge.receiver_port).default_value is not None:
+                pass
+            else:
+                dependencies[receiver].add(sender)
 
         return dependencies
 
@@ -474,6 +534,7 @@ class Model(MdfBase):
         onnx_opset_version: The ONNX opset used for any ONNX functions in this model.
 
     """
+
     id: str = field(validator=instance_of(str))
     graphs: List[Graph] = field(factory=list)
     format: str = field(
@@ -492,6 +553,8 @@ class Model(MdfBase):
         level: int = 2,
         filename_root: Optional[str] = None,
         only_warn_on_fail: bool = False,
+        is_horizontal: bool = False,
+        solid_color=False,
     ):
         """Convert MDF graph to an image (png or svg) using the Graphviz export
 
@@ -502,6 +565,7 @@ class Model(MdfBase):
             level: 1,2,3, depending on how much detail to include
             filename_root: will change name of file generated to filename_root.png, etc.
             only_warn_on_fail: just give a warning if this fails, e.g. no dot executable. Useful for preventing errors in automated tests
+            solid_color: if True, will return a solid color for the graphviz node.  default is False
         """
         from modeci_mdf.interfaces.graphviz.exporter import mdf_to_graphviz
 
@@ -513,10 +577,15 @@ class Model(MdfBase):
                 view_on_render=view_on_render,
                 level=level,
                 filename_root=filename_root,
+                is_horizontal=is_horizontal,
+                solid_color=solid_color,
             )
 
         except Exception as e:
             if only_warn_on_fail:
+                import traceback
+
+                print(traceback.format_exc())
                 print(
                     "Failure to generate image! Ensure Graphviz executables (dot etc.) are installed on native system. Error: \n%s"
                     % e
@@ -527,4 +596,41 @@ class Model(MdfBase):
 
 # Add a special hook for handling unstructuring of Parameters and Functions
 converter.register_unstructure_hook(Parameter, Parameter._unstructure)
-converter.register_structure_hook(Function, Function._structure)
+
+
+def parsed_structure_factory(cl):
+    base_structure = converter._structure_func.dispatch(cl)
+
+    def new_structure(obj, t):
+        obj = cl._parse_cattr_structure(obj)
+        return base_structure(obj, t)
+
+    return new_structure
+
+
+def parsed_unstructure_factory(cl):
+    base_unstructure = converter._unstructure_func.dispatch(cl)
+
+    def new_unstructure(obj):
+        obj = cl._parse_cattr_unstructure(obj)
+        return base_unstructure(obj)
+
+    return new_unstructure
+
+
+for k, v in list(locals().items()):
+    # add structure hook for MdfBase classes where present
+    try:
+        v._parse_cattr_structure
+    except AttributeError:
+        pass
+    else:
+        converter.register_structure_hook(v, parsed_structure_factory(v))
+
+    # add unstructure hook for MdfBase classes where present
+    try:
+        v._parse_cattr_unstructure
+    except AttributeError:
+        pass
+    else:
+        converter.register_unstructure_hook(v, parsed_unstructure_factory(v))

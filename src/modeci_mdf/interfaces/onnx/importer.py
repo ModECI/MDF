@@ -1,6 +1,7 @@
 """
 Code for importing ONNX models into MDF.
 """
+
 import typing
 
 import onnx
@@ -21,7 +22,14 @@ from modeci_mdf.mdf import *
 def id_to_port(id: str):
     """Turn unique ONNX output and input value names into valid MDF input and outport names"""
 
+    # Get rid of periods in names
     new_name = str(id).replace(".", "_")
+
+    # Get rid of slashes in names
+    new_name = str(id).replace("/", "_")
+
+    # Get rid of double colon in id names, this causes issues with execution engine.
+    new_name = new_name.replace("::", "_")
 
     # If the first character is a digit, precede with an underscore so this can never be interpreted
     # as number down the line.
@@ -53,7 +61,6 @@ def get_shape_params(shape: onnx.TensorShapeProto) -> typing.Tuple:
 
 
 def get_onnx_attribute(a):
-
     # Use the helpers to get the appropriate value
     val = onnx.helper.get_attribute_value(a)
 
@@ -85,7 +92,6 @@ def onnx_node_to_mdf(
 
     # If this is a ONNX Node,
     if type(node) == onnx.NodeProto:
-
         # Create and MDF node with parameters
         # FIXME: We need to preserve type info somewhere
         params_dict = {a.name: get_onnx_attribute(a) for a in node.attribute}
@@ -100,7 +106,6 @@ def onnx_node_to_mdf(
         non_constant_inputs = []
         func_args = {}
         for inp_i, inp in enumerate(node.input):
-
             # Get the name of the formal argument that corresponds to this input.
             # We need to go to the schema for this.
             # FIXME: We need to make sure we are going the correct schema here ... yuck!
@@ -138,7 +143,7 @@ def onnx_node_to_mdf(
         for inp in non_constant_inputs:
             param_info = onnx_initializer.get(inp, None)
             shape = param_info["shape"] if param_info else None
-            ip = InputPort(id=id_to_port(inp), shape=shape)
+            ip = InputPort(id=id_to_port(inp), shape=shape, type="float")
             mdf_node.input_ports.append(ip)
 
         for out in node.output:
@@ -185,7 +190,6 @@ def onnx_to_mdf(
         onnx_initializer = {}
 
     if type(onnx_model) == ModelProto:
-
         # Do shape inference on the model so we can get shapes of intermediate outputs
         # FIXME: This function has side-effects, it probably shouldn't
         try:
@@ -345,8 +349,89 @@ def convert_file(input_file: str):
     mdf_model.to_yaml_file(f"{out_filename}.yaml")
 
 
-def main():
+# The data used for getting the name and categories of graphs are gotten here https://raw.githubusercontent.com/lutzroeder/netron/main/source/onnx-metadata.json'
 
+# the data used for getting the color of categories of graphs are gotten here 'https://github.com/lutzroeder/netron/blob/b7a0be975f852c2c2fbce4a6fce69a37819b3601/source/grapher.css#L27'
+
+
+new_dict = {
+    "AveragePool": "Pool",
+    "BatchNormalization": "Normalization",
+    "Clip": "Activation",
+    "Concat": "Tensor",
+    "Constant": "Constant",
+    "Conv": "Layer",
+    "ConvInteger": "Layer",
+    "ConvTranspose": "Layer",
+    "Dropout": "Dropout",
+    "Elu": "Activation",
+    "Flatten": "Shape",
+    "GRU": "Layer",
+    "Gather": "Transform",
+    "Gemm": "Layer",
+    "GlobalAveragePool": "Pool",
+    "GlobalLpPool": "Pool",
+    "GlobalMaxPool": "Pool",
+    "HardSigmoid": "Activation",
+    "InstanceNormalization": "Normalization",
+    "LRN": "Normalization",
+    "LSTM": "Layer",
+    "LeakyRelu": "Activation",
+    "LogSoftmax": "Activation",
+    "LpNormalization": "Normalization",
+    "LpPool": "Pool",
+    "MaxPool": "Pool",
+    "MaxRoiPool": "Pool",
+    "PRelu": "Activation",
+    "Pad": "Tensor",
+    "RNN": "Layer",
+    "Relu": "Activation",
+    "Reshape": "Shape",
+    "Selu": "Activation",
+    "Sigmoid": "Activation",
+    "Slice": "Tensor",
+    "Softmax": "Activation",
+    "Softplus": "Activation",
+    "Softsign": "Activation",
+    "Split": "Tensor",
+    "Squeeze": "Transform",
+    "Tanh": "Activation",
+    "ThresholdedRelu": "Activation",
+    "Tile": "Shape",
+    "Transpose": "Transform",
+    "Unsqueeze": "Transform",
+    "Upsample": "Data",
+    "FusedConv": "Layer",
+}
+
+color_dict = {
+    "Activation": ".4 .2 .1",
+    "Layer": ".2 .3 .5",
+    "Pool": ".2 .3 .2",
+    "Normalization": ".2 .3 .3",
+    "Tensor": ".3 .3 .2",
+    "Transform": ".2 .3 .3",
+    "Shape": ".4 .3 .3",
+    "Dropout": ".3 .3 .4",
+    "Data": ".3 .3 .3",
+}
+
+
+def get_category_of_onnx_node(entry):
+    for key, value in new_dict.items():
+        if key in entry:
+            return value
+
+
+def get_color_for_onnx_category(shape):
+    a = {}
+    for key, val in color_dict.items():
+        if shape == key:
+            a["color"] = val
+            return a
+
+
+def main():
     import argparse
 
     parser = argparse.ArgumentParser(

@@ -1,14 +1,14 @@
 #!/bin/bash
 set -ex
 
-pip install .
+pip install .[all]
 
 # Note this:
 #    1) runs examples to regenerate yaml/json...
 #    2) tests examples with simple_scheduler
-python -m pytest -ra tests/*.py
-python -m pytest -ra tests/interfaces/onnx/*.py
-python -m pytest -ra tests/interfaces/pytorch/test_export.py
+python -m pytest -ra -v tests/*.py
+python -m pytest -rav tests/interfaces/onnx/*.py
+python -m pytest -rav tests/interfaces/pytorch/test_export.py
 #python -m pytest -ra tests/interfaces/pytorch/test_import.py # inception taking v long
 
 cd examples/MDF
@@ -20,6 +20,9 @@ python abcd.py -run
 python arrays.py -run
 python states.py -run -nogui
 python abc_conditions.py -run
+python params_funcs.py -run
+python newton.py -run -nogui
+python switched_rlc.py -run -nogui
 
 ## Test exporting to NeuroML
 
@@ -30,11 +33,11 @@ python -m modeci_mdf.interfaces.neuroml.exporter States.json -run
 
 ## Test exporting to graphs via GraphViz
 
-python -m modeci_mdf.interfaces.graphviz.exporter Simple.json 1 -noview
+python -m modeci_mdf.interfaces.graphviz.exporter Simple.json 1 -noview -horizontal
 mv simple_example.gv.png images/simple.png
 python -m modeci_mdf.interfaces.graphviz.exporter Simple.json 3 -noview
 mv simple_example.gv.png images/simple_3.png
-python -m modeci_mdf.interfaces.graphviz.exporter ABCD.json 1 -noview
+python -m modeci_mdf.interfaces.graphviz.exporter ABCD.json 1 -noview -horizontal
 mv abcd_example.gv.png images/abcd.png
 python -m modeci_mdf.interfaces.graphviz.exporter ABCD.json 3 -noview
 mv abcd_example.gv.png images/abcd_3.png
@@ -44,10 +47,34 @@ python -m modeci_mdf.interfaces.graphviz.exporter States.yaml 3 -noview
 mv state_example.gv.png images/states.png
 python -m modeci_mdf.interfaces.graphviz.exporter abc_conditions.yaml 3 -noview
 mv abc_conditions_example.gv.png images/abc_conditions.png
+python -m modeci_mdf.interfaces.graphviz.exporter ParametersFunctions.yaml 3 -noview
+mv params_funcs_example.gv.png images/params_funcs.png
+python -m modeci_mdf.interfaces.graphviz.exporter NewtonCoolingModel.yaml 3 -noview
+mv cooling_process.gv.png images/newton.png
+mv newton_plot.png images/newton_plot.png
+python -m modeci_mdf.interfaces.graphviz.exporter SwitchedRLC_Circuit.yaml 3 -noview
+mv SwitchedRLC_Circuit.gv.png images/switched_rlc_circuit.png
+mv switched_rlc_plot.png images/switched_rlc_plot.png
+
+cd conditions
+python everyNCalls.py -graph
+mv everyncalls.png images/everyncalls.png
+python timeInterval.py -graph
+mv timeinterval.png images/timeinterval.png
+python threshold.py -graph
+mv threshold.png images/threshold.png
+python composite_condition_example.py -graph
+mv composite_example.png images/composite_example.png
+cd ..
 
 ## Test regenerating NeuroML
 
 cd RNN
+./regenerate.sh
+
+## Test regenerating network example
+
+cd ../networks
 ./regenerate.sh
 
 
@@ -56,12 +83,18 @@ cd RNN
 cd ../../NeuroML
 ./regenerateAndTest.sh -nogui
 
+## Test PyTorch examples
+
+cd ../PyTorch
+./regenerate.sh
+
 ## Test ONNX examples
 
 cd ../ONNX
 python simple_ab.py -run
 python simple_abc.py
 python simple_abcd.py
+python abc_basic.py
 
 ## Test ACT-R examples
 
@@ -69,8 +102,15 @@ cd ../ACT-R
 python count.py
 python addition.py
 
+## Test Keras examples
+
+cd ../TensorFlow/Keras
+./regenerate.sh
+
 ## Generate the docs
 
-cd ../../docs
+cd ../../../docs
 python generate.py
 cd ..
+
+/bin/bash -c 'pre-commit run --all-files; echo Finished running pre-commit!' # Note: prevents error code when reformatting

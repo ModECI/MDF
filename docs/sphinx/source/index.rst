@@ -11,13 +11,16 @@
     :width: 15%
     :target: http://modeci.org
 
-|logo| ModECI_MDF
-====================
+|logo| ModECI Model Description Format (MDF)
+============================================
 
-MDF is intended to be an open source, community-supported standard and associated library
+MDF is an open source, community-supported standard and associated library
 of tools for expressing computational models in a form that allows them to be exchanged
-between diverse programming languages and execution environments. It consists of a
-specification for expressing models in serialized form (currently JSON or YAML
+between diverse programming languages and execution environments. The overarching aim is
+to provide a common format for models across **computational neuroscience, cognitive science and machine learning**.
+
+It consists of a
+specification for expressing models in serialized form (currently JSON, YAML or BSON
 representations, though others such as HDF5 are planned) and a set of Python
 tools for implementing a model described using MDF. The serialized formats can be used
 when importing a model into a supported target environment to execute it; and,
@@ -28,22 +31,46 @@ re-used in other environments.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
+   :caption: Contents
 
    api/Introduction
+   api/QuickStart
+   api/MDFpaper
    api/Installation
+   api/Contributing
+   api/Contributors
+
 
 .. toctree::
    :maxdepth: 2
-   :caption: Specification:
+   :caption: Specification
 
    api/Specification
 
 .. toctree::
+   :maxdepth: 1
+   :caption: Examples
+
+   api/export_format/MDF/MDF.md
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Export Formats
+
+   api/export_format/ACT-R/ACT-R.md
+   api/export_format/NeuroML/NeuroML.md
+   api/export_format/ONNX/ONNX.md
+   api/export_format/PsyNeuLink/PsyNeuLink.md
+   api/export_format/PyTorch/PyTorch.md
+   api/export_format/Quantum/Quantum.md
+   api/export_format/WebGME/WebGME.md
+
+.. toctree::
    :maxdepth: 2
-   :caption: Functions:
+   :caption: Functions
 
    api/MDF_function_specifications
+
 
 .. toctree::
    :caption: API Reference

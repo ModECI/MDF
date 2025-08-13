@@ -1,6 +1,6 @@
 ABCD:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.0
+    generating_application: Python modeci-mdf v0.4.12
     graphs:
         abcd_example:
             nodes:
@@ -30,7 +30,7 @@ ABCD:
                                 slope: slope
                                 intercept: intercept
                     output_ports:
-                        output_1:
+                        out_port:
                             value: linear_func
                 B:
                     metadata:
@@ -52,7 +52,7 @@ ABCD:
                                 bias: bias
                                 offset: offset
                     output_ports:
-                        output_1:
+                        out_port:
                             value: logistic_func
                 C:
                     metadata:
@@ -79,7 +79,7 @@ ABCD:
                                 bias: bias
                                 offset: offset
                     output_ports:
-                        output_1:
+                        out_port:
                             value: exponential_func
                 D:
                     metadata:
@@ -97,7 +97,7 @@ ABCD:
                                 variable0: input_port1
                                 scale: scale
                     output_ports:
-                        output_1:
+                        out_port:
                             value: sin_func
             edges:
                 edge_input0_A:
@@ -108,15 +108,15 @@ ABCD:
                 edge_A_B:
                     sender: A
                     receiver: B
-                    sender_port: output_1
+                    sender_port: out_port
                     receiver_port: input_port1
                 edge_B_C:
                     sender: B
                     receiver: C
-                    sender_port: output_1
+                    sender_port: out_port
                     receiver_port: input_port1
                 edge_C_D:
                     sender: C
                     receiver: D
-                    sender_port: output_1
+                    sender_port: out_port
                     receiver_port: input_port1

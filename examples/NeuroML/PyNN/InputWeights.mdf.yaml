@@ -1,0 +1,244 @@
+InputWeights:
+    format: ModECI MDF v0.4
+    graphs:
+        InputWeights:
+            notes: 'Example: InputWeights'
+            nodes:
+                pop0:
+                    metadata:
+                        color: 1 0 0
+                        radius: 20
+                        region: region1
+                    parameters:
+                        cm:
+                            value:
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                            - 1.0
+                        i_offset:
+                            value:
+                            - 0.0
+                            - 0.0
+                            - 0.0
+                            - 0.0
+                        tau_syn_E:
+                            value:
+                            - 0.5
+                            - 0.5
+                            - 0.5
+                            - 0.5
+                        tau_syn_I:
+                            value:
+                            - 0.5
+                            - 0.5
+                            - 0.5
+                            - 0.5
+                        v_init:
+                            value:
+                            - -65.0
+                            - -65.0
+                            - -65.0
+                            - -65.0
+                        tau_m:
+                            value:
+                            - 20.0
+                            - 20.0
+                            - 20.0
+                            - 20.0
+                        tau_refrac:
+                            value:
+                            - 5.0
+                            - 5.0
+                            - 5.0
+                            - 5.0
+                        v_reset:
+                            value:
+                            - -65.0
+                            - -65.0
+                            - -65.0
+                            - -65.0
+                        v_rest:
+                            value:
+                            - -65.0
+                            - -65.0
+                            - -65.0
+                            - -65.0
+                        v_thresh:
+                            value:
+                            - -50.0
+                            - -50.0
+                            - -50.0
+                            - -50.0
+                        MSEC:
+                            value:
+                            - 0.001
+                            - 0.001
+                            - 0.001
+                            - 0.001
+                        MVOLT:
+                            value:
+                            - 0.001
+                            - 0.001
+                            - 0.001
+                            - 0.001
+                        NFARAD:
+                            value:
+                            - 1.0e-09
+                            - 1.0e-09
+                            - 1.0e-09
+                            - 1.0e-09
+                        spike:
+                            default_initial_value:
+                            - 0
+                            - 0
+                            - 0
+                            - 0
+                            conditions:
+                                condition_spike_on:
+                                    test: (REGIME_integrating == ACTIVE_REGIME) *
+                                        (v > v_thresh * MVOLT)
+                                    value: 1
+                                condition_spike_off:
+                                    test: spike > 0
+                                    value: 0
+                        v:
+                            time_derivative: REGIME_integrating * ((MVOLT * ((i_offset/cm)
+                                +  ((v_rest - (v/MVOLT)) / tau_m))/MSEC) + (iSyn /
+                                (cm * NFARAD)))
+                            conditions:
+                                entering_regime_refractory:
+                                    test: (REGIME_integrating == ACTIVE_REGIME) *
+                                        (v > v_thresh * MVOLT)
+                                    value: v_reset * MVOLT
+                            default_initial_value: v_init * MVOLT
+                        lastSpikeTime:
+                            conditions:
+                                entering_regime_refractory:
+                                    test: (REGIME_integrating == ACTIVE_REGIME) *
+                                        (v > v_thresh * MVOLT)
+                                    value: t
+                        ACTIVE_REGIME:
+                            value:
+                            - 1
+                            - 1
+                            - 1
+                            - 1
+                        INACTIVE_REGIME:
+                            value:
+                            - 0
+                            - 0
+                            - 0
+                            - 0
+                        REGIME_refractory:
+                            value: REGIME_refractory
+                            default_initial_value: INACTIVE_REGIME
+                            conditions:
+                                regime_exit_condition:
+                                    test: (REGIME_refractory == ACTIVE_REGIME) * (t
+                                        > lastSpikeTime + (tau_refrac*MSEC))
+                                    value: INACTIVE_REGIME
+                                regime_entry_condition:
+                                    test: (REGIME_integrating == ACTIVE_REGIME) *
+                                        (v > v_thresh * MVOLT)
+                                    value: ACTIVE_REGIME
+                        t:
+                            default_initial_value: 0
+                            time_derivative: '1'
+                        REGIME_integrating:
+                            conditions:
+                                regime_entry_condition:
+                                    test: (REGIME_refractory == ACTIVE_REGIME) * (t
+                                        > lastSpikeTime + (tau_refrac*MSEC))
+                                    value: ACTIVE_REGIME
+                                regime_exit_condition:
+                                    test: (REGIME_integrating == ACTIVE_REGIME) *
+                                        (v > v_thresh * MVOLT)
+                                    value: INACTIVE_REGIME
+                            value: REGIME_integrating
+                            default_initial_value: ACTIVE_REGIME
+                        iSyn:
+                            value: synapses_i
+                    input_ports:
+                        spike_in_E:
+                            shape:
+                            - 4
+                            reduce: add
+                        spike_in_I:
+                            shape:
+                            - 4
+                            reduce: add
+                        synapses_i: {}
+                    output_ports:
+                        spike:
+                            value: spike
+                        REGIME_refractory:
+                            value: REGIME_refractory
+                        REGIME_integrating:
+                            value: REGIME_integrating
+                        v:
+                            value: v
+                        lastSpikeTime:
+                            value: lastSpikeTime
+                    notes: "Cell: [Cell(notes=None, id='testcell', parameters={'i_offset':\
+                        \ 0.0, 'tau_refrac': 5}, neuroml2_source_file=None, lems_source_file=None,\
+                        \ neuroml2_cell=None, pynn_cell='IF_curr_alpha', arbor_cell=None,\
+                        \ bindsnet_node=None)] is defined in None and in Lems is:\
+                        \ Component, id: testcell, type: IF_curr_alpha,\n   parameters:\
+                        \ {'cm': '1.0', 'i_offset': 0.0, 'tau_syn_E': '0.5', 'tau_syn_I':\
+                        \ '0.5', 'v_init': '-65.0', 'tau_m': '20.0', 'tau_refrac':\
+                        \ 5, 'v_reset': '-65.0', 'v_rest': '-65.0', 'v_thresh': '-50.0'}\n\
+                        \   parent: None\n"
+                InputList_stim:
+                    parameters:
+                        delay:
+                            value:
+                            - 0.2
+                        duration:
+                            value:
+                            - 0.6
+                        amplitude:
+                            value:
+                            - 9.9e-10
+                        weight:
+                            value:
+                            - 0.4926525560828922
+                            - 0.09153037575095012
+                            - 0.7719212487329726
+                            - 0.37271884720664766
+                        i:
+                            conditions:
+                                condition_0:
+                                    test: t < delay
+                                    value: '0'
+                                condition_1:
+                                    test: t >= delay and t < duration + delay
+                                    value: weight * amplitude
+                                condition_2:
+                                    test: t >= duration + delay
+                                    value: '0'
+                        t:
+                            default_initial_value: 0
+                            time_derivative: '1'
+                    input_ports:
+                        spike_input:
+                            shape:
+                            - 1
+                            reduce: add
+                    output_ports:
+                        i:
+                            value: i
+                    notes: "Cell: [InputSource(notes=None, id='i_clamp', parameters={'amplitude':\
+                        \ 'input_amp', 'start': 200.0, 'stop': 800.0}, neuroml2_source_file=None,\
+                        \ neuroml2_input=None, lems_source_file=None, pynn_input='DCSource')]\
+                        \ is defined in None and in Lems is: Component, id: i_clamp,\
+                        \ type: pulseGenerator,\n   parameters: {'delay': '200.0ms',\
+                        \ 'duration': '600.0ms', 'amplitude': '0.99nA'}\n   parent:\
+                        \ None\n"
+            edges:
+                Edge InputList_stim to pop0:
+                    name: Edge InputList_stim to pop0
+                    sender_port: i
+                    receiver_port: synapses_i
+                    sender: InputList_stim
+                    receiver: pop0

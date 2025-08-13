@@ -40,7 +40,7 @@ def generate_test_model(
 
         hidden_node = Node(id="hidden_node_%i" % i)
 
-        hidden_node.input_ports.append(InputPort(id="in_port"))
+        hidden_node.input_ports.append(InputPort(id="in_port", shape=input_shape))
         hidden_node.parameters.append(Parameter(id="slope0", value=0.5))
         hidden_node.parameters.append(
             Parameter(
@@ -80,7 +80,7 @@ def generate_test_model(
         id="output_node",
     )
 
-    output_node.input_ports.append(InputPort(id="in_port"))
+    output_node.input_ports.append(InputPort(id="in_port", shape=output_shape))
     output_node.output_ports.append(OutputPort(id="out_port", value="in_port"))
     mod_graph.nodes.append(output_node)
 

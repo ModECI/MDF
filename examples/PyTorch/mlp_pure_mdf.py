@@ -4,6 +4,7 @@ import numpy as np
 import sys
 import h5py
 import time
+import os
 
 # Note: the weights for this model were precomputed and saved in the file weights.h5
 def get_weight_info():
@@ -162,10 +163,16 @@ def main():
 
     mod_graph = mod.graphs[0]
 
-    new_file = mod.to_yaml_file("%s.yaml" % mod.id)
-    new_file = mod.to_json_file("%s.json" % mod.id)
+    yaml_file = mod.to_yaml_file("%s.yaml" % mod.id)
+    json_file = mod.to_json_file("%s.json" % mod.id)
 
-    # mdf_to_graphviz(mod_graph,view_on_render=not test_all, level=3)
+    if "-mdf_to_pytorch" in sys.argv:
+        print("Exporting model to pure PyTorch")
+        from modeci_mdf.interfaces.pytorch import mdf_to_pytorch
+
+        pytorch_model = mdf_to_pytorch(
+            mod, yaml_file, eval_models=False, version="mdf.s"
+        )
 
     from modelspec.utils import FORMAT_NUMPY, FORMAT_TENSORFLOW
 
@@ -189,10 +196,6 @@ def main():
         out = _val_info(eg.enodes[n].evaluable_outputs["out_port"].curr_value)
         print(f"Final output value of node {n}:\t {out}")
 
-    from modeci_mdf.interfaces.pytorch import mdf_to_pytorch
-
-    ###pytorch_model = mdf_to_pytorch(mod, ".", eval_models=False, version="mdf.s")
-
     if "-graph" in sys.argv:
         mod.to_graph_image(
             engine="dot",
@@ -200,7 +203,9 @@ def main():
             view_on_render=False,
             level=2,
             filename_root="mlp_pure_mdf",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
     if test_all:

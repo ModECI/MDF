@@ -1,0 +1,103 @@
+{
+    "iaf_example": {
+        "version": "NeuroMLlite v0.6.0",
+        "notes": "NeuroMLlite export of MDF graph: iaf_example",
+        "cells": {
+            "current_input_node__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "pre__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "post__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "syn_post__instance": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            }
+        },
+        "synapses": {
+            "rsDL": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "silentSyn_proj_input_edge": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "silentSyn_proj_post_internal_edge": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            },
+            "silentSyn_proj_syn_edge": {
+                "lems_source_file": "iaf_example_lems_definitions.xml"
+            }
+        },
+        "populations": {
+            "current_input_node": {
+                "size": 1,
+                "component": "current_input_node__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            },
+            "pre": {
+                "size": 1,
+                "component": "pre__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            },
+            "post": {
+                "size": 1,
+                "component": "post__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            },
+            "syn_post": {
+                "size": 1,
+                "component": "syn_post__instance",
+                "properties": {
+                    "color": "0.2 0.2 0.2",
+                    "radius": 3
+                }
+            }
+        },
+        "projections": {
+            "proj_input_edge": {
+                "presynaptic": "current_input_node",
+                "postsynaptic": "pre",
+                "synapse": "rsDL",
+                "pre_synapse": "silentSyn_proj_input_edge",
+                "type": "continuousProjection",
+                "weight": 1,
+                "random_connectivity": {
+                    "probability": 1
+                }
+            },
+            "proj_post_internal_edge": {
+                "presynaptic": "syn_post",
+                "postsynaptic": "post",
+                "synapse": "rsDL",
+                "pre_synapse": "silentSyn_proj_post_internal_edge",
+                "type": "continuousProjection",
+                "weight": 1,
+                "random_connectivity": {
+                    "probability": 1
+                }
+            },
+            "proj_syn_edge": {
+                "presynaptic": "pre",
+                "postsynaptic": "syn_post",
+                "synapse": "rsDL",
+                "pre_synapse": "silentSyn_proj_syn_edge",
+                "type": "continuousProjection",
+                "weight": 1,
+                "random_connectivity": {
+                    "probability": 1
+                }
+            }
+        }
+    }
+}

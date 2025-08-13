@@ -4,25 +4,31 @@ way somewhat defeats the performance purposes of ONNX since the overhead for eac
 allows us to test the MDF scheduler (which invokes Python functions) on any MDF model defined over ONNX operations. In
 the future, the MDF should probably just compile to ONNX (or some other IR) for execution.
 """
+
 import functools
 
-import torch
 import numpy as np
 import onnxruntime as ort
 import onnx.defs
 
+try:
+    import torch
+
+    torch_is_available = True
+except ModuleNotFoundError:
+    torch_is_available = False
+
 # Currently using sklearn2onnx API to define ONNX operations. This dependency can probably be removed pretty easily.
 # Do not remove this import even though it appears unused.
-import skl2onnx.algebra.onnx_ops
 
-from typing import Dict, Tuple, Any, List, Callable
+from typing import Dict, Any, List, Callable
 
 OpSchema = onnx.defs.OpSchema
 FormalParameterOption = OpSchema.FormalParameterOption
 
 # Use the same ONNX opset version that torch is using for defaults now
 # from torch.onnx.symbolic_helper import _default_onnx_opset_version as onnx_opset_version
-onnx_opset_version = 13
+onnx_opset_version = 15
 
 __all__ = [
     "predict_with_onnxruntime",
@@ -64,10 +70,10 @@ def predict_with_onnxruntime(model_def, *inputs) -> Dict[str, np.array]:
 def convert_type(v):
     """Helper function to convert types to ONNX compatible types."""
 
-    if type(v) == list:
+    if type(v) is list:
         v = np.array(v)
 
-    if type(v) == int or type(v) == float:
+    if type(v) is int or type(v) is float:
         v = np.atleast_1d(v)
 
     if hasattr(v, "dtype") and v.dtype == np.int32:
@@ -76,7 +82,7 @@ def convert_type(v):
     if hasattr(v, "dtype") and v.dtype == np.float64:
         v = v.astype(np.float32)
 
-    if isinstance(v, torch.Tensor):
+    if torch_is_available and isinstance(v, torch.Tensor):
         v = v.detach().cpu().numpy()
 
     return v
@@ -119,9 +125,24 @@ def run_onnx_op(
     if op_name == "Pad":
         if "constant_value" in inputs:
             cval = inputs["constant_value"]
-            data = list(inputs.values())[0]
-            if cval.dtype != data.dtype:
-                inputs["constant_value"] = cval.astype(data.dtype)
+            if cval is None:
+                inputs.pop("constant_value")
+            else:
+                data = list(inputs.values())[0]
+                if cval.dtype != data.dtype:
+                    inputs["constant_value"] = cval.astype(data.dtype)
+
+    # SkLearn ONNX doesn't seem to support ConcatFromSequence, see
+    # https://github.com/onnx/sklearn-onnx/issues/710
+    # Let us just use this implemetation I found in ONNX backend test.
+    if op_name == "ConcatFromSequence":
+        from onnx.backend.test.case.model.sequence import ConcatFromSequenceImpl
+
+        return {
+            "concat_result": ConcatFromSequenceImpl(
+                inputs["input_sequence"], **attributes
+            )
+        }
 
     op_class = import_class(f"skl2onnx.algebra.onnx_ops.Onnx{op_name}")
     input_names = list(inputs.keys())
@@ -131,6 +152,13 @@ def run_onnx_op(
     )
 
     model_def = op.to_onnx(inputs)
+
+    # For some reason, for some ops, the opset version is set to the miniumum supported version.
+    # For certain ops, this is version 1. The ONNX runtime is printing a warning about any version
+    # less than 7. So, if the opset version is less than 7, set to opset_version.
+    if model_def.opset_import[0].version < 7:
+        model_def.opset_import[0].version = opset_version
+
     return predict_with_onnxruntime(model_def, *input_vals)
 
 
@@ -202,11 +230,16 @@ def get_onnx_ops(opset_version: int = onnx_opset_version) -> List[Dict]:
             add_mdf_function.
     """
 
+    ops_blacklist = ["Loop", "Scan", "If"]
+
     mdf_funcspecs = []
     for schema in get_all_schemas_version(opset_version):
         args_list = [input.name for input in schema.inputs]
         params_list = [p for p in schema.attributes]
         args_params_str = ", ".join(args_list + params_list)
+
+        if schema.name in ops_blacklist:
+            continue
 
         mdf_funcspecs.append(
             dict(
@@ -232,7 +265,6 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
     """
 
     def onnx_wrapper(*args, **kwargs):
-
         # If we are dealing with cosntant, just return it.
         if schema.name == "Constant":
             value = args[0] if len(args) > 0 else list(kwargs.values())[0]
@@ -258,7 +290,6 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
             len(schema.inputs) > 0
             and schema.inputs[0].option == FormalParameterOption.Variadic
         ):
-
             for i, arg in enumerate(args):
                 inputs_dict[f"input{i}"] = arg
 
@@ -311,10 +342,28 @@ def _make_onnx_function(schema: onnx.defs.OpSchema) -> Callable:
         for kw in kwargs:
             if kw not in schema.attributes:
                 raise ValueError(
-                    f"Passed unkown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
+                    f"Passed unknown attribute ({kw}) to ONNX op {schema.name}, supported attributes: {list(schema.attributes)}"
                 )
 
+        # For some reason ONNX models are getting shape arguments that are 2D when they need to be 1D
+        if schema.name == "Reshape":
+            inputs_dict["shape"] = inputs_dict["shape"].flatten()
+
         output_names = [out.name for out in schema.outputs]
+
+        # We need to handle BatchNormalization differently, it has 1 required output plus 2 optional outputs
+        # that are only allowed if training mode is set to 1.
+        if schema.name == "BatchNormalization" and kwargs["training_mode"] == 0:
+            output_names = ["Y"]
+
+            out_dict = run_onnx_op(
+                op_name=schema.name,
+                inputs=inputs_dict,
+                output_names=output_names,
+                **kwargs,
+            )
+
+            return tuple(out_dict.values())
 
         out_dict = run_onnx_op(
             op_name=schema.name, inputs=inputs_dict, output_names=output_names, **kwargs
@@ -339,7 +388,6 @@ def _define_onnx_functions(opset_version):
     current_module = sys.modules[__name__]
 
     for schema in get_all_schemas_version(opset_version):
-
         onnx_wrapper = _make_onnx_function(schema)
 
         # Lets call this function a lowercase version of the opname, follow PEP 8

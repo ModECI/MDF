@@ -20,14 +20,13 @@ def test_ab():
     mdf_model = load_mdf(str(file_path))
 
     # Test input
-    test_input = np.array([[0, 0, 0], [1, 1, 1]], dtype=np.float32)
+    test_input = np.array([[0.0, 0.0, 0.0], [1.0, 1.0, 1.0]], dtype=np.float32)
 
     # Get the result of MDF execution
     mdf_executable = EvaluableGraph(mdf_model.graphs[0], verbose=False)
-    # TODO: the int type cast is necessaryf or now because the nodes' parameters are constants and inputs must have
-    #  the same type
-    mdf_executable.evaluate(initializer={"input": test_input.astype(int)})
-    mdf_output = mdf_executable.enodes["Mul_3"].evaluable_outputs["_4"].curr_value
+
+    mdf_executable.evaluate(initializer={"input": test_input})
+    mdf_output = mdf_executable.enodes["/B/Mul"].evaluable_outputs["_4"].curr_value
 
     # Get the translated ONNX model
     onnx_models = mdf_to_onnx(mdf_model)
@@ -62,7 +61,7 @@ def test_abc():
     # Get the result of MDF execution
     mdf_executable = EvaluableGraph(mdf_model.graphs[0], verbose=False)
     mdf_executable.evaluate(initializer={"input": test_input})
-    mdf_output = mdf_executable.enodes["Cos_2"].evaluable_outputs["_3"].curr_value
+    mdf_output = mdf_executable.enodes["/C/Cos"].evaluable_outputs["_3"].curr_value
 
     # Get the translated ONNX model
     onnx_models = mdf_to_onnx(mdf_model)

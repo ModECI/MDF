@@ -1,0 +1,283 @@
+{
+    "IAF_net3": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.12",
+        "graphs": {
+            "iaf_example": {
+                "nodes": {
+                    "current_input_node": {
+                        "parameters": {
+                            "time": {
+                                "default_initial_value": 0,
+                                "time_derivative": "1"
+                            },
+                            "start": {
+                                "value": 20
+                            },
+                            "duration": {
+                                "value": 10
+                            },
+                            "amplitude": {
+                                "value": 10
+                            },
+                            "level": {
+                                "value": 0,
+                                "conditions": [
+                                    {
+                                        "id": "on",
+                                        "test": "time > start",
+                                        "value": "amplitude"
+                                    },
+                                    {
+                                        "id": "off",
+                                        "test": "time > start + duration",
+                                        "value": "amplitude*0"
+                                    }
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "current_output": {
+                                "value": "level"
+                            }
+                        }
+                    },
+                    "current_input_node2": {
+                        "parameters": {
+                            "time": {
+                                "default_initial_value": 0,
+                                "time_derivative": "1"
+                            },
+                            "start": {
+                                "value": 60
+                            },
+                            "duration": {
+                                "value": 10
+                            },
+                            "amplitude": {
+                                "value": 3
+                            },
+                            "level": {
+                                "value": 0,
+                                "conditions": [
+                                    {
+                                        "id": "on",
+                                        "test": "time > start",
+                                        "value": "amplitude"
+                                    },
+                                    {
+                                        "id": "off",
+                                        "test": "time > start + duration",
+                                        "value": "amplitude*0"
+                                    }
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "current_output": {
+                                "value": "level"
+                            }
+                        }
+                    },
+                    "pre": {
+                        "input_ports": {
+                            "current_input": {
+                                "shape": [
+                                    1
+                                ],
+                                "reduce": "add"
+                            }
+                        },
+                        "parameters": {
+                            "v0": {
+                                "value": [
+                                    -60
+                                ]
+                            },
+                            "erev": {
+                                "value": [
+                                    -70
+                                ]
+                            },
+                            "tau": {
+                                "value": 10.0
+                            },
+                            "thresh": {
+                                "value": [
+                                    -20
+                                ]
+                            },
+                            "spiking": {
+                                "default_initial_value": "0",
+                                "conditions": [
+                                    {
+                                        "id": "is_spiking",
+                                        "test": "v >= thresh",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "id": "not_spiking",
+                                        "test": "v < thresh",
+                                        "value": "0"
+                                    }
+                                ]
+                            },
+                            "v": {
+                                "default_initial_value": "v0",
+                                "time_derivative": "-1 * (v-erev)/tau + current_input",
+                                "conditions": [
+                                    {
+                                        "id": "reset",
+                                        "test": "v > thresh",
+                                        "value": "erev"
+                                    }
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "v_output": {
+                                "value": "v"
+                            },
+                            "spiking_output": {
+                                "value": "spiking"
+                            }
+                        }
+                    },
+                    "post": {
+                        "input_ports": {
+                            "current_input": {
+                                "shape": [
+                                    1
+                                ],
+                                "reduce": "add"
+                            }
+                        },
+                        "parameters": {
+                            "v0": {
+                                "value": [
+                                    -60
+                                ]
+                            },
+                            "erev": {
+                                "value": [
+                                    -70
+                                ]
+                            },
+                            "tau": {
+                                "value": 10.0
+                            },
+                            "thresh": {
+                                "value": [
+                                    -20
+                                ]
+                            },
+                            "spiking": {
+                                "default_initial_value": "0",
+                                "conditions": [
+                                    {
+                                        "id": "is_spiking",
+                                        "test": "v >= thresh",
+                                        "value": "1"
+                                    },
+                                    {
+                                        "id": "not_spiking",
+                                        "test": "v < thresh",
+                                        "value": "0"
+                                    }
+                                ]
+                            },
+                            "v": {
+                                "default_initial_value": "v0",
+                                "time_derivative": "-1 * (v-erev)/tau + current_input",
+                                "conditions": [
+                                    {
+                                        "id": "reset",
+                                        "test": "v > thresh",
+                                        "value": "erev"
+                                    }
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "v_output": {
+                                "value": "v"
+                            },
+                            "spiking_output": {
+                                "value": "spiking"
+                            }
+                        }
+                    },
+                    "syn_post": {
+                        "input_ports": {
+                            "spike_input": {
+                                "shape": [
+                                    1
+                                ],
+                                "reduce": "add"
+                            }
+                        },
+                        "parameters": {
+                            "syn_tau": {
+                                "value": 10
+                            },
+                            "spike_weights": {
+                                "value": [
+                                    40
+                                ]
+                            },
+                            "weighted_spike": {
+                                "function": "MatMul",
+                                "args": {
+                                    "A": "spike_weights",
+                                    "B": "spike_input"
+                                }
+                            },
+                            "syn_i": {
+                                "default_initial_value": "0",
+                                "time_derivative": "-1 * syn_i",
+                                "conditions": [
+                                    {
+                                        "id": "spike_detected",
+                                        "test": "spike_input > 0",
+                                        "value": "weighted_spike"
+                                    }
+                                ]
+                            }
+                        },
+                        "output_ports": {
+                            "current_output": {
+                                "value": "syn_i"
+                            }
+                        }
+                    }
+                },
+                "edges": {
+                    "input_edge": {
+                        "sender": "current_input_node",
+                        "receiver": "pre",
+                        "sender_port": "current_output",
+                        "receiver_port": "current_input"
+                    },
+                    "input_edge2": {
+                        "sender": "current_input_node2",
+                        "receiver": "pre",
+                        "sender_port": "current_output",
+                        "receiver_port": "current_input"
+                    },
+                    "post_internal_edge": {
+                        "sender": "syn_post",
+                        "receiver": "post",
+                        "sender_port": "current_output",
+                        "receiver_port": "current_input"
+                    },
+                    "syn_edge": {
+                        "sender": "pre",
+                        "receiver": "syn_post",
+                        "sender_port": "spiking_output",
+                        "receiver_port": "spike_input"
+                    }
+                }
+            }
+        }
+    }
+}

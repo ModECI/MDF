@@ -18,7 +18,7 @@ sys.path.append(str(BASEDIR / "src"))
 # -- Project information -----------------------------------------------------
 
 project = "modeci-mdf"
-copyright = "2021, ModECI project"
+copyright = "2023, ModECI project"
 author = "ModECI project"
 
 
@@ -136,7 +136,7 @@ htmlhelp_basename = "ModECI_MDFdoc"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ["_static"]
+html_static_path = ["_static"]
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
@@ -145,14 +145,14 @@ intersphinx_mapping = {
     "pytest": ("https://docs.pytest.org/en/stable", None),
 }
 
-from sphinx.ext.autodoc import ClassLevelDocumenter, InstanceAttributeDocumenter
+from sphinx.ext.autodoc import ClassLevelDocumenter, AttributeDocumenter
 
 
 def add_directive_header(self, sig):
     ClassLevelDocumenter.add_directive_header(self, sig)
 
 
-InstanceAttributeDocumenter.add_directive_header = add_directive_header
+AttributeDocumenter.add_directive_header = add_directive_header
 
 
 import os

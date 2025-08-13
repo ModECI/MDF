@@ -7,6 +7,7 @@ from modeci_mdf.mdf import *
 from modeci_mdf.utils import simple_connect, print_summary
 
 import abcd_python as abcd
+import os
 
 
 def main():
@@ -39,7 +40,7 @@ def main():
         args={"variable0": ip1.id, "slope": "slope", "intercept": "intercept"},
     )
     a.parameters.append(f1)
-    a.output_ports.append(OutputPort(id="output_1", value="linear_func"))
+    a.output_ports.append(OutputPort(id="out_port", value="linear_func"))
 
     e1 = simple_connect(input_node, a, mod_graph)
 
@@ -58,7 +59,7 @@ def main():
         args={"variable0": ip1.id, "gain": "gain", "bias": "bias", "offset": "offset"},
     )
     b.parameters.append(f1)
-    b.output_ports.append(OutputPort(id="output_1", value="logistic_func"))
+    b.output_ports.append(OutputPort(id="out_port", value="logistic_func"))
 
     simple_connect(a, b, mod_graph)
 
@@ -84,7 +85,7 @@ def main():
         },
     )
     c.parameters.append(f1)
-    c.output_ports.append(OutputPort(id="output_1", value="exponential_func"))
+    c.output_ports.append(OutputPort(id="out_port", value="exponential_func"))
 
     simple_connect(b, c, mod_graph)
 
@@ -99,7 +100,7 @@ def main():
         id="sin_func", function="sin", args={"variable0": ip1.id, "scale": "scale"}
     )
     d.parameters.append(f1)
-    d.output_ports.append(OutputPort(id="output_1", value="sin_func"))
+    d.output_ports.append(OutputPort(id="out_port", value="sin_func"))
 
     simple_connect(c, d, mod_graph)
 
@@ -131,7 +132,10 @@ def main():
             view_on_render=False,
             level=1,
             filename_root="abcd",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            is_horizontal=True,
         )
         mod.to_graph_image(
             engine="dot",
@@ -139,7 +143,9 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="abcd_3",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

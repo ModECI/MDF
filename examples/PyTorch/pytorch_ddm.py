@@ -2,6 +2,7 @@ from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
 import time
 import re
+import os
 import torch
 from torch import nn
 
@@ -75,7 +76,6 @@ def main():
     mdf_model, param_dict = pytorch_to_mdf(
         model=ddm,
         args=tuple(ddm_params.values()),
-        example_outputs=(rt, decision),
         use_onnx_ops=True,
     )
 
@@ -91,7 +91,9 @@ def main():
             view_on_render=False,
             level=2,
             filename_root="ddm",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

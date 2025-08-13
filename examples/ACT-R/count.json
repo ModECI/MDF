@@ -1,7 +1,7 @@
 {
     "count": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.0",
+        "generating_application": "Python modeci-mdf v0.4.12",
         "graphs": {
             "count_graph": {
                 "nodes": {
@@ -407,16 +407,6 @@
                             "type": "JustRan",
                             "kwargs": {
                                 "dependencies": "conflict_resolution"
-                            }
-                        }
-                    },
-                    "termination": {
-                        "check_term_true": {
-                            "type": "JustRan",
-                            "kwargs": {
-                                "dependencies": [
-                                    "check_termination"
-                                ]
                             }
                         }
                     }

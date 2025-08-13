@@ -9,15 +9,14 @@ from modeci_mdf.execution_engine import EvaluableGraph
 
 import onnx
 from onnx import helper, shape_inference
-from onnx import AttributeProto, TensorProto, GraphProto
+from onnx import TensorProto
 from onnx.defs import get_schema
 
-from ast import literal_eval
+import onnxruntime
+
 
 import argparse
 import os
-
-import numpy
 
 
 def mdf_to_onnx(mdf_model):
@@ -44,7 +43,27 @@ def mdf_to_onnx(mdf_model):
         onnx_graph = generate_onnx_graph(graph, nodenames_in_execution_order)
 
         # Make an onnx model from graph
-        onnx_model = helper.make_model(onnx_graph)
+
+        # Check to see if onnxruntime version is less than 1.15, if so ir_version should
+        # be 8 for now. See: https://github.com/microsoft/onnxruntime/issues/15874
+        # There is still now programmatic way to determine the max supported ir_version from onnxruntime
+        # Here is the issue: https://github.com/microsoft/onnxruntime/issues/14932
+        # We will have to continue this dumb hack for the time being.
+        make_model_kwargs = {}
+        try:
+            from packaging.version import Version, InvalidVersion
+
+            v = Version(onnxruntime.__version__)
+
+            if v < Version("1.15"):
+                make_model_kwargs = {"ir_version": 8}
+            elif v < Version("1.18"):
+                make_model_kwargs = {"ir_version": 9}
+
+        except (InvalidVersion, ModuleNotFoundError):
+            pass
+
+        onnx_model = helper.make_model(onnx_graph, **make_model_kwargs)
 
         # Infer shapes
         onnx_model = shape_inference.infer_shapes(onnx_model)
@@ -206,7 +225,6 @@ def generate_onnx_node(node, graph):
 
 
 def main():
-    import argparse
 
     parser = argparse.ArgumentParser(
         description="Converter from MDF to ONNX. "
@@ -237,8 +255,6 @@ def convert_mdf_file_to_onnx(input_file: str):
     Returns:
         NoneType
     """
-
-    import os
 
     # Load the MDF model from file - this is not used anymore
     mdf_model = load_mdf(input_file)

@@ -1,2 +1,2 @@
 # Install all the dependencies
--e .[docs]
+-e .[optional]

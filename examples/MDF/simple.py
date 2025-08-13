@@ -2,6 +2,7 @@
     Example of ModECI MDF - A simple 2 node graph.
 """
 
+import os
 from modeci_mdf.mdf import (
     Model,
     Graph,
@@ -14,6 +15,7 @@ from modeci_mdf.mdf import (
 )
 
 import sys
+import os
 
 
 def main():
@@ -70,6 +72,7 @@ def main():
 
     new_file = mod.to_json_file("%s.json" % mod.id)
     new_file = mod.to_yaml_file("%s.yaml" % mod.id)
+    new_file = mod.to_bson_file("%s.bson" % mod.id)
 
     if "-run" in sys.argv:
         verbose = True
@@ -89,7 +92,9 @@ def main():
             view_on_render=False,
             level=1,
             filename_root="simple",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
         mod.to_graph_image(
             engine="dot",
@@ -97,7 +102,9 @@ def main():
             view_on_render=False,
             level=3,
             filename_root="simple_3",
-            only_warn_on_fail=True,  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+            only_warn_on_fail=(
+                os.name == "nt"
+            ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
         )
 
 

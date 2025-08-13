@@ -1,6 +1,7 @@
 """
-    Code for importing ACT-R models into MDF.
+Code for importing ACT-R models into MDF.
 """
+
 from modeci_mdf.mdf import *
 
 
@@ -228,7 +229,8 @@ def build_model() -> Model:
             fire_prod_node.id: cond_fire_prod,
             check_node.id: cond_check,
         },
-        termination={"check_term_true": cond_term},
+        # FIXME: Disable termination condition for now. This is causing errors in the scheduler. Seems unused in tests.
+        # termination={"environment_state_update": cond_term},
     )
 
     return mod

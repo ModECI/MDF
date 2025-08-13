@@ -1,7 +1,7 @@
 {
     "RNNs": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.0",
+        "generating_application": "Python modeci-mdf v0.4.12",
         "graphs": {
             "rnn_example": {
                 "nodes": {
@@ -40,8 +40,17 @@
                     },
                     "rnn_node": {
                         "input_ports": {
-                            "ext_input": {},
-                            "fb_input": {}
+                            "ext_input": {
+                                "shape": [
+                                    5
+                                ]
+                            },
+                            "fb_input": {
+                                "default_value": 0,
+                                "shape": [
+                                    5
+                                ]
+                            }
                         },
                         "parameters": {
                             "M": {
@@ -94,7 +103,7 @@
                                     0.10262953816578246,
                                     0.43893793957112615
                                 ],
-                                "time_derivative": "-x + g*int_fb + ext_input"
+                                "time_derivative": "-x + g*int_fb + ext_input + fb_input"
                             },
                             "r": {
                                 "function": "tanh",
@@ -122,7 +131,11 @@
                     },
                     "readout_node": {
                         "input_ports": {
-                            "input": {}
+                            "input": {
+                                "shape": [
+                                    5
+                                ]
+                            }
                         },
                         "parameters": {
                             "wr": {
@@ -172,6 +185,15 @@
                         "receiver_port": "input",
                         "parameters": {
                             "weight": 1
+                        }
+                    },
+                    "feedback_edge": {
+                        "sender": "readout_node",
+                        "receiver": "rnn_node",
+                        "sender_port": "z",
+                        "receiver_port": "fb_input",
+                        "parameters": {
+                            "weight": 0.3
                         }
                     }
                 }

@@ -37,8 +37,14 @@ mv ABCD.gv.png ABCD.mdf.png
 
 ####  Generate and run jNeuroML version of the network from NeuroMLlite definition
 python FN.py -jnml
-####  Generate PsyNeuLink version of the network from NeuroMLlite definition
-#python FN.py -pnl  # Generated BIDS-MDF/PNL no longer valid...
+
+
+####  Generate and run generated LEMS direcly in jlems
+pynml LEMS_SimFN.xml -nogui
+
+####  Generate and run NEURON version of the network
+pynml LEMS_SimFN.xml -neuron -run -nogui
+rm *_nrn.py # remove generated file once complete
 
 ####  Generate a graph depicting the structure of the network from the LEMS description
 pynml LEMS_SimFN.xml -lems-graph
@@ -53,6 +59,7 @@ python -m modeci_mdf.interfaces.graphviz.exporter FN.mdf.yaml 3 -noview
 python -m modeci_mdf.execution_engine FN.mdf.json
 
 ####  Test running MDF version & save result
+python FNrun.py -multi -nogui
 python FNrun.py -nogui
 
 
@@ -74,6 +81,12 @@ python -m modeci_mdf.execution_engine IzhikevichTest.mdf.yaml
 
 ####  Test running MDF version & save result
 python Izh_run.py -nogui
+
+
+####  Test PyNN based examples
+cd PyNN
+./regenerateAndTest.sh
+
 
 
 echo "Successfully ran all tests"

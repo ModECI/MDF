@@ -1,6 +1,6 @@
 {
     "version": "ModECI MDF v0.4",
-    "comment": "**Note: the ModECI MDF specification is still in development! Subject to change without (much) notice.** See [here](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) for ongoing discussions.",
+    "comment": "**Note: the ModECI MDF specification is still in development!** See [here](https://github.com/ModECI/MDF/issues) for ongoing discussions.",
     "specification": {
         "Model": {
             "definition": "The top level construct in MDF is Model, which may contain multiple :class:`Graph` objects and model attribute(s)",
@@ -34,7 +34,7 @@
             }
         },
         "Graph": {
-            "definition": "A directed graph consisting of Node(s) connected via Edge(s)",
+            "definition": "A directed graph consisting of :class:`~Node`s (with :class:`~Parameter`s and :class:`~Function`s evaluated internally) connected via :class:`~Edge`s.",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -56,16 +56,16 @@
             "allowed_children": {
                 "nodes": {
                     "type": "Node",
-                    "description": "One or more :class:`Node`\\(s) present in the graph"
+                    "description": "One or more :class:`Node`(s) present in the graph"
                 },
                 "edges": {
                     "type": "Edge",
-                    "description": "Zero or more :class:`Edge`\\(s) present in the graph"
+                    "description": "Zero or more :class:`Edge`(s) present in the graph"
                 }
             }
         },
         "Node": {
-            "definition": "The values from these are processed via a number of :class:`Function`\\(s) and one or more final values\nare calculated on the :class:`OutputPort`\\(s)",
+            "definition": "A self contained unit of evaluation receiving input from other nodes on :class:`InputPort`(s). The values from these are processed via a number of :class:`Function`(s) and one or more final values\nare calculated on the :class:`OutputPort`(s)",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -83,15 +83,15 @@
                 },
                 "functions": {
                     "type": "Function",
-                    "description": "The :class:`Function`\\(s) for computation the node"
+                    "description": "The :class:`Function`(s) for computation the node"
                 },
                 "parameters": {
                     "type": "Parameter",
-                    "description": "Dictionary of :class:`Parameter`\\(s) for the node"
+                    "description": "Dictionary of :class:`Parameter`(s) for the node"
                 },
                 "output_ports": {
                     "type": "OutputPort",
-                    "description": "The :class:`OutputPort`\\(s) containing evaluated quantities from the node"
+                    "description": "The :class:`OutputPort`(s) containing evaluated quantities from the node"
                 }
             }
         },
@@ -106,6 +106,10 @@
                     "type": "str",
                     "description": "The unique (for this Node) id of the input port,"
                 },
+                "default_value": {
+                    "type": "Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]",
+                    "description": "Value to set at this input port if no edge connected to it."
+                },
                 "shape": {
                     "type": "Union[Tuple[int, ...], NoneType]",
                     "description": "The shape of the input port. This uses the same syntax as numpy ndarray shapes\n(e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape"
@@ -113,11 +117,15 @@
                 "type": {
                     "type": "Union[str, NoneType]",
                     "description": "The data type of the input received at a port."
+                },
+                "reduce": {
+                    "type": "Union[str, NoneType]",
+                    "description": "Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)"
                 }
             }
         },
         "Function": {
-            "definition": "A single value which is evaluated as a function of values on :class:`InputPort`\\(s) and other Functions",
+            "definition": "A single value which is evaluated as a function of values on :class:`InputPort`(s) and other Functions",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -142,7 +150,7 @@
             }
         },
         "Parameter": {
-            "definition": "referencing other :class:`Parameter`\\(s)), be evaluated by an inbuilt function with args, or change from a\n:code:`default_initial_value` with a :code:`time_derivative`.",
+            "definition": "A parameter of the :class:`Node`, which can be: 1) a specific fixed :code:`value` (a constant (int/float) or an array) 2) a string expression for the :code:`value` referencing other named :class:`Parameter`(s). which may be stateful (i.e. can change value over multiple executions of the :class:`Node`); 3) be evaluated by an\ninbuilt :code:`function` with :code:`args`; 4) or change from a :code:`default_initial_value` with a :code:`time_derivative`.",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -166,7 +174,7 @@
                 },
                 "function": {
                     "type": "Union[str, NoneType]",
-                    "description": "Which of the in-build MDF functions (linear etc.) this uses, See"
+                    "description": "Which of the in-build MDF functions (linear etc.) this uses, See\nhttps://mdf.readthedocs.io/en/latest/api/MDF_function_specifications.html"
                 },
                 "args": {
                     "type": "Union[Any, NoneType]",
@@ -198,7 +206,7 @@
             }
         },
         "OutputPort": {
-            "definition": "connected by an :class:`Edge`",
+            "definition": "The :class:`OutputPort` is an attribute of a :class:`Node` which exports information to another :class:`Node` connected by an :class:`Edge`",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",
@@ -223,7 +231,7 @@
             }
         },
         "Edge": {
-            "definition": ":class:`OutputPort` to a receiver's :class:`InputPort`.",
+            "definition": "An :class:`Edge` is an attribute of a :class:`Graph` that transmits computational results from a sender's :class:`OutputPort` to a receiver's :class:`InputPort`.",
             "allowed_parameters": {
                 "metadata": {
                     "type": "Union[Any, NoneType]",

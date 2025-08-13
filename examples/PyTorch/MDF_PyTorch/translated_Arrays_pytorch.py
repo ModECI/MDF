@@ -79,12 +79,15 @@ torch.onnx.export(
     "Arrays.onnx",
     verbose=True,
     input_names=[],
-    example_outputs=output,
     opset_version=9,
 )
 onnx_model = onnx.load("Arrays.onnx")
 onnx.checker.check_model(onnx_model)
 sess = rt.InferenceSession("Arrays.onnx")
-res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+# res = sess.run(None, {sess.get_inputs()[0].name: dummy_input.numpy()})
+res = sess.run(
+    None, {}
+)  # The input to the graph gets optimized out. No need to pass. Example should probably use input.
+
 if __name__ == "__main__":
     print("Exported to PyTorch and ONNX")
