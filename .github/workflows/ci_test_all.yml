@@ -2,9 +2,9 @@ name: CI Test script
 
 on:
   push:
-    branches: [ main, development, experimental, test*, nml* ]
+    branches: [ main, development, experimental, test*, nml*, version* ]
   pull_request:
-    branches: [ main, development, experimental, test*, nml* ]
+    branches: [ main, development, experimental, test*, nml*, version* ]
 
 jobs:
 
@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.10"]
+        python-version: [ "3.11"]
         runs-on: [ubuntu-latest]
 
     steps:

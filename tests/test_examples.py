@@ -29,7 +29,6 @@ example_exclusion_strings = [
     "generate_json_and_scripts.py",
     "pytorch_ddm.py",
     "keras_model.py",
-    "keras_to_MDF.py",
 ]
 
 # Filter any excluded example scripts
