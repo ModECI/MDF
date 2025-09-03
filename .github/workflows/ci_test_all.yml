@@ -44,9 +44,3 @@ jobs:
       run: |
         pip list
 
-
-
-
-    - name: Final version info for optional installed packages
-      run: |
-          pip list
