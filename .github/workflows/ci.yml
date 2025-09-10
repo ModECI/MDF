@@ -25,7 +25,7 @@ jobs:
           extra_args: --hook-stage manual --all-files
 
   tests:
-    name: Test ${{ matrix.test-suite }} on Python ${{ matrix.python-version }} / ${{ matrix.os }}
+    name: ${{ matrix.test-suite }}, py ${{ matrix.python-version }}, ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
