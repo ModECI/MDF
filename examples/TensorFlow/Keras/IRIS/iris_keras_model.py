@@ -90,6 +90,8 @@ def run():
     predictions = model.predict([X_test])
     print("The predicted number at index 0 is", np.argmax(predictions[0]))
 
+    return model
+
 
 if __name__ == "__main__":
     run()
