@@ -105,7 +105,6 @@ all = [
     "modeci-mdf[all_except_psyneulink]",
     "modeci-mdf[psyneulink]",
     "modeci-mdf[neuroml_simulators]",
-    "modeci-mdf[dev]",
 ]
 
 # Development dependency groups (PEP 735)
