@@ -31,7 +31,7 @@ example_exclusion_strings = [
     ".reconstructed.py",
     "generate_json_and_scripts.py",
     "pytorch_ddm.py",
-    "keras_model.py",
+    "iris_keras_model.py",
 ]
 
 # Filter any excluded example scripts

@@ -7,7 +7,7 @@ from modeci_mdf.interfaces.keras import keras_to_mdf
 from modelspec.utils import _val_info
 from modeci_mdf.execution_engine import EvaluableGraph
 
-from keras_model import run
+from mnist_keras_model import run
 
 model = run()
 
