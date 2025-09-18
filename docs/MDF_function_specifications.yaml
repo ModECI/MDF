@@ -1617,7 +1617,7 @@ onnx::LpPool:
 onnx::MatMul:
     description: '
 
-        Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html
+        Matrix product that behaves like [numpy.matmul](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html).
 
         '
     arguments:
@@ -1627,7 +1627,7 @@ onnx::MatMul:
 onnx::MatMulInteger:
     description: '
 
-        Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html.
+        Matrix product that behaves like [numpy.matmul](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html).
 
         The production MUST never overflow. The accumulation may overflow if and only
         if in 32 bits.
@@ -1668,8 +1668,7 @@ onnx::MaxPool:
         \ 1)\n ```\n or\n ```\n output_spatial_shape[i] = ceil((input_spatial_shape[i]\
         \ + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i]\
         \ + 1)\n ```\n if ceil_mode is enabled. `pad_shape[i]` is the sum of pads\
-        \ along axis `i`. Sliding windows that would start in the right padded region\
-        \ are ignored.\n\n `auto_pad` is a DEPRECATED attribute. If you are using\
+        \ along axis `i`.\n\n `auto_pad` is a DEPRECATED attribute. If you are using\
         \ them currently, the output spatial shape will be following when ceil_mode\
         \ is enabled:\n ```\n VALID: output_spatial_shape[i] = ceil((input_spatial_shape[i]\
         \ - ((kernel_spatial_shape[i] - 1) * dilations[i] + 1) + 1) / strides_spatial_shape[i])\n\
@@ -2090,7 +2089,7 @@ onnx::QLinearConv:
 onnx::QLinearMatMul:
     description: '
 
-        Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html.
+        Matrix product that behaves like [numpy.matmul](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html).
 
         It consumes two quantized input tensors, their scales and zero points, scale
         and zero point of output,
