@@ -79,7 +79,7 @@ For guidelines on contributing to the development of MDF, see [here](https://git
 ## Examples
 
 To get started, follow the simple example in a Jupyter notebook [here](https://github.com/ModECI/MDF/blob/main/examples/SimpleExample.ipynb)
-
+ 
 
 Multiple examples of serialized MDF files, the Python scripts used to generate them, as well as mappings to target environments can be found [here](https://github.com/ModECI/MDF/blob/main/examples/README.md).
 
