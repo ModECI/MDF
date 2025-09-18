@@ -1685,7 +1685,7 @@ Python version: `onnx_ops.lppool(X, auto_pad, kernel_shape, p, pads, strides)`
 
 ## MatMul
  <p><i>
-Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html
+Matrix product that behaves like [numpy.matmul](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html).
 </i></p>
 
 Python version: `onnx_ops.matmul(A, B)`
@@ -1695,7 +1695,7 @@ Python version: `onnx_ops.matmul(A, B)`
 
 ## MatMulInteger
  <p><i>
-Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html.
+Matrix product that behaves like [numpy.matmul](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html).
 The production MUST never overflow. The accumulation may overflow if and only if in 32 bits.
 </i></p>
 
@@ -1732,7 +1732,7 @@ Python version: `onnx_ops.max(data_0)`
  ```
  output_spatial_shape[i] = ceil((input_spatial_shape[i] + pad_shape[i] - dilation[i] * (kernel_shape[i] - 1) - 1) / strides_spatial_shape[i] + 1)
  ```
- if ceil_mode is enabled. `pad_shape[i]` is the sum of pads along axis `i`. Sliding windows that would start in the right padded region are ignored.
+ if ceil_mode is enabled. `pad_shape[i]` is the sum of pads along axis `i`.
 
  `auto_pad` is a DEPRECATED attribute. If you are using them currently, the output spatial shape will be following when ceil_mode is enabled:
  ```
@@ -2237,7 +2237,7 @@ Python version: `onnx_ops.qlinearconv(x, x_scale, x_zero_point, w, w_scale, w_ze
 
 ## QLinearMatMul
  <p><i>
-Matrix product that behaves like numpy.matmul: https://docs.scipy.org/doc/numpy-1.13.0/reference/generated/numpy.matmul.html.
+Matrix product that behaves like [numpy.matmul](https://numpy.org/doc/stable/reference/generated/numpy.matmul.html).
 It consumes two quantized input tensors, their scales and zero points, scale and zero point of output,
 and computes the quantized output. The quantization formula is y = saturate((x / y_scale) + y_zero_point).
 For (x / y_scale), it is rounding to nearest ties to even. Refer to https://en.wikipedia.org/wiki/Rounding for details.
