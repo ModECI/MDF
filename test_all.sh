@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-pip install .[all]
+pip install .[all] --group "dev"
 
 # Note this:
 #    1) runs examples to regenerate yaml/json...

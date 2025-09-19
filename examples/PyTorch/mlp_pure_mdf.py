@@ -6,6 +6,7 @@ import h5py
 import time
 import os
 
+
 # Note: the weights for this model were precomputed and saved in the file weights.h5
 def get_weight_info():
 

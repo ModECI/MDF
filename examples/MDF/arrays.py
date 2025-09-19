@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Testing arrays as inputs
+Example of ModECI MDF - Testing arrays as inputs
 """
 
 from modeci_mdf.mdf import *
