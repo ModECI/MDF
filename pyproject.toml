@@ -4,17 +4,210 @@ requires = [
     "wheel",
     "toml",
 ]
-
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "modeci-mdf"
+dynamic = ["version"]
+description = "ModECI (Model Exchange and Convergence Initiative) Model Description Format"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "LGPLv3"}
+authors = [
+    {name = "ModECI contributors", email = "p.gleeson@gmail.com"},
+]
+maintainers = [
+    {name = "ModECI contributors", email = "p.gleeson@gmail.com"},
+]
+keywords = ["scientific computing", "modeling", "neuroscience"]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Scientific/Engineering",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development",
+    "Typing :: Typed",
+]
+dependencies = [
+    "graph_scheduler>=1.1.1",
+    "numpy",
+    "matplotlib",
+    "graphviz",
+    "h5py",
+    "onnxruntime",
+    "onnx",
+    "skl2onnx",
+    "attrs>=21.1.0",
+    "cattrs",
+    "modelspec<0.4,>=0.3.0",
+    "glom",
+]
+
+[project.urls]
+Homepage = "https://www.modeci.org"
+Repository = "https://github.com/ModECI/MDF"
+Documentation = "https://mdf.readthedocs.io"
+
+[project.optional-dependencies]
+psyneulink = [
+    "psyneulink>=0.15.3",
+]
+
+neuroml = [
+    "pyNeuroML>=1.0.10",
+    "neuromllite>=0.5.6",
+    "PyNN>=0.10.1",
+]
+
+neuroml_simulators = [
+    "neuron",
+]
+
+tensorflow = [
+    "tensorflow>=2.16.0",
+    "keras_visualizer",
+    "pydot",
+]
+
+test = [
+    "pytest",
+    "pytest-benchmark",
+    "pytest-mock",
+    "setuptools",
+]
+
+optional = [
+    "torchviz",
+    "netron",
+    "torch>=1.11.0",
+    "torchvision",
+    "h5py",
+]
+
+all_except_psyneulink = [
+    "modeci-mdf[tensorflow]",
+    "modeci-mdf[optional]",
+    "modeci-mdf[neuroml]",
+]
+
+all = [
+    "modeci-mdf[all_except_psyneulink]",
+    "modeci-mdf[psyneulink]",
+    "modeci-mdf[neuroml_simulators]",
+]
+
+# Development dependency groups (PEP 735)
+[dependency-groups]
+dev = [
+    "pre-commit",
+    "modeci-mdf[test]",
+]
+
+docs = [
+    "Sphinx",
+    "recommonmark>=0.5.0",
+    "nbsphinx",
+    "sphinx_copybutton",
+    "sphinx-rtd-theme",
+    "myst_parser",
+    "sphinx_markdown_tables",
+    "sphinx-autoapi",
+    "pytorch-sphinx-theme==0.0.19",
+    "sphinxcontrib-versioning",
+    "Jinja2<3.1",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+exclude = ["tests", "examples"]
+
+[tool.setuptools.package-data]
+"*" = ["syn_definitions.xml"]
+
+[tool.setuptools.dynamic]
+version = {attr = "modeci_mdf.__version__"}
 
 #[tool.setuptools_scm]
 #write_to = "src/modeci_mdf/version.py"
 
 [tool.pytest.ini_options]
-    markers = [
-        "coremdf: marks tests which are core to the MDF specification",
-        "actr: marks tests which require ACT-R to be installed.",
-        "pytorch: marks test which require PyTorch to be installed.')",
-        "psyneulink: marks tests which require PsyNueLink to be installed.",
-        "neuroml: marks tests which require NeuroML to be installed."
-    ]
+junit_family = "xunit2"
+addopts = "--benchmark-disable -Wd --strict-markers"
+xfail_strict = true
+testpaths = ["tests"]
+required_plugins = ["pytest-benchmark"]
+markers = [
+    "coremdf: marks tests which are core to the MDF specification",
+    "actr: marks tests which require ACT-R to be installed.",
+    "pytorch: marks test which require PyTorch to be installed.')",
+    "psyneulink: marks tests which require PsyNueLink to be installed.",
+    "neuroml: marks tests which require NeuroML to be installed.",
+    "tensorflow: marks tests which require TensorFlow to be installed.",
+]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+
+[tool.flake8]
+max-line-length = 80
+max-complexity = 13
+select = ["C", "E", "F", "W", "B", "B9", "T"]
+ignore = ["E203", "E231", "E501", "E722", "W503", "B950"]
+per-file-ignores = [
+    "tests/*:T",
+    "examples/*:T",
+    "notebooks/*:T",
+    "docs/*:T",
+    "scripts/*:T",
+    "setup_helpers.py:C901",
+]
+
+[tool.mypy]
+warn_unused_configs = true
+python_version = "3.6"
+files = ["src"]
+disallow_any_generics = true
+disallow_subclassing_any = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_reexport = true
+strict_equality = true
+
+[tool.check-manifest]
+ignore = [
+    ".all-contributorsrc",
+    ".pre-commit-config.yaml",
+    ".readthedocs.yml",
+    "examples/**",
+    "notebooks/**",
+    "docs/**",
+    "scripts/**",
+    "dev-requirements.txt",
+    "CONTRIBUTING.md",
+    "*.html",
+    "src/modeci_mdf/version.py",
+    "tests/.pytest_cache/**",
+]
