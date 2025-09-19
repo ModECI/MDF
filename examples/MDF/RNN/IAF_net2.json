@@ -1,7 +1,7 @@
 {
     "IAF_net2": {
         "format": "ModECI MDF v0.4",
-        "generating_application": "Python modeci-mdf v0.4.12",
+        "generating_application": "Python modeci-mdf v0.4.13",
         "graphs": {
             "iaf_example": {
                 "nodes": {
@@ -65,7 +65,8 @@
                             "current_input": {
                                 "shape": [
                                     8
-                                ]
+                                ],
+                                "reduce": "add"
                             }
                         },
                         "parameters": {
@@ -149,7 +150,8 @@
                             "current_input": {
                                 "shape": [
                                     8
-                                ]
+                                ],
+                                "reduce": "add"
                             }
                         },
                         "parameters": {
@@ -233,7 +235,8 @@
                             "spike_input": {
                                 "shape": [
                                     8
-                                ]
+                                ],
+                                "reduce": "add"
                             }
                         },
                         "parameters": {

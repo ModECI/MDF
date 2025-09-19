@@ -180,6 +180,13 @@ The <a href="#inputport">InputPort</a> is an attribute of a Node which allows ex
 
 
   <tr>
+    <td><b>default_value</b></td>
+    <td>Union</td>
+    <td><i>Value to set at this input port if no edge connected to it.</i></td>
+ </tr>
+
+
+  <tr>
     <td><b>shape</b></td>
     <td>Optional</td>
     <td><i>The shape of the input port. This uses the same syntax as numpy ndarray shapes
@@ -191,6 +198,13 @@ The <a href="#inputport">InputPort</a> is an attribute of a Node which allows ex
     <td><b>type</b></td>
     <td>Optional</td>
     <td><i>The data type of the input received at a port.</i></td>
+ </tr>
+
+
+  <tr>
+    <td><b>reduce</b></td>
+    <td>Optional</td>
+    <td><i>Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)</i></td>
  </tr>
 
 

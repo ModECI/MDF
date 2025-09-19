@@ -58,7 +58,7 @@ def create_iaf_syn_node(
         syn_tau = Parameter(id="syn_tau", value=syn_tau)
         syn_node.parameters.append(syn_tau)
 
-        ip_spike = InputPort(id="spike_input", shape="(%i,)" % num_cells)
+        ip_spike = InputPort(id="spike_input", shape="(%i,)" % num_cells, reduce="add")
         syn_node.input_ports.append(ip_spike)
 
         spike_weights = Parameter(id="spike_weights", value=numpy.identity(num_cells))
@@ -91,7 +91,7 @@ def create_iaf_syn_node(
     ## IAF node...
     iaf_node = Node(id)
 
-    ip_current = InputPort(id="current_input", shape="(%i,)" % num_cells)
+    ip_current = InputPort(id="current_input", shape="(%i,)" % num_cells, reduce="add")
     iaf_node.input_ports.append(ip_current)
 
     v0 = Parameter(
@@ -293,7 +293,8 @@ def main():
         recorded = {}
         times = []
         t = []
-        i = []
+        input1 = []
+        input2 = []
         s1 = []
         sp1 = []
         s2 = []
@@ -313,9 +314,15 @@ def main():
                     % eg.enodes["post"].evaluable_outputs["v_output"].curr_value
                 )
 
-            i.append(
+            input1.append(
                 eg.enodes[input_node.id].evaluable_outputs["current_output"].curr_value
             )
+            if net3:
+                input2.append(
+                    eg.enodes[input_node2.id]
+                    .evaluable_outputs["current_output"]
+                    .curr_value
+                )
             t.append(eg.enodes[input_node.id].evaluable_parameters["time"].curr_value)
             s1.append(eg.enodes["pre"].evaluable_outputs["v_output"].curr_value)
             sp1.append(eg.enodes["pre"].evaluable_parameters["spiking"].curr_value)
@@ -331,16 +338,18 @@ def main():
 
         markersize = 2 if num_cells < 20 else 0.5
 
-        if type(i[0]) == numpy.ndarray and i[0].size > 1:
-            for ii in range(len(i[0])):
+        if type(input1[0]) == numpy.ndarray and input1[0].size > 1:
+            for ii in range(len(input1[0])):
                 iii = []
                 for ti in range(len(t)):
-                    iii.append(i[ti][ii])
+                    iii.append(input1[ti][ii])
                 axis[0].plot(
                     times, iii, label="Input node %s current" % ii, linewidth="0.5"
                 )
         else:
-            axis[0].plot(times, i, label="Input node current", color="k")
+            axis[0].plot(times, input1, label="Input node current", color="k")
+        if net3:
+            axis[0].plot(times, input2, label="Input node current 2", color="g")
 
         if not some_net:
             axis[0].legend()
@@ -443,7 +452,7 @@ def main():
             engine="dot",
             output_format="png",
             view_on_render=False,
-            level=2,
+            level=1 if net3 else 2,
             filename_root="iaf%s"
             % (
                 ".net"

@@ -72,6 +72,11 @@ cd ..
 cd RNN
 ./regenerate.sh
 
+## Test regenerating network example
+
+cd ../networks
+./regenerate.sh
+
 
 ## Test regenerating NeuroML
 
