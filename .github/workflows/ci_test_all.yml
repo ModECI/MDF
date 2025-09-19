@@ -2,9 +2,9 @@ name: CI Test script
 
 on:
   push:
-    branches: [ main, development, experimental, test*, nml* ]
+    branches: [ main, development, experimental, test*, nml*, version* ]
   pull_request:
-    branches: [ main, development, experimental, test*, nml* ]
+    branches: [ main, development, experimental, test*, nml*, version* ]
 
 jobs:
 
