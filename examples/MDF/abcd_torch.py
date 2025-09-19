@@ -38,6 +38,7 @@ class MyLogistic(nn.Module):
 
 B = MyLogistic(abcd.B_gain, abcd.B_bias, abcd.B_offset)
 
+
 #### C
 class MyExp(nn.Module):
     def __init__(self, scale, rate, bias, offset):
@@ -52,6 +53,7 @@ class MyExp(nn.Module):
 
 
 C = MyExp(abcd.C_scale, abcd.C_rate, abcd.C_bias, abcd.C_offset)
+
 
 #### D
 class MySin(nn.Module):

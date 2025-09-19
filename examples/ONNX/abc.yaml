@@ -1,6 +1,6 @@
 ONNX Model:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.12
+    generating_application: Python modeci-mdf v0.4.13
     graphs:
         main_graph:
             nodes:
@@ -22,7 +22,7 @@ ONNX Model:
                     output_ports:
                         _A_Add_output_0:
                             value: /A/Add
-                Loop_3:
+                Loop_6:
                     input_ports:
                         B_loop_count:
                             shape:
@@ -39,7 +39,7 @@ ONNX Model:
                                 graph_sub_graph:
                                     id: sub_graph
                                     nodes:
-                                        Div_5:
+                                        Div_8:
                                             input_ports:
                                                 x.11:
                                                     shape:
@@ -49,28 +49,28 @@ ONNX Model:
                                             parameters:
                                                 B:
                                                     value: 10.0
-                                                Div_5:
+                                                Div_8:
                                                     function: onnx::Div
                                                     args:
                                                         A: x.11
                                                         B: B
                                             output_ports:
                                                 x:
-                                                    value: Div_5
-                                        Identity_6:
+                                                    value: Div_8
+                                        Identity_9:
                                             parameters:
                                                 input:
                                                     value: true
-                                                Identity_6:
+                                                Identity_9:
                                                     function: onnx::Identity
                                                     args:
                                                         input: input
                                             output_ports:
                                                 _11:
-                                                    value: Identity_6
+                                                    value: Identity_9
                         cond:
                             value: true
-                        Loop_3:
+                        Loop_6:
                             function: onnx::Loop
                             args:
                                 M: B_loop_count
@@ -78,7 +78,7 @@ ONNX Model:
                                 v_initial: _A_Add_output_0
                     output_ports:
                         x.3:
-                            value: Loop_3
+                            value: Loop_6
                 /C/Mul:
                     input_ports:
                         x.3:
@@ -97,13 +97,13 @@ ONNX Model:
                         _13:
                             value: /C/Mul
             edges:
-                /A/Add._A_Add_output_0_Loop_3._A_Add_output_0:
+                /A/Add._A_Add_output_0_Loop_6._A_Add_output_0:
                     sender: /A/Add
-                    receiver: Loop_3
+                    receiver: Loop_6
                     sender_port: _A_Add_output_0
                     receiver_port: _A_Add_output_0
-                Loop_3.x.3_/C/Mul.x.3:
-                    sender: Loop_3
+                Loop_6.x.3_/C/Mul.x.3:
+                    sender: Loop_6
                     receiver: /C/Mul
                     sender_port: x.3
                     receiver_port: x.3

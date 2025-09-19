@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Testing integrate and fire neurons
+Example of ModECI MDF - Testing integrate and fire neurons
 """
 
 from modeci_mdf.mdf import *

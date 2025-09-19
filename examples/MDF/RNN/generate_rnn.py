@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Testing RNNs
+Example of ModECI MDF - Testing RNNs
 """
 
 from modeci_mdf.mdf import *

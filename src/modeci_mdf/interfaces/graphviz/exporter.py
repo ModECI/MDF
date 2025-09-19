@@ -283,7 +283,7 @@ def mdf_to_graphviz(
             if node.input_ports and len(node.input_ports) > 0:
                 for ip in node.input_ports:
                     additional = ""
-                    if ip.shape is not None:
+                    if ip.shape is not None and ip.shape != ():
                         additional += "shape: %s, " % str(ip.shape)
                     """if ip.reduce is not None:
                         if ip.reduce != "overwrite":  # since this is the default...
@@ -487,9 +487,9 @@ def mdf_to_graphviz(
                         format_output(op.id),
                         match_in_expr(op.value, node),
                         "(shape: %s)" % str(op.shape)
-                        if op.shape is not None
+                        if op.shape is not None and op.shape != ()
                         else ""
-                        if level >= LEVEL_2 and op.shape is not None
+                        if level >= LEVEL_2 and op.shape is not None and op.shape != ()
                         else "",
                     )
 
