@@ -1,6 +1,6 @@
 IAF_net3:
     format: ModECI MDF v0.4
-    generating_application: Python modeci-mdf v0.4.12
+    generating_application: Python modeci-mdf v0.4.13
     graphs:
         iaf_example:
             nodes:

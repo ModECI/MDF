@@ -87,15 +87,17 @@ The `InputPort <#inputport>`__ is an attribute of a Node which allows external i
 
 **Allowed parameters**
 
-===============  ===========  =============================================================================================
-Allowed field    Data Type    Description
-===============  ===========  =============================================================================================
-**metadata**     Optional     Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
-**id**           str          The unique (for this Node) id of the input port,
-**shape**        Optional     The shape of the input port. This uses the same syntax as numpy ndarray shapes
-                              (e.g., **numpy.zeros(shape)** would produce an array with the correct shape
-**type**         Optional     The data type of the input received at a port.
-===============  ===========  =============================================================================================
+=================  ===========  =================================================================================================================================================================================================
+Allowed field      Data Type    Description
+=================  ===========  =================================================================================================================================================================================================
+**metadata**       Optional     Optional metadata field, an arbitrary dictionary of string keys and JSON serializable values.
+**id**             str          The unique (for this Node) id of the input port,
+**default_value**  Union        Value to set at this input port if no edge connected to it.
+**shape**          Optional     The shape of the input port. This uses the same syntax as numpy ndarray shapes
+                                (e.g., **numpy.zeros(shape)** would produce an array with the correct shape
+**type**           Optional     The data type of the input received at a port.
+**reduce**         Optional     Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)
+=================  ===========  =================================================================================================================================================================================================
 
 ========
 Function

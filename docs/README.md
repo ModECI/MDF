@@ -181,7 +181,7 @@ The <a href="#inputport">InputPort</a> is an attribute of a Node which allows ex
 
   <tr>
     <td><b>default_value</b></td>
-    <td>Union[EvaluableExpression, List, Dict, ndarray, int, float, str, NoneType]</td>
+    <td>Union</td>
     <td><i>Value to set at this input port if no edge connected to it.</i></td>
  </tr>
 
@@ -203,7 +203,7 @@ The <a href="#inputport">InputPort</a> is an attribute of a Node which allows ex
 
   <tr>
     <td><b>reduce</b></td>
-    <td>Union[str, NoneType]</td>
+    <td>Optional</td>
     <td><i>Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)</i></td>
  </tr>
 
