@@ -5,137 +5,133 @@ on:
   pull_request:
   push:
   release:
-    types:
-      - published
+    types: [published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   pre-commit:
     name: Format
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-    - uses: pre-commit/action@v3.0.1
-      with:
-        extra_args: --hook-stage manual --all-files
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - uses: pre-commit/action@v3.0.1
+        with:
+          extra_args: --hook-stage manual --all-files
 
-  checks:
-    name: Check Python ${{ matrix.python-version }} on ${{ matrix.runs-on }}
-    runs-on: ${{ matrix.runs-on }}
+  tests:
+    name: ${{ matrix.test-suite }}, py ${{ matrix.python-version }}, ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.9", "3.11", "3.12"]
-        runs-on: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ['3.10', '3.13']
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        test-suite: [core, actr, pytorch, neuroml, tensorflow, psyneulink]
         exclude:
-          - runs-on: macos-latest
-            python-version: "3.9"
+          - os: windows-latest
+            test-suite: tensorflow
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python-version }}
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    # Rely on version of modelspec from PyPI as set by setup.cfg...
-    #- name: Install modelspec
-    #  run: python -m pip install git+https://github.com/ModECI/modelspec.git@main
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    # Rely on version of NeuroMLlite from PyPI as set by setup.py...
-    # - name: Install NeuroMLlite
-    #   run: python -m pip install NeuroMLlite>=0.5.0
+      - name: Install HDF5 for pytables on macos-14/latest
+        if: ${{ matrix.runs-on == 'macos-latest' }}
+        run: |
+          brew install hdf5
 
-    # Rely on version of PsyNeuLink from PyPI as set by setup.py...
-    #- name: Install specific PsyNeuLink branch
-    #  run: python -m pip install git+https://github.com/ModECI/PsyNeuLink@devel
+      - name: Install graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+        with:
+          # Skip to run brew update command on macOS.
+          macos-skip-brew-update: 'true' # default false
 
-    - name: Install HDF5 for pytables on macos-14/latest
-      if: ${{ matrix.runs-on == 'macos-latest' }}
-      run: |
-        brew install hdf5
+      - name: Install extras for ${{ matrix.test-suite }}
+        shell: bash
+        run: |
+          uv sync --dev
+          case "${{ matrix.test-suite }}" in
+            pytorch)    uv sync --extra "optional"   --dev ;;
+            neuroml)    uv sync --extra "neuroml"     --dev ;;
+            tensorflow) uv sync --extra "tensorflow" --dev ;;
+            psyneulink) uv sync --extra "psyneulink"  --dev ;;
+          esac
 
-    - name: Install core package
-      run: |
-        python -m pip install .[dev]
+      - name: Run ${{ matrix.test-suite }} tests
+        shell: bash
+        run: |
+          MARKER="${{ matrix.test-suite }}"
+          if [ "${{ matrix.test-suite }}" = "core" ]; then
+            MARKER="coremdf"
+          fi
+          uv run pytest -v -m "${MARKER}" tests/
 
-    - name: Version info for installed packages
-      run: |
-        pip list
-
-    - name: Test core package
-      run: |
-        python -m pytest -m coremdf tests/
-
-    - name: Install most optional dependencies
-      run: |
-        python -m pip install .[optional]
-
-    - name: Version info for optional installed packages
-      run: |
-          pip list
-
-    - name: Install graphviz
-      uses: ts-graphviz/setup-graphviz@v2
-      with:
-        # Skip to run brew update command on macOS.
-        macos-skip-brew-update: 'true' # default false
-
-    - name: Test interface ACT-R
-      run: |
-        python -m pytest -v -m "actr" tests/
-
-    - name: Test interface PyTorch
-      run: |
-        python -m pytest -v -m "pytorch" tests/
-
-    - name: Test interface NeuroML
-      run: |
-        python -m pip install .[neuroml]
-        python -m pytest -v -m "neuroml" tests/
-
-    - name: Test interface TensorFlow
-      run: |
-        python -m pip install .[tensorflow]
-        dot -V
-        python -m pytest -v -m "tensorflow" tests/
-
-    - name: Test interface PsyNeuLink
-      run: |
-        python -m pip install .[psyneulink]
-        python -m pytest -v -m "psyneulink" tests/
-
-    - name: Build Documentation
-      run: |
-        cd docs
-        python generate.py
-        cd sphinx
-        make clean
-        make html
-
-    - name: Final version info for optional installed packages
-      run: |
-          pip list
+  docs:
+    name: Build Documentation
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.10'
+      - name: Generate and Build Docs
+        run: |
+          uv sync --group docs
+          cd docs
+          uv run generate.py
+          cd sphinx
+          uv run make clean
+          uv run make html
 
   dist:
     name: Distribution build
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Build sdist & wheel
+        run: pipx run --spec build pyproject-build
+      - uses: actions/upload-artifact@v4
+        with:
+          path: dist
+      - uses: pypa/gh-action-pypi-publish@v1.4.1
+        if: github.event_name == 'release' && github.event.action == 'published'
+        with:
+          user: __token__
+          password: ${{ secrets.pypi_password }}
 
-    - name: Build sdist and wheel
-      run: pipx run --spec build pyproject-build
-
-    - uses: actions/upload-artifact@v4
-      with:
-        path: dist
-
-    - uses: pypa/gh-action-pypi-publish@v1.4.1
-      if: github.event_name == 'release' && github.event.action == 'published'
-      with:
-        user: __token__
-        # Remember to generate this and set it in "GitHub Secrets"
-        password: ${{ secrets.pypi_password }}
+  all-passed:
+    runs-on: ubuntu-latest
+    needs:
+      - pre-commit
+      - tests
+      - docs
+      - dist
+    if: always()
+    steps:
+      - name: Fail if any dependency did not succeed
+        run: |
+          echo "Upstream results: ${{ join(needs.*.result, ', ') }}"
+          # If any result is failure/cancelled/skipped, fail this job
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') || contains(needs.*.result, 'skipped') }}" == "true" ]]; then
+            exit 1
+          fi

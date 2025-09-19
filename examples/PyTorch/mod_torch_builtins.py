@@ -2,6 +2,7 @@
 Wrap commonly-used torch builtins in nn.Module subclass
 for easier automatic construction of script
 """
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F

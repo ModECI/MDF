@@ -92,9 +92,11 @@ onnx.checker.check_model(onnx_model)
 sess = rt.InferenceSession("Simple.onnx")
 res = sess.run(
     None,
-    {sess.get_inputs()[0].name: dummy_input.numpy()}
-    if len(sess.get_inputs()) > 0
-    else {},
+    (
+        {sess.get_inputs()[0].name: dummy_input.numpy()}
+        if len(sess.get_inputs()) > 0
+        else {}
+    ),
 )
 
 if __name__ == "__main__":

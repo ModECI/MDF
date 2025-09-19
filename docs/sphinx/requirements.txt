@@ -1,2 +1,2 @@
 # Install all the dependencies
--e .[optional]
+--group=docs

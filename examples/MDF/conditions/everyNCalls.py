@@ -2,6 +2,7 @@
 Example of ModECI MDF- A simple 3 Node graph where the first node is satisfying the Static condition and the second and third node is satisfying the Node based conditions
 
 """
+
 import os
 import graph_scheduler
 from modeci_mdf.mdf import (

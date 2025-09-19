@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Testing state variables
+Example of ModECI MDF - Testing state variables
 """
 
 from modeci_mdf.mdf import *
