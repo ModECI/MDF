@@ -73,7 +73,7 @@ Successful interfacing of MDF to existing disciplinary standards (such as [ONNX]
 ## Installation
 
 ### Requirements
-Requires Python >= 3.7
+Requires Python >= 3.9
 
 ### Quick start
 ```
