@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-pip install .[all] --group "dev"
+pip install .[all] --group "dev" --cache-dir=/home/runner/tmp --prefer-binary
 
 # Note this:
 #    1) runs examples to regenerate yaml/json...
