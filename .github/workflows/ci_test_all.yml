@@ -37,7 +37,9 @@ jobs:
 
     - name: Run test script
       run: |
+        df -h
         export NEURON_HOME=$pythonLocation
+        export TMPDIR=/home/user/tmp/
         ./test_all.sh
 
     - name: Version info for installed packages
