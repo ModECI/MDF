@@ -1,9 +1,11 @@
 #!/bin/bash
 set -ex
 
+## This is overkill, but it seems to lead to less space being used on install, which was 
+## causing issues on GHA CI.
 df -h
-pip install . --cache-dir=/home/runner/tmp --prefer-binary
 
+pip install . --cache-dir=/home/runner/tmp --prefer-binary
 df -h
 pip cache info
 pip cache purge
@@ -11,8 +13,12 @@ df -h
 
 pip install .[optional] --cache-dir=/home/runner/tmp --prefer-binary
 df -h
+pip cache purge
+df -h
 
 pip install .[all] --cache-dir=/home/runner/tmp --prefer-binary
+df -h
+
 
 # Note this:
 #    1) runs examples to regenerate yaml/json...
