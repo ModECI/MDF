@@ -9,6 +9,9 @@ pip cache info
 pip cache purge
 df -h
 
+pip install .[optional] --cache-dir=/home/runner/tmp --prefer-binary
+df -h
+
 pip install .[all] --cache-dir=/home/runner/tmp --prefer-binary
 
 # Note this:
