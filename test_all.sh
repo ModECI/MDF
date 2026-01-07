@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ex
 
-## This is overkill, but it seems to lead to less space being used on install, which was 
+## This is overkill, but it seems to lead to less space being used on install, which was
 ## causing issues on GHA CI.
 df -h
 
