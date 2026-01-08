@@ -99,19 +99,25 @@ class InputPort(MdfBase):
 
     Attributes:
         id: The unique (for this Node) id of the input port,
+        default_value: Value to set at this input port if no edge connected to it.
         shape: The shape of the input port. This uses the same syntax as numpy ndarray shapes
             (e.g., :code:`numpy.zeros(shape)` would produce an array with the correct shape
         type: The data type of the input received at a port.
+        reduce: Specifies how to deal with multiple inputs to one port during a single timestep: add: add up all the values; multiply: multiply the values, overwrite: just use the last value supplied (default)
 
     """
 
     id: str = field(validator=instance_of(str))
+    default_value: Optional[ValueExprType] = field(default=None)
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
         default=(),
         converter=lambda x: make_tuple(x) if type(x) is str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
+    reduce: Optional[str] = field(
+        validator=optional(instance_of(str)), default="overwrite"
+    )
 
 
 @modelspec.define(eq=False)
@@ -488,7 +494,10 @@ class Graph(MdfBase):
             sender = self.get_node(edge.sender)
             receiver = self.get_node(edge.receiver)
 
-            dependencies[receiver].add(sender)
+            if receiver.get_input_port(edge.receiver_port).default_value is not None:
+                pass
+            else:
+                dependencies[receiver].add(sender)
 
         return dependencies
 
