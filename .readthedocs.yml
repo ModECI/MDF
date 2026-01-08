@@ -5,15 +5,15 @@ build:
   tools:
     python: "3.11"
 
+  commands:
+    - python -m pip install -U pip
+    - python -m pip install . --group docs
+
 sphinx:
   configuration: docs/sphinx/source/conf.py
 
 formats:
   - htmlzip
-
-python:
-  install:
-    - requirements: docs/sphinx/requirements.txt
 
 submodules:
   exclude: all
