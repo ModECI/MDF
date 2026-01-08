@@ -8,11 +8,11 @@ def create_rnn_node(id, N, g, seed=1234):
 
     ## RNN node...
     rnn_node = Node(id=id)
-    ipr1 = InputPort(id="ext_input", shape="(%i,)" % N)
-    rnn_node.input_ports.append(ipr1)
+    ext_ip = InputPort(id="ext_input", shape="(%i,)" % N)
+    rnn_node.input_ports.append(ext_ip)
 
-    ipr2 = InputPort(id="fb_input", shape="(%i,)" % N)
-    rnn_node.input_ports.append(ipr2)
+    fb_ip = InputPort(id="fb_input", default_value=0, shape="(%i,)" % N)
+    rnn_node.input_ports.append(fb_ip)
 
     default_initial_value = np.zeros(N)
     default_initial_value = 2 * np.random.random(N) - 1
@@ -26,7 +26,7 @@ def create_rnn_node(id, N, g, seed=1234):
     x = Parameter(
         id="x",
         default_initial_value=default_initial_value,
-        time_derivative="-x + g*int_fb + %s" % ipr1.id,
+        time_derivative=f"-x + g*int_fb + {ext_ip.id} + {fb_ip.id}",
     )
     rnn_node.parameters.append(x)
 

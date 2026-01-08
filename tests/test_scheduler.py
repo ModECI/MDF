@@ -15,7 +15,7 @@ def test_execution_engine_main(tmpdir):
     mdf_formats = ["json", "yaml"]
     array_formats = [FORMAT_NUMPY, FORMAT_TENSORFLOW]
 
-    # For now, don't make tensorflow a requiremnt...
+    # For now, don't make tensorflow a requirement...
     try:
         import tensorflow
     except:
@@ -221,7 +221,7 @@ def test_threshold(create_model):
     [
         ("A", "A_output"),
         ("A", "A_param_2"),
-        ("B", "B_input"),
+        ("B", "B_output"),
     ],
 )
 @pytest.mark.parametrize(

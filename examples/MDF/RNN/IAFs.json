@@ -47,7 +47,8 @@
                             "current_input": {
                                 "shape": [
                                     1
-                                ]
+                                ],
+                                "reduce": "add"
                             }
                         },
                         "parameters": {
@@ -110,7 +111,8 @@
                             "current_input": {
                                 "shape": [
                                     1
-                                ]
+                                ],
+                                "reduce": "add"
                             }
                         },
                         "parameters": {
@@ -173,7 +175,8 @@
                             "spike_input": {
                                 "shape": [
                                     1
-                                ]
+                                ],
+                                "reduce": "add"
                             }
                         },
                         "parameters": {

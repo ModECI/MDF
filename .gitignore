@@ -274,6 +274,9 @@ Thumbs.db #thumbnail cache on Windows
 /examples/PyTorch/simple_pytorch_to_mdf.1
 /examples/MDF/NLP/TestNLP_3
 /examples/MDF/NLP/TestNLP
+/examples/MDF/networks/Net_acyclical
+/examples/MDF/net/Net_acyclical
+/examples/MDF/net/weight.py
 /examples/MDF/conditions/composite_example
 /examples/NeuroML/arm64
 /examples/MDF/RNN/iaf.net
