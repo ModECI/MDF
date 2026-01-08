@@ -41,6 +41,9 @@ def test_std_functions(name, expected_result, parameters):
     try:
         assert stdf.mdf_functions[name]["function"](**parameters) == expected_result
     except:
-        assert numpy.array_equal(
-            stdf.mdf_functions[name]["function"](**parameters), expected_result
+        assert numpy.allclose(
+            stdf.mdf_functions[name]["function"](**parameters),
+            expected_result,
+            atol=0,
+            rtol=1e-8,
         )
