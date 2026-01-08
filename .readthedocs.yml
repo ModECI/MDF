@@ -1,21 +1,19 @@
-# .readthedocs.yml
-# Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
-
-# Required
 version: 2
 
-# Build documentation in the docs/ directory with Sphinx
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.11"
+
 sphinx:
   configuration: docs/sphinx/source/conf.py
 
-# Just generate htmlzip version, as pdf failing due to inclusion of svg files (in badges)
 formats:
   - htmlzip
 
 python:
   install:
-     - requirements: docs/sphinx/requirements.txt
+    - requirements: docs/sphinx/requirements.txt
 
 submodules:
   exclude: all
