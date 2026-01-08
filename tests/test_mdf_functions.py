@@ -40,7 +40,7 @@ import modeci_mdf.functions.standard as stdf
 def test_std_functions(name, expected_result, parameters):
     try:
         assert stdf.mdf_functions[name]["function"](**parameters) == expected_result
-    except ValueError:
+    except:
         assert numpy.array_equal(
             stdf.mdf_functions[name]["function"](**parameters), expected_result
         )
