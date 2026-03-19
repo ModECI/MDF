@@ -42,6 +42,7 @@ classifiers = [
 dependencies = [
     "graph_scheduler>=1.1.1",
     "numpy",
+    "scipy",
     "matplotlib",
     "graphviz",
     "h5py",

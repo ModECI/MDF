@@ -1,4 +1,4 @@
-name: CI Test script
+name: CI test_all.sh script
 
 on:
   push:
