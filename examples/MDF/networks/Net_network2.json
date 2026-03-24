@@ -1,0 +1,50 @@
+{
+    "Net_network2": {
+        "format": "ModECI MDF v0.4",
+        "generating_application": "Python modeci-mdf v0.4.14",
+        "graphs": {
+            "Net_network2": {
+                "nodes": {
+                    "A": {
+                        "input_ports": {
+                            "input": {
+                                "default_value": 5
+                            }
+                        },
+                        "parameters": {
+                            "total_inputs": {
+                                "value": "total_inputs + input"
+                            },
+                            "execute_count": {
+                                "value": "execute_count + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "total_inputs"
+                            }
+                        }
+                    },
+                    "B": {
+                        "input_ports": {
+                            "input": {}
+                        },
+                        "parameters": {
+                            "total_inputs": {
+                                "value": "total_inputs + input"
+                            },
+                            "execute_count": {
+                                "value": "execute_count + 1"
+                            }
+                        },
+                        "output_ports": {
+                            "out_port": {
+                                "value": "total_inputs"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
