@@ -679,6 +679,9 @@ class EvaluableOutput:
             )
         return self.curr_value
 
+    def __repr__(self):
+        return f"EvaluableOutput({self.output_port.id} = {_val_info(self.curr_value)} )"
+
 
 class EvaluableInput:
     """Evaluates input value at the :class:`~modeci_mdf.mdf.InputPort` of the node during MDF graph execution.
