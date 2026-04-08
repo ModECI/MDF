@@ -769,7 +769,7 @@ class EvaluableInput:
                 )
             )
 
-        ###self.curr_value = None # to be tested for conditions
+        self.curr_value = None  # to be tested for conditions...
         return final_val
 
 

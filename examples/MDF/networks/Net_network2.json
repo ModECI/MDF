@@ -7,38 +7,38 @@
                 "nodes": {
                     "A": {
                         "input_ports": {
-                            "input": {
+                            "in_port_0": {
                                 "default_value": 5
                             }
                         },
                         "parameters": {
                             "total_inputs": {
-                                "value": "total_inputs + input"
+                                "value": "total_inputs + in_port_0"
                             },
                             "execute_count": {
                                 "value": "execute_count + 1"
                             }
                         },
                         "output_ports": {
-                            "out_port": {
+                            "out_port_0": {
                                 "value": "total_inputs"
                             }
                         }
                     },
                     "B": {
                         "input_ports": {
-                            "input": {}
+                            "in_port_0": {}
                         },
                         "parameters": {
                             "total_inputs": {
-                                "value": "total_inputs + input"
+                                "value": "total_inputs + in_port_0"
                             },
                             "execute_count": {
                                 "value": "execute_count + 1"
                             }
                         },
                         "output_ports": {
-                            "out_port": {
+                            "out_port_0": {
                                 "value": "total_inputs"
                             }
                         }

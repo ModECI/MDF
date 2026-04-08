@@ -20,20 +20,20 @@ def main(ref="network2"):
         node = Node(id=id)
 
         if id == "A":
-            ip1 = InputPort(id="input", default_value=5)
+            ip1 = InputPort(id="in_port_0", default_value=5)
             node.input_ports.append(ip1)
 
         if id == "B":
-            ip1 = InputPort(id="input")
+            ip1 = InputPort(id="in_port_0")
             node.input_ports.append(ip1)
 
-        p1 = Parameter(id="total_inputs", value="total_inputs + input")
+        p1 = Parameter(id="total_inputs", value="total_inputs + in_port_0")
         node.parameters.append(p1)
 
         p2 = Parameter(id="execute_count", value="execute_count + 1")
         node.parameters.append(p2)
 
-        op1 = OutputPort(id="out_port", value=p1.id)
+        op1 = OutputPort(id="out_port_0", value=p1.id)
         node.output_ports.append(op1)
 
         mod_graph.nodes.append(node)
@@ -78,8 +78,8 @@ def main(ref="network2"):
             bi.append(eg.enodes["B"].evaluable_parameters["execute_count"].curr_value)
             at.append(eg.enodes["A"].evaluable_parameters["total_inputs"].curr_value)
             bt.append(eg.enodes["B"].evaluable_parameters["total_inputs"].curr_value)
-            ao.append(eg.enodes["A"].evaluable_outputs["out_port"].curr_value)
-            bo.append(eg.enodes["B"].evaluable_outputs["out_port"].curr_value)
+            ao.append(eg.enodes["A"].evaluable_outputs["out_port_0"].curr_value)
+            bo.append(eg.enodes["B"].evaluable_outputs["out_port_0"].curr_value)
             t += dt
 
         if "-nogui" not in sys.argv:
