@@ -1,0 +1,140 @@
+{
+    "FN": {
+        "format": "ModECI MDF v0.4",
+        "graphs": {
+            "FN": {
+                "notes": "FitzHugh Nagumo cell model - originally specified in NeuroML/LEMS",
+                "nodes": {
+                    "FNpop": {
+                        "metadata": {
+                            "color": "0.2 0.2 0.2",
+                            "radius": 3,
+                            "region": "region1"
+                        },
+                        "parameters": {
+                            "initial_w": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "initial_v": {
+                                "value": [
+                                    -1.0
+                                ]
+                            },
+                            "a_v": {
+                                "value": [
+                                    -0.3333333333333333
+                                ]
+                            },
+                            "b_v": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "c_v": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "d_v": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "e_v": {
+                                "value": [
+                                    -1.0
+                                ]
+                            },
+                            "f_v": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "time_constant_v": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "a_w": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "b_w": {
+                                "value": [
+                                    -0.8
+                                ]
+                            },
+                            "c_w": {
+                                "value": [
+                                    0.7
+                                ]
+                            },
+                            "time_constant_w": {
+                                "value": [
+                                    12.5
+                                ]
+                            },
+                            "threshold_exc": {
+                                "value": [
+                                    -1.0
+                                ]
+                            },
+                            "mode": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "uncorrelated_activity": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "Iext": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "MSEC": {
+                                "value": [
+                                    0.001
+                                ]
+                            },
+                            "spike": {
+                                "value": [
+                                    0
+                                ]
+                            },
+                            "V": {
+                                "default_initial_value": "initial_v",
+                                "time_derivative": "(a_v*V*V*V + (1+threshold_exc)*b_v*V*V + (-1*threshold_exc)*c_v*V + d_v + e_v*W + f_v*Iext + INPUT) / (time_constant_v*MSEC)"
+                            },
+                            "W": {
+                                "default_initial_value": "initial_w",
+                                "time_derivative": "(mode*a_w*V + b_w*W + c_w + (1-mode)*uncorrelated_activity) / (time_constant_w*MSEC)"
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
+                            "V": {
+                                "value": "V"
+                            },
+                            "W": {
+                                "value": "W"
+                            }
+                        },
+                        "notes": "Cell: [Cell(notes=None, id='fn', parameters={'initial_w': 'initial_w', 'initial_v': 'initial_v', 'a_v': 'a_v', 'b_v': 'b_v', 'c_v': 'c_v', 'd_v': 'd_v', 'e_v': 'e_v', 'f_v': 'f_v', 'time_constant_v': 'time_constant_v', 'a_w': 'a_w', 'b_w': 'b_w', 'c_w': 'c_w', 'time_constant_w': 'time_constant_w', 'threshold': 'threshold', 'mode': 'mode', 'uncorrelated_activity': 'uncorrelated_activity', 'Iext': 'Iext'}, neuroml2_source_file=None, lems_source_file='FN_Definitions.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in FN_Definitions.xml and in Lems is: Component, id: fn, type: fnCell,\n   parameters: {'initial_w': '0.0', 'initial_v': '-1', 'a_v': '-0.3333333333333333', 'b_v': '0.0', 'c_v': '1.0', 'd_v': '1', 'e_v': '-1.0', 'f_v': '1.0', 'time_constant_v': '1.0', 'a_w': '1.0', 'b_w': '-0.8', 'c_w': '0.7', 'time_constant_w': '12.5', 'threshold_exc': '-1.0', 'mode': '1.0', 'uncorrelated_activity': '0.0', 'Iext': '0'}\n   parent: None\n"
+                    }
+                },
+                "edges": {}
+            }
+        }
+    }
+}
