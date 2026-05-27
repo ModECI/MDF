@@ -1,0 +1,62 @@
+ONNX Model:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.14
+    graphs:
+        main_graph:
+            nodes:
+                /A/Sin:
+                    input_ports:
+                        input:
+                            shape:
+                            - 2
+                            - 3
+                            type: float
+                    parameters:
+                        /A/Sin:
+                            function: onnx::Sin
+                            args:
+                                input: input
+                    output_ports:
+                        _A_Sin_output_0:
+                            value: /A/Sin
+                /B/Sin:
+                    input_ports:
+                        _A_Sin_output_0:
+                            shape:
+                            - 2
+                            - 3
+                            type: float
+                    parameters:
+                        /B/Sin:
+                            function: onnx::Sin
+                            args:
+                                input: _A_Sin_output_0
+                    output_ports:
+                        _B_Sin_output_0:
+                            value: /B/Sin
+                /C/Cos:
+                    input_ports:
+                        _B_Sin_output_0:
+                            shape:
+                            - 2
+                            - 3
+                            type: float
+                    parameters:
+                        /C/Cos:
+                            function: onnx::Cos
+                            args:
+                                input: _B_Sin_output_0
+                    output_ports:
+                        _3:
+                            value: /C/Cos
+            edges:
+                /A/Sin._A_Sin_output_0_/B/Sin._A_Sin_output_0:
+                    sender: /A/Sin
+                    receiver: /B/Sin
+                    sender_port: _A_Sin_output_0
+                    receiver_port: _A_Sin_output_0
+                /B/Sin._B_Sin_output_0_/C/Cos._B_Sin_output_0:
+                    sender: /B/Sin
+                    receiver: /C/Cos
+                    sender_port: _B_Sin_output_0
+                    receiver_port: _B_Sin_output_0
