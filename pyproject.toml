@@ -127,6 +127,7 @@ docs = [
     "pytorch-sphinx-theme==0.0.19",
     "sphinxcontrib-versioning",
     "Jinja2<3.1",
+    "pandas<3.0",
 ]
 
 [tool.setuptools]
