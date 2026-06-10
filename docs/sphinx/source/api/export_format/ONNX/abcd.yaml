@@ -1,0 +1,170 @@
+ONNX Model:
+    format: ModECI MDF v0.4
+    generating_application: Python modeci-mdf v0.4.14
+    graphs:
+        main_graph:
+            nodes:
+                /A/Mul:
+                    input_ports:
+                        input:
+                            shape:
+                            - 1
+                            - 1
+                            type: float
+                    parameters:
+                        A:
+                            value:
+                            -   - 2.0
+                        /A/Mul:
+                            function: onnx::Mul
+                            args:
+                                A: A
+                                B: input
+                    output_ports:
+                        _A_Mul_output_0:
+                            value: /A/Mul
+                /A/Add:
+                    input_ports:
+                        _A_Mul_output_0:
+                            shape:
+                            - 1
+                            - 1
+                            type: float
+                    parameters:
+                        B:
+                            value:
+                            -   - 2.0
+                        /A/Add:
+                            function: onnx::Add
+                            args:
+                                A: _A_Mul_output_0
+                                B: B
+                    output_ports:
+                        _A_Add_output_0:
+                            value: /A/Add
+                /B/Mul:
+                    input_ports:
+                        _A_Add_output_0:
+                            shape:
+                            - 1
+                            - 1
+                            type: float
+                    parameters:
+                        A:
+                            value:
+                            -   - 2.0
+                        /B/Mul:
+                            function: onnx::Mul
+                            args:
+                                A: A
+                                B: _A_Add_output_0
+                    output_ports:
+                        _B_Mul_output_0:
+                            value: /B/Mul
+                /B/Add:
+                    input_ports:
+                        _B_Mul_output_0:
+                            shape:
+                            - 1
+                            - 1
+                            type: float
+                    parameters:
+                        B:
+                            value:
+                            -   - 2.0
+                        /B/Add:
+                            function: onnx::Add
+                            args:
+                                A: _B_Mul_output_0
+                                B: B
+                    output_ports:
+                        _B_Add_output_0:
+                            value: /B/Add
+                /C/Mul:
+                    input_ports:
+                        _B_Add_output_0:
+                            shape:
+                            - 1
+                            - 1
+                            type: float
+                    parameters:
+                        A:
+                            value:
+                            -   - 2.0
+                        /C/Mul:
+                            function: onnx::Mul
+                            args:
+                                A: A
+                                B: _B_Add_output_0
+                    output_ports:
+                        _C_Mul_output_0:
+                            value: /C/Mul
+                /C/Add:
+                    input_ports:
+                        _C_Mul_output_0:
+                            shape:
+                            - 1
+                            - 1
+                            type: float
+                    parameters:
+                        B:
+                            value:
+                            -   - 2.0
+                        /C/Add:
+                            function: onnx::Add
+                            args:
+                                A: _C_Mul_output_0
+                                B: B
+                    output_ports:
+                        c:
+                            value: /C/Add
+                /D/Add:
+                    input_ports:
+                        _C_Mul_output_0:
+                            shape:
+                            - 1
+                            - 1
+                            type: float
+                    parameters:
+                        B:
+                            value:
+                            -   - 2.0
+                        /D/Add:
+                            function: onnx::Add
+                            args:
+                                A: _C_Mul_output_0
+                                B: B
+                    output_ports:
+                        d:
+                            value: /D/Add
+            edges:
+                /A/Mul._A_Mul_output_0_/A/Add._A_Mul_output_0:
+                    sender: /A/Mul
+                    receiver: /A/Add
+                    sender_port: _A_Mul_output_0
+                    receiver_port: _A_Mul_output_0
+                /A/Add._A_Add_output_0_/B/Mul._A_Add_output_0:
+                    sender: /A/Add
+                    receiver: /B/Mul
+                    sender_port: _A_Add_output_0
+                    receiver_port: _A_Add_output_0
+                /B/Mul._B_Mul_output_0_/B/Add._B_Mul_output_0:
+                    sender: /B/Mul
+                    receiver: /B/Add
+                    sender_port: _B_Mul_output_0
+                    receiver_port: _B_Mul_output_0
+                /B/Add._B_Add_output_0_/C/Mul._B_Add_output_0:
+                    sender: /B/Add
+                    receiver: /C/Mul
+                    sender_port: _B_Add_output_0
+                    receiver_port: _B_Add_output_0
+                /C/Mul._C_Mul_output_0_/C/Add._C_Mul_output_0:
+                    sender: /C/Mul
+                    receiver: /C/Add
+                    sender_port: _C_Mul_output_0
+                    receiver_port: _C_Mul_output_0
+                /C/Mul._C_Mul_output_0_/D/Add._C_Mul_output_0:
+                    sender: /C/Mul
+                    receiver: /D/Add
+                    sender_port: _C_Mul_output_0
+                    receiver_port: _C_Mul_output_0

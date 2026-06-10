@@ -1,0 +1,522 @@
+{
+    "ABCD": {
+        "format": "ModECI MDF v0.4",
+        "graphs": {
+            "ABCD": {
+                "notes": "Example of a simplified network",
+                "nodes": {
+                    "A_input": {
+                        "metadata": {
+                            "color": "0.2 0.2 0.2",
+                            "radius": 3,
+                            "region": "region1"
+                        },
+                        "parameters": {
+                            "variable": {
+                                "value": [
+                                    2.0
+                                ]
+                            },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "variable"
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
+                            "V": {
+                                "value": "V"
+                            },
+                            "OUTPUT": {
+                                "value": "OUTPUT"
+                            }
+                        },
+                        "notes": "Cell: [Cell(notes=None, id='a_input', parameters={'variable': 'A_initial'}, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: a_input, type: inputNode,\n   parameters: {'variable': '2'}\n   parent: None\n"
+                    },
+                    "A": {
+                        "metadata": {
+                            "color": "0 0.9 0",
+                            "radius": 5,
+                            "region": "region1"
+                        },
+                        "parameters": {
+                            "slope": {
+                                "value": [
+                                    2.0
+                                ]
+                            },
+                            "intercept": {
+                                "value": [
+                                    2.0
+                                ]
+                            },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "INPUT*slope + intercept"
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
+                            "V": {
+                                "value": "V"
+                            },
+                            "OUTPUT": {
+                                "value": "OUTPUT"
+                            }
+                        },
+                        "notes": "Cell: [Cell(notes=None, id='a', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: a, type: pnlLinearFunctionTM,\n   parameters: {'slope': '2', 'intercept': '2'}\n   parent: None\n"
+                    },
+                    "B": {
+                        "metadata": {
+                            "color": ".8 .8 .8",
+                            "radius": 5,
+                            "region": "region1"
+                        },
+                        "parameters": {
+                            "gain": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "bias": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "x_0": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "offset": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "1/(1+numpy.exp(-1*gain*(INPUT + bias - x_0)+offset))"
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
+                            "V": {
+                                "value": "V"
+                            },
+                            "OUTPUT": {
+                                "value": "OUTPUT"
+                            }
+                        },
+                        "notes": "Cell: [Cell(notes=None, id='b', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: b, type: pnlLogisticFunctionTM,\n   parameters: {'gain': '1.0', 'bias': '0.0', 'x_0': '0.0', 'offset': '0.0'}\n   parent: None\n"
+                    },
+                    "C": {
+                        "metadata": {
+                            "color": "0.7 0.7 0.7",
+                            "radius": 5,
+                            "region": "region1"
+                        },
+                        "parameters": {
+                            "rate": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "bias": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "scale": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "offset": {
+                                "value": [
+                                    0.0
+                                ]
+                            },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
+                            "V": {
+                                "value": 0
+                            },
+                            "OUTPUT": {
+                                "value": "scale * numpy.exp((rate * INPUT) + bias) + offset"
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
+                            "V": {
+                                "value": "V"
+                            },
+                            "OUTPUT": {
+                                "value": "OUTPUT"
+                            }
+                        },
+                        "notes": "Cell: [Cell(notes=None, id='c', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: c, type: pnlExponentialFunctionTM,\n   parameters: {'rate': '1.0', 'bias': '0.0', 'scale': '1.0', 'offset': '0.0'}\n   parent: None\n"
+                    },
+                    "D": {
+                        "metadata": {
+                            "color": "0.7 0 0",
+                            "radius": 5,
+                            "region": "region1"
+                        },
+                        "parameters": {
+                            "rate": {
+                                "value": [
+                                    0.05
+                                ]
+                            },
+                            "time_step_size": {
+                                "value": [
+                                    0.1
+                                ]
+                            },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "OUTPUT < 0",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
+                            "OUTPUT": {
+                                "time_derivative": "(rate * INPUT) / time_step_size",
+                                "default_initial_value": [
+                                    0
+                                ]
+                            },
+                            "V": {
+                                "value": 0
+                            }
+                        },
+                        "input_ports": {
+                            "INPUT": {}
+                        },
+                        "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
+                            "OUTPUT": {
+                                "value": "OUTPUT"
+                            },
+                            "V": {
+                                "value": "V"
+                            }
+                        },
+                        "notes": "Cell: [Cell(notes=None, id='d', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', neuroml2_cell=None, pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in PNL.xml and in Lems is: Component, id: d, type: pnlSimpleIntegratorMechanism,\n   parameters: {'rate': '0.05', 'time_step_size': '0.1s'}\n   parent: None\n"
+                    },
+                    "proj_input_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj0_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj1_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj2_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    },
+                    "proj3_rsDL": {
+                        "parameters": {
+                            "weight": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "SEC": {
+                                "value": [
+                                    1.0
+                                ]
+                            },
+                            "rpeer": {
+                                "value": "peer_OUTPUT"
+                            },
+                            "I": {
+                                "value": "weight * rpeer"
+                            }
+                        },
+                        "input_ports": {
+                            "peer_OUTPUT": {}
+                        },
+                        "output_ports": {
+                            "I": {
+                                "value": "I"
+                            }
+                        },
+                        "notes": "Cell: [Synapse(notes=None, id='rsDL', parameters=None, neuroml2_source_file=None, lems_source_file='PNL.xml', pynn_synapse_type=None, pynn_receptor_type=None)] is defined in PNL.xml and in Lems is: Component, id: rsDL, type: synapseDL,\n   parameters: {}\n   parent: None\n"
+                    }
+                },
+                "edges": {
+                    "A_TO_proj_input_rsDL": {
+                        "name": "A_TO_proj_input_rsDL",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "peer_OUTPUT",
+                        "sender": "A",
+                        "receiver": "proj_input_rsDL"
+                    },
+                    "proj_input_rsDL_TO_B": {
+                        "name": "proj_input_rsDL_TO_B",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj_input_rsDL",
+                        "receiver": "B"
+                    },
+                    "A_input_TO_proj0_rsDL": {
+                        "name": "A_input_TO_proj0_rsDL",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "peer_OUTPUT",
+                        "sender": "A_input",
+                        "receiver": "proj0_rsDL"
+                    },
+                    "proj0_rsDL_TO_A": {
+                        "name": "proj0_rsDL_TO_A",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj0_rsDL",
+                        "receiver": "A"
+                    },
+                    "A_TO_proj1_rsDL": {
+                        "name": "A_TO_proj1_rsDL",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "peer_OUTPUT",
+                        "sender": "A",
+                        "receiver": "proj1_rsDL"
+                    },
+                    "proj1_rsDL_TO_C": {
+                        "name": "proj1_rsDL_TO_C",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj1_rsDL",
+                        "receiver": "C"
+                    },
+                    "B_TO_proj2_rsDL": {
+                        "name": "B_TO_proj2_rsDL",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "peer_OUTPUT",
+                        "sender": "B",
+                        "receiver": "proj2_rsDL"
+                    },
+                    "proj2_rsDL_TO_D": {
+                        "name": "proj2_rsDL_TO_D",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj2_rsDL",
+                        "receiver": "D"
+                    },
+                    "C_TO_proj3_rsDL": {
+                        "name": "C_TO_proj3_rsDL",
+                        "sender_port": "OUTPUT",
+                        "receiver_port": "peer_OUTPUT",
+                        "sender": "C",
+                        "receiver": "proj3_rsDL"
+                    },
+                    "proj3_rsDL_TO_D": {
+                        "name": "proj3_rsDL_TO_D",
+                        "sender_port": "I",
+                        "receiver_port": "INPUT",
+                        "sender": "proj3_rsDL",
+                        "receiver": "D"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -4,6 +4,7 @@ This file does three things:
     - Exports in to ONNX using a combination of tracing and scripting
     - Converts it to MDF
 """
+
 import torch
 import onnx
 import os
@@ -77,16 +78,16 @@ def main():
 
     mdf_model.to_json_file("abc.json")
     mdf_model.to_yaml_file("abc.yaml")
+    """
+    Can't be exported to graph as Loop not supported...
     mdf_model.to_graph_image(
         engine="dot",
         output_format="png",
         view_on_render=False,
         level=3,
         filename_root="abc",
-        only_warn_on_fail=(
-            os.name == "nt"
-        ),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
-    )
+        only_warn_on_fail= (os.name=='nt'),  # Makes sure test of this doesn't fail on Windows on GitHub Actions
+    )"""
 
 
 if __name__ == "__main__":

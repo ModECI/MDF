@@ -27,7 +27,7 @@ for ex in [
 import glob
 
 for ex in ["ACT-R", "NeuroML", "ONNX", "PyTorch"]:
-    for suf in ["png", "svg"]:
+    for suf in ["png", "svg", "py", "yaml", "json"]:
         for file in glob.glob(f"../examples/{ex}/*.{suf}"):
             print("Copying: %s" % file)
             shutil.copy(file, "sphinx/source/api/export_format/%s" % ex)
