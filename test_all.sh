@@ -5,18 +5,18 @@ set -ex
 ## causing issues on GHA CI.
 df -h
 
-python -m pip install -vvv . --cache-dir=/home/runner/tmp --prefer-binary
+python -m pip install . --cache-dir=/home/runner/tmp --prefer-binary
 df -h
 pip cache info
 pip cache purge
 df -h
 
-python -m pip install -vvv .[optional] --cache-dir=/home/runner/tmp --prefer-binary
+python -m pip install .[optional] --cache-dir=/home/runner/tmp --prefer-binary
 df -h
 pip cache purge
 df -h
 
-python -m pip install -vvv .[all] --cache-dir=/home/runner/tmp --prefer-binary
+python -m pip install .[all] --cache-dir=/home/runner/tmp --prefer-binary
 df -h
 
 
