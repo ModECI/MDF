@@ -41,7 +41,7 @@ jobs:
 
         # pip install psyneulink from https://github.com/PrincetonUniversity/PsyNeuLink, branch devel
         pip install git+https://github.com/PrincetonUniversity/PsyNeuLink.git@devel
-        
+
         export NEURON_HOME=$pythonLocation
         ./test_all.sh
 
