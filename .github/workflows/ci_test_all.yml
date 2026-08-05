@@ -18,9 +18,9 @@ jobs:
         runs-on: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -37,7 +37,11 @@ jobs:
 
     - name: Run test script
       run: |
-        # pip install torch==2.8.0 # pinned to avoid issues with latest version taking up too much space...
+        python -m pip install -U pip
+
+        # pip install psyneulink from https://github.com/PrincetonUniversity/PsyNeuLink, branch devel
+        pip install psyneulink
+
         export NEURON_HOME=$pythonLocation
         ./test_all.sh
 
