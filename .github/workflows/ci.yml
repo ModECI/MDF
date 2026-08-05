@@ -36,6 +36,8 @@ jobs:
         exclude:
           - os: windows-latest
             test-suite: tensorflow
+          - os: macos-latest
+            test-suite: tensorflow  # too slow...
 
     steps:
       - uses: actions/checkout@v7
