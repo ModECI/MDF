@@ -11,7 +11,7 @@ name = "modeci-mdf"
 dynamic = ["version"]
 description = "ModECI (Model Exchange and Convergence Initiative) Model Description Format"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = {text = "LGPLv3"}
 authors = [
     {name = "ModECI contributors", email = "p.gleeson@gmail.com"},
@@ -25,9 +25,7 @@ classifiers = [
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
     "Natural Language :: English",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.8",
     "Topic :: Scientific/Engineering",
-    "Intended Audience :: Science/Research",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
@@ -35,7 +33,6 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Topic :: Scientific/Engineering",
     "Topic :: Software Development",
     "Typing :: Typed",
 ]
@@ -93,7 +90,6 @@ optional = [
     "netron",
     "torch>=1.11.0",
     "torchvision",
-    "h5py",
 ]
 
 all_except_psyneulink = [
@@ -145,9 +141,6 @@ exclude = ["tests", "examples"]
 [tool.setuptools.dynamic]
 version = {attr = "modeci_mdf.__version__"}
 
-#[tool.setuptools_scm]
-#write_to = "src/modeci_mdf/version.py"
-
 [tool.pytest.ini_options]
 junit_family = "xunit2"
 addopts = "--benchmark-disable -Wd --strict-markers"
@@ -157,7 +150,7 @@ required_plugins = ["pytest-benchmark"]
 markers = [
     "coremdf: marks tests which are core to the MDF specification",
     "actr: marks tests which require ACT-R to be installed.",
-    "pytorch: marks test which require PyTorch to be installed.')",
+    "pytorch: marks tests which require PyTorch to be installed.",
     "psyneulink: marks tests which require PsyNueLink to be installed.",
     "neuroml: marks tests which require NeuroML to be installed.",
     "tensorflow: marks tests which require TensorFlow to be installed.",
@@ -183,7 +176,7 @@ per-file-ignores = [
 
 [tool.mypy]
 warn_unused_configs = true
-python_version = "3.6"
+python_version = "3.10"
 files = ["src"]
 disallow_any_generics = true
 disallow_subclassing_any = true
