@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - Showing usage of parameters and functions
+Example of ModECI MDF - Showing usage of parameters and functions
 """
 
 from modeci_mdf.mdf import *

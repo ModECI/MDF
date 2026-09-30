@@ -42,7 +42,7 @@ The MNIST dataset has already been preprocessed and cleaned, which saves time an
 
 This model uses the Keras library to recognize handwritten digits from the MNIST dataset. The model is built using a Sequential model, with three dense layers and uses the Adam optimizer, sparse categorical crossentropy loss, and accuracy as evaluation metrics.
 
-The model ([keras_model.py](keras_model.py)) is trained for 3 epochs and the final network is saved as [kr_N_model.h5](kr_N_model.h5). The model is then evaluated on the test data, where its accuracy is reported. The model predicts the number for the first test data index, and the actual number is shown using a plot.
+The model ([keras_model.py](mnist_keras_model.py)) is trained for 3 epochs and the final network is saved as [kr_N_model.h5](kr_N_model.h5). The model is then evaluated on the test data, where its accuracy is reported. The model predicts the number for the first test data index, and the actual number is shown using a plot.
 
 ### Prerequisites
 

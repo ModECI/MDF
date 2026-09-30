@@ -1,0 +1,192 @@
+{
+    "IzhikevichTest": {
+        "format": "ModECI MDF v0.4",
+        "graphs": {
+            "IzhikevichTest": {
+                "notes": "Example Izhikevich",
+                "nodes": {
+                    "izhPop": {
+                        "parameters": {
+                            "v0": {
+                                "value": [
+                                    -0.08
+                                ]
+                            },
+                            "C": {
+                                "value": [
+                                    1e-10
+                                ]
+                            },
+                            "k": {
+                                "value": [
+                                    7e-07
+                                ]
+                            },
+                            "vr": {
+                                "value": [
+                                    -0.06
+                                ]
+                            },
+                            "vt": {
+                                "value": [
+                                    -0.04
+                                ]
+                            },
+                            "vpeak": {
+                                "value": [
+                                    0.035
+                                ]
+                            },
+                            "a": {
+                                "value": [
+                                    30.0
+                                ]
+                            },
+                            "b": {
+                                "value": [
+                                    -2e-09
+                                ]
+                            },
+                            "c": {
+                                "value": [
+                                    -0.05
+                                ]
+                            },
+                            "d": {
+                                "value": [
+                                    1e-10
+                                ]
+                            },
+                            "spike": {
+                                "default_initial_value": [
+                                    0
+                                ],
+                                "conditions": {
+                                    "condition_0_on": {
+                                        "test": "v > vpeak",
+                                        "value": 1
+                                    },
+                                    "condition_0_off": {
+                                        "test": "spike > 0",
+                                        "value": 0
+                                    }
+                                }
+                            },
+                            "v": {
+                                "default_initial_value": "v0",
+                                "conditions": {
+                                    "condition_0": {
+                                        "test": "v > vpeak",
+                                        "value": "c"
+                                    }
+                                },
+                                "time_derivative": "iMemb / C"
+                            },
+                            "u": {
+                                "default_initial_value": "0",
+                                "conditions": {
+                                    "condition_0": {
+                                        "test": "v > vpeak",
+                                        "value": "u + d"
+                                    }
+                                },
+                                "time_derivative": "a * (b * (v-vr) - u)"
+                            },
+                            "iSyn": {
+                                "value": "synapses_i"
+                            },
+                            "iMemb": {
+                                "value": "k * (v-vr) * (v-vt) + iSyn - u"
+                            }
+                        },
+                        "input_ports": {
+                            "synapses_i": {}
+                        },
+                        "output_ports": {
+                            "spike": {
+                                "value": "spike"
+                            },
+                            "v": {
+                                "value": "v"
+                            },
+                            "u": {
+                                "value": "u"
+                            },
+                            "iMemb": {
+                                "value": "iMemb"
+                            }
+                        },
+                        "notes": "Cell: [Cell(notes=None, id='izhCell', parameters={'v0': 'v0', 'C': 'C', 'k': 'k', 'vr': 'vr', 'vt': 'vt', 'vpeak': 'vpeak', 'a': 'a', 'b': 'b', 'c': 'c', 'd': 'd'}, neuroml2_source_file=None, lems_source_file=None, neuroml2_cell='izhikevich2007Cell', pynn_cell=None, arbor_cell=None, bindsnet_node=None)] is defined in None and in Lems is: Component, id: izhCell, type: izhikevich2007Cell,\n   parameters: {'v0': '-80mV', 'C': '100 pF', 'k': '0.7 nS_per_mV', 'vr': '-60 mV', 'vt': '-40 mV', 'vpeak': '35 mV', 'a': '0.03 per_ms', 'b': '-2 nS', 'c': '-50 mV', 'd': '100 pA'}\n   parent: None\n"
+                    },
+                    "InputList_stim": {
+                        "parameters": {
+                            "amplitude": {
+                                "value": [
+                                    1e-10
+                                ]
+                            },
+                            "delay": {
+                                "value": [
+                                    0.1
+                                ]
+                            },
+                            "duration": {
+                                "value": [
+                                    0.5
+                                ]
+                            },
+                            "weight": {
+                                "value": [
+                                    1
+                                ]
+                            },
+                            "i": {
+                                "conditions": {
+                                    "condition_0": {
+                                        "test": "t < delay",
+                                        "value": "0"
+                                    },
+                                    "condition_1": {
+                                        "test": "t >= delay and t < duration + delay",
+                                        "value": "weight * amplitude"
+                                    },
+                                    "condition_2": {
+                                        "test": "t >= duration + delay",
+                                        "value": "0"
+                                    }
+                                }
+                            },
+                            "t": {
+                                "default_initial_value": 0,
+                                "time_derivative": "1"
+                            }
+                        },
+                        "input_ports": {
+                            "spike_input": {
+                                "shape": [
+                                    1
+                                ],
+                                "reduce": "add"
+                            }
+                        },
+                        "output_ports": {
+                            "i": {
+                                "value": "i"
+                            }
+                        },
+                        "notes": "Cell: [InputSource(notes=None, id='iclamp_0', parameters={'amplitude': 'stim_amp', 'delay': 'delay', 'duration': 'duration'}, neuroml2_source_file=None, neuroml2_input='pulseGenerator', lems_source_file=None, pynn_input=None)] is defined in None and in Lems is: Component, id: iclamp_0, type: pulseGenerator,\n   parameters: {'amplitude': '100pA', 'delay': '100ms', 'duration': '500ms'}\n   parent: None\n"
+                    }
+                },
+                "edges": {
+                    "Edge InputList_stim to izhPop": {
+                        "name": "Edge InputList_stim to izhPop",
+                        "sender_port": "i",
+                        "receiver_port": "synapses_i",
+                        "sender": "InputList_stim",
+                        "receiver": "izhPop"
+                    }
+                }
+            }
+        }
+    }
+}

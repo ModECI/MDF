@@ -2,7 +2,7 @@
 
 **For more details on Keras and the current state of the Keras->MDF mapping see the [MNIST example](../MNIST).**
 
-This model uses the [IRIS dataset](https://en.wikipedia.org/wiki/Iris_flower_data_set) in the [trained Keras model](keras_model.py) and the MDF equivalent.
+This model uses the [IRIS dataset](https://en.wikipedia.org/wiki/Iris_flower_data_set) in the [trained Keras model](iris_keras_model.py) and the MDF equivalent.
 
 ### Summarize Model
 

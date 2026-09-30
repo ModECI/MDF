@@ -2,9 +2,9 @@ name: CI Test script
 
 on:
   push:
-    branches: [ main, development, experimental, test*, nml* ]
+    branches: [ main, development, experimental, test*, nml*, version* ]
   pull_request:
-    branches: [ main, development, experimental, test*, nml* ]
+    branches: [ main, development, experimental, test*, nml*, version* ]
 
 jobs:
 
@@ -14,13 +14,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.10"]
+        python-version: [ "3.12"]
         runs-on: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -37,16 +37,14 @@ jobs:
 
     - name: Run test script
       run: |
+        python -m pip install -U pip
+
+        # pip install psyneulink from https://github.com/PrincetonUniversity/PsyNeuLink, branch devel
+        pip install psyneulink
+
         export NEURON_HOME=$pythonLocation
         ./test_all.sh
 
     - name: Version info for installed packages
       run: |
         pip list
-
-
-
-
-    - name: Final version info for optional installed packages
-      run: |
-          pip list

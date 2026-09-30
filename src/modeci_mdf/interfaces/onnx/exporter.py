@@ -49,7 +49,7 @@ def mdf_to_onnx(mdf_model):
         # There is still now programmatic way to determine the max supported ir_version from onnxruntime
         # Here is the issue: https://github.com/microsoft/onnxruntime/issues/14932
         # We will have to continue this dumb hack for the time being.
-        make_model_kwargs = {}
+        make_model_kwargs = {"ir_version": 10}
         try:
             from packaging.version import Version, InvalidVersion
 

@@ -361,9 +361,9 @@ def torchnode_to_mdfnode(
             out_dtype = str(out_type.getElementType())
 
         try:
-            shape = tuple(out_type.sizes()) if out_type.sizes() else None
+            shape = tuple(out_type.sizes()) if out_type.sizes() else ()
         except RuntimeError:
-            shape = None
+            shape = ()
 
         mdf_node.output_ports.append(
             OutputPort(
@@ -387,9 +387,9 @@ def torchnode_to_mdfnode(
                 inp_dtype = str(inp_type.getElementType())
 
             try:
-                shape = tuple(inp_type.sizes()) if inp_type.sizes() else None
+                shape = tuple(inp_type.sizes()) if inp_type.sizes() else ()
             except RuntimeError:
-                shape = None
+                shape = ()
 
             mdf_node.input_ports.append(
                 InputPort(id=ip_name, shape=shape, type=inp_dtype)

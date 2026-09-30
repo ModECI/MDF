@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torch import nn  # All neural network modules
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
 
+
 # Simple CNN
 class CNN(nn.Module):
     def __init__(self, in_channels=1, num_classes=10):

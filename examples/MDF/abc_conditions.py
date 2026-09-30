@@ -1,5 +1,5 @@
 """
-    Example of ModECI MDF - A simple 3 node graph with scheduling conditions
+Example of ModECI MDF - A simple 3 node graph with scheduling conditions
 """
 
 import os

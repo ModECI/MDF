@@ -1,6 +1,6 @@
 """
-    Example of ModECI MDF - Testing arrays as inputs - this allows graphs of
-    various scales/sizes to be generated for testing purposes
+Example of ModECI MDF - Testing arrays as inputs - this allows graphs of
+various scales/sizes to be generated for testing purposes
 """
 
 from modeci_mdf.mdf import *

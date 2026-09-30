@@ -111,7 +111,7 @@ class InputPort(MdfBase):
     default_value: Optional[ValueExprType] = field(default=None)
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
-        default=None,
+        default=(),
         converter=lambda x: make_tuple(x) if type(x) is str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)
@@ -139,7 +139,7 @@ class OutputPort(MdfBase):
     value: Optional[str] = field(validator=optional(instance_of(str)), default=None)
     shape: Optional[Tuple[int, ...]] = field(
         validator=optional(instance_of(tuple)),
-        default=None,
+        default=(),
         converter=lambda x: make_tuple(x) if type(x) is str else x,
     )
     type: Optional[str] = field(validator=optional(instance_of(str)), default=None)

@@ -119,7 +119,7 @@ def _get_torchvision_models():
         "maxvit_t": "MaxViT is failing because we are trying to call ast.parse on a string that is not valid python."
         " Need to handle string arguments requried by einops.",
         "resnet101": "Resnet101 is failing to match currently.",
-        "vit_": "ViT models are failing because PyTorch cant convert to ONNX the unflatten op.",
+        # "vit_": "ViT models are failing because PyTorch cant convert to ONNX the unflatten op.",
     }
 
     pytest_params = []

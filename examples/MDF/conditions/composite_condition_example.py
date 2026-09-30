@@ -2,7 +2,6 @@
 Example of ModECI MDF - A simple three Node graph satisfying the composite - 'All' condition
 """
 
-
 from modeci_mdf.mdf import *
 import graph_scheduler
 import os

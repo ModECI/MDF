@@ -13,6 +13,13 @@
 **Note: MDF is still in development! See the [open issues related to the specification](https://github.com/ModECI/MDF/issues?q=is%3Aissue+is%3Aopen+label%3Aspecification) or go [here](http://modeci.org/#contactPage) to get in contact regarding MDF.**
 *The MDF format was first proposed following a meeting organised at Princeton in July 2019 by Russ Poldrack of the Center for Reproducible Neuroscience (CRN) at Stanford and the [Brain Imaging Data Standard (BIDS)](https://bids.neuroimaging.io/) initiative. For more on the previous work in this area, see [here](https://github.com/OpenSourceBrain/PsyNeuLinkShowcase/tree/master/BIDS-MDF).*
 
+## Paper introducing MDF
+
+The background to the ModECI project, the motivation for developing the Model Description Format, and the initial Python implementation of the language have been described in a NeuroView article in the Neuron journal:
+
+*<b>Integrating model development across computational neuroscience, cognitive science, and machine learning</b>*
+Padraig Gleeson, Sharon Crook, David Turner, Katherine Mantel, Mayank Raunak, Ted Willke and Jonathan D. Cohen, April 25, 2023 DOI: [https://doi.org/10.1016/j.neuron.2023.03.037](https://doi.org/10.1016/j.neuron.2023.03.037)
+
 
 ## Overview
 
