@@ -9,4 +9,4 @@ Padraig Gleeson, Sharon Crook, David Turner, Katherine Mantel, Mayank Raunak, Te
 
 *Neuroscience, cognitive science, and computer science are increasingly benefiting through their interactions. This could be accelerated by direct sharing of computational models across disparate modeling software used in each. We describe a Model Description Format designed to meet this challenge.*
 
-The paper will be freely downloadable from [here](https://www.cell.com/neuron/fulltext/S0896-6273(23)00261-1) in April 2024. If you do not have access to this via your institution, please [download the preprint of the paper here](https://github.com/ModECI/MDFpaper/blob/main/GleesonEtAl23_ModECI_NeuroView.pdf).
+The paper is freely downloadable from [here](https://www.cell.com/neuron/fulltext/S0896-6273(23)00261-1).
