@@ -317,3 +317,4 @@ examples/TensorFlow/Keras/keras_to_MDF
 /docs/sphinx/source/api/export_format/MDF/images/newton.png
 /docs/sphinx/source/api/export_format/MDF/images/newton_plot.png
 /examples/MDF/networks/Net_acyclical
+/examples/MDF/networks/Net_network2
