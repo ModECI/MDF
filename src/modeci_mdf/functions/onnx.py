@@ -59,7 +59,10 @@ def predict_with_onnxruntime(model_def, *inputs) -> Dict[str, np.array]:
         A dict of output values, keys are output names for the model. Values are
         the output values of the model.
     """
-    sess = ort.InferenceSession(model_def.SerializeToString())
+    sess = ort.InferenceSession(
+        model_def.SerializeToString(),
+        providers=["AzureExecutionProvider", "CPUExecutionProvider"],
+    )
     names = [i.name for i in sess.get_inputs()]
     dinputs = {name: input for name, input in zip(names, inputs)}
     res = sess.run(None, dinputs)

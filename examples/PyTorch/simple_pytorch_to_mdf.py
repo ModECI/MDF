@@ -7,6 +7,7 @@ import onnxruntime as rt
 from torchviz import make_dot
 import netron
 from modeci_mdf.interfaces.pytorch import pytorch_to_mdf
+from modeci_mdf.interfaces.pytorch import pytorch_fx_to_mdf
 import os
 
 
@@ -74,6 +75,33 @@ def main():
     )
     print("Passed all comparison tests!")
 
+    print("Comparing FX to mdf translation")
+    # Pytorch FX to MDF
+    fx_mdf_model, fx_params_dict = pytorch_fx_to_mdf(
+        model=model,
+        args=(input_images),
+    )
+
+    # Get the graph
+    fx_mdf_graph = fx_mdf_model.graphs[0]
+
+    # Add inputs to the parameters dict so we can feed this to the EvaluableGraph for initialization of graph input.
+    fx_params_dict["input1"] = input_images.numpy()
+
+    # Evaluate the model via the MDF scheduler
+    eg = EvaluableGraph(graph=fx_mdf_graph, verbose=False)
+    eg.evaluate(initializer=fx_params_dict)
+    fx_output_mdf = eg.output_enodes[0].get_output()
+
+    print("Evaluated the graph in PyTorch FX, output: %s" % (_val_info(fx_output_mdf)))
+
+    # Make sure the results are the same between PyTorch and MDF
+    assert np.allclose(
+        output.detach().numpy(),
+        fx_output_mdf,
+    )
+    print("Passed all comparison tests!")
+
     # Output the model to JSON
     mdf_model.to_json_file("simple_pytorch_to_mdf.json")
 
@@ -90,7 +118,10 @@ def main():
     )
     onnx_model = onnx.load("simple_pytorch_to_mdf.onnx")
     onnx.checker.check_model(onnx_model)
-    sess = rt.InferenceSession("simple_pytorch_to_mdf.onnx")
+    sess = rt.InferenceSession(
+        "simple_pytorch_to_mdf.onnx",
+        providers=["AzureExecutionProvider", "CPUExecutionProvider"],
+    )
     res = sess.run(None, {sess.get_inputs()[0].name: input_images.numpy()})
     print("Exported to MDF and ONNX")
 
